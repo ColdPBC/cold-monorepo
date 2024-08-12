@@ -1,11 +1,12 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { SupplierDetailSidebar } from '@coldpbc/components';
+import { MaterialDetailSidebar } from '@coldpbc/components';
 import React from 'react';
+import { addDays } from 'date-fns';
 
-const meta: Meta<typeof SupplierDetailSidebar> = {
-  title: 'Organisms/SupplierDetailSidebar',
-  component: SupplierDetailSidebar,
+const meta: Meta<typeof MaterialDetailSidebar> = {
+  title: 'Organisms/MaterialDetailSidebar',
+  component: MaterialDetailSidebar,
   tags: ['autodocs'],
   decorators: [withKnobs],
 };
@@ -23,6 +24,7 @@ const SidebarStory = () => {
   const [selectedClaim, setSelectedClaim] = React.useState<{
     name: string;
     label: string;
+    level: string;
     activeDocuments: {
       name: string;
       expirationDate: string | null;
@@ -38,10 +40,11 @@ const SidebarStory = () => {
   } | null>({
     name: 'bluesign',
     label: 'bluesign',
+    level: 'Material',
     activeDocuments: [
       {
         name: 'bluesign Certificate active',
-        expirationDate: '2024-10-03T22:13:29.457Z',
+        expirationDate: addDays(new Date(), 70).toISOString(),
         status: 'Active',
         type: 'Certificate',
       },
@@ -73,5 +76,5 @@ const SidebarStory = () => {
       },
     ],
   });
-  return <SupplierDetailSidebar selectedClaim={selectedClaim} closeSidebar={() => setSelectedClaim(null)} innerRef={React.createRef()} />;
+  return <MaterialDetailSidebar selectedClaim={selectedClaim} closeSidebar={() => setSelectedClaim(null)} />;
 };

@@ -1,7 +1,6 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { useNavigate, useParams } from 'react-router-dom';
-import useSWR from 'swr';
-import { Certifications, MaterialsWithCertifications, SuppliersWithCertifications, ToastMessage } from '@coldpbc/interfaces';
+import { Certifications, MaterialsWithCertifications, ToastMessage } from '@coldpbc/interfaces';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { ButtonTypes, CertificationStatus } from '@coldpbc/enums';
