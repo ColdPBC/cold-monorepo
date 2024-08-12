@@ -58,20 +58,6 @@ export const _SupplierDetail = () => {
   }, [supplierSWR.data]);
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      // close the sidebar if the click is outside the sidebar but not on the table
-      if (ref.current && !ref.current.contains(event.target) && tableRef.current && !tableRef.current.contains(event.target) && selectedClaim !== null) {
-        setSelectedClaim(null);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref, tableRef, selectedClaim]);
-
-  useEffect(() => {
     // check if the supplier has been modified
     if (supplierSWR.data && supplier) {
       if (
