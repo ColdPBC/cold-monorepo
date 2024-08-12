@@ -8,11 +8,13 @@ import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, Gri
 import { CertificationStatus, IconNames } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays } from 'date-fns';
-import { find, forEach, isEqual, toArray, uniq, uniqWith } from 'lodash';
+import { forEach, isEqual, toArray, uniq, uniqWith } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { listFilterOperators, listSortComparator } from '@coldpbc/lib';
+import { useNavigate } from 'react-router-dom';
 
 const _MaterialsDataGrid = () => {
+  const navigate = useNavigate();
   const [materials, setMaterials] = useState<MaterialsWithCertifications[]>([]);
   const materialsSWR = useOrgSWR<MaterialsWithCertifications[], any>([`/materials`, 'GET'], axiosFetcher);
 
@@ -24,7 +26,7 @@ const _MaterialsDataGrid = () => {
           setMaterials([]);
         }
       } else {
-        setMaterials(materialsSWR.data);
+        setMaterials(materialsSWR.data.sort((a, b) => a.id.localeCompare(b.id)));
       }
     }
   }, [materialsSWR.data]);
@@ -257,7 +259,7 @@ const _MaterialsDataGrid = () => {
         noRowsOverlay: MUIDataGridNoRowsOverlay,
       }}
       onRowClick={params => {
-        // todo: navigate to the material page
+        navigate(`/materials/${params.id}`);
       }}
     />
   );

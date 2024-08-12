@@ -8,22 +8,25 @@ import { ButtonTypes, CertificationStatus } from '@coldpbc/enums';
 import capitalize from 'lodash/capitalize';
 import { getDateActiveStatus } from '@coldpbc/lib';
 import { isAxiosError } from 'axios';
-import { BaseButton, Input, MainContent, Modal, Spinner, SupplierClaimsTable, SupplierDetailSidebar } from '@coldpbc/components';
+import { BaseButton, Input, MainContent, Spinner, MuiDataGrid, MaterialDetailClaimsTable, ErrorFallback, MaterialDetailSidebar, Modal } from '@coldpbc/components';
 import opacity from 'hex-color-opacity';
 import { HexColors } from '@coldpbc/themes';
+import { withErrorBoundary } from 'react-error-boundary';
+import { isEqual } from 'lodash';
 
-export const MaterialDetail = () => {
+const _MaterialDetail = () => {
   const { addToastMessage } = useAddToastMessage();
   const navigate = useNavigate();
   const { logBrowser } = useColdContext();
   const { id } = useParams();
   const { orgId } = useAuth0Wrapper();
-  const materialSWR = useOrgSWR<MaterialsWithCertifications, any>([`/suppliers/${id}`, 'GET'], axiosFetcher);
+  const materialSWR = useOrgSWR<MaterialsWithCertifications, any>([`/materials/${id}`, 'GET'], axiosFetcher);
   const ref = React.useRef<HTMLDivElement>(null);
   const tableRef = React.useRef<HTMLDivElement>(null);
   const [material, setMaterial] = useState<MaterialsWithCertifications | undefined>(undefined);
   const [selectedClaim, setSelectedClaim] = useState<{
     name: string;
+    level: string;
     label: string;
     activeDocuments: {
       name: string;
@@ -52,20 +55,6 @@ export const MaterialDetail = () => {
     }
   }, [materialSWR.data]);
 
-  // useEffect(() => {
-  //   function handleClickOutside(event) {
-  //     // close the sidebar if the click is outside the sidebar but not on the table
-  //     if (ref.current && !ref.current.contains(event.target) && tableRef.current && !tableRef.current.contains(event.target) && selectedClaim !== null) {
-  //       setSelectedClaim(null);
-  //     }
-  //   }
-  //
-  //   document.addEventListener('mousedown', handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //   };
-  // }, [ref, tableRef, selectedClaim]);
-
   useEffect(() => {
     // check if the supplier has been modified
     if (materialSWR.data && material) {
@@ -77,9 +66,22 @@ export const MaterialDetail = () => {
     }
   }, [material]);
 
-  const handleRowClick = (claimName: string) => {
+  const handleRowClick = (claimObject: { name: string; level: string }) => {
     // get the claim data
-    if ((selectedClaim && selectedClaim.name === claimName) || supplier === undefined) {
+    if (
+      (selectedClaim &&
+        isEqual(
+          {
+            name: claimObject.name,
+            level: claimObject.level,
+          },
+          {
+            name: selectedClaim.name,
+            level: selectedClaim.level,
+          },
+        )) ||
+      material === undefined
+    ) {
       setSelectedClaim(null);
     } else {
       const claims: {
@@ -91,7 +93,7 @@ export const MaterialDetail = () => {
           effective_end_date: string | null;
           type: string;
         };
-      }[] = supplier?.certification_claims
+      }[] = material?.certification_claims
         .filter(
           (claim: {
             id: string;
@@ -103,7 +105,7 @@ export const MaterialDetail = () => {
               type: string;
             };
           }) => {
-            return claim.certification !== undefined && claim.certification.name === claimName;
+            return claim.certification !== undefined && claim.certification.name === claimObject.name && claim.certification.level === claimObject.level;
           },
         )
         .sort((a, b) => {
@@ -139,8 +141,9 @@ export const MaterialDetail = () => {
         });
 
       setSelectedClaim({
-        name: claimName,
-        label: claimName,
+        name: claimObject.name,
+        label: claimObject.name,
+        level: claimObject.level,
         activeDocuments: claims
           .filter(claim => claim.organization_file.effective_end_date !== null)
           .filter(claim => getDateActiveStatus(claim.organization_file.effective_end_date) !== 'Expired')
@@ -178,7 +181,7 @@ export const MaterialDetail = () => {
     }
   };
 
-  const saveSupplier = async () => {
+  const saveMaterial = async () => {
     if (material === undefined) return;
 
     setSaveButtonLoading(true);
@@ -192,28 +195,29 @@ export const MaterialDetail = () => {
     ]);
 
     if (isAxiosError(response)) {
-      logBrowser('SupplierDetail update error', 'error', { response });
-      await addToastMessage({ message: 'Error saving supplier', type: ToastMessage.FAILURE, timeout: 2000 });
+      logBrowser('Material update error', 'error', { response });
+      await addToastMessage({ message: 'Error saving material', type: ToastMessage.FAILURE, timeout: 2000 });
     } else {
-      await materialSWR.mutate();
-      logBrowser('SupplierDetail update saved', 'info', { response });
-      await addToastMessage({ message: 'Supplier saved successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
+      logBrowser('Material update saved', 'info', { response });
+      await addToastMessage({ message: 'Material saved successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
     }
 
+    await materialSWR.mutate();
     setSaveButtonLoading(false);
   };
 
-  const deleteSupplier = async () => {
+  const deleteMaterial = async () => {
     if (material === undefined) return;
 
-    const response = await axiosFetcher([`/organizations/${orgId}/material/${id}`, 'DELETE']);
+    const response = await axiosFetcher([`/organizations/${orgId}/materials/${id}`, 'DELETE']);
 
     if (isAxiosError(response)) {
-      logBrowser('SupplierDetail delete error', 'error', { response });
-      await addToastMessage({ message: 'Error deleting supplier', type: ToastMessage.FAILURE, timeout: 2000 });
+      logBrowser('MaterialDetail delete error', 'error', { response });
+      await addToastMessage({ message: 'Error deleting material', type: ToastMessage.FAILURE, timeout: 2000 });
+      setDeleteModalOpen(false);
     } else {
-      await addToastMessage({ message: 'Supplier deleted successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
-      navigate('/suppliers');
+      await addToastMessage({ message: 'Material deleted successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
+      navigate('/materials');
     }
   };
 
@@ -226,9 +230,11 @@ export const MaterialDetail = () => {
           setDeleteModalOpen(true);
         }}
         variant={ButtonTypes.warning}
+        disabled={deleteButtonLoading}
+        loading={deleteButtonLoading}
       />,
     );
-    buttons.push(<BaseButton label={'Save'} onClick={saveSupplier} disabled={saveButtonDisabled || saveButtonLoading} loading={saveButtonLoading} />);
+    buttons.push(<BaseButton label={'Save'} onClick={saveMaterial} disabled={saveButtonDisabled || saveButtonLoading} loading={saveButtonLoading} />);
     return <div className={'flex flex-row gap-[16px] h-[40px]'}>{buttons}</div>;
   };
 
@@ -242,6 +248,32 @@ export const MaterialDetail = () => {
 
   if (!material) return null;
 
+  const supplierRows = material.material_suppliers
+    .sort((a, b) => {
+      return a.supplier.id.localeCompare(b.supplier.id);
+    })
+    .map(materialSupplier => {
+      return {
+        id: materialSupplier.supplier.id,
+        name: materialSupplier.supplier.name,
+        country: materialSupplier.supplier.country,
+      };
+    });
+
+  const supplierColumns = [
+    {
+      field: 'name',
+      headerName: 'Name',
+      flex: 1,
+      headerClassName: 'bg-gray-30 text-body',
+    },
+    {
+      field: 'country',
+      headerName: 'Country',
+      flex: 1,
+      headerClassName: 'bg-gray-30 text-body',
+    },
+  ];
   return (
     <div className={'w-full h-full flex flex-col items-center gap-[24px] text-tc-primary relative'}>
       <div
@@ -254,7 +286,7 @@ export const MaterialDetail = () => {
           onClick={() => {
             navigate('/materials');
           }}>
-          Suppliers{' '}
+          Materials{' '}
         </div>
         <span className={'w-[24px] h-[24px] flex items-center justify-center'}>{'>'}</span>
         <span>{materialSWR.data?.name}</span>
@@ -271,11 +303,25 @@ export const MaterialDetail = () => {
               className: 'py-2 rounded-[8px]',
             }}
             input_label_props={{ className: 'w-[77px] flex items-center' }}
-            container_classname={'gap-[10px] flex flex-row w-full justify-between'}
+            container_classname={'gap-[10px] flex flex-row w-1/2 justify-between'}
           />
         </div>
+        <div className={'w-full flex mb-[40px] flex-col gap-[24px]'}>
+          <div className={'text-h3'}>Associated Suppliers</div>
+          <MuiDataGrid
+            rows={supplierRows}
+            columns={supplierColumns}
+            sx={{
+              '--DataGrid-overlayHeight': '50px',
+            }}
+          />
+        </div>
+        <div className={'w-full flex mb-[40px] flex-col gap-[24px]'}>
+          <div className={'text-h3'}>Compliance Documents</div>
+          <MaterialDetailClaimsTable material={material} selectClaim={handleRowClick} />
+        </div>
       </MainContent>
-      <SupplierDetailSidebar selectedClaim={selectedClaim} closeSidebar={() => setSelectedClaim(null)} innerRef={ref} />
+      <MaterialDetailSidebar selectedClaim={selectedClaim} closeSidebar={() => setSelectedClaim(null)} />
       <Modal
         show={deleteModalOpen}
         setShowModal={setDeleteModalOpen}
@@ -296,7 +342,7 @@ export const MaterialDetail = () => {
             label: 'Yes, Delete',
             onClick: async () => {
               setDeleteButtonLoading(true);
-              await deleteSupplier();
+              await deleteMaterial();
               setDeleteButtonLoading(false);
             },
             disabled: deleteButtonLoading,
@@ -308,3 +354,7 @@ export const MaterialDetail = () => {
     </div>
   );
 };
+
+export const MaterialDetail = withErrorBoundary(_MaterialDetail, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});
