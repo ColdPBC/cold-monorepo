@@ -1,3 +1,36 @@
+# [1.327.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.326.0...v1.327.0) (2024-08-13)
+
+
+### Bug Fixes
+
+* **app.module:** replace CertificationsModule with ClaimsModule ([d8b3ce5](https://github.com/ColdPBC/cold-monorepo/commit/d8b3ce5699be4370628cc16edb6af3b53fa2aba0))
+* **claims_repository:** correct id prefix and error messages for createClaim method ([7aca483](https://github.com/ColdPBC/cold-monorepo/commit/7aca483432aef03e95cbebc0c2ede39d300b451d))
+* correct method and parameter names in claims service ([c0a1502](https://github.com/ColdPBC/cold-monorepo/commit/c0a1502e8b24ff6c286ae1ef784e159adf407581))
+* correct module and service references in ClaimsModule ([1137280](https://github.com/ColdPBC/cold-monorepo/commit/11372805e8ed59251ba9eab6cf0a63c5ed32b1fc))
+* improve validation for optional fields in organization claims ([3855b52](https://github.com/ColdPBC/cold-monorepo/commit/3855b52da1160a4f244fa4f86c2ab13fa4ecca54))
+* **prisma:** correct field name for organization_claims in schema ([a6a6421](https://github.com/ColdPBC/cold-monorepo/commit/a6a64211954e91d117e44b894a775224d866e73c))
+* rename certification_claim to organization_claims to correct schema field name ([bd92159](https://github.com/ColdPBC/cold-monorepo/commit/bd9215934e8c60588a13140d5c1b9404068388db))
+* update organization claims endpoint path ([2447cbc](https://github.com/ColdPBC/cold-monorepo/commit/2447cbcf143f312aa1e747797bc8eff41cce848e))
+
+
+### Features
+
+* add claims service for handling certification operations ([7026088](https://github.com/ColdPBC/cold-monorepo/commit/7026088694ca46be26b3f3e2e63fecf9f17397a6))
+* Add custom comparator and filter operators for DataGrid ([b1c1458](https://github.com/ColdPBC/cold-monorepo/commit/b1c145876d0404c99ee0c6473cb55860c7bec868))
+* Add materials page with data grid and related components ([97705e9](https://github.com/ColdPBC/cold-monorepo/commit/97705e91ed9d750e53abd7e79d2a153304916786))
+* add OrganizationClaimsModule to cold-api project ([550310c](https://github.com/ColdPBC/cold-monorepo/commit/550310cdf522a5f20140a75c739e4de24deebb0e))
+* add unique constraint to claims table and create various indexes ([d61c199](https://github.com/ColdPBC/cold-monorepo/commit/d61c19905fdd86d326dbb08c09cbfd4227303cd6))
+* **claims:** refactor ClaimsController to use correct ClaimsService reference ([f6816d1](https://github.com/ColdPBC/cold-monorepo/commit/f6816d1e81375ea2fb1db90f4446ebfc5002fee1))
+* Enable Materials Page with Feature Toggle ([616f173](https://github.com/ColdPBC/cold-monorepo/commit/616f1730338a9a2f4abbd7a0d7641530fe4f5e7d))
+* export claims module in nest library ([1f5c4cc](https://github.com/ColdPBC/cold-monorepo/commit/1f5c4cc6559c543e561166735b1d42774fae350f))
+* remove certification_types enum ([e04278c](https://github.com/ColdPBC/cold-monorepo/commit/e04278cf11ab322eea83064ab65fd66d00707b4e))
+* remove CertificationsService from cold-api ([f372b39](https://github.com/ColdPBC/cold-monorepo/commit/f372b39162119b0078517b679ef629f9ed3c011d))
+* rename and restructure claims tables ([48405c9](https://github.com/ColdPBC/cold-monorepo/commit/48405c984bb9dbd5976506935aad6ce6a4f8a2de))
+* Rename supplier comparator and adjust DataGrid styling. ([88f93ee](https://github.com/ColdPBC/cold-monorepo/commit/88f93ee0b20c93a2ba4c26f9ce6f60e585ea220a))
+* update claim structure and rename indexes ([d8747a1](https://github.com/ColdPBC/cold-monorepo/commit/d8747a1a2bc327a161ff10962f17f22315aa0b1d))
+* Update documentsPage component to ignore Chromatic UI testing ([0e483fd](https://github.com/ColdPBC/cold-monorepo/commit/0e483fd9577b101b68cde484f68babca1121e256))
+* update OpenAPI examples and survey structure ([5252586](https://github.com/ColdPBC/cold-monorepo/commit/525258655d14757171668ccc6b234b459a1410cd))
+
 # [1.326.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.325.0...v1.326.0) (2024-08-08)
 
 
