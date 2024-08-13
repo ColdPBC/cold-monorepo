@@ -149,7 +149,7 @@ export class EventService extends BaseWorker {
       const service_definition = integration.service_definition;
 
       // If the service definition doesn't have a routing key, log a warning and skip this iteration
-      const routingKey = get(service_definition, `definition.rabbitMQ.${isRPC ? 'rpcOptions' : 'publishOptions'}.routing_key`);
+      const routingKey: any = get(service_definition, `definition.rabbitMQ.${isRPC ? 'rpcOptions' : 'publishOptions'}.routing_key`);
       if (!routingKey) {
         this.logger.warn('rabbitMQ.publishOptions.routing_key not found in service definition; unable to publish to service', { service_definition });
         continue;
@@ -168,7 +168,7 @@ export class EventService extends BaseWorker {
 
       // If the event is an RPC, send an async event, otherwise send an RPC event and return the response
       if (!isRPC) {
-        this.sendAsyncEvent(routingKey, event, merged, options);
+        await this.sendAsyncEvent(routingKey, event, merged, options);
       } else {
         responses.push(await this.sendRPCEvent(routingKey, event, merged, options));
       }
