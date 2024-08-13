@@ -1,4 +1,4 @@
-# [1.327.0-cold-934.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.326.0...v1.327.0-cold-934.1) (2024-08-13)
+# [1.327.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.326.0...v1.327.0) (2024-08-13)
 
 
 ### Bug Fixes
@@ -10,7 +10,6 @@
 * improve validation for optional fields in organization claims ([3855b52](https://github.com/ColdPBC/cold-monorepo/commit/3855b52da1160a4f244fa4f86c2ab13fa4ecca54))
 * **prisma:** correct field name for organization_claims in schema ([a6a6421](https://github.com/ColdPBC/cold-monorepo/commit/a6a64211954e91d117e44b894a775224d866e73c))
 * rename certification_claim to organization_claims to correct schema field name ([bd92159](https://github.com/ColdPBC/cold-monorepo/commit/bd9215934e8c60588a13140d5c1b9404068388db))
-* typecast routing_key to string in organization integrations service ([18c7019](https://github.com/ColdPBC/cold-monorepo/commit/18c7019bd3a7c0ce0d012414f90e78af892fd687))
 * update organization claims endpoint path ([2447cbc](https://github.com/ColdPBC/cold-monorepo/commit/2447cbcf143f312aa1e747797bc8eff41cce848e))
 
 
