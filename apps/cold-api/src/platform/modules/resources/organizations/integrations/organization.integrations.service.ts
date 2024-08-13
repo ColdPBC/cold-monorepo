@@ -108,7 +108,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
       }
 
       await this.rabbit.publish(
-        get(service.definition, 'rabbitMQ.rpcOptions.routing_key', 'deadletter'),
+        get(service.definition, 'rabbitMQ.rpcOptions.routing_key', 'deadletter') as string,
         {
           data: {
             organization: org,
