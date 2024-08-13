@@ -1,3 +1,10 @@
+## [1.327.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.327.0...v1.327.1) (2024-08-13)
+
+
+### Bug Fixes
+
+* typecast routing_key to string in organization integrations service ([18c7019](https://github.com/ColdPBC/cold-monorepo/commit/18c7019bd3a7c0ce0d012414f90e78af892fd687))
+
 # [1.327.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.326.0...v1.327.0) (2024-08-13)
 
 
