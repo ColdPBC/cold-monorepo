@@ -1,3 +1,10 @@
+# [1.323.0-COLD-904.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.323.0-COLD-904.1...v1.323.0-COLD-904.2) (2024-08-14)
+
+
+### Features
+
+* Remove assessments context and related components ([0e0f551](https://github.com/ColdPBC/cold-monorepo/commit/0e0f5517e3857c54bc92e39c7954ff0422cba236))
+
 # [1.323.0-COLD-904.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.322.0...v1.323.0-COLD-904.1) (2024-08-06)
 
 
