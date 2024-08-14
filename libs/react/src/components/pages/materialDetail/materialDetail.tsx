@@ -13,6 +13,7 @@ import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
 import { isEqual } from 'lodash';
 import { MaterialDetailAddSupplier } from '../../organisms/materialDetailAddSupplier/materialDetailAddSupplier';
+import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
 const _MaterialDetail = () => {
   const { addToastMessage } = useAddToastMessage();
@@ -229,7 +230,7 @@ const _MaterialDetail = () => {
       };
     });
 
-  const supplierColumns = [
+  const supplierColumns: GridColDef[] = [
     {
       field: 'name',
       headerName: 'Name',
@@ -241,6 +242,21 @@ const _MaterialDetail = () => {
       headerName: 'Country',
       flex: 1,
       headerClassName: 'bg-gray-30 text-body',
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      width: 60,
+      headerClassName: 'bg-gray-30 text-body',
+      getActions: params => [
+        <GridActionsCellItem
+          label="View Details"
+          onClick={() => {
+            navigate(`/suppliers/${params.row.id}`);
+          }}
+          showInMenu
+        />,
+      ],
     },
   ];
   return (
