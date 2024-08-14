@@ -8,12 +8,12 @@ export class ClaimsService extends BaseWorker {
     super(ClaimsService.name);
   }
 
-  create(org: organizations, user: IAuthenticatedUser, createCertificationDto: claims) {
-    return this.claimsRepository.createClaim(org, user, createCertificationDto);
+  create(org: organizations, user: IAuthenticatedUser, createClaimDto: claims) {
+    return this.claimsRepository.createClaim(org, user, createClaimDto);
   }
 
-  update(org: organizations, user: IAuthenticatedUser, updateCertificationDto: claims) {
-    return this.claimsRepository.updateComplianceCertification(org, user, updateCertificationDto);
+  update(org: organizations, user: IAuthenticatedUser, updateClaimDto: claims) {
+    return this.claimsRepository.updateClaim(org, user, updateClaimDto);
   }
 
   findAll() {
@@ -29,6 +29,6 @@ export class ClaimsService extends BaseWorker {
   }
 
   remove(org: organizations, user: IAuthenticatedUser, id: string) {
-    return this.claimsRepository.deleteComplianceCertification(org, user, id);
+    return this.claimsRepository.deleteClaim(org, user, id);
   }
 }

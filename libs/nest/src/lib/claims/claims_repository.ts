@@ -54,7 +54,7 @@ export class ClaimsRepository extends BaseWorker {
     return policies;
   }
 
-  async updateComplianceCertification(org: organizations, user: IAuthenticatedUser, data: claims) {
+  async updateClaim(org: organizations, user: IAuthenticatedUser, data: claims) {
     const policy = this.prisma.claims.update({
       where: {
         id: data.id,
@@ -67,7 +67,7 @@ export class ClaimsRepository extends BaseWorker {
     return policy;
   }
 
-  async deleteComplianceCertification(org: organizations, user: IAuthenticatedUser, id: string) {
+  async deleteClaim(org: organizations, user: IAuthenticatedUser, id: string) {
     const policy = this.prisma.claims.delete({
       where: {
         id: id,
@@ -113,18 +113,18 @@ export class ClaimsRepository extends BaseWorker {
       },
     };
 
-    const certifications = await this.prisma.claims.findMany(queryOptions);
+    const claims = await this.prisma.claims.findMany(queryOptions);
 
-    if (!certifications || certifications.length === 0) {
+    if (!claims || claims.length === 0) {
       throw new NotFoundException(`No Certifications found`);
     }
 
-    return certifications;
+    return claims;
   }
 
   async findOne(org: organizations, user: IAuthenticatedUser, filters?: { name?: string; id?: string }) {
     if (filters?.id || filters?.name) {
-      const certification = await this.prisma.claims.findUnique({
+      const claim = await this.prisma.claims.findUnique({
         where: {
           id: filters.id,
           name: filters.name,
@@ -137,11 +137,11 @@ export class ClaimsRepository extends BaseWorker {
         },
       });
 
-      if (!certification) {
-        throw new NotFoundException({ filters, user }, `No Certification found`);
+      if (!claim) {
+        throw new NotFoundException({ filters, user }, `No Claim found`);
       }
 
-      return certification;
+      return claim;
     } else {
       throw new UnprocessableEntityException({ filters, user }, 'Must provide id or name');
     }

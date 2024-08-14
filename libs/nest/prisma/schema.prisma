@@ -326,6 +326,9 @@ model organizations {
   survey_status                             survey_status[]
   utility_bills                             utility_bills[]
   vector_records                            vector_records[]
+  claims                                    claims[]
+  facility_footprints                       facility_footprints[]
+  compliance_responses                      compliance_responses[]
 }
 
 /// @namespace Organization_Facilities
@@ -336,59 +339,60 @@ model organizations {
 /// @zod.import(["import { organization_facilitiesSchema } from '../../custom'"])
 /// @actions
 model organization_facilities {
-  id                   String                 @id @default(cuid())
-  organization_id      String
-  name                 String
-  city                 String?
-  country              String?
-  created_at           DateTime               @default(now())
-  updated_at           DateTime               @updatedAt
-  address_line_2       String?
-  postal_code          String?
-  deleted              Boolean                @default(false)
-  metadata             Json?
-  state_province       String?
-  address_line_1       String?
-  supplier             Boolean?               @default(false)
+  id                  String                @id @default(cuid())
+  organization_id     String
+  name                String
+  city                String?
+  country             String?
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  address_line_2      String?
+  postal_code         String?
+  deleted             Boolean               @default(false)
+  metadata            Json?
+  state_province      String?
+  address_line_1      String?
+  supplier            Boolean?              @default(false)
   organization_claims organization_claims[]
-  emissions            emissions[]
-  integrations         integrations[]
-  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  utility_bills        utility_bills[]
-  product_suppliers    suppliers_view[]
-  material_suppliers   material_suppliers[]
+  emissions           emissions[]
+  integrations        integrations[]
+  organization        organizations         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  utility_bills       utility_bills[]
+  product_suppliers   suppliers_view[]
+  material_suppliers  material_suppliers[]
 
   @@index([organization_id], map: "organization_facilities_organization_id_idx1")
 }
 
 model claims {
-  id                   String                 @id @default(cuid())
-  organization_id      String?
-  name                 String
-  created_at           DateTime               @default(now())
-  updated_at           DateTime               @updatedAt
-  deleted              Boolean                @default(false)
-  level                claim_level
-  type                 claim_types
+  id                  String                @id @default(cuid())
+  organization_id     String?
+  name                String
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  deleted             Boolean               @default(false)
+  level               claim_levels
+  type                claim_types
   organization_claims organization_claims[]
+  organization        organizations?        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
   @@unique([organization_id, name], name: "orgIdName")
 }
 
 model organization_claims {
   id                       String                   @id @default(cuid())
-  claim_id         String
+  claim_id                 String
   organization_facility_id String?
   organization_file_id     String
-  issued_date              DateTime                 @default(now())
-  effective_date           DateTime                 @default(now())
+  issued_date              DateTime?                @default(now())
+  effective_date           DateTime?                @default(now())
   created_at               DateTime                 @default(now())
   updated_at               DateTime                 @updatedAt
   deleted                  Boolean                  @default(false)
   material_id              String?
   product_id               String?
   organization_id          String
-  claim            claims           @relation(fields: [claim_id], references: [id], onDelete: Cascade)
+  claim                    claims                   @relation(fields: [claim_id], references: [id], onDelete: Cascade)
   material                 materials?               @relation(fields: [material_id], references: [id])
   facility                 organization_facilities? @relation(fields: [organization_facility_id], references: [id])
   organization_file        organization_files       @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
@@ -404,42 +408,42 @@ model organization_claims {
 }
 
 model products {
-  id                   String                 @id @default(cuid())
-  name                 String                 @unique
-  created_at           DateTime               @default(now())
-  updated_at           DateTime               @updatedAt
-  deleted              Boolean                @default(false)
-  organization_id      String
-  certification_claims organization_claims[]
-  product_materials    product_materials[]
-  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  id                  String                @id @default(cuid())
+  name                String                @unique
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  deleted             Boolean               @default(false)
+  organization_id     String
+  organization_claims organization_claims[]
+  product_materials   product_materials[]
+  organization        organizations         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
   @@index([organization_id], map: "products_organization_id_idx1")
 }
 
 model materials {
-  id                   String                 @id @default(cuid())
-  name                 String                 @unique
-  created_at           DateTime               @default(now())
-  updated_at           DateTime               @updatedAt
-  deleted              Boolean                @default(false)
-  organization_id      String
-  certification_claims organization_claims[]
-  material_suppliers   material_suppliers[]
-  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  product_materials    product_materials[]
+  id                  String                @id @default(cuid())
+  name                String                @unique
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  deleted             Boolean               @default(false)
+  organization_id     String
+  organization_claims organization_claims[]
+  material_suppliers  material_suppliers[]
+  organization        organizations         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  product_materials   product_materials[]
 
   @@index([organization_id], map: "materials_organization_id_idx1")
 }
 
 model material_suppliers {
-  id               String                  @id @default(cuid())
-  material_id      String
-  supplier_id      String
-  created_at       DateTime                @default(now())
-  updated_at       DateTime                @updatedAt
-  material         materials               @relation(fields: [material_id], references: [id], onDelete: Cascade)
-  supplier         organization_facilities @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+  id          String                  @id @default(cuid())
+  material_id String
+  supplier_id String
+  created_at  DateTime                @default(now())
+  updated_at  DateTime                @updatedAt
+  material    materials               @relation(fields: [material_id], references: [id], onDelete: Cascade)
+  supplier    organization_facilities @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
 
   @@index([material_id], map: "material_suppliers_material_id_idx1")
 }
@@ -679,6 +683,8 @@ model facility_footprints {
   type            String   @default("year")
   value           Int
   deleted         Boolean  @default(false)
+
+  organization organizations @relation(fields: [organization_id], references: [id])
 
   @@unique([facility_id, type, value], name: "facilityFootprintKey")
 }
@@ -1006,6 +1012,8 @@ view compliance_responses {
   compliance_sections                    compliance_sections?                  @relation(fields: [compliance_section_id], references: [id])
   compliance_questions                   compliance_questions?                 @relation(fields: [compliance_question_id], references: [id])
 
+  organization organizations? @relation(fields: [organization_id], references: [id])
+
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
   @@index([organization_id])
   @@index([organization_compliance_id])
@@ -1019,7 +1027,7 @@ view compliance_responses {
 }
 
 view organization_claims_view {
-  facility_id            String               @id
+  facility_id            String       @id
   facility_name          String?
   address_line_1         String?
   address_line_2         String?
@@ -1030,7 +1038,7 @@ view organization_claims_view {
   supplier               Boolean
   claim_id               String?
   claim_name             String?
-  claim_level            claim_level?
+  claim_level            claim_levels?
   claim_type             claim_types?
   organization_file_id   String?
   organization_file_name String?
@@ -1097,11 +1105,11 @@ enum component_definition_types {
   TEST
 }
 
-enum claim_level {
-  Organization
-  Supplier
-  Product
-  Material
+enum claim_levels {
+  ORGANIZATION
+  SUPPLIER
+  PRODUCT
+  MATERIAL
 }
 
 enum file_types {

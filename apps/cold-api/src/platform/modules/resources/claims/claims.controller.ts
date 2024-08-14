@@ -13,42 +13,42 @@ import { claims } from '@prisma/client';
 @UseFilters(new HttpExceptionFilter(ClaimsController.name))
 @Controller('claims')
 export class ClaimsController {
-  constructor(private readonly certificationsService: ClaimsService) {}
+  constructor(private readonly claim: ClaimsService) {}
 
   @Post()
   @Roles(Role.ColdAdmin)
   create(@Req() req: any, @Body() createClaimDto: claims) {
-    return this.certificationsService.create(req.organization, req.user, createCertificationDto);
+    return this.claim.create(req.organization, req.user, createClaimDto);
   }
 
   @Patch(':id')
   @Roles(Role.ColdAdmin)
   update(@Req() req: any, @Param('id') id: string, @Body() updateClaimDto: claims) {
-    updateCertificationDto.id = id;
-    return this.certificationsService.update(req.org, req.user, updateCertificationDto);
+    updateClaimDto.id = id;
+    return this.claim.update(req.org, req.user, updateClaimDto);
   }
 
   @Get()
   @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   findAll() {
-    return this.certificationsService.findAll();
+    return this.claim.findAll();
   }
 
   @Get(':id')
   @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   findById(@Req() req: any, @Param('id') id: string) {
-    return this.certificationsService.findById(req.organization, req.user, id);
+    return this.claim.findById(req.organization, req.user, id);
   }
 
   @Get('name/:name')
   @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   findByName(@Req() req: any, @Param('name') name: string) {
-    return this.certificationsService.findByName(req.organization, req.user, name);
+    return this.claim.findByName(req.organization, req.user, name);
   }
 
   @Delete(':id')
   @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   remove(@Req() req: any, @Param('id') id: string) {
-    return this.certificationsService.remove(req.organization, req.user, id);
+    return this.claim.remove(req.organization, req.user, id);
   }
 }
