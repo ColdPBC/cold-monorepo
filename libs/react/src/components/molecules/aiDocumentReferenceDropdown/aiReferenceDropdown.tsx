@@ -3,10 +3,10 @@ import { ColdIcon } from '../../atoms';
 import { IconNames } from '@coldpbc/enums';
 import { QuestionnaireQuestionComplianceReference } from '@coldpbc/interfaces';
 import { isArray } from 'lodash';
-import { t } from 'msw/lib/glossary-de6278a9';
 
 export const AiReferenceDropdown = (props: { reference: QuestionnaireQuestionComplianceReference }) => {
   const { reference } = props;
+
   const { file, url, text } = reference;
   const [open, setOpen] = useState<boolean>(false);
   const getReference = () => {
