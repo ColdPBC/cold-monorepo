@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, IAuthenticatedUser } from '@coldpbc/nest';
-import { ComplianceCertificationClaimsRepository } from '@coldpbc/nest';
-import { certification_claims, organizations } from '@prisma/client';
+import { BaseWorker, IAuthenticatedUser, OrganizationClaimsRepository } from '@coldpbc/nest';
+import { organization_claims, organizations } from '@prisma/client';
 import { unset } from 'lodash';
 
 @Injectable()
-export class ClaimsService extends BaseWorker {
-  constructor(readonly claimsRepository: ComplianceCertificationClaimsRepository) {
-    super(ClaimsService.name);
+export class OrganizationClaimsService extends BaseWorker {
+  constructor(readonly claimsRepository: OrganizationClaimsRepository) {
+    super(OrganizationClaimsService.name);
   }
-  create(org: organizations, user: IAuthenticatedUser, createClaimDto: certification_claims) {
+  create(org: organizations, user: IAuthenticatedUser, createClaimDto: organization_claims) {
     unset(createClaimDto, 'id');
 
     return this.claimsRepository.createClaim(org, user, createClaimDto);
@@ -23,7 +22,7 @@ export class ClaimsService extends BaseWorker {
     return this.claimsRepository.findOne(org, user, { name });
   }
 
-  update(org: organizations, user: IAuthenticatedUser, id: string, updateClaimDto: certification_claims) {
+  update(org: organizations, user: IAuthenticatedUser, id: string, updateClaimDto: organization_claims) {
     updateClaimDto.id = id;
     return this.claimsRepository.updateClaim(org, user, id, updateClaimDto);
   }

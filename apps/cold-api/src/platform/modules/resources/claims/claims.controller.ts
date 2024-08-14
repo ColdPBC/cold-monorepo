@@ -1,54 +1,54 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UseFilters, Req } from '@nestjs/common';
-import { CertificationsService } from './certifications.service';
+import { ClaimsService } from './claims.service';
 import { HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Role, Roles, RolesGuard } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
-import { certifications } from '@prisma/client';
+import { claims } from '@prisma/client';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseInterceptors(OrgUserInterceptor)
 @ApiOAuth2(['openid', 'email', 'profile'])
-@ApiTags('Certifications')
-@UseFilters(new HttpExceptionFilter(CertificationsController.name))
-@Controller('certifications')
-export class CertificationsController {
-  constructor(private readonly certificationsService: CertificationsService) {}
+@ApiTags('Claims')
+@UseFilters(new HttpExceptionFilter(ClaimsController.name))
+@Controller('claims')
+export class ClaimsController {
+  constructor(private readonly claim: ClaimsService) {}
 
   @Post()
   @Roles(Role.ColdAdmin)
-  create(@Req() req: any, @Body() createCertificationDto: certifications) {
-    return this.certificationsService.create(req.organization, req.user, createCertificationDto);
+  create(@Req() req: any, @Body() createClaimDto: claims) {
+    return this.claim.create(req.organization, req.user, createClaimDto);
   }
 
   @Patch(':id')
   @Roles(Role.ColdAdmin)
-  update(@Req() req: any, @Param('id') id: string, @Body() updateCertificationDto: certifications) {
-    updateCertificationDto.id = id;
-    return this.certificationsService.update(req.org, req.user, updateCertificationDto);
+  update(@Req() req: any, @Param('id') id: string, @Body() updateClaimDto: claims) {
+    updateClaimDto.id = id;
+    return this.claim.update(req.org, req.user, updateClaimDto);
   }
 
   @Get()
   @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   findAll() {
-    return this.certificationsService.findAll();
+    return this.claim.findAll();
   }
 
   @Get(':id')
   @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   findById(@Req() req: any, @Param('id') id: string) {
-    return this.certificationsService.findById(req.organization, req.user, id);
+    return this.claim.findById(req.organization, req.user, id);
   }
 
   @Get('name/:name')
   @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   findByName(@Req() req: any, @Param('name') name: string) {
-    return this.certificationsService.findByName(req.organization, req.user, name);
+    return this.claim.findByName(req.organization, req.user, name);
   }
 
   @Delete(':id')
   @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   remove(@Req() req: any, @Param('id') id: string) {
-    return this.certificationsService.remove(req.organization, req.user, id);
+    return this.claim.remove(req.organization, req.user, id);
   }
 }
