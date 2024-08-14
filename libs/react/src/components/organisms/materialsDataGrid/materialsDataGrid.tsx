@@ -140,7 +140,7 @@ const _MaterialsDataGrid = () => {
       field: claim.claim_name,
       headerName: claim.claim_name,
       headerClassName: 'bg-gray-30 h-[37px] text-body',
-      width: 170,
+      flex: 1,
       renderCell: params => {
         return renderCell(params);
       },

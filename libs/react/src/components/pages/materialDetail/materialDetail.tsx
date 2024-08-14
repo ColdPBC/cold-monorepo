@@ -198,9 +198,10 @@ const _MaterialDetail = () => {
         variant={ButtonTypes.warning}
         disabled={deleteButtonLoading}
         loading={deleteButtonLoading}
+        key={'delete'}
       />,
     );
-    buttons.push(<BaseButton label={'Save'} onClick={saveMaterial} disabled={saveButtonDisabled || saveButtonLoading} loading={saveButtonLoading} />);
+    buttons.push(<BaseButton label={'Save'} onClick={saveMaterial} disabled={saveButtonDisabled || saveButtonLoading} loading={saveButtonLoading} key={'save'} />);
     return <div className={'flex flex-row gap-[16px] h-[40px]'}>{buttons}</div>;
   };
 
