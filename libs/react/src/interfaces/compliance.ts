@@ -191,7 +191,7 @@ export interface QuestionnaireQuestionComplianceResponse {
 export interface QuestionnaireQuestionComplianceReference {
   file?: string;
   url?: string;
-  text?: string[];
+  text?: string[] | string;
 }
 
 export interface QuestionnaireComplianceContainerPayLoad {

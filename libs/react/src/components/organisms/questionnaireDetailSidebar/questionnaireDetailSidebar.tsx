@@ -8,7 +8,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 
 const _QuestionnaireDetailSidebar = () => {
   const { logBrowser } = useColdContext();
-  const { focusQuestion, setFocusQuestion } = useContext(ColdComplianceQuestionnaireContext);
+  const { focusQuestion, setFocusQuestion, name } = useContext(ColdComplianceQuestionnaireContext);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [tab, setTab] = useState<'ai' | 'notes' | 'more'>('ai');
 
@@ -81,6 +81,8 @@ const _QuestionnaireDetailSidebar = () => {
     focusQuestion,
   });
 
+  const tabs = ['ai', 'notes'];
+
   return (
     <div
       className={'flex flex-col h-full'}
@@ -95,7 +97,7 @@ const _QuestionnaireDetailSidebar = () => {
         <>
           <div className={'w-full h-auto flex flex-row gap-[12px] px-[24px] py-[16px] bg-gray-30 justify-between'}>
             <div className={'flex flex-row gap-[24px] justify-start'}>
-              {['ai', 'notes', 'more'].map(tabName => {
+              {tabs.map(tabName => {
                 return (
                   <div
                     className={`flex flex-row items-center gap-[24px] cursor-pointer ${tab === tabName ? 'text-tc-primary' : 'text-tc-disabled'}`}

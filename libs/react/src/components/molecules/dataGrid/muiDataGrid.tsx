@@ -1,0 +1,71 @@
+import { HexColors } from '@coldpbc/themes';
+import { MUIDataGridNoRowsOverlay } from '@coldpbc/components';
+import { DataGrid, DataGridProps, GridColDef, GridValidRowModel } from '@mui/x-data-grid';
+import { twMerge } from 'tailwind-merge';
+
+export interface MUIDataGridProps extends DataGridProps {
+  rows: GridValidRowModel[];
+  columns: GridColDef[];
+}
+
+export const MuiDataGrid = (props: MUIDataGridProps) => {
+  return (
+    <DataGrid
+      rowHeight={37}
+      getRowClassName={() => {
+        return 'text-tc-primary cursor-pointer';
+      }}
+      columnHeaderHeight={40}
+      autoHeight={true}
+      {...props}
+      sx={{
+        '--DataGrid-overlayHeight': '300px',
+        '--DataGrid-rowBorderColor': HexColors.gray[30],
+        '& .MuiTablePagination-root': {
+          color: HexColors.tc.primary,
+        },
+        '& .MuiDataGrid-withBorderColor': {
+          borderColor: HexColors.gray[30],
+        },
+        '& .MuiDataGrid-columnHeaderTitle': {
+          fontWeight: 'bold',
+        },
+        '& .MuiDataGrid-cell:focus': {
+          outline: 'none',
+        },
+        '& .MuiDataGrid-cell:focus-within': {
+          outline: 'none',
+        },
+        '& .MuiDataGrid-columnHeader:focus': {
+          outline: 'none',
+        },
+        '& .MuiDataGrid-columnHeader:focus-within': {
+          outline: 'none',
+        },
+        ...props.sx,
+      }}
+      slots={{
+        noRowsOverlay: MUIDataGridNoRowsOverlay,
+        ...props.slots,
+      }}
+      slotProps={{
+        filterPanel: {
+          sx: {
+            '& .MuiInput-input': {
+              backgroundColor: 'transparent',
+              fontFamily: 'Inter',
+              fontSize: '14px',
+              padding: '4px 0px 5px',
+              height: '32px',
+            },
+            '& .MuiDataGrid-filterFormColumnInput': {
+              backgroundColor: 'transparent',
+            },
+          },
+        },
+        ...props.slotProps,
+      }}
+      className={twMerge('text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto', props.className)}
+    />
+  );
+};

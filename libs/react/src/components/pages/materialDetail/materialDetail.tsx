@@ -1,30 +1,31 @@
+import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BaseButton, ErrorFallback, Input, MainContent, Modal, Spinner, SupplierClaimsTable, SupplierDetailSidebar } from '@coldpbc/components';
-import { ButtonTypes, CertificationStatus } from '@coldpbc/enums';
+import { Certifications, MaterialsWithCertifications, ToastMessage } from '@coldpbc/interfaces';
+import { axiosFetcher } from '@coldpbc/fetchers';
 import React, { ReactNode, useEffect, useState } from 'react';
+import { ButtonTypes, CertificationStatus } from '@coldpbc/enums';
+import capitalize from 'lodash/capitalize';
+import { getDateActiveStatus } from '@coldpbc/lib';
+import { isAxiosError } from 'axios';
+import { BaseButton, Input, MainContent, Spinner, MuiDataGrid, MaterialDetailClaimsTable, ErrorFallback, MaterialDetailSidebar, Modal } from '@coldpbc/components';
 import opacity from 'hex-color-opacity';
 import { HexColors } from '@coldpbc/themes';
-import { getDateActiveStatus } from '@coldpbc/lib';
-import useSWR from 'swr';
-import { axiosFetcher } from '@coldpbc/fetchers';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
-import { Certifications, Suppliers, SuppliersWithCertifications, ToastMessage } from '@coldpbc/interfaces';
-import { isAxiosError } from 'axios';
-import capitalize from 'lodash/capitalize';
 import { withErrorBoundary } from 'react-error-boundary';
+import { isEqual } from 'lodash';
 
-export const _SupplierDetail = () => {
+const _MaterialDetail = () => {
   const { addToastMessage } = useAddToastMessage();
   const navigate = useNavigate();
   const { logBrowser } = useColdContext();
   const { id } = useParams();
   const { orgId } = useAuth0Wrapper();
-  const supplierSWR = useSWR<SuppliersWithCertifications, any, any>([`/organizations/${orgId}/suppliers/${id}`, 'GET'], axiosFetcher);
+  const materialSWR = useOrgSWR<MaterialsWithCertifications, any>([`/materials/${id}`, 'GET'], axiosFetcher);
   const ref = React.useRef<HTMLDivElement>(null);
   const tableRef = React.useRef<HTMLDivElement>(null);
-  const [supplier, setSupplier] = useState<SuppliersWithCertifications | undefined>(undefined);
+  const [material, setMaterial] = useState<MaterialsWithCertifications | undefined>(undefined);
   const [selectedClaim, setSelectedClaim] = useState<{
     name: string;
+    level: string;
     label: string;
     activeDocuments: {
       name: string;
@@ -45,38 +46,41 @@ export const _SupplierDetail = () => {
   const [deleteButtonLoading, setDeleteButtonLoading] = useState(false);
 
   useEffect(() => {
-    if (supplierSWR.data) {
-      setSupplier({
-        ...supplierSWR.data,
-        name: supplierSWR.data.name || '',
-        address_line_1: supplierSWR.data.address_line_1 || '',
-        address_line_2: supplierSWR.data.address_line_2 || '',
-        city: supplierSWR.data.city || '',
-        country: supplierSWR.data.country || '',
+    if (materialSWR.data) {
+      setMaterial({
+        ...materialSWR.data,
+        name: materialSWR.data.name || '',
       });
     }
-  }, [supplierSWR.data]);
+  }, [materialSWR.data]);
 
   useEffect(() => {
     // check if the supplier has been modified
-    if (supplierSWR.data && supplier) {
-      if (
-        supplierSWR.data.name === supplier.name &&
-        supplierSWR.data.address_line_1 === supplier.address_line_1 &&
-        supplierSWR.data.address_line_2 === supplier.address_line_2 &&
-        supplierSWR.data.city === supplier.city &&
-        supplierSWR.data.country === supplier.country
-      ) {
+    if (materialSWR.data && material) {
+      if (materialSWR.data.name === material.name) {
         setSaveButtonDisabled(true);
       } else {
         setSaveButtonDisabled(false);
       }
     }
-  }, [supplier]);
+  }, [material]);
 
-  const handleRowClick = (claimName: string) => {
+  const handleRowClick = (claimObject: { name: string; level: string }) => {
     // get the claim data
-    if ((selectedClaim && selectedClaim.name === claimName) || supplier === undefined) {
+    if (
+      (selectedClaim &&
+        isEqual(
+          {
+            name: claimObject.name,
+            level: claimObject.level,
+          },
+          {
+            name: selectedClaim.name,
+            level: selectedClaim.level,
+          },
+        )) ||
+      material === undefined
+    ) {
       setSelectedClaim(null);
     } else {
       const claims: {
@@ -88,7 +92,7 @@ export const _SupplierDetail = () => {
           effective_end_date: string | null;
           type: string;
         };
-      }[] = supplier?.certification_claims
+      }[] = material?.certification_claims
         .filter(
           (claim: {
             id: string;
@@ -100,7 +104,7 @@ export const _SupplierDetail = () => {
               type: string;
             };
           }) => {
-            return claim.certification !== undefined && claim.certification.name === claimName;
+            return claim.certification !== undefined && claim.certification.name === claimObject.name && claim.certification.level === claimObject.level;
           },
         )
         .sort((a, b) => {
@@ -136,8 +140,9 @@ export const _SupplierDetail = () => {
         });
 
       setSelectedClaim({
-        name: claimName,
-        label: claimName,
+        name: claimObject.name,
+        label: claimObject.name,
+        level: claimObject.level,
         activeDocuments: claims
           .filter(claim => claim.organization_file.effective_end_date !== null)
           .filter(claim => getDateActiveStatus(claim.organization_file.effective_end_date) !== 'Expired')
@@ -175,46 +180,43 @@ export const _SupplierDetail = () => {
     }
   };
 
-  const saveSupplier = async () => {
-    if (supplier === undefined) return;
+  const saveMaterial = async () => {
+    if (material === undefined) return;
 
     setSaveButtonLoading(true);
 
     const response = await axiosFetcher([
-      `/organizations/${orgId}/facilities/${id}`,
+      `/organizations/${orgId}/materials/${id}`,
       'PATCH',
       {
-        name: supplier.name,
-        address_line_1: supplier.address_line_1,
-        address_line_2: supplier.address_line_2,
-        city: supplier.city,
-        country: supplier.country,
+        name: material.name,
       },
     ]);
 
     if (isAxiosError(response)) {
-      logBrowser('SupplierDetail update error', 'error', { response });
-      await addToastMessage({ message: 'Error saving supplier', type: ToastMessage.FAILURE, timeout: 2000 });
+      logBrowser('Material update error', 'error', { response });
+      await addToastMessage({ message: 'Error saving material', type: ToastMessage.FAILURE, timeout: 2000 });
     } else {
-      await supplierSWR.mutate();
-      logBrowser('SupplierDetail update saved', 'info', { response });
-      await addToastMessage({ message: 'Supplier saved successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
+      logBrowser('Material update saved', 'info', { response });
+      await addToastMessage({ message: 'Material saved successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
     }
 
+    await materialSWR.mutate();
     setSaveButtonLoading(false);
   };
 
-  const deleteSupplier = async () => {
-    if (supplier === undefined) return;
+  const deleteMaterial = async () => {
+    if (material === undefined) return;
 
-    const response = await axiosFetcher([`/organizations/${orgId}/facilities/${id}`, 'DELETE']);
+    const response = await axiosFetcher([`/organizations/${orgId}/materials/${id}`, 'DELETE']);
 
     if (isAxiosError(response)) {
-      logBrowser('SupplierDetail delete error', 'error', { response });
-      await addToastMessage({ message: 'Error deleting supplier', type: ToastMessage.FAILURE, timeout: 2000 });
+      logBrowser('MaterialDetail delete error', 'error', { response });
+      await addToastMessage({ message: 'Error deleting material', type: ToastMessage.FAILURE, timeout: 2000 });
+      setDeleteModalOpen(false);
     } else {
-      await addToastMessage({ message: 'Supplier deleted successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
-      navigate('/suppliers');
+      await addToastMessage({ message: 'Material deleted successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
+      navigate('/materials');
     }
   };
 
@@ -227,22 +229,50 @@ export const _SupplierDetail = () => {
           setDeleteModalOpen(true);
         }}
         variant={ButtonTypes.warning}
+        disabled={deleteButtonLoading}
+        loading={deleteButtonLoading}
       />,
     );
-    buttons.push(<BaseButton label={'Save'} onClick={saveSupplier} disabled={saveButtonDisabled || saveButtonLoading} loading={saveButtonLoading} />);
+    buttons.push(<BaseButton label={'Save'} onClick={saveMaterial} disabled={saveButtonDisabled || saveButtonLoading} loading={saveButtonLoading} />);
     return <div className={'flex flex-row gap-[16px] h-[40px]'}>{buttons}</div>;
   };
 
-  if (supplierSWR.isLoading) {
+  if (materialSWR.isLoading) {
     return <Spinner />;
   }
 
-  if (isAxiosError(supplierSWR.data)) {
+  if (isAxiosError(materialSWR.data)) {
     return null;
   }
 
-  if (!supplier) return null;
+  if (!material) return null;
 
+  const supplierRows = material.material_suppliers
+    .sort((a, b) => {
+      return a.supplier.id.localeCompare(b.supplier.id);
+    })
+    .map(materialSupplier => {
+      return {
+        id: materialSupplier.supplier.id,
+        name: materialSupplier.supplier.name,
+        country: materialSupplier.supplier.country,
+      };
+    });
+
+  const supplierColumns = [
+    {
+      field: 'name',
+      headerName: 'Name',
+      flex: 1,
+      headerClassName: 'bg-gray-30 text-body',
+    },
+    {
+      field: 'country',
+      headerName: 'Country',
+      flex: 1,
+      headerClassName: 'bg-gray-30 text-body',
+    },
+  ];
   return (
     <div className={'w-full h-full flex flex-col items-center gap-[24px] text-tc-primary relative'}>
       <div
@@ -253,90 +283,49 @@ export const _SupplierDetail = () => {
         <div
           className={'cursor-pointer hover:underline'}
           onClick={() => {
-            navigate('/suppliers');
+            navigate('/materials');
           }}>
-          Suppliers{' '}
+          Materials{' '}
         </div>
         <span className={'w-[24px] h-[24px] flex items-center justify-center'}>{'>'}</span>
-        <span>{supplierSWR.data?.name}</span>
+        <span>{materialSWR.data?.name}</span>
       </div>
-      <MainContent className={'flex flex-col gap-[40px] px-[64px]'} title={supplierSWR.data?.name} headerElement={getPageButtons()}>
+      <MainContent className={'flex flex-col gap-[40px] px-[64px]'} title={materialSWR.data?.name} headerElement={getPageButtons()}>
         <div className={'w-full mb-[40px] flex flex-col gap-[12px]'}>
           <Input
             input_label={'Name'}
             input_props={{
               name: 'name',
-              value: supplier.name,
-              onChange: e => setSupplier({ ...supplier, name: e.target.value }),
-              onValueChange: e => setSupplier({ ...supplier, name: e.value }),
+              value: material.name,
+              onChange: e => setMaterial({ ...material, name: e.target.value }),
+              onValueChange: e => setMaterial({ ...material, name: e.value }),
               className: 'py-2 rounded-[8px]',
             }}
             input_label_props={{ className: 'w-[77px] flex items-center' }}
-            container_classname={'gap-[10px] flex flex-row w-full justify-between'}
-          />
-          <Input
-            input_label={'Address 1'}
-            input_props={{
-              name: 'address_1',
-              value: supplier.address_line_1 || '',
-              onChange: e => setSupplier({ ...supplier, address_line_1: e.target.value }),
-              onValueChange: e => setSupplier({ ...supplier, address_line_1: e.value }),
-              className: 'py-2 rounded-[8px]',
-            }}
-            input_label_props={{ className: 'w-[77px] flex items-center' }}
-            container_classname={'gap-[10px] flex flex-row w-full justify-between'}
-          />
-          <Input
-            input_label={'Address 2'}
-            input_props={{
-              name: 'address_2',
-              value: supplier.address_line_2,
-              onChange: e => setSupplier({ ...supplier, address_line_2: e.target.value }),
-              onValueChange: e => setSupplier({ ...supplier, address_line_2: e.value }),
-              className: 'py-2 rounded-[8px]',
-            }}
-            input_label_props={{ className: 'w-[77px] flex items-center' }}
-            container_classname={'gap-[10px] flex flex-row w-full justify-between'}
-          />
-          <Input
-            input_label={'City'}
-            input_props={{
-              name: 'city',
-              value: supplier.city,
-              onChange: e => setSupplier({ ...supplier, city: e.target.value }),
-              onValueChange: e => setSupplier({ ...supplier, city: e.value }),
-              className: 'py-2 rounded-[8px]',
-            }}
-            input_label_props={{ className: 'w-[77px] flex items-center' }}
-            container_classname={'gap-[10px] flex flex-row w-full justify-between'}
-          />
-          <Input
-            input_label={'Country'}
-            input_props={{
-              name: 'country',
-              value: supplier.country,
-              onChange: e => setSupplier({ ...supplier, country: e.target.value }),
-              onValueChange: e => setSupplier({ ...supplier, country: e.value }),
-              className: 'py-2 rounded-[8px]',
-            }}
-            input_label_props={{ className: 'w-[77px] flex items-center' }}
-            container_classname={'gap-[10px] flex flex-row w-full justify-between'}
+            container_classname={'gap-[10px] flex flex-row w-1/2 justify-between'}
           />
         </div>
-        <SupplierClaimsTable
-          supplier={supplier}
-          showSupplierCertificateDetails={claim => {
-            handleRowClick(claim);
-          }}
-          innerRef={tableRef}
-        />
+        <div className={'w-full flex mb-[40px] flex-col gap-[24px]'}>
+          <div className={'text-h3'}>Associated Suppliers</div>
+          <MuiDataGrid
+            rows={supplierRows}
+            columns={supplierColumns}
+            sx={{
+              '--DataGrid-overlayHeight': '50px',
+            }}
+          />
+        </div>
+        <div className={'w-full flex mb-[40px] flex-col gap-[24px]'}>
+          <div className={'text-h3'}>Compliance Documents</div>
+          <MaterialDetailClaimsTable material={material} selectClaim={handleRowClick} />
+        </div>
       </MainContent>
-      <SupplierDetailSidebar selectedClaim={selectedClaim} closeSidebar={() => setSelectedClaim(null)} innerRef={ref} />
+      <MaterialDetailSidebar selectedClaim={selectedClaim} closeSidebar={() => setSelectedClaim(null)} />
       <Modal
         show={deleteModalOpen}
         setShowModal={setDeleteModalOpen}
         header={{
-          title: `Are you sure you want to delete ${supplier.name}?`,
+          title: `Are you sure you want to delete ${material.name}?`,
           cardProps: {
             glow: false,
           },
@@ -352,7 +341,7 @@ export const _SupplierDetail = () => {
             label: 'Yes, Delete',
             onClick: async () => {
               setDeleteButtonLoading(true);
-              await deleteSupplier();
+              await deleteMaterial();
               setDeleteButtonLoading(false);
             },
             disabled: deleteButtonLoading,
@@ -365,9 +354,6 @@ export const _SupplierDetail = () => {
   );
 };
 
-export const SupplierDetail = withErrorBoundary(_SupplierDetail, {
+export const MaterialDetail = withErrorBoundary(_MaterialDetail, {
   FallbackComponent: props => <ErrorFallback {...props} />,
-  onError: (error, info) => {
-    console.error('Error occurred in SupplierDetail: ', error);
-  },
 });
