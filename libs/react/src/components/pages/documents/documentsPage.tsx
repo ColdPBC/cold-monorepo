@@ -1,22 +1,12 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
-import { BaseButton, ColdIcon, DocumentDetailsSidebar, DocumentUploadButton, ErrorFallback, MainContent, Modal, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
+import { ColdIcon, DocumentDetailsSidebar, DocumentUploadButton, ErrorFallback, MainContent, Modal, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
-import {
-  DataGrid,
-  GridActionsCellItem,
-  GridCallbackDetails,
-  GridColDef,
-  GridRenderCellParams,
-  GridRowParams,
-  GridTreeNodeWithRender,
-  GridValidRowModel,
-  MuiEvent,
-} from '@mui/x-data-grid';
+import { DataGrid, GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridValidRowModel, MuiEvent } from '@mui/x-data-grid';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Files, ToastMessage } from '@coldpbc/interfaces';
-import { set, toArray } from 'lodash';
-import { ButtonTypes, CertificationStatus, FileTypes, IconNames } from '@coldpbc/enums';
+import { toArray } from 'lodash';
+import { ButtonTypes, ClaimStatus, FileTypes, IconNames } from '@coldpbc/enums';
 import { differenceInDays, format } from 'date-fns';
 import { isAxiosError } from 'axios';
 import { getDateActiveStatus } from '@coldpbc/lib';
@@ -43,14 +33,14 @@ const _DocumentsPage = () => {
     let diff = 0;
 
     switch (params.value) {
-      case CertificationStatus.Expired:
+      case ClaimStatus.Expired:
         return (
           <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px] text-tc-secondary'}>
             <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.tc.disabled} />
             <span className={'text-tc-disabled'}>Expired</span>
           </div>
         );
-      case CertificationStatus.ExpiringSoon:
+      case ClaimStatus.ExpiringSoon:
         if (expirationDate) {
           diff = differenceInDays(new Date(expirationDate), new Date());
         }
@@ -60,7 +50,7 @@ const _DocumentsPage = () => {
             <span className={'text-yellow-200'}>{diff} days</span>
           </div>
         );
-      case CertificationStatus.Active:
+      case ClaimStatus.Active:
         return (
           <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px] text-tc-secondary'}>
             <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} />
@@ -68,7 +58,7 @@ const _DocumentsPage = () => {
           </div>
         );
       default:
-      case CertificationStatus.Inactive:
+      case ClaimStatus.Inactive:
         return (
           <div className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
             <div className={'w-[24px] h-[24px] flex flex-row justify-center items-center'}>
@@ -225,7 +215,7 @@ const _DocumentsPage = () => {
       flex: 1,
       minWidth: 100,
       type: 'singleSelect',
-      valueOptions: toArray(CertificationStatus),
+      valueOptions: toArray(ClaimStatus),
       renderCell: renderStatus,
     },
     {

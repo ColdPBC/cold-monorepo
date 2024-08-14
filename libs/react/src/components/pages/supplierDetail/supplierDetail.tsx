@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { BaseButton, ErrorFallback, Input, MainContent, Modal, Spinner, SupplierClaimsTable, SupplierDetailSidebar } from '@coldpbc/components';
-import { ButtonTypes, CertificationStatus } from '@coldpbc/enums';
+import { ButtonTypes, ClaimStatus } from '@coldpbc/enums';
 import React, { ReactNode, useEffect, useState } from 'react';
 import opacity from 'hex-color-opacity';
 import { HexColors } from '@coldpbc/themes';
@@ -99,7 +99,7 @@ export const _SupplierDetail = () => {
           return {
             name: claim.organization_file.original_name,
             expirationDate: null,
-            status: CertificationStatus.Inactive,
+            status: ClaimStatus.Inactive,
             type: capitalize(claim.organization_file.type),
           };
         });

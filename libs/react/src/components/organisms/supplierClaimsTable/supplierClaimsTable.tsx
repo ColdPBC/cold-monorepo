@@ -1,12 +1,12 @@
-import { BaseButton, ColdIcon, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
-import { ButtonTypes, CertificationStatus, IconNames } from '@coldpbc/enums';
+import { ColdIcon, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
+import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
 import { HexColors } from '@coldpbc/themes';
 import { forEach, orderBy, toArray, uniq } from 'lodash';
 import { differenceInDays } from 'date-fns';
 import { getDateActiveStatus } from '@coldpbc/lib';
 import React, { ReactNode } from 'react';
-import { Suppliers, SuppliersWithCertifications } from '@coldpbc/interfaces';
+import { SuppliersWithCertifications } from '@coldpbc/interfaces';
 
 export const SupplierClaimsTable = (props: {
   supplier: SuppliersWithCertifications;
@@ -25,7 +25,7 @@ export const SupplierClaimsTable = (props: {
     let diff = 0;
     let statusElement: ReactNode | null = null;
     switch (params.value) {
-      case CertificationStatus.Expired:
+      case ClaimStatus.Expired:
         statusElement = (
           <div className={'text-body h-full flex flex-row justify-start items-center gap-[0px]'}>
             <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.red['100']} />
@@ -33,7 +33,7 @@ export const SupplierClaimsTable = (props: {
           </div>
         );
         break;
-      case CertificationStatus.ExpiringSoon:
+      case ClaimStatus.ExpiringSoon:
         if (expirationDate) {
           diff = differenceInDays(new Date(expirationDate), new Date());
         }
@@ -44,7 +44,7 @@ export const SupplierClaimsTable = (props: {
           </div>
         );
         break;
-      case CertificationStatus.Active:
+      case ClaimStatus.Active:
         statusElement = (
           <div className={'text-body h-full flex flex-row justify-start items-center gap-[0px]'}>
             <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} />
@@ -53,7 +53,7 @@ export const SupplierClaimsTable = (props: {
         );
         break;
       default:
-      case CertificationStatus.Inactive:
+      case ClaimStatus.Inactive:
         statusElement = (
           <div className={'h-full flex flex-row justify-start items-center'}>
             <div className={'w-[24px] h-[24px] flex flex-row justify-center items-center'}>
@@ -97,7 +97,7 @@ export const SupplierClaimsTable = (props: {
       maxWidth: 100,
       flex: 1,
       type: 'singleSelect',
-      valueOptions: toArray(CertificationStatus),
+      valueOptions: toArray(ClaimStatus),
       renderCell: renderStatus,
     },
   ];
