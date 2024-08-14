@@ -11,6 +11,7 @@ import {
   Footprint,
   Interceptor,
   Journey,
+  MaterialDetail,
   MaterialRoutes,
   MaterialsPage,
   ProtectedRoute,
@@ -43,6 +44,7 @@ export const ColdRoutes = () => {
         {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<SuppliersPage />} />}
         {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers/:id'} element={<SupplierDetail />} />}
         {ldFlags.showMaterialsPageCold912 && <Route path={'/materials'} element={<MaterialsPage />} />}
+        {ldFlags.showMaterialsPageCold912 && <Route path={'/materials/:id'} element={<MaterialDetail />} />}
       </>
     );
   };

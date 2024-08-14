@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { ColdIcon } from '../../atoms';
 import { IconNames } from '@coldpbc/enums';
 import { QuestionnaireQuestionComplianceReference } from '@coldpbc/interfaces';
+import { isArray } from 'lodash';
 
 export const AiReferenceDropdown = (props: { reference: QuestionnaireQuestionComplianceReference }) => {
   const { reference } = props;
+
   const { file, url, text } = reference;
   const [open, setOpen] = useState<boolean>(false);
   const getReference = () => {
@@ -38,9 +40,7 @@ export const AiReferenceDropdown = (props: { reference: QuestionnaireQuestionCom
       </div>
       {open && (
         <div className={'w-full flex flex-col gap-[20px] text-body italic text-start'}>
-          {text?.map((t, index) => (
-            <div key={index}>{t}...</div>
-          ))}
+          {isArray(text) ? text.map((t, index) => <div key={index}>{t}...</div>) : <div>{text}</div>}
         </div>
       )}
     </div>

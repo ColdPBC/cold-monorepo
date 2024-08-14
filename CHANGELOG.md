@@ -1,3 +1,22 @@
+# [1.328.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.327.1...v1.328.0) (2024-08-14)
+
+
+### Bug Fixes
+
+* allow `text` to be either string array or string in compliance interface ([a3baa59](https://github.com/ColdPBC/cold-monorepo/commit/a3baa59b3909ca63b57ac6c979e0a421af692522))
+* handle non-array text properly in AiReferenceDropdown ([780c4aa](https://github.com/ColdPBC/cold-monorepo/commit/780c4aab67c0671ed8e4b021edb8be88a83ac294))
+* remove unnecessary tab condition check ([7e2999a](https://github.com/ColdPBC/cold-monorepo/commit/7e2999a193204e940af0560fac51d0201d1719d9))
+* remove unused import in aiReferenceDropdown.tsx ([107753a](https://github.com/ColdPBC/cold-monorepo/commit/107753a14e9e187ece2582afcfd1d6737b847fa7))
+
+
+### Features
+
+* add material detail mock and handler APIs ([708ea59](https://github.com/ColdPBC/cold-monorepo/commit/708ea5910db41d5eb2df0048c29d63cce3bd5967))
+* Add Material Detail Sidebar and MuiDataGrid components and refine materials data management ([1c9f60c](https://github.com/ColdPBC/cold-monorepo/commit/1c9f60cd92099ea2986abdf4195dc6b70ecda3f4))
+* add MaterialDetail page and remove flag for MaterialsPage route ([8a01ece](https://github.com/ColdPBC/cold-monorepo/commit/8a01eceb7b34b80d0d3838eb1b56d2d8793c2de4))
+* dynamically update tabs based on compliance name ([c4eeb41](https://github.com/ColdPBC/cold-monorepo/commit/c4eeb417c389c16bccc90c80e391f207549501dd))
+* update routes for materials and suppliers ([66537d8](https://github.com/ColdPBC/cold-monorepo/commit/66537d80ac0ac0edc0aa2a7b82af1ae98be91bb0))
+
 ## [1.327.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.327.0...v1.327.1) (2024-08-13)
 
 

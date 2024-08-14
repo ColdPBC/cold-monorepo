@@ -37,7 +37,7 @@ import { getDefaultEmissionMock } from './emissionMocks';
 import { getNotesMock } from './notesMock';
 import { getClaimsMock, getSupplierClaimsMock } from './claimsMock';
 import { getSupplierMockById, getSupplierWithCertificationClaimsMock } from './suppliersMock';
-import { getMaterialsMock } from './materialsMock';
+import { getMaterialDetailMockById, getMaterialsMock } from './materialsMock';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -391,5 +391,18 @@ export const handlers = [
 
   rest.get(getApiUrl('/organizations/:orgId/materials'), (req, res, ctx) => {
     return res(ctx.json(getMaterialsMock()));
+  }),
+
+  rest.get(getApiUrl('/organizations/:orgId/materials/:id'), (req, res, ctx) => {
+    const { id } = req.params as { id: string };
+    return res(ctx.json(getMaterialDetailMockById(id)));
+  }),
+
+  rest.patch(getApiUrl('/organizations/:orgId/materials/:id'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.delete(getApiUrl('/organizations/:orgId/materials/:id'), (req, res, ctx) => {
+    return res(ctx.status(200));
   }),
 ];

@@ -108,7 +108,7 @@ export class MaterialsRepository extends BaseWorker {
     },
     data: any,
   ) {
-    const product = this.prisma.products.update({
+    const product = this.prisma.materials.update({
       where: {
         organization_id: org.id,
         id: filters.id,

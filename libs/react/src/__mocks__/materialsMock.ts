@@ -145,3 +145,7 @@ export function getMaterialsMock(): MaterialsWithCertifications[] {
     },
   ];
 }
+
+export function getMaterialDetailMockById(id: string): MaterialsWithCertifications {
+  return getMaterialsMock().find(material => material.id === id) || getMaterialsMock()[0];
+}
