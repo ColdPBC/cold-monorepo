@@ -1,5 +1,5 @@
 import React from 'react';
-import { AllCompliance, SurveyNextStep } from '@coldpbc/interfaces';
+import { AllCompliance } from '@coldpbc/interfaces';
 import { BaseButton, Card } from '@coldpbc/components';
 import { ButtonTypes } from '@coldpbc/enums';
 import { snakeCase } from 'lodash';

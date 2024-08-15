@@ -21,10 +21,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   getAllComplianceMocks,
   getComplianceCountsMock,
-  getComplianceMock,
   getComplianceMockByName,
-  getOrganizationComplianceMock,
-  getOrganizationComplianceMockByName,
   getQuestionAIDetailsMock,
   getQuestionnaireContainerMock,
   getQuestionnaireSidebarComplianceMock,
@@ -246,24 +243,6 @@ export const handlers = [
 
   rest.get(getApiUrl('/organizations/:orgId/surveys'), (req, res, ctx) => {
     return res(ctx.json(getSurveysMock()));
-  }),
-
-  rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
-    return res(ctx.json(getComplianceMock()));
-  }),
-
-  rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
-    return res(ctx.json(getOrganizationComplianceMock()));
-  }),
-
-  rest.post(getApiUrl('/compliance_definitions/:name/organizations/:orgId'), (req, res, ctx) => {
-    const { name, orgId } = req.params;
-    return res(
-      ctx.json({
-        ...getOrganizationComplianceMockByName(name as string),
-        compliance_definition: undefined,
-      }),
-    );
   }),
 
   rest.get(getApiUrl('/components/documents_list_table'), (req, res, ctx) => {

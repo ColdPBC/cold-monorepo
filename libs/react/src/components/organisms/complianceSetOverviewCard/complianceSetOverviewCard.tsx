@@ -1,6 +1,6 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { AllCompliance, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
+import { AllCompliance, ToastMessage } from '@coldpbc/interfaces';
 import React, { useContext } from 'react';
 import { ColdCompliancePageContext } from '@coldpbc/context';
 import { ComplianceStatus, ErrorType, GlobalSizes } from '@coldpbc/enums';
@@ -13,7 +13,6 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { get, isArray } from 'lodash';
 import { getTermString } from '@coldpbc/lib';
 import { isDefined } from 'class-validator';
-import useSWR from 'swr';
 
 const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompliance }) => {
   const navigate = useNavigate();

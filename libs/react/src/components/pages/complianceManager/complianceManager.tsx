@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
-import { find, forEach, get } from 'lodash';
+import { forEach, get } from 'lodash';
 import { ColdIcon, ColdLeftArrowIcon, ComplianceManagerOverview, ComplianceManagerPreview, ErrorFallback, Spinner } from '@coldpbc/components';
 import React, { useContext, useEffect, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
@@ -8,7 +8,7 @@ import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { format } from 'date-fns';
 import { withErrorBoundary } from 'react-error-boundary';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
-import { Compliance, ComplianceManagerCountsPayload, ComplianceSidebarPayload, CurrentAIStatusPayload, OrgCompliance } from '@coldpbc/interfaces';
+import { Compliance, ComplianceManagerCountsPayload, ComplianceSidebarPayload, CurrentAIStatusPayload } from '@coldpbc/interfaces';
 import useSWRSubscription from 'swr/subscription';
 import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
