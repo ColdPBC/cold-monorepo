@@ -9,6 +9,8 @@ import {
   DocumentUpload,
   Footprint,
   Interceptor,
+  MaterialDetail,
+  MaterialsPage,
   ProtectedRoute,
   Signup,
   SupplierDetail,
@@ -26,7 +28,7 @@ export const ColdRoutes = () => {
   const getFilteredRoutes = () => {
     return (
       <>
-        <Route index element={<Navigate to={'/compliance'} replace={true} />} />
+        <Route path={'/'} element={<Navigate to={'/compliance'} replace={true} />} />
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
         {ldFlags.showActions261 && <Route path={'/actions'} element={<ActionsOverview />} />}
@@ -36,8 +38,10 @@ export const ColdRoutes = () => {
         <Route path={'/settings/users'} element={<UserSettingsPage />} />
         <Route path="*" element={<Navigate to={'/compliance'} replace={true} />} />
         {WizardRoutes()}
-        {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<SuppliersPage />} />}
-        {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers/:id'} element={<SupplierDetail />} />}
+        <Route path={'/suppliers'} element={ldFlags.showSuppliersPageCold890 ? <SuppliersPage /> : <Navigate to={'/compliance'} replace={true} />} />
+        <Route path={'/suppliers/:id'} element={ldFlags.showSuppliersPageCold890 ? <SupplierDetail /> : <Navigate to={'/compliance'} replace={true} />} />
+        <Route path={'/materials'} element={ldFlags.showMaterialsPageCold912 ? <MaterialsPage /> : <Navigate to={'/compliance'} replace={true} />} />
+        <Route path={'/materials/:id'} element={ldFlags.showMaterialsPageCold912 ? <MaterialDetail /> : <Navigate to={'/compliance'} replace={true} />} />
       </>
     );
   };

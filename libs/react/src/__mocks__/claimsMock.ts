@@ -1,7 +1,7 @@
-import { Certifications, SuppliersClaimNamesPayload } from '@coldpbc/interfaces';
+import { Claims, SuppliersClaimNamesPayload } from '@coldpbc/interfaces';
 
 export const getSupplierClaimsMock = (): SuppliersClaimNamesPayload[] => {
-  return getCertificationsMock()
+  return getClaimsMock()
     .filter(cert => {
       return cert.level === 'Supplier';
     })
@@ -12,7 +12,7 @@ export const getSupplierClaimsMock = (): SuppliersClaimNamesPayload[] => {
     });
 };
 
-export const getCertificationsMock = (): Certifications[] => {
+export const getClaimsMock = (): Claims[] => {
   return [
     {
       id: '1',
@@ -41,6 +41,6 @@ export const getCertificationsMock = (): Certifications[] => {
   ];
 };
 
-export const getCertificationMockByName = (name: string): Certifications => {
-  return getCertificationsMock().find(cert => cert.name === name) || getCertificationsMock()[0];
+export const getClaimsMockByName = (name: string): Claims => {
+  return getClaimsMock().find(cert => cert.name === name) || getClaimsMock()[0];
 };

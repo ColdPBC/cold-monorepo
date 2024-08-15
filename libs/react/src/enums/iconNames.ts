@@ -37,4 +37,5 @@ export enum IconNames {
   ColdSuppliersNavIcon = 'ColdSuppliersNavIcon',
   ColdExpiringIcon = 'ColdExpiringIcon',
   ColdDangerIcon = 'ColdDangerIcon',
+  ColdMaterialsIcon = 'ColdMaterialsIcon',
 }

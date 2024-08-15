@@ -30,13 +30,14 @@ import {
   getQuestionnaireSidebarComplianceMock,
 } from './complianceMock';
 import { getDocumentsListTableMock } from './componentMock';
-import { getAllFilesMock, getFilesWithCertificateClaimsMock } from './filesMock';
+import { getFilesWithCertificateClaimsMock } from './filesMock';
 import { returnUpdatedSurvey } from './helpers';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { getDefaultEmissionMock } from './emissionMocks';
 import { getNotesMock } from './notesMock';
-import { getCertificationsMock, getSupplierClaimsMock } from './claimsMock';
-import { getSupplierMockById, getSupplierMockByName, getSupplierWithCertificationClaimsMock } from './suppliersMock';
+import { getClaimsMock, getSupplierClaimsMock } from './claimsMock';
+import { getSupplierMockById, getSupplierWithCertificationClaimsMock } from './suppliersMock';
+import { getMaterialDetailMockById, getMaterialsMock } from './materialsMock';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -359,8 +360,8 @@ export const handlers = [
     return res(ctx.json(getQuestionAIDetailsMock(sectionGroupId, sectionId, questionId)));
   }),
 
-  rest.get(getApiUrl('/certifications'), (req, res, ctx) => {
-    return res(ctx.json(getCertificationsMock()));
+  rest.get(getApiUrl('/claims'), (req, res, ctx) => {
+    return res(ctx.json(getClaimsMock()));
   }),
 
   rest.get(getApiUrl('/organizations/:orgId/suppliers'), (req, res, ctx) => {
@@ -392,4 +393,24 @@ export const handlers = [
     return res(ctx.status(200));
   }),
 
+  rest.get(getApiUrl('/organizations/:orgId/materials'), (req, res, ctx) => {
+    return res(ctx.json(getMaterialsMock()));
+  }),
+
+  rest.get(getApiUrl('/organizations/:orgId/materials/:id'), (req, res, ctx) => {
+    const { id } = req.params as { id: string };
+    return res(ctx.json(getMaterialDetailMockById(id)));
+  }),
+
+  rest.patch(getApiUrl('/organizations/:orgId/materials/:id'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.delete(getApiUrl('/organizations/:orgId/materials/:id'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.post(getApiUrl('/organizations/:orgId/materials/:materialId/supplier/:supplierId'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
 ];

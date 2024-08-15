@@ -1,9 +1,9 @@
 import { addDays, subDays } from 'date-fns';
-import { getCertificationMockByName, getCertificationsMock } from './claimsMock';
-import { Suppliers } from '@coldpbc/interfaces';
+import { getClaimsMock, getClaimsMockByName } from './claimsMock';
+import { SuppliersWithCertifications } from '@coldpbc/interfaces';
 
-export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
-  const certifications = getCertificationsMock();
+export const getSupplierWithCertificationClaimsMock = (): SuppliersWithCertifications[] => {
+  const certifications = getClaimsMock();
   return [
     {
       id: '1',
@@ -12,10 +12,10 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
       address_line_2: '',
       city: '',
       country: 'Vietnam',
-      certification_claims: [
+      organization_claims: [
         {
           id: '1',
-          certification: getCertificationMockByName('PFAS-Test'),
+          claim: getClaimsMockByName('PFAS-Test'),
           organization_file: {
             original_name: 'PFAS-Test Certificate',
             effective_start_date: addDays(new Date(), 5).toISOString(),
@@ -25,7 +25,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '2',
-          certification: getCertificationMockByName('Lead-Test'),
+          claim: getClaimsMockByName('Lead-Test'),
           organization_file: {
             original_name: 'Lead-Test Certificate',
             effective_start_date: null,
@@ -35,7 +35,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '3',
-          certification: getCertificationMockByName('phthalate'),
+          claim: getClaimsMockByName('phthalate'),
           organization_file: {
             original_name: 'phthalate Certificate',
             effective_start_date: null,
@@ -45,7 +45,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '4',
-          certification: getCertificationMockByName('bluesign'),
+          claim: getClaimsMockByName('bluesign'),
           organization_file: {
             original_name: 'bluesign Certificate expired 1',
             effective_start_date: subDays(new Date(), 5).toISOString(),
@@ -55,7 +55,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '5',
-          certification: getCertificationMockByName('bluesign'),
+          claim: getClaimsMockByName('bluesign'),
           organization_file: {
             original_name: 'bluesign Certificate active',
             effective_start_date: addDays(new Date(), 70).toISOString(),
@@ -65,7 +65,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '6',
-          certification: getCertificationMockByName('bluesign'),
+          claim: getClaimsMockByName('bluesign'),
           organization_file: {
             original_name: 'bluesign Certificate expiring soon',
             effective_start_date: addDays(new Date(), 5).toISOString(),
@@ -75,7 +75,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '6',
-          certification: getCertificationMockByName('bluesign'),
+          claim: getClaimsMockByName('bluesign'),
           organization_file: {
             original_name: 'bluesign Certificate expired 2',
             effective_start_date: subDays(new Date(), 7).toISOString(),
@@ -85,7 +85,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '6',
-          certification: getCertificationMockByName('bluesign'),
+          claim: getClaimsMockByName('bluesign'),
           organization_file: {
             original_name: 'bluesign Certificate without date',
             effective_start_date: null,
@@ -102,10 +102,10 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
       address_line_2: '',
       city: '',
       country: 'China',
-      certification_claims: [
+      organization_claims: [
         {
           id: '6',
-          certification: getCertificationMockByName('PFAS-Test'),
+          claim: getClaimsMockByName('PFAS-Test'),
           organization_file: {
             original_name: 'PFAS-Test Certificate Pritt, Inc.',
             effective_start_date: addDays(new Date(), 5).toISOString(),
@@ -115,7 +115,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '7',
-          certification: getCertificationMockByName('phthalate'),
+          claim: getClaimsMockByName('phthalate'),
           organization_file: {
             original_name: 'phthalate Certificate Pritt, Inc.',
             effective_start_date: addDays(new Date(), 5).toISOString(),
@@ -132,10 +132,10 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
       address_line_2: '',
       city: '',
       country: 'Vietnam',
-      certification_claims: [
+      organization_claims: [
         {
           id: '8',
-          certification: getCertificationMockByName('PFAS-Test'),
+          claim: getClaimsMockByName('PFAS-Test'),
           organization_file: {
             original_name: 'PFAS-Test Certificate Smotherman, Inc.',
             effective_start_date: addDays(new Date(), 10).toISOString(),
@@ -145,7 +145,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '9',
-          certification: getCertificationMockByName('Lead-Test'),
+          claim: getClaimsMockByName('Lead-Test'),
           organization_file: {
             original_name: 'Lead-Test Certificate Smotherman, Inc.',
             effective_start_date: addDays(new Date(), 70).toISOString(),
@@ -162,10 +162,10 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
       address_line_2: '',
       city: '',
       country: 'Vietnam',
-      certification_claims: [
+      organization_claims: [
         {
           id: '10',
-          certification: getCertificationMockByName('PFAS-Test'),
+          claim: getClaimsMockByName('PFAS-Test'),
           organization_file: {
             original_name: 'PFAS-Test Certificate Menzie, Inc.',
             effective_start_date: addDays(new Date(), 30).toISOString(),
@@ -175,7 +175,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '11',
-          certification: getCertificationMockByName('bluesign'),
+          claim: getClaimsMockByName('bluesign'),
           organization_file: {
             original_name: 'bluesign Certificate Menzie, Inc.',
             effective_start_date: addDays(new Date(), 70).toISOString(),
@@ -192,10 +192,10 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
       address_line_2: '',
       city: '',
       country: 'Vietnam',
-      certification_claims: [
+      organization_claims: [
         {
           id: '12',
-          certification: getCertificationMockByName('PFAS-Test'),
+          claim: getClaimsMockByName('PFAS-Test'),
           organization_file: {
             original_name: 'PFAS-Test Certificate Want, Inc.',
             effective_start_date: addDays(new Date(), 70).toISOString(),
@@ -205,7 +205,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '13',
-          certification: getCertificationMockByName('bluesign'),
+          claim: getClaimsMockByName('bluesign'),
           organization_file: {
             original_name: 'bluesign Certificate Want, Inc.',
             effective_start_date: subDays(new Date(), 3).toISOString(),
@@ -222,10 +222,10 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
       address_line_2: '',
       city: '',
       country: 'Vietnam',
-      certification_claims: [
+      organization_claims: [
         {
           id: '14',
-          certification: getCertificationMockByName('Lead-Test'),
+          claim: getClaimsMockByName('Lead-Test'),
           organization_file: {
             original_name: 'Lead-Test Certificate Tattershall, Inc.',
             effective_start_date: subDays(new Date(), 30).toISOString(),
@@ -235,7 +235,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '15',
-          certification: getCertificationMockByName('phthalate'),
+          claim: getClaimsMockByName('phthalate'),
           organization_file: {
             original_name: 'phthalate Certificate Tattershall, Inc.',
             effective_start_date: subDays(new Date(), 3).toISOString(),
@@ -252,10 +252,10 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
       address_line_2: '',
       city: '',
       country: 'Vietnam',
-      certification_claims: [
+      organization_claims: [
         {
           id: '16',
-          certification: getCertificationMockByName('PFAS-Test'),
+          claim: getClaimsMockByName('PFAS-Test'),
           organization_file: {
             original_name: 'PFAS-Test Certificate Panek, Inc.',
             effective_start_date: addDays(new Date(), 60).toISOString(),
@@ -265,7 +265,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '17',
-          certification: getCertificationMockByName('Lead-Test'),
+          claim: getClaimsMockByName('Lead-Test'),
           organization_file: {
             original_name: 'Lead-Test Certificate Panek, Inc.',
             effective_start_date: addDays(new Date(), 30).toISOString(),
@@ -275,7 +275,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '18',
-          certification: getCertificationMockByName('bluesign'),
+          claim: getClaimsMockByName('bluesign'),
           organization_file: {
             original_name: 'bluesign Certificate Panek, Inc.',
             effective_start_date: addDays(new Date(), 70).toISOString(),
@@ -292,10 +292,10 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
       address_line_2: '',
       city: '',
       country: 'Vietnam',
-      certification_claims: [
+      organization_claims: [
         {
           id: '19',
-          certification: getCertificationMockByName('PFAS-Test'),
+          claim: getClaimsMockByName('PFAS-Test'),
           organization_file: {
             original_name: 'PFAS-Test Certificate Faul, Inc.',
             effective_start_date: addDays(new Date(), 5).toISOString(),
@@ -305,7 +305,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '20',
-          certification: getCertificationMockByName('Lead-Test'),
+          claim: getClaimsMockByName('Lead-Test'),
           organization_file: {
             original_name: 'Lead-Test Certificate Faul, Inc.',
             effective_start_date: addDays(new Date(), 5).toISOString(),
@@ -315,7 +315,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '21',
-          certification: getCertificationMockByName('phthalate'),
+          claim: getClaimsMockByName('phthalate'),
           organization_file: {
             original_name: 'phthalate Certificate Faul, Inc.',
             effective_start_date: null,
@@ -325,7 +325,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '22',
-          certification: getCertificationMockByName('bluesign'),
+          claim: getClaimsMockByName('bluesign'),
           organization_file: {
             original_name: 'bluesign Certificate Faul, Inc.',
             effective_start_date: addDays(new Date(), 70).toISOString(),
@@ -342,10 +342,10 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
       address_line_2: '',
       city: '',
       country: 'Vietnam',
-      certification_claims: [
+      organization_claims: [
         {
           id: '23',
-          certification: getCertificationMockByName('PFAS-Test'),
+          claim: getClaimsMockByName('PFAS-Test'),
           organization_file: {
             original_name: 'PFAS-Test Certificate Hushon, Inc.',
             effective_start_date: addDays(new Date(), 70).toISOString(),
@@ -355,7 +355,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '24',
-          certification: getCertificationMockByName('Lead-Test'),
+          claim: getClaimsMockByName('Lead-Test'),
           organization_file: {
             original_name: 'Lead-Test Certificate Hushon, Inc.',
             effective_start_date: addDays(new Date(), 5).toISOString(),
@@ -365,7 +365,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '25',
-          certification: getCertificationMockByName('phthalate'),
+          claim: getClaimsMockByName('phthalate'),
           organization_file: {
             original_name: 'phthalate Certificate Hushon, Inc.',
             effective_start_date: addDays(new Date(), 5).toISOString(),
@@ -375,7 +375,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
         },
         {
           id: '26',
-          certification: getCertificationMockByName('bluesign'),
+          claim: getClaimsMockByName('bluesign'),
           organization_file: {
             original_name: 'bluesign Certificate Hushon, Inc.',
             effective_start_date: addDays(new Date(), 70).toISOString(),
@@ -392,7 +392,7 @@ export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
       address_line_2: '',
       city: '',
       country: 'US',
-      certification_claims: [],
+      organization_claims: [],
     },
   ];
 };

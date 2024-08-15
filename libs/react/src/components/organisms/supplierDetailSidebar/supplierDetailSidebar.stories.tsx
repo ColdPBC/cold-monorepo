@@ -2,6 +2,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { SupplierDetailSidebar } from '@coldpbc/components';
 import React from 'react';
+import { addDays } from 'date-fns';
 
 const meta: Meta<typeof SupplierDetailSidebar> = {
   title: 'Organisms/SupplierDetailSidebar',
@@ -41,7 +42,7 @@ const SidebarStory = () => {
     activeDocuments: [
       {
         name: 'bluesign Certificate active',
-        expirationDate: '2024-10-03T22:13:29.457Z',
+        expirationDate: addDays(new Date(), 70).toISOString(),
         status: 'Active',
         type: 'Certificate',
       },

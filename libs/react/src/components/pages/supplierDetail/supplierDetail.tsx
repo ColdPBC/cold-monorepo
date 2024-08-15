@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { BaseButton, ErrorFallback, Input, MainContent, Modal, Spinner, SupplierClaimsTable, SupplierDetailSidebar } from '@coldpbc/components';
-import { ButtonTypes, CertificationStatus } from '@coldpbc/enums';
+import { ButtonTypes, ClaimStatus } from '@coldpbc/enums';
 import React, { ReactNode, useEffect, useState } from 'react';
 import opacity from 'hex-color-opacity';
 import { HexColors } from '@coldpbc/themes';
@@ -8,7 +8,7 @@ import { getDateActiveStatus } from '@coldpbc/lib';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
-import { Certifications, Suppliers, ToastMessage } from '@coldpbc/interfaces';
+import { SuppliersWithCertifications, ToastMessage } from '@coldpbc/interfaces';
 import { isAxiosError } from 'axios';
 import capitalize from 'lodash/capitalize';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -19,10 +19,10 @@ export const _SupplierDetail = () => {
   const { logBrowser } = useColdContext();
   const { id } = useParams();
   const { orgId } = useAuth0Wrapper();
-  const supplierSWR = useSWR<Suppliers, any, any>([`/organizations/${orgId}/suppliers/${id}`, 'GET'], axiosFetcher);
+  const supplierSWR = useSWR<SuppliersWithCertifications, any, any>([`/organizations/${orgId}/suppliers/${id}`, 'GET'], axiosFetcher);
   const ref = React.useRef<HTMLDivElement>(null);
   const tableRef = React.useRef<HTMLDivElement>(null);
-  const [supplier, setSupplier] = useState<Suppliers | undefined>(undefined);
+  const [supplier, setSupplier] = useState<SuppliersWithCertifications | undefined>(undefined);
   const [selectedClaim, setSelectedClaim] = useState<{
     name: string;
     label: string;
@@ -58,20 +58,6 @@ export const _SupplierDetail = () => {
   }, [supplierSWR.data]);
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      // close the sidebar if the click is outside the sidebar but not on the table
-      if (ref.current && !ref.current.contains(event.target) && tableRef.current && !tableRef.current.contains(event.target) && selectedClaim !== null) {
-        setSelectedClaim(null);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref, tableRef, selectedClaim]);
-
-  useEffect(() => {
     // check if the supplier has been modified
     if (supplierSWR.data && supplier) {
       if (
@@ -93,30 +79,10 @@ export const _SupplierDetail = () => {
     if ((selectedClaim && selectedClaim.name === claimName) || supplier === undefined) {
       setSelectedClaim(null);
     } else {
-      const claims: {
-        id: string;
-        certification: Certifications | undefined;
-        organization_file: {
-          original_name: string;
-          effective_start_date: string | null;
-          effective_end_date: string | null;
-          type: string;
-        };
-      }[] = supplier?.certification_claims
-        .filter(
-          (claim: {
-            id: string;
-            certification: Certifications | undefined;
-            organization_file: {
-              original_name: string;
-              effective_start_date: string | null;
-              effective_end_date: string | null;
-              type: string;
-            };
-          }) => {
-            return claim.certification !== undefined && claim.certification.name === claimName;
-          },
-        )
+      const claims = supplier?.organization_claims
+        .filter(orgClaim => {
+          return orgClaim.claim.name === claimName;
+        })
         .sort((a, b) => {
           if (a.organization_file.effective_start_date && b.organization_file.effective_start_date) {
             return new Date(b.organization_file.effective_start_date).getTime() - new Date(a.organization_file.effective_start_date).getTime();
@@ -126,25 +92,14 @@ export const _SupplierDetail = () => {
         });
 
       const documentsWithNoDates = claims
-        .filter(
-          (claim: {
-            id: string;
-            certification: Certifications | undefined;
-            organization_file: {
-              original_name: string;
-              effective_start_date: string | null;
-              effective_end_date: string | null;
-              type: string;
-            };
-          }) => {
-            return claim.organization_file.effective_end_date === null;
-          },
-        )
+        .filter(orgClaim => {
+          return orgClaim.organization_file.effective_end_date === null;
+        })
         .map(claim => {
           return {
             name: claim.organization_file.original_name,
             expirationDate: null,
-            status: CertificationStatus.Inactive,
+            status: ClaimStatus.Inactive,
             type: capitalize(claim.organization_file.type),
           };
         });

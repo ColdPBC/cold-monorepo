@@ -1,4 +1,4 @@
-import { BadRequestException, Global, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 import { IAuthenticatedUser } from '../../../primitives';
@@ -14,22 +14,75 @@ export class MaterialsRepository extends BaseWorker {
   material_query = {
     id: true,
     name: true,
-    organization: true,
+    material_suppliers: {
+      include: {
+        supplier: true,
+        material: true,
+      },
+    },
+    organization_claims: {
+      select: {
+        id: true,
+        claim_id: true,
+        effective_date: true,
+        issued_date: true,
+        material: true,
+        product: true,
+        facility: true,
+        organization_file: {
+          select: {
+            id: true,
+            original_name: true,
+            bucket: true,
+            key: true,
+            expires_at: true,
+            effective_start_date: true,
+            effective_end_date: true,
+            openai_file_id: true,
+            type: true,
+            mimetype: true,
+            size: true,
+            checksum: true,
+          },
+        },
+        claim: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            level: true,
+          },
+        },
+      },
+    },
     created_at: true,
     updated_at: true,
   };
 
   async createMaterial(org: organizations, user: IAuthenticatedUser, data: any) {
-    data.id = new Cuid2Generator(GuidPrefixes.Material).scopedId;
-    data.organization_id = org.id;
+    try {
+      data.id = new Cuid2Generator(GuidPrefixes.Material).scopedId;
+      data.organization_id = org.id;
 
-    const product = this.prisma.materials.create({
-      data: data,
-    });
+      const product = await this.prisma.materials.create({
+        data: data,
+      });
 
-    this.logger.log(`Organization material ${data.name} created`, { organization: org, user, product });
+      this.logger.log(`Organization material ${data.name} created`, { organization: org, user, product });
 
-    return product;
+      return product;
+    } catch (e) {
+      if (e.code === 'P2002') {
+        throw new ConflictException({ organization: org, user, data }, { cause: `Material ${data.name} already exists` });
+      }
+      this.logger.error(`Organization material ${data.name} failed to create`, {
+        organization: org,
+        user,
+        data,
+        error: e,
+      });
+      throw e;
+    }
   }
 
   async createMaterials(org: organizations, user: IAuthenticatedUser, data: any[]) {
@@ -46,8 +99,16 @@ export class MaterialsRepository extends BaseWorker {
     return materials;
   }
 
-  async updateMaterials(org: organizations, user: IAuthenticatedUser, filters: { id?: string; name?: string }, data: any) {
-    const product = this.prisma.products.update({
+  async updateMaterials(
+    org: organizations,
+    user: IAuthenticatedUser,
+    filters: {
+      id?: string;
+      name?: string;
+    },
+    data: any,
+  ) {
+    const product = this.prisma.materials.update({
       where: {
         organization_id: org.id,
         id: filters.id,
@@ -65,6 +126,28 @@ export class MaterialsRepository extends BaseWorker {
     data.id = new Cuid2Generator(GuidPrefixes.MaterialSupplier).scopedId;
     data.organization_id = org.id;
 
+    const material = await this.prisma.materials.findUnique({
+      where: {
+        id: data.material_id,
+      },
+    });
+
+    if (!material) {
+      throw new NotFoundException({ organization: org, user, data }, 'Material not found');
+    }
+
+    const supplier = await this.prisma.organization_facilities.findUnique({
+      where: {
+        id: data.supplier_id,
+      },
+    });
+
+    if (!supplier) {
+      throw new NotFoundException({ organization: org, user, data }, 'Supplier not found');
+    }
+
+    delete data.organization_id;
+
     const result = this.prisma.material_suppliers.create({
       data: data,
     });
@@ -75,18 +158,18 @@ export class MaterialsRepository extends BaseWorker {
   }
 
   async findAll(org: organizations, user: IAuthenticatedUser) {
-    const products = await this.prisma.materials.findMany({
+    const materials = await this.prisma.materials.findMany({
       where: {
         organization_id: org.id,
       },
       select: this.material_query,
     });
 
-    if (!products || products.length === 0) {
+    if (!materials || materials.length === 0) {
       throw new NotFoundException({ organization: org, user }, `No products found`);
     }
 
-    return products;
+    return materials;
   }
 
   findOne(org: organizations, user: IAuthenticatedUser, filters: { name?: string; id?: string }) {

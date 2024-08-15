@@ -77,16 +77,157 @@ export const LongNameNoSpaces: Story = {
   },
 };
 
+export const WithClaims: Story = {
+  render: args => {
+    return <SidebarStory {...args} />;
+  },
+  args: {
+    file: {
+      ...getFilesWithCertificateClaimsMock()[0],
+      organization_claims: [
+        {
+          id: 'claim_cov42be44dd54mb6y90ef5fq',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmxke',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: null,
+          product: null,
+          claim: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'WRAP Certified',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+        {
+          id: 'claim_cov42be44dd54mb6y90ef',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: {
+            id: 'mat_n081cl70wmqsl1uydmkgmxke',
+            name: 'Spandex 1',
+            material_suppliers: [],
+            organization_claims: [],
+          },
+          product: null,
+          claim: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'Pfas Test',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+        {
+          id: 'claim_cov42be44dd54mb6y90ef',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: {
+            id: 'mat_n081cl70wmqsl1uydmkgmxke',
+            name: 'Spandex 2',
+            material_suppliers: [],
+            organization_claims: [],
+          },
+          product: null,
+          claim: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'Pfas Test',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+        {
+          id: 'claim_cov42be44dd54mb6y90ef',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: {
+            id: 'mat_n081cl70wmqsl1uydmkgmxke',
+            name: 'Spandex 2',
+            material_suppliers: [],
+            organization_claims: [],
+          },
+          product: null,
+          claim: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'bluesign',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+        {
+          id: 'claim_cov42be44dd54mb6y90ef',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: {
+            id: 'mat_n081cl70wmqsl1uydmkgmxke',
+            name: 'Spandex 2',
+            material_suppliers: [],
+            organization_claims: [],
+          },
+          product: null,
+          claim: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'rsl',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+        {
+          id: 'claim_cov42be44dd54mb6y90ef',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: {
+            id: 'mat_n081cl70wmqsl1uydmkgmxke',
+            name: 'Spandex 2',
+            material_suppliers: [],
+            organization_claims: [],
+          },
+          product: null,
+          claim: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'Supplier COC',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+      ],
+    },
+    innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
+  },
+};
+
 const SidebarStory = (props: {
   file: Files | undefined;
   innerRef: React.RefObject<HTMLDivElement>;
   ref?: LegacyRef<any> | undefined;
   key?: Key | null | undefined;
   closeSidebar: () => void;
-  isLoading: boolean;
-  signedUrl: string | undefined;
 }) => {
-  const { file, innerRef, isLoading, signedUrl } = props;
+  const { file, innerRef } = props;
   const [selectedFile, setSelectedFile] = React.useState<Files | undefined>(file);
   return (
     <DocumentDetailsSidebar
@@ -97,9 +238,9 @@ const SidebarStory = (props: {
       deleteFile={() => {
         setSelectedFile(undefined);
       }}
-      downloadFile={url => {}}
-      isLoading={isLoading}
-      signedUrl={signedUrl}
+      downloadFile={() => {}}
+      signedUrl={''}
+      isLoading={false}
     />
   );
 };

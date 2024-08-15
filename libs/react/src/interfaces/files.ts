@@ -1,5 +1,6 @@
-import { Certifications } from './certifications';
+import { Claims } from './claims';
 import { FileTypes } from '@coldpbc/enums';
+import { MaterialsWithCertifications } from './materials';
 
 export interface Files {
   id: string;
@@ -7,5 +8,13 @@ export interface Files {
   type: FileTypes;
   effective_start_date: null | string;
   effective_end_date: null | string;
-  certification_claim: Certifications[];
+  organization_claims: {
+    id: string;
+    claim_id: string;
+    organization_file_id: string;
+    claim: Claims;
+    material: null | MaterialsWithCertifications;
+    product: null | any;
+    facility: null | any;
+  }[];
 }

@@ -1,7 +1,7 @@
 import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
 import { HexColors } from '@coldpbc/themes';
 import { ColdIcon, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
-import { CertificationStatus, IconNames } from '@coldpbc/enums';
+import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import { differenceInDays, format } from 'date-fns';
 import { forEach, toArray } from 'lodash';
 import { getDateActiveStatus } from '@coldpbc/lib';
@@ -22,14 +22,14 @@ export const SupplierDetailDocumentsTable = (props: {
     let diff = 0;
 
     switch (params.value) {
-      case CertificationStatus.Expired:
+      case ClaimStatus.Expired:
         return (
           <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px]'}>
             <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.tc.disabled} />
             <span className={'text-tc-disabled'}>Expired</span>
           </div>
         );
-      case CertificationStatus.ExpiringSoon:
+      case ClaimStatus.ExpiringSoon:
         if (expirationDate) {
           diff = differenceInDays(new Date(expirationDate), new Date());
         }
@@ -39,7 +39,7 @@ export const SupplierDetailDocumentsTable = (props: {
             <span className={'text-yellow-200'}>{diff} days</span>
           </div>
         );
-      case CertificationStatus.Active:
+      case ClaimStatus.Active:
         return (
           <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px]'}>
             <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} />
@@ -47,7 +47,7 @@ export const SupplierDetailDocumentsTable = (props: {
           </div>
         );
       default:
-      case CertificationStatus.Inactive:
+      case ClaimStatus.Inactive:
         return (
           <div className={'w-full h-full flex flex-row justify-start items-center'}>
             <div className={'w-[24px] h-[24px] flex flex-row justify-center items-center'}>
@@ -95,7 +95,7 @@ export const SupplierDetailDocumentsTable = (props: {
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
       type: 'singleSelect',
-      valueOptions: toArray(CertificationStatus),
+      valueOptions: toArray(ClaimStatus),
       renderCell: renderStatus,
     },
     {
@@ -109,7 +109,7 @@ export const SupplierDetailDocumentsTable = (props: {
     },
   ];
 
-  let newRows: GridValidRowModel[] = [];
+  const newRows: GridValidRowModel[] = [];
 
   forEach(documents, (document, index) => {
     newRows.push({

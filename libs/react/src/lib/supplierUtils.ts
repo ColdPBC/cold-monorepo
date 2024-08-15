@@ -1,19 +1,19 @@
 import { differenceInDays } from 'date-fns';
-import { CertificationStatus } from '@coldpbc/enums';
+import { ClaimStatus } from '@coldpbc/enums';
 
 export const getDateActiveStatus = (expirationDate: string | null) => {
-  let text = CertificationStatus.Inactive;
+  let text = ClaimStatus.Inactive;
   if (expirationDate === null || expirationDate === undefined) {
-    text = CertificationStatus.Inactive;
+    text = ClaimStatus.Inactive;
   } else {
     // get the difference between the current date and the date in the cell
     const diff = differenceInDays(new Date(expirationDate), new Date());
     if (diff < 0) {
-      text = CertificationStatus.Expired;
+      text = ClaimStatus.Expired;
     } else if (diff < 60) {
-      text = CertificationStatus.ExpiringSoon;
+      text = ClaimStatus.ExpiringSoon;
     } else {
-      text = CertificationStatus.Active;
+      text = ClaimStatus.Active;
     }
   }
   return text;

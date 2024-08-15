@@ -1,19 +1,140 @@
-# [1.323.0-COLD-904.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.323.0-COLD-904.1...v1.323.0-COLD-904.2) (2024-08-14)
+# [1.329.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.328.1...v1.329.0) (2024-08-15)
 
 
 ### Features
 
-* Remove assessments context and related components ([0e0f551](https://github.com/ColdPBC/cold-monorepo/commit/0e0f5517e3857c54bc92e39c7954ff0422cba236))
+* add functionality to associate suppliers to materials ([339edb3](https://github.com/ColdPBC/cold-monorepo/commit/339edb36b108f6fc7427aba9686fdd893ead87b1))
+* add POST handler for supplier materials in mock API ([35d3f02](https://github.com/ColdPBC/cold-monorepo/commit/35d3f020c4e79b4a42412f0069274847086f4b30))
+* add supplier action column to MaterialDetail component ([83ad4d0](https://github.com/ColdPBC/cold-monorepo/commit/83ad4d03e2c11eda163e534baf83016f156e02d2))
 
-# [1.323.0-COLD-904.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.322.0...v1.323.0-COLD-904.1) (2024-08-06)
+## [1.328.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.328.0...v1.328.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* adjust layout, routing, and button properties for enhanced functionality ([d802086](https://github.com/ColdPBC/cold-monorepo/commit/d802086693314fe2d30ada0b28094a698b58c1a9))
+
+# [1.328.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.327.1...v1.328.0) (2024-08-14)
+
+
+### Bug Fixes
+
+* allow `text` to be either string array or string in compliance interface ([a3baa59](https://github.com/ColdPBC/cold-monorepo/commit/a3baa59b3909ca63b57ac6c979e0a421af692522))
+* handle non-array text properly in AiReferenceDropdown ([780c4aa](https://github.com/ColdPBC/cold-monorepo/commit/780c4aab67c0671ed8e4b021edb8be88a83ac294))
+* remove unnecessary tab condition check ([7e2999a](https://github.com/ColdPBC/cold-monorepo/commit/7e2999a193204e940af0560fac51d0201d1719d9))
+* remove unused import in aiReferenceDropdown.tsx ([107753a](https://github.com/ColdPBC/cold-monorepo/commit/107753a14e9e187ece2582afcfd1d6737b847fa7))
 
 
 ### Features
 
-* Delete complianceOverview components and redundant logic ([07248e7](https://github.com/ColdPBC/cold-monorepo/commit/07248e782f29bb71e5b0461a473843579dca8617))
-* Refactor compliance data fetching in ComplianceQuestionnaire ([d2d8dac](https://github.com/ColdPBC/cold-monorepo/commit/d2d8dac156692ee9ae16ee96f9f504ccc246f17a))
-* Refactor compliance-related components to streamline data retrieval ([146ad7f](https://github.com/ColdPBC/cold-monorepo/commit/146ad7fa09bd7b315677c82abe7cc3a3b85bf1cb))
-* Remove compliance wizard lair and related components ([3b9e4f9](https://github.com/ColdPBC/cold-monorepo/commit/3b9e4f92eaf80613ef4c35ac32046b4ecb992b99))
+* add material detail mock and handler APIs ([708ea59](https://github.com/ColdPBC/cold-monorepo/commit/708ea5910db41d5eb2df0048c29d63cce3bd5967))
+* Add Material Detail Sidebar and MuiDataGrid components and refine materials data management ([1c9f60c](https://github.com/ColdPBC/cold-monorepo/commit/1c9f60cd92099ea2986abdf4195dc6b70ecda3f4))
+* add MaterialDetail page and remove flag for MaterialsPage route ([8a01ece](https://github.com/ColdPBC/cold-monorepo/commit/8a01eceb7b34b80d0d3838eb1b56d2d8793c2de4))
+* dynamically update tabs based on compliance name ([c4eeb41](https://github.com/ColdPBC/cold-monorepo/commit/c4eeb417c389c16bccc90c80e391f207549501dd))
+* update routes for materials and suppliers ([66537d8](https://github.com/ColdPBC/cold-monorepo/commit/66537d80ac0ac0edc0aa2a7b82af1ae98be91bb0))
+
+## [1.327.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.327.0...v1.327.1) (2024-08-13)
+
+
+### Bug Fixes
+
+* typecast routing_key to string in organization integrations service ([18c7019](https://github.com/ColdPBC/cold-monorepo/commit/18c7019bd3a7c0ce0d012414f90e78af892fd687))
+
+# [1.327.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.326.0...v1.327.0) (2024-08-13)
+
+
+### Bug Fixes
+
+* **app.module:** replace CertificationsModule with ClaimsModule ([d8b3ce5](https://github.com/ColdPBC/cold-monorepo/commit/d8b3ce5699be4370628cc16edb6af3b53fa2aba0))
+* **claims_repository:** correct id prefix and error messages for createClaim method ([7aca483](https://github.com/ColdPBC/cold-monorepo/commit/7aca483432aef03e95cbebc0c2ede39d300b451d))
+* correct method and parameter names in claims service ([c0a1502](https://github.com/ColdPBC/cold-monorepo/commit/c0a1502e8b24ff6c286ae1ef784e159adf407581))
+* correct module and service references in ClaimsModule ([1137280](https://github.com/ColdPBC/cold-monorepo/commit/11372805e8ed59251ba9eab6cf0a63c5ed32b1fc))
+* improve validation for optional fields in organization claims ([3855b52](https://github.com/ColdPBC/cold-monorepo/commit/3855b52da1160a4f244fa4f86c2ab13fa4ecca54))
+* **prisma:** correct field name for organization_claims in schema ([a6a6421](https://github.com/ColdPBC/cold-monorepo/commit/a6a64211954e91d117e44b894a775224d866e73c))
+* rename certification_claim to organization_claims to correct schema field name ([bd92159](https://github.com/ColdPBC/cold-monorepo/commit/bd9215934e8c60588a13140d5c1b9404068388db))
+* update organization claims endpoint path ([2447cbc](https://github.com/ColdPBC/cold-monorepo/commit/2447cbcf143f312aa1e747797bc8eff41cce848e))
+
+
+### Features
+
+* add claims service for handling certification operations ([7026088](https://github.com/ColdPBC/cold-monorepo/commit/7026088694ca46be26b3f3e2e63fecf9f17397a6))
+* Add custom comparator and filter operators for DataGrid ([b1c1458](https://github.com/ColdPBC/cold-monorepo/commit/b1c145876d0404c99ee0c6473cb55860c7bec868))
+* Add materials page with data grid and related components ([97705e9](https://github.com/ColdPBC/cold-monorepo/commit/97705e91ed9d750e53abd7e79d2a153304916786))
+* add OrganizationClaimsModule to cold-api project ([550310c](https://github.com/ColdPBC/cold-monorepo/commit/550310cdf522a5f20140a75c739e4de24deebb0e))
+* add unique constraint to claims table and create various indexes ([d61c199](https://github.com/ColdPBC/cold-monorepo/commit/d61c19905fdd86d326dbb08c09cbfd4227303cd6))
+* **claims:** refactor ClaimsController to use correct ClaimsService reference ([f6816d1](https://github.com/ColdPBC/cold-monorepo/commit/f6816d1e81375ea2fb1db90f4446ebfc5002fee1))
+* Enable Materials Page with Feature Toggle ([616f173](https://github.com/ColdPBC/cold-monorepo/commit/616f1730338a9a2f4abbd7a0d7641530fe4f5e7d))
+* export claims module in nest library ([1f5c4cc](https://github.com/ColdPBC/cold-monorepo/commit/1f5c4cc6559c543e561166735b1d42774fae350f))
+* remove certification_types enum ([e04278c](https://github.com/ColdPBC/cold-monorepo/commit/e04278cf11ab322eea83064ab65fd66d00707b4e))
+* remove CertificationsService from cold-api ([f372b39](https://github.com/ColdPBC/cold-monorepo/commit/f372b39162119b0078517b679ef629f9ed3c011d))
+* rename and restructure claims tables ([48405c9](https://github.com/ColdPBC/cold-monorepo/commit/48405c984bb9dbd5976506935aad6ce6a4f8a2de))
+* Rename supplier comparator and adjust DataGrid styling. ([88f93ee](https://github.com/ColdPBC/cold-monorepo/commit/88f93ee0b20c93a2ba4c26f9ce6f60e585ea220a))
+* update claim structure and rename indexes ([d8747a1](https://github.com/ColdPBC/cold-monorepo/commit/d8747a1a2bc327a161ff10962f17f22315aa0b1d))
+* Update documentsPage component to ignore Chromatic UI testing ([0e483fd](https://github.com/ColdPBC/cold-monorepo/commit/0e483fd9577b101b68cde484f68babca1121e256))
+* update OpenAPI examples and survey structure ([5252586](https://github.com/ColdPBC/cold-monorepo/commit/525258655d14757171668ccc6b234b459a1410cd))
+
+# [1.326.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.325.0...v1.326.0) (2024-08-08)
+
+
+### Features
+
+* Add custom comparator and filter operators for DataGrid ([2fbe814](https://github.com/ColdPBC/cold-monorepo/commit/2fbe81434a711030a2bb60721164f9adb5766b05))
+* Add materials page with data grid and related components ([5f23586](https://github.com/ColdPBC/cold-monorepo/commit/5f23586ecca101ff87c3086990128c92578568e0))
+* Enable Materials Page with Feature Toggle ([e44bb91](https://github.com/ColdPBC/cold-monorepo/commit/e44bb919e9092696fa7ca97f08aa16d378226bc3))
+* Rename supplier comparator and adjust DataGrid styling. ([726bb8e](https://github.com/ColdPBC/cold-monorepo/commit/726bb8e8d017d4f761194a295fc915580f82318a))
+* Update documentsPage component to ignore Chromatic UI testing ([7561339](https://github.com/ColdPBC/cold-monorepo/commit/7561339dde793bf75a8c52fb95e4e41089f26d5d))
+
+# [1.325.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.2...v1.325.0) (2024-08-07)
+
+
+### Features
+
+* Add materials interface and update document details sidebar ([357512c](https://github.com/ColdPBC/cold-monorepo/commit/357512c0382b7dd6c37abc48810c426d8c9057d5))
+* Refactor and add claims to document details sidebar ([c6a3501](https://github.com/ColdPBC/cold-monorepo/commit/c6a35019d815a52676ab5df9b2db13e7c994fd9f))
+* Refactor and update document details components. ([cfc180e](https://github.com/ColdPBC/cold-monorepo/commit/cfc180e1ed8a2c6e1c982ed3f287ce13808bddb8))
+
+## [1.324.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.1...v1.324.2) (2024-08-06)
+
+
+### Bug Fixes
+
+* update material repository and schema to handle supplier relations and errors ([c5cf196](https://github.com/ColdPBC/cold-monorepo/commit/c5cf196e548c87a4ca39a41eff49db558285030f))
+
+## [1.324.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.0...v1.324.1) (2024-08-06)
+
+
+### Bug Fixes
+
+* enhance materials repository to include detailed supplier and material selection ([d4dafde](https://github.com/ColdPBC/cold-monorepo/commit/d4dafde9dbc15fe20a3d3e2a0936207685efaf36))
+
+# [1.324.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.323.0...v1.324.0) (2024-08-06)
+
+
+### Bug Fixes
+
+* add missing createSupplierMaterial method in materials.service ([b4a752b](https://github.com/ColdPBC/cold-monorepo/commit/b4a752b26bbffb9d5727d1af65aa811c1a62527d))
+* enhance materials controller with authentication, roles, and error handling ([a7f7fd1](https://github.com/ColdPBC/cold-monorepo/commit/a7f7fd19d04f429027dbb26549d5405a38616c65))
+* update route parameter name for file update endpoint ([2a7e9b7](https://github.com/ColdPBC/cold-monorepo/commit/2a7e9b7123fd61ab4e56d8d6b0d2798fbe248518))
+* validate material and supplier existence before creating material_suppliers ([e594d81](https://github.com/ColdPBC/cold-monorepo/commit/e594d814039857d48bd5aaa17ba0a5331e541b19))
+
+
+### Features
+
+* update OpenAPI schema examples and add new paths for organization files ([18ada17](https://github.com/ColdPBC/cold-monorepo/commit/18ada178fbf4a07dbc498552cc0be4d049ea6d42))
+
+# [1.323.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.322.1...v1.323.0) (2024-08-06)
+
+
+### Features
+
+* enhance organization file service to include materials and products ([119d4a3](https://github.com/ColdPBC/cold-monorepo/commit/119d4a3bd2b38297352b0954a1ac38ac6ccb3659))
+
+## [1.322.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.322.0...v1.322.1) (2024-08-06)
+
+
+### Bug Fixes
+
+* include 'facility' in organization files service ([e364ff1](https://github.com/ColdPBC/cold-monorepo/commit/e364ff10c42ff74b431d993c09bddd0ee37f4e48))
 
 # [1.322.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.321.0...v1.322.0) (2024-08-05)
 

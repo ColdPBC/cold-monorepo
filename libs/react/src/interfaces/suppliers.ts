@@ -1,4 +1,4 @@
-import { Certifications } from './certifications';
+import { Claims } from './claims';
 
 export interface Suppliers {
   id: string;
@@ -7,9 +7,12 @@ export interface Suppliers {
   address_line_2: string;
   city: string;
   country: string;
-  certification_claims: {
+}
+
+export interface SuppliersWithCertifications extends Suppliers {
+  organization_claims: {
     id: string;
-    certification: Certifications;
+    claim: Claims;
     organization_file: {
       original_name: string;
       effective_start_date: string | null;
