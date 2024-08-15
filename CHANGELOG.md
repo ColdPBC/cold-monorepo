@@ -1,3 +1,12 @@
+# [1.329.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.328.1...v1.329.0) (2024-08-15)
+
+
+### Features
+
+* add functionality to associate suppliers to materials ([339edb3](https://github.com/ColdPBC/cold-monorepo/commit/339edb36b108f6fc7427aba9686fdd893ead87b1))
+* add POST handler for supplier materials in mock API ([35d3f02](https://github.com/ColdPBC/cold-monorepo/commit/35d3f020c4e79b4a42412f0069274847086f4b30))
+* add supplier action column to MaterialDetail component ([83ad4d0](https://github.com/ColdPBC/cold-monorepo/commit/83ad4d03e2c11eda163e534baf83016f156e02d2))
+
 ## [1.328.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.328.0...v1.328.1) (2024-08-15)
 
 
