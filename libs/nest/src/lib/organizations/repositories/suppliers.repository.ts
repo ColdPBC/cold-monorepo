@@ -16,10 +16,10 @@ export class SuppliersRepository extends BaseWorker {
     postal_code: true,
     country: true,
     metadata: true,
-    certification_claims: {
+    organization_claims: {
       select: {
         id: true,
-        certification_id: true,
+        claim_id: true,
         effective_date: true,
         issued_date: true,
         material: true,
@@ -41,7 +41,7 @@ export class SuppliersRepository extends BaseWorker {
             checksum: true,
           },
         },
-        certification: {
+        claim: {
           select: {
             id: true,
             name: true,

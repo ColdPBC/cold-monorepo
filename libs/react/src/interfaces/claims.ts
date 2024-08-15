@@ -1,4 +1,4 @@
-export interface Certifications {
+export interface Claims {
   id: string;
   name: string;
   level: string;

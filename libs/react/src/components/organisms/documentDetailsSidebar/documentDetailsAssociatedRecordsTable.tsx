@@ -5,14 +5,14 @@ import { DataGrid, GridColDef, GridValidRowModel } from '@mui/x-data-grid';
 import React from 'react';
 import { get, isEqual, uniqWith } from 'lodash';
 
-export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['certification_claim'] | undefined }) => {
+export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['organization_claims'] | undefined }) => {
   const { records } = props;
 
   if (records === undefined || (records && records.length === 0)) {
     return null;
   }
 
-  let newRows: GridValidRowModel[] = [];
+  const newRows: GridValidRowModel[] = [];
 
   const productMaterialSupplierCombinations = uniqWith(
     records.map(record => {

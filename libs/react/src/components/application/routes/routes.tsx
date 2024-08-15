@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   AccountSettingsPage,
   ActionsOverview,
-  ApplicationToaster,
   CarbonFootprint,
   ComplianceRoutes,
   DashboardLayout,
@@ -10,9 +9,7 @@ import {
   DocumentUpload,
   Footprint,
   Interceptor,
-  Journey,
   MaterialDetail,
-  MaterialRoutes,
   MaterialsPage,
   ProtectedRoute,
   Signup,
@@ -31,7 +28,7 @@ export const ColdRoutes = () => {
   const getFilteredRoutes = () => {
     return (
       <>
-        <Route index element={<Navigate to={'/compliance'} replace={true} />} />
+        <Route path={'/'} element={<Navigate to={'/compliance'} replace={true} />} />
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
         {ldFlags.showActions261 && <Route path={'/actions'} element={<ActionsOverview />} />}
@@ -41,10 +38,10 @@ export const ColdRoutes = () => {
         <Route path={'/settings/users'} element={<UserSettingsPage />} />
         <Route path="*" element={<Navigate to={'/compliance'} replace={true} />} />
         {WizardRoutes()}
-        {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<SuppliersPage />} />}
-        {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers/:id'} element={<SupplierDetail />} />}
-        {ldFlags.showMaterialsPageCold912 && <Route path={'/materials'} element={<MaterialsPage />} />}
-        {ldFlags.showMaterialsPageCold912 && <Route path={'/materials/:id'} element={<MaterialDetail />} />}
+        <Route path={'/suppliers'} element={ldFlags.showSuppliersPageCold890 ? <SuppliersPage /> : <Navigate to={'/compliance'} replace={true} />} />
+        <Route path={'/suppliers/:id'} element={ldFlags.showSuppliersPageCold890 ? <SupplierDetail /> : <Navigate to={'/compliance'} replace={true} />} />
+        <Route path={'/materials'} element={ldFlags.showMaterialsPageCold912 ? <MaterialsPage /> : <Navigate to={'/compliance'} replace={true} />} />
+        <Route path={'/materials/:id'} element={ldFlags.showMaterialsPageCold912 ? <MaterialDetail /> : <Navigate to={'/compliance'} replace={true} />} />
       </>
     );
   };

@@ -22,7 +22,7 @@ export function getMaterialsMock(): MaterialsWithCertifications[] {
           },
         },
       ],
-      certification_claims: [
+      organization_claims: [
         {
           id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
           material: {
@@ -43,7 +43,7 @@ export function getMaterialsMock(): MaterialsWithCertifications[] {
             effective_end_date: '2025-04-30T05:00:00.000Z',
             type: 'TEST_RESULTS',
           },
-          certification: {
+          claim: {
             id: 'cert_b4guvd418edqrrye04cgrcx5',
             name: 'Greensign',
             level: 'Material',
@@ -88,7 +88,7 @@ export function getMaterialsMock(): MaterialsWithCertifications[] {
           },
         },
       ],
-      certification_claims: [
+      organization_claims: [
         {
           id: 'claim_weeo1u7kox8l7lh2ggstrhgl',
           material: {
@@ -110,7 +110,7 @@ export function getMaterialsMock(): MaterialsWithCertifications[] {
             effective_end_date: '2025-04-30T05:00:00.000Z',
             type: 'TEST_RESULTS',
           },
-          certification: {
+          claim: {
             id: 'cert_b4guvd418edqrrye04cgrcx5',
             name: 'Greensign',
             level: 'Material',
@@ -123,25 +123,25 @@ export function getMaterialsMock(): MaterialsWithCertifications[] {
       id: 'mat_cdvjpbctliv2b0afo9inys2y',
       name: 'Handcrafted Frozen Tuna',
       material_suppliers: [],
-      certification_claims: [],
+      organization_claims: [],
     },
     {
       id: 'mat_j7xtvksv2jrlxdzrd2m6bvbt',
       name: 'Handmade Soft Shoes',
       material_suppliers: [],
-      certification_claims: [],
+      organization_claims: [],
     },
     {
       id: 'mat_ibakmtajuny03w5m7s82r10y',
       name: 'Fantastic Cotton Mouse',
       material_suppliers: [],
-      certification_claims: [],
+      organization_claims: [],
     },
     {
       id: 'mat_inry3efikrihb7yh2nr2zj9e',
       name: 'Generic Concrete Table',
       material_suppliers: [],
-      certification_claims: [],
+      organization_claims: [],
     },
   ];
 }

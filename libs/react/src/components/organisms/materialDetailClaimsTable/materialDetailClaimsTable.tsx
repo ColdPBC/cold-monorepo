@@ -2,7 +2,7 @@ import { MaterialsWithCertifications } from '@coldpbc/interfaces';
 import { ColdIcon, ErrorFallback, MuiDataGrid } from '@coldpbc/components';
 import React, { ReactNode } from 'react';
 import { forEach, get, isEqual, orderBy, toArray, uniq, uniqWith } from 'lodash';
-import { CertificationStatus, IconNames } from '@coldpbc/enums';
+import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import { GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays } from 'date-fns';
@@ -12,19 +12,19 @@ import { withErrorBoundary } from 'react-error-boundary';
 const _MaterialDetailClaimsTable = (props: { material: MaterialsWithCertifications; selectClaim: (object: { name: string; level: string }) => void }) => {
   const { material, selectClaim } = props;
 
-  const getAssociatedRecords = (level: string, certificationClaims: MaterialsWithCertifications['certification_claims']): string[] => {
+  const getAssociatedRecords = (level: string, orgClaims: MaterialsWithCertifications['organization_claims']): string[] => {
     // get the a list of unique supplier, product, and material names
     switch (level) {
       case 'Supplier':
-        return uniq(certificationClaims.map(claim => get(claim, 'facility.name', ''))).filter((name: string) => {
+        return uniq(orgClaims.map(claim => get(claim, 'facility.name', ''))).filter((name: string) => {
           return name !== '';
         });
       case 'Product':
-        return uniq(certificationClaims.map(claim => get(claim, 'product.name', ''))).filter((name: string) => {
+        return uniq(orgClaims.map(claim => get(claim, 'product.name', ''))).filter((name: string) => {
           return name !== '';
         });
       default:
-        return uniq(certificationClaims.map(claim => get(claim, 'material.name', ''))).filter((name: string) => {
+        return uniq(orgClaims.map(claim => get(claim, 'material.name', ''))).filter((name: string) => {
           return name !== '';
         });
     }
@@ -36,7 +36,7 @@ const _MaterialDetailClaimsTable = (props: { material: MaterialsWithCertificatio
     let diff = 0;
     let statusElement: ReactNode | null = null;
     switch (params.value) {
-      case CertificationStatus.Expired:
+      case ClaimStatus.Expired:
         statusElement = (
           <div className={'text-body h-full flex flex-row justify-start items-center gap-[0px]'}>
             <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.red['100']} />
@@ -44,7 +44,7 @@ const _MaterialDetailClaimsTable = (props: { material: MaterialsWithCertificatio
           </div>
         );
         break;
-      case CertificationStatus.ExpiringSoon:
+      case ClaimStatus.ExpiringSoon:
         if (expirationDate) {
           diff = differenceInDays(new Date(expirationDate), new Date());
         }
@@ -55,7 +55,7 @@ const _MaterialDetailClaimsTable = (props: { material: MaterialsWithCertificatio
           </div>
         );
         break;
-      case CertificationStatus.Active:
+      case ClaimStatus.Active:
         statusElement = (
           <div className={'text-body h-full flex flex-row justify-start items-center gap-[0px]'}>
             <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} />
@@ -64,7 +64,7 @@ const _MaterialDetailClaimsTable = (props: { material: MaterialsWithCertificatio
         );
         break;
       default:
-      case CertificationStatus.Inactive:
+      case ClaimStatus.Inactive:
         statusElement = (
           <div className={'h-full flex flex-row justify-start items-center'}>
             <div className={'w-[24px] h-[24px] flex flex-row justify-center items-center'}>
@@ -137,17 +137,17 @@ const _MaterialDetailClaimsTable = (props: { material: MaterialsWithCertificatio
       minWidth: 100,
       headerClassName: 'bg-gray-30 text-body',
       type: 'singleSelect',
-      valueOptions: toArray(CertificationStatus),
+      valueOptions: toArray(ClaimStatus),
       renderCell: renderStatus,
     },
   ];
 
-  const orderedCertificateClaims = orderBy(material.certification_claims, ['certification.name', 'organization_file.effective_end_date'], ['desc', 'desc']);
+  const orderedCertificateClaims = orderBy(material.organization_claims, ['certification.name', 'organization_file.effective_end_date'], ['desc', 'desc']);
 
   const uniqueClaims = uniqWith(
-    orderedCertificateClaims.map(claim => ({
-      name: claim.certification?.name,
-      level: claim.certification?.level,
+    orderedCertificateClaims.map(orgClaim => ({
+      name: orgClaim.claim.name,
+      level: orgClaim.claim.level,
     })),
     isEqual,
   );
@@ -155,8 +155,8 @@ const _MaterialDetailClaimsTable = (props: { material: MaterialsWithCertificatio
   const newRows: GridValidRowModel[] = [];
 
   forEach(uniqueClaims, (value, index) => {
-    const claimCertifications = orderedCertificateClaims.filter(claim => {
-      return claim.certification?.name === value.name && claim.certification?.level === value.level;
+    const claimCertifications = orderedCertificateClaims.filter(orgClaim => {
+      return orgClaim.claim.name === value.name && orgClaim.claim.level === value.level;
     });
     if (claimCertifications.length > 0) {
       // get the first claim certification without effective end date being null
