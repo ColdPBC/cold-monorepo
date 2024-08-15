@@ -364,6 +364,10 @@ export const handlers = [
     return res(ctx.status(200));
   }),
 
+  rest.put(getApiUrl('/compliance/:name/organizations/:orgI/activate'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
   rest.delete(getApiUrl('/organizations/:orgId/files/:fileId'), (req, res, ctx) => {
     return res(ctx.status(200));
   }),

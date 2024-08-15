@@ -19,7 +19,7 @@ export const StartAIComplianceModal = () => {
           Cold Climate will pre-fill as much of the form as possible based on the documents below. You'll always be able to review and edit yourself before submitting anything.
         </div>
         <div className={'text-body w-full'}>You can always add more documents later if you realized you missed something.</div>
-        <div className={'w-full flex flex-col gap-[8px]'}>
+        <div className={'w-full flex flex-col gap-[8px] overflow-y-auto'}>
           {fileData.map((file, index) => (
             <div key={index} className={'w-full flex flex-row justify-start p-[8px] border-[1px] border-gray-50 rounded-[8px] bg-gray-30'}>
               <div className={'text-eyebrow'}>{file.original_name}</div>
