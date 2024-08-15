@@ -1,3 +1,10 @@
+## [1.328.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.328.0...v1.328.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* adjust layout, routing, and button properties for enhanced functionality ([d802086](https://github.com/ColdPBC/cold-monorepo/commit/d802086693314fe2d30ada0b28094a698b58c1a9))
+
 # [1.328.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.327.1...v1.328.0) (2024-08-14)
 
 
