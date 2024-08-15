@@ -405,4 +405,8 @@ export const handlers = [
   rest.delete(getApiUrl('/organizations/:orgId/materials/:id'), (req, res, ctx) => {
     return res(ctx.status(200));
   }),
+
+  rest.post(getApiUrl('/organizations/:orgId/materials/:materialId/supplier/:supplierId'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
 ];

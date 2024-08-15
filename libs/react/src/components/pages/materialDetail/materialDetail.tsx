@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { MaterialsWithCertifications, ToastMessage } from '@coldpbc/interfaces';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { ButtonTypes, ClaimStatus } from '@coldpbc/enums';
+import { ButtonTypes, ClaimStatus, IconNames } from '@coldpbc/enums';
 import capitalize from 'lodash/capitalize';
 import { getDateActiveStatus } from '@coldpbc/lib';
 import { isAxiosError } from 'axios';
@@ -12,6 +12,8 @@ import opacity from 'hex-color-opacity';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
 import { isEqual } from 'lodash';
+import { MaterialDetailAddSupplier } from '../../organisms/materialDetailAddSupplier/materialDetailAddSupplier';
+import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
 const _MaterialDetail = () => {
   const { addToastMessage } = useAddToastMessage();
@@ -42,6 +44,7 @@ const _MaterialDetail = () => {
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteButtonLoading, setDeleteButtonLoading] = useState(false);
+  const [addSupplierModalOpen, setAddSupplierModalOpen] = useState(false);
 
   useEffect(() => {
     if (materialSWR.data) {
@@ -227,7 +230,7 @@ const _MaterialDetail = () => {
       };
     });
 
-  const supplierColumns = [
+  const supplierColumns: GridColDef[] = [
     {
       field: 'name',
       headerName: 'Name',
@@ -239,6 +242,21 @@ const _MaterialDetail = () => {
       headerName: 'Country',
       flex: 1,
       headerClassName: 'bg-gray-30 text-body',
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      width: 60,
+      headerClassName: 'bg-gray-30 text-body',
+      getActions: params => [
+        <GridActionsCellItem
+          label="View Details"
+          onClick={() => {
+            navigate(`/suppliers/${params.row.id}`);
+          }}
+          showInMenu
+        />,
+      ],
     },
   ];
   return (
@@ -274,7 +292,10 @@ const _MaterialDetail = () => {
           />
         </div>
         <div className={'w-full flex mb-[40px] flex-col gap-[24px]'}>
-          <div className={'text-h3'}>Associated Suppliers</div>
+          <div className={'w-full flex flex-row justify-between'}>
+            <div className={'text-h3'}>Associated Suppliers</div>
+            <BaseButton label={'Add'} variant={ButtonTypes.secondary} iconLeft={IconNames.PlusIcon} onClick={() => setAddSupplierModalOpen(true)} />
+          </div>
           <MuiDataGrid
             rows={supplierRows}
             columns={supplierColumns}
@@ -316,6 +337,14 @@ const _MaterialDetail = () => {
             loading: deleteButtonLoading,
             variant: ButtonTypes.warning,
           },
+        }}
+      />
+      <MaterialDetailAddSupplier
+        showAddSupplierModal={addSupplierModalOpen}
+        setShowAddSupplierModal={setAddSupplierModalOpen}
+        material={material}
+        refreshMaterials={() => {
+          materialSWR.mutate();
         }}
       />
     </div>
