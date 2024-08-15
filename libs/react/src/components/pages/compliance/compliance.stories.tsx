@@ -1,4 +1,4 @@
-import { getCompliancePageHandler, StoryMockProvider } from '@coldpbc/mocks';
+import { StoryMockProvider } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { CompliancePage } from '@coldpbc/components';
@@ -14,22 +14,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: args => (
-    <StoryMockProvider handlers={getCompliancePageHandler.default}>
-      <CompliancePage />
-    </StoryMockProvider>
-  ),
-};
-
-export const Activate: Story = {
-  render: args => (
-    <StoryMockProvider handlers={getCompliancePageHandler.activate}>
-      <CompliancePage />
-    </StoryMockProvider>
-  ),
-};
-
-export const NewPage: Story = {
   render: args => (
     <StoryMockProvider>
       <CompliancePage />
