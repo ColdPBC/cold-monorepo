@@ -209,7 +209,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
         });
 
         this.metrics.event(
-          'User added bookmark to compliance question',
+          'User deleted bookmark from compliance question',
           `${user.coldclimate_claims.email} from ${org.name} deleted a bookmark ${question ? `on the following question(${qId})` : ''}) for ${question.compliance_definition_name}`,
           {
             alert_type: 'success',
