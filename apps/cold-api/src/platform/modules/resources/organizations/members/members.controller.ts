@@ -5,7 +5,7 @@ import {
   bpcDecoratorOptions,
   coldAdminOnly,
   coldAndCompanyAdmins,
-  IAuthenticatedUser,
+  IRequest,
   JwtAuthGuard,
   orgIdDecoratorOptions,
   OrgUserInterceptor,
@@ -43,12 +43,7 @@ export class MembersController extends BaseWorker {
   getOrgMembers(
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     if (!orgId) throw new Error('orgId is required');
@@ -71,11 +66,7 @@ export class MembersController extends BaseWorker {
   @HttpCode(200)
   getOrgUsersRoles(
     @Req()
-    req: {
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Param('orgId') orgId: string,
     @Param('userId') userId: string,
     @Query('bpc') bpc?: boolean,
@@ -103,12 +94,7 @@ export class MembersController extends BaseWorker {
     @Param('roleName') roleName: string,
     @Param('userId') userId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     this.logger.info('adding user to organization with role', {
@@ -148,12 +134,7 @@ export class MembersController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Body() body: { members: string[] },
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return await this.members.removeUserFromOrganization(orgId, body, req);
   }
