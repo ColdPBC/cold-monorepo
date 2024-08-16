@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { OrganizationComplianceNotesService } from './organization_compliance_notes.service';
-import { HttpExceptionFilter, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
+import { HttpExceptionFilter, IRequest, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -30,22 +30,22 @@ export class OrganizationComplianceNotesController {
   constructor(private readonly organizationComplianceNotesService: OrganizationComplianceNotesService) {}
 
   @Get('/questions/:qId/notes')
-  findAllByQuestion(@Req() req: any, @Param('name') name: string, @Param('qId') qId: string) {
+  findAllByQuestion(@Req() req: IRequest, @Param('name') name: string, @Param('qId') qId: string) {
     return this.organizationComplianceNotesService.findAll(name, qId, req);
   }
 
   @Post('/questions/:qId/notes')
-  create(@Req() req: any, @Param('name') name: string, @Param('qId') qId: string, @Body() body: { note: string }) {
+  create(@Req() req: IRequest, @Param('name') name: string, @Param('qId') qId: string, @Body() body: { note: string }) {
     return this.organizationComplianceNotesService.create(name, qId, body.note, req);
   }
 
   @Patch('/questions/:qId/notes/:id')
-  update(@Req() req: any, @Param('name') name: string, @Param('id') id: string, @Param('qId') qId: string, @Body() body: { note: string }) {
+  update(@Req() req: IRequest, @Param('name') name: string, @Param('id') id: string, @Param('qId') qId: string, @Body() body: { note: string }) {
     return this.organizationComplianceNotesService.update(name, qId, id, body.note, req);
   }
 
   @Delete('/questions/:qId/notes/:id')
-  remove(@Req() req: any, @Param('name') name: string, @Param('id') id: string, @Param('qId') qId: string) {
+  remove(@Req() req: IRequest, @Param('name') name: string, @Param('id') id: string, @Param('qId') qId: string) {
     return this.organizationComplianceNotesService.remove(name, qId, id, req);
   }
 }
