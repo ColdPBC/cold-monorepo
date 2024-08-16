@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, OnModuleInit, Param, Patch, Post, Query, Req, UploadedFiles, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import multerS3 from 'multer-s3';
-import { allRoles, coldAndCompanyAdmins, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
+import { allRoles, coldAndCompanyAdmins, HttpExceptionFilter, IAuthenticatedUser, IRequest, JwtAuthGuard, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { OrganizationFilesService } from './organization.files.service';
@@ -42,7 +42,7 @@ export class OrganizationFilesController implements OnModuleInit {
 
   @Get()
   @Roles(...allRoles)
-  async getFiles(@Param('orgId') orgId: string, @Req() req: { user: IAuthenticatedUser }, @Query('bpc') bpc: boolean) {
+  async getFiles(@Param('orgId') orgId: string, @Req() req: IRequest, @Query('bpc') bpc: boolean) {
     return this.orgFiles.getFiles(req, orgId, bpc);
   }
 
@@ -52,9 +52,7 @@ export class OrganizationFilesController implements OnModuleInit {
     @Param('orgId') orgId: string,
     @Param('id') fileId: string,
     @Req()
-    req: {
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.orgFiles.getUrl(req, fileId);
   }
@@ -65,9 +63,7 @@ export class OrganizationFilesController implements OnModuleInit {
     @Param('orgId') orgId: string,
     @Param('id') fileId: string,
     @Req()
-    req: {
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.orgFiles.deleteFile(req, orgId, Array.isArray(fileId) ? fileId : [fileId]);
   }
@@ -81,12 +77,7 @@ export class OrganizationFilesController implements OnModuleInit {
     @UploadedFiles()
     file: Array<Express.Multer.File>,
     @Req()
-    req: {
-      body: never;
-      headers: never;
-      query: never;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     try {
       return this.orgFiles.uploadFile(req, orgId, file, bpc);
@@ -104,12 +95,7 @@ export class OrganizationFilesController implements OnModuleInit {
     @Param('id') fileId: string,
     @Body() data: { effective_end_date?: string; effective_start_date?: string; type?: string },
     @Req()
-    req: {
-      body: never;
-      headers: never;
-      query: never;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.orgFiles.update(req, fileId, data);
   }
