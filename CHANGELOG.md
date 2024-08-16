@@ -16,7 +16,7 @@
 # [1.329.0-cold-947.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.328.0...v1.329.0-cold-947.1) (2024-08-15)
 
 
-### Features
+## Features
 
 * update organization claims view ([ca5df70](https://github.com/ColdPBC/cold-monorepo/commit/ca5df70c81a31c9f80d64e43117dd0fc8f21cac0))
 
