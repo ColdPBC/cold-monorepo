@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { OrganizationComplianceAiResponsesService } from './organization_compliance_ai_responses.service';
-import { allRoles, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { allRoles, HttpExceptionFilter, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
 import { coldAdminOnly } from '../../../../_global/global.params';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { organization_compliance_ai_responses } from '@prisma/client';
@@ -27,7 +27,7 @@ export class OrganizationComplianceAiResponsesController {
     example: 'b_corp_2024',
   })
   @Roles(...coldAdminOnly)
-  create(@Param('orgId') orgId: string, @Param('name') name: string, @Body() aiResponseData: organization_compliance_ai_responses, @Req() req: any) {
+  create(@Param('orgId') orgId: string, @Param('name') name: string, @Body() aiResponseData: organization_compliance_ai_responses, @Req() req: IRequest) {
     return this.organizationComplianceAiResponsesService.createAiResponse(req.organization, name, aiResponseData, req.user);
   }
 
@@ -45,7 +45,7 @@ export class OrganizationComplianceAiResponsesController {
     example: 'b_corp_2024',
   })
   @Roles(...allRoles)
-  findAllAiResponses(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: any) {
+  findAllAiResponses(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: IRequest) {
     return this.organizationComplianceAiResponsesService.findAllAiResponses(req.organization, name, req.user);
   }
 
@@ -70,7 +70,7 @@ export class OrganizationComplianceAiResponsesController {
     example: 'cair_',
   })
   @Roles(...allRoles)
-  findOneAiResponse(@Param('orgId') orgId: string, @Param('name') name: string, @Param('aiId') id: string, @Req() req: any) {
+  findOneAiResponse(@Param('orgId') orgId: string, @Param('name') name: string, @Param('aiId') id: string, @Req() req: IRequest) {
     return this.organizationComplianceAiResponsesService.findOneAiResponse(req.organization, name, id, req.user);
   }
 
@@ -100,7 +100,7 @@ export class OrganizationComplianceAiResponsesController {
     @Param('name') name: string,
     @Param('aiId') id: string,
     @Body() aiResponseData: organization_compliance_ai_responses,
-    @Req() req: any,
+    @Req() req: IRequest,
   ) {
     return this.organizationComplianceAiResponsesService.updateAiResponse(req.organization, name, id, aiResponseData, req.user);
   }
@@ -119,7 +119,7 @@ export class OrganizationComplianceAiResponsesController {
     example: 'b_corp_2024',
   })
   @Roles(...coldAdminOnly)
-  removeAllAiResponses(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: any) {
+  removeAllAiResponses(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: IRequest) {
     return this.organizationComplianceAiResponsesService.removeAllAiResponses(req.organization, name, req.user);
   }
 
@@ -144,7 +144,7 @@ export class OrganizationComplianceAiResponsesController {
     example: 'cair_',
   })
   @Roles(...coldAdminOnly)
-  removeAiResponse(@Param('orgId') orgId: string, @Param('name') name: string, @Param('aiId') id: string, @Req() req: any) {
+  removeAiResponse(@Param('orgId') orgId: string, @Param('name') name: string, @Param('aiId') id: string, @Req() req: IRequest) {
     return this.organizationComplianceAiResponsesService.removeAiResponse(req.organization, name, id, req.user);
   }
 }
