@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace'; // eslint-disable-next-line @nx/enforce-module-boundaries
-import { OrganizationsRepository, Auth0Organization, Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, Tags } from '@coldpbc/nest';
+import { OrganizationsRepository, Auth0Organization, Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, Tags, IRequest } from '@coldpbc/nest';
 import { get, kebabCase, merge, omit, pick, set } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 import { CreateOrganizationDto } from './dto/organization.dto';
@@ -149,7 +149,7 @@ export class OrganizationService extends BaseWorker {
    */
   async getOrganizations(
     bpc = false,
-    req: any,
+    req: { user: any },
     filters?: {
       id?: string;
       name?: string;
@@ -199,7 +199,7 @@ export class OrganizationService extends BaseWorker {
    * @param req
    * @param bypassCache
    */
-  async getOrganization(nameOrId: string, req: any, bypassCache = false): Promise<organizations> {
+  async getOrganization(nameOrId: string, req: IRequest, bypassCache = false): Promise<organizations> {
     const { user } = req;
     try {
       if (!nameOrId || nameOrId === ':name' || nameOrId === ':orgId') throw new UnprocessableEntityException(`Organization 'name' or 'id' is required`);
@@ -250,7 +250,7 @@ export class OrganizationService extends BaseWorker {
     }
   }
 
-  async updateOrganization(orgId: string, org: Partial<CreateOrganizationDto>, req: any): Promise<organizations> {
+  async updateOrganization(orgId: string, org: Partial<CreateOrganizationDto>, req: IRequest): Promise<organizations> {
     const { user, url, organization } = req;
     try {
       this.logger.info('updating organization', { org, user });
@@ -268,7 +268,7 @@ export class OrganizationService extends BaseWorker {
         data: org,
       });
       // update org list cache
-      await this.getOrganizations(user, true);
+      await this.getOrganizations(true, req, { id: updated.id });
 
       this.mqtt.publishMQTT('cold', {
         swr_key: url,
@@ -299,7 +299,7 @@ export class OrganizationService extends BaseWorker {
    * @param org
    * @param req
    */
-  async createOrganization(org: Partial<CreateOrganizationDto>, req: any): Promise<Auth0Organization> {
+  async createOrganization(org: Partial<CreateOrganizationDto>, req: IRequest): Promise<Auth0Organization> {
     const { user, url } = req;
     try {
       this.logger.info('creating organization', { org, user });
@@ -319,7 +319,7 @@ export class OrganizationService extends BaseWorker {
       });
 
       // update org list cache
-      await this.getOrganizations(user, true);
+      await this.getOrganizations(true, req, { id: saved.data.id });
 
       this.mqtt.publishMQTT('cold', {
         swr_key: url,
@@ -342,7 +342,7 @@ export class OrganizationService extends BaseWorker {
    * @param org
    * @param req
    */
-  async createColdOrg(org: Partial<CreateOrganizationDto>, req: any): Promise<Partial<organizations>> {
+  async createColdOrg(org: Partial<CreateOrganizationDto>, req: IRequest): Promise<Partial<organizations>> {
     const { user, url } = req;
     // Name should be kebabCased
     const orgName = kebabCase(org.display_name);
@@ -482,7 +482,7 @@ export class OrganizationService extends BaseWorker {
    * @param org
    * @param req
    */
-  async deleteOrganization(org: any, req: any) {
+  async deleteOrganization(org: any, req: IRequest) {
     const { user, url, organization } = req;
 
     try {
@@ -596,7 +596,7 @@ export class OrganizationService extends BaseWorker {
 
       throw e;
     }
-    await this.getOrganizations(user, true);
+    await this.getOrganizations(true, req, { id: org.id });
 
     set(this.tags, 'status', 'completed');
 
