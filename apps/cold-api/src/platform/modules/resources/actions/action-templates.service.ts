@@ -7,6 +7,7 @@ import {
   ActionTemplatesEntity,
   BaseWorker,
   CacheService,
+  IRequest,
   MqttService,
   PrismaService,
   ZodCreateActionTemplate,
@@ -22,11 +23,11 @@ export class ActionTemplatesService extends BaseWorker {
 
   /**
    * This action returns all actions
-   * @param {AuthenticatedUser} user
+   * @param req
    * @param {boolean} bpc
    * @returns {Promise<any>}
    */
-  async getActionTemplates(req: any, bpc?: boolean): Promise<ActionTemplatesEntity[]> {
+  async getActionTemplates(req: IRequest, bpc?: boolean): Promise<ActionTemplatesEntity[]> {
     const { user } = req;
     this.setTags({ user: user.coldclimate_claims, bpc });
 
@@ -64,12 +65,12 @@ export class ActionTemplatesService extends BaseWorker {
 
   /**
    * This action returns an action by id
-   * @param {AuthenticatedUser} user
+   * @param req
    * @param {string} id
    * @param {boolean} bpc
    * @returns {Promise<any>}
    */
-  async getActionTemplate(req: any, id: string, bpc?: boolean): Promise<ZodCreateActionTemplateDto> {
+  async getActionTemplate(req: IRequest, id: string, bpc?: boolean): Promise<ZodCreateActionTemplateDto> {
     const { user } = req;
     this.setTags({ user: user.coldclimate_claims, action_template_id: id, bpc });
 
@@ -110,11 +111,11 @@ export class ActionTemplatesService extends BaseWorker {
 
   /**
    * This action creates a new action template
-   * @param {AuthenticatedUser} user
+   * @param req
    * @param {ActionDefinitionsCreate} data
    * @returns action_templates
    */
-  async createActionTemplate(req: any, data: ZodCreateActionTemplate) {
+  async createActionTemplate(req: IRequest, data: ZodCreateActionTemplate) {
     const { user, url } = req;
 
     this.setTags({ user: user.coldclimate_claims, data });
@@ -164,12 +165,12 @@ export class ActionTemplatesService extends BaseWorker {
 
   /**
    * This action updates an action template
-   * @param {AuthenticatedUser} user
+   * @param req
    * @param {string} id
    * @param {UpdateActionTemplatesDto} data
    * @returns {Promise<action_templates>}
    */
-  async updateActionTemplate(req: any, id: string, data: ZodCreateActionTemplate): Promise<ActionTemplatesEntity> {
+  async updateActionTemplate(req: IRequest, id: string, data: ZodCreateActionTemplate): Promise<ActionTemplatesEntity> {
     const { user, url } = req;
 
     this.setTags({ user: user.coldclimate_claims, action_template_id: id, data });
@@ -223,10 +224,10 @@ export class ActionTemplatesService extends BaseWorker {
 
   /**
    * This action deletes an action
-   * @param {AuthenticatedUser} user
+   * @param req
    * @param {string} id
    */
-  async deleteActionTemplate(req: any, id: string) {
+  async deleteActionTemplate(req: IRequest, id: string) {
     const { user, url } = req;
     this.setTags({ user: user.coldclimate_claims, action_template_id: id });
 
