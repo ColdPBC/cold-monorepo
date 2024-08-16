@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, MaterialsRepository } from '@coldpbc/nest';
+import { BaseWorker, MaterialsRepository, IRequest } from '@coldpbc/nest';
 
 @Injectable()
 export class MaterialsService extends BaseWorker {
@@ -7,11 +7,11 @@ export class MaterialsService extends BaseWorker {
     super(MaterialsService.name);
   }
 
-  create(req: any, createMaterialDto: any) {
+  create(req: IRequest, createMaterialDto: any) {
     return this.repository.createMaterial(req.organization, req.user, createMaterialDto);
   }
 
-  createSupplierMaterial(req: any, id: string, supplierId: string) {
+  createSupplierMaterial(req: IRequest, id: string, supplierId: string) {
     const data = {
       material_id: id,
       supplier_id: supplierId,
@@ -20,7 +20,7 @@ export class MaterialsService extends BaseWorker {
     return this.repository.createSupplierMaterial(req.organization, req.user, data);
   }
 
-  deleteSupplierMaterial(req: any, material_id: string, supplier_id: string) {
+  deleteSupplierMaterial(req: IRequest, material_id: string, supplier_id: string) {
     const data = {
       material_id,
       supplier_id,
@@ -29,23 +29,23 @@ export class MaterialsService extends BaseWorker {
     return this.repository.removeMaterialSupplier(req.organization, req.user, data);
   }
 
-  createMany(req: any, createMaterialsDto: any[]) {
+  createMany(req: IRequest, createMaterialsDto: any[]) {
     return this.repository.createMaterials(req.organization, req.user, createMaterialsDto);
   }
 
-  findAll(req: any) {
+  findAll(req: IRequest) {
     return this.repository.findAll(req.organization, req.user);
   }
 
-  findOne(req: any, id: string) {
+  findOne(req: IRequest, id: string) {
     return this.repository.findOne(req.organization, req.user, { id });
   }
 
-  update(req: any, id: string, updateMaterialDto: any) {
+  update(req: IRequest, id: string, updateMaterialDto: any) {
     return this.repository.updateMaterials(req.organization, req.user, { id }, updateMaterialDto);
   }
 
-  remove(req: any, id: string) {
+  remove(req: IRequest, id: string) {
     return this.repository.remove(req.organization, req.user, { id });
   }
 }
