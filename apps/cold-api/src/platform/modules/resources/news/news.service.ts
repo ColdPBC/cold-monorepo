@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { news } from '@prisma/client';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, CacheService, MqttService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, IRequest, MqttService, PrismaService } from '@coldpbc/nest';
 import { CreateArticleDto } from './dto/news-article.dto';
 
 @Span()
@@ -13,10 +13,10 @@ export class NewsService extends BaseWorker {
 
   /***
    * This action creates a new policy definition
-   * @param user AuthenticatedUser
+   * @param req
    * @param payload CreateArticleDto
    */
-  async create(req: any, payload: CreateArticleDto): Promise<CreateArticleDto> {
+  async create(req: IRequest, payload: CreateArticleDto): Promise<CreateArticleDto> {
     const { url } = req;
     try {
       payload.created_at = new Date();
@@ -58,10 +58,10 @@ export class NewsService extends BaseWorker {
 
   /***
    * This action deletes a policy definition
-   * @param user AuthenticatedUser
+   * @param req
    * @param id string
    */
-  async delete(req: any, id: string): Promise<void> {
+  async delete(req: IRequest, id: string): Promise<void> {
     const { url } = req;
     const article = await this.prisma.news.findUnique({
       where: {
@@ -92,7 +92,7 @@ export class NewsService extends BaseWorker {
     await this.getArticles(req, 3, 0, true, true);
   }
 
-  async getArticles(req: any, take: number, skip: number, bpc: boolean, published = true): Promise<news[]> {
+  async getArticles(req: IRequest, take: number, skip: number, bpc: boolean, published = true): Promise<news[]> {
     const { user } = req;
     if (bpc) {
       const cached = await this.cache.get(`organizations:${user.coldclimate_claims.org_id}:news:${take}${skip}`);
