@@ -120,6 +120,8 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
 
   async createComplianceQuestionBookmark(name: string, qId: string, org: organizations, user: IAuthenticatedUser) {
     try {
+      const start = new Date();
+
       this.cache.delete(`${this.getCacheKey(org, name, user)}`, true);
 
       const orgCompliance = await this.getOrganizationCompliance(name, org, qId);
@@ -136,6 +138,28 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
           email: user.coldclimate_claims.email,
         },
       });
+
+      if (!org.isTest) {
+        const question = await this.prisma.compliance_questions.findUnique({
+          where: {
+            id: qId,
+          },
+        });
+
+        this.sendMetrics('organization.compliance.question.bookmarks', 'compliance_notes_repository.createComplianceQuestionBookmark', 'delete', 'completed', {
+          sendEvent: true,
+          start,
+          tags: {
+            key: question ? question.key : '',
+            question_id: qId,
+            compliance: name,
+            organization_id: org.id,
+            organization_name: org.name,
+            email: user.coldclimate_claims.email,
+            data: response,
+          },
+        });
+      }
 
       this.getComplianceQuestionBookmarksByEmail(name, org, user);
 
@@ -173,6 +197,35 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
           },
         },
       });
+
+      if (!org.isTest) {
+        this.metrics.increment('cold.compliance.question.bookmark', 1, {
+          event: 'deleted',
+          question_id: qId,
+          compliance: question.compliance_definition_name,
+          organization_id: org.id,
+          organization_name: org.name,
+          email: user.coldclimate_claims.email,
+        });
+
+        this.metrics.event(
+          'User deleted bookmark from compliance question',
+          `${user.coldclimate_claims.email} from ${org.name} deleted a bookmark ${question ? `on the following question(${qId})` : ''}) for ${question.compliance_definition_name}`,
+          {
+            alert_type: 'success',
+            date_happened: new Date(),
+            priority: 'normal',
+          },
+          {
+            event: 'deleted',
+            question_id: qId,
+            compliance: question.compliance_definition_name,
+            organization_id: org.id,
+            organization_name: org.name,
+            email: user.coldclimate_claims.email,
+          },
+        );
+      }
 
       return deleted;
     } catch (err) {

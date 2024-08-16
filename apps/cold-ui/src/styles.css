@@ -27,63 +27,30 @@
 }
 
 @media print {
-  .markdown-terms *,
-  .markdown-terms *:before,
-  .markdown-terms *:after {
-    background: transparent !important;
-    color: #000 !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
+  /* Disable overflow for the content container */
+  .w-screen, .h-screen, .overflow-y-auto, .h-full, .w-full, .markdown-terms {
+    overflow: visible !important;
+    height: auto !important;
+    width: auto !important;
+  }
+
+  /* Style the terms and conditions for printing */
+  .markdown-terms {
+    font-family: 'Merriweather', Georgia, serif;
+    margin: 20px 40px;
+    max-width: 60rem;
   }
 
   .markdown-terms a,
   .markdown-terms a:visited {
-    text-decoration: underline;
+    color: #3498db;
   }
 
-  .markdown-terms a[href]:after {
-    content: " (" attr(href) ")";
+  /* Ensuring the entire page is used for printing */
+  @page {
+    margin: 20mm;
   }
 
-  .markdown-terms abbr[title]:after {
-    content: " (" attr(title) ")";
-  }
-
-  .markdown-terms a[href^="#"]:after,
-  .markdown-terms a[href^="javascript:"]:after {
-    content: "";
-  }
-
-  .markdown-terms pre,
-  .markdown-terms blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid;
-  }
-
-  .markdown-terms thead {
-    display: table-header-group;
-  }
-
-  .markdown-terms tr,
-  .markdown-terms img {
-    page-break-inside: avoid;
-  }
-
-  .markdown-terms img {
-    max-width: 100% !important;
-  }
-
-  .markdown-terms p,
-  .markdown-terms h2,
-  .markdown-terms h3 {
-    orphans: 3;
-    widows: 3;
-  }
-
-  .markdown-terms h2,
-  .markdown-terms h3 {
-    page-break-after: avoid;
-  }
 }
 
 @media screen and (min-width: 32rem) and (max-width: 48rem) {

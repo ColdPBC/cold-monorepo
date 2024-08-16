@@ -15,6 +15,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
   }
 
   async createAiResponses(org: organizations, complianceName: string, responseData: any, user: any) {
+    const start = new Date();
     await this.cache.delete(this.getCacheKey(org, complianceName), true);
 
     this.logger.info(`Creating ai_responses for ${org.name}: ${complianceName}`, {
@@ -24,13 +25,35 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
     });
 
     try {
-      await this.prisma.organization_compliance_ai_responses.create({
+      const response = await this.prisma.organization_compliance_ai_responses.create({
         data: {
           organization_id: org?.id,
           organization_compliance_id: complianceName,
           ...responseData,
         },
       });
+
+      if (!org.isTest) {
+        const question = await this.prisma.compliance_questions.findUnique({
+          where: {
+            id: responseData.compliance_question_id,
+          },
+        });
+
+        this.sendMetrics('organization.compliance.notes', 'compliance_notes_repository', 'update', 'completed', {
+          sendEvent: false,
+          start,
+          tags: {
+            key: question ? question.key : '',
+            question_id: responseData.compliance_question_id,
+            compliance: complianceName,
+            organization_id: org.id,
+            organization_name: org.name,
+            email: user.coldclimate_claims.email,
+            data: response,
+          },
+        });
+      }
     } catch (error) {
       this.logger.error(`Error creating ai_responses for ${org.name}: ${complianceName}`, { organization: org, complianceName, user, error });
 
