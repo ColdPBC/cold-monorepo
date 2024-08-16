@@ -1,3 +1,19 @@
+# [1.330.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.329.0...v1.330.0) (2024-08-16)
+
+
+### Features
+
+* Add metric collection to compliance note operations ([ccc4528](https://github.com/ColdPBC/cold-monorepo/commit/ccc4528c01da490e2997bed54ed24c51bc05654d))
+* add metrics and event logging for compliance question bookmarks ([ae76b2c](https://github.com/ColdPBC/cold-monorepo/commit/ae76b2ce77ca22799f958c453bc7786c22c97803))
+* Add metrics and events tracking for file operations ([7a56376](https://github.com/ColdPBC/cold-monorepo/commit/7a5637611d2f4fdd73ec6cfee661bbe753393bf9))
+* add metrics logging for AI responses creation ([5b927b8](https://github.com/ColdPBC/cold-monorepo/commit/5b927b8fd9475b5f5cf0b859e5e06f0d9d4170da))
+* add metrics logging to claims_repository methods ([43f32bf](https://github.com/ColdPBC/cold-monorepo/commit/43f32bf628c1f79454fee2bca10c2be95bfefbfa))
+* add metrics tracking for compliance responses repository ([6506629](https://github.com/ColdPBC/cold-monorepo/commit/6506629f602576a9aa973a6177431d1176f15bfd))
+* add metrics tracking to organization compliance operations ([f8ee5f1](https://github.com/ColdPBC/cold-monorepo/commit/f8ee5f1f57fb9e50c24dec44e54c60101ff98e0e))
+* add sendMetrics method to worker class ([e398b24](https://github.com/ColdPBC/cold-monorepo/commit/e398b24afe7eb0e0e43872c408c5f079edc81791))
+* enhance organization compliance status creation with metrics tracking ([5d7094a](https://github.com/ColdPBC/cold-monorepo/commit/5d7094ab8ccc7053498b9d57d651dabea78f8eac))
+* update organization claims view ([ca5df70](https://github.com/ColdPBC/cold-monorepo/commit/ca5df70c81a31c9f80d64e43117dd0fc8f21cac0))
+
 # [1.329.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.328.1...v1.329.0) (2024-08-15)
 
 

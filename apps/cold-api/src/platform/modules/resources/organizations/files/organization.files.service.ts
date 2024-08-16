@@ -109,7 +109,7 @@ export class OrganizationFilesService extends BaseWorker {
   }
 
   async uploadFile(req: any, orgId: string, files: Array<Express.Multer.File>, bpc?: boolean) {
-    const { user, url } = req;
+    const { user, url, organization } = req;
     const org = await this.helper.getOrganizationById(orgId, req.user, bpc);
     const existingFiles: any = [];
 
@@ -189,6 +189,20 @@ export class OrganizationFilesService extends BaseWorker {
         await this.events.sendIntegrationEvent(false, 'file.uploaded', existing, user, orgId);
 
         existingFiles.push(existing);
+
+        if (!organization.isTest) {
+          this.metrics.increment('cold.file.uploaded', 1, { organization_id: organization.id, organization_name: organization.name, email: user.coldclimate_claims.email });
+          this.metrics.event(
+            'File Uploaded',
+            `A file was uploaded by ${user.coldclimate_claims.email} for ${organization.name}`,
+            {
+              alert_type: 'success',
+              date_happened: new Date(),
+              priority: 'normal',
+            },
+            { status: 'complete', organization_id: organization.id, organization_name: organization.name, email: user.coldclimate_claims.email },
+          );
+        }
       } catch (e) {
         this.logger.error(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
 
@@ -204,6 +218,22 @@ export class OrganizationFilesService extends BaseWorker {
           },
         });
 
+        if (!organization.isTest) {
+          this.metrics.event(
+            'File Upload Failed',
+            `A file upload attempt by ${user.coldclimate_claims.email} for ${organization.name} failed`,
+            {
+              alert_type: 'error',
+              date_happened: new Date(),
+              priority: 'normal',
+            },
+            {
+              organization_id: organization.id,
+              organization_name: organization.name,
+              email: user.coldclimate_claims.email,
+            },
+          );
+        }
         throw e;
       }
     }
@@ -288,6 +318,28 @@ export class OrganizationFilesService extends BaseWorker {
 
     if (!file || !file.bucket || !file.key) {
       throw new NotFoundException(`File ${fileId} not found`);
+    }
+
+    if (!req.organization.isTest) {
+      this.metrics.increment('cold.s3_url.requested', 1, {
+        organization_id: req.organization.id,
+        organization_name: req.organization.name,
+        email: req.user.coldclimate_claims.email,
+      });
+      this.metrics.event(
+        'S3 Url Generated',
+        `An S3 Url for downloading a file was requested by ${req.user.coldclimate_claims.email} for ${req.organization.name}`,
+        {
+          alert_type: 'success',
+          date_happened: new Date(),
+          priority: 'normal',
+        },
+        {
+          organization_id: req.organization.id,
+          organization_name: req.organization.name,
+          email: req.user.coldclimate_claims.email,
+        },
+      );
     }
 
     return this.s3.getSignedURL(req.user, file.bucket, file.key, 120);

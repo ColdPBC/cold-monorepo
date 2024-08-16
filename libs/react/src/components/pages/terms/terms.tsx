@@ -1,10 +1,9 @@
 import React, { PropsWithChildren } from 'react';
-import { axiosFetcher } from '../../../fetchers';
+import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
-import { Spinner } from '../../atoms';
+import { ErrorFallback, Spinner } from '@coldpbc/components';
 import ReactMarkdown from 'react-markdown';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
 import { ErrorType } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
 
@@ -13,10 +12,7 @@ export interface TermsProps {
 }
 
 function _Terms(props: PropsWithChildren<TermsProps>) {
-  const { data, error, isLoading } = useSWR<any, any, any>(
-    ['/policies/' + props.type + '/content', 'GET'],
-    axiosFetcher,
-  );
+  const { data, error, isLoading } = useSWR<any, any, any>([`/policies/${props.type}/content`, 'GET'], axiosFetcher);
   const { logError } = useColdContext();
 
   if (isLoading) {
@@ -33,8 +29,8 @@ function _Terms(props: PropsWithChildren<TermsProps>) {
   }
 
   return (
-    <div className={'bg-white h-full w-full'}>
-      <div className={'markdown-terms'}>
+    <div className={'bg-white h-full w-full overflow-y-auto'}>
+      <div className={'markdown-terms overflow-y-auto'}>
         <ReactMarkdown children={data} />
       </div>
     </div>

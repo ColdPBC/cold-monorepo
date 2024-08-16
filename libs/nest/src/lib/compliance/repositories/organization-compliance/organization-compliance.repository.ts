@@ -207,6 +207,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
 
   async createOrgCompliance(name: string, data: any, user: IAuthenticatedUser, organization: organizations) {
     try {
+      const start = new Date();
       await this.cacheService.delete(`organizations:${organization.id}:compliance:${name}`, true);
 
       data.compliance_definition_name = name;
@@ -215,9 +216,17 @@ export class OrganizationComplianceRepository extends BaseWorker {
       data.id = new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId;
       data.description = '';
 
-      return this.prisma.organization_compliance.create({
+      const compliance = await this.prisma.organization_compliance.create({
         data,
       });
+
+      this.sendMetrics('organization.compliance', 'organization_compliance_repository', 'create', 'completed', {
+        sendEvent: true,
+        start,
+        tags: { organization, user, compliance: compliance },
+      });
+
+      return compliance;
     } catch (error) {
       this.logger.error(`Error creating compliance definition`, { name, organization, ...data, error, user });
       throw error;
@@ -226,6 +235,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
 
   async updateOrgComplianceDefinition(name: string, data: any, user: IAuthenticatedUser, organization: organizations) {
     try {
+      const start = new Date();
       await this.cacheService.delete(`organizations:${organization.id}:compliance:${name}`, true);
 
       const userResponse = await this.prisma.organization_compliance.update({
@@ -238,6 +248,12 @@ export class OrganizationComplianceRepository extends BaseWorker {
         data,
       });
 
+      this.sendMetrics('organization.compliance', 'organization_compliance_repository', 'update', 'completed', {
+        sendEvent: true,
+        start,
+        tags: { organization, user, compliance: userResponse },
+      });
+
       return userResponse;
     } catch (error) {
       this.logger.error(`Error updating compliance definition`, { name, organization, ...data, error, user });
@@ -247,9 +263,10 @@ export class OrganizationComplianceRepository extends BaseWorker {
 
   async deleteOrgComplianceDefinition(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
+      const start = new Date();
       await this.cacheService.delete(`organizations:${organization.id}:compliance:${name}`, true);
 
-      return this.prisma.organization_compliance.delete({
+      const deleted = this.prisma.organization_compliance.delete({
         where: {
           orgIdCompNameKey: {
             compliance_definition_name: name,
@@ -257,6 +274,14 @@ export class OrganizationComplianceRepository extends BaseWorker {
           },
         },
       });
+
+      this.sendMetrics('organization.compliance', 'organization_compliance_repository', 'delete', 'completed', {
+        sendEvent: true,
+        start,
+        tags: { organization, user, compliance: deleted },
+      });
+
+      return deleted;
     } catch (error) {
       this.logger.error(`Error deleting compliance definition`, { name, organization, error, user });
       throw error;

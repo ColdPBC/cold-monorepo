@@ -220,16 +220,41 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       let orgResponseEntity, aiResponseEntity;
 
+      // If the AI response is provided, save it
       if (ai_response && (Object.prototype.hasOwnProperty.call(ai_response, 'answer') || ai_response?.justification)) {
         const aiResponse = await this.upsertAIResponse(start, aiResponseEntity, ai_response, compliance, org, qId, user);
         start = aiResponse.start;
         aiResponseEntity = aiResponse.aiResponseEntity;
       }
 
+      // If the user response is provided, save it
       if (user_response && Object.prototype.hasOwnProperty.call(user_response, 'value')) {
         const orgResponse = await this.upsertOrgResponse(start, orgResponseEntity, compliance, qId, user_response, org, user);
         start = orgResponse.start;
         orgResponseEntity = orgResponse.orgResponseEntity;
+
+        if (!org.isTest) {
+          const question = await this.prisma.compliance_questions.findUnique({
+            where: {
+              id: qId,
+            },
+          });
+
+          this.sendMetrics('organization.compliance.user.responses', 'organization_compliance_responses_repository', 'update', 'completed', {
+            sendEvent: true,
+            start,
+            tags: {
+              key: question ? question.key : '',
+              question_id: qId,
+              section_id: sId,
+              section_group_id: sgId,
+              compliance: compliance.compliance_definition_name,
+              organization_id: org.id,
+              organization_name: org.name,
+              email: user.coldclimate_claims.email,
+            },
+          });
+        }
       }
 
       if (orgResponseEntity || aiResponseEntity) {
@@ -876,6 +901,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
   }
 
   async deleteComplianceResponse(org: organizations, compliance_definition_name: string, sgId: string, sId: string, qId: string, user: IAuthenticatedUser, type: string = 'ai') {
+    const start = new Date();
     await this.cacheService.delete(this.getCacheKey(org, compliance_definition_name), true);
 
     const compliance = await this.prisma.organization_compliance.findUnique({
@@ -899,25 +925,79 @@ export class ComplianceResponsesRepository extends BaseWorker {
         org,
       });
 
+      const question = await this.prisma.compliance_questions.findUnique({
+        where: {
+          id: qId,
+        },
+      });
+
+      let response: any;
       switch (type) {
         case 'ai':
-          return await this.prisma.organization_compliance_ai_responses.delete({
+          response = await this.prisma.organization_compliance_ai_responses.delete({
             where: { orgCompQuestId: { organization_compliance_id: compliance.id, compliance_question_id: qId } },
           });
+          this.sendMetrics('organization.compliance.ai.responses', 'organization_compliance_responses_repository', 'delete', 'completed', {
+            sendEvent: true,
+            start,
+            tags: {
+              key: question ? question.key : '',
+              question_id: qId,
+              section_id: sId,
+              section_group_id: sgId,
+              compliance: compliance.compliance_definition_name,
+              organization_id: org.id,
+              organization_name: org.name,
+              email: user.coldclimate_claims.email,
+              data: response,
+            },
+          });
+          break;
         case 'org':
-          return await this.prisma.organization_compliance_responses.deleteMany({
+          response = await this.prisma.organization_compliance_responses.deleteMany({
             where: { organization_compliance_id: compliance.id, compliance_question_id: qId },
           });
-        case 'all':
-          await this.prisma.organization_compliance_ai_responses.deleteMany({
+          this.sendMetrics('organization.compliance.user.responses', 'organization_compliance_responses_repository', 'delete', 'completed', {
+            sendEvent: true,
+            start,
+            tags: {
+              key: question ? question.key : '',
+              question_id: qId,
+              section_id: sId,
+              section_group_id: sgId,
+              compliance: compliance.compliance_definition_name,
+              organization_id: org.id,
+              organization_name: org.name,
+              email: user.coldclimate_claims.email,
+              data: response,
+            },
+          });
+          break;
+        case 'all': {
+          response = this.prisma.organization_compliance_ai_responses.deleteMany({
             where: { organization_compliance_id: compliance.id },
           });
-          return await this.prisma.organization_compliance_responses.deleteMany({
+
+          const orgResponse = await this.prisma.organization_compliance_responses.deleteMany({
             where: { organization_compliance_id: compliance.id },
           });
+          this.sendMetrics('organization.compliance.responses', 'organization_compliance_responses_repository', 'delete_all', 'completed', {
+            sendEvent: true,
+            start,
+            tags: {
+              compliance: compliance.compliance_definition_name,
+              organization_id: org.id,
+              organization_name: org.name,
+              email: user.coldclimate_claims.email,
+              data: { aiResponse: response, orgResponse },
+            },
+          });
+          return { aiResponse: response, orgResponse };
+        }
         default:
           throw new BadRequestException(`Invalid type ${type} provided`);
       }
+      return response;
     } catch (error) {
       this.logger.error(`Error clearing previous responses for ${org.name}: ${compliance_definition_name}`, {
         user,
@@ -1076,6 +1156,25 @@ export class ComplianceResponsesRepository extends BaseWorker {
       duration: new Date().getTime() - start.getTime(),
     });
 
+    const question = await this.prisma.compliance_questions.findUnique({
+      where: {
+        id: qId,
+      },
+    });
+
+    this.sendMetrics('organization.compliance.user.responses', 'organization_compliance_responses_repository', 'update', 'completed', {
+      sendEvent: true,
+      start,
+      tags: {
+        key: question ? question.key : '',
+        question_id: qId,
+        compliance: compliance.compliance_definition_name,
+        organization_id: org.id,
+        organization_name: org.name,
+        email: user.coldclimate_claims.email,
+        data: orgResponseEntity,
+      },
+    });
     return { start, orgResponseEntity };
   }
 
@@ -1136,6 +1235,27 @@ export class ComplianceResponsesRepository extends BaseWorker {
       organization: org,
       duration: new Date().getTime() - start.getTime(),
     });
+
+    const question = await this.prisma.compliance_questions.findUnique({
+      where: {
+        id: qId,
+      },
+    });
+
+    this.sendMetrics('organization.compliance.ai.responses', 'organization_compliance_responses_repository', 'update', 'completed', {
+      sendEvent: false,
+      start,
+      tags: {
+        key: question ? question.key : '',
+        question_id: qId,
+        compliance: compliance.compliance_definition_name,
+        organization_id: org.id,
+        organization_name: org.name,
+        email: user.coldclimate_claims.email,
+        data: aiResponseEntity,
+      },
+    });
+
     return { start, aiResponseEntity };
   }
 }
