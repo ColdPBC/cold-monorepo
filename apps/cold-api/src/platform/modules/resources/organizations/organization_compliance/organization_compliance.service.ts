@@ -16,7 +16,7 @@ export class OrganizationComplianceService extends BaseWorker {
   }
 
   async activateAi(orgId: string, req: any, compliance_name: string): Promise<any> {
-    const { user, url, headers } = req;
+    const { user, url, headers, organization } = req;
 
     const openAI_definition = await this.prisma.service_definitions.findFirst({
       where: {
@@ -66,6 +66,32 @@ export class OrganizationComplianceService extends BaseWorker {
           service: openAI_definition,
         },
       });
+
+      if (!organization.isTest) {
+        this.metrics.increment('cold.compliance.ai', 1, {
+          event: 'activated',
+          compliance: compliance_name,
+          organization_id: organization.id,
+          organization_name: organization.name,
+          email: user.coldclimate_claims.email,
+        });
+        this.metrics.event(
+          'Compliance AI Activated',
+          `${user.coldclimate_claims.email} from ${organization.name} activated AI process for ${compliance_name}`,
+          {
+            alert_type: 'success',
+            date_happened: new Date(),
+            priority: 'normal',
+          },
+          {
+            event: 'activated',
+            compliance: compliance_name,
+            organization_id: organization.id,
+            organization_name: organization.name,
+            email: user.coldclimate_claims.email,
+          },
+        );
+      }
     } else {
       const compliance_definition = await this.prisma.compliance_definitions.findFirst({
         where: {

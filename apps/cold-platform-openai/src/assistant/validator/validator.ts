@@ -36,11 +36,13 @@ export class OpenAIResponse extends BaseWorker {
       response = JSON.parse(response);
     }
 
+    /*
     if (!this.isValid(response)) {
       throw new UnprocessableEntityException({ ...response }, 'Invalid response');
     } else {
-      return OpenAIResponse.validate(response)['data'];
-    }
+      const validated = OpenAIResponse.validate(response)['data'];
+      return validated;
+    }*/
   }
 
   static validate(data: OpenAIResponse): z.SafeParseReturnType<OpenAIResponseType, OpenAIResponseType> {

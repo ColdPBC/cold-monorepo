@@ -15,6 +15,7 @@ export class ComplianceNotesRepository extends BaseWorker {
   }
 
   async createNote(name: string, qId: string, note: string, org: any, user: any) {
+    const start = new Date();
     await this.cacheService.delete(this.getCacheKey(org.id, name), true);
 
     const orgCompliance = await this.validate(qId, name, org, user);
@@ -30,6 +31,28 @@ export class ComplianceNotesRepository extends BaseWorker {
         metadata: { email: user.coldclimate_claims.email },
       },
     });
+
+    if (!org.isTest) {
+      const question = await this.prisma.compliance_questions.findUnique({
+        where: {
+          id: qId,
+        },
+      });
+
+      this.sendMetrics('organization.compliance.notes', 'compliance_notes_repository', 'create', 'completed', {
+        sendEvent: true,
+        start,
+        tags: {
+          key: question ? question.key : '',
+          question_id: qId,
+          compliance: orgCompliance.compliance_definition_name,
+          organization_id: org.id,
+          organization_name: org.name,
+          email: user.coldclimate_claims.email,
+          data: newNote,
+        },
+      });
+    }
 
     this.logger.debug(`Created new note for ${name} question (${qId}) with ID: ${newNote.id}`);
     return newNote;
@@ -52,6 +75,7 @@ export class ComplianceNotesRepository extends BaseWorker {
   }
 
   async updateNote(name: string, qId: string, id: string, note: string, org: any, user: any) {
+    const start = new Date();
     await this.cacheService.delete(`${this.getCacheKey(org.id, name)}:${id}`, true);
 
     const orgCompliance = await this.validate(qId, name, org, user);
@@ -66,25 +90,69 @@ export class ComplianceNotesRepository extends BaseWorker {
       },
     });
 
+    if (!org.isTest) {
+      const question = await this.prisma.compliance_questions.findUnique({
+        where: {
+          id: qId,
+        },
+      });
+
+      this.sendMetrics('organization.compliance.notes', 'compliance_notes_repository', 'update', 'completed', {
+        sendEvent: true,
+        start,
+        tags: {
+          key: question ? question.key : '',
+          question_id: qId,
+          compliance: orgCompliance.compliance_definition_name,
+          organization_id: org.id,
+          organization_name: org.name,
+          email: user.coldclimate_claims.email,
+          data: notes,
+        },
+      });
+    }
     this.logger.debug(`Updated note (${id}) for ${name} question (${qId})`);
 
     return notes;
   }
 
   async remove(name: string, qId: string, id: string, org: any, user: any) {
+    const start = new Date();
     await this.cacheService.delete(`${this.getCacheKey(org.id, name)}:${id}`, true);
 
     const orgCompliance = await this.validate(qId, name, org, user);
 
     if (!id) throw new BadRequestException('Note ID is required');
 
-    await this.prisma.organization_compliance_notes.delete({
+    const deleted = await this.prisma.organization_compliance_notes.delete({
       where: {
         id,
         organization_compliance_id: orgCompliance.id,
         compliance_question_id: qId,
       },
     });
+
+    if (!org.isTest) {
+      const question = await this.prisma.compliance_questions.findUnique({
+        where: {
+          id: qId,
+        },
+      });
+
+      this.sendMetrics('organization.compliance.notes', 'compliance_notes_repository', 'delete', 'completed', {
+        sendEvent: true,
+        start,
+        tags: {
+          key: question ? question.key : '',
+          question_id: qId,
+          compliance: orgCompliance.compliance_definition_name,
+          organization_id: org.id,
+          organization_name: org.name,
+          email: user.coldclimate_claims.email,
+          data: deleted,
+        },
+      });
+    }
 
     this.logger.debug(`Deleted note with ID: ${id}`);
 
