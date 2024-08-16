@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException, 
 import { filter, set } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { component_definition_types } from 'prisma/prisma-client';
-import { BaseWorker, CacheService, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, DarklyService, IRequest, MqttService, PrismaService } from '@coldpbc/nest';
 import { filterItemsByRole } from './component-definitions.utils';
 
 @Span()
@@ -26,10 +26,10 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
 
   /***
    * This action returns a component definition by type
-   * @param user
+   * @param req
    * @param type
    */
-  async findByType(req: any, type: component_definition_types): Promise<any[]> {
+  async findByType(req: IRequest, type: component_definition_types): Promise<any[]> {
     const { user } = req;
     try {
       const cached: any = await this.cache.get(`component_definitions:type:${type}`);
@@ -60,9 +60,9 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
   /***
    * This action creates a new component definition
    * @param createComponentDefinitionDto
-   * @param user
+   * @param req
    */
-  async create(createComponentDefinitionDto: any, req: any): Promise<any> {
+  async create(createComponentDefinitionDto: any, req: IRequest): Promise<any> {
     const { user, url } = req;
     try {
       // delete cached definitions by type
@@ -77,7 +77,7 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
       this.logger.info('created definition', definition);
 
       //rebuild cache async
-      await this.findByType(user, createComponentDefinitionDto.type);
+      await this.findByType(req, createComponentDefinitionDto.type);
 
       this.mqtt.publishMQTT('public', {
         swr_key: url,
@@ -113,9 +113,9 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
 
   /***
    * this action retunrs all component definitions
-   * @param user
+   * @param req
    */
-  async findAll(req: any): Promise<any[]> {
+  async findAll(req: IRequest): Promise<any[]> {
     const { user } = req;
     const definitions = (await this.prisma.component_definitions.findMany()) as any[];
 
@@ -133,10 +133,10 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
   /**
    * This action returns a named component definition
    * @param name
-   * @param user
+   * @param req
    * @param bypassCache
    */
-  async findOne(name: string, req: any, bypassCache?: boolean): Promise<any> {
+  async findOne(name: string, req: IRequest, bypassCache?: boolean): Promise<any> {
     const { user } = req;
     try {
       let def: any;
@@ -185,12 +185,12 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
    * This action updates a named component definition
    * @param name
    * @param updateComponentDefinitionDto
-   * @param user
+   * @param req
    */
-  async update(name: string, updateComponentDefinitionDto: any, req: any): Promise<any> {
-    const { user, url } = req;
+  async update(name: string, updateComponentDefinitionDto: any, req: IRequest): Promise<any> {
+    const { url } = req;
     try {
-      const def = await this.findOne(name, user);
+      const def = await this.findOne(name, req);
       if (def) {
         await this.cache.delete(`component_definitions:name:${def.name}`);
         await this.cache.delete(`component_definitions:type:${def.type}`);
@@ -238,9 +238,9 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
   /***
    * This action removes a named component definition
    * @param name
-   * @param user
+   * @param req
    */
-  async remove(name: string, req: any) {
+  async remove(name: string, req: IRequest) {
     const { user, url } = req;
     try {
       const def = await this.findOne(name, req);
@@ -250,7 +250,7 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
       }
 
       //rebuild type cache
-      await this.findByType(user, def.type);
+      await this.findByType(req, def.type);
 
       await this.prisma.component_definitions.delete({ where: { name: name } });
 
