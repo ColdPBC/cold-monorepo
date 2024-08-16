@@ -1,7 +1,7 @@
 # [1.329.0-cold-947.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.329.0-cold-947.1...v1.329.0-cold-947.2) (2024-08-16)
 
 
-### Features
+## Features
 
 * Add metric collection to compliance note operations ([ccc4528](https://github.com/ColdPBC/cold-monorepo/commit/ccc4528c01da490e2997bed54ed24c51bc05654d))
 * add metrics and event logging for compliance question bookmarks ([ae76b2c](https://github.com/ColdPBC/cold-monorepo/commit/ae76b2ce77ca22799f958c453bc7786c22c97803))
