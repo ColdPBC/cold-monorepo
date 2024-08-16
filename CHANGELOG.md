@@ -1,3 +1,31 @@
+# [1.333.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.332.0...v1.333.0) (2024-08-16)
+
+
+### Bug Fixes
+
+* **chat.service:** correct log message to include section and item keys ([5046aa7](https://github.com/ColdPBC/cold-monorepo/commit/5046aa7300d467a6bf88566f49114320cb4da7fc))
+* **mqtt.validator.service:** adjust user field validation in MqttUIPayloadSchema to allow any type values ([76437fb](https://github.com/ColdPBC/cold-monorepo/commit/76437fbf14b731795dd6fa93113e4c4efd473671))
+* replace `any` type with `IRequest` in ComplianceSectionsController ([b06c757](https://github.com/ColdPBC/cold-monorepo/commit/b06c7572ea20474804434fa17de03fd9262d5cc2))
+* update IRequest type for compliance question bookmark controller methods ([5f0b1c1](https://github.com/ColdPBC/cold-monorepo/commit/5f0b1c12e2c749c3a72ba0d16d8ec4c98dad1721))
+* update Request type to IRequest in EventService ([0a02f75](https://github.com/ColdPBC/cold-monorepo/commit/0a02f75fab404b5a984c855cd8b07d5d55abe1c1))
+
+
+### Features
+
+* add DD_ENV environment variable to development run configuration ([d280b22](https://github.com/ColdPBC/cold-monorepo/commit/d280b225e05fc6bc0a358738a04625ff091701f8))
+* add delete supplier material endpoint ([425e2e1](https://github.com/ColdPBC/cold-monorepo/commit/425e2e1fb6ff83b3901bd5e418263c21b14900e8))
+* add deleteSupplierMaterial method to materials.service ([18f0824](https://github.com/ColdPBC/cold-monorepo/commit/18f0824538ae36c86be1afc775638edb61999c29))
+* add IRequest interface for request handling ([9f28fcc](https://github.com/ColdPBC/cold-monorepo/commit/9f28fcce6e71d23d7b554ac1859b4e90f0629332))
+* add method to remove material supplier from organization ([509f3d1](https://github.com/ColdPBC/cold-monorepo/commit/509f3d1f429f07537e9077abd404ab01587fdedf))
+* export request.interface in primitives interfaces ([17eaca7](https://github.com/ColdPBC/cold-monorepo/commit/17eaca73227bb92cbf33d7174d611c7cb902b0ea))
+* replace `any` with `IRequest` in policy services and controller ([1050074](https://github.com/ColdPBC/cold-monorepo/commit/105007462c7a9c3225da5c4edafa7230237f3fb0))
+* update compliance section groups to use IRequest interface ([c6a4009](https://github.com/ColdPBC/cold-monorepo/commit/c6a4009d768ccf1b45a4fcad6a99d600048832b5))
+* update IRequest type for compliance response controllers ([28be455](https://github.com/ColdPBC/cold-monorepo/commit/28be4559be6c70be46d069a3f9e747eccac8e13e))
+* update organization claims controller to use IRequest interface ([ab9aa5d](https://github.com/ColdPBC/cold-monorepo/commit/ab9aa5d54a4929e6f4cba1846c8482cafd5e513e))
+* update request type to IRequest in invitations service and controller ([5bcf82b](https://github.com/ColdPBC/cold-monorepo/commit/5bcf82b42cca7089aa3fbf1f66e31338a27ff7c4))
+* update request type to IRequest in news service methods ([567de89](https://github.com/ColdPBC/cold-monorepo/commit/567de89634880d36e653c0416d86f1706ba94331))
+* update request type usage in organization compliance notes ([ed4a301](https://github.com/ColdPBC/cold-monorepo/commit/ed4a30127d17a5624f27621e176bc479b056475b))
+
 # [1.332.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.331.0...v1.332.0) (2024-08-16)
 
 
