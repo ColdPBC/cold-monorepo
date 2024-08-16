@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../../pipes/resource.pipe';
-import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Role, Roles, RolesGuard, SurveyResponseSchema, GeneratorService } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, JwtAuthGuard, Role, Roles, RolesGuard, SurveyResponseSchema, GeneratorService, IRequest } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../../_global/global.params';
 import { ComplianceDefinitionService } from './compliance-definitions.service';
 import { ComplianceDefinition, ComplianceDefinitionSchema } from './compliance-definitions.schema';
@@ -29,12 +29,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   @Roles(...coldAdminOnly)
   createDefinition(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body(new ResourceValidationPipe(ComplianceDefinitionSchema, 'POST')) definition: ComplianceDefinition,
   ) {
     return this.complianceService.create(req, definition);
@@ -51,12 +46,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   @ApiTags('Deprecated')
   create(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body(new ResourceValidationPipe(ComplianceDefinitionSchema, 'POST')) definition: ComplianceDefinition,
   ) {
     return this.complianceService.create(req, definition);
@@ -108,12 +98,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   injectComplianceSurvey(
     @Param('name') name: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body()
     definition: {
       sections: { [key: string]: { follow_up: any } };
@@ -135,12 +120,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   injectSurvey(
     @Param('id') id: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body()
     definition: {
       sections: { [key: string]: { follow_up: any } };
@@ -179,12 +159,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   })
   async getAllComplianceFrameworks(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Param('orgId') orgId: string,
     @Query('bpc') bpc: boolean,
   ) {
@@ -206,12 +181,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   })
   async getAllComplianceDefinitions(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc: boolean,
   ) {
     return await this.complianceService.getAllByOrg(req, bpc);
@@ -237,12 +207,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   })
   async getComplianceByName(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Param('name') name: string,
     @Query('bpc') bpc?: boolean,
   ) {
@@ -271,12 +236,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   })
   async findByName(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Param('name') name: string,
     @Query('bpc') bpc?: boolean,
   ) {
@@ -301,9 +261,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('name') name: string,
     @Body(new ResourceValidationPipe(SurveyResponseSchema, 'PATCH')) compliance: Partial<ComplianceDefinition>,
     @Req()
-    req: {
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.update(name, compliance as ComplianceDefinition, req);
   }
@@ -326,9 +284,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('name') name: string,
     @Body(new ResourceValidationPipe(SurveyResponseSchema, 'PATCH')) compliance: Partial<ComplianceDefinition>,
     @Req()
-    req: {
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.update(name, compliance as ComplianceDefinition, req);
   }
@@ -346,12 +302,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   deleteComplianceByName(
     @Param('name') name: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.remove(name, req);
   }
@@ -373,12 +324,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   removeComplianceByName(
     @Param('name') name: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.remove(name, req);
   }
@@ -428,12 +374,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('name') name: string,
     @Req()
-    req: {
-      body: { surveys_override?: string[] };
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.createOrgCompliance(req, name, orgId);
   }
@@ -462,9 +403,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('name') name: string,
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.activate(orgId, req, name);
   }
@@ -492,12 +431,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('name') name: string,
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.deactivate(name, orgId, req);
   }
@@ -539,12 +473,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('name') name: string,
     @Req()
-    req: {
-      body: { surveys_override?: string[] };
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.createOrgCompliance(req, name, orgId);
   }
@@ -568,12 +497,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   })
   async getComp(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     return await this.complianceService.findOrgCompliances(req, bpc);
@@ -603,12 +527,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('name') name: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     return this.complianceService.deactivate(name, orgId, req, bpc);
@@ -643,9 +562,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('name') name: string,
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.activate(orgId, req, name);
   }
@@ -670,12 +587,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('name') name: string,
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.deactivate(name, orgId, req);
   }
@@ -719,12 +631,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('name') name: string,
     @Req()
-    req: {
-      body: { surveys_override?: string[] };
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.createOrgCompliance(req, name, orgId);
   }
@@ -762,12 +669,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('name') name: string,
     @Req()
-    req: {
-      body: { surveys_override?: string[] };
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.complianceService.createOrgCompliance(req, name, orgId);
   }
@@ -789,12 +691,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   async getOrgComp(
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     return await this.complianceService.findOrgCompliances(req, bpc);
@@ -821,12 +718,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('name') name: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     return this.complianceService.deactivate(name, orgId, req, bpc);
