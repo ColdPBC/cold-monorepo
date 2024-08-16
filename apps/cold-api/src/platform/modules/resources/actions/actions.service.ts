@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { merge } from 'lodash';
-import { BaseWorker, CacheService, CreateActionTemplatesDto, MqttService, PrismaService, ZodCreateActionDto } from '@coldpbc/nest';
+import { BaseWorker, CacheService, CreateActionTemplatesDto, IRequest, MqttService, PrismaService, ZodCreateActionDto } from '@coldpbc/nest';
 import { SurveysService } from '../surveys/surveys.service';
 
 @Span()
@@ -14,12 +14,12 @@ export class ActionsService extends BaseWorker {
 
   /**
    * This action returns all actions for an organization
-   * @param {AuthenticatedUser} user
+   * @param req
    * @param {string} orgId
    * @param {boolean} bpc
    * @returns {Promise<any>}
    */
-  async getActions(req: any, orgId: string, bpc?: boolean) {
+  async getActions(req: IRequest, orgId: string, bpc?: boolean) {
     const { user } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
@@ -54,7 +54,7 @@ export class ActionsService extends BaseWorker {
     }
   }
 
-  private async filterDependentSurveys(action, req: any, orgId: string) {
+  private async filterDependentSurveys(action, req: IRequest, orgId: string) {
     const { user } = req;
     const dep_surveys: any[] = [];
 
@@ -82,13 +82,13 @@ export class ActionsService extends BaseWorker {
 
   /**
    * This action returns an org's action by ID
-   * @param {AuthenticatedUser} user
+   * @param req
    * @param {string} id
    * @param {string} orgId
    * @param {boolean} bpc
    * @returns {Promise<unknown>}
    */
-  async getAction(req: any, orgId: string, id: string, bpc?: boolean) {
+  async getAction(req: IRequest, orgId: string, id: string, bpc?: boolean) {
     const { user } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
@@ -128,13 +128,14 @@ export class ActionsService extends BaseWorker {
 
   /**
    * This action assigns an action template to an organization
-   * @param {AuthenticatedUser} user
+   * @param req
    * @param {string} id - action template id
    * @param {string} orgId - organization id
    * @param {actionsPartial} data - data to merge with action template
+   * @param bpc
    * @returns {Promise<unknown>}
    */
-  async createActionFromTemplate(req: any, orgId: string, id: string, data: CreateActionTemplatesDto, bpc?: boolean) {
+  async createActionFromTemplate(req: IRequest, orgId: string, id: string, data: CreateActionTemplatesDto, bpc?: boolean) {
     let action: any;
     const { user, url } = req;
     try {
@@ -204,7 +205,7 @@ export class ActionsService extends BaseWorker {
   }
 
   async updateAction(
-    req: any,
+    req: IRequest,
     orgId: string,
     id: string,
     data: {
@@ -272,12 +273,12 @@ export class ActionsService extends BaseWorker {
 
   /**
    * This action deletes an action
-   * @param {AuthenticatedUser} user
+   * @param req
    * @param {string} orgId
    * @param {string} id
    * @returns {Promise<unknown>}
    */
-  async deleteAction(req: any, orgId: string, id: string) {
+  async deleteAction(req: IRequest, orgId: string, id: string) {
     const { user, url } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
