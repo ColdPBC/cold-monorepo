@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Put, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { OrganizationComplianceResponsesService } from './organization_compliance_responses.service';
-import { allRoles, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { allRoles, coldAdminOnly, HttpExceptionFilter, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { compliance_responses } from '@prisma/client';
 
@@ -54,7 +54,7 @@ export class OrganizationComplianceResponsesController {
     @Param('sId') sId: string,
     @Param('qId') qId: string,
     @Body() compliance_response: compliance_responses,
-    @Req() req: any,
+    @Req() req: IRequest,
   ) {
     return this.organizationComplianceResponsesService.upsert(name, sgId, sId, qId, compliance_response, req);
   }
@@ -63,7 +63,7 @@ export class OrganizationComplianceResponsesController {
   @Roles(...allRoles)
   getGroupResponses(
     @Param('name') name: string,
-    @Req() req: any,
+    @Req() req: IRequest,
     @Query('take', new ParseIntPipe({ optional: true })) take: number = 100,
     @Query('skip', new ParseIntPipe({ optional: true })) skip: number = 0,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
@@ -91,7 +91,7 @@ export class OrganizationComplianceResponsesController {
   getResponsesByGroup(
     @Param('name') name: string,
     @Param('sgId') sgId: string,
-    @Req() req: any,
+    @Req() req: IRequest,
     @Query('take', new ParseIntPipe({ optional: true })) take: number = 100,
     @Query('skip', new ParseIntPipe({ optional: true })) skip: number = 0,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
@@ -125,7 +125,7 @@ export class OrganizationComplianceResponsesController {
     @Param('name') name: string,
     @Param('sgId') sgId: string,
     @Param('sId') sId: string,
-    @Req() req: any,
+    @Req() req: IRequest,
     @Query('take', new ParseIntPipe({ optional: true })) take: number = 100,
     @Query('skip', new ParseIntPipe({ optional: true })) skip: number = 0,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean = true,
@@ -165,7 +165,7 @@ export class OrganizationComplianceResponsesController {
     @Param('sgId') sgId: string,
     @Param('sId') sId: string,
     @Param('qId') qId: string,
-    @Req() req: any,
+    @Req() req: IRequest,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean = true,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean = true,
   ) {
@@ -200,7 +200,7 @@ export class OrganizationComplianceResponsesController {
     @Param('sgId') sgId: string,
     @Param('sId') sId: string,
     @Param('qId') qId: string,
-    @Req() req: any,
+    @Req() req: IRequest,
     @Query('type') type: 'ai' | 'org' | 'all',
   ) {
     return this.organizationComplianceResponsesService.deleteReponseByType(name, sgId, sId, qId, req, type);
@@ -208,7 +208,7 @@ export class OrganizationComplianceResponsesController {
 
   @Get('responses')
   @Roles(...allRoles)
-  findAllComplianceResponses(@Param('name') name: string, @Req() req: any, @Query('take') take: number, @Query('skip') skip: number, @Query('bpc') bpc: boolean) {
+  findAllComplianceResponses(@Param('name') name: string, @Req() req: IRequest, @Query('take') take: number, @Query('skip') skip: number, @Query('bpc') bpc: boolean) {
     return this.organizationComplianceResponsesService.findAllByCompliance(name, req, { take, skip, bpc });
   }
 
@@ -216,7 +216,7 @@ export class OrganizationComplianceResponsesController {
   //@CacheTTL(50)
   @Get('responses/counts')
   @Roles(...allRoles)
-  async getComplianceResponsesCounts(@Param('name') name: string, @Req() req: any, @Query('bpc') bpc: boolean) {
+  async getComplianceResponsesCounts(@Param('name') name: string, @Req() req: IRequest, @Query('bpc') bpc: boolean) {
     const response = await this.organizationComplianceResponsesService.findAllByCompliance(name, req, { onlyCounts: true, bpc });
     // return response.counts;
     return response;
@@ -231,7 +231,7 @@ export class OrganizationComplianceResponsesController {
     example: 'cr_', // Example value
   })
   @Roles(...coldAdminOnly)
-  findById(@Param('name') name: string, @Param('id') id: number, @Req() req: any) {
+  findById(@Param('name') name: string, @Param('id') id: number, @Req() req: IRequest) {
     return this.organizationComplianceResponsesService.findOne(name, +id, req);
   }
 

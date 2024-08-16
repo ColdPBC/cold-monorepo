@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { BaseWorker, ComplianceResponseOptions, ComplianceResponsesRepository } from '@coldpbc/nest';
+import { BaseWorker, ComplianceResponseOptions, ComplianceResponsesRepository, IRequest } from '@coldpbc/nest';
 
 @Injectable()
 export class OrganizationComplianceResponsesService extends BaseWorker {
@@ -7,11 +7,11 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
     super(OrganizationComplianceResponsesService.name);
   }
 
-  upsert(name: string, sgId: string, sId: string, qId: string, complianceResponseData: any, req: any) {
+  upsert(name: string, sgId: string, sId: string, qId: string, complianceResponseData: any, req: IRequest) {
     return this.repository.updateComplianceResponse(req.organization, name, sgId, sId, qId, req.user, complianceResponseData);
   }
 
-  async findAllByCompliance(name: string, req: any, options?: ComplianceResponseOptions) {
+  async findAllByCompliance(name: string, req: IRequest, options?: ComplianceResponseOptions) {
     try {
       if (options) {
         options.take = options.take || 400;
@@ -22,11 +22,11 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
     } catch (error) {
       console.log(error);
       if (error instanceof NotFoundException) throw error;
-      throw new UnprocessableEntityException({ organization: req.org, user: req.user, description: error.message, cause: error });
+      throw new UnprocessableEntityException({ organization: req.organization, user: req.user, description: error.message, cause: error });
     }
   }
 
-  getQuestionsBySectionId(name: string, sgId: string, sId: string, req: any, options?: ComplianceResponseOptions) {
+  getQuestionsBySectionId(name: string, sgId: string, sId: string, req: IRequest, options?: ComplianceResponseOptions) {
     if (options) {
       options.take = options.take || 100;
       options.skip = options.skip || 0;
@@ -34,7 +34,7 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
     return this.repository.getScoredComplianceQuestionBySection(req.organization, name, sgId, sId, req.user, options);
   }
 
-  getQuestionResponseById(name: string, sgId: string, sId: string, qId: string, req: any, options?: ComplianceResponseOptions) {
+  getQuestionResponseById(name: string, sgId: string, sId: string, qId: string, req: IRequest, options?: ComplianceResponseOptions) {
     if (options) {
       options.take = options.take || 100;
       options.skip = options.skip || 0;
@@ -43,7 +43,7 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
     return this.repository.getScoredComplianceQuestionById(req.organization, name, sgId, sId, qId, req.user, options);
   }
 
-  findAllByGroupId(name: string, csgId: string, req: any, options?: ComplianceResponseOptions) {
+  findAllByGroupId(name: string, csgId: string, req: IRequest, options?: ComplianceResponseOptions) {
     this.formatOptions(options, { responses: true, references: true, bookmarks: true });
     return this.repository.getScoredComplianceQuestionBySectionGroup(req.organization, name, csgId, req.user, options);
   }
@@ -70,15 +70,15 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
     return this.repository.getComplianceResponses(req.organization, name, req.user, options);
   }
 
-  findOne(name: string, id: number, req: any, options?: ComplianceResponseOptions) {
+  findOne(name: string, id: number, req: IRequest, options?: ComplianceResponseOptions) {
     if (options) {
       options.take = options.take || 100;
       options.skip = options.skip || 0;
     }
-    return this.repository.getComplianceResponseById(req.organizations, name, req.user, +id, options);
+    return this.repository.getComplianceResponseById(req.organization, name, req.user, +id, options);
   }
 
-  deleteReponseByType(name: string, sgId: string, sId: string, qId: string, req: any, type) {
+  deleteReponseByType(name: string, sgId: string, sId: string, qId: string, req: IRequest, type) {
     return this.repository.deleteComplianceResponse(req.organization, name, sgId, sId, qId, req.user, type);
   }
   remove(id: number) {
