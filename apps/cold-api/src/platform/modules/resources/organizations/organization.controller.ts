@@ -4,7 +4,7 @@ import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions } from '../_global/global.params';
 import { OrganizationService } from './organization.service';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard, GeneratorService } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard, GeneratorService, IRequest } from '@coldpbc/nest';
 import { CreateOrganizationDto } from './dto/organization.dto';
 import { FootprintsService } from './facilities/footprints/footprints.service';
 
@@ -47,12 +47,7 @@ export class OrganizationController extends BaseWorker {
     @Query() query,
     @Body(new ResourceValidationPipe(OrganizationsSchema.partial(), 'POST')) createOrganizationDTO: CreateOrganizationDto,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.orgService.createColdOrg(createOrganizationDTO, req);
   }
@@ -83,12 +78,7 @@ export class OrganizationController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Body(new ResourceValidationPipe(OrganizationsSchema.partial(), 'PATCH')) createOrganizationDTO: Partial<CreateOrganizationDto>,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.orgService.updateOrganization(orgId, createOrganizationDTO, req);
   }
@@ -110,7 +100,7 @@ export class OrganizationController extends BaseWorker {
     description: 'Optional: provide either tha name or the id to filter results',
     example: { name: '{{test_company_name}}', id: '{{test_company_id}}' },
   })
-  getOrganizations(@Req() req: any, @Query('bpc') bpc?: boolean, @Query('filter') filter?: { name: string; id: string }) {
+  getOrganizations(@Req() req: IRequest, @Query('bpc') bpc?: boolean, @Query('filter') filter?: { name: string; id: string }) {
     return this.orgService.getOrganizations(bpc, req, filter);
   }
 
@@ -129,12 +119,7 @@ export class OrganizationController extends BaseWorker {
   async getOrganization(
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     this.logger.info('getting organization', { orgId });
@@ -168,12 +153,7 @@ export class OrganizationController extends BaseWorker {
   async removeOrg(
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     const org = await this.orgService.getOrganization(orgId, req);
     if (!org) {
@@ -201,12 +181,7 @@ export class OrganizationController extends BaseWorker {
   @HttpCode(204)
   async removeOrgs(
     @Req()
-    req: {
-      body: { organizations: string[] };
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     const { organizations } = req.body;
     if (!Array.isArray(organizations)) {
@@ -237,14 +212,9 @@ export class OrganizationController extends BaseWorker {
   @HttpCode(204)
   async deleteTestOrgs(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
-    const orgs = await this.orgService.getOrganizations(true, { isTest: true });
+    const orgs = await this.orgService.getOrganizations(true, req, { isTest: true });
     if (orgs) {
       const deletePromises: any = [];
       for (const org of orgs) {
