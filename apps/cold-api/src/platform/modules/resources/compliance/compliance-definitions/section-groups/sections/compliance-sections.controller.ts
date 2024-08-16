@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ComplianceSectionsService } from './compliance-sections.service';
-import { GeneratorService, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { GeneratorService, HttpExceptionFilter, IRequest, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { coldAdminOnly } from '../../../../_global/global.params';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { compliance_sections } from '@prisma/client';
@@ -35,7 +35,7 @@ export class ComplianceSectionsController {
   }
 
   @Get()
-  findAll(@Param('name') name: string, @Param('sgId') groupId: string, @Req() req: any, @Query('filter') filter: boolean, @Query('questions') questions: boolean) {
+  findAll(@Param('name') name: string, @Param('sgId') groupId: string, @Req() req: IRequest, @Query('filter') filter: boolean, @Query('questions') questions: boolean) {
     return this.complianceSectionsService.findSectionsByComplianceAndGroup(name, req.user, groupId, filter, questions);
   }
 
@@ -44,7 +44,7 @@ export class ComplianceSectionsController {
     @Param('name') name: string,
     @Param('sId') id: string,
     @Param('sgId') groupId: string,
-    @Req() req: any,
+    @Req() req: IRequest,
     @Query('filter') filter: boolean,
     @Query('questions') questions: boolean,
   ) {
@@ -56,7 +56,7 @@ export class ComplianceSectionsController {
     @Param('name') name: string,
     @Param('key') key: string,
     @Param('sgId') groupId: string,
-    @Req() req: any,
+    @Req() req: IRequest,
     @Query('filter') filter: boolean,
     @Query('questions') questions: boolean,
   ) {
@@ -85,7 +85,7 @@ export class ComplianceSectionsController {
   }
 
   @Delete(':sId')
-  remove(@Param('name') name: string, @Param('sgId') groupId: string, @Param('sId') id: string, @Req() req: any) {
+  remove(@Param('name') name: string, @Param('sgId') groupId: string, @Param('sId') id: string, @Req() req: IRequest) {
     return this.complianceSectionsService.remove(id, name, groupId, req.user);
   }
 }
