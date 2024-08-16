@@ -157,6 +157,38 @@ export class MaterialsRepository extends BaseWorker {
     return result;
   }
 
+  removeMaterialSupplier(org: organizations, user: IAuthenticatedUser, filters: { id?: string; material_id?: string; supplier_id?: string }) {
+    this.logger.log(`Organization material supplier ${filters.id} deleted`, { organization: org, user, filters });
+
+    const material = this.prisma.materials.findUnique({
+      where: {
+        id: filters.material_id,
+        organization_id: org.id,
+      },
+    });
+    if (!material) {
+      throw new NotFoundException({ organization: org, user, filters }, 'Material not found');
+    }
+
+    const supplier = this.prisma.organization_facilities.findUnique({
+      where: {
+        id: filters.supplier_id,
+        organization_id: org.id,
+      },
+    });
+
+    if (!supplier) {
+      throw new NotFoundException({ organization: org, user, filters }, 'Supplier not found');
+    }
+
+    return this.prisma.material_suppliers.deleteMany({
+      where: {
+        material_id: filters.material_id,
+        supplier_id: filters.supplier_id,
+      },
+    });
+  }
+
   async findAll(org: organizations, user: IAuthenticatedUser) {
     const materials = await this.prisma.materials.findMany({
       where: {
