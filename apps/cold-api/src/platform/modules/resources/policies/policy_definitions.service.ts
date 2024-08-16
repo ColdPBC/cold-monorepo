@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { BaseWorker, CacheService, MqttService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, IRequest, MqttService, PrismaService } from '@coldpbc/nest';
 
 import { CreatePolicyDataDto } from './dto/create-policy-data.dto';
 import { CreatePolicyDefinition } from './dto/create-policy-definition.dto';
@@ -15,7 +15,7 @@ export class Policy_definitionsService extends BaseWorker {
    * This action creates a new policy definition
    * @param createPolicyDefinition
    */
-  async create(req: any, createPolicyDefinition: PolicyDefinitionDto): Promise<PolicyDefinitionDto> {
+  async create(req: IRequest, createPolicyDefinition: PolicyDefinitionDto): Promise<PolicyDefinitionDto> {
     const { user, url } = req;
     try {
       createPolicyDefinition.created_at = new Date();
@@ -70,7 +70,7 @@ export class Policy_definitionsService extends BaseWorker {
    * @param id
    * @param updatedPolicy
    */
-  async update(id: number, updatedPolicy: CreatePolicyDefinition, req: any): Promise<PolicyDefinitionDto> {
+  async update(id: number, updatedPolicy: CreatePolicyDefinition, req: IRequest): Promise<PolicyDefinitionDto> {
     const { url } = req;
     try {
       let policy = await this.prisma.policy_definitions.findUnique({ where: { id } });
@@ -120,7 +120,7 @@ export class Policy_definitionsService extends BaseWorker {
    * @param id
    * @param user
    */
-  async createSignedData(id: number, req: any): Promise<CreatePolicyDataDto> {
+  async createSignedData(id: number, req: IRequest): Promise<CreatePolicyDataDto> {
     const { user, url } = req;
     try {
       const policyData: CreatePolicyDataDto = {
@@ -232,7 +232,7 @@ export class Policy_definitionsService extends BaseWorker {
     return options.contentOnly ? policy.definition : policy;
   }
 
-  async findSignedDataByEmail(req: any): Promise<PolicyDefinitionDto[]> {
+  async findSignedDataByEmail(req: IRequest): Promise<PolicyDefinitionDto[]> {
     const { user } = req;
 
     const content = await this.prisma.policy_definitions.findMany({
