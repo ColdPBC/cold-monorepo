@@ -22,6 +22,12 @@ export class MaterialsController {
     return this.materialsService.createSupplierMaterial(req, id, supplierId);
   }
 
+  @Delete('/:id/supplier/:supplierId')
+  @Roles(...allRoles)
+  delete(@Req() req: any, @Param('orgId') orgId: string, @Param('id') id: string, @Param('supplierId') supplierId: string) {
+    return this.materialsService.deleteSupplierMaterial(req, id, supplierId);
+  }
+
   @Post('batch')
   @Roles(...allRoles)
   createMany(@Req() req: any, @Param('orgId') orgId: string, @Body() createMaterialDto: any) {
