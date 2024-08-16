@@ -30,7 +30,7 @@ export const MqttSocketAPIPayloadSchema = MqttBasePayloadSchema.extend({
 export const MqttUIPayloadSchema = MqttBasePayloadSchema.extend({
   swr_key: z.string(),
   org_id: z.string(),
-  user: z.union([z.string().email(), z.record(z.unknown())]),
+  user: z.any(),
 }).strip();
 
 export const MqttAPIComplianceSectionPayloadSchema = MqttSocketAPIPayloadSchema.extend({
