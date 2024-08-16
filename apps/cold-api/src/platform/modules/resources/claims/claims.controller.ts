@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UseFilters, Req } from '@nestjs/common';
 import { ClaimsService } from './claims.service';
-import { HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Role, Roles, RolesGuard } from '@coldpbc/nest';
+import { HttpExceptionFilter, IRequest, JwtAuthGuard, OrgUserInterceptor, Role, Roles, RolesGuard } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { claims } from '@prisma/client';
@@ -17,15 +17,15 @@ export class ClaimsController {
 
   @Post()
   @Roles(Role.ColdAdmin)
-  create(@Req() req: any, @Body() createClaimDto: claims) {
+  create(@Req() req: IRequest, @Body() createClaimDto: claims) {
     return this.claim.create(req.organization, req.user, createClaimDto);
   }
 
   @Patch(':id')
   @Roles(Role.ColdAdmin)
-  update(@Req() req: any, @Param('id') id: string, @Body() updateClaimDto: claims) {
+  update(@Req() req: IRequest, @Param('id') id: string, @Body() updateClaimDto: claims) {
     updateClaimDto.id = id;
-    return this.claim.update(req.org, req.user, updateClaimDto);
+    return this.claim.update(req.organization, req.user, updateClaimDto);
   }
 
   @Get()
@@ -36,19 +36,19 @@ export class ClaimsController {
 
   @Get(':id')
   @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
-  findById(@Req() req: any, @Param('id') id: string) {
+  findById(@Req() req: IRequest, @Param('id') id: string) {
     return this.claim.findById(req.organization, req.user, id);
   }
 
   @Get('name/:name')
   @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
-  findByName(@Req() req: any, @Param('name') name: string) {
+  findByName(@Req() req: IRequest, @Param('name') name: string) {
     return this.claim.findByName(req.organization, req.user, name);
   }
 
   @Delete(':id')
   @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
-  remove(@Req() req: any, @Param('id') id: string) {
+  remove(@Req() req: IRequest, @Param('id') id: string) {
     return this.claim.remove(req.organization, req.user, id);
   }
 }

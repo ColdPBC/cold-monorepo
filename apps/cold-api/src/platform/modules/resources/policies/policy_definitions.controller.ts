@@ -1,6 +1,6 @@
 import { Controller, Get, Param, ParseIntPipe, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiParam, ApiTags } from '@nestjs/swagger';
-import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Public, Roles, RolesGuard } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IRequest, JwtAuthGuard, Public, Roles, RolesGuard } from '@coldpbc/nest';
 import { coldAdminOnly } from '../_global/global.params';
 import { Policy_definitionsService } from './policy_definitions.service';
 
@@ -64,11 +64,7 @@ export class Policy_definitionsController extends BaseWorker {
   signPolicy(
     @Param('id', new ParseIntPipe()) id: number,
     @Req()
-    req: {
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.policyDefinitionsService.createSignedData(id, req);
   }
@@ -81,12 +77,7 @@ export class Policy_definitionsController extends BaseWorker {
   @Get('signed/user')
   findSigned(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.policyDefinitionsService.findSignedDataByEmail(req);
   }

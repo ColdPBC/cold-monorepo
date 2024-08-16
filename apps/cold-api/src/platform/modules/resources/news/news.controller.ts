@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseBoolPipe, Post, Query, Req, 
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, newsSchema, Roles, RolesGuard } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IRequest, JwtAuthGuard, newsSchema, Roles, RolesGuard } from '@coldpbc/nest';
 import { bpcDecoratorOptions, coldAdminOnly, skipDecoratorOptions, takeDecoratorOptions } from '../_global/global.params';
 import { CreateArticleDto } from './dto/news-article.dto';
 import { postNewsExample } from './examples/news.examples';
@@ -30,12 +30,7 @@ export class NewsController extends BaseWorker {
   @ApiQuery(bpcDecoratorOptions)
   getArticles(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('take') take: number,
     @Query('skip') skip: number,
     @Query('bpc', new ParseBoolPipe({ optional: true })) bpc: boolean,
@@ -63,12 +58,7 @@ export class NewsController extends BaseWorker {
   create(
     @Body(new ResourceValidationPipe(newsSchema, 'POST')) body: CreateArticleDto,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.newsService.create(req, body as CreateArticleDto);
   }
@@ -88,12 +78,7 @@ export class NewsController extends BaseWorker {
   Delete(
     @Param('id') id: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.newsService.delete(req, id);
   }

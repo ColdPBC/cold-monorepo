@@ -1,5 +1,5 @@
 import { ConflictException, HttpException, Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
-import { Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, Tags } from '@coldpbc/nest';
+import { Auth0TokenService, BaseWorker, CacheService, DarklyService, IRequest, MqttService, PrismaService, Tags } from '@coldpbc/nest';
 import { AxiosResponse, isAxiosError } from 'axios';
 import { RoleService } from '../../auth0/roles/role.service';
 import { HttpService } from '@nestjs/axios';
@@ -36,7 +36,7 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
     this.options = await this.utilService.init();
   }
 
-  async getOrgInvites(orgId: string, req: any, updateCache = false) {
+  async getOrgInvites(orgId: string, req: IRequest, updateCache = false) {
     const { user } = req;
     try {
       // make sure org exists
@@ -77,10 +77,10 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
    * @param inviter_name
    * @param roleId
    * @param suppressEmail
-   * @param user
+   * @param req
    * @param bpc
    */
-  async inviteUser(orgId: string, user_email: string, inviter_name: string, roleId: string | string[], suppressEmail = false, req: any, bpc = true) {
+  async inviteUser(orgId: string, user_email: string, inviter_name: string, roleId: string | string[], suppressEmail = false, req: IRequest, bpc = true) {
     const { user, url } = req;
     const data = {};
     try {
@@ -177,11 +177,9 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
    * Delete an organization in Auth0
    * @param orgId
    * @param invId
-   * @param user
-   * @param updateCache
-   * @param impersonatedOrg
+   * @param req
    */
-  async deleteInvitation(orgId: string, invId: string, req: any) {
+  async deleteInvitation(orgId: string, invId: string, req: IRequest) {
     const { user, url } = req;
 
     this.tags = merge(this.tags, {

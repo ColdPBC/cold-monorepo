@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, CreateActionTemplatesDto, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Role, Roles, RolesGuard, ZodCreateActionDto } from '@coldpbc/nest';
+import { BaseWorker, CreateActionTemplatesDto, HttpExceptionFilter, IRequest, JwtAuthGuard, Role, Roles, RolesGuard, ZodCreateActionDto } from '@coldpbc/nest';
 import { allRoles } from '../_global/global.params';
 import { ActionsService } from './actions.service';
 
@@ -28,12 +28,7 @@ export class ActionsController extends BaseWorker {
   public getActions(
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     return this.assignments.getActions(req, orgId, bpc);
@@ -53,12 +48,7 @@ export class ActionsController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('id') id: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     return this.assignments.getAction(req, orgId, id, bpc);
@@ -87,12 +77,7 @@ export class ActionsController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('id') id: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body() dto: CreateActionTemplatesDto,
   ) {
     return this.assignments.createActionFromTemplate(req, orgId, id, dto);
@@ -113,12 +98,7 @@ export class ActionsController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('id') id: string,
     @Req()
-    req: {
-      body: { name?: string };
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body() dto: { action: ZodCreateActionDto },
   ) {
     return this.assignments.updateAction(req, orgId, id, dto);

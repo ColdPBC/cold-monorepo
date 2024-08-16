@@ -7,7 +7,7 @@ import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import {
   BaseWorker,
   HttpExceptionFilter,
-  IAuthenticatedUser,
+  IRequest,
   JwtAuthGuard,
   Role,
   Roles,
@@ -42,12 +42,7 @@ export class SurveysController extends BaseWorker {
   @Roles(...coldAdminOnly)
   create(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body(new ResourceValidationPipe(SurveyResponseSchema, 'POST')) createSurvey: SurveyDefinitionsEntity,
   ) {
     return this.surveyService.create(createSurvey, req);
@@ -76,12 +71,7 @@ export class SurveysController extends BaseWorker {
   })
   async findAll(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('type') type: survey_types,
     @Query('name') name: string,
     @Query('impersonateOrg') orgId?: string,
@@ -121,12 +111,7 @@ export class SurveysController extends BaseWorker {
   async findAllByOrg(
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('type') type: survey_types,
     @Query('name') name: string,
     @Query('bpc') bpc?: boolean,
@@ -157,12 +142,7 @@ export class SurveysController extends BaseWorker {
     @Param('type') type: survey_types,
     @Query('bpc') bpc: boolean,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     const response = await this.surveyService.findDefinitionByType(req, type, bpc);
     return response;
@@ -185,12 +165,7 @@ export class SurveysController extends BaseWorker {
   async findDefinitionByName(
     @Param('name') name: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('impersonateOrg') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
@@ -229,12 +204,7 @@ export class SurveysController extends BaseWorker {
     @Query('type') type: survey_types,
     @Param('name') name: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('impersonateOrg') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
@@ -261,12 +231,7 @@ export class SurveysController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('name') name: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     const response = await this.surveyService.findOne(name, req, bpc, orgId);
@@ -292,9 +257,7 @@ export class SurveysController extends BaseWorker {
     @Param('name') name: string,
     @Body(new ResourceValidationPipe(SurveyResponseSchema, 'PATCH')) updateSurvey: Partial<ZodCategoryResponseDto>,
     @Req()
-    req: {
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.surveyService.update(name, updateSurvey as UpdateSurveyDefinitionsDto, req);
   }
@@ -317,12 +280,7 @@ export class SurveysController extends BaseWorker {
     @Param('name') name: string,
     @Body() updateComponentDefinitionDto: UpdateSurveyDefinitionDto,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('impersonateOrg') orgId?: string,
   ) {
     return this.surveyService.submitResults(name, updateComponentDefinitionDto, req, orgId);
@@ -355,12 +313,7 @@ export class SurveysController extends BaseWorker {
     @Param('name') name: string,
     @Body(new ResourceValidationPipe(SurveyResponseSchema, 'PUT')) updateComponentDefinitionDto: UpdateSurveyDefinitionDto,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.surveyService.submitResults(name, updateComponentDefinitionDto, req, orgId);
   }
@@ -378,12 +331,7 @@ export class SurveysController extends BaseWorker {
   remove(
     @Param('name') name: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.surveyService.remove(name, req);
   }
@@ -408,12 +356,7 @@ export class SurveysController extends BaseWorker {
     @Param('name') name: string,
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.surveyService.delete(name, orgId, req);
   }

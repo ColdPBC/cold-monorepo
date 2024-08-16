@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseFilte
 import { ComplianceSectionGroupsService } from './compliance-section-groups.service';
 import { ComplianceQuestionsService } from './sections/questions/compliance-questions.service';
 import { ComplianceSectionsService } from './sections/compliance-sections.service';
-import { ComplianceSectionGroupsExtendedDto, GeneratorService, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { ComplianceSectionGroupsExtendedDto, GeneratorService, HttpExceptionFilter, IRequest, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { coldAdminOnly } from '../../../_global/global.params';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
@@ -41,7 +41,7 @@ export class ComplianceSectionGroupsController {
     @Param('sgId') groupId: string,
     @Param('name') name: string,
     @Param('key') key: string,
-    @Req() req: any,
+    @Req() req: IRequest,
     @Query('fq') filter: boolean,
     @Query('iq') questions: boolean,
   ) {

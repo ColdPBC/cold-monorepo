@@ -1,5 +1,5 @@
 import { HttpException, Injectable, OnModuleInit, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
-import { Auth0TokenService, BaseWorker, CacheService, ColdRabbitService, MqttService } from '@coldpbc/nest';
+import { Auth0TokenService, BaseWorker, CacheService, ColdRabbitService, IRequest, MqttService } from '@coldpbc/nest';
 import { merge } from 'lodash';
 import { RoleService } from '../../auth0/roles/role.service';
 import { HttpService } from '@nestjs/axios';
@@ -28,12 +28,10 @@ export class OrgRolesService extends BaseWorker implements OnModuleInit {
    * Get Organization User Roles in Auth0
    * @param orgId
    * @param userId
-   * @param roleName
-   * @param user
-   * @param updateCache
-   * @param impersonatedOrg
+   * @param req
+   * @param bpc
    */
-  async getOrgUserRoles(orgId: string, userId: string, req: any, bpc = false) {
+  async getOrgUserRoles(orgId: string, userId: string, req: IRequest, bpc = false) {
     const { user } = req;
     if (orgId !== user.coldclimate_claims.org_id && !user.isColdAdmin) {
       throw new HttpException('You do not have permission to perform this action', 403);
@@ -62,12 +60,11 @@ export class OrgRolesService extends BaseWorker implements OnModuleInit {
    * Update Organization User Roles in Auth0
    * @param orgId
    * @param userId
+   * @param req
    * @param roleName
-   * @param user
-   * @param connection
    * @param updateCache
    */
-  async updateOrgUserRoles(orgId: string, userId: string, req: any, roleName: string, updateCache = false) {
+  async updateOrgUserRoles(orgId: string, userId: string, req: IRequest, roleName: string, updateCache = false) {
     const { user, url } = req;
     this.logger.tags = merge(this.tags, {
       org_id: orgId,

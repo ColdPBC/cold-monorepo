@@ -3,7 +3,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { Span } from 'nestjs-ddtrace';
 import * as z from 'zod';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
+import { BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IRequest, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import { IntegrationsService } from '../../integrations/integrations.service';
 import { EventService } from '../../../utilities/events/event.service';
 import { pick } from 'lodash';
@@ -46,7 +46,7 @@ export class OrganizationFilesService extends BaseWorker {
     }
   }
 
-  async getFiles(req: any, orgId: string, bpc?: boolean): Promise<any> {
+  async getFiles(req: IRequest, orgId: string, bpc?: boolean): Promise<any> {
     try {
       const org = await this.helper.getOrganizationById(orgId, req.user, bpc);
 
@@ -90,7 +90,7 @@ export class OrganizationFilesService extends BaseWorker {
     }
   }
 
-  async update(req: any, file_id: string, data: any) {
+  async update(req: IRequest, file_id: string, data: any) {
     z.object({
       effective_end_date: z.string().optional().nullable(),
       effective_start_date: z.string().optional().nullable(),
@@ -108,7 +108,7 @@ export class OrganizationFilesService extends BaseWorker {
     });
   }
 
-  async uploadFile(req: any, orgId: string, files: Array<Express.Multer.File>, bpc?: boolean) {
+  async uploadFile(req: IRequest, orgId: string, files: Array<Express.Multer.File>, bpc?: boolean) {
     const { user, url, organization } = req;
     const org = await this.helper.getOrganizationById(orgId, req.user, bpc);
     const existingFiles: any = [];
@@ -241,7 +241,7 @@ export class OrganizationFilesService extends BaseWorker {
     return existingFiles;
   }
 
-  async deleteFile(req: any, orgId: string, fileIds: string[]) {
+  async deleteFile(req: IRequest, orgId: string, fileIds: string[]) {
     const { user, url } = req;
     try {
       const org = await this.helper.getOrganizationById(orgId, req.user, true);
@@ -308,7 +308,7 @@ export class OrganizationFilesService extends BaseWorker {
     }
   }
 
-  async getUrl(req: any, fileId: string) {
+  async getUrl(req: IRequest, fileId: string) {
     const file = await this.prisma.organization_files.findUnique({
       where: {
         id: fileId,

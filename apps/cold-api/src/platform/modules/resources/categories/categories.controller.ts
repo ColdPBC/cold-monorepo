@@ -1,9 +1,9 @@
-import {Body, Controller, Get, HttpCode, Param, Put, Query, Req, UseFilters} from '@nestjs/common';
-import {ApiOperation, ApiParam, ApiQuery, ApiTags} from '@nestjs/swagger';
-import {Span} from 'nestjs-ddtrace';
-import {BaseWorker, HttpExceptionFilter, IAuthenticatedUser, Roles} from '@coldpbc/nest';
-import {allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions} from '../_global/global.params';
-import {CategoriesService} from './categories.service';
+import { Body, Controller, Get, HttpCode, Param, Put, Query, Req, UseFilters } from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Span } from 'nestjs-ddtrace';
+import { BaseWorker, HttpExceptionFilter, IRequest, Roles } from '@coldpbc/nest';
+import { allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions } from '../_global/global.params';
+import { CategoriesService } from './categories.service';
 
 /**
  * Categories (taxonomy) controller
@@ -35,12 +35,7 @@ export class CategoriesController extends BaseWorker {
   @UseFilters(new HttpExceptionFilter(CategoriesController.name))
   findAll(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('impersonateOrg') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
@@ -66,12 +61,7 @@ export class CategoriesController extends BaseWorker {
   @UseFilters(new HttpExceptionFilter(CategoriesController.name))
   findAllByOrg(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Param('orgId') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
@@ -104,12 +94,7 @@ export class CategoriesController extends BaseWorker {
   @UseFilters(new HttpExceptionFilter(CategoriesController.name))
   findByKeyAndOrg(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Param('orgId') orgId?: string,
     @Param('name') nameOrId?: string,
     @Query('bpc') bpc?: boolean,
@@ -138,12 +123,7 @@ export class CategoriesController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Body() submitCategoryValuesDto: any,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.categoriesService.submitResults(submitCategoryValuesDto, req, orgId);
   }

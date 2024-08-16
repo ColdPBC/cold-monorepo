@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Patch, Param, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
-import { allRoles, BaseWorker, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { allRoles, BaseWorker, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FacilitiesService } from './facilities.service';
 import { bpcDecoratorOptions, orgIdDecoratorOptions } from '../../_global/global.params';
@@ -17,7 +17,7 @@ export class FacilitiesController extends BaseWorker {
 
   @Get()
   @Roles(...allRoles)
-  getFacilities(@Req() req: any, @Param('orgId') orgId: string) {
+  getFacilities(@Req() req: IRequest, @Param('orgId') orgId: string) {
     return this.facilitiesService.getOrganizationFacilities(req, orgId);
   }
 
@@ -30,7 +30,7 @@ export class FacilitiesController extends BaseWorker {
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam(orgIdDecoratorOptions)
   @ApiBody(FacilityBodyExample)
-  createFacility(@Req() req: any, @Param('orgId') orgId: string, @Body() body: any) {
+  createFacility(@Req() req: IRequest, @Param('orgId') orgId: string, @Body() body: any) {
     return this.facilitiesService.createOrganizationFacility(req, orgId, body);
   }
 
@@ -40,7 +40,7 @@ export class FacilitiesController extends BaseWorker {
     summary: 'Delete Organization Facility',
     operationId: 'deleteFacility',
   })
-  deleteFacility(@Req() req: any, @Param('orgId') orgId: string, @Param('facilityId') facilityId: string) {
+  deleteFacility(@Req() req: IRequest, @Param('orgId') orgId: string, @Param('facilityId') facilityId: string) {
     return this.facilitiesService.deleteOrganizationFacility(req, facilityId);
   }
 
@@ -50,7 +50,7 @@ export class FacilitiesController extends BaseWorker {
     summary: 'Delete Organization Facility',
     operationId: 'deleteFacility',
   })
-  updateFacility(@Req() req: any, @Param('orgId') orgId: string, @Param('facilityId') facilityId: string, @Body() body: any) {
+  updateFacility(@Req() req: IRequest, @Param('orgId') orgId: string, @Param('facilityId') facilityId: string, @Body() body: any) {
     return this.facilitiesService.update(req, facilityId, body);
   }
 }

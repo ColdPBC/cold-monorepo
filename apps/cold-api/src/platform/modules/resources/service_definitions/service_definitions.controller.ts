@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Req, UseFilters, UseGuards } from '@nestjs/common';
-import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, IRequest, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ServiceDefinitionsService } from './service_definitions.service';
@@ -26,12 +26,7 @@ export class ServiceDefinitionsController extends BaseWorker {
   @Roles(...allRoles)
   async getServiceDefinition(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Param('name') name: string,
   ) {
     return await this.serviceDefinitions.getService(req.user, name);

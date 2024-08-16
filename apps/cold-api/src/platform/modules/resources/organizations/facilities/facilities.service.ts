@@ -1,4 +1,4 @@
-import { BaseWorker, Cuid2Generator, GuidPrefixes, MqttService, organization_facilities, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, Cuid2Generator, GuidPrefixes, IRequest, MqttService, organization_facilities, PrismaService } from '@coldpbc/nest';
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class FacilitiesService extends BaseWorker {
     super(FacilitiesService.name);
   }
 
-  async getOrganizationFacilities(req: any, orgId: string): Promise<organization_facilities[]> {
+  async getOrganizationFacilities(req: IRequest, orgId: string): Promise<organization_facilities[]> {
     const { user } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId)
@@ -34,7 +34,7 @@ export class FacilitiesService extends BaseWorker {
   }
 
   async createOrganizationFacility(
-    req: any,
+    req: IRequest,
     orgId: string,
     body: {
       city: string;
@@ -96,7 +96,7 @@ export class FacilitiesService extends BaseWorker {
     }
   }
 
-  async update(req: any, facilityId: string, data: any) {
+  async update(req: IRequest, facilityId: string, data: any) {
     data.organization_id = req.organization.id;
     data.id = facilityId;
     data.deleted = false;
@@ -113,7 +113,7 @@ export class FacilitiesService extends BaseWorker {
     });
   }
 
-  async deleteOrganizationFacility(req: any, facilityId: string) {
+  async deleteOrganizationFacility(req: IRequest, facilityId: string) {
     return this.prisma.organization_facilities.delete({
       where: {
         id: facilityId,

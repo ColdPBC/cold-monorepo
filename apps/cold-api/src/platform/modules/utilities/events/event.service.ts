@@ -1,4 +1,4 @@
-import { BaseWorker, ColdRabbitService, IAuthenticatedUser, PrismaService, RabbitMessageOptions } from '@coldpbc/nest';
+import { BaseWorker, ColdRabbitService, IAuthenticatedUser, IRequest, PrismaService, RabbitMessageOptions } from '@coldpbc/nest';
 import { get, merge } from 'lodash';
 import { Global, Injectable } from '@nestjs/common';
 
@@ -84,14 +84,14 @@ export class EventService extends BaseWorker {
    * @throws Will throw an error if the user is required when authenticated request object is not provided.
    * @throws Will throw an error if the organization id is required and not provided.
    */
-  async sendIntegrationEvent(isRPC: boolean, event: string, data: any, request: Request): Promise<any | void>;
+  async sendIntegrationEvent(isRPC: boolean, event: string, data: any, request: IRequest): Promise<any | void>;
   async sendIntegrationEvent(isRPC: boolean, event: string, data: any, user: IAuthenticatedUser): Promise<any | void>;
   async sendIntegrationEvent(isRPC: boolean, event: string, data: any, user: IAuthenticatedUser, orgId: string, options?: RabbitMessageOptions): Promise<any | void>;
   async sendIntegrationEvent(
     isRPC: boolean,
     event: string,
     data: any,
-    requestOrUser: Request | IAuthenticatedUser,
+    requestOrUser: IRequest | IAuthenticatedUser,
     orgId?: string,
     options?: RabbitMessageOptions,
   ): Promise<any | void> {

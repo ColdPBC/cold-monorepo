@@ -1,5 +1,5 @@
 import { HttpException, Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
-import { Auth0TokenService, BaseWorker, CacheService, MqttService } from '@coldpbc/nest';
+import { Auth0TokenService, BaseWorker, CacheService, IRequest, MqttService } from '@coldpbc/nest';
 import { map, merge, set } from 'lodash';
 import axios from 'axios';
 import { RoleService } from '../../auth0/roles/role.service';
@@ -59,10 +59,10 @@ export class MembersService extends BaseWorker implements OnModuleInit {
   /***
    * Get Organization members by org ID
    * @param orgId
-   * @param user
+   * @param req
    * @param bypassCache
    */
-  async getOrganizationMembers(orgId: string, req: any, bypassCache = false) {
+  async getOrganizationMembers(orgId: string, req: IRequest, bypassCache = false) {
     const { user } = req;
     try {
       const org = await this.helper.getOrganizationById(orgId, user, bypassCache);
@@ -148,13 +148,12 @@ export class MembersService extends BaseWorker implements OnModuleInit {
    * Add User to Organization in Auth0
    * @param orgId
    * @param userId
-   * @param connection
+   * @param req
    * @param roleName (ie: 'company:member', 'company:admin')
-   * @param user
    * @param bypassCache
    *
    */
-  async addUserToOrganization(orgId: string, userId: string, req: any, roleName: string, bypassCache = false) {
+  async addUserToOrganization(orgId: string, userId: string, req: IRequest, roleName: string, bypassCache = false) {
     const { user, url } = req;
     this.tags = merge(this.tags, {
       org_id: orgId,
@@ -236,10 +235,9 @@ export class MembersService extends BaseWorker implements OnModuleInit {
    * Remove User from Organization in Auth0
    * @param orgId
    * @param body
-   * @param user
-   * @param updateCache
+   * @param req
    */
-  async removeUserFromOrganization(orgId: string, body: { members: string[] }, req: any) {
+  async removeUserFromOrganization(orgId: string, body: { members: string[] }, req: IRequest) {
     const { user, url } = req;
     this.tags = merge(this.tags, {
       org_id: orgId,
@@ -262,7 +260,7 @@ export class MembersService extends BaseWorker implements OnModuleInit {
       const deleted = await this.httpService.axiosRef.delete(`/organizations/${orgId}/members`, Object.assign({}, this.options, { data: body }));
 
       // update cache entries
-      this.getOrganizationMembers(orgId, user, true);
+      this.getOrganizationMembers(orgId, req, true);
 
       this.mqtt.publishMQTT('ui', {
         org_id: orgId,

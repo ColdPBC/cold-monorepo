@@ -1,4 +1,5 @@
 export * from "./datadog"
 export * from "./organizations"
+export * from "./request.interface"
 export * from "./user.interface"
 export * from "./worker.interface"

@@ -2,8 +2,8 @@ import {
   BaseWorker,
   bpcDecoratorOptions,
   coldAndCompanyAdmins,
-  IAuthenticatedUser,
   invIdDecoratorOptions,
+  IRequest,
   JwtAuthGuard,
   orgIdDecoratorOptions,
   OrgUserInterceptor,
@@ -53,12 +53,7 @@ export class InvitationsController extends BaseWorker {
   @HttpCode(201)
   inviteUser(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body() inviteUserDto: { user_email: string; inviter_name: string; roleId: string },
     @Param('orgId') orgId: string,
     @Query('bpc') bpc?: boolean,
@@ -84,9 +79,7 @@ export class InvitationsController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('invId') invId: string,
     @Req()
-    req: {
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     this.logger.log(`Removing organization (${orgId}) invite in Auth0`, { orgId, invId, ...req.user });
 

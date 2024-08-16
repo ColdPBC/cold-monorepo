@@ -8,7 +8,7 @@ import {
   BaseWorker,
   CreateActionTemplateItemSchema,
   HttpExceptionFilter,
-  IAuthenticatedUser,
+  IRequest,
   JwtAuthGuard,
   Roles,
   RolesGuard,
@@ -42,12 +42,7 @@ export class ActionTemplatesController extends BaseWorker {
   @Roles(...coldAdminOnly)
   public getActionTemplates(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ): Promise<any> {
     return this.actions.getActionTemplates(req, bpc);
@@ -76,12 +71,7 @@ export class ActionTemplatesController extends BaseWorker {
   public getActionTemplate(
     @Param('id', ParseUUIDPipe) id: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     return this.actions.getActionTemplate(req, id, bpc);
@@ -110,11 +100,7 @@ export class ActionTemplatesController extends BaseWorker {
   public createActionTemplate(
     @Body(new ResourceValidationPipe(CreateActionTemplateItemSchema, 'POST')) body: ZodCreateActionTemplate,
     @Req()
-    req: {
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.actions.createActionTemplate(req, body);
   }
@@ -149,7 +135,7 @@ export class ActionTemplatesController extends BaseWorker {
     @Param('id') id: string,
     @Body(new ResourceValidationPipe(CreateActionTemplateItemSchema, 'PATCH')) body: ZodCreateActionTemplate,
     @Req()
-    req: { headers: any; query: any; user: IAuthenticatedUser },
+    req: IRequest,
   ) {
     return this.actions.updateActionTemplate(req, id, body);
   }
@@ -183,12 +169,7 @@ export class ActionTemplatesController extends BaseWorker {
   public deleteActionTemplate(
     @Param('id', ParseUUIDPipe) id: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.actions.deleteActionTemplate(req, id);
   }

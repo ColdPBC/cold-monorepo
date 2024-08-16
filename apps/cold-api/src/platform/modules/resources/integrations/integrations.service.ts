@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, CacheService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, IRequest, PrismaService } from '@coldpbc/nest';
 
 @Span()
 @Injectable()
@@ -12,13 +12,13 @@ export class IntegrationsService extends BaseWorker {
   /**
    * Get All Integrations
    *
-   * @param {AuthenticatedUser} user - The authenticated user.
-   * @param {any} payload - The payload containing routing key and action.
+   * @param req
+   * @param data
    * @param {boolean} bpc - Flag indicating whether to use cached data.
    * @returns {Promise<any>} - A promise that resolves to the data retrieved from the integrations.
    * @throws {Error} - If an error occurs during retrieval.
    */
-  async getAllIntegrations(req: any, data: any, bpc: boolean): Promise<any> {
+  async getAllIntegrations(req: IRequest, data: any, bpc: boolean): Promise<any> {
     const { user } = req;
     try {
       if (bpc) {

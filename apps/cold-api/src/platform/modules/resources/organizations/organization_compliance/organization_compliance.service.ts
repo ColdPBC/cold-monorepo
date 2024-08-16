@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BaseWorker, DarklyService, MqttService, OrganizationComplianceRepository, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, DarklyService, IRequest, MqttService, OrganizationComplianceRepository, PrismaService } from '@coldpbc/nest';
 import { organization_compliance } from '@prisma/client';
 import { EventService } from '../../../utilities/events/event.service';
 
@@ -15,7 +15,7 @@ export class OrganizationComplianceService extends BaseWorker {
     super(OrganizationComplianceService.name);
   }
 
-  async activateAi(orgId: string, req: any, compliance_name: string): Promise<any> {
+  async activateAi(orgId: string, req: IRequest, compliance_name: string): Promise<any> {
     const { user, url, headers, organization } = req;
 
     const openAI_definition = await this.prisma.service_definitions.findFirst({
@@ -166,7 +166,7 @@ export class OrganizationComplianceService extends BaseWorker {
       });
     }
   }
-  create(name: string, organizationCompliance: organization_compliance, req: any) {
+  create(name: string, organizationCompliance: organization_compliance, req: IRequest) {
     try {
       organizationCompliance.organization_id = req.organization.id;
       organizationCompliance.compliance_definition_name = name;
@@ -178,17 +178,17 @@ export class OrganizationComplianceService extends BaseWorker {
     }
   }
 
-  findAll(name: string, req: any) {
+  findAll(name: string, req: IRequest) {
     const { organization, user } = req;
     try {
-      return this.repository.getOrgComplianceDefinitions(name, organization, user);
+      return this.repository.getOrgComplianceDefinitions(name, user, organization);
     } catch (error) {
       this.logger.error(`Error getting compliance definitions`, { organization, error, user });
       throw error;
     }
   }
 
-  findOneByName(name: string, req: any) {
+  findOneByName(name: string, req: IRequest) {
     try {
       return this.repository.getOrgComplianceDefinitionByName(name, req.user, req.organization);
     } catch (error) {
@@ -197,7 +197,7 @@ export class OrganizationComplianceService extends BaseWorker {
     }
   }
 
-  update(name: string, orgComplianceData: organization_compliance, req: any) {
+  update(name: string, orgComplianceData: organization_compliance, req: IRequest) {
     try {
       orgComplianceData.compliance_definition_name = name;
       orgComplianceData.organization_id = req.organization.id;
@@ -209,7 +209,7 @@ export class OrganizationComplianceService extends BaseWorker {
     }
   }
 
-  remove(name: string, req: any) {
+  remove(name: string, req: IRequest) {
     try {
       return this.repository.deleteOrgComplianceDefinition(name, req.user, req.organization);
     } catch (error) {

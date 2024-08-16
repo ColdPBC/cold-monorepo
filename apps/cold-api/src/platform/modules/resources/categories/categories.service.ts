@@ -1,23 +1,8 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { detailedDiff, diff } from 'deep-object-diff';
 import { isEmpty, isUUID } from 'class-validator';
 import { Span } from 'nestjs-ddtrace';
-import {
-  BaseWorker,
-  CacheService,
-  DarklyService,
-  MqttService,
-  ObjectUtils,
-  PrismaService,
-  Tags,
-  ZodCategoryDefinitionItemDto,
-} from '@coldpbc/nest';
+import { BaseWorker, CacheService, DarklyService, IRequest, MqttService, ObjectUtils, PrismaService, Tags, ZodCategoryDefinitionItemDto } from '@coldpbc/nest';
 import { v4 } from 'uuid';
 import { find, get, merge, omit } from 'lodash';
 
@@ -43,13 +28,13 @@ export class CategoriesService extends BaseWorker {
 
   /**
    * Get Category Cache Key
-   * @param {AuthenticatedUser} user
+   * @param req
    * @param {string} orgId
    * @param {string} nameOrId
    * @returns {string}
    * @private
    */
-  private getCategoryCacheKey(req: any, orgId?: string, nameOrId?: string) {
+  private getCategoryCacheKey(req: IRequest, orgId?: string, nameOrId?: string) {
     const { user } = req;
     const keyName = isUUID(nameOrId) ? 'id' : 'name';
     // Return impersonated key
@@ -81,12 +66,12 @@ export class CategoriesService extends BaseWorker {
 
   /**
    * Get Full Category Taxonomy
-   * @param {AuthenticatedUser} user
+   * @param req
    * @param {boolean} bypassCache
    * @param {string} orgId
    * @returns {Promise<CategoryDefinitionDto>}
    */
-  async findFull(req: any, bypassCache?: boolean, orgId?: string): Promise<ZodCategoryDefinitionItemDto> {
+  async findFull(req: IRequest, bypassCache?: boolean, orgId?: string): Promise<ZodCategoryDefinitionItemDto> {
     const { user } = req;
 
     const categoryCacheKey = this.getCategoryCacheKey(req, orgId);
@@ -131,12 +116,12 @@ export class CategoriesService extends BaseWorker {
 
   /**
    * @description This action returns a category definition key by name
+   * @param req
    * @param name
-   * @param user
    * @param bypassCache
    * @param orgId
    */
-  async findByName(req: any, bypassCache?: boolean, orgId?: string, name?: string): Promise<ZodCategoryDefinitionItemDto | undefined> {
+  async findByName(req: IRequest, bypassCache?: boolean, orgId?: string, name?: string): Promise<ZodCategoryDefinitionItemDto | undefined> {
     if (isEmpty(name) || name == ':name') {
       throw new BadRequestException(`Name is required!`);
     }
@@ -165,12 +150,11 @@ export class CategoriesService extends BaseWorker {
 
   /***
    * This action stores org category results
-   * @param name
    * @param submission
-   * @param user
+   * @param req
    * @param impersonateOrg
    */
-  async submitResults(submission: any, req: any, impersonateOrg?: string): Promise<ZodCategoryDefinitionItemDto> {
+  async submitResults(submission: any, req: IRequest, impersonateOrg?: string): Promise<ZodCategoryDefinitionItemDto> {
     const { user, url } = req;
     let result: any;
     let org = (await this.cache.get(`organizations:${user.isColdAdmin && impersonateOrg ? impersonateOrg : user.coldclimate_claims.org_id}`)) as any;
@@ -305,10 +289,10 @@ export class CategoriesService extends BaseWorker {
 
   /***
    * This action creates a new category definition
-   * @param user
+   * @param req
    * @param createCategoryDefinitionDto
    */
-  async create(req: any, createCategoryDefinitionDto: any): Promise<ZodCategoryDefinitionItemDto> {
+  async create(req: IRequest, createCategoryDefinitionDto: any): Promise<ZodCategoryDefinitionItemDto> {
     const { user, url } = req;
 
     const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as any;
@@ -397,11 +381,11 @@ export class CategoriesService extends BaseWorker {
 
   /***
    * This action updates a category definition
-   * @param name
+   * @param id
    * @param updateSurveyDefinitionDto
-   * @param user
+   * @param req
    */
-  async update(id: string, updateSurveyDefinitionDto: any, req: any): Promise<ZodCategoryDefinitionItemDto> {
+  async update(id: string, updateSurveyDefinitionDto: any, req: IRequest): Promise<ZodCategoryDefinitionItemDto> {
     const { user, url } = req;
 
     const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as any;

@@ -4,7 +4,7 @@ import { Span } from 'nestjs-ddtrace';
 import { coldAdminOnly } from '../../_global/global.params';
 import { MemberService } from './member.service';
 
-import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, JwtStrategy, PermissionsGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IRequest, JwtAuthGuard, JwtStrategy, PermissionsGuard, Roles, RolesGuard } from '@coldpbc/nest';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
@@ -27,12 +27,7 @@ export class MemberController extends BaseWorker {
   })
   async getByEmails(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Param('email') email: string,
     @Query('bpc') bpc?: boolean,
   ) {
@@ -49,12 +44,7 @@ export class MemberController extends BaseWorker {
   })
   async updateUser(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Param('email') email: string,
   ) {
     return this.membersService.updateUser(req, email, req.body);
@@ -71,23 +61,7 @@ export class MemberController extends BaseWorker {
   @Roles(...coldAdminOnly)
   async createUser(
     @Req()
-    req: {
-      body: {
-        email_verified?: boolean;
-        given_name?: string;
-        picture?: string;
-        password?: string;
-        blocked?: boolean;
-        name?: string;
-        nickname?: string;
-        connection?: string;
-        family_name?: string;
-        email: string;
-      };
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.membersService.createMember(req, req.body);
   }
