@@ -154,6 +154,50 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
     }
   }
 
+  public sendMetrics(
+    resource: string,
+    source: string,
+    event: string,
+    status: string,
+    options: {
+      start?: Date;
+      sendEvent?: boolean;
+      tags: { [key: string]: any };
+    },
+  ) {
+    const tags = {
+      ...options.tags,
+      status,
+      source,
+    };
+
+    this.metrics.increment(`cold.${resource}`, 1, tags);
+
+    if (options.start) {
+      this.metrics.histogram(`cold.${resource}.duration`, new Date().getTime() - options.start.getTime(), tags);
+    }
+
+    if (options.sendEvent) {
+      let alert_type: 'info' | 'error' | 'success' | 'warning' = 'info';
+      if (['completed', 'complete', 'done', 'success'].includes(status)) {
+        alert_type = 'success';
+      }
+      if (['error', 'failed'].includes(status)) {
+        alert_type = 'error';
+      }
+
+      this.metrics.event(
+        `cold.${resource}`,
+        `${resource} ${status} ${options.tags.error ? ' | ' + options.tags.error.message : ''}`,
+        {
+          alert_type: alert_type,
+          priority: alert_type === 'info' ? 'low' : 'normal',
+          source_type_name: 'openai',
+        },
+        tags,
+      );
+    }
+  }
   // Instance Functions
   public getJSON(name = 'package.json') {
     return BaseWorker.getJSON(name);
