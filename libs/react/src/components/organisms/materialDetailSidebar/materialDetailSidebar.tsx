@@ -38,7 +38,7 @@ export const MaterialDetailSidebar = (props: {
 
   return (
     <div
-      className={'flex flex-col h-screen absolute top-0 right-0 bottom-0 overflow-y-auto text-tc-primary'}
+      className={'flex flex-col h-screen fixed top-0 right-0 bottom-0 overflow-y-auto text-tc-primary'}
       style={{
         width: selectedClaim ? '588px' : '0px',
         minWidth: selectedClaim ? '588px' : '0px',

@@ -30,12 +30,12 @@ const _DocumentDetailsSidebar = (props: {
   });
 
   const claims: string[] = uniq(
-    file?.certification_claim.map(claim => {
-      return claim.certification.name;
+    file?.organization_claims.map(claim => {
+      return claim.claim.name;
     }),
   );
 
-  const records = file?.certification_claim.map(claim => claim);
+  const records = file?.organization_claims.map(claim => claim);
 
   return (
     <div
@@ -199,9 +199,9 @@ const _DocumentDetailsSidebar = (props: {
                   <div className={'w-full text-tc-primary text-eyebrow'}>Sustainability Attributes</div>
                   <div className={'w-full rounded-[8px] border-[1.5px] border-gray-90 p-[16px] flex-wrap scrollbar-hide flex flex-row gap-[10px]'}>
                     {claims.map((claim, index) => (
-                        <div key={index} className={'rounded-[32px] border-[1px] border-primary px-[12px] w-auto whitespace-nowrap truncate'}>
-                          <span className={'text-body'}>{claim}</span>
-                        </div>
+                      <div key={index} className={'rounded-[32px] border-[1px] border-primary px-[12px] w-auto whitespace-nowrap truncate'}>
+                        <span className={'text-body'}>{claim}</span>
+                      </div>
                     ))}
                   </div>
                 </div>

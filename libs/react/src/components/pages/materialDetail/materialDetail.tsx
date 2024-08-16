@@ -1,17 +1,19 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Certifications, MaterialsWithCertifications, ToastMessage } from '@coldpbc/interfaces';
+import { MaterialsWithCertifications, ToastMessage } from '@coldpbc/interfaces';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { ButtonTypes, CertificationStatus } from '@coldpbc/enums';
+import { ButtonTypes, ClaimStatus, IconNames } from '@coldpbc/enums';
 import capitalize from 'lodash/capitalize';
 import { getDateActiveStatus } from '@coldpbc/lib';
 import { isAxiosError } from 'axios';
-import { BaseButton, Input, MainContent, Spinner, MuiDataGrid, MaterialDetailClaimsTable, ErrorFallback, MaterialDetailSidebar, Modal } from '@coldpbc/components';
+import { BaseButton, ErrorFallback, Input, MainContent, MaterialDetailClaimsTable, MaterialDetailSidebar, Modal, MuiDataGrid, Spinner } from '@coldpbc/components';
 import opacity from 'hex-color-opacity';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
 import { isEqual } from 'lodash';
+import { MaterialDetailAddSupplier } from '../../organisms/materialDetailAddSupplier/materialDetailAddSupplier';
+import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
 const _MaterialDetail = () => {
   const { addToastMessage } = useAddToastMessage();
@@ -20,8 +22,6 @@ const _MaterialDetail = () => {
   const { id } = useParams();
   const { orgId } = useAuth0Wrapper();
   const materialSWR = useOrgSWR<MaterialsWithCertifications, any>([`/materials/${id}`, 'GET'], axiosFetcher);
-  const ref = React.useRef<HTMLDivElement>(null);
-  const tableRef = React.useRef<HTMLDivElement>(null);
   const [material, setMaterial] = useState<MaterialsWithCertifications | undefined>(undefined);
   const [selectedClaim, setSelectedClaim] = useState<{
     name: string;
@@ -44,6 +44,7 @@ const _MaterialDetail = () => {
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteButtonLoading, setDeleteButtonLoading] = useState(false);
+  const [addSupplierModalOpen, setAddSupplierModalOpen] = useState(false);
 
   useEffect(() => {
     if (materialSWR.data) {
@@ -83,30 +84,10 @@ const _MaterialDetail = () => {
     ) {
       setSelectedClaim(null);
     } else {
-      const claims: {
-        id: string;
-        certification: Certifications | undefined;
-        organization_file: {
-          original_name: string;
-          effective_start_date: string | null;
-          effective_end_date: string | null;
-          type: string;
-        };
-      }[] = material?.certification_claims
-        .filter(
-          (claim: {
-            id: string;
-            certification: Certifications | undefined;
-            organization_file: {
-              original_name: string;
-              effective_start_date: string | null;
-              effective_end_date: string | null;
-              type: string;
-            };
-          }) => {
-            return claim.certification !== undefined && claim.certification.name === claimObject.name && claim.certification.level === claimObject.level;
-          },
-        )
+      const claims = material?.organization_claims
+        .filter(orgClaim => {
+          return orgClaim.claim !== undefined && orgClaim.claim.name === claimObject.name && orgClaim.claim.level === claimObject.level;
+        })
         .sort((a, b) => {
           if (a.organization_file.effective_start_date && b.organization_file.effective_start_date) {
             return new Date(b.organization_file.effective_start_date).getTime() - new Date(a.organization_file.effective_start_date).getTime();
@@ -116,25 +97,14 @@ const _MaterialDetail = () => {
         });
 
       const documentsWithNoDates = claims
-        .filter(
-          (claim: {
-            id: string;
-            certification: Certifications | undefined;
-            organization_file: {
-              original_name: string;
-              effective_start_date: string | null;
-              effective_end_date: string | null;
-              type: string;
-            };
-          }) => {
-            return claim.organization_file.effective_end_date === null;
-          },
-        )
+        .filter(claim => {
+          return claim.organization_file.effective_end_date === null;
+        })
         .map(claim => {
           return {
             name: claim.organization_file.original_name,
             expirationDate: null,
-            status: CertificationStatus.Inactive,
+            status: ClaimStatus.Inactive,
             type: capitalize(claim.organization_file.type),
           };
         });
@@ -231,9 +201,10 @@ const _MaterialDetail = () => {
         variant={ButtonTypes.warning}
         disabled={deleteButtonLoading}
         loading={deleteButtonLoading}
+        key={'delete'}
       />,
     );
-    buttons.push(<BaseButton label={'Save'} onClick={saveMaterial} disabled={saveButtonDisabled || saveButtonLoading} loading={saveButtonLoading} />);
+    buttons.push(<BaseButton label={'Save'} onClick={saveMaterial} disabled={saveButtonDisabled || saveButtonLoading} loading={saveButtonLoading} key={'save'} />);
     return <div className={'flex flex-row gap-[16px] h-[40px]'}>{buttons}</div>;
   };
 
@@ -259,7 +230,7 @@ const _MaterialDetail = () => {
       };
     });
 
-  const supplierColumns = [
+  const supplierColumns: GridColDef[] = [
     {
       field: 'name',
       headerName: 'Name',
@@ -271,6 +242,21 @@ const _MaterialDetail = () => {
       headerName: 'Country',
       flex: 1,
       headerClassName: 'bg-gray-30 text-body',
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      width: 60,
+      headerClassName: 'bg-gray-30 text-body',
+      getActions: params => [
+        <GridActionsCellItem
+          label="View Details"
+          onClick={() => {
+            navigate(`/suppliers/${params.row.id}`);
+          }}
+          showInMenu
+        />,
+      ],
     },
   ];
   return (
@@ -306,7 +292,10 @@ const _MaterialDetail = () => {
           />
         </div>
         <div className={'w-full flex mb-[40px] flex-col gap-[24px]'}>
-          <div className={'text-h3'}>Associated Suppliers</div>
+          <div className={'w-full flex flex-row justify-between'}>
+            <div className={'text-h3'}>Associated Suppliers</div>
+            <BaseButton label={'Add'} variant={ButtonTypes.secondary} iconLeft={IconNames.PlusIcon} onClick={() => setAddSupplierModalOpen(true)} />
+          </div>
           <MuiDataGrid
             rows={supplierRows}
             columns={supplierColumns}
@@ -348,6 +337,14 @@ const _MaterialDetail = () => {
             loading: deleteButtonLoading,
             variant: ButtonTypes.warning,
           },
+        }}
+      />
+      <MaterialDetailAddSupplier
+        showAddSupplierModal={addSupplierModalOpen}
+        setShowAddSupplierModal={setAddSupplierModalOpen}
+        material={material}
+        refreshMaterials={() => {
+          materialSWR.mutate();
         }}
       />
     </div>

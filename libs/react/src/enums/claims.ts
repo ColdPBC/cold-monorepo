@@ -1,4 +1,4 @@
-export enum CertificationStatus {
+export enum ClaimStatus {
   Inactive = 'Inactive',
   Active = 'Active',
   Expired = 'Expired',

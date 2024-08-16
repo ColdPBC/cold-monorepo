@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { BaseButton, ErrorFallback, Input, MainContent, Modal, Spinner, SupplierClaimsTable, SupplierDetailSidebar } from '@coldpbc/components';
-import { ButtonTypes, CertificationStatus } from '@coldpbc/enums';
+import { ButtonTypes, ClaimStatus } from '@coldpbc/enums';
 import React, { ReactNode, useEffect, useState } from 'react';
 import opacity from 'hex-color-opacity';
 import { HexColors } from '@coldpbc/themes';
@@ -8,7 +8,7 @@ import { getDateActiveStatus } from '@coldpbc/lib';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
-import { Certifications, Suppliers, SuppliersWithCertifications, ToastMessage } from '@coldpbc/interfaces';
+import { SuppliersWithCertifications, ToastMessage } from '@coldpbc/interfaces';
 import { isAxiosError } from 'axios';
 import capitalize from 'lodash/capitalize';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -79,30 +79,10 @@ export const _SupplierDetail = () => {
     if ((selectedClaim && selectedClaim.name === claimName) || supplier === undefined) {
       setSelectedClaim(null);
     } else {
-      const claims: {
-        id: string;
-        certification: Certifications | undefined;
-        organization_file: {
-          original_name: string;
-          effective_start_date: string | null;
-          effective_end_date: string | null;
-          type: string;
-        };
-      }[] = supplier?.certification_claims
-        .filter(
-          (claim: {
-            id: string;
-            certification: Certifications | undefined;
-            organization_file: {
-              original_name: string;
-              effective_start_date: string | null;
-              effective_end_date: string | null;
-              type: string;
-            };
-          }) => {
-            return claim.certification !== undefined && claim.certification.name === claimName;
-          },
-        )
+      const claims = supplier?.organization_claims
+        .filter(orgClaim => {
+          return orgClaim.claim.name === claimName;
+        })
         .sort((a, b) => {
           if (a.organization_file.effective_start_date && b.organization_file.effective_start_date) {
             return new Date(b.organization_file.effective_start_date).getTime() - new Date(a.organization_file.effective_start_date).getTime();
@@ -112,25 +92,14 @@ export const _SupplierDetail = () => {
         });
 
       const documentsWithNoDates = claims
-        .filter(
-          (claim: {
-            id: string;
-            certification: Certifications | undefined;
-            organization_file: {
-              original_name: string;
-              effective_start_date: string | null;
-              effective_end_date: string | null;
-              type: string;
-            };
-          }) => {
-            return claim.organization_file.effective_end_date === null;
-          },
-        )
+        .filter(orgClaim => {
+          return orgClaim.organization_file.effective_end_date === null;
+        })
         .map(claim => {
           return {
             name: claim.organization_file.original_name,
             expirationDate: null,
-            status: CertificationStatus.Inactive,
+            status: ClaimStatus.Inactive,
             type: capitalize(claim.organization_file.type),
           };
         });

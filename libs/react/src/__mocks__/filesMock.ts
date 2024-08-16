@@ -61,7 +61,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
       effective_start_date: addDays(new Date(), 5).toISOString(),
       effective_end_date: addDays(new Date(), 5).toISOString(),
       type: FileTypes.CERTIFICATE,
-      certification_claim: [],
+      organization_claims: [],
     },
     {
       id: '2',
@@ -69,7 +69,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
       effective_start_date: null,
       effective_end_date: null,
       type: FileTypes.CERTIFICATE,
-      certification_claim: [],
+      organization_claims: [],
     },
     {
       id: '3',
@@ -77,7 +77,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
       effective_start_date: null,
       effective_end_date: null,
       type: FileTypes.CERTIFICATE,
-      certification_claim: [],
+      organization_claims: [],
     },
     {
       id: '4',
@@ -85,7 +85,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
       effective_start_date: null,
       effective_end_date: null,
       type: FileTypes.CERTIFICATE,
-      certification_claim: [],
+      organization_claims: [],
     },
     {
       id: '5',
@@ -93,7 +93,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
       effective_start_date: addDays(new Date(), 5).toISOString(),
       effective_end_date: addDays(new Date(), 5).toISOString(),
       type: FileTypes.CERTIFICATE,
-      certification_claim: [],
+      organization_claims: [],
     },
     {
       id: '6',
@@ -101,7 +101,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
       effective_start_date: addDays(new Date(), 70).toISOString(),
       effective_end_date: addDays(new Date(), 70).toISOString(),
       type: FileTypes.CERTIFICATE,
-      certification_claim: [],
+      organization_claims: [],
     },
   ];
 }

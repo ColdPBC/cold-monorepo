@@ -3,8 +3,7 @@ import { ButtonTypes } from '../../enums/buttons';
 import { GlobalSizes } from '../../enums/sizes';
 import { IconNames } from '../../enums/iconNames';
 
-export interface IButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: GlobalSizes;
   /**
    * Boolean value to make the button text uppercase
@@ -68,4 +67,6 @@ export interface IButtonProps
   target?: React.HTMLAttributeAnchorTarget;
 
   loading?: boolean;
+
+  key?: string;
 }
