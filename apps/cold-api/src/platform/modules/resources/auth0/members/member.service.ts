@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { Span } from 'nestjs-ddtrace';
-import { Auth0TokenService, BaseWorker, CacheService, MqttService } from '@coldpbc/nest';
+import { Auth0TokenService, BaseWorker, CacheService, IRequest, MqttService } from '@coldpbc/nest';
 import { filter } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 
@@ -23,7 +23,7 @@ export class MemberService extends BaseWorker {
    * @param user
    * @param bpc
    */
-  async getMemberByEmail(email: string, req: any, bpc?: boolean, force?: boolean) {
+  async getMemberByEmail(email: string, req: IRequest, bpc?: boolean, force?: boolean) {
     const { user } = req;
     if (!force && !user.isColdAdmin && user.coldclimate_claims.email !== email) {
       throw new UnauthorizedException(`You are not authorized to get this user: ${email}`);
@@ -164,7 +164,7 @@ export class MemberService extends BaseWorker {
    * Create member in Auth0
    */
   async createMember(
-    req: any,
+    req: IRequest,
     user: {
       email_verified?: boolean;
       given_name?: string;
@@ -215,7 +215,7 @@ export class MemberService extends BaseWorker {
    * Create member in Auth0
    */
   async updateUser(
-    req: any,
+    req: IRequest,
     email: string,
     payload: {
       picture: string;
@@ -233,7 +233,7 @@ export class MemberService extends BaseWorker {
 
       this.options = await this.utilService.init();
 
-      const found = await this.getMemberByEmail(email, { user }, true);
+      const found = await this.getMemberByEmail(email, req, true);
       if (!found) {
         throw new NotFoundException(`User with email ${email} not found`);
       }
