@@ -1117,7 +1117,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             continue;
           }
 
-          await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
+          await job.log(`Question | section: ${section.key} question: ${item.key} (${items.indexOf(item)} of ${items.length})`);
 
           this.logger.info(`Processing Question | ${section.key}.${item.key}`, {
             section: section.key,
