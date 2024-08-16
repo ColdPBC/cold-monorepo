@@ -63,10 +63,12 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
   }
 
   async createOrganizationComplianceStatus(name: string, type: string, user: IAuthenticatedUser, organization: organizations) {
+    const start = new Date();
+
     await this.cache.delete(`organizations:${organization.id}:compliance:${name}:status`, true);
 
     this.logger.info(`Creating Compliance Status`, { user, compliance_name: name, organization });
-    return this.prisma.organization_compliance_statuses.create({
+    const compliance_status = this.prisma.organization_compliance_statuses.create({
       // @ts-expect-error - This is a valid type
       data: {
         id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceStatus).scopedId,
@@ -74,5 +76,12 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
         email: user.coldclimate_claims.email,
       },
     });
+    this.sendMetrics('organization.compliance.statuses', 'organization-compliance-statuses-repository', 'create', 'completed', {
+      sendEvent: true,
+      start,
+      tags: { compliance_set: name, organization, user, compliance_status: compliance_status },
+    });
+
+    return compliance_status;
   }
 }
