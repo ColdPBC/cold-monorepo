@@ -12,6 +12,7 @@ export class ClaimsRepository extends BaseWorker {
   }
 
   async createClaim(org: organizations, user: IAuthenticatedUser, data: claims) {
+    const start = new Date();
     data.id = new Cuid2Generator(GuidPrefixes.Claims).scopedId;
 
     if (!data.name) {
@@ -27,10 +28,13 @@ export class ClaimsRepository extends BaseWorker {
 
     this.logger.log(`Compliance Policy ${data.name} created`, { certification });
 
+    this.sendMetrics('claims', 'claims_repository', 'created', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: certification } });
+
     return certification;
   }
 
   async createClaims(org: organizations, user: IAuthenticatedUser, data: claims[]) {
+    const start = new Date();
     data = data.map(d => {
       if (!d.name) {
         throw new BadRequestException('Compliance Policy name is required');
@@ -49,12 +53,15 @@ export class ClaimsRepository extends BaseWorker {
       data: data,
     });
 
+    this.sendMetrics('claims', 'claims_repository', 'batch.created', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: policies } });
+
     this.logger.log(`Created ${data.length} compliance policies`, { policies });
 
     return policies;
   }
 
   async updateClaim(org: organizations, user: IAuthenticatedUser, data: claims) {
+    const start = new Date();
     const policy = this.prisma.claims.update({
       where: {
         id: data.id,
@@ -64,10 +71,13 @@ export class ClaimsRepository extends BaseWorker {
 
     this.logger.log(`Compliance policy ${data.name} updated`, { policy });
 
+    this.sendMetrics('claims', 'claims_repository', 'updated', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: policy } });
+
     return policy;
   }
 
   async deleteClaim(org: organizations, user: IAuthenticatedUser, id: string) {
+    const start = new Date();
     const policy = this.prisma.claims.delete({
       where: {
         id: id,
@@ -75,6 +85,7 @@ export class ClaimsRepository extends BaseWorker {
     });
 
     this.logger.log(`Compliance Policy ${id} deleted`, { organization: org, user, policy });
+    this.sendMetrics('claims', 'claims_repository', 'deleted', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: policy } });
 
     return policy;
   }
