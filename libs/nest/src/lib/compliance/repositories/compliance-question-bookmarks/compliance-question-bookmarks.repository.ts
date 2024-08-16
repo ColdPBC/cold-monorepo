@@ -146,7 +146,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
           },
         });
 
-        this.sendMetrics('organization.compliance.question.bookmarks', 'compliance_notes_repository.createComplianceQuestionBookmark', 'delete', 'completed', {
+        this.sendMetrics('organization.compliance.question.bookmarks', 'cold-nest', 'delete', 'completed', {
           sendEvent: true,
           start,
           tags: {

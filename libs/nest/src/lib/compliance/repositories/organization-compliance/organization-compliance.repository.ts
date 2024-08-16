@@ -220,7 +220,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
         data,
       });
 
-      this.sendMetrics('organization.compliance', 'organization_compliance_repository', 'create', 'completed', {
+      this.sendMetrics('organization.compliance', 'cold-nest', 'create', 'completed', {
         sendEvent: true,
         start,
         tags: { organization, user, compliance: compliance },
@@ -248,7 +248,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
         data,
       });
 
-      this.sendMetrics('organization.compliance', 'organization_compliance_repository', 'update', 'completed', {
+      this.sendMetrics('organization.compliance', 'cold-nest', 'update', 'completed', {
         sendEvent: true,
         start,
         tags: { organization, user, compliance: userResponse },
@@ -275,7 +275,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
         },
       });
 
-      this.sendMetrics('organization.compliance', 'organization_compliance_repository', 'delete', 'completed', {
+      this.sendMetrics('organization.compliance', 'cold-nest', 'delete', 'completed', {
         sendEvent: true,
         start,
         tags: { organization, user, compliance: deleted },

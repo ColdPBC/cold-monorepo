@@ -76,7 +76,7 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
         email: user.coldclimate_claims.email,
       },
     });
-    this.sendMetrics('organization.compliance.statuses', 'organization-compliance-statuses-repository', 'create', 'completed', {
+    this.sendMetrics('organization.compliance.statuses', 'cold-nest', 'create', 'completed', {
       sendEvent: true,
       start,
       tags: { compliance_set: name, organization, user, compliance_status: compliance_status },

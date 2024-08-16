@@ -167,6 +167,7 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
   ) {
     const tags = {
       ...options.tags,
+      event,
       status,
       source,
     };
