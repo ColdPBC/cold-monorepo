@@ -20,6 +20,15 @@ export class MaterialsService extends BaseWorker {
     return this.repository.createSupplierMaterial(req.organization, req.user, data);
   }
 
+  deleteSupplierMaterial(req: any, material_id: string, supplier_id: string) {
+    const data = {
+      material_id,
+      supplier_id,
+    };
+
+    return this.repository.removeMaterialSupplier(req.organization, req.user, data);
+  }
+
   createMany(req: any, createMaterialsDto: any[]) {
     return this.repository.createMaterials(req.organization, req.user, createMaterialsDto);
   }

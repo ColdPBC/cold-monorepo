@@ -445,6 +445,7 @@ model material_suppliers {
   material    materials               @relation(fields: [material_id], references: [id], onDelete: Cascade)
   supplier    organization_facilities @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
 
+  @@unique([material_id, supplier_id], name: "materialSupplierKey")
   @@index([material_id], map: "material_suppliers_material_id_idx1")
 }
 

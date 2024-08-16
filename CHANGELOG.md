@@ -1,3 +1,17 @@
+# [1.332.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.331.0...v1.332.0) (2024-08-16)
+
+
+### Features
+
+* add deleteSupplierMaterial method to materials.service ([446f8f6](https://github.com/ColdPBC/cold-monorepo/commit/446f8f6e552781652b6dca7772fc9e10aaca02f3))
+
+# [1.331.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.330.0...v1.331.0) (2024-08-16)
+
+
+### Features
+
+* add unique constraint for material_suppliers on material_id and supplier_id ([d565342](https://github.com/ColdPBC/cold-monorepo/commit/d56534220706938b8e9aae9f0ca0cc39780c0353))
+
 # [1.330.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.329.0...v1.330.0) (2024-08-16)
 
 
