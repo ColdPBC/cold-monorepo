@@ -221,7 +221,7 @@ export class OrganizationFilesService extends BaseWorker {
         if (!organization.isTest) {
           this.metrics.event(
             'File Upload Failed',
-            `A file was at by ${user.coldclimate_claims.email} for ${organization.name}`,
+            `A file upload attempt by ${user.coldclimate_claims.email} for ${organization.name} failed`,
             {
               alert_type: 'error',
               date_happened: new Date(),
