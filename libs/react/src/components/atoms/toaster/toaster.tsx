@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
-import { ToastMessageType } from '@coldpbc/interfaces';
-import { KeyedMutator } from 'swr';
+import React from 'react';
+import { ToastMessage, ToastMessageType } from '@coldpbc/interfaces';
 
 export interface ToasterProps {
   toastMessage: ToastMessageType;
@@ -13,15 +12,15 @@ export const Toaster = (props: ToasterProps) => {
   const getHighlightClassName = () => {
     let className = '';
     switch (type) {
-      default:
-      case 'success':
-        className = 'border-[1px] border-tc-success';
-        break;
-      case 'failure':
+      case ToastMessage.FAILURE:
         className = 'border-[1px] border-red-500';
         break;
-      case 'info':
+      case ToastMessage.INFO:
         className = 'border-[1px] border-blue-500';
+        break;
+      default:
+      case ToastMessage.SUCCESS:
+        className = 'border-[1px] border-tc-success';
         break;
     }
 
