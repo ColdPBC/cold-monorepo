@@ -1,3 +1,10 @@
+## [1.334.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.1...v1.334.2) (2024-08-19)
+
+
+### Bug Fixes
+
+* improve compliance retrieval and creation logic to handle missing compliance definitions ([163419b](https://github.com/ColdPBC/cold-monorepo/commit/163419bc84269007d4a5984ebfde1bfffecfa227))
+
 ## [1.334.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.0...v1.334.1) (2024-08-19)
 
 
