@@ -1,3 +1,10 @@
+## [1.334.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.3...v1.334.4) (2024-08-19)
+
+
+### Bug Fixes
+
+* remove sensitive payload logging and correct metrics field name ([a5a856b](https://github.com/ColdPBC/cold-monorepo/commit/a5a856b1473568afc6cff383d0e220033e790ce2))
+
 ## [1.334.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.2...v1.334.3) (2024-08-19)
 
 
