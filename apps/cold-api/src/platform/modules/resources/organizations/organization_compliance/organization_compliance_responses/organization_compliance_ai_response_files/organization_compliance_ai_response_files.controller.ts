@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { OrganizationComplianceAiResponseFilesService } from './organization_compliance_ai_response_files.service';
-import { HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { HttpExceptionFilter, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
 import { allRoles, coldAdminOnly } from '../../../../_global/global.params';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
@@ -33,8 +33,8 @@ export class OrganizationComplianceAiResponseFilesController {
     example: 'cair_',
   })
   @Roles(...coldAdminOnly)
-  create(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Body() aiResponseFileData: any, @Req() req: any) {
-    return this.organizationComplianceAiResponseFilesService.create(req.org, complianceName, responseId, aiResponseFileData, req.user);
+  create(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Body() aiResponseFileData: any, @Req() req: IRequest) {
+    return this.organizationComplianceAiResponseFilesService.create(req.organization, complianceName, responseId, aiResponseFileData, req.user);
   }
 
   @Get()
@@ -58,8 +58,8 @@ export class OrganizationComplianceAiResponseFilesController {
     example: 'cair_',
   })
   @Roles(...allRoles)
-  findAll(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Req() req: any) {
-    return this.organizationComplianceAiResponseFilesService.findAll(req.org, complianceName, responseId, req.user);
+  findAll(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Req() req: IRequest) {
+    return this.organizationComplianceAiResponseFilesService.findAll(req.organization, complianceName, responseId, req.user);
   }
 
   @Get(':id')
@@ -90,8 +90,8 @@ export class OrganizationComplianceAiResponseFilesController {
     example: 'cairf_',
   })
   @Roles(...allRoles)
-  findOne(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Param('id') id: string, @Req() req: any) {
-    return this.organizationComplianceAiResponseFilesService.findOne(req.org, complianceName, responseId, id, req.user);
+  findOne(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Param('id') id: string, @Req() req: IRequest) {
+    return this.organizationComplianceAiResponseFilesService.findOne(req.organization, complianceName, responseId, id, req.user);
   }
 
   @Patch(':id')
@@ -128,9 +128,9 @@ export class OrganizationComplianceAiResponseFilesController {
     @Param('aiId') responseId: string,
     @Param('id') id: string,
     @Body() aiResponseFileData: any,
-    @Req() req: any,
+    @Req() req: IRequest,
   ) {
-    return this.organizationComplianceAiResponseFilesService.update(req.org, complianceName, responseId, id, aiResponseFileData, req.user);
+    return this.organizationComplianceAiResponseFilesService.update(req.organization, complianceName, responseId, id, aiResponseFileData, req.user);
   }
 
   @Delete(':id')
@@ -161,7 +161,7 @@ export class OrganizationComplianceAiResponseFilesController {
     example: 'cairf_',
   })
   @Roles(...coldAdminOnly)
-  remove(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Param('id') id: string, @Req() req: any) {
-    return this.organizationComplianceAiResponseFilesService.remove(req.org, complianceName, responseId, id, req.user);
+  remove(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Param('id') id: string, @Req() req: IRequest) {
+    return this.organizationComplianceAiResponseFilesService.remove(req.organization, complianceName, responseId, id, req.user);
   }
 }

@@ -40,7 +40,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
           },
         });
 
-        this.sendMetrics('organization.compliance.notes', 'compliance_notes_repository', 'update', 'completed', {
+        this.sendMetrics('organization.compliance.notes', 'cold-nest', 'update', 'completed', {
           sendEvent: false,
           start,
           tags: {

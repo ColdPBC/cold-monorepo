@@ -1,5 +1,5 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { BaseWorker, CacheService, ColdRabbitService, MqttService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, ColdRabbitService, IRequest, MqttService, PrismaService } from '@coldpbc/nest';
 import { get } from 'lodash';
 import { EventService } from '../../../utilities/events/event.service';
 import { OrganizationHelper } from '../helpers/organization.helper';
@@ -26,7 +26,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
    * @returns {Promise<any>} - A promise that resolves to the data retrieved from the integrations.
    * @throws {Error} - If an error occurs during retrieval.
    */
-  async getOrganizationIntegrations(req: any, orgId: string, bpc?: boolean): Promise<any> {
+  async getOrganizationIntegrations(req: IRequest, orgId: string, bpc?: boolean): Promise<any> {
     const { user } = req;
     try {
       if (bpc) {
@@ -59,7 +59,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
   }
 
   async createFacilityIntegration(
-    req: any,
+    req: IRequest,
     orgId: string,
     locId: string,
     body: {
@@ -160,7 +160,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
    * @param body
    */
   async enableIntegration(
-    req: any,
+    req: IRequest,
     orgId: string,
     body: {
       service_definition_id: string;
@@ -239,7 +239,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
   }
 
   async createIntegration(
-    req: any,
+    req: IRequest,
     orgId: string,
     body: {
       service_definition_id: string;

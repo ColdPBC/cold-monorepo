@@ -1,6 +1,6 @@
 import { BadRequestException, Global, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, CacheService, ComplianceDefinitionsRepository, Cuid2Generator, DarklyService, GuidPrefixes, MqttService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, ComplianceDefinitionsRepository, Cuid2Generator, DarklyService, GuidPrefixes, IRequest, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance-definitions.schema';
 import { compliance_definitions } from '@prisma/client';
 import { omit, pick } from 'lodash';
@@ -30,7 +30,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     });
   }
 
-  async activate(orgId: string, req: any, compliance_name: string): Promise<any> {
+  async activate(orgId: string, req: IRequest, compliance_name: string): Promise<any> {
     const { user, url, headers } = req;
     const compliance_definition = await this.prisma.compliance_definitions.findUnique({
       where: {
@@ -198,7 +198,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     }
   }
 
-  async injectSurvey(req: any, name: string, survey: any) {
+  async injectSurvey(req: IRequest, name: string, survey: any) {
     const compliance = await this.prisma.compliance_definitions.findUnique({
       where: {
         name: name,
@@ -217,7 +217,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param req
    * @param complianceDefinition
    */
-  async create(req: any, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
+  async create(req: IRequest, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
     //await this.cache.delete(`compliance:${complianceDefinition.name}:organizations:${req.organization.id}`, true);
 
     const { user, url } = req;
@@ -455,7 +455,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param orgId
    * @param bpc
    */
-  async createOrgCompliance(req: any, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
+  async createOrgCompliance(req: IRequest, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
     const { user, url } = req;
     this.setTags({ user: user.coldclimate_claims });
     try {
@@ -562,7 +562,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * This action returns all compliance definitions for an org
    * @param bpc
    */
-  async getAllByOrg(req: any, bpc: boolean): Promise<compliance_definitions[]> {
+  async getAllByOrg(req: IRequest, bpc: boolean): Promise<compliance_definitions[]> {
     const deflist = await this.definitions.getComplianceDefinitionsByOrgId(req, bpc);
 
     if (!Array.isArray(deflist) || deflist.length < 1) {
@@ -578,7 +578,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param orgId
    * @param bpc
    */
-  async findOrgCompliances(req: any, bpc?: boolean): Promise<OrgCompliance[]> {
+  async findOrgCompliances(req: IRequest, bpc?: boolean): Promise<OrgCompliance[]> {
     if (!bpc) {
       /*const cached = (await this.cache.get(`compliance_definitions:org:${orgId}`)) as OrgCompliance[];
 
@@ -619,7 +619,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param req
    * @param bypassCache
    */
-  async findOne(name: string, req: any, bypassCache?: boolean): Promise<ComplianceDefinition> {
+  async findOne(name: string, req: IRequest, bypassCache?: boolean): Promise<ComplianceDefinition> {
     const { user, organization } = req;
     this.setTags({ user: user.coldclimate_claims, bpc: bypassCache });
 
@@ -654,7 +654,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param complianceDefinition
    * @param req
    */
-  async update(name: string, complianceDefinition: ComplianceDefinition, req: any): Promise<ComplianceDefinition> {
+  async update(name: string, complianceDefinition: ComplianceDefinition, req: IRequest): Promise<ComplianceDefinition> {
     const { user, url, organization, method } = req;
     this.setTags({
       user: user.coldclimate_claims,
@@ -717,7 +717,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param name
    * @param req
    */
-  async remove(name: string, req: any) {
+  async remove(name: string, req: IRequest) {
     const { user, url, organization } = req;
     this.setTags({
       compliance_definition_name: name,
@@ -762,7 +762,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param req
    * @param bpc
    */
-  async deactivate(name: string, orgId: string, req: any, bpc?: boolean) {
+  async deactivate(name: string, orgId: string, req: IRequest, bpc?: boolean) {
     const { user, url, organization } = req;
     this.setTags({
       compliance_definition_name: name,

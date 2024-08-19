@@ -702,7 +702,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           reqs.push(this.processComplianceSection(job, section, organization, user, session));
         } catch (e) {
           this.logger.error(`Error processing survey ${job.data.survey.name}`, { error: e.message, stack: e.stack, job: job.id });
-          this.sendMetrics('organization.compliance.section', 'chat_service.process_compliance', 'process', 'failed', {
+          this.sendMetrics('organization.compliance.section', 'cold-openai', 'process', 'failed', {
             start,
 
             sendEvent: true,
@@ -855,7 +855,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         // Create a new thread for each section run
         reqs.push(() => {
           this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session).then(() => {
-            this.sendMetrics('organization.compliance.section.question', 'chat_service.process_survey', 'process', 'failed', {
+            this.sendMetrics('organization.compliance.section.question', 'cold-openAi', 'process', 'failed', {
               start,
               sendEvent: true,
               tags: {
@@ -884,7 +884,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     } catch (e) {
       this.logger.error(`Error processing survey ${job.data.survey.name}`, { error: e.message, stack: e.stack, job: job.id });
 
-      this.sendMetrics('organization.compliance.section', 'chat_service.process_survey', 'process', 'failed', {
+      this.sendMetrics('organization.compliance.section', 'cold-openai', 'process', 'failed', {
         start,
         sendEvent: true,
         tags: {
@@ -973,7 +973,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               justification: follow_up.ai_response.justification,
             });
 
-            this.sendMetrics('organization.compliance.section.question', 'chat_service.process_section', 'process', 'completed', {
+            this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'process', 'completed', {
               start,
               sendEvent: false,
               tags: {
@@ -1019,7 +1019,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               });
             }
 
-            this.sendMetrics('organization.compliance.section.question', 'chat_service.process_section', 'process', 'completed', {
+            this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'process', 'completed', {
               start,
               sendEvent: false,
               tags: {
@@ -1049,7 +1049,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
           await job.progress(idx / items.length);
         } catch (error) {
-          this.sendMetrics('organization.compliance.section.question', 'chat_service.process_section', 'process', 'failed', {
+          this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'process', 'failed', {
             start,
             sendEvent: true,
             tags: {
@@ -1070,7 +1070,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     } catch (e) {
       this.logger.error(`Error processing ${section}: ${e.message}`, { error: e.message, stack: e.stack, job: job.id });
 
-      this.sendMetrics('organization.compliance.section.question', 'chat_service.process_section', 'process', 'failed', {
+      this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'process', 'failed', {
         start,
         sendEvent: true,
         tags: {
@@ -1117,7 +1117,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             continue;
           }
 
-          await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
+          await job.log(`Question | section: ${section.key} question: ${item.key} (${items.indexOf(item)} of ${items.length})`);
 
           this.logger.info(`Processing Question | ${section.key}.${item.key}`, {
             section: section.key,
@@ -1142,7 +1142,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               ai_response: response,
             });
 
-            this.sendMetrics('organization.compliance.section.question', 'chat_service.process_compliance_section', 'process', 'completed', {
+            this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'process', 'completed', {
               start,
               sendEvent: false,
               tags: {
@@ -1185,7 +1185,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
                 ai_response: additionalValue,
               });
 
-              this.sendMetrics('organization.compliance.section.question.additional_context', 'chat_service.process_compliance_section', 'process', 'completed', {
+              this.sendMetrics('organization.compliance.section.question.additional_context', 'cold-openai', 'process', 'completed', {
                 start,
                 sendEvent: false,
                 tags: {
@@ -1313,7 +1313,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           // delete the question from the cache since it's been processed
           await this.complianceSectionsCacheRepository.deleteCachedActiveQuestion(item, section, organization, job);
         } catch (error) {
-          this.sendMetrics('organization.compliance.section.question', 'chat_service.process_compliance_section', 'process', 'failed', {
+          this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'process', 'failed', {
             start,
             sendEvent: true,
             tags: {
@@ -1339,7 +1339,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     } catch (e) {
       await this.complianceSectionsCacheRepository.deleteCachedActiveSection(section, organization, job);
 
-      this.sendMetrics('organization.compliance.section', 'chat_service.process_compliance_section', 'process', 'failed', {
+      this.sendMetrics('organization.compliance.section', 'cold-openai', 'process', 'failed', {
         start,
         sendEvent: true,
         tags: {

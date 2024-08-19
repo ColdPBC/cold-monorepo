@@ -3,7 +3,7 @@ import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@
 import { Span } from 'nestjs-ddtrace';
 import { component_definition_types } from 'prisma/prisma-client';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IRequest, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../_global/global.params';
 import { ComponentDefinitionsService } from './component-definitions.service';
 import { ComponentDefinitionDto } from './dto/component-definition-dto';
@@ -37,12 +37,7 @@ export class ComponentDefinitionsController extends BaseWorker {
   @HttpCode(201)
   create(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body(new ResourceValidationPipe(ComponentDefinitionSchema, 'POST')) createComponentDefinitionDto: ComponentDefinitionDto,
   ) {
     return this.componentDefinitions.create(createComponentDefinitionDto, req);
@@ -57,12 +52,7 @@ export class ComponentDefinitionsController extends BaseWorker {
   @Roles(...allRoles)
   findAll(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.componentDefinitions.findAll(req);
   }
@@ -80,10 +70,7 @@ export class ComponentDefinitionsController extends BaseWorker {
   async getAllByType(
     @Param('type') type: component_definition_types,
     @Req()
-    req: {
-      headers: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     const response = await this.componentDefinitions.findByType(req, type);
     return response;
@@ -103,11 +90,7 @@ export class ComponentDefinitionsController extends BaseWorker {
   async findOne(
     @Param('name') name: string,
     @Req()
-    req: {
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     const response = await this.componentDefinitions.findOne(name, req);
     return response;
@@ -129,10 +112,7 @@ export class ComponentDefinitionsController extends BaseWorker {
     @Param('name') name: string,
     @Body(new ResourceValidationPipe(ComponentDefinitionSchema, 'PATCH')) updateComponentDefinitionDto: any,
     @Req()
-    req: {
-      headers: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.componentDefinitions.update(name, updateComponentDefinitionDto, req);
   }
@@ -152,12 +132,7 @@ export class ComponentDefinitionsController extends BaseWorker {
   remove(
     @Param('name') name: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
   ) {
     return this.componentDefinitions.remove(name, req);
   }

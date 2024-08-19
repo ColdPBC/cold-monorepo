@@ -1,15 +1,6 @@
 import { Controller, HttpCode, Param, Patch, Put, Query, Req } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
-import {
-  BaseWorker,
-  bpcDecoratorOptions,
-  coldAndCompanyAdmins,
-  IAuthenticatedUser,
-  orgIdDecoratorOptions,
-  roleNameDecoratorOptions,
-  Roles,
-  userIdDecoratorOptions,
-} from '@coldpbc/nest';
+import { BaseWorker, bpcDecoratorOptions, coldAndCompanyAdmins, IRequest, orgIdDecoratorOptions, roleNameDecoratorOptions, Roles, userIdDecoratorOptions } from '@coldpbc/nest';
 import { OrgRolesService } from './roles.service';
 import { MembersService } from '../members/members.service';
 
@@ -39,12 +30,7 @@ export class OrgRolesController extends BaseWorker {
     @Param('roleName') roleName: string,
     @Param('userId') userId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc') bpc?: boolean,
   ) {
     this.logger.info('adding user to organization with role', {
@@ -78,12 +64,7 @@ export class OrgRolesController extends BaseWorker {
   @HttpCode(201)
   async updateOrgUserRoles(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Param('orgId') orgId: string,
     @Param('roleName') roleName: string,
     @Param('userId') userId: string,

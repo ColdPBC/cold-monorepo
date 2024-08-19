@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, Param, ParseBoolPipe, Post, Put, Query, Req } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { bpcDecoratorOptions, coldAndCompanyAdmins, orgIdDecoratorOptions } from '../../_global/global.params';
-import { BaseWorker, IAuthenticatedUser, Roles } from '@coldpbc/nest';
+import { BaseWorker, IRequest, Roles } from '@coldpbc/nest';
 import { IntegrationBodySchema } from '../../integrations/examples/integration_examples';
 import { OrganizationIntegrationsService } from './organization.integrations.service';
 
@@ -24,12 +24,7 @@ export class OrganizationIntegrationsController extends BaseWorker {
   getOrganizationIntegrations(
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc', new ParseBoolPipe({ optional: true })) bpc: boolean,
   ) {
     if (!bpc) bpc = false;
@@ -49,12 +44,7 @@ export class OrganizationIntegrationsController extends BaseWorker {
   createIntegration(
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body()
     body: {
       organization_id: string;
@@ -77,12 +67,7 @@ export class OrganizationIntegrationsController extends BaseWorker {
   activateIntegration(
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body()
     body: {
       organization_id: string;
@@ -106,12 +91,7 @@ export class OrganizationIntegrationsController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Param('facId') facId: string,
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Body()
     body: {
       organization_id: string;

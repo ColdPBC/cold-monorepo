@@ -126,21 +126,25 @@ export class MaterialsRepository extends BaseWorker {
     data.id = new Cuid2Generator(GuidPrefixes.MaterialSupplier).scopedId;
     data.organization_id = org.id;
 
-    const material = await this.prisma.materials.findUnique({
-      where: {
-        id: data.material_id,
-      },
-    });
+    // Perform material and supplier existence checks concurrently
+    const [material, supplier] = await Promise.all([
+      this.prisma.materials.findUnique({
+        where: {
+          id: data.material_id,
+          organization_id: org.id,
+        },
+      }),
+      this.prisma.organization_facilities.findUnique({
+        where: {
+          id: data.supplier_id,
+          organization_id: org.id,
+        },
+      }),
+    ]);
 
     if (!material) {
       throw new NotFoundException({ organization: org, user, data }, 'Material not found');
     }
-
-    const supplier = await this.prisma.organization_facilities.findUnique({
-      where: {
-        id: data.supplier_id,
-      },
-    });
 
     if (!supplier) {
       throw new NotFoundException({ organization: org, user, data }, 'Supplier not found');
@@ -155,6 +159,41 @@ export class MaterialsRepository extends BaseWorker {
     this.logger.log(`Organization material ${data.name} created`, { organization: org, user, material_supplier: result });
 
     return result;
+  }
+
+  async removeMaterialSupplier(org: organizations, user: IAuthenticatedUser, filters: { id?: string; material_id?: string; supplier_id?: string }) {
+    this.logger.log(`Organization material supplier ${filters.id} deleted`, { organization: org, user, filters });
+
+    // Perform material and supplier existence checks concurrently
+    const [material, supplier] = await Promise.all([
+      this.prisma.materials.findUnique({
+        where: {
+          id: filters.material_id,
+          organization_id: org.id,
+        },
+      }),
+      this.prisma.organization_facilities.findUnique({
+        where: {
+          id: filters.supplier_id,
+          organization_id: org.id,
+        },
+      }),
+    ]);
+
+    if (!material) {
+      throw new NotFoundException({ organization: org, user, filters }, 'Material not found');
+    }
+
+    if (!supplier) {
+      throw new NotFoundException({ organization: org, user, filters }, 'Supplier not found');
+    }
+
+    return this.prisma.material_suppliers.deleteMany({
+      where: {
+        material_id: filters.material_id,
+        supplier_id: filters.supplier_id,
+      },
+    });
   }
 
   async findAll(org: organizations, user: IAuthenticatedUser) {

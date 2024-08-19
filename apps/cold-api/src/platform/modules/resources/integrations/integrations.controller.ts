@@ -1,7 +1,7 @@
 import { Controller, Get, ParseBoolPipe, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IRequest, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { bpcDecoratorOptions, coldAdminOnly } from '../_global/global.params';
 
 import { IntegrationsService } from './integrations.service';
@@ -27,12 +27,7 @@ export class IntegrationsController extends BaseWorker {
   @ApiQuery(bpcDecoratorOptions)
   getAllIntegrations(
     @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
+    req: IRequest,
     @Query('bpc', new ParseBoolPipe({ optional: true })) bpc: boolean,
   ) {
     if (!bpc) bpc = false;

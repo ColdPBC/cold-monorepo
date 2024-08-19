@@ -240,7 +240,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
             },
           });
 
-          this.sendMetrics('organization.compliance.user.responses', 'organization_compliance_responses_repository', 'update', 'completed', {
+          this.sendMetrics('organization.compliance.user.responses', 'cold-nest', 'update', 'completed', {
             sendEvent: true,
             start,
             tags: {
@@ -937,7 +937,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
           response = await this.prisma.organization_compliance_ai_responses.delete({
             where: { orgCompQuestId: { organization_compliance_id: compliance.id, compliance_question_id: qId } },
           });
-          this.sendMetrics('organization.compliance.ai.responses', 'organization_compliance_responses_repository', 'delete', 'completed', {
+          this.sendMetrics('organization.compliance.ai.responses', 'cold-nest', 'delete', 'completed', {
             sendEvent: true,
             start,
             tags: {
@@ -957,7 +957,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
           response = await this.prisma.organization_compliance_responses.deleteMany({
             where: { organization_compliance_id: compliance.id, compliance_question_id: qId },
           });
-          this.sendMetrics('organization.compliance.user.responses', 'organization_compliance_responses_repository', 'delete', 'completed', {
+          this.sendMetrics('organization.compliance.user.responses', 'cold-nest', 'delete', 'completed', {
             sendEvent: true,
             start,
             tags: {
@@ -981,7 +981,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
           const orgResponse = await this.prisma.organization_compliance_responses.deleteMany({
             where: { organization_compliance_id: compliance.id },
           });
-          this.sendMetrics('organization.compliance.responses', 'organization_compliance_responses_repository', 'delete_all', 'completed', {
+          this.sendMetrics('organization.compliance.responses', 'cold-nest', 'delete_all', 'completed', {
             sendEvent: true,
             start,
             tags: {
@@ -1162,7 +1162,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       },
     });
 
-    this.sendMetrics('organization.compliance.user.responses', 'organization_compliance_responses_repository', 'update', 'completed', {
+    this.sendMetrics('organization.compliance.user.responses', 'cold-nest', 'update', 'completed', {
       sendEvent: true,
       start,
       tags: {
@@ -1242,7 +1242,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       },
     });
 
-    this.sendMetrics('organization.compliance.ai.responses', 'organization_compliance_responses_repository', 'update', 'completed', {
+    this.sendMetrics('organization.compliance.ai.responses', 'cold-nest', 'update', 'completed', {
       sendEvent: false,
       start,
       tags: {

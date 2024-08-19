@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BaseWorker, OrganizationComplianceRepository, OrganizationComplianceStatusesRepository } from '@coldpbc/nest';
+import { BaseWorker, IRequest, OrganizationComplianceRepository, OrganizationComplianceStatusesRepository } from '@coldpbc/nest';
 import { survey_status_types } from '@prisma/client';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class OrganizationComplianceStatusesService extends BaseWorker {
     super(OrganizationComplianceStatusesService.name);
   }
 
-  create(org_id: string, name: string, statusType: survey_status_types, req: any) {
+  create(org_id: string, name: string, statusType: survey_status_types, req: IRequest) {
     try {
       const orgCompliance = this.orgComplianceRepository.getOrgComplianceDefinitionByName(name, req.user, req.organization);
 
@@ -23,7 +23,7 @@ export class OrganizationComplianceStatusesService extends BaseWorker {
     }
   }
 
-  findByOrgComplianceName(name: string, req: any) {
+  findByOrgComplianceName(name: string, req: IRequest) {
     try {
       return this.repository.getAllByOrgAndComplianceName(name, req.user, req.organization);
     } catch (error) {
@@ -32,7 +32,7 @@ export class OrganizationComplianceStatusesService extends BaseWorker {
     }
   }
 
-  async findOne(name: string, id: string, req: any) {
+  async findOne(name: string, id: string, req: IRequest) {
     try {
       const compliance = await this.orgComplianceRepository.getOrgComplianceDefinitionByName(name, req.user, req.organization);
 

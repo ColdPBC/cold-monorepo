@@ -28,7 +28,7 @@ export class ClaimsRepository extends BaseWorker {
 
     this.logger.log(`Compliance Policy ${data.name} created`, { certification });
 
-    this.sendMetrics('claims', 'claims_repository', 'created', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: certification } });
+    this.sendMetrics('claims', 'cold-nest', 'created', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: certification } });
 
     return certification;
   }
@@ -53,7 +53,7 @@ export class ClaimsRepository extends BaseWorker {
       data: data,
     });
 
-    this.sendMetrics('claims', 'claims_repository', 'batch.created', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: policies } });
+    this.sendMetrics('claims', 'cold-nest', 'batch.created', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: policies } });
 
     this.logger.log(`Created ${data.length} compliance policies`, { policies });
 
@@ -71,7 +71,7 @@ export class ClaimsRepository extends BaseWorker {
 
     this.logger.log(`Compliance policy ${data.name} updated`, { policy });
 
-    this.sendMetrics('claims', 'claims_repository', 'updated', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: policy } });
+    this.sendMetrics('claims', 'cold-nest', 'updated', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: policy } });
 
     return policy;
   }
@@ -85,7 +85,7 @@ export class ClaimsRepository extends BaseWorker {
     });
 
     this.logger.log(`Compliance Policy ${id} deleted`, { organization: org, user, policy });
-    this.sendMetrics('claims', 'claims_repository', 'deleted', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: policy } });
+    this.sendMetrics('claims', 'cold-nest', 'deleted', 'completed', { sendEvent: true, start, tags: { organization: org, user, claims: policy } });
 
     return policy;
   }

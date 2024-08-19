@@ -39,7 +39,7 @@ export class ComplianceNotesRepository extends BaseWorker {
         },
       });
 
-      this.sendMetrics('organization.compliance.notes', 'compliance_notes_repository', 'create', 'completed', {
+      this.sendMetrics('organization.compliance.notes', 'cold-nest', 'create', 'completed', {
         sendEvent: true,
         start,
         tags: {
@@ -97,7 +97,7 @@ export class ComplianceNotesRepository extends BaseWorker {
         },
       });
 
-      this.sendMetrics('organization.compliance.notes', 'compliance_notes_repository', 'update', 'completed', {
+      this.sendMetrics('organization.compliance.notes', 'cold-nest', 'update', 'completed', {
         sendEvent: true,
         start,
         tags: {
@@ -139,7 +139,7 @@ export class ComplianceNotesRepository extends BaseWorker {
         },
       });
 
-      this.sendMetrics('organization.compliance.notes', 'compliance_notes_repository', 'delete', 'completed', {
+      this.sendMetrics('organization.compliance.notes', 'cold-nest', 'delete', 'completed', {
         sendEvent: true,
         start,
         tags: {

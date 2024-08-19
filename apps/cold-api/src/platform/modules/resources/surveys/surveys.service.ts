@@ -6,7 +6,17 @@ import { diff } from 'deep-object-diff';
 import { filter, find, map, merge, omit, set } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
-import { BaseWorker, CacheService, DarklyService, MqttService, PrismaService, SurveyDefinitionsEntity, UpdateSurveyDefinitionsDto, ZodSurveyResponseDto } from '@coldpbc/nest';
+import {
+  BaseWorker,
+  CacheService,
+  DarklyService,
+  IRequest,
+  MqttService,
+  PrismaService,
+  SurveyDefinitionsEntity,
+  UpdateSurveyDefinitionsDto,
+  ZodSurveyResponseDto,
+} from '@coldpbc/nest';
 import { SurveyFilterService } from './filter/survey.filter.service';
 import { ScoringService } from './scoring/scoring.service';
 import { OrgSurveysService } from '../organizations/surveys/orgSurveys.service';
@@ -39,10 +49,11 @@ export class SurveysService extends BaseWorker {
 
   /***
    * This action returns a survey definition by type
-   * @param user
+   * @param req
    * @param type
+   * @param bpc
    */
-  async findDefinitionByType(req: any, type: survey_types, bpc?: boolean): Promise<ZodSurveyResponseDto[]> {
+  async findDefinitionByType(req: IRequest, type: survey_types, bpc?: boolean): Promise<ZodSurveyResponseDto[]> {
     const { user } = req;
     this.logger.tags = merge(this.tags, { survey_type: type, user: user.coldclimate_claims });
 
@@ -68,7 +79,7 @@ export class SurveysService extends BaseWorker {
     }
   }
 
-  async findAllDefinitions(req: any, bpc?: boolean): Promise<ZodSurveyResponseDto[]> {
+  async findAllDefinitions(req: IRequest, bpc?: boolean): Promise<ZodSurveyResponseDto[]> {
     const { user } = req;
     this.setTags({ user: user.coldclimate_claims });
 
@@ -92,7 +103,7 @@ export class SurveysService extends BaseWorker {
     }
   }
 
-  async findDefinitionByName(req: any, name: string, bpc?: boolean): Promise<ZodSurveyResponseDto[]> {
+  async findDefinitionByName(req: IRequest, name: string, bpc?: boolean): Promise<ZodSurveyResponseDto[]> {
     const { user } = req;
     this.setTags({ user: user.coldclimate_claims });
 
@@ -125,9 +136,9 @@ export class SurveysService extends BaseWorker {
   /***
    * This action creates a new survey definition
    * @param createSurveyDefinitionDto
-   * @param user
+   * @param req
    */
-  async create(createSurveyDefinitionDto: Partial<SurveyDefinitionsEntity>, req: any): Promise<ZodSurveyResponseDto> {
+  async create(createSurveyDefinitionDto: Partial<SurveyDefinitionsEntity>, req: IRequest): Promise<ZodSurveyResponseDto> {
     const { user, url } = req;
     const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as organizations;
 
@@ -221,7 +232,7 @@ export class SurveysService extends BaseWorker {
    * @param bpc
    */
   async findAllSubmittedSurveysByOrg(
-    req: any,
+    req: IRequest,
     surveyFilter?: {
       name: string;
       type: string;
@@ -281,13 +292,12 @@ export class SurveysService extends BaseWorker {
 
   /***
    * This action returns all survey definitions
-   * @param user
+   * @param req
    * @param surveyFilter
    * @param bpc
-   * @param impersonateOrg
    */
   async findAll(
-    req: any,
+    req: IRequest,
     surveyFilter?: {
       name: string;
       type: string;
@@ -325,11 +335,11 @@ export class SurveysService extends BaseWorker {
   /**
    * This action returns a survey by name
    * @param name
-   * @param user
-   * @param bypassCache
+   * @param req
+   * @param bpc
    * @param impersonateOrg
    */
-  async findOne(name: string, req: any, bpc?: boolean, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
+  async findOne(name: string, req: IRequest, bpc?: boolean, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
     const { user, organization } = req;
     const isID = isUUID(name);
 
@@ -345,7 +355,7 @@ export class SurveysService extends BaseWorker {
 
     try {
       if (!bpc) {
-        const surveyCacheKey = this.getSurveyCacheKey(organization, req, name, isID);
+        const surveyCacheKey = this.getSurveyCacheKey(organization.name, req, name, isID);
         cached = (await this.cache.get(surveyCacheKey)) as ZodSurveyResponseDto;
       }
 
@@ -409,7 +419,7 @@ export class SurveysService extends BaseWorker {
   }
 
   // get the cache key for the survey type
-  private getSurveyTypeCacheKey(impersonateOrg: string | undefined, req: any, def: any) {
+  private getSurveyTypeCacheKey(impersonateOrg: string | undefined, req: IRequest, def: any) {
     const { user, organization } = req;
 
     const key = `survey_definitions:type:${def?.type}`;
@@ -420,7 +430,7 @@ export class SurveysService extends BaseWorker {
   }
 
   // get the cache key for the survey name
-  private getSurveyCacheKey(impersonateOrg: string | undefined, req: any, name: string, isId?: boolean) {
+  private getSurveyCacheKey(impersonateOrg: string | undefined, req: IRequest, name: string, isId?: boolean) {
     const { user, organization } = req;
 
     const key = `survey_definitions:${isId ? 'id' : 'name'}:${name}`;
@@ -434,16 +444,16 @@ export class SurveysService extends BaseWorker {
    * This action stores survey results for a named survey
    * @param name
    * @param submission
-   * @param user
+   * @param req
    * @param impersonateOrg
    */
-  async submitResults(name: string, submission: any, req: any, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
+  async submitResults(name: string, submission: any, req: IRequest, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
     if (!req.organization && impersonateOrg) {
-      req.organization = await this.prisma.organizations.findUnique({
+      req.organization = (await this.prisma.organizations.findUnique({
         where: {
           id: impersonateOrg,
         },
-      });
+      })) as organizations;
 
       if (!req.organization) {
         throw new NotFoundException(`Organization with id: ${impersonateOrg} does not exist`);
@@ -582,7 +592,7 @@ export class SurveysService extends BaseWorker {
    * @param updateSurveyDefinitionDto
    * @param user
    */
-  async update(name: string, updateSurveyDefinitionDto: UpdateSurveyDefinitionsDto, req: any): Promise<ZodSurveyResponseDto> {
+  async update(name: string, updateSurveyDefinitionDto: UpdateSurveyDefinitionsDto, req: IRequest): Promise<ZodSurveyResponseDto> {
     const { user, url, organization } = req;
     const org = organization;
 
@@ -662,9 +672,9 @@ export class SurveysService extends BaseWorker {
    * @param name
    * @param user
    */
-  async remove(name: string, req: any) {
-    const { user, url, organziation } = req;
-    const org = organziation;
+  async remove(name: string, req: IRequest) {
+    const { user, url, organization } = req;
+    const org = organization;
 
     const tags: { [p: string]: any } | string[] = {
       survey_name: name,
@@ -730,7 +740,7 @@ export class SurveysService extends BaseWorker {
    * @param orgId
    * @param req
    */
-  async delete(name: string, orgId: string, req: any) {
+  async delete(name: string, orgId: string, req: IRequest) {
     const { user, url } = req;
 
     const org = await this.prisma.organizations.findUnique({
