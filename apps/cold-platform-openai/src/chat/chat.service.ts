@@ -620,16 +620,11 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       // Set the tags for the survey
       this.setTags({
-        compliance_set: compliance.compliance_definition_name,
         base_update_topic,
-        organization: {
-          name: organization.name,
-          id: organization.id,
-        },
-        user: {
-          email: user.coldclimate_claims.email,
-          id: user.id || user.coldclimate_claims.id,
-        },
+        compliance_name: job.data.payload?.compliance.compliance_definition_name,
+        organization_name: job.data.organization?.name,
+        organization_id: job.data.organization?.id,
+        user_email: job.data.user?.coldclimate_claims?.email,
       });
 
       // Initialize the category context
@@ -706,9 +701,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             start,
             sendEvent: true,
             tags: {
-              compliance_set: job.data.survey?.name,
-              organization: job.data.organization?.name,
-              user: job.data.user?.coldclimate_claims?.email,
+              compliance_name: job.data.payload?.compliance.compliance_definition_name,
+              organization_name: job.data.organization?.name,
+              organization_id: job.data.organization?.id,
+              user_email: job.data.user?.coldclimate_claims?.email,
               error: e.message,
             },
           });
@@ -855,7 +851,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             start,
             sendEvent: true,
             tags: {
-              ...this.tags,
+              compliance_name: job.data.payload?.compliance.compliance_definition_name,
+              organization_name: job.data.organization?.name,
+              organization_id: job.data.organization?.id,
+              user_email: job.data.user?.coldclimate_claims?.email,
               section: section,
               fp_session: session.id,
             },
@@ -881,7 +880,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         start,
         sendEvent: true,
         tags: {
-          ...this.tags,
+          compliance_name: job.data.payload?.compliance.compliance_definition_name,
+          organization_name: job.data.organization?.name,
+          organization_id: job.data.organization?.id,
+          user_email: job.data.user?.coldclimate_claims?.email,
         },
       });
     }
@@ -967,7 +969,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               start,
               sendEvent: false,
               tags: {
-                compliance_set: job.data.survey?.name,
+                compliance_name: job.data.payload?.compliance.compliance_definition_name,
                 organization_name: job.data.organization?.name,
                 organization_id: job.data.organization?.id,
                 user_email: job.data.user?.coldclimate_claims?.email,
@@ -1014,10 +1016,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               start,
               sendEvent: false,
               tags: {
-                compliance_name: job.data.survey?.name,
-                compliance_title: job.data.survey?.title,
-                organization_id: job.data.organization?.id,
+                compliance_name: job.data.payload?.compliance.compliance_definition_name,
                 organization_name: job.data.organization?.name,
+                organization_id: job.data.organization?.id,
                 user_email: job.data.user?.coldclimate_claims?.email,
                 section: section,
                 question: item,
@@ -1046,10 +1047,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             start,
             sendEvent: true,
             tags: {
-              compliance_name: job.data.survey?.name,
-              compliance_title: job.data.survey?.title,
-              organization_id: job.data.organization?.id,
+              compliance_name: job.data.payload?.compliance.compliance_definition_name,
               organization_name: job.data.organization?.name,
+              organization_id: job.data.organization?.id,
               user_email: job.data.user?.coldclimate_claims?.email,
               section,
               question: item,
@@ -1069,10 +1069,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         start,
         sendEvent: true,
         tags: {
-          compliance_name: job.data.survey?.name,
-          compliance_title: job.data.survey?.title,
-          organization_id: job.data.organization?.id,
+          compliance_name: job.data.payload?.compliance.compliance_definition_name,
           organization_name: job.data.organization?.name,
+          organization_id: job.data.organization?.id,
           user_email: job.data.user?.coldclimate_claims?.email,
           fp_session: session.sessionId,
           error: e,
@@ -1172,10 +1171,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
                 start,
                 sendEvent: false,
                 tags: {
-                  compliance_name: job.data.survey?.name,
-                  compliance_title: job.data.survey?.title,
-                  organization_id: job.data.organization?.id,
+                  compliance_name: job.data.payload?.compliance.compliance_definition_name,
                   organization_name: job.data.organization?.name,
+                  organization_id: job.data.organization?.id,
                   user_email: job.data.user?.coldclimate_claims?.email,
                   section_key: section.key,
                   question_key: item.key,
@@ -1222,10 +1220,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             start,
             sendEvent: false,
             tags: {
-              compliance_name: job.data.survey?.name,
-              compliance_title: job.data.survey?.title,
-              organization_id: job.data.organization?.id,
+              compliance_name: job.data.payload?.compliance.compliance_definition_name,
               organization_name: job.data.organization?.name,
+              organization_id: job.data.organization?.id,
               user_email: job.data.user?.coldclimate_claims?.email,
               section_key: section.key,
               question_key: item.key,
@@ -1260,9 +1257,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             start,
             sendEvent: true,
             tags: {
-              compliance_set: job.data.survey?.name,
-              organization: job.data.organization?.name,
-              user: job.data.user?.coldclimate_claims?.email,
+              compliance_name: job.data.payload?.compliance.compliance_definition_name,
+              organization_name: job.data.organization?.name,
+              organization_id: job.data.organization?.id,
+              user_email: job.data.user?.coldclimate_claims?.email,
               section,
               question: item,
               session,
@@ -1279,10 +1277,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         start,
         sendEvent: false,
         tags: {
-          compliance_name: job.data.survey?.name,
-          compliance_title: job.data.survey?.title,
-          organization_id: job.data.organization?.id,
+          compliance_name: job.data.payload?.compliance.compliance_definition_name,
           organization_name: job.data.organization?.name,
+          organization_id: job.data.organization?.id,
           user_email: job.data.user?.coldclimate_claims?.email,
           section_key: section.key,
         },
@@ -1299,9 +1296,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         start,
         sendEvent: true,
         tags: {
-          compliance_set: job.data.survey?.name,
-          organization: job.data.organization?.name,
-          user: job.data.user?.coldclimate_claims?.email,
+          compliance_name: job.data.payload?.compliance.compliance_definition_name,
+          organization_name: job.data.organization?.name,
+          organization_id: job.data.organization?.id,
+          user_email: job.data.user?.coldclimate_claims?.email,
           section,
           session,
           error: e,
