@@ -17,14 +17,14 @@ export const NewsItem = ({ item }: Props) => {
   };
 
   return (
-    <div className="bg-bgc-accent p-4 w-full text-white flex items-center rounded-lg">
+    <div className="bg-bgc-accent p-4 w-full text-white flex items-center rounded-lg" data-chromatic="ignore">
       <div
         className="w-[80px] h-[80px] bg-cover bg-center bg-no-repeat rounded-lg mr-6"
         style={{
           backgroundImage: `url('${image_url}')`,
         }}
       />
-      <div className="flex-1 flex flex-col" data-chromatic="ignore">
+      <div className="flex-1 flex flex-col">
         <div className="font-bold leading-normal text-md">{title}</div>
         <div className="flex text-xs font-normal mt-2 items-center">
           {getTimeSincePublished()}

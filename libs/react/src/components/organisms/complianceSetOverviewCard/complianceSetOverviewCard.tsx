@@ -1,6 +1,6 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { AllCompliance, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
+import { AllCompliance, ToastMessage } from '@coldpbc/interfaces';
 import React, { useContext } from 'react';
 import { ColdCompliancePageContext } from '@coldpbc/context';
 import { ComplianceStatus, ErrorType, GlobalSizes } from '@coldpbc/enums';
@@ -13,7 +13,6 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { get, isArray } from 'lodash';
 import { getTermString } from '@coldpbc/lib';
 import { isDefined } from 'class-validator';
-import useSWR from 'swr';
 
 const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompliance }) => {
   const navigate = useNavigate();
@@ -23,16 +22,6 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
   const { addToastMessage } = useAddToastMessage();
   const { filter } = useContext(ColdCompliancePageContext);
   const [complianceSetLoading, setComplianceSetLoading] = React.useState<boolean>(false);
-
-  const getOrgComplianceURL = () => {
-    if (ldFlags.showNewComplianceManagerCold711) {
-      return null;
-    } else {
-      return [`/compliance/${complianceSet.name}/organizations/${orgId}`, 'GET'];
-    }
-  };
-
-  const orgComplianceSWR = useSWR<OrgCompliance, any, any>(getOrgComplianceURL(), axiosFetcher);
 
   const dueDate = get(complianceSet, 'metadata.due_date', undefined);
   const term = get(complianceSet, 'metadata.term', undefined);
@@ -57,8 +46,6 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
       }
     }
   }
-
-  const orgComplianceSet = orgComplianceSWR.data;
 
   const getComplianceLogo = () => {
     let imageClassName = 'max-w-[60px] max-h-[60px]';
@@ -164,36 +151,20 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
   };
 
   const onCardClick = async () => {
-    if (complianceSetLoading) return;
-    if (ldFlags.showNewComplianceManagerCold711) {
-      if (complianceStatus === ComplianceStatus.inActive) {
-        // post to compliance/{complianceSet.name}/organizations/{orgId}
-        setComplianceSetLoading(true);
-        const response = await axiosFetcher([`/compliance/${complianceSet.name}/organizations/${orgId}`, 'POST']);
-        if (isAxiosError(response)) {
-          await addToastMessage({ message: 'Compliance could not be added', type: ToastMessage.FAILURE });
-          logError(response.message, ErrorType.AxiosError, response);
-        } else {
-          await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
-          navigate(`/compliance/${complianceSet.name}`);
-        }
-        setComplianceSetLoading(false);
+    if (complianceStatus === ComplianceStatus.inActive) {
+      // post to compliance/{complianceSet.name}/organizations/{orgId}
+      setComplianceSetLoading(true);
+      const response = await axiosFetcher([`/compliance/${complianceSet.name}/organizations/${orgId}`, 'POST']);
+      if (isAxiosError(response)) {
+        await addToastMessage({ message: 'Compliance could not be added', type: ToastMessage.FAILURE });
+        logError(response.message, ErrorType.AxiosError, response);
       } else {
+        await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
         navigate(`/compliance/${complianceSet.name}`);
       }
+      setComplianceSetLoading(false);
     } else {
-      if (!isAxiosError(orgComplianceSet) && orgComplianceSet !== undefined) {
-        navigate(`/wizard/compliance/${complianceSet.name}`);
-      } else {
-        const response = await axiosFetcher([`/compliance_definitions/${complianceSet.name}/organizations/${orgId}`, 'POST']);
-        if (isAxiosError(response)) {
-          await addToastMessage({ message: 'Compliance could not be added', type: ToastMessage.FAILURE });
-          logError(response.message, ErrorType.AxiosError, response);
-        } else {
-          await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
-          navigate(`/wizard/compliance/${complianceSet.name}`);
-        }
-      }
+      navigate(`/compliance/${complianceSet.name}`);
     }
   };
 
@@ -237,16 +208,10 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
       }
       glow={false}
       onClick={onCardClick}>
-      {orgComplianceSWR.isLoading ? (
-        <Spinner />
-      ) : (
-        <>
-          {getComplianceLogo()}
-          {getComplianceSetTitle()}
-          {getComplianceStatusChip()}
-          {getComplianceDueDate()}
-        </>
-      )}
+      {getComplianceLogo()}
+      {getComplianceSetTitle()}
+      {getComplianceStatusChip()}
+      {getComplianceDueDate()}
       {complianceSetLoading && complianceSetLoadingBackground()}
     </Card>
   );

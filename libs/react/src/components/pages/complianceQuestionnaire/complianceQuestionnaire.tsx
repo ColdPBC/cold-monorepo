@@ -4,9 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
-import { AIDetails, ComplianceSidebarPayload, OrgCompliance } from '@coldpbc/interfaces';
+import { AIDetails, Compliance, ComplianceSidebarPayload } from '@coldpbc/interfaces';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { withErrorBoundary } from 'react-error-boundary';
+import { isAxiosError } from 'axios';
 
 const _ComplianceQuestionnaire = () => {
   const { logBrowser } = useColdContext();
@@ -20,14 +21,7 @@ const _ComplianceQuestionnaire = () => {
   const { orgId } = useAuth0Wrapper();
   const { complianceName } = useParams();
 
-  const getComplianceUrl = () => {
-    if (orgId) {
-      return [`/compliance_definitions/organizations/${orgId}`, 'GET'];
-    } else {
-      return null;
-    }
-  };
-  const complianceSWR = useSWR<OrgCompliance[], any, any>(getComplianceUrl(), axiosFetcher);
+  const complianceDataSWR = useSWR<Compliance, any, any>([`/compliance/${complianceName}`, 'GET'], axiosFetcher);
 
   const getSidebarDataUrl = () => {
     return [`/compliance/${complianceName}/organizations/${orgId}/section_groups/responses`, 'GET'];
@@ -41,31 +35,38 @@ const _ComplianceQuestionnaire = () => {
     }
   }, [focusQuestion]);
 
-  if (complianceSWR.isLoading || sideBarSWR.isLoading) {
+  useEffect(() => {
+    logBrowser(`ComplianceQuestionnaire loaded for ${complianceName}`, 'info', {
+      name: complianceName,
+      data: complianceDataSWR.data,
+      sidebarData: sideBarSWR.data,
+      scrollToQuestion,
+      focusQuestion,
+      orgId,
+    });
+  }, [complianceDataSWR.data, sideBarSWR.data, scrollToQuestion, focusQuestion, orgId, complianceName]);
+
+  if (complianceDataSWR.isLoading || sideBarSWR.isLoading) {
     return <Spinner />;
   }
 
-  const selectedCompliance = complianceSWR.data?.find(compliance => compliance.compliance_definition.name === complianceName);
-
-  if (!sideBarSWR.data) {
+  if (!sideBarSWR.data || isAxiosError(complianceDataSWR.data)) {
+    logBrowser('ComplianceQuestionnaire failed to load', 'error', {
+      complianceName,
+      complianceDataSWR,
+      sideBarSWR,
+      orgId,
+    });
     return null;
   }
 
-  logBrowser(`ComplianceQuestionnaire loaded for ${complianceName}`, 'info', {
-    name: complianceName,
-    data: complianceSWR.data,
-    selectedCompliance,
-    scrollToQuestion,
-    focusQuestion,
-    orgId,
-    url: getSidebarDataUrl(),
-  });
+  const selectedCompliance = complianceDataSWR.data;
 
   return (
     <ColdComplianceQuestionnaireContext.Provider
       value={{
         name: complianceName || '',
-        complianceDefinition: selectedCompliance?.compliance_definition || undefined,
+        complianceDefinition: selectedCompliance,
         scrollToQuestion,
         setScrollToQuestion,
         focusQuestion,
@@ -78,7 +79,7 @@ const _ComplianceQuestionnaire = () => {
             className={'w-full gap-[16px] py-[8px] text-button text-tc-primary flex flex-row items-center cursor-pointer justify-start'}
             onClick={() => navigate(`/compliance/${complianceName}`)}>
             <ColdLeftArrowIcon className={'w-[40px] h-[40px]'} />
-            <div>Back to {selectedCompliance && selectedCompliance.compliance_definition.title}</div>
+            <div>Back to {selectedCompliance?.title}</div>
           </div>
         </div>
         {selectedCompliance ? (

@@ -1,9 +1,8 @@
 import React from 'react';
 import { Card, ErrorFallback, NextStepCard, Spinner } from '@coldpbc/components';
-import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { OrgCompliance, SurveyNextStep, SurveyPayloadType } from '@coldpbc/interfaces';
-import { find, flatMap, includes, startCase } from 'lodash';
+import { AllCompliance } from '@coldpbc/interfaces';
 import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorType } from '@coldpbc/enums';
@@ -11,50 +10,18 @@ import useSWR from 'swr';
 
 const _NextSteps = () => {
   const { orgId } = useAuth0Wrapper();
-  const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
+  const allCompliances = useSWR<AllCompliance[], any, any>([`/compliance/all/organizations/${orgId}`, 'GET'], axiosFetcher);
 
-  const { data, isLoading, error } = useOrgSWR<SurveyPayloadType[]>(['/surveys', 'GET'], axiosFetcher);
   const { logError, logBrowser } = useColdContext();
   const navigate = useNavigate();
 
-  const getSurveyProgress = (survey: SurveyPayloadType): number => {
-    let totalQuestions = 0;
-    let completedQuestions = 0;
-    Object.keys(survey.definition.sections).forEach(section => {
-      const sectionData = survey.definition.sections[section];
-      if (sectionData.component !== null) {
-        totalQuestions += 1;
-        if (sectionData.skipped !== undefined && sectionData.value !== undefined) {
-          completedQuestions += 1;
-        }
-      }
-      Object.keys(sectionData.follow_up).forEach(followUp => {
-        const followUpData = sectionData.follow_up[followUp];
-        totalQuestions += 1;
-        if (followUpData.skipped !== undefined && followUpData.value !== undefined) {
-          completedQuestions += 1;
-        }
-      });
-    });
-    if (completedQuestions === 0) {
-      return 0;
-    } else {
-      return Math.round((completedQuestions / totalQuestions) * 100);
-    }
-  };
-
-  if (isLoading || orgCompliances.isLoading) {
+  if (allCompliances.isLoading) {
     return <Spinner />;
   }
 
-  if (error) {
-    logBrowser('Error fetching surveys', 'error', { ...error }, error);
-    logError(error, ErrorType.SWRError);
-    return;
-  }
-  if (orgCompliances.error) {
-    logBrowser('Error fetching org compliances', 'error', { ...orgCompliances.error }, orgCompliances.error);
-    logError(orgCompliances.error, ErrorType.SWRError);
+  if (allCompliances.error) {
+    logBrowser('Error fetching surveys', 'error', { ...allCompliances.error }, allCompliances.error);
+    logError(allCompliances.error, ErrorType.SWRError);
     return;
   }
 
@@ -62,35 +29,26 @@ const _NextSteps = () => {
     orgId,
   });
 
-  if (!orgCompliances.data?.length) {
-    return;
+  if (!allCompliances.data?.length) {
+    return null;
   }
 
-  const compliances = orgCompliances.data;
-  const complianceSurveys = flatMap(compliances, compliance => {
-    return compliance.compliance_definition.surveys;
-  });
-
-  const nextSteps = data
-    ?.filter(survey => {
-      return !survey.definition.submitted && includes(complianceSurveys, survey.name);
-    })
-    .sort((a, b) => {
-      const aDate = new Date(a.updated_at);
-      const bDate = new Date(b.updated_at);
-      return bDate.getTime() - aDate.getTime();
-    })
-    .map((survey): SurveyNextStep => {
-      const progress = getSurveyProgress(survey);
+  const nextSteps = allCompliances.data
+    .map(compliance => {
+      const progress = compliance.progress || 0;
       return {
-        compliance: find(compliances, compliance => {
-          return includes(compliance.compliance_definition.surveys, survey.name);
-        }),
-        name: survey.name,
-        title: startCase(survey.name),
+        compliance: compliance,
+        name: compliance.name,
+        title: compliance.title,
         started: progress > 0,
         surveyProgress: progress,
       };
+    })
+    .sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    })
+    .sort((a, b) => {
+      return b.surveyProgress - a.surveyProgress;
     })
     .splice(0, 3);
 
@@ -106,7 +64,7 @@ const _NextSteps = () => {
                 <NextStepCard
                   nextStep={nextStep}
                   onNextStepClick={() => {
-                    navigate(`/wizard/compliance/${nextStep.compliance?.compliance_definition.name}`);
+                    navigate(`/compliance/${nextStep.compliance.name}`);
                   }}
                 />
               </div>

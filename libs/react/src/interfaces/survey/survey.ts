@@ -1,5 +1,3 @@
-import { OrgCompliance } from '../compliance';
-
 export interface SurveyFormDefinitionPayloadType {
   id: string;
   name: string;
@@ -129,14 +127,6 @@ export interface SurveyAdditionalContext {
     answer?: string | boolean | number | Array<string>;
     what_we_need?: string;
   };
-}
-
-export interface SurveyNextStep {
-  compliance?: OrgCompliance;
-  name: string;
-  title: string;
-  started: boolean;
-  surveyProgress: number;
 }
 
 export interface ComplianceSurveyPayloadType {

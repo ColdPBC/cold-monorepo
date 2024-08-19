@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
-import { find, forEach, get } from 'lodash';
+import { forEach, get } from 'lodash';
 import { ColdIcon, ColdLeftArrowIcon, ComplianceManagerOverview, ComplianceManagerPreview, ErrorFallback, Spinner } from '@coldpbc/components';
 import React, { useContext, useEffect, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
@@ -8,7 +8,7 @@ import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { format } from 'date-fns';
 import { withErrorBoundary } from 'react-error-boundary';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
-import { Compliance, ComplianceManagerCountsPayload, ComplianceSidebarPayload, CurrentAIStatusPayload, OrgCompliance } from '@coldpbc/interfaces';
+import { Compliance, ComplianceManagerCountsPayload, ComplianceSidebarPayload, CurrentAIStatusPayload } from '@coldpbc/interfaces';
 import useSWRSubscription from 'swr/subscription';
 import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
@@ -33,7 +33,6 @@ const _ComplianceManager = () => {
 
   const sectionGroups = useSWR<ComplianceSidebarPayload, any, any>(getSectionGroupDataUrl(), axiosFetcher);
   const complianceSWR = useSWR<Compliance, any, any>([`/compliance/${name}`, 'GET'], axiosFetcher);
-  const orgCompliances = useSWR<OrgCompliance[], any, any>(orgId ? [`/compliance_definitions/organizations/${orgId}`, 'GET'] : null, axiosFetcher);
   const files = useOrgSWR<any[], any>([`/files`, 'GET'], axiosFetcher);
 
   const getCurrentAIStatusTopic = () => {
@@ -57,75 +56,71 @@ const _ComplianceManager = () => {
   const compliance = complianceSWR.data;
 
   useEffect(() => {
-    if (orgCompliances) {
-      // check to see is the compliance is in the orgCompliances
-      const orgCompliance = find(orgCompliances.data, { compliance_definition: { name } });
-      if (orgCompliance) {
-        logBrowser(`Setting ${name} compliance manager status to activated`, 'info', { name, orgCompliance });
-        setStatus(ComplianceManagerStatus.activated);
-        if (files.data && files.data.length > 0) {
-          logBrowser(`Setting ${name} compliance manager status to uploaded documents`, 'info', { name, files });
-          setStatus(ComplianceManagerStatus.uploadedDocuments);
-          if (currentAIStatus?.data && currentAIStatus.data.length > 0) {
-            logBrowser(`Setting ${name} compliance manager status to started AI`, 'info', { name, currentAIStatus });
-            setStatus(ComplianceManagerStatus.startedAi);
-          } else {
-            // check the compliance counts to see if the AI has been run
-            const complianceSectionGroupCounts = countsDataSWR.data?.compliance_section_groups;
-            let aiAnswered = 0;
-            let userAnswered = 0;
-            let totalQuestions = 0;
-            forEach(complianceSectionGroupCounts, (value, key) => {
-              aiAnswered += value.counts.ai_answered;
-              userAnswered += value.counts.org_answered;
-              totalQuestions += value.counts.not_started + value.counts.ai_answered + value.counts.org_answered;
-            });
-            if (totalQuestions > 0) {
-              if (aiAnswered > 0 && userAnswered === 0) {
-                logBrowser(`Setting ${name} compliance manager status to completed AI`, 'info', {
-                  name,
-                  complianceSectionGroupCounts,
-                  aiAnswered,
-                  totalQuestions,
-                  userAnswered,
-                });
-                setStatus(ComplianceManagerStatus.completedAi);
-              } else if (aiAnswered > 0 && userAnswered > 0) {
-                logBrowser(`Setting ${name} compliance manager status to started questions`, 'info', {
-                  name,
-                  complianceSectionGroupCounts,
-                  aiAnswered,
-                  totalQuestions,
-                  userAnswered,
-                });
-                setStatus(ComplianceManagerStatus.startedQuestions);
-              }
-
-              if (totalQuestions === userAnswered) {
-                logBrowser(`Setting ${name} compliance manager status to completed questions`, 'info', {
-                  name,
-                  complianceSectionGroupCounts,
-                  aiAnswered,
-                  totalQuestions,
-                  userAnswered,
-                });
-                setStatus(ComplianceManagerStatus.completedQuestions);
-              }
+    if (compliance) {
+      logBrowser(`Setting ${name} compliance manager status to activated`, 'info', { name, compliance });
+      setStatus(ComplianceManagerStatus.activated);
+      if (files.data && files.data.length > 0) {
+        logBrowser(`Setting ${name} compliance manager status to uploaded documents`, 'info', { name, files });
+        setStatus(ComplianceManagerStatus.uploadedDocuments);
+        if (currentAIStatus?.data && currentAIStatus.data.length > 0) {
+          logBrowser(`Setting ${name} compliance manager status to started AI`, 'info', { name, currentAIStatus });
+          setStatus(ComplianceManagerStatus.startedAi);
+        } else {
+          // check the compliance counts to see if the AI has been run
+          const complianceSectionGroupCounts = countsDataSWR.data?.compliance_section_groups;
+          let aiAnswered = 0;
+          let userAnswered = 0;
+          let totalQuestions = 0;
+          forEach(complianceSectionGroupCounts, (value, key) => {
+            aiAnswered += value.counts.ai_answered;
+            userAnswered += value.counts.org_answered;
+            totalQuestions += value.counts.not_started + value.counts.ai_answered + value.counts.org_answered;
+          });
+          if (totalQuestions > 0) {
+            if (aiAnswered > 0 && userAnswered === 0) {
+              logBrowser(`Setting ${name} compliance manager status to completed AI`, 'info', {
+                name,
+                complianceSectionGroupCounts,
+                aiAnswered,
+                totalQuestions,
+                userAnswered,
+              });
+              setStatus(ComplianceManagerStatus.completedAi);
+            } else if (aiAnswered > 0 && userAnswered > 0) {
+              logBrowser(`Setting ${name} compliance manager status to started questions`, 'info', {
+                name,
+                complianceSectionGroupCounts,
+                aiAnswered,
+                totalQuestions,
+                userAnswered,
+              });
+              setStatus(ComplianceManagerStatus.startedQuestions);
             }
 
-            const statuses = countsDataSWR?.data?.statuses;
-            if (statuses && statuses.length > 0) {
-              const recentStatus = statuses[0];
-              if (recentStatus.type === 'user_submitted') {
-                logBrowser(`Setting ${name} compliance manager status to submitted`, 'info', { name, recentStatus });
-                setStatus(ComplianceManagerStatus.submitted);
-              }
+            if (totalQuestions === userAnswered) {
+              logBrowser(`Setting ${name} compliance manager status to completed questions`, 'info', {
+                name,
+                complianceSectionGroupCounts,
+                aiAnswered,
+                totalQuestions,
+                userAnswered,
+              });
+              setStatus(ComplianceManagerStatus.completedQuestions);
+            }
+          }
+
+          const statuses = countsDataSWR?.data?.statuses;
+          if (statuses && statuses.length > 0) {
+            const recentStatus = statuses[0];
+            if (recentStatus.type === 'user_submitted') {
+              logBrowser(`Setting ${name} compliance manager status to submitted`, 'info', { name, recentStatus });
+              setStatus(ComplianceManagerStatus.submitted);
             }
           }
         }
       }
     }
-  }, [orgCompliances, files, currentAIStatus, countsDataSWR, name]);
+  }, [compliance, files, currentAIStatus, countsDataSWR, name]);
 
   useEffect(() => {
     logBrowser('Compliance Definition', 'info', {
@@ -134,14 +129,13 @@ const _ComplianceManager = () => {
       compliance,
       status,
       managementView,
-      orgCompliances,
       currentAIStatus: currentAIStatus.data,
       files: files.data,
       complianceSWR: complianceSWR.data,
     });
-  }, [orgCompliances, files, currentAIStatus, name, orgId, compliance, status, managementView, complianceSWR]);
+  }, [files, currentAIStatus, name, orgId, compliance, status, managementView, complianceSWR]);
 
-  if (orgCompliances.isLoading || files.isLoading || countsDataSWR.isLoading || sectionGroups.isLoading || complianceSWR.isLoading) {
+  if (files.isLoading || countsDataSWR.isLoading || sectionGroups.isLoading || complianceSWR.isLoading) {
     return <Spinner />;
   }
 

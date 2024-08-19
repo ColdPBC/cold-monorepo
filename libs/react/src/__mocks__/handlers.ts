@@ -21,10 +21,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   getAllComplianceMocks,
   getComplianceCountsMock,
-  getComplianceMock,
   getComplianceMockByName,
-  getOrganizationComplianceMock,
-  getOrganizationComplianceMockByName,
   getQuestionAIDetailsMock,
   getQuestionnaireContainerMock,
   getQuestionnaireSidebarComplianceMock,
@@ -248,24 +245,6 @@ export const handlers = [
     return res(ctx.json(getSurveysMock()));
   }),
 
-  rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
-    return res(ctx.json(getComplianceMock()));
-  }),
-
-  rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
-    return res(ctx.json(getOrganizationComplianceMock()));
-  }),
-
-  rest.post(getApiUrl('/compliance_definitions/:name/organizations/:orgId'), (req, res, ctx) => {
-    const { name, orgId } = req.params;
-    return res(
-      ctx.json({
-        ...getOrganizationComplianceMockByName(name as string),
-        compliance_definition: undefined,
-      }),
-    );
-  }),
-
   rest.get(getApiUrl('/components/documents_list_table'), (req, res, ctx) => {
     return res(ctx.json(getDocumentsListTableMock()));
   }),
@@ -378,6 +357,14 @@ export const handlers = [
   }),
 
   rest.patch(getApiUrl('/organizations/:orgId/files/:fileId'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.post(getApiUrl('/compliance/:name/organizations/:orgId'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.put(getApiUrl('/compliance/:name/organizations/:orgI/activate'), (req, res, ctx) => {
     return res(ctx.status(200));
   }),
 

@@ -1,12 +1,9 @@
-import { JourneyOverviewCard, TemperatureCheckCard } from '../../molecules';
+import { TemperatureCheckCard } from '../../molecules';
 import { AppContent, CenterColumnContent, RightColumnContent, SubcategoryActionsOverviewCard } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 const _ActionsOverview = () => {
-  const ldFlags = useFlags();
-
   return (
     <AppContent title="Actions Overview">
       <CenterColumnContent>

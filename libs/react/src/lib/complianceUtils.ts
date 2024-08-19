@@ -55,7 +55,7 @@ export const getTermString = (term: string) => {
 };
 
 export const startComplianceAI = async (name: string, orgId: string) => {
-  return await axiosFetcher([`/compliance_definitions/${name}/organizations/${orgId}`, 'PUT']);
+  return await axiosFetcher([`/compliance/${name}/organizations/${orgId}/activate`, 'PUT']);
 };
 
 export const isComplianceStatusPassed = (state: ComplianceManagerStatus, managerStatus: ComplianceManagerStatus) => {
