@@ -18,8 +18,13 @@ export const Toaster = (props: ToasterProps) => {
       case ToastMessage.INFO:
         className = 'border-[1px] border-blue-500';
         break;
+      case ToastMessage.FAILURE:
+        className = 'border-[1px] border-red-500';
+        break;
+      case ToastMessage.INFO:
+        className = 'border-[1px] border-blue-500';
+        break;
       default:
-      case ToastMessage.SUCCESS:
         className = 'border-[1px] border-tc-success';
         break;
     }
