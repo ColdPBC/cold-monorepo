@@ -99,17 +99,7 @@ export class JobConsumer extends BaseWorker {
     try {
       this.logger.info(`Received ${job.name} job: ${job.id} `);
 
-      const useRag = await this.darkly.getBooleanFlag('dynamic-enable-rag-processing', false, {
-        kind: 'org-compliance-set',
-        key: job.data.organization.name,
-        name: job.data.payload.compliance.compliance_definition.name,
-      });
-
-      if (useRag) {
-        await this.chat.process_survey(job);
-      } else {
-        await this.assistant.process_survey(job);
-      }
+      await this.chat.process_compliance_set(job);
     } catch (e) {
       this.logger.error(e.message, e);
       throw e;
