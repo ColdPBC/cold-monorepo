@@ -1,6 +1,6 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { useNavigate, useParams } from 'react-router-dom';
-import { MaterialsWithCertifications, ToastMessage } from '@coldpbc/interfaces';
+import { MaterialsWithCertifications, Suppliers, ToastMessage } from '@coldpbc/interfaces';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { ButtonTypes, ClaimStatus, IconNames } from '@coldpbc/enums';
@@ -45,6 +45,8 @@ const _MaterialDetail = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteButtonLoading, setDeleteButtonLoading] = useState(false);
   const [addSupplierModalOpen, setAddSupplierModalOpen] = useState(false);
+  const [deleteSupplierButtonLoading, setDeleteSupplierButtonLoading] = useState(false);
+  const [supplierToDelete, setSupplierToDelete] = useState<Suppliers | null>(null);
 
   useEffect(() => {
     if (materialSWR.data) {
@@ -184,6 +186,7 @@ const _MaterialDetail = () => {
       logBrowser('MaterialDetail delete error', 'error', { response });
       await addToastMessage({ message: 'Error deleting material', type: ToastMessage.FAILURE, timeout: 2000 });
       setDeleteModalOpen(false);
+      await materialSWR.mutate();
     } else {
       await addToastMessage({ message: 'Material deleted successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
       navigate('/materials');
@@ -206,6 +209,22 @@ const _MaterialDetail = () => {
     );
     buttons.push(<BaseButton label={'Save'} onClick={saveMaterial} disabled={saveButtonDisabled || saveButtonLoading} loading={saveButtonLoading} key={'save'} />);
     return <div className={'flex flex-row gap-[16px] h-[40px]'}>{buttons}</div>;
+  };
+
+  const deleteMaterialSupplier = async () => {
+    if (supplierToDelete === null) {
+      return;
+    }
+    const response = await axiosFetcher([`/organizations/${orgId}/materials/${material?.id}/supplier/${supplierToDelete.id}`, 'DELETE']);
+    if (isAxiosError(response)) {
+      logBrowser('MaterialDetail delete supplier error', 'error', { response });
+      await addToastMessage({ message: 'Error deleting supplier', type: ToastMessage.FAILURE, timeout: 2000 });
+    } else {
+      logBrowser('MaterialDetail delete supplier success', 'info', { response });
+      await addToastMessage({ message: 'Supplier deleted successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
+    }
+    setSupplierToDelete(null);
+    await materialSWR.mutate();
   };
 
   if (materialSWR.isLoading) {
@@ -256,9 +275,17 @@ const _MaterialDetail = () => {
           }}
           showInMenu
         />,
+        <GridActionsCellItem
+          label="Remove"
+          onClick={() => {
+            setSupplierToDelete(material.material_suppliers.find(supplier => supplier.supplier.id === params.row.id)?.supplier || null);
+          }}
+          showInMenu
+        />,
       ],
     },
   ];
+
   return (
     <div className={'w-full h-full flex flex-col items-center gap-[24px] text-tc-primary relative'}>
       <div
@@ -345,6 +372,35 @@ const _MaterialDetail = () => {
         material={material}
         refreshMaterials={() => {
           materialSWR.mutate();
+        }}
+      />
+      <Modal
+        show={supplierToDelete !== null}
+        setShowModal={() => setSupplierToDelete(null)}
+        header={{
+          title: `Are you sure you want to delete supplier ${supplierToDelete?.name} from ${material.name}?`,
+          cardProps: {
+            glow: false,
+          },
+        }}
+        body={<div>This cannot be undone.</div>}
+        footer={{
+          rejectButton: {
+            label: 'Cancel',
+            onClick: () => setSupplierToDelete(null),
+            variant: ButtonTypes.secondary,
+          },
+          resolveButton: {
+            label: 'Yes, Delete',
+            onClick: async () => {
+              setDeleteSupplierButtonLoading(true);
+              await deleteMaterialSupplier();
+              setDeleteSupplierButtonLoading(false);
+            },
+            disabled: deleteSupplierButtonLoading,
+            loading: deleteSupplierButtonLoading,
+            variant: ButtonTypes.warning,
+          },
         }}
       />
     </div>
