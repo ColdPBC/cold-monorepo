@@ -92,10 +92,11 @@ export class CacheService extends BaseWorker {
         await this.delete(key, options.wildcard);
       }
 
-      this.metrics.increment('cold.api.cache', this.tags);
+      this.metrics.increment('cold.api.cache', { event: 'set', status: 'complete', ...this.tags });
 
       return await this.cacheManager.store.set(key, value, options.ttl);
     } catch (err: any) {
+      this.metrics.increment('cold.api.cache', { event: 'set', status: 'failed', ...this.tags });
       this.logger.error(err.message, { error: err, key: key, value: value, options: options });
     }
   }
@@ -107,7 +108,7 @@ export class CacheService extends BaseWorker {
 
     this.setTags({ action: 'delete', key: pattern });
 
-    this.metrics.increment('cold.api.cache', 1, this.tags);
+    this.metrics.increment('cold.api.cache', { event: 'delete', status: 'complete', ...this.tags });
 
     if (wildcard) {
       const keys = await this.store.keys();
@@ -131,7 +132,7 @@ export class CacheService extends BaseWorker {
 
     this.setTags({ action: 'reset' });
 
-    this.metrics.increment('cold.api.cache', 1, this.tags);
+    this.metrics.increment('cold.api.cache', { event: 'reset', status: 'complete', ...this.tags });
 
     return await this.store.reset();
   }
