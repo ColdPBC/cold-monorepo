@@ -1,3 +1,10 @@
+## [1.334.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.2...v1.334.3) (2024-08-19)
+
+
+### Bug Fixes
+
+* update tag attributes in chat service ([e273bb6](https://github.com/ColdPBC/cold-monorepo/commit/e273bb63fa502dcc5f576444ba9d7765f86f83a8))
+
 ## [1.334.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.1...v1.334.2) (2024-08-19)
 
 
