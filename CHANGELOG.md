@@ -1,3 +1,11 @@
+## [1.334.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.0...v1.334.1) (2024-08-19)
+
+
+### Bug Fixes
+
+* correct metrics increment and alert source type handling ([1ab4ad7](https://github.com/ColdPBC/cold-monorepo/commit/1ab4ad76559afbd7abbada952a1b44a8de756b2c))
+* simplify job processing logic in job.consumer.ts ([a209cf7](https://github.com/ColdPBC/cold-monorepo/commit/a209cf715b33ce0a1346bf38967b5c9ada36ca75))
+
 # [1.334.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.333.0...v1.334.0) (2024-08-19)
 
 
