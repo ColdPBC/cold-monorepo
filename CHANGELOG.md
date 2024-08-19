@@ -1,3 +1,20 @@
+# [1.334.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.333.0...v1.334.0) (2024-08-19)
+
+
+### Bug Fixes
+
+* update compliance activation endpoints and improve UI scrolling ([f434fcf](https://github.com/ColdPBC/cold-monorepo/commit/f434fcfb923ef209ad1dc4d9a386209f74df6cfe))
+
+
+### Features
+
+* add data-chromatic attribute to newsItem component ([cc60ec4](https://github.com/ColdPBC/cold-monorepo/commit/cc60ec44dfc581367acdfd9c759f7c9499781f86))
+* Delete complianceOverview components and redundant logic ([07248e7](https://github.com/ColdPBC/cold-monorepo/commit/07248e782f29bb71e5b0461a473843579dca8617))
+* Refactor compliance data fetching in ComplianceQuestionnaire ([d2d8dac](https://github.com/ColdPBC/cold-monorepo/commit/d2d8dac156692ee9ae16ee96f9f504ccc246f17a))
+* Refactor compliance-related components to streamline data retrieval ([146ad7f](https://github.com/ColdPBC/cold-monorepo/commit/146ad7fa09bd7b315677c82abe7cc3a3b85bf1cb))
+* Remove assessments context and related components ([0e0f551](https://github.com/ColdPBC/cold-monorepo/commit/0e0f5517e3857c54bc92e39c7954ff0422cba236))
+* Remove compliance wizard lair and related components ([3b9e4f9](https://github.com/ColdPBC/cold-monorepo/commit/3b9e4f92eaf80613ef4c35ac32046b4ecb992b99))
+
 # [1.333.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.332.0...v1.333.0) (2024-08-16)
 
 
