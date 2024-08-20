@@ -1,3 +1,16 @@
+# [1.335.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.4...v1.335.0) (2024-08-20)
+
+
+### Bug Fixes
+
+* replace logError with logBrowser, adjust compliance set loading background ([0d8c356](https://github.com/ColdPBC/cold-monorepo/commit/0d8c3569fe5198706124549638008e23863c0cea))
+* replace logError with logBrowser, adjust compliance set loading background ([5e0925b](https://github.com/ColdPBC/cold-monorepo/commit/5e0925b582b1e8a2b7707f01153ce5a1ec84b25c))
+
+
+### Features
+
+* add supplier removal functionality for materials ([7787e8a](https://github.com/ColdPBC/cold-monorepo/commit/7787e8aaecb3ebcba7915b0ba0d44c035b8220cd))
+
 ## [1.334.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.3...v1.334.4) (2024-08-19)
 
 
