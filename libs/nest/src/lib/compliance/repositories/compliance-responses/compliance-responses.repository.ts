@@ -155,7 +155,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
   /**
    * Create or Update a compliance response
-   * @param orgId
+   * @param org
    * @param compliance_definition_name
    * @param sId
    * @param sgId
@@ -436,30 +436,15 @@ export class ComplianceResponsesRepository extends BaseWorker {
         },
         select: {
           organization_id: true,
+          compliance_definition_id: true,
           compliance_definition_name: true,
           visible: true,
         },
       });
 
-      if (!orgComp) {
-        const compliance = await this.prisma.compliance_definitions.findUnique({
-          where: {
-            name: compliance_definition_name,
-          },
-        });
-
-        if (!compliance || !compliance.id) {
-          throw new NotFoundException(`Compliance Definition ${compliance_definition_name} not found`);
-        }
-        // If the organization compliance is not found, create it since they are trying to access the compliance set for the first time
-        await this.prisma.organization_compliance.create({
-          data: {
-            id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
-            organization_id: org.id,
-            compliance_definition_name: compliance_definition_name,
-            compliance_definition_id: compliance.id,
-            description: '',
-          },
+      if (!orgComp?.compliance_definition_id) {
+        throw new NotFoundException(`Organization Compliance for ${compliance_definition_name} not found for Organization ${org.name}`, {
+          description: `Organization Compliance for ${compliance_definition_name} not found for Organization ${org.name}`,
         });
       }
 

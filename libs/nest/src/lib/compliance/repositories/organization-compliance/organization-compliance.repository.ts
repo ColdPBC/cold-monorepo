@@ -210,13 +210,24 @@ export class OrganizationComplianceRepository extends BaseWorker {
       const start = new Date();
       await this.cacheService.delete(`organizations:${organization.id}:compliance:${name}`, true);
 
+      const compliance = await this.prisma.compliance_definitions.findUnique({
+        where: {
+          name: name,
+        },
+      });
+
+      if (!compliance) {
+        throw new NotFoundException({ organization, compliance, user }, `Compliance definition not found`);
+      }
+
       data.compliance_definition_name = name;
 
       data.organization_id = organization.id;
+      data.compliance_definition_id = compliance.id;
       data.id = new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId;
       data.description = '';
 
-      const compliance = await this.prisma.organization_compliance.create({
+      const orgCompliance = await this.prisma.organization_compliance.create({
         data,
       });
 
@@ -226,7 +237,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
         tags: { organization, user, compliance: compliance },
       });
 
-      return compliance;
+      return orgCompliance;
     } catch (error) {
       this.logger.error(`Error creating compliance definition`, { name, organization, ...data, error, user });
       throw error;

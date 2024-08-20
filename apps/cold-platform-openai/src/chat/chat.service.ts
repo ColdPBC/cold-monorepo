@@ -620,16 +620,11 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       // Set the tags for the survey
       this.setTags({
-        compliance_set: compliance.compliance_definition_name,
         base_update_topic,
-        organization: {
-          name: organization.name,
-          id: organization.id,
-        },
-        user: {
-          email: user.coldclimate_claims.email,
-          id: user.id || user.coldclimate_claims.id,
-        },
+        compliance_name: job.data.payload?.compliance.compliance_definition_name,
+        organization_name: job.data.organization?.name,
+        organization_id: job.data.organization?.id,
+        user_email: job.data.user?.coldclimate_claims?.email,
       });
 
       // Initialize the category context
@@ -702,14 +697,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           reqs.push(this.processComplianceSection(job, section, organization, user, session));
         } catch (e) {
           this.logger.error(`Error processing survey ${job.data.survey.name}`, { error: e.message, stack: e.stack, job: job.id });
-          this.sendMetrics('organization.compliance.section', 'cold-openai', 'process', 'failed', {
+          this.sendMetrics('organization.compliance.section', 'cold-openai', 'processing', 'failed', {
             start,
-
             sendEvent: true,
             tags: {
-              compliance_set: job.data.survey?.name,
-              organization: job.data.organization?.name,
-              user: job.data.user?.coldclimate_claims?.email,
+              compliance_name: job.data.payload?.compliance.compliance_definition_name,
+              organization_name: job.data.organization?.name,
+              organization_id: job.data.organization?.id,
+              user_email: job.data.user?.coldclimate_claims?.email,
               error: e.message,
             },
           });
@@ -738,7 +733,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param {Job} job - The job object containing the survey data.
    * @returns {Promise<void>} - A promise that resolves when the survey processing is complete.
    */
-  async process_survey(job: Job) {
+  async process_compliance_set(job: Job) {
     const start = new Date();
     try {
       // Destructure the necessary data from the job
@@ -748,7 +743,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       await this.resetAIResponses(user, survey, organization);
 
       // Log the start of the survey processing
-      this.logger.info(`✅ Started processing survey ${survey.name}`, {
+      this.logger.info(`✅ Started processing compliance_set ${survey.name}`, {
         compliance: survey.name,
         user,
         integration,
@@ -779,7 +774,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         }
 
         // Get the files for the organization
-        const files = await this.prisma.organization_files.findMany({ where: { organization_id: organization.id } });
+        const files: any[] = await this.prisma.organization_files.findMany({ where: { organization_id: organization.id } });
 
         // If no files are found, log a warning
         if (!files || files.length === 0) {
@@ -796,15 +791,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       // Set the tags for the survey
       this.setTags({
         compliance_title: survey?.definition?.title,
+        compliance_name: survey?.definition?.name,
         url: on_update_url,
-        organization: {
-          name: organization.name,
-          id: organization.id,
-        },
-        user: {
-          email: user.coldclimate_claims.email,
-          id: user.id || user.coldclimate_claims.id,
-        },
+        organization_name: organization.name,
+        organization_id: organization.id,
+        user_email: user.coldclimate_claims.email,
+        user_id: user.id || user.coldclimate_claims.id,
       });
 
       // Log the start of the survey processing
@@ -853,19 +845,19 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         this.logger.info(`Session created for survey ${survey.name}`, session);
 
         // Create a new thread for each section run
-        reqs.push(() => {
-          this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session).then(() => {
-            this.sendMetrics('organization.compliance.section.question', 'cold-openAi', 'process', 'failed', {
-              start,
-              sendEvent: true,
-              tags: {
-                compliance_set: job.data.survey?.name,
-                organization: job.data.organization?.name,
-                user: job.data.user?.coldclimate_claims?.email,
-                section,
-                session,
-              },
-            });
+        reqs.push(async () => {
+          await this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session);
+          this.sendMetrics('organization.compliance.section', 'cold-openAi', 'processing', 'failed', {
+            start,
+            sendEvent: true,
+            tags: {
+              compliance_name: job.data.payload?.compliance.compliance_definition_name,
+              organization_name: job.data.organization?.name,
+              organization_id: job.data.organization?.id,
+              user_email: job.data.user?.coldclimate_claims?.email,
+              section: section,
+              fp_session: session.id,
+            },
           });
         });
       }
@@ -884,14 +876,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     } catch (e) {
       this.logger.error(`Error processing survey ${job.data.survey.name}`, { error: e.message, stack: e.stack, job: job.id });
 
-      this.sendMetrics('organization.compliance.section', 'cold-openai', 'process', 'failed', {
+      this.sendMetrics('organization.compliance.section', 'cold-openai', 'processing', 'failed', {
         start,
         sendEvent: true,
         tags: {
-          compliance_set: job.data.survey?.name,
-          organization: job.data.organization?.name,
-          user: job.data.user?.coldclimate_claims?.email,
-          error: e.message,
+          compliance_name: job.data.payload?.compliance.compliance_definition_name,
+          organization_name: job.data.organization?.name,
+          organization_id: job.data.organization?.id,
+          user_email: job.data.user?.coldclimate_claims?.email,
         },
       });
     }
@@ -973,13 +965,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               justification: follow_up.ai_response.justification,
             });
 
-            this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'process', 'completed', {
+            this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'processing', 'completed', {
               start,
               sendEvent: false,
               tags: {
-                compliance_set: job.data.survey?.name,
-                organization: job.data.organization?.name,
-                user: job.data.user?.coldclimate_claims?.email,
+                compliance_name: job.data.payload?.compliance.compliance_definition_name,
+                organization_name: job.data.organization?.name,
+                organization_id: job.data.organization?.id,
+                user_email: job.data.user?.coldclimate_claims?.email,
                 section,
                 question: item,
                 session,
@@ -1019,16 +1012,17 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               });
             }
 
-            this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'process', 'completed', {
+            this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'processing', 'completed', {
               start,
               sendEvent: false,
               tags: {
-                compliance_set: job.data.survey?.name,
-                organization: job.data.organization?.name,
-                user: job.data.user?.coldclimate_claims?.email,
-                section,
+                compliance_name: job.data.payload?.compliance.compliance_definition_name,
+                organization_name: job.data.organization?.name,
+                organization_id: job.data.organization?.id,
+                user_email: job.data.user?.coldclimate_claims?.email,
+                section: section,
                 question: item,
-                session,
+                fp_session: session.sessionId,
               },
             });
 
@@ -1049,16 +1043,17 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
           await job.progress(idx / items.length);
         } catch (error) {
-          this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'process', 'failed', {
+          this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'processing', 'failed', {
             start,
             sendEvent: true,
             tags: {
-              compliance_set: job.data.survey?.name,
-              organization: job.data.organization?.name,
-              user: job.data.user?.coldclimate_claims?.email,
+              compliance_name: job.data.payload?.compliance.compliance_definition_name,
+              organization_name: job.data.organization?.name,
+              organization_id: job.data.organization?.id,
+              user_email: job.data.user?.coldclimate_claims?.email,
               section,
               question: item,
-              session,
+              fp_session: session.sessionId,
               error: error,
             },
           });
@@ -1070,15 +1065,15 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     } catch (e) {
       this.logger.error(`Error processing ${section}: ${e.message}`, { error: e.message, stack: e.stack, job: job.id });
 
-      this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'process', 'failed', {
+      this.sendMetrics('organization.compliance.section', 'cold-openai', 'processing', 'failed', {
         start,
         sendEvent: true,
         tags: {
-          compliance_set: job.data.survey?.name,
-          organization: job.data.organization?.name,
-          user: job.data.user?.coldclimate_claims?.email,
-          section,
-          session,
+          compliance_name: job.data.payload?.compliance.compliance_definition_name,
+          organization_name: job.data.organization?.name,
+          organization_id: job.data.organization?.id,
+          user_email: job.data.user?.coldclimate_claims?.email,
+          fp_session: session.sessionId,
           error: e,
         },
       });
@@ -1105,7 +1100,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     try {
       await job.log(`Section | ${section} : ${job.data.totalJobs.length}`);
-      this.logger.info(`Processing ${section}: ${section.title}`, { section });
+      this.logger.info(`Processing ${section.key}: ${section.title}`, { section });
 
       // get the followup items for the section
       const items = section.compliance_questions;
@@ -1141,37 +1136,24 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               user: user.coldclimate_claims.email,
               ai_response: response,
             });
-
-            this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'process', 'completed', {
-              start,
-              sendEvent: false,
-              tags: {
-                compliance_set: job.data.survey?.name,
-                organization: job.data.organization?.name,
-                user: job.data.user?.coldclimate_claims?.email,
-                section,
-                question: item,
-                session,
-              },
-            });
           }
           // if there is additional context, create a new run for it
           if (item.additional_context && Object.keys(item.additional_context).length > 0) {
             if (item.additional_context.value) {
               this.logger.info(`Skipping ${section.key}.${item.key}.additional_context; it has already been answered`, {
-                section: section,
-                key: item,
+                section: section.key,
+                key: item.key,
                 additional_context: item.additional_context,
               });
               continue;
             }
 
             this.logger.info(`Processing Question | ${section.key}.${item.key}.additional_context: ${item.prompt}`);
-            const additionalValue = await this.askSurveyQuestion(item, organization.name, job.data.user, session, item['additional_context']);
+            const ai_additionalContextResponse = await this.askSurveyQuestion(item, organization.name, job.data.user, session, item['additional_context']);
 
-            if (additionalValue) {
-              item.additional_context.ai_response = additionalValue;
-              item.additional_context.ai_answered = typeof additionalValue.answer !== 'undefined';
+            if (ai_additionalContextResponse) {
+              item.additional_context.ai_response = ai_additionalContextResponse;
+              item.additional_context.ai_answered = typeof ai_additionalContextResponse.answer !== 'undefined';
 
               this.logger.info(`Ai responded: ${section.key}.${item.key}`, {
                 compliance_set: job.data.payload?.compliance?.compliance_definition_name,
@@ -1182,24 +1164,24 @@ export class ChatService extends BaseWorker implements OnModuleInit {
                 answer: item.value,
                 user: user.coldclimate_claims.email,
                 isAdditionalContext: true,
-                ai_response: additionalValue,
+                ai_response: ai_additionalContextResponse,
               });
 
-              this.sendMetrics('organization.compliance.section.question.additional_context', 'cold-openai', 'process', 'completed', {
+              this.sendMetrics('organization.compliance.section.question.additional_context', 'cold-openai', 'processing', 'completed', {
                 start,
                 sendEvent: false,
                 tags: {
-                  compliance_set: job.data.survey?.name,
-                  organization: job.data.organization?.name,
-                  user: job.data.user?.coldclimate_claims?.email,
-                  section,
-                  question: item,
-                  session,
+                  compliance_name: job.data.payload?.compliance.compliance_definition_name,
+                  organization_name: job.data.organization?.name,
+                  organization_id: job.data.organization?.id,
+                  user_email: job.data.user?.coldclimate_claims?.email,
+                  section_key: section.key,
+                  question_key: item.key,
+                  fp_session: session.sessionId,
                 },
               });
             }
 
-            item.additional_context.ai_response = additionalValue;
             item.additional_context.ai_attempted = true;
           }
 
@@ -1233,62 +1215,20 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               additional_context: item.additional_context,
             },
           });
-          /*
-          for (const file of item.ai_response.references) {
-            if (!file.url) {
-              const orgFile = await this.prisma.organization_files.findUnique({
-                where: {
-                  s3Key: {
-                    organization_id: organization.id,
-                    bucket: 'cold-api-uploaded-files',
-                    key: `${process.env.NODE_ENV}/${organization.name}/${file.file}`,
-                  },
-                },
-              });
 
-              if (!orgFile) {
-                this.logger.error(`File not found for ${file.file}`, { file });
-                continue;
-              }
-
-              await this.prisma.organization_compliance_ai_response_files.create({
-                data: {
-                  id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAiResponseFile).scopedId,
-                  organization_compliance_ai_response_id: ai_response.id,
-                  organization_files_id: orgFile?.id,
-                  organization_compliance_id: job.data.payload.compliance.id,
-                  organization_id: organization.id,
-                },
-              });
-            }
-          };
-*/
-          /*await this.prisma.compliance_responses.upsert({
-            where: {
-              orgCompQuestId: {
-                organization_compliance_id: job.data.payload?.compliance?.id,
-                compliance_question_id: item.id,
-              },
+          this.sendMetrics('organization.compliance.section.question', 'cold-openai', 'processing', 'completed', {
+            start,
+            sendEvent: false,
+            tags: {
+              compliance_name: job.data.payload?.compliance.compliance_definition_name,
+              organization_name: job.data.organization?.name,
+              organization_id: job.data.organization?.id,
+              user_email: job.data.user?.coldclimate_claims?.email,
+              section_key: section.key,
+              question_key: item.key,
+              fp_session: session.sessionId,
             },
-            create: {
-              compliance_question_id: item.id,
-              compliance_section_id: section.id,
-              compliance_section_group_id: section.compliance_section_group_id,
-              organization_id: organization.id,
-              compliance_definition_name: job.data.payload?.compliance?.compliance_definition_name,
-              organization_compliance_id: job.data.payload.compliance.id,
-              organization_compliance_ai_response_id: ai_response.id,
-            },
-            update: {
-              compliance_question_id: item.id,
-              compliance_section_id: section.id,
-              compliance_section_group_id: section.compliance_section_group_id,
-              organization_id: organization.id,
-              compliance_definition_name: job.data.payload?.compliance?.compliance_definition_name,
-              organization_compliance_id: job.data.payload.compliance.id,
-              organization_compliance_ai_response_id: ai_response.id,
-            },
-          });*/
+          });
 
           // publish the response to the rabbit queue
           await this.rabbit.publish(`cold.core.api.compliance_responses`, {
@@ -1317,9 +1257,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             start,
             sendEvent: true,
             tags: {
-              compliance_set: job.data.survey?.name,
-              organization: job.data.organization?.name,
-              user: job.data.user?.coldclimate_claims?.email,
+              compliance_name: job.data.payload?.compliance.compliance_definition_name,
+              organization_name: job.data.organization?.name,
+              organization_id: job.data.organization?.id,
+              user_email: job.data.user?.coldclimate_claims?.email,
               section,
               question: item,
               session,
@@ -1332,6 +1273,18 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         }
       }
 
+      this.sendMetrics('organization.compliance.section', 'cold-openai', 'processing', 'completed', {
+        start,
+        sendEvent: false,
+        tags: {
+          compliance_name: job.data.payload?.compliance.compliance_definition_name,
+          organization_name: job.data.organization?.name,
+          organization_id: job.data.organization?.id,
+          user_email: job.data.user?.coldclimate_claims?.email,
+          section_key: section.key,
+        },
+      });
+
       // delete the entire section from the cache since it's been processed
       await this.complianceSectionsCacheRepository.deleteCachedActiveSection(section, organization, job);
 
@@ -1339,13 +1292,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     } catch (e) {
       await this.complianceSectionsCacheRepository.deleteCachedActiveSection(section, organization, job);
 
-      this.sendMetrics('organization.compliance.section', 'cold-openai', 'process', 'failed', {
+      this.sendMetrics('organization.compliance.section', 'cold-openai', 'processing', 'failed', {
         start,
         sendEvent: true,
         tags: {
-          compliance_set: job.data.survey?.name,
-          organization: job.data.organization?.name,
-          user: job.data.user?.coldclimate_claims?.email,
+          compliance_name: job.data.payload?.compliance.compliance_definition_name,
+          organization_name: job.data.organization?.name,
+          organization_id: job.data.organization?.id,
+          user_email: job.data.user?.coldclimate_claims?.email,
           section,
           session,
           error: e,

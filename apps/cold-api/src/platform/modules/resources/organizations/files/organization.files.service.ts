@@ -191,7 +191,7 @@ export class OrganizationFilesService extends BaseWorker {
         existingFiles.push(existing);
 
         if (!organization.isTest) {
-          this.metrics.increment('cold.file.uploaded', 1, { organization_id: organization.id, organization_name: organization.name, email: user.coldclimate_claims.email });
+          this.metrics.increment('cold.file.uploaded', 1, { organization_id: organization.id, organization_name: organization.name, user_email: user.coldclimate_claims.email });
           this.metrics.event(
             'File Uploaded',
             `A file was uploaded by ${user.coldclimate_claims.email} for ${organization.name}`,

@@ -172,7 +172,7 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
       source,
     };
 
-    this.metrics.increment(`cold.${resource}`, 1, tags);
+    this.metrics.increment(`cold.${resource}`, tags);
 
     if (options.start) {
       this.metrics.histogram(`cold.${resource}.duration`, new Date().getTime() - options.start.getTime(), tags);
@@ -193,7 +193,7 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
         {
           alert_type: alert_type,
           priority: alert_type === 'info' ? 'low' : 'normal',
-          source_type_name: 'openai',
+          source_type_name: source,
         },
         tags,
       );

@@ -133,7 +133,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
       if (this.mqttClient && responseTopic) {
         this.mqttClient.publish(responseTopic, JSON.stringify(payload), { qos: 0, retain: false });
 
-        this.logger.log(`Published to topic: ${responseTopic}`, payload);
+        this.logger.log(`Published to topic: ${responseTopic}`);
       } else {
         this.logger.error('MQTT client is not connected');
       }
@@ -165,7 +165,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
       if (this.mqttClient && topic) {
         this.mqttClient.publish(topic, JSON.stringify(inputs.payload));
 
-        this.logger.log(`Published to topic: ${topic}`, inputs.payload);
+        this.logger.log(`Published to topic: ${topic}`);
       } else {
         this.logger.error('MQTT client is not connected');
       }

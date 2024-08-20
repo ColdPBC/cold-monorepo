@@ -1,3 +1,32 @@
+## [1.334.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.3...v1.334.4) (2024-08-19)
+
+
+### Bug Fixes
+
+* remove sensitive payload logging and correct metrics field name ([a5a856b](https://github.com/ColdPBC/cold-monorepo/commit/a5a856b1473568afc6cff383d0e220033e790ce2))
+
+## [1.334.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.2...v1.334.3) (2024-08-19)
+
+
+### Bug Fixes
+
+* update tag attributes in chat service ([e273bb6](https://github.com/ColdPBC/cold-monorepo/commit/e273bb63fa502dcc5f576444ba9d7765f86f83a8))
+
+## [1.334.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.1...v1.334.2) (2024-08-19)
+
+
+### Bug Fixes
+
+* improve compliance retrieval and creation logic to handle missing compliance definitions ([163419b](https://github.com/ColdPBC/cold-monorepo/commit/163419bc84269007d4a5984ebfde1bfffecfa227))
+
+## [1.334.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.0...v1.334.1) (2024-08-19)
+
+
+### Bug Fixes
+
+* correct metrics increment and alert source type handling ([1ab4ad7](https://github.com/ColdPBC/cold-monorepo/commit/1ab4ad76559afbd7abbada952a1b44a8de756b2c))
+* simplify job processing logic in job.consumer.ts ([a209cf7](https://github.com/ColdPBC/cold-monorepo/commit/a209cf715b33ce0a1346bf38967b5c9ada36ca75))
+
 # [1.334.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.333.0...v1.334.0) (2024-08-19)
 
 
