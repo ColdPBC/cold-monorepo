@@ -396,4 +396,8 @@ export const handlers = [
   rest.post(getApiUrl('/organizations/:orgId/materials/:materialId/supplier/:supplierId'), (req, res, ctx) => {
     return res(ctx.status(200));
   }),
+
+  rest.delete(getApiUrl('/organizations/:orgId/materials/:materialId/supplier/:supplierId'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
 ];

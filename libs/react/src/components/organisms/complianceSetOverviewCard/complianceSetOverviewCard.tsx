@@ -3,7 +3,7 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { AllCompliance, ToastMessage } from '@coldpbc/interfaces';
 import React, { useContext } from 'react';
 import { ColdCompliancePageContext } from '@coldpbc/context';
-import { ComplianceStatus, ErrorType, GlobalSizes } from '@coldpbc/enums';
+import { ComplianceStatus, GlobalSizes } from '@coldpbc/enums';
 import { Card, ComplianceStatusChip, ErrorFallback, Spinner } from '@coldpbc/components';
 import { differenceInDays, format, intlFormatDistance } from 'date-fns';
 import { isAxiosError } from 'axios';
@@ -18,7 +18,7 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
   const navigate = useNavigate();
   const ldFlags = useFlags();
   const { orgId } = useAuth0Wrapper();
-  const { logError } = useColdContext();
+  const { logBrowser } = useColdContext();
   const { addToastMessage } = useAddToastMessage();
   const { filter } = useContext(ColdCompliancePageContext);
   const [complianceSetLoading, setComplianceSetLoading] = React.useState<boolean>(false);
@@ -157,7 +157,7 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
       const response = await axiosFetcher([`/compliance/${complianceSet.name}/organizations/${orgId}`, 'POST']);
       if (isAxiosError(response)) {
         await addToastMessage({ message: 'Compliance could not be added', type: ToastMessage.FAILURE });
-        logError(response.message, ErrorType.AxiosError, response);
+        logBrowser(response.message, 'error', { response });
       } else {
         await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
         navigate(`/compliance/${complianceSet.name}`);
@@ -189,6 +189,7 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
   const complianceSetLoadingBackground = () => {
     // return an overlay with transparent background and spinner to put over the card
     // put the spinner in the center of the card
+    if (!complianceSetLoading) return null;
     return (
       <div className={'absolute left-0 top-0 w-full h-full bg-bgc-accent bg-opacity-50 flex justify-center items-center'}>
         <Spinner size={GlobalSizes.xLarge} />
@@ -212,7 +213,7 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
       {getComplianceSetTitle()}
       {getComplianceStatusChip()}
       {getComplianceDueDate()}
-      {complianceSetLoading && complianceSetLoadingBackground()}
+      {complianceSetLoadingBackground()}
     </Card>
   );
 };
