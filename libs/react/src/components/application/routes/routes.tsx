@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   AccountSettingsPage,
   ActionsOverview,
+  BillingPage,
   CarbonFootprint,
   ComplianceRoutes,
   DashboardLayout,
@@ -42,6 +43,7 @@ export const ColdRoutes = () => {
         <Route path={'/suppliers/:id'} element={ldFlags.showSuppliersPageCold890 ? <SupplierDetail /> : <Navigate to={'/compliance'} replace={true} />} />
         <Route path={'/materials'} element={ldFlags.showMaterialsPageCold912 ? <MaterialsPage /> : <Navigate to={'/compliance'} replace={true} />} />
         <Route path={'/materials/:id'} element={ldFlags.showMaterialsPageCold912 ? <MaterialDetail /> : <Navigate to={'/compliance'} replace={true} />} />
+        <Route path={'/billing'} element={<BillingPage />} />
       </>
     );
   };
