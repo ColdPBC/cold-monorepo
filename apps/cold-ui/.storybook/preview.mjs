@@ -30,7 +30,6 @@ if (typeof global.process === 'undefined' || global.process.title === 'browser')
 
 export default {
   parameters: {
-    actions: {argTypesRegex: '^on[A-Z].*'},
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -118,6 +117,7 @@ export default {
       },
     },
   },
+
   decorators: [
     Story => {
       return StyledEngineProvider({
@@ -129,4 +129,6 @@ export default {
       })
     },
   ],
+
+  tags: ['autodocs']
 };

@@ -3,11 +3,7 @@ import turbosnap from 'vite-plugin-turbosnap';
 import { mergeConfig } from 'vite';
 
 const config: StorybookConfig = {
-  stories: [
-    '../src/**/*.stories.@(js|jsx|tsx|ts|mdx)',
-    '../src/**/*.mdx',
-    '../../../libs/react/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
-  ],
+  stories: ['../src/**/*.stories.@(js|jsx|tsx|ts|mdx)', '../src/**/*.mdx', '../../../libs/react/src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
   addons: [
     '@storybook/addon-knobs',
     '@storybook/addon-essentials',
@@ -15,7 +11,10 @@ const config: StorybookConfig = {
     'storybook-addon-cookie',
     'storybook-addon-launchdarkly',
     '@storybook/addon-interactions',
+    '@chromatic-com/storybook',
+    '@storybook/addon-themes',
   ],
+
   framework: {
     name: '@storybook/react-vite',
     options: {
@@ -24,6 +23,7 @@ const config: StorybookConfig = {
       },
     },
   },
+
   async viteFinal(config, { configType }) {
     return mergeConfig(config, {
       plugins:
@@ -37,6 +37,12 @@ const config: StorybookConfig = {
           : [],
     });
   },
+
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
+  },
+
+  docs: {},
 };
 
 export default config;

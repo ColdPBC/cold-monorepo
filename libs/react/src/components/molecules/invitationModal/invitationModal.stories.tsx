@@ -1,18 +1,8 @@
 import React, { useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
-import { BaseButton } from '../../atoms/button/button';
-import { GlobalSizes } from '../../../enums/sizes';
+import { BaseButton } from '@coldpbc/components';
+import { GlobalSizes } from '@coldpbc/enums';
 import { InvitationModal, InvitationModalProps } from './invitationModal';
-import { auth0UserMock } from '../../../__mocks__/userMock';
-import { StoryMockProvider } from '@coldpbc/mocks';
-import { TeamMemberSettings } from '@coldpbc/components';
-import {
-  userEvent,
-  waitFor,
-  waitForElementToBeRemoved,
-  within,
-} from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
 
 const meta: Meta<typeof InvitationModal> = {
   /* 👇 The title prop is optional.
@@ -47,7 +37,7 @@ const DefaultComponent = (args: InvitationModalProps) => {
 };
 
 export const Default: Story = {
-  render: (args) => <DefaultComponent {...args} />,
+  render: args => <DefaultComponent {...args} />,
   args: {
     companyName: 'Cold Climate',
   },
