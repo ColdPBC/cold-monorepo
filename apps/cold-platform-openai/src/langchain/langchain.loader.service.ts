@@ -75,9 +75,15 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
         return await textSplitter.splitDocuments(documents);
       }
       case 'pdf': {
-        const loader = new PDFLoader(new Blob([await s3File?.Body.transformToByteArray()]), { splitPages: false });
+        const fileBytes = await s3File?.Body.transformToByteArray();
+        const loader = new PDFLoader(new Blob([fileBytes]), { splitPages: false });
         const documents = await loader.load();
-        return await textSplitter.splitDocuments(documents);
+        const content = await textSplitter.splitDocuments(documents);
+        if (content.length > 0) {
+          return content;
+        } else {
+          return { type: 'pdf', bytes: fileBytes };
+        }
       }
       case 'csv': {
         const loader = new CSVLoader(new Blob([await s3File.Body.transformToByteArray()], { type: 'text/csv' }));
