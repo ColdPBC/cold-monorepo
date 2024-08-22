@@ -155,6 +155,10 @@ export class OrganizationController extends BaseWorker {
     @Req()
     req: IRequest,
   ) {
+    if (req.user.isColdAdmin && orgId === 'test') {
+      return this.deleteTestOrgs(req);
+    }
+
     const org = await this.orgService.getOrganization(orgId, req);
     if (!org) {
       throw new NotFoundException('Organization not found');
@@ -197,19 +201,6 @@ export class OrganizationController extends BaseWorker {
     }
   }
 
-  /***
-   * **Internal Use Only** : Delete all test orgs
-   * @param res
-   * @param req
-   */
-  @ApiOperation({
-    summary: 'Delete Test Organizations',
-    operationId: 'DeleteTestOrgs',
-    description: 'Deletes all test organizations',
-  })
-  @Delete('test')
-  @Roles(...coldAdminOnly)
-  @HttpCode(204)
   async deleteTestOrgs(
     @Req()
     req: IRequest,
