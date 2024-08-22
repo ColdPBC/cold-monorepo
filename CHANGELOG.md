@@ -1,3 +1,20 @@
+# [1.335.0-cold-944.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.335.0-cold-944.2...v1.335.0-cold-944.3) (2024-08-22)
+
+
+### Bug Fixes
+
+* correct uploadStreamToS3 function parameter type ([b32d07b](https://github.com/ColdPBC/cold-monorepo/commit/b32d07b14dab3c9ac1a1b40c7c0397a893e6fc81))
+* **logging:** initialize DarklyService during onModuleInit ([6b58460](https://github.com/ColdPBC/cold-monorepo/commit/6b58460a71afb004fa7c5ba6e44f0a542b4ddd93))
+
+
+### Features
+
+* add ExtractionModule to AppModule ([476b8f8](https://github.com/ColdPBC/cold-monorepo/commit/476b8f809fbe088bf03e0ad63519165e03de8bc6))
+* add ExtractionModule to cold-platform-openai app ([122dd7f](https://github.com/ColdPBC/cold-monorepo/commit/122dd7fa87bb5d685edefb8b331ed45251d9646e))
+* add ExtractionModule to CrawlerModule ([5f6b759](https://github.com/ColdPBC/cold-monorepo/commit/5f6b759479cd6a35e38df32df4667c58c5856a07))
+* add ExtractionService for AI-based content classification and data extraction ([41f8a75](https://github.com/ColdPBC/cold-monorepo/commit/41f8a75b817b4c9997688e615c93835efdfe007b))
+* integrate ExtractionService and S3Service for PDF content handling ([489c250](https://github.com/ColdPBC/cold-monorepo/commit/489c250ac466773efce7261549563e64fce3c287))
+
 # [1.335.0-cold-944.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.335.0-cold-944.1...v1.335.0-cold-944.2) (2024-08-22)
 
 
