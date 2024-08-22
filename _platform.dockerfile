@@ -42,6 +42,11 @@ RUN yarn prebuild
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache ${DD_SERVICE}:build:production ; else echo "building development..." && npx nx run --skip-nx-cache ${DD_SERVICE}:build:development ; fi
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
+USER root
+
+RUN apt-get update
+RUN apt-get install graphicsmagick -y
+
 USER node
 
 ARG DD_SERVICE
