@@ -1,3 +1,15 @@
+# [1.335.0-cold-944.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.3...v1.335.0-cold-944.1) (2024-08-22)
+
+
+### Bug Fixes
+
+* remove sensitive payload logging and correct metrics field name ([a5a856b](https://github.com/ColdPBC/cold-monorepo/commit/a5a856b1473568afc6cff383d0e220033e790ce2))
+
+
+### Features
+
+* add metadata column to organization_files table ([fbbc309](https://github.com/ColdPBC/cold-monorepo/commit/fbbc3097af67698c7e94c4292312482a7be0a3db))
+
 ## [1.334.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.2...v1.334.3) (2024-08-19)
 
 
