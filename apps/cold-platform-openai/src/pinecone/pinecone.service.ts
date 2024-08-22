@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IAuthenticatedUser, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
 import { Pinecone, PineconeRecord, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { ConfigService } from '@nestjs/config';
 import { Document } from '@langchain/core/documents';
@@ -7,7 +7,9 @@ import OpenAI from 'openai';
 import { LangchainLoaderService } from '../langchain/langchain.loader.service';
 import { organization_files, organizations } from '@prisma/client';
 import { InjectQueue } from '@nestjs/bull';
+import { fromBuffer } from 'pdf2pic';
 import { Queue } from 'bull';
+import { ExtractionService } from '../extraction/extraction.service';
 
 export type PineconeMetadata = {
   url: string;
@@ -18,8 +20,8 @@ export type PineconeMetadata = {
 
 @Injectable()
 export class PineconeService extends BaseWorker implements OnModuleInit {
-  public pinecone: Pinecone;
-  public openai: OpenAI;
+  private pinecone: Pinecone;
+  private openai: OpenAI;
   idGenerator = new Cuid2Generator(GuidPrefixes.Vector);
 
   constructor(
@@ -28,6 +30,8 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     readonly darkly: DarklyService,
     readonly lc: LangchainLoaderService,
     readonly prisma: PrismaService,
+    readonly s3: S3Service,
+    readonly extraction: ExtractionService,
     @InjectQueue('pinecone') readonly queue: Queue,
   ) {
     super(PineconeService.name);
@@ -283,6 +287,19 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     return docs.join('\n');
   }
 
+  async gets3File(file: any, user) {
+    const bucket = `cold-api-uploaded-files`;
+
+    const extension = file.key.split('.').pop();
+    const s3File = await this.s3.getObject(user, bucket, file.key);
+
+    if (!s3File.Body) {
+      throw new Error(`File not found: ${file.key}`);
+    }
+
+    return { s3File, extension };
+  }
+
   // The function `getMatchesFromEmbeddings` is used to retrieve matches for the given embeddings
   async getMatchesFromEmbeddings(embeddings: number[], topK: number, namespace: string, indexName: string): Promise<ScoredPineconeRecord<PineconeMetadata>[]> {
     // Obtain a client for Pinecone
@@ -452,17 +469,68 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         // Load the document content from the file and split it into chunks
         const content = await this.lc.getDocContent(filePayload, user);
 
-        // Get the vector embeddings for the document
-        const embeddings = await Promise.all(content.flat().map(doc => this.embedDocument(doc, filePayload, organization.name)));
-        for (const v of embeddings) {
-          const record = { id: v.id, values: v.values, metadata: v.metadata };
-          index.namespace(organization.name).upsert([record]);
+        if (Array.isArray(content) && content.length > 0) {
+          // Store the vector embeddings for the document
+          await this.persistEmbeddings(index, content, filePayload, organization);
+          await this.extraction.extractDataFromContent(content, user, filePayload);
+        } else {
+          this.logger.warn(`No text content found in ${filePayload.original_name}; converting to image`);
+
+          await this.converPdfToImage(content['bytes'], filePayload, user, organization);
         }
       }
     } catch (e) {
       this.logger.error('Error upserting chunk', { error: e, namespace: organization.name });
 
       this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'failed' });
+    }
+  }
+
+  async converPdfToImage(content: any[], filePayload: { original_name: any[] }, user: IAuthenticatedUser, organization: organizations) {
+    const convert = fromBuffer(Buffer.from(content), { format: 'png', quality: 100, density: 100 });
+
+    try {
+      const image = await convert(1, { responseType: 'buffer' });
+
+      if (!image.buffer) {
+        throw new Error(`No image found in ${filePayload.original_name}`);
+      }
+
+      const s3Image = await this.s3.uploadStreamToS3(user, organization.id, {
+        originalname: `${filePayload.original_name.toString().replace(`${filePayload.original_name.toString().split('.').pop()}`, 'png')}`,
+        buffer: image.buffer,
+      });
+
+      const orgFile = await this.prisma.organization_files.create({
+        data: {
+          id: new Cuid2Generator(GuidPrefixes.OrganizationFile).scopedId,
+          organization_id: organization.id,
+          bucket: s3Image.bucket,
+          key: s3Image.key,
+          original_name: `${filePayload.original_name.toString().replace(`${filePayload.original_name.toString().split('.').pop()}`, 'png')}`,
+          mimetype: 'image/png',
+          encoding: 'base64',
+          contentType: 'image/png',
+          checksum: await S3Service.calculateBufferChecksum(image.buffer),
+          size: image.buffer.length,
+        },
+      });
+
+      const url = await this.s3.getSignedURL(user, s3Image.bucket, s3Image.key, 3600);
+
+      await this.extraction.extractDataFromContent(url, user, orgFile);
+    } catch (e) {
+      this.logger.error('Error converting pdf to image', { error: e, namespace: organization.name });
+      throw new e();
+    }
+  }
+
+  async persistEmbeddings(index: any, content: Document<Record<string, any>>[], filePayload: any, organization: { name: string }) {
+    // Get the vector embeddings for the document
+    const embeddings = await Promise.all(content.flat().map(doc => this.embedDocument(doc, filePayload, organization.name)));
+    for (const v of embeddings) {
+      const record = { id: v.id, values: v.values, metadata: v.metadata };
+      index.namespace(organization.name).upsert([record]);
     }
   }
 
