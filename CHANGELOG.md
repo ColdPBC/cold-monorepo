@@ -1,3 +1,23 @@
+# [1.335.0-cold-944.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.335.0-cold-944.1...v1.335.0-cold-944.2) (2024-08-22)
+
+
+### Features
+
+* add bluesign schema for certificate extraction ([d6b0900](https://github.com/ColdPBC/cold-monorepo/commit/d6b09001f75a664ed4ed1f62b87009489192c8c4))
+* add classification schema for document extraction ([75f14c4](https://github.com/ColdPBC/cold-monorepo/commit/75f14c4f2f1ba0aee2a2301c35ebd8a8c03f7f0c))
+* add default extraction schema for unknown document types ([4ea7591](https://github.com/ColdPBC/cold-monorepo/commit/4ea7591c71929b2efea32226649f7e41c1301c5d))
+* add default policy schema for extraction module ([fe4abc1](https://github.com/ColdPBC/cold-monorepo/commit/fe4abc1c97c4f0b99d6240632276eb41ab913b10))
+* add default statement schema for document extraction ([3a821c0](https://github.com/ColdPBC/cold-monorepo/commit/3a821c0499284c6d63c4e3ef114faf1dbf0a754f))
+* add default test schema for extraction ([b3d74df](https://github.com/ColdPBC/cold-monorepo/commit/b3d74df575c7cb62916d7cfba9d31d0a3697e265))
+* add global.schema.ts for extraction module ([4135a2f](https://github.com/ColdPBC/cold-monorepo/commit/4135a2fa430a4728c815bcd3562390521277bc18))
+* add Integrations enum value ([4267bdd](https://github.com/ColdPBC/cold-monorepo/commit/4267bdd5465591a9fa734ef6857e39d536d65352))
+* add intertek.schema.ts to facility extraction from test documents ([d87d2bf](https://github.com/ColdPBC/cold-monorepo/commit/d87d2bf03f0b3ad59c4ddf0a7f12bc909ff37a15))
+* add schema for default certificate ([e69b97b](https://github.com/ColdPBC/cold-monorepo/commit/e69b97b5146e6af01afadc381a9137bbb961bd3d))
+* add schema for TUV Rheinland documents ([71fd8b8](https://github.com/ColdPBC/cold-monorepo/commit/71fd8b83e1c6ecdb3698fc557ba2c5e265d4c984))
+* add SGS schema for test document extraction ([02af502](https://github.com/ColdPBC/cold-monorepo/commit/02af502d49aeb5cfe89857530568e4227e6cc870))
+* add wrap schema definition for certificate extraction ([a8aff80](https://github.com/ColdPBC/cold-monorepo/commit/a8aff80f63a31abc4f3dc0ee3a79c9b84e9eb1dd))
+* enhance PDF handling in langchain loader service ([3eb199c](https://github.com/ColdPBC/cold-monorepo/commit/3eb199c555bd4362e83c27eedb3e90616a559ba2))
+
 # [1.335.0-cold-944.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.3...v1.335.0-cold-944.1) (2024-08-22)
 
 
