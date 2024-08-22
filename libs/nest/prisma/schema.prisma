@@ -604,6 +604,7 @@ model organization_files {
   fieldname                                 String?
   location                                  String?
   versionId                                 String?
+  metadata                                  Json?
   checksum                                  String?
   deleted                                   Boolean                                     @default(false)
   openai_vector_store_id                    String?
