@@ -31,4 +31,5 @@ export enum GuidPrefixes {
   'Vector' = 'vector',
   'SurveyStatus' = 'sstatus',
   'SurveyData' = 'sdata',
+  'Integrations' = 'int',
 }
