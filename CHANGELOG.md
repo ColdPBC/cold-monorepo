@@ -1,3 +1,16 @@
+# [1.335.0-cold-944.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.335.0-cold-944.3...v1.335.0-cold-944.4) (2024-08-22)
+
+
+### Bug Fixes
+
+* ensure orgId parameter starts with 'org_' in org-user-interceptor service ([7f3fbef](https://github.com/ColdPBC/cold-monorepo/commit/7f3fbef2f077dd16f9fdc876de281648346826dd))
+
+
+### Features
+
+* add default platform integrations on organization creation ([8eab6f2](https://github.com/ColdPBC/cold-monorepo/commit/8eab6f2b4b88e3c3d5c6dd26f657d1a2b9f56ad6))
+* add interceptor to organization files controller and adjust delete test orgs logic ([a37059c](https://github.com/ColdPBC/cold-monorepo/commit/a37059c6dc43fa3f36efe38788fcb01925361b8d))
+
 # [1.335.0-cold-944.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.335.0-cold-944.2...v1.335.0-cold-944.3) (2024-08-22)
 
 
