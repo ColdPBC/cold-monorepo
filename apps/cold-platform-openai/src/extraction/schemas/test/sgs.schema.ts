@@ -1,5 +1,5 @@
 import z from 'zod';
-import { summary } from '../global.schema';
+import { address_line_1, address_line_2, city, country, email, phone, postal_code, state_province, summary, website } from '../global.schema';
 
 export const sgs = z.object({
   testing_company: z
@@ -23,16 +23,16 @@ export const sgs = z.object({
   summary: summary,
   supplier: z.object({
     name: z.string().describe('If the document contains an applicant, place it here'),
-    address_line_1: z.string().describe('If the document contains an applicant address, place the street address here here'),
-    address_line_2: z.string().describe('If the document contains an applicant address, place the unit/suite or care of information here'),
-    city: z.string().describe('If the document contains an applicant address, place the city here'),
-    state_province: z.string().describe('If the document contains an applicant address, place the state or province here'),
-    postal_code: z.string().describe('If the document contains an applicant address, place the postal code here'),
-    country: z.string().describe('If the document contains an applicant address, place the country here'),
+    address_line_1: address_line_1,
+    address_line_2: address_line_2,
+    city: city,
+    state_province: state_province,
+    postal_code: postal_code,
+    country: country,
     metadata: z.object({
-      email: z.string().describe('If the document contains an applicant email, place it here'),
-      phone: z.string().describe('If the document contains an applicant phone number, place it here'),
-      website: z.string().describe('If the document contains an applicant website, place it here'),
+      email: email,
+      phone: phone,
+      website: website,
     }),
   }),
   sample: z.object({
