@@ -54,7 +54,7 @@ export class S3Service extends BaseWorker implements OnModuleInit {
     return hash.digest('hex');
   }
 
-  async uploadStreamToS3(user: IAuthenticatedUser, org_id: string, file) {
+  async uploadStreamToS3(user: IAuthenticatedUser, org_id: string, file: { originalname: string; buffer: Buffer }) {
     const key = `${this.details.env}/${org_id}/${file.originalname}`;
     const bucket = 'cold-api-uploaded-files';
     const putCommand: PutObjectCommand = new PutObjectCommand({
