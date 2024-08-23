@@ -7,9 +7,7 @@ const config: StorybookConfig = {
   addons: [
     '@storybook/addon-knobs',
     '@storybook/addon-essentials',
-    'storybook-addon-auth0-react',
     'storybook-addon-cookie',
-    'storybook-addon-launchdarkly',
     '@storybook/addon-interactions',
     '@chromatic-com/storybook',
     '@storybook/addon-themes',

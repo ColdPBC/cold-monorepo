@@ -2,9 +2,7 @@ import React from 'react';
 import { Popover } from './popover';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { Positions } from '../../../enums/positions';
-import { ColorNames } from '../../../enums/colors';
-import { GlobalSizes } from '../../../enums/sizes';
+import { ColorNames, GlobalSizes, Positions } from '@coldpbc/enums';
 import { Avatar } from '../avatar/avatar';
 
 const meta: Meta<typeof Popover> = {
@@ -12,39 +10,17 @@ const meta: Meta<typeof Popover> = {
   component: Popover,
   tags: ['autodocs'],
   decorators: [withKnobs],
-  argTypes: {
-    position: {
-      control: 'select',
-      options: Positions,
-      defaultValue: Positions.Bottom,
-    },
-    color: {
-      control: 'select',
-      options: ColorNames,
-      defaultValue: ColorNames.jetBlack,
-    },
-    arrow: {
-      control: 'boolean',
-      defaultValue: true,
-    },
-  },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => {
+  render: args => {
     const { position, color, width, content, arrow } = args;
     return (
       <div className="flex w-full place-content-center">
-        <Popover
-          content={content}
-          position={position}
-          color={color}
-          width={width}
-          arrow={arrow}
-        >
+        <Popover content={content} position={position} color={color} width={width} arrow={arrow}>
           <div className="border border-black">Hover over me</div>
         </Popover>
       </div>
@@ -61,24 +37,18 @@ export const Default: Story = {
 };
 
 export const WithComplexComponents: Story = {
-  render: (args) => {
+  render: args => {
     const { position, color, width, arrow } = args;
 
     const getContent = () => {
       return (
         <div className="flex space-x-2">
           <div>
-            <Avatar
-              user={{ given_name: 'Qaalib', family_name: 'Farah' }}
-              size={GlobalSizes.small}
-            />
+            <Avatar user={{ given_name: 'Qaalib', family_name: 'Farah' }} size={GlobalSizes.small} />
           </div>
           <div>
-            A user profile contains information about the user, such as their
-            name, email, and profile picture. The profile can be viewed by other
-            users in the system, depending on the privacy settings of the user.
-            The profile can be viewed by other users in the system, depending on
-            the privacy settings of the user.
+            A user profile contains information about the user, such as their name, email, and profile picture. The profile can be viewed by other users in the system, depending on
+            the privacy settings of the user. The profile can be viewed by other users in the system, depending on the privacy settings of the user.
           </div>
         </div>
       );
@@ -86,13 +56,7 @@ export const WithComplexComponents: Story = {
 
     return (
       <div className="flex w-full place-content-center">
-        <Popover
-          content={getContent()}
-          position={position}
-          color={color}
-          width={width}
-          arrow={arrow}
-        >
+        <Popover content={getContent()} position={position} color={color} width={width} arrow={arrow}>
           <div className="border border-black">Hover over me</div>
         </Popover>
       </div>

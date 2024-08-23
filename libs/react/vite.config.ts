@@ -5,6 +5,7 @@ import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
 import alias from '@rollup/plugin-alias';
+import { InputPluginOption } from 'rollup';
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/react',
@@ -53,7 +54,7 @@ export default defineConfig({
             '@coldpbc/styles': path.resolve(__dirname, './src/styles'),
             '@coldpbc/themes': path.resolve(__dirname, './src/themes'),
           },
-        }),
+        }) as InputPluginOption,
       ],
       output: {
         manualChunks(id) {

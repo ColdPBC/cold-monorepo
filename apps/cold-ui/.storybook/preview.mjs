@@ -2,10 +2,7 @@ import documentationTemplate from './documentationTemplate.mdx';
 import '../src/styles.css';
 import 'flowbite';
 import {auth0UserMock, worker} from '../../../libs/react/src';
-import {StyledEngineProvider, ThemeProvider} from "@mui/material";
-import {muiTheme} from "../../../libs/react/src/themes/muiTheme";
-import {LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
+import {Auth0Addon} from "./decorators/auth0Addon";
 
 // Storybook executes this module in both bootstap phase (Node)
 // and a story's runtime (browser). However, we cannot call `setupWorker`
@@ -61,38 +58,6 @@ export default {
         user: auth0UserMock,
       },
     },
-    auth0AddOn: {
-      isLoading: false,
-      isAuthenticated: true,
-      getAccessTokenSilently: () => {
-        return 'accessToken';
-      },
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      getAccessTokenWithPopup: () => {
-      },
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      getIdTokenClaims: () => {
-      },
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      loginWithRedirect: () => {
-      },
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      loginWithPopup: () => {
-      },
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      logout: () => {
-      },
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      handleRedirectCallback: () => {
-      },
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      buildAuthorizeUrl: () => {
-      },
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      buildLogoutUrl: () => {
-      },
-      user: auth0UserMock,
-    },
     launchdarkly: {
       flags: {
         showTeamMemberTable: true,
@@ -119,14 +84,8 @@ export default {
   },
 
   decorators: [
-    Story => {
-      return StyledEngineProvider({
-        injectFirst: true,
-        children: LocalizationProvider({
-          dateAdapter: AdapterDateFns,
-          children: ThemeProvider({theme: muiTheme, children: Story()})
-        })
-      })
+    (Story, options) => {
+      return Auth0Addon(Story, options);
     },
   ],
 
