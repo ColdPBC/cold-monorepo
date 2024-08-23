@@ -31,7 +31,7 @@ export class ComplianceDefinitionService extends BaseWorker {
   }
 
   async activate(orgId: string, req: IRequest, compliance_name: string): Promise<any> {
-    const { user, url, headers } = req;
+    const { user, url, headers, organization } = req;
     const compliance_definition = await this.prisma.compliance_definitions.findUnique({
       where: {
         name: compliance_name,
@@ -117,10 +117,10 @@ export class ComplianceDefinitionService extends BaseWorker {
           base_update_topic: `ui/${process.env.NODE_ENV}/${orgId}/${compliance_name}`,
           service: this.openAI_definition,
           compliance,
+          organization,
           token: headers['authorization'].replace('Bearer ', ''),
         },
         user,
-        orgId,
       );
 
       this.mqtt.publishMQTT('public', {
@@ -180,11 +180,11 @@ export class ComplianceDefinitionService extends BaseWorker {
         {
           on_update_url: `/organizations/${orgId}/surveys/${compliance_name}`,
           surveys,
+          organization,
           service: this.openAI_definition,
           compliance,
         },
         user,
-        orgId,
       );
 
       this.mqtt.publishMQTT('public', {
