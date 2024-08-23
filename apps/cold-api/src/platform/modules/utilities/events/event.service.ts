@@ -86,15 +86,8 @@ export class EventService extends BaseWorker {
    */
   async sendIntegrationEvent(isRPC: boolean, event: string, data: any, request: IRequest): Promise<any | void>;
   async sendIntegrationEvent(isRPC: boolean, event: string, data: any, user: IAuthenticatedUser): Promise<any | void>;
-  async sendIntegrationEvent(isRPC: boolean, event: string, data: any, user: IAuthenticatedUser, orgId: string, options?: RabbitMessageOptions): Promise<any | void>;
-  async sendIntegrationEvent(
-    isRPC: boolean,
-    event: string,
-    data: any,
-    requestOrUser: IRequest | IAuthenticatedUser,
-    orgId?: string,
-    options?: RabbitMessageOptions,
-  ): Promise<any | void> {
+  async sendIntegrationEvent(isRPC: boolean, event: string, data: any, user: IAuthenticatedUser, options?: RabbitMessageOptions): Promise<any | void>;
+  async sendIntegrationEvent(isRPC: boolean, event: string, data: any, requestOrUser: IRequest | IAuthenticatedUser, options?: RabbitMessageOptions): Promise<any | void> {
     // Extract the user from the request or use the provided user
     const currentUser = (requestOrUser['user'] || requestOrUser) as IAuthenticatedUser;
 
@@ -104,39 +97,31 @@ export class EventService extends BaseWorker {
     }
 
     let org: any = null;
-    if (requestOrUser['organization']) {
-      org = requestOrUser['organization'];
-      orgId = org.id;
+    if (data.org || data.organization || requestOrUser['organization']) {
+      org = data.org || data.organization || requestOrUser['organization'];
     }
 
     if (!org) {
-      if (!orgId) {
-        // If orgId is not provided, try to extract it from the request or the user's claims
-        if (requestOrUser instanceof Request && !requestOrUser['params'].orgId) {
-          orgId = currentUser.coldclimate_claims.org_id;
-        } else if (requestOrUser instanceof Request && requestOrUser['params'].orgId) {
-          // if orgId is not provided, try to get it from request otherwise get it from user claims;
-          orgId = get(requestOrUser, 'params.orgId', currentUser.coldclimate_claims.org_id);
-        }
-      } else {
-        // If orgId is provided but doesn't start with 'org_', throw an error
-        if (!orgId.startsWith('org_')) {
-          throw new Error('Organization id is required.');
-        }
+      let orgId;
+
+      // If orgId is not provided, try to extract it from the request or the user's claims
+      if (requestOrUser instanceof Request && !requestOrUser['params'].orgId) {
+        orgId = currentUser.coldclimate_claims.org_id;
+      } else if (requestOrUser instanceof Request && requestOrUser['params'].orgId) {
+        // if orgId is not provided, try to get it from request otherwise get it from user claims;
+        orgId = get(requestOrUser, 'params.orgId', currentUser.coldclimate_claims.org_id);
       }
 
-      // Fetch the organization from the database
-      org = await this.prisma.organizations.findUnique({
-        where: {
-          id: orgId,
-        },
-      });
+      // If orgId is provided but doesn't start with 'org_', throw an error
+      if (!orgId || !orgId.startsWith('org_')) {
+        throw new Error('Organization id is required.');
+      }
     }
 
     // Fetch all integrations for the organization
     const integrations = await this.prisma.integrations.findMany({
       where: {
-        organization_id: org.id,
+        organization_id: org?.id,
       },
       include: {
         service_definition: true,
