@@ -1,7 +1,20 @@
 import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace'; // eslint-disable-next-line @nx/enforce-module-boundaries
-import { OrganizationsRepository, Auth0Organization, Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, Tags, IRequest } from '@coldpbc/nest';
+import {
+  OrganizationsRepository,
+  Auth0Organization,
+  Auth0TokenService,
+  BaseWorker,
+  CacheService,
+  DarklyService,
+  MqttService,
+  PrismaService,
+  Tags,
+  IRequest,
+  Cuid2Generator,
+  GuidPrefixes,
+} from '@coldpbc/nest';
 import { get, kebabCase, merge, omit, pick, set } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 import { CreateOrganizationDto } from './dto/organization.dto';
@@ -415,6 +428,23 @@ export class OrganizationService extends BaseWorker {
         tags.org_id = auth0Org.id;
 
         existing = await this.repository.create(org as any, user);
+
+        const platformIntegrations = await this.prisma.service_definitions.findMany({
+          where: {
+            type: 'platform',
+          },
+        });
+
+        for (const int of platformIntegrations) {
+          await this.prisma.integrations.create({
+            data: {
+              id: new Cuid2Generator(GuidPrefixes.Integrations).scopedId,
+              organization_id: existing.id,
+              service_definition_id: int.id,
+              metadata: {},
+            },
+          });
+        }
 
         await this.cache.set(`organizations:${auth0Org.id}`, auth0Org, {
           update: true,

@@ -14,7 +14,7 @@ import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
 export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
   logger: WorkerLogger;
   tracer: TraceService = new TraceService();
-  darkly: DarklyService = new DarklyService(this.config);
+  darkly: DarklyService;
   enableHealthLogs: boolean = false;
 
   constructor(readonly config: ConfigService) {
@@ -23,6 +23,7 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
   }
 
   async onModuleInit() {
+    this.darkly = new DarklyService(this.config);
     await this.darkly.onModuleInit();
 
     this.darkly.subscribeToBooleanFlagChanges('dynamic-enable-health-check-logs', value => {

@@ -20,9 +20,10 @@ import { ChatService } from './chat/chat.service';
 import { FreeplayModule } from './freeplay/freeplay.module';
 import { CrawlerModule } from './crawler/crawler.module';
 import { EventsModule } from '../../cold-api/src/platform/modules/utilities/events/events.module';
+import { ExtractionModule } from './extraction/extraction.module';
 
 @Module({
-  imports: [FreeplayModule, CrawlerModule],
+  imports: [FreeplayModule, CrawlerModule, ExtractionModule],
   providers: [],
 })
 export class AppModule {
@@ -56,6 +57,7 @@ export class AppModule {
         PineconeModule,
         LangchainModule,
         LoadersModule,
+        ExtractionModule,
         await CrawlerModule.forRootAsync(),
         ChatModule,
       ],

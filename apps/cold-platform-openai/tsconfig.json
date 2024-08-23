@@ -12,7 +12,7 @@
   ],
   "compilerOptions": {
     "esModuleInterop": true,
-    "target": "ES2021",
+    "target": "es2022",
 
     "noImplicitReturns": true,
     "noImplicitAny": false

@@ -13,7 +13,7 @@ export class OrgUserInterceptor implements NestInterceptor {
   async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<unknown>> {
     const request = context.switchToHttp().getRequest();
     const user = request.user as IAuthenticatedUser;
-    const orgId = request.params?.orgId;
+    const orgId = !request.params?.orgId?.startsWith('org_') ? undefined : request.params?.orgId;
     const prisma = new PrismaService(this.config);
 
     if (user) {
