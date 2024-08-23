@@ -28,6 +28,51 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+  postgres:
+    container_name: cold-postgres
+    image: postgres:14-alpine
+    depends_on:
+      - proxy
+    networks:
+      - cold
+    ports:
+      - '5432:5432'
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=colddb
+  cache:
+    labels:
+      - "traefik.http.routers.cache.rule=Host(`cache.coldclimate.wtf`)"
+      - "traefik.tcp.services.cache.loadbalancer.server.port=6379"
+      - "traefik.udp.services.cache.loadbalancer.server.port=6379"
+    image: redis:latest
+    container_name: cold-cache
+    restart: always
+    depends_on:
+      - proxy
+    networks:
+      - cold
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+  rabbit:
+    labels:
+      - "traefik.http.routers.rabbit.rule=Host(`rabbit.coldclimate.wtf`)"
+      - "traefik.tcp.routers.rabbit.rule=Host(`rabbit.coldclimate.wtf`)"
+      - "traefik.tcp.services.rabbit.loadbalancer.server.port=5672"
+      - "traefik.http.services.rabbit.loadbalancer.server.port=15672"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - cold
+    depends_on:
+      - proxy
+    image: rabbitmq:3-management-alpine
+    container_name: cold-rabbit
   api:
     build:
       context: .
@@ -66,39 +111,6 @@ services:
       LOG_FORMAT: pretty
     volumes:
       - /usr/src/app/node_modules
-  climatiq:
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.climatiq.rule=Host(`climatiq.coldclimate.wtf`)"
-      - "traefik.http.routers.climatiq.entrypoints=web"
-    build:
-      context: .
-      dockerfile: _platform.dockerfile
-      args:
-        NODE_ENV: development
-        DD_SERVICE: cold-platform-climatiq
-        DD_VERSION: 0.0.1
-        LOG_FORMAT: pretty
-        PORT: 7002
-    container_name: cold-platform-climatiq
-    restart: always
-    networks:
-      - cold
-    external_links:
-      - api
-      - rabbit
-      - cache
-    depends_on:
-      - api
-    ports:
-      - '7002:7002'
-    environment:
-      PORT: 7002
-      DD_SERVICE: cold-platform-climatiq
-      NODE_ENV: development
-      LOG_FORMAT: pretty
-    volumes:
-      - /usr/src/app/node_modules
   openai:
     labels:
       - "traefik.enable=true"
@@ -126,7 +138,6 @@ services:
       - cache
       - rabbit
       - postgres
-      - climatiq
     ports:
       - '7003:7003'
     environment:
@@ -137,85 +148,5 @@ services:
       LOG_FORMAT: pretty
     volumes:
       - /usr/src/app/node_modules
-  bayou:
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.climatiq.rule=Host(`bayou.coldclimate.wtf`)"
-      - "traefik.http.routers.climatiq.entrypoints=web"
-    build:
-      context: .
-      dockerfile: _platform.dockerfile
-      args:
-        NODE_ENV: development
-        DD_SERVICE: cold-platform-bayou
-        DD_VERSION: 0.0.1
-        PORT: 7004
-        DD_API_KEY: ${DD_API_KEY}
-        FC_GIT_COMMIT_SHA: cdc3b19
-    container_name: cold-platform-bayou
-    restart: always
-    networks:
-      - cold
-    external_links:
-      - api
-      - rabbit
-      - cache
-    depends_on:
-      - api
-      - climatiq
-    ports:
-      - '7004:7004'
-    environment:
-      PORT: 7004
-      DD_API_KEY: ${DD_API_KEY}
-      DD_SERVICE: cold-platform-bayou
-      NODE_ENV: development
-      LOG_FORMAT: pretty
-    volumes:
-      - /usr/src/app/node_modules
-  cache:
-    labels:
-      - "traefik.http.routers.cache.rule=Host(`cache.coldclimate.wtf`)"
-      - "traefik.tcp.services.cache.loadbalancer.server.port=6379"
-      - "traefik.udp.services.cache.loadbalancer.server.port=6379"
-    image: redis:6.2-alpine
-    container_name: cold-cache
-    restart: always
-    depends_on:
-      - proxy
-    networks:
-      - cold
-    ports:
-      - '6379:6379'
-    command: openai-server --save 20 1 --loglevel warning
-
-  postgres:
-    container_name: cold-postgres
-    image: postgres:14-alpine
-    depends_on:
-      - proxy
-    networks:
-      - cold
-    ports:
-      - '5432:5432'
-    volumes:
-      - ~/apps/postgres:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=colddb
-  rabbit:
-    labels:
-      - "traefik.http.routers.rabbit.rule=Host(`rabbit.coldclimate.wtf`)"
-      - "traefik.tcp.services.rabbit.loadbalancer.server.port=5672"
-      - "traefik.http.services.rabbit.loadbalancer.server.port=15672"
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    networks:
-      - cold
-    depends_on:
-      - proxy
-    image: rabbitmq:3-management-alpine
-    container_name: cold-rabbit
+      - ~/.aws:/home/node/.aws
 

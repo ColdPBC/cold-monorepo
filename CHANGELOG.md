@@ -1,3 +1,38 @@
+# [1.336.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.335.0...v1.336.0) (2024-08-23)
+
+
+### Bug Fixes
+
+* correct uploadStreamToS3 function parameter type ([b32d07b](https://github.com/ColdPBC/cold-monorepo/commit/b32d07b14dab3c9ac1a1b40c7c0397a893e6fc81))
+* ensure orgId parameter starts with 'org_' in org-user-interceptor service ([7f3fbef](https://github.com/ColdPBC/cold-monorepo/commit/7f3fbef2f077dd16f9fdc876de281648346826dd))
+* **logging:** initialize DarklyService during onModuleInit ([6b58460](https://github.com/ColdPBC/cold-monorepo/commit/6b58460a71afb004fa7c5ba6e44f0a542b4ddd93))
+
+
+### Features
+
+* add bluesign schema for certificate extraction ([d6b0900](https://github.com/ColdPBC/cold-monorepo/commit/d6b09001f75a664ed4ed1f62b87009489192c8c4))
+* add classification schema for document extraction ([75f14c4](https://github.com/ColdPBC/cold-monorepo/commit/75f14c4f2f1ba0aee2a2301c35ebd8a8c03f7f0c))
+* add default extraction schema for unknown document types ([4ea7591](https://github.com/ColdPBC/cold-monorepo/commit/4ea7591c71929b2efea32226649f7e41c1301c5d))
+* add default platform integrations on organization creation ([8eab6f2](https://github.com/ColdPBC/cold-monorepo/commit/8eab6f2b4b88e3c3d5c6dd26f657d1a2b9f56ad6))
+* add default policy schema for extraction module ([fe4abc1](https://github.com/ColdPBC/cold-monorepo/commit/fe4abc1c97c4f0b99d6240632276eb41ab913b10))
+* add default statement schema for document extraction ([3a821c0](https://github.com/ColdPBC/cold-monorepo/commit/3a821c0499284c6d63c4e3ef114faf1dbf0a754f))
+* add default test schema for extraction ([b3d74df](https://github.com/ColdPBC/cold-monorepo/commit/b3d74df575c7cb62916d7cfba9d31d0a3697e265))
+* add ExtractionModule to AppModule ([476b8f8](https://github.com/ColdPBC/cold-monorepo/commit/476b8f809fbe088bf03e0ad63519165e03de8bc6))
+* add ExtractionModule to cold-platform-openai app ([122dd7f](https://github.com/ColdPBC/cold-monorepo/commit/122dd7fa87bb5d685edefb8b331ed45251d9646e))
+* add ExtractionModule to CrawlerModule ([5f6b759](https://github.com/ColdPBC/cold-monorepo/commit/5f6b759479cd6a35e38df32df4667c58c5856a07))
+* add ExtractionService for AI-based content classification and data extraction ([41f8a75](https://github.com/ColdPBC/cold-monorepo/commit/41f8a75b817b4c9997688e615c93835efdfe007b))
+* add global.schema.ts for extraction module ([4135a2f](https://github.com/ColdPBC/cold-monorepo/commit/4135a2fa430a4728c815bcd3562390521277bc18))
+* add Integrations enum value ([4267bdd](https://github.com/ColdPBC/cold-monorepo/commit/4267bdd5465591a9fa734ef6857e39d536d65352))
+* add interceptor to organization files controller and adjust delete test orgs logic ([a37059c](https://github.com/ColdPBC/cold-monorepo/commit/a37059c6dc43fa3f36efe38788fcb01925361b8d))
+* add intertek.schema.ts to facility extraction from test documents ([d87d2bf](https://github.com/ColdPBC/cold-monorepo/commit/d87d2bf03f0b3ad59c4ddf0a7f12bc909ff37a15))
+* add metadata column to organization_files table ([fbbc309](https://github.com/ColdPBC/cold-monorepo/commit/fbbc3097af67698c7e94c4292312482a7be0a3db))
+* add schema for default certificate ([e69b97b](https://github.com/ColdPBC/cold-monorepo/commit/e69b97b5146e6af01afadc381a9137bbb961bd3d))
+* add schema for TUV Rheinland documents ([71fd8b8](https://github.com/ColdPBC/cold-monorepo/commit/71fd8b83e1c6ecdb3698fc557ba2c5e265d4c984))
+* add SGS schema for test document extraction ([02af502](https://github.com/ColdPBC/cold-monorepo/commit/02af502d49aeb5cfe89857530568e4227e6cc870))
+* add wrap schema definition for certificate extraction ([a8aff80](https://github.com/ColdPBC/cold-monorepo/commit/a8aff80f63a31abc4f3dc0ee3a79c9b84e9eb1dd))
+* enhance PDF handling in langchain loader service ([3eb199c](https://github.com/ColdPBC/cold-monorepo/commit/3eb199c555bd4362e83c27eedb3e90616a559ba2))
+* integrate ExtractionService and S3Service for PDF content handling ([489c250](https://github.com/ColdPBC/cold-monorepo/commit/489c250ac466773efce7261549563e64fce3c287))
+
 # [1.335.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.4...v1.335.0) (2024-08-20)
 
 
@@ -5,6 +40,7 @@
 
 * replace logError with logBrowser, adjust compliance set loading background ([0d8c356](https://github.com/ColdPBC/cold-monorepo/commit/0d8c3569fe5198706124549638008e23863c0cea))
 * replace logError with logBrowser, adjust compliance set loading background ([5e0925b](https://github.com/ColdPBC/cold-monorepo/commit/5e0925b582b1e8a2b7707f01153ce5a1ec84b25c))
+
 
 
 ### Features
