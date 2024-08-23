@@ -17035,7 +17035,6 @@ __metadata:
     source-map-support: "npm:^0.5.20"
     stable-hash: "npm:^0.0.3"
     storybook: "npm:^8.2.9"
-    storybook-addon-cookie: "npm:^4.0.0-alpha.0"
     storybook-addon-designs: "npm:^6.3.1"
     storybook-addon-mock: "npm:^5.0.0"
     storybook-design-token: "npm:^3.1.0"
@@ -34908,19 +34907,6 @@ __metadata:
   dependencies:
     internal-slot: "npm:^1.0.4"
   checksum: 10/2a23a36f4f6bfa63f46ae2d53a3f80fe8276110b95a55345d8ed3d92125413494033bc8697eb774e8f7aeb5725f70e3d69753caa2ecacdac6258c16fa8aa8b0f
-  languageName: node
-  linkType: hard
-
-"storybook-addon-cookie@npm:^4.0.0-alpha.0":
-  version: 4.0.0-alpha.0
-  resolution: "storybook-addon-cookie@npm:4.0.0-alpha.0"
-  peerDependencies:
-    "@storybook/blocks": ^8.0.0
-    "@storybook/components": ^8.0.0
-    "@storybook/manager-api": ^8.0.0
-    "@storybook/preview-api": ^8.0.0
-    "@storybook/types": ^8.0.0
-  checksum: 10/23bed60b47e466ad8ddfc5a7477a4a2a9e9be8814b3e361dd7da3408ab9d89c16d43a8a0faea167a8f32bdf0a2ee7f9d5720fc6b26c4fde8fdae389dbdd7d883
   languageName: node
   linkType: hard
 

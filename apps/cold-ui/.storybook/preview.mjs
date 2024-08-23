@@ -2,7 +2,7 @@ import documentationTemplate from './documentationTemplate.mdx';
 import '../src/styles.css';
 import 'flowbite';
 import {auth0UserMock, worker} from '../../../libs/react/src';
-import {Auth0Addon} from "./decorators/auth0Addon";
+import {Decorator} from "./decorators/decorator";
 
 // Storybook executes this module in both bootstap phase (Node)
 // and a story's runtime (browser). However, we cannot call `setupWorker`
@@ -85,7 +85,7 @@ export default {
 
   decorators: [
     (Story, options) => {
-      return Auth0Addon(Story, options);
+      return Decorator(Story, options);
     },
   ],
 

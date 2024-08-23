@@ -346,7 +346,6 @@
     "source-map-support": "^0.5.20",
     "stable-hash": "^0.0.3",
     "storybook": "^8.2.9",
-    "storybook-addon-cookie": "^4.0.0-alpha.0",
     "storybook-addon-designs": "^6.3.1",
     "storybook-addon-mock": "^5.0.0",
     "storybook-design-token": "^3.1.0",

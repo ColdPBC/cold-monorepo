@@ -3,15 +3,8 @@ import turbosnap from 'vite-plugin-turbosnap';
 import { mergeConfig } from 'vite';
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.@(js|jsx|tsx|ts|mdx)', '../src/**/*.mdx', '../../../libs/react/src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
-  addons: [
-    '@storybook/addon-knobs',
-    '@storybook/addon-essentials',
-    'storybook-addon-cookie',
-    '@storybook/addon-interactions',
-    '@chromatic-com/storybook',
-    '@storybook/addon-themes',
-  ],
+  stories: ['../../../libs/react/src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
+  addons: ['@storybook/addon-knobs', '@storybook/addon-essentials', '@storybook/addon-interactions', '@chromatic-com/storybook', '@storybook/addon-themes'],
 
   framework: {
     name: '@storybook/react-vite',
