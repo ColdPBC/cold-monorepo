@@ -1,7 +1,7 @@
 import { auth0UserMock, getEmptyPoliciesSignedMock, getSignUpHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { ApplicationToaster, SignupPage } from '@coldpbc/components';
+import { SignupPage } from '@coldpbc/components';
 
 const meta: Meta<typeof SignupPage> = {
   title: 'Pages/SignupPage',
@@ -24,22 +24,6 @@ export const NewUserExistingCompany: Story = {
         }}
         signedPolicyData={getEmptyPoliciesSignedMock()}
       />
-    </StoryMockProvider>
-  ),
-};
-
-export const OnSignupError: Story = {
-  render: args => (
-    <StoryMockProvider handlers={getSignUpHandler.server500Error}>
-      <SignupPage
-        userData={{
-          ...auth0UserMock,
-          given_name: undefined,
-          family_name: undefined,
-        }}
-        signedPolicyData={getEmptyPoliciesSignedMock()}
-      />
-      <ApplicationToaster />
     </StoryMockProvider>
   ),
 };
