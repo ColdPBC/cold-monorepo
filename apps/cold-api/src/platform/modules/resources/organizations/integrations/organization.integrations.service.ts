@@ -168,7 +168,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
       metadata: any;
     },
   ): Promise<any> {
-    const { user, url } = req;
+    const { user, url, organization } = req;
     try {
       const service = await this.prisma.service_definitions.findUnique({
         where: {
@@ -190,13 +190,12 @@ export class OrganizationIntegrationsService extends BaseWorker {
         false,
         'compliance.activated',
         {
-          organization: org,
+          organization: organization,
           service_definition_id: service.id,
           metadata: body.metadata,
           user: user,
         },
         user,
-        orgId,
         {
           exchange: 'amq.direct',
           timeout: body.timeout || 5000,
@@ -247,7 +246,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
       metadata: any;
     },
   ): Promise<any> {
-    const { user, url } = req;
+    const { user, url, organization } = req;
     try {
       const service = await this.prisma.service_definitions.findUnique({
         where: {
@@ -269,13 +268,12 @@ export class OrganizationIntegrationsService extends BaseWorker {
         false,
         'integration.enabled',
         {
-          organization: org,
+          organization: organization,
           service_definition_id: service.id,
           metadata: body.metadata,
           user: user,
         },
         user,
-        orgId,
         {
           exchange: 'amq.direct',
           timeout: body.timeout || 5000,
