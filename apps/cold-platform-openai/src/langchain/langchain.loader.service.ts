@@ -49,16 +49,7 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
     return await textSplitter.splitDocuments(documents);
   }
 
-  async getDocContent(file: any, user: AuthenticatedUser | { coldclimate_claims: { email: string } }) {
-    const bucket = `cold-api-uploaded-files`;
-
-    const extension = file.key.split('.').pop();
-    const s3File = await this.s3.getObject(user, bucket, file.key);
-
-    if (!s3File.Body) {
-      throw new Error(`File not found: ${file.key}`);
-    }
-
+  async getDocContent(extension, bytes: Uint8Array, user: AuthenticatedUser | { coldclimate_claims: { email: string } }) {
     const textSplitter = RecursiveCharacterTextSplitter.fromLanguage('html', {
       chunkSize: Number(this.chunkSize),
       chunkOverlap: Number(this.overlapSize),
@@ -66,37 +57,36 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
 
     switch (extension) {
       case 'docx': {
-        const content = await this.wordLoader.load(Buffer.from(await s3File.Body.transformToByteArray()));
+        const content = await this.wordLoader.load(Buffer.from(bytes));
         const documents = await textSplitter.createDocuments([content.data]);
         return await textSplitter.splitDocuments(documents);
       }
       case 'xlsx': {
-        const documents = await this.xlsLoader.load(await s3File.Body.transformToByteArray());
+        const documents = await this.xlsLoader.load(bytes);
         return await textSplitter.splitDocuments(documents);
       }
       case 'pdf': {
-        const fileBytes = await s3File?.Body.transformToByteArray();
-        const loader = new PDFLoader(new Blob([fileBytes]), { splitPages: false });
+        const loader = new PDFLoader(new Blob([bytes]), { splitPages: false });
         const documents = await loader.load();
         const content = await textSplitter.splitDocuments(documents);
         if (content.length > 0) {
           return content;
         } else {
-          return { type: 'pdf', bytes: fileBytes };
+          return { type: 'pdf', bytes: bytes };
         }
       }
       case 'csv': {
-        const loader = new CSVLoader(new Blob([await s3File.Body.transformToByteArray()], { type: 'text/csv' }));
+        const loader = new CSVLoader(new Blob([bytes], { type: 'text/csv' }));
         const documents = await loader.load();
         return await textSplitter.splitDocuments(documents);
       }
       case 'json': {
-        const loader = new JSONLoader(new Blob([await s3File.Body.transformToString()], { type: 'application/json' }));
+        const loader = new JSONLoader(new Blob([bytes], { type: 'application/json' }));
         const documents = await loader.load();
         return await textSplitter.splitDocuments(documents);
       }
       default: {
-        const loader = new TextLoader(new Blob([await s3File.Body.transformToString()], { type: 'text/plain' }));
+        const loader = new TextLoader(new Blob([bytes], { type: 'text/plain' }));
         const data = await loader.load();
         const textSplitter = new RecursiveCharacterTextSplitter({
           chunkSize: Number(this.chunkSize),
