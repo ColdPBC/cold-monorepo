@@ -1,20 +1,8 @@
 import z from 'zod';
-import {
-  address_line_1,
-  address_line_2,
-  city,
-  country,
-  effective_end_date,
-  effective_start_date,
-  email,
-  phone,
-  postal_code,
-  state_province,
-  summary,
-  website,
-} from '../global.schema';
+import { address_line_1, address_line_2, city, country, effective_start_date, email, phone, postal_code, state_province, summary, website } from '../global.schema';
 
 export const intertek = z.object({
+  effective_start_date: effective_start_date,
   testing_company: z
     .object({
       name: z.enum(['intertek']),
@@ -31,7 +19,7 @@ export const intertek = z.object({
       }),
     })
     .describe('If the document is a test document, attempt to extract data for testing company information'),
-  test_date: z.string().describe('If the document contains a test date, place it here'),
+  test_date: z.string().describe('If the document contains a date the test was started, place it here'),
   test_number: z.string().describe('If the document contains a test number, place it here'),
   supplier: z.object({
     name: z.string().describe('If the document contains an applicant, place it here'),

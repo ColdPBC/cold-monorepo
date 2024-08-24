@@ -1,20 +1,8 @@
 import z from 'zod';
-import {
-  address_line_1,
-  address_line_2,
-  city,
-  country,
-  effective_end_date,
-  effective_start_date,
-  email,
-  phone,
-  postal_code,
-  state_province,
-  summary,
-  website,
-} from '../global.schema';
+import { address_line_1, address_line_2, city, country, effective_start_date, email, phone, postal_code, state_province, summary, website } from '../global.schema';
 
 export const tuv_rhineland = z.object({
+  effective_start_date: effective_start_date,
   testing_company: z
     .object({
       name: z.enum(['TÜVRheinland']),
@@ -31,8 +19,6 @@ export const tuv_rhineland = z.object({
       }),
     })
     .describe('If the document is a test document, attempt to extract data for testing company information'),
-  effective_start_date: effective_start_date,
-  effective_end_date: effective_end_date,
   summary: summary,
   supplier: z.object({
     name: z.string().describe('If the document contains a client name, place it here'),

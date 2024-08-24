@@ -241,14 +241,14 @@ export class ExtractionService extends BaseWorker {
         },
       };
 
-      if (parsedClassification.type !== 'test' && (parsedResponse.effective_start_date || parsedResponse.effective_end_date)) {
+      if (parsedResponse.effective_start_date || parsedResponse.effective_end_date) {
         try {
-          updateData.effective_start_date = new Date(parsedResponse.effective_start_date).toISOString();
+          updateData.effective_start_date = parsedResponse.effective_start_date ? new Date(parsedResponse.effective_start_date).toISOString() : undefined;
         } catch (e) {
           this.logger.error('Error parsing effective_start_date', { error: e });
         }
         try {
-          updateData.effective_end_date = new Date(parsedResponse.effective_end_date).toISOString();
+          updateData.effective_end_date = parsedResponse.effective_end_date ? new Date(parsedResponse.effective_end_date).toISOString() : undefined;
         } catch (e) {
           this.logger.error('Error parsing effective_start_date', { error: e });
         }

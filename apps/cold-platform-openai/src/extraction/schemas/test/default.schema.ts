@@ -15,6 +15,7 @@ import {
 } from '../global.schema';
 
 export const defaultTestSchema = z.object({
+  effective_start_date: effective_start_date,
   testing_company: z
     .object({
       name: z.string().describe('If the document contains an applicant, place it here'),

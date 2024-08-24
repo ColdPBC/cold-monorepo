@@ -1,7 +1,8 @@
 import z from 'zod';
-import { address_line_1, address_line_2, city, country, email, phone, postal_code, state_province, summary, website } from '../global.schema';
+import { address_line_1, address_line_2, city, country, effective_start_date, email, phone, postal_code, state_province, summary, website } from '../global.schema';
 
 export const sgs = z.object({
+  effective_start_date: effective_start_date,
   testing_company: z
     .object({
       name: z.enum(['SGS Vietnam Ltd.']),
