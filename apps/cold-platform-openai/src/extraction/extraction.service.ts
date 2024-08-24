@@ -242,8 +242,16 @@ export class ExtractionService extends BaseWorker {
       };
 
       if (parsedClassification.type !== 'test' && (parsedResponse.effective_start_date || parsedResponse.effective_end_date)) {
-        updateData.effective_start_date = new Date(parsedResponse.effective_start_date).toISOString();
-        updateData.effective_end_date = new Date(parsedResponse.effective_end_date).toISOString();
+        try {
+          updateData.effective_start_date = new Date(parsedResponse.effective_start_date).toISOString();
+        } catch (e) {
+          this.logger.error('Error parsing effective_start_date', { error: e });
+        }
+        try {
+          updateData.effective_end_date = new Date(parsedResponse.effective_end_date).toISOString();
+        } catch (e) {
+          this.logger.error('Error parsing effective_start_date', { error: e });
+        }
       }
 
       const updatedFile = await this.prisma.organization_files.update({
@@ -268,7 +276,7 @@ export class ExtractionService extends BaseWorker {
         },
       });
 
-      return parsedResponse;
+      return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
     } catch (e) {
       this.logger.info('Error extracting data from content', { error: e });
       this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
