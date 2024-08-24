@@ -71,7 +71,7 @@ export class JobConsumer extends BaseWorker {
   @Process('file.deleted')
   async deleteFileJob(job: Job) {
     const { vectors } = job.data.payload;
-    const index = await this.loader.getIndex(job.data.organization.name);
+    const index = await this.loader.getIndex();
 
     if (Array.isArray(vectors)) {
       const deleted: any = [];
