@@ -1,3 +1,12 @@
+## [1.337.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.1...v1.337.2) (2024-08-24)
+
+
+### Bug Fixes
+
+* enhance file classification in chat service ([9ef04da](https://github.com/ColdPBC/cold-monorepo/commit/9ef04dabb5c371a70d2f5396924282d1e904e9d6))
+* handle date parsing errors and refine response format ([f7723f9](https://github.com/ColdPBC/cold-monorepo/commit/f7723f90e9c55acb610943de38227c303fa2385a))
+* improve file processing for various content types ([e530de1](https://github.com/ColdPBC/cold-monorepo/commit/e530de18d60c8d801bdfead5892e2765d37ccb53))
+
 ## [1.337.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.0...v1.337.1) (2024-08-24)
 
 
