@@ -28,7 +28,7 @@ import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { FPSession, FreeplayService } from '../freeplay/freeplay.service';
 import { FormattedPrompt } from 'freeplay/thin';
-import { compliance_sections, file_types, organizations } from '@prisma/client';
+import { compliance_sections, file_types, organization_files, organizations } from '@prisma/client';
 
 @Injectable()
 export class ChatService extends BaseWorker implements OnModuleInit {
@@ -1370,19 +1370,24 @@ export class ChatService extends BaseWorker implements OnModuleInit {
   }
 
   async classifyOrgDocuments(org: organizations, user: IAuthenticatedUser, type?: file_types) {
+    const where = {
+      organization_id: org.id,
+    };
+
+    if (type) {
+      where['type'] = type;
+    }
+
     const files = await this.prisma.organization_files.findMany({
-      where: {
-        organization_id: org.id,
-        type,
-      },
+      where,
     });
 
     for (const file of files) {
-      await this.processFiles(org, user, file);
+      this.processFiles(org, user, file);
     }
   }
 
-  async processFiles(organization: organizations, user: IAuthenticatedUser, file) {
+  async processFiles(organization: organizations, user: IAuthenticatedUser, file: organization_files) {
     const index = await this.pc.getIndex();
 
     return await this.pc.uploadData(organization, user, file, index);
