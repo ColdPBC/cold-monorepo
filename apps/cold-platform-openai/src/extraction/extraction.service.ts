@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BaseWorker, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
 import z from 'zod';
-import { organization_files } from '@prisma/client';
+import { organization_files, organizations } from '@prisma/client';
 import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
@@ -41,13 +41,19 @@ export class ExtractionService extends BaseWorker {
    * @param content
    * @param user
    * @param orgFile
+   * @param organization
    */
-  async classifyContent(content: any[] | string, user: IAuthenticatedUser, orgFile: organization_files) {
-    const classifyPrompt = `You are a helpful assistant and you help users classify and extract data from documents that they upload.  Classify this content using the following rules:
+  async classifyContent(content: any[] | string, user: IAuthenticatedUser, orgFile: organization_files, organization: organizations) {
+    const start = new Date();
+
+    const classifyPrompt = `You are a helpful assistant for ${
+      organization.display_name
+    } and you help users classify and extract data from documents that they upload.  Classify this content using the following rules:
     - if the content is an RSL (Restricted Substance List), classify it as a policy
     - if the content is a certificate, classify it as a certificate
     - if the content is a test result, classify it as a test
     - if the content is a statement, classify it as a statement
+    - if the content is an impact assessment from ${organization.display_name}, classify it as a statement
      ${this.contentIsUrl(content) ? 'from the following image' : `from the following context: ${Array.isArray(content) ? content.join(' ') : content}`}:`;
 
     const messageContent: { type: string; text?: string; image_url?: { url: string } }[] = [
@@ -81,23 +87,38 @@ export class ExtractionService extends BaseWorker {
 
     this.logger.info('content_classification response', { classification: classifyResponse, user, file: orgFile });
 
+    this.sendMetrics('organization.files', 'cold-openai', 'classify', 'completed', {
+      start,
+      sendEvent: false,
+      tags: {
+        organization_name: organization?.name,
+        organization_id: organization?.id,
+        user_email: user?.coldclimate_claims?.email,
+        file_name: orgFile.original_name,
+        file_type: orgFile.type,
+        file_id: orgFile.id,
+      },
+    });
+
     return classifyResponse;
   }
 
   /**
    * Use Ai to extract text from an image
    * @param content
-   * @param image_url
    * @param user
    * @param orgFile
+   * @param organization
    */
-  async extractDataFromContent(content: any[] | string, user: IAuthenticatedUser, orgFile: organization_files) {
+  async extractDataFromContent(content: any[] | string, user: IAuthenticatedUser, orgFile: organization_files, organization: organizations) {
+    const start = new Date();
     try {
       // map over content to extract pageContent if content is an array of langchain documents
       content = Array.isArray(content) ? content.map(c => c.pageContent) : content;
 
       // classify content and generate a prompt for the extraction
-      const { choices } = await this.classifyContent(content, user, orgFile);
+      const { choices } = await this.classifyContent(content, user, orgFile, organization);
+
       if (!Array.isArray(choices) || choices.length === 0) {
         throw new Error('No choices found in classify response');
       }
@@ -233,8 +254,36 @@ export class ExtractionService extends BaseWorker {
       });
 
       this.logger.info('file metadata updated', { file: updatedFile });
+
+      this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
+        start,
+        sendEvent: false,
+        tags: {
+          organization_name: organization?.name,
+          organization_id: organization?.id,
+          user_email: user?.coldclimate_claims?.email,
+          file_name: orgFile.original_name,
+          file_type: orgFile.type,
+          file_id: orgFile.id,
+        },
+      });
+
+      return parsedResponse;
     } catch (e) {
       this.logger.info('Error extracting data from content', { error: e });
+      this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
+        start,
+        sendEvent: true,
+        tags: {
+          organization_name: organization?.name,
+          organization_id: organization?.id,
+          user_email: user?.coldclimate_claims?.email,
+          file_name: orgFile.original_name,
+          file_type: orgFile.type,
+          file_id: orgFile.id,
+          error: e.message,
+        },
+      });
       throw e;
     }
   }
