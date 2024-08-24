@@ -1,3 +1,26 @@
+# [1.337.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.336.0...v1.337.0) (2024-08-24)
+
+
+### Bug Fixes
+
+* **crawler:** update method calls to getIndexDetails and getIndex ([28bd3c1](https://github.com/ColdPBC/cold-monorepo/commit/28bd3c15746f80cc0ce3e6be5edfcec64c51b23b))
+* **events:** refactor sendIntegrationEvent to simplify orgId handling ([f78b06c](https://github.com/ColdPBC/cold-monorepo/commit/f78b06ce69183694988d5c71f5c6675d3ae596dd))
+* include organization in compliance service requests ([4312065](https://github.com/ColdPBC/cold-monorepo/commit/431206507c18e452d9feba7139bbb610b1f0aa31))
+* include organization in integration events ([8d96856](https://github.com/ColdPBC/cold-monorepo/commit/8d96856c8c07d3f5aac421da06fb3fe8eb9abed2))
+* **job.consumer:** remove unnecessary organization name parameter in deleteFileJob ([7965574](https://github.com/ColdPBC/cold-monorepo/commit/796557498fc2553465f2526ac6a341ee305d59aa))
+* **organization.controller:** simplify organization deletion logic ([75a8e16](https://github.com/ColdPBC/cold-monorepo/commit/75a8e168b8fa6dc2c5a005c2f1fa4d98eca81b55))
+* **organization.service:** correct parameter passed to sendIntegrationEvent function ([8858695](https://github.com/ColdPBC/cold-monorepo/commit/88586958aabfaa6d3551b61f2075a3ebd8c72231))
+* update index retrieval and add document classification methods ([be1bb11](https://github.com/ColdPBC/cold-monorepo/commit/be1bb11632c7e8f641e967f580a75da03c451ad7))
+* update organization handling in Rabbit service ([f535a89](https://github.com/ColdPBC/cold-monorepo/commit/f535a89aa820585542379442bf515b8bac3128fc))
+* use correct variable name for organization in integrations service ([e03c4ee](https://github.com/ColdPBC/cold-monorepo/commit/e03c4eee75eba0195133b99e1b998754f97b95bb))
+
+
+### Features
+
+* add classification endpoints to trigger extraction on existing files ([cbe9be4](https://github.com/ColdPBC/cold-monorepo/commit/cbe9be4a42c68cbd08e049d95c51e0e5aa62efef))
+* enhance activation process with organization data ([b41827c](https://github.com/ColdPBC/cold-monorepo/commit/b41827cfda03783242bc16f66b490c61ae475c11))
+* enhance classification and extraction with organization context ([f313349](https://github.com/ColdPBC/cold-monorepo/commit/f3133491e674854fbcbdf6b9debeb2ee1db76e0b))
+
 # [1.336.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.335.0...v1.336.0) (2024-08-23)
 
 
