@@ -478,46 +478,67 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
             this.logger.info(`upserted ${v.id} of ${filePayload.original_name} to namespace ${organization.name} in index ${index.name}`);
           }
         }
+      }
+
+      const extension = filePayload.key.split('.').pop();
+
+      let bytes: Uint8Array = new Uint8Array();
+
+      if (['png', 'jpg', 'gif', 'bmp', 'tiff', 'heic'].includes(extension)) {
+        const url = await this.s3.getSignedURL(user, filePayload.bucket, filePayload.key, 3600);
+        const response = await this.extraction.extractDataFromContent(url, user, filePayload, organization);
+
+        if (response) {
+          // Encode the JSON string to a byte array
+          const encoder = new TextEncoder();
+          bytes = encoder.encode(JSON.stringify(response));
+        }
       } else {
-        const extension = filePayload.key.split('.').pop();
+        const bucket = `cold-api-uploaded-files`;
+        const s3File = await this.s3.getObject(user, bucket, filePayload.key);
 
-        let bytes: Uint8Array = new Uint8Array();
-
-        if (['png', 'jpg', 'gif', 'bmp', 'tiff', 'hiec'].includes(extension)) {
-          const url = await this.s3.getSignedURL(user, filePayload.bucket, filePayload.key, 3600);
-          const response = await this.extraction.extractDataFromContent(url, user, filePayload, organization);
-          if (response) {
-            // Encode the JSON string to a byte array
-            const encoder = new TextEncoder();
-            bytes = encoder.encode(JSON.stringify(response));
-          }
-        } else {
-          const bucket = `cold-api-uploaded-files`;
-          const s3File = await this.s3.getObject(user, bucket, filePayload.key);
-
-          if (!s3File.Body) {
-            throw new Error(`File not found: ${filePayload.key}`);
-          }
-
-          bytes = await s3File.Body.transformToByteArray();
+        if (!s3File.Body) {
+          throw new Error(`File not found: ${filePayload.key}`);
         }
 
-        if (!bytes) {
-          throw new Error(`No bytes found in ${filePayload.original_name}`);
+        bytes = await s3File.Body.transformToByteArray();
+      }
+
+      if (!bytes) {
+        throw new Error(`No bytes found in ${filePayload.original_name}`);
+      }
+
+      // Load the document content from the file and split it into chunks
+      const content = await this.lc.getDocContent(extension, bytes, user);
+
+      if (Array.isArray(content) && content.length > 0) {
+        // Store the vector embeddings for the document
+        await this.persistEmbeddings(index, content, filePayload, organization);
+
+        await this.extraction.extractDataFromContent(content, user, filePayload, organization);
+      } else {
+        this.logger.warn(`No text content found in ${filePayload.original_name}; converting to image`);
+
+        bytes = content['bytes'];
+
+        const url = await this.converPdfToImage(bytes, filePayload, user, organization);
+
+        if (!url) {
+          throw new Error(`No image url found in ${filePayload.original_name}`);
         }
 
-        // Load the document content from the file and split it into chunks
-        const content = await this.lc.getDocContent(extension, bytes, user);
+        const extracted = await this.extraction.extractDataFromContent(url, user, filePayload, organization);
 
-        if (Array.isArray(content) && content.length > 0) {
-          // Store the vector embeddings for the document
-          await this.persistEmbeddings(index, content, filePayload, organization);
-          await this.extraction.extractDataFromContent(content, user, filePayload, organization);
-        } else {
-          this.logger.warn(`No text content found in ${filePayload.original_name}; converting to image`);
-
-          await this.converPdfToImage(content['bytes'], filePayload, user, organization);
+        if (extracted) {
+          // Encode the JSON string to a byte array
+          const encoder = new TextEncoder();
+          bytes = encoder.encode(JSON.stringify(extracted));
         }
+
+        // Create embedding for content
+        const embedding = (await this.lc.getDocContent('txt', bytes, user)) as Document<Record<string, any>>[];
+
+        await this.persistEmbeddings(index, embedding, filePayload, organization);
       }
     } catch (e) {
       this.logger.error('Error upserting chunk', { error: e, namespace: organization.name });
@@ -526,7 +547,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async converPdfToImage(content: any[], filePayload: { original_name: any[] }, user: IAuthenticatedUser, organization: organizations) {
+  async converPdfToImage(content: Uint8Array, filePayload: { original_name: any[] }, user: IAuthenticatedUser, organization: organizations) {
     const convert = fromBuffer(Buffer.from(content), { format: 'png', quality: 100, density: 100 });
 
     try {
@@ -541,8 +562,15 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         buffer: image.buffer,
       });
 
-      const orgFile = await this.prisma.organization_files.create({
-        data: {
+      const orgFile = await this.prisma.organization_files.upsert({
+        where: {
+          s3Key: {
+            bucket: s3Image.bucket,
+            key: s3Image.key,
+            organization_id: organization.id,
+          },
+        },
+        create: {
           id: new Cuid2Generator(GuidPrefixes.OrganizationFile).scopedId,
           organization_id: organization.id,
           bucket: s3Image.bucket,
@@ -554,14 +582,26 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           checksum: await S3Service.calculateBufferChecksum(image.buffer),
           size: image.buffer.length,
         },
+        update: {
+          key: s3Image.key,
+          original_name: `${filePayload.original_name.toString().replace(`${filePayload.original_name.toString().split('.').pop()}`, 'png')}`,
+          mimetype: 'image/png',
+          encoding: 'base64',
+          contentType: 'image/png',
+          checksum: await S3Service.calculateBufferChecksum(image.buffer),
+          size: image.buffer.length,
+        },
       });
+
+      this.logger.info(`converted ${filePayload.original_name} to image ${orgFile.original_name}`, { file: orgFile });
 
       const url = await this.s3.getSignedURL(user, s3Image.bucket, s3Image.key, 3600);
 
-      await this.extraction.extractDataFromContent(url, user, orgFile, organization);
+      return url;
     } catch (e) {
       this.logger.error('Error converting pdf to image', { error: e, namespace: organization.name });
-      //throw new e();
+
+      return null;
     }
   }
 
