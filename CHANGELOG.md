@@ -1,3 +1,10 @@
+## [1.337.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.0...v1.337.1) (2024-08-24)
+
+
+### Bug Fixes
+
+* **chat.service:** add missing await for async operations ([30ece5a](https://github.com/ColdPBC/cold-monorepo/commit/30ece5ac3b1711d0d989bcfc84f3a2f524c0132c))
+
 # [1.337.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.336.0...v1.337.0) (2024-08-24)
 
 
