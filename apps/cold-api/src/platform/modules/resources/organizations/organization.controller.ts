@@ -159,12 +159,7 @@ export class OrganizationController extends BaseWorker {
       return this.deleteTestOrgs(req);
     }
 
-    const org = await this.orgService.getOrganization(orgId, req);
-    if (!org) {
-      throw new NotFoundException('Organization not found');
-    }
-
-    return this.orgService.deleteOrganization(org, req);
+    return this.orgService.deleteOrganization(req.organization, req);
   }
 
   /***
