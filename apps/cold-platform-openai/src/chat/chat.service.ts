@@ -1365,7 +1365,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     const organizations = await this.prisma.organizations.findMany();
     const { user } = req;
     for (const org of organizations) {
-      this.classifyOrgDocuments(org, user);
+      await this.classifyOrgDocuments(org, user, type);
     }
   }
 
@@ -1378,7 +1378,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     });
 
     for (const file of files) {
-      this.processFiles(org, user, file);
+      await this.processFiles(org, user, file);
     }
   }
 
