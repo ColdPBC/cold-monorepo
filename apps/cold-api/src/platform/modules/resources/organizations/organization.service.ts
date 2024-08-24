@@ -569,7 +569,7 @@ export class OrganizationService extends BaseWorker {
 
       // delete org assistant from openAI
       try {
-        const serviceReponses = await this.events.sendIntegrationEvent(true, 'organization.deleted', { organization }, req);
+        const serviceReponses = await this.events.sendIntegrationEvent(true, 'organization.deleted', { organization: org }, req);
 
         this.logger.info(`organization ${org.id} deleted response received from services`, serviceReponses);
       } catch (e) {
