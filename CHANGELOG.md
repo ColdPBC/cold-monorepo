@@ -1,3 +1,10 @@
+## [1.337.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.3...v1.337.4) (2024-08-26)
+
+
+### Bug Fixes
+
+* **pinecone.service:** add null checks and improve error handling in uploadData method ([ed83d18](https://github.com/ColdPBC/cold-monorepo/commit/ed83d189bc9a1324c1708801c559769b71c1ef5b))
+
 ## [1.337.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.2...v1.337.3) (2024-08-24)
 
 
