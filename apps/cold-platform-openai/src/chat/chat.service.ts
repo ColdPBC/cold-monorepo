@@ -1383,7 +1383,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     });
 
     for (const file of files) {
-      this.processFiles(org, user, file);
+      await this.processFiles(org, user, file);
     }
   }
 

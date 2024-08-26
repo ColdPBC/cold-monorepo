@@ -463,7 +463,11 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
   async uploadData(organization: any, user: any, filePayload: any, index: any) {
     try {
-      if (filePayload.vector_records && filePayload.vector_records.length > 0) {
+      if (!filePayload) {
+        throw new Error('No file payload found');
+      }
+
+      if (filePayload?.vector_records && filePayload?.vector_records.length > 0) {
         for (const v of filePayload.vector_records) {
           this.logger.info(`checking if ${v.id} of ${filePayload.original_name} exists in db`);
           const found = await index.namespace(organization.name).query({
@@ -480,12 +484,12 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         }
       }
 
-      const extension = filePayload.key.split('.').pop();
+      const extension = filePayload?.key.split('.').pop();
 
       let bytes: Uint8Array = new Uint8Array();
 
-      if (['png', 'jpg', 'gif', 'bmp', 'tiff', 'heic'].includes(extension)) {
-        const url = await this.s3.getSignedURL(user, filePayload.bucket, filePayload.key, 3600);
+      if (['png', 'jpg', 'gif', 'bmp', 'tiff', 'heic'].includes(extension.toLowerCase())) {
+        const url = await this.s3.getSignedURL(user, filePayload?.bucket, filePayload?.key, 3600);
         const response = await this.extraction.extractDataFromContent(url, user, filePayload, organization);
 
         if (response) {
@@ -495,17 +499,17 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         }
       } else {
         const bucket = `cold-api-uploaded-files`;
-        const s3File = await this.s3.getObject(user, bucket, filePayload.key);
+        const s3File = await this.s3.getObject(user, bucket, filePayload?.key);
 
-        if (!s3File.Body) {
-          throw new Error(`File not found: ${filePayload.key}`);
+        if (!s3File?.Body) {
+          throw new Error(`File not found: ${filePayload?.key}`);
         }
 
-        bytes = await s3File.Body.transformToByteArray();
+        bytes = await s3File?.Body?.transformToByteArray();
       }
 
       if (!bytes) {
-        throw new Error(`No bytes found in ${filePayload.original_name}`);
+        throw new Error(`No bytes found in ${filePayload?.original_name}`);
       }
 
       // Load the document content from the file and split it into chunks
@@ -517,14 +521,14 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
         await this.extraction.extractDataFromContent(content, user, filePayload, organization);
       } else {
-        this.logger.warn(`No text content found in ${filePayload.original_name}; converting to image`);
+        this.logger.warn(`No text content found in ${filePayload?.original_name}; converting to image`);
 
         bytes = content['bytes'];
 
         const url = await this.converPdfToImage(bytes, filePayload, user, organization);
 
         if (!url) {
-          throw new Error(`No image url found in ${filePayload.original_name}`);
+          throw new Error(`No image url found in ${filePayload?.original_name}`);
         }
 
         const extracted = await this.extraction.extractDataFromContent(url, user, filePayload, organization);
@@ -541,7 +545,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         await this.persistEmbeddings(index, embedding, filePayload, organization);
       }
     } catch (e) {
-      this.logger.error('Error upserting chunk', { error: e, namespace: organization.name });
+      this.logger.error(e.message, { error: e, namespace: organization.name, file: filePayload });
 
       this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'failed' });
     }
