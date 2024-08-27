@@ -31,7 +31,7 @@
             "clusterMaxInstances": 4
           },
           "cpu": 1,
-          "memory": 4,
+          "memory": 3,
           "maxInstances": 2,
           "minInstances": 2,
           "dockerfilePath": "_platform.dockerfile",

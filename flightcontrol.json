@@ -77,7 +77,7 @@
             "clusterMaxInstances": 4
           },
           "cpu": 1,
-          "memory": 4,
+          "memory": 3,
           "maxInstances": 2,
           "minInstances": 2,
           "buildType": "docker",
@@ -269,8 +269,8 @@
             "clusterMinInstances": 1,
             "clusterMaxInstances": 4
           },
-          "cpu": 0.5,
-          "memory": 1,
+          "cpu": 0.25,
+          "memory": 0.75,
           "maxInstances": 2,
           "minInstances": 2,
           "buildType": "docker",
