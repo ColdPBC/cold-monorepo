@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
 import { Pinecone, PineconeRecord, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { ConfigService } from '@nestjs/config';
@@ -10,6 +10,7 @@ import { InjectQueue } from '@nestjs/bull';
 import { fromBuffer } from 'pdf2pic';
 import { Queue } from 'bull';
 import { ExtractionService } from '../extraction/extraction.service';
+import { ExtractionXlsxService } from '../extraction/extraction.xlsx.service';
 
 export type PineconeMetadata = {
   url: string;
@@ -32,6 +33,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     readonly prisma: PrismaService,
     readonly s3: S3Service,
     readonly extraction: ExtractionService,
+    readonly xlsxService: ExtractionXlsxService,
     @InjectQueue('pinecone') readonly queue: Queue,
   ) {
     super(PineconeService.name);
@@ -484,7 +486,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         }
       }
 
-      const extension = filePayload?.key.split('.').pop();
+      let extension = filePayload?.key.split('.').pop();
 
       let bytes: Uint8Array = new Uint8Array();
 
@@ -497,7 +499,18 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           const encoder = new TextEncoder();
           bytes = encoder.encode(JSON.stringify(response));
         }
+      } else if (extension === 'xlsx') {
+        const pdfBytes = await this.convertXlsToPdf(user, filePayload, organization);
+
+        if (!pdfBytes) {
+          throw new Error(`Failed to convert ${filePayload.original_name} to pdf`);
+        }
+
+        bytes = pdfBytes;
+        // set extension to PDF since it's now been converted
+        extension = 'pdf';
       } else {
+        // Process All Others
         const bucket = `cold-api-uploaded-files`;
         const s3File = await this.s3.getObject(user, bucket, filePayload?.key);
 
@@ -508,7 +521,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         bytes = await s3File?.Body?.transformToByteArray();
       }
 
-      if (!bytes) {
+      if (!bytes || bytes.length < 1) {
         throw new Error(`No bytes found in ${filePayload?.original_name}`);
       }
 
@@ -521,6 +534,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
         await this.extraction.extractDataFromContent(content, user, filePayload, organization);
       } else {
+        // Attempt to convert PDF to Image since no text content found
         this.logger.warn(`No text content found in ${filePayload?.original_name}; converting to image`);
 
         bytes = content['bytes'];
@@ -548,6 +562,29 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       this.logger.error(e.message, { error: e, namespace: organization.name, file: filePayload });
 
       this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'failed' });
+    }
+  }
+
+  private async convertXlsToPdf(user: any, filePayload: any, organization: any) {
+    // Process Spreadsheet
+    try {
+      const s3File = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
+      const bytes = await s3File?.Body?.transformToByteArray();
+
+      if (!bytes) {
+        throw new BadRequestException('Failed to load file');
+      }
+
+      const fileData = await this.xlsxService.convertXLS(bytes, filePayload, user, organization);
+
+      if (!fileData || !fileData.file || !fileData.bytes) {
+        throw new Error(`Failed to convert ${filePayload.original_name} to pdf`);
+      }
+
+      return fileData.bytes;
+    } catch (e) {
+      this.logger.error('Error converting xlsx to image', { error: e, namespace: organization.name });
+      return undefined;
     }
   }
 
@@ -653,6 +690,10 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
       const index = await this.getIndex();
 
+      if (!org_file) {
+        throw new Error(`File not found: ${filePayload.id}`);
+      }
+
       await this.uploadData(organization, user, org_file, index);
     } catch (error) {
       if (error instanceof ConflictException) {
@@ -670,7 +711,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         },
       });
 
-      throw new Error('Failed to ingest your data');
+      throw new Error('Failed to ingest data');
     }
   }
 
