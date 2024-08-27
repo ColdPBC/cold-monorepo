@@ -63,7 +63,7 @@
         },
         {
           "id": "cold-gql-fc-production",
-          "name": "cold-graph-ql",
+          "name": "cold-graphql",
           "port": 9001,
           "type": "web",
           "ci": {
@@ -79,15 +79,12 @@
           "memory": 3,
           "maxInstances": 2,
           "minInstances": 2,
+          "basePath": "./apps/cold-graphql",
           "buildType": "nixpacks",
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
           "watchPaths": [
-            "apps/cold-api/src/**",
-            "apps/cold-api/test/**",
-            "libs/nest/prisma/**",
-            "libs/nest/src/**",
-            "_api.dockerfile"
+            "libs/nest/prisma/**"
           ],
           "healthCheckPath": "/health",
           "containerInsights": true,
@@ -96,7 +93,7 @@
           "dockerLabels": {
             "com.datadoghq.tags.environment": "production",
             "com.datadoghq.tags.env": "production",
-            "com.datadoghq.tags.service": "cold-graph-ql",
+            "com.datadoghq.tags.service": "cold-graphql",
             "com.datadoghq.ad.check_names": "[\"postgres\"]",
             "com.datadoghq.ad.init_configs": "[{}]",
             "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]",
