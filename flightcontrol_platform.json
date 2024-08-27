@@ -10,10 +10,7 @@
         "branch": "main",
         "trigger": "manual"
       },
-      "vpc": {
-        "id": "vpc-0adff7558db4535e2",
-        "cidr": "10.192.0.0/16"
-      },
+
       "services": [
         {
           "id": "cold-platform-openai-production",
@@ -130,10 +127,6 @@
         "pr": false,
         "branch": "main",
         "trigger": "manual"
-      },
-      "vpc": {
-        "id": "vpc-060fc621728026ddf",
-        "cidr": "10.192.0.0/16"
       },
       "services": [
         {
@@ -253,10 +246,6 @@
           ]
         },
         "trigger": "manual"
-      },
-      "vpc": {
-        "id": "vpc-0d5a6014067dda3b2",
-        "cidr": "10.192.0.0/16"
       },
       "services": [
         {
