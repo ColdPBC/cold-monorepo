@@ -21,7 +21,11 @@
           "domain": "openai.coldclimate.com",
           "cpu": 1,
           "port": 7003,
-          "type": "fargate",
+          "type": "web",
+          "ci": {
+            "type": "ec2",
+            "instanceSize": "t3a.medium"
+          },
           "memory": 2,
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
@@ -133,7 +137,11 @@
           "domain": "openai.coldclimate.online",
           "cpu": 1,
           "port": 7003,
-          "type": "fargate",
+          "type": "web",
+          "ci": {
+            "type": "ec2",
+            "instanceSize": "t3a.medium"
+          },
           "memory": 2,
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
@@ -246,7 +254,11 @@
           "name": "cold-platform-openai",
           "cpu": 1,
           "port": 7001,
-          "type": "fargate",
+          "type": "web",
+          "ci": {
+            "type": "ec2",
+            "instanceSize": "t3a.medium"
+          },
           "memory": 2,
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
