@@ -1,3 +1,10 @@
+# [1.338.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.4...v1.338.0) (2024-08-27)
+
+
+### Features
+
+* add XLSX file extraction service with PDF conversion and upload to S3 ([e6616e0](https://github.com/ColdPBC/cold-monorepo/commit/e6616e0c811580665852462bba5d46e5215e15d2))
+
 ## [1.337.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.3...v1.337.4) (2024-08-26)
 
 
