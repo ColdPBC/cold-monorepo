@@ -301,7 +301,7 @@ const _DocumentsPage = () => {
   };
 
   return (
-    <div className="relative overflow-y-hidden h-full w-full">
+    <div className="relative overflow-y-auto h-full w-full">
       <MainContent title="Documents" headerElement={getPageButtons()}>
         <DataGrid
           rows={tableRows}
