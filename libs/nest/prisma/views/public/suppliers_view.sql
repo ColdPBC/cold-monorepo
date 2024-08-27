@@ -9,7 +9,8 @@ SELECT
   of.state_province,
   of.postal_code,
   of.metadata,
-  of.supplier
+  of.supplier,
+  of.supplier_tier
 FROM
   (
     organization_facilities of

@@ -16,6 +16,8 @@ export class SuppliersRepository extends BaseWorker {
     postal_code: true,
     country: true,
     metadata: true,
+    supplier: true,
+    supplier_tier: true,
     organization_claims: {
       select: {
         id: true,
@@ -111,6 +113,7 @@ export class SuppliersRepository extends BaseWorker {
           supplier: true,
         },
         select: {
+          // only return the claim name
           claim_name: true,
         },
       });

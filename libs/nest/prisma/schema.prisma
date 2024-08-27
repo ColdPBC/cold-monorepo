@@ -353,6 +353,7 @@ model organization_facilities {
   state_province      String?
   address_line_1      String?
   supplier            Boolean?              @default(false)
+  supplier_tier       Int?
   organization_claims organization_claims[]
   emissions           emissions[]
   integrations        integrations[]
