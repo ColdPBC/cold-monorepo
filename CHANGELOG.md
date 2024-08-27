@@ -1,3 +1,10 @@
+# [1.339.0-cold-953.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.0...v1.339.0-cold-953.1) (2024-08-27)
+
+
+### Features
+
+* add supplier_tier to organization_facilities and views ([1aa7cf7](https://github.com/ColdPBC/cold-monorepo/commit/1aa7cf7347802bd33fc64b10cde3cc9dad75f1e8))
+
 # [1.338.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.4...v1.338.0) (2024-08-27)
 
 
