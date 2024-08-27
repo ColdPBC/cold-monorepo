@@ -65,20 +65,21 @@
           "id": "cold-api-fc-production",
           "name": "cold-api",
           "domain": "api.coldclimate.com",
-          "cpu": 1,
           "port": 7001,
           "type": "web",
           "ci": {
-            "type": "ec2",
-            "instanceSize": "t3a.medium"
+            "type": "ec2"
           },
           "target": {
             "type": "ecs-ec2",
-            "clusterInstanceSize": "t3a.medium",
+            "clusterInstanceSize": "t3.xlarge",
             "clusterMinInstances": 2,
             "clusterMaxInstances": 4
           },
-          "memory": 2,
+          "cpu": 1,
+          "memory": 4,
+          "maxInstances": 2,
+          "minInstances": 2,
           "buildType": "docker",
           "dockerfilePath": "_api.dockerfile",
           "dockerContext": ".",
@@ -94,8 +95,6 @@
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
-          "maxInstances": 4,
-          "minInstances": 2,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
@@ -257,22 +256,23 @@
         },
         {
           "id": "cold-api-fc-staging",
-          "cpu": 1,
           "name": "cold-api",
           "domain": "api.coldclimate.online",
           "port": 7001,
           "type": "web",
           "ci": {
-            "type": "ec2",
-            "instanceSize": "t2.medium"
+            "type": "ec2"
           },
           "target": {
             "type": "ecs-ec2",
-            "clusterInstanceSize": "t2.medium",
+            "clusterInstanceSize": "t3a.medium",
             "clusterMinInstances": 1,
-            "clusterMaxInstances": 2
+            "clusterMaxInstances": 4
           },
-          "memory": 2,
+          "cpu": 0.5,
+          "memory": 1,
+          "maxInstances": 2,
+          "minInstances": 2,
           "buildType": "docker",
           "dockerfilePath": "_api.dockerfile",
           "dockerContext": ".",
@@ -289,8 +289,6 @@
             "cooldownTimerSecs": 60,
             "requestsPerTarget": 160
           },
-          "maxInstances": 3,
-          "minInstances": 2,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": false,
