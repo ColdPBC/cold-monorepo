@@ -70,7 +70,7 @@
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "c7a.4xlarge"
+            "instanceSize": "t3a.4xlarge"
           },
           "memory": 2,
           "buildType": "nixpacks",
@@ -165,7 +165,8 @@
           "port": 9001,
           "type": "web",
           "ci": {
-            "type": "ec2"
+            "type": "ec2",
+            "instanceSize": "t3a.4xlarge"
           },
           "memory": 2,
           "buildType": "nixpacks",
@@ -339,22 +340,22 @@
         },
         {
           "id": "cold-api-fc-staging",
-          "cpu": 1,
+          "cpu": 0.5,
           "name": "cold-api",
           "domain": "api.coldclimate.online",
           "port": 7001,
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "t2.medium"
+            "instanceSize": "t3a.4xlarge"
           },
           "target": {
             "type": "ecs-ec2",
             "clusterInstanceSize": "t3.medium",
             "clusterMinInstances": 1,
-            "clusterMaxInstances": 1
+            "clusterMaxInstances": 2
           },
-          "memory": 2,
+          "memory": 1,
           "buildType": "docker",
           "dockerfilePath": "_api.dockerfile",
           "dockerContext": ".",
@@ -371,8 +372,8 @@
             "cooldownTimerSecs": 60,
             "requestsPerTarget": 160
           },
-          "maxInstances": 3,
-          "minInstances": 2,
+          "maxInstances": 1,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": false,
