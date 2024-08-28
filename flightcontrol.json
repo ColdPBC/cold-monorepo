@@ -122,8 +122,8 @@
             {
               "name": "cold-datadog-api-production",
               "image": "datadog/agent",
-              "cpuAllotment": 0.5,
-              "memoryAllotment": 0.25,
+              "cpuAllotment": 1,
+              "memoryAllotment": 1,
               "enableNetworking": true,
               "logging": true,
               "ports": [

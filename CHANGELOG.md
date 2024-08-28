@@ -1,18 +1,53 @@
-# [1.339.0-cold-000.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.339.0-cold-000.1...v1.339.0-cold-000.2) (2024-08-28)
+## [1.340.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.2...v1.340.3) (2024-08-28)
 
 
 ### Bug Fixes
 
-* update EC2 instance sizes in flightcontrol configuration ([e8bbb5c](https://github.com/ColdPBC/cold-monorepo/commit/e8bbb5c6295e5bc67268ad6b2d4e8f959c0b1be5))
+* enable vertical scrolling on documents page ([184cf0d](https://github.com/ColdPBC/cold-monorepo/commit/184cf0db284ddc06ef866b0a45bf52e094f0f137))
 
-# [1.339.0-cold-000.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.1-cold-000.1...v1.339.0-cold-000.1) (2024-08-28)
+## [1.340.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.1...v1.340.2) (2024-08-28)
+
+
+### Bug Fixes
+
+* handle undefined borderRadius and add TODO comment ([3010a19](https://github.com/ColdPBC/cold-monorepo/commit/3010a19369c6c748a42c7424a74a3aff8118cdde))
+
+## [1.340.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.0...v1.340.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* **tsconfig:** update exclude patterns to exclude react library files ([94f51ec](https://github.com/ColdPBC/cold-monorepo/commit/94f51ec92a5e8460b4cf60cae6313263932cfa90))
+
+# [1.340.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.339.1...v1.340.0) (2024-08-28)
 
 
 ### Features
 
-* configure instance size for CI in flightcontrol.json ([7dc1a01](https://github.com/ColdPBC/cold-monorepo/commit/7dc1a012372e326c380b61862847a08c0a1300ec))
+* remove cold-graphql configuration ([fc64c92](https://github.com/ColdPBC/cold-monorepo/commit/fc64c929dc6274bca212564c0ff706b2136220cc))
 
-## [1.338.1-cold-000.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.0...v1.338.1-cold-000.1) (2024-08-28)
+## [1.339.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.339.0...v1.339.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* update flightcontrol target and commands ([b3dd0c5](https://github.com/ColdPBC/cold-monorepo/commit/b3dd0c536f9ad56aeb19c06ce2e5c1ab501dab3a))
+
+# [1.339.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.2...v1.339.0) (2024-08-28)
+
+
+### Features
+
+* update flight control configuration for cold-graphql ([a94a77a](https://github.com/ColdPBC/cold-monorepo/commit/a94a77a503c08f9f434bf7c816f5f287c4599954))
+
+## [1.338.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.1...v1.338.2) (2024-08-28)
+
+
+### Bug Fixes
+
+* adjust instance configurations and resource allocations ([85506af](https://github.com/ColdPBC/cold-monorepo/commit/85506af7354cecc9273bb3d899c41e3eb6366162))
+
+## [1.338.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.0...v1.338.1) (2024-08-27)
 
 
 ### Bug Fixes
