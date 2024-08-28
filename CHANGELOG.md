@@ -1,3 +1,10 @@
+## [1.341.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.7...v1.341.8) (2024-08-28)
+
+
+### Bug Fixes
+
+* add debugging commands to build and start scripts ([9b2f0be](https://github.com/ColdPBC/cold-monorepo/commit/9b2f0be3422cbb17494f16cd0059e82ff25917f4))
+
 ## [1.341.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.6...v1.341.7) (2024-08-28)
 
 
