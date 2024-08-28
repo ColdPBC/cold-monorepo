@@ -72,6 +72,12 @@
             "type": "ec2",
             "instanceSize": "t3a.4xlarge"
           },
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3a.xlarge",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 4
+          },
           "memory": 2,
           "buildType": "nixpacks",
           "watchPaths": [
@@ -81,8 +87,8 @@
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
-          "maxInstances": 4,
-          "minInstances": 2,
+          "maxInstances": 2,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
@@ -168,6 +174,12 @@
             "type": "ec2",
             "instanceSize": "t3a.4xlarge"
           },
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3a.xlarge",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 4
+          },
           "memory": 2,
           "buildType": "nixpacks",
           "watchPaths": [
@@ -177,11 +189,11 @@
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
-          "maxInstances": 4,
+          "maxInstances": 2,
           "minInstances": 2,
           "healthCheckPath": "/health",
           "containerInsights": true,
-          "enableCloudfrontSwr": true,
+          "enableCloudfrontSwr": false,
           "versionHistoryCount": 10,
           "dockerLabels": {
             "com.datadoghq.tags.environment": "production",
@@ -206,7 +218,8 @@
             "DD_SERVICE": "cold-graphql",
             "DD_ENV": "production",
             "FC_ENV": "production",
-            "NODE_ENV": "production"
+            "NODE_ENV": "production",
+            "GRAPHWEAVER_API_PORT": 9001
           },
           "sidecars": [
             {
