@@ -1,3 +1,10 @@
+# [1.342.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.8...v1.342.0) (2024-08-28)
+
+
+### Features
+
+* setup backend with Graphweaver and AuthZero ([868c359](https://github.com/ColdPBC/cold-monorepo/commit/868c359596dc8c586023005c9a1da095a0e623fa))
+
 ## [1.341.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.7...v1.341.8) (2024-08-28)
 
 
