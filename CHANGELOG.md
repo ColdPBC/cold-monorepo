@@ -1,3 +1,10 @@
+## [1.344.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.344.0...v1.344.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* remove ApplyAccessControlList annotation and update imports ([ea67c08](https://github.com/ColdPBC/cold-monorepo/commit/ea67c0840cc9835b328c541d91a01368d859c70a))
+
 # [1.344.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.343.0...v1.344.0) (2024-08-28)
 
 
