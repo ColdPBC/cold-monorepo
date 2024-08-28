@@ -75,7 +75,10 @@
             "instanceSize": "t3.2xlarge"
           },
           "target": {
-            "type": "fargate"
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3.xlarge",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 2
           },
           "memory": 2,
           "buildType": "nixpacks",
@@ -405,7 +408,7 @@
         },
         {
           "id": "cold-api-fc-staging",
-          "cpu": 0.5,
+          "cpu": 1,
           "name": "cold-api",
           "domain": "api.coldclimate.online",
           "port": 7001,
@@ -415,7 +418,10 @@
             "instanceSize": "t3.2xlarge"
           },
           "target": {
-            "type": "fargate"
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3.xlarge",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 2
           },
           "memory": 2,
           "buildType": "nixpacks",
