@@ -8,7 +8,7 @@
     "types": ["node"],
     "target": "es2022"
   },
-  "exclude": ["node_modules","jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
+  "exclude": ["../../libs/react/**/*.ts","../../libs/react/**/*.tsx", "node_modules","jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
   "include": ["src/**/*.ts"]
 }
 
