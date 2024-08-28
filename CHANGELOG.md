@@ -1,3 +1,10 @@
+## [1.341.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.3...v1.341.4) (2024-08-28)
+
+
+### Bug Fixes
+
+* add basePath to cold-api in flightcontrol.json ([42edc73](https://github.com/ColdPBC/cold-monorepo/commit/42edc73f3301b3510e9cc4866355cd1cb9c9b672))
+
 ## [1.341.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.2...v1.341.3) (2024-08-28)
 
 
