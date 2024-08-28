@@ -69,7 +69,8 @@
           "port": 7001,
           "type": "web",
           "ci": {
-            "type": "ec2"
+            "type": "ec2",
+            "instanceSize": "c7a.4xlarge"
           },
           "memory": 2,
           "buildType": "nixpacks",
