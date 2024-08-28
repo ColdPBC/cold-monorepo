@@ -74,13 +74,7 @@
             "type": "ec2",
             "instanceSize": "t3.2xlarge"
           },
-          "target": {
-            "type": "ecs-ec2",
-            "clusterInstanceSize": "t3.xlarge",
-            "clusterMinInstances": 1,
-            "clusterMaxInstances": 4
-          },
-          "memory": 3,
+          "memory": 2,
           "buildType": "nixpacks",
           "installCommand": "corepack enable yarn && yarn install",
           "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-ui:build:production",
@@ -92,7 +86,7 @@
             "_api.dockerfile"
           ],
           "maxInstances": 2,
-          "minInstances": 1,
+          "minInstances": 2,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": false,
@@ -407,7 +401,7 @@
         },
         {
           "id": "cold-api-fc-staging",
-          "cpu": 0.5,
+          "cpu": 1,
           "name": "cold-api",
           "domain": "api.coldclimate.online",
           "port": 7001,
@@ -416,16 +410,10 @@
             "type": "ec2",
             "instanceSize": "t3.2xlarge"
           },
-          "target": {
-            "type": "ecs-ec2",
-            "clusterInstanceSize": "t3.medium",
-            "clusterMinInstances": 1,
-            "clusterMaxInstances": 2
-          },
-          "memory": 1,
-          "buildType": "docker",
-          "dockerfilePath": "_api.dockerfile",
-          "dockerContext": ".",
+          "installCommand": "corepack enable yarn && yarn install",
+          "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-ui:build:production",
+          "memory": 2,
+          "buildType": "nixpacks",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
@@ -439,7 +427,7 @@
             "cooldownTimerSecs": 60,
             "requestsPerTarget": 160
           },
-          "maxInstances": 1,
+          "maxInstances": 2,
           "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
