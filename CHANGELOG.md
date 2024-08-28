@@ -1,3 +1,10 @@
+# [1.343.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.342.1...v1.343.0) (2024-08-28)
+
+
+### Features
+
+* add ACL and modify entities ([ca53cce](https://github.com/ColdPBC/cold-monorepo/commit/ca53cceb333075aa548e9a03863fb0d53d1cdc6f))
+
 ## [1.342.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.342.0...v1.342.1) (2024-08-28)
 
 
