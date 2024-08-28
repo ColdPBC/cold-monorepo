@@ -1,3 +1,10 @@
+# [1.340.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.339.1...v1.340.0) (2024-08-28)
+
+
+### Features
+
+* remove cold-graphql configuration ([fc64c92](https://github.com/ColdPBC/cold-monorepo/commit/fc64c929dc6274bca212564c0ff706b2136220cc))
+
 ## [1.339.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.339.0...v1.339.1) (2024-08-28)
 
 
