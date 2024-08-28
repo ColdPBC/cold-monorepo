@@ -67,7 +67,7 @@
           "name": "cold-api",
           "domain": "api.coldclimate.com",
           "basePath": ".",
-          "cpu": 1,
+          "cpu": 2,
           "port": 7001,
           "type": "web",
           "ci": {
@@ -80,7 +80,7 @@
             "clusterMinInstances": 1,
             "clusterMaxInstances": 2
           },
-          "memory": 2,
+          "memory": 4,
           "buildType": "nixpacks",
           "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:production",
           "startCommand": "yarn dlx nx run cold-api:serve:production",
@@ -92,7 +92,7 @@
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
-          "maxInstances": 2,
+          "maxInstances": 1,
           "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
@@ -408,9 +408,9 @@
         },
         {
           "id": "cold-api-fc-staging",
-          "cpu": 1,
           "name": "cold-api",
           "domain": "api.coldclimate.online",
+          "cpu": 2,
           "port": 7001,
           "type": "web",
           "ci": {
@@ -423,11 +423,11 @@
             "clusterMinInstances": 1,
             "clusterMaxInstances": 2
           },
-          "memory": 2,
+          "memory": 4,
           "buildType": "nixpacks",
+          "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:production",
+          "startCommand": "yarn dlx nx run cold-api:serve:production",
           "installCommand": "corepack enable yarn && yarn install",
-          "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:staging",
-          "startCommand": "yarn dlx nx run cold-api:serve:staging",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
@@ -435,14 +435,14 @@
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
+          "maxInstances": 1,
+          "minInstances": 1,
           "autoscaling": {
             "cpuThreshold": 70,
             "memoryThreshold": 70,
             "cooldownTimerSecs": 60,
             "requestsPerTarget": 160
           },
-          "maxInstances": 2,
-          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": false,
