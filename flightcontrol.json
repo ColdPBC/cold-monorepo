@@ -182,10 +182,10 @@
           },
           "memory": 2,
           "buildType": "nixpacks",
-          "installCommand": "cd apps/cold-graphql && corepack enable pnpm && pnpm install",
+          "installCommand": "corepack enable pnpm && pnpm install",
           "buildCommand": "pnpm run build",
           "startCommand": "pnpm run start",
-
+          "basePath": "./apps/cold-graphql",
           "watchPaths": [
             "libs/nest/prisma/**"
           ],
@@ -276,10 +276,10 @@
           },
           "singlePageApp": true,
           "buildType": "nixpacks",
-          "basePath": ".",
-          "installCommand": "cd apps/cold-graphql && corepack enable pnpm && pnpm install",
+          "basePath": "./apps/cold-graphql",
+          "installCommand": "pnpm install",
           "buildCommand": "pnpm run build",
-          "outputDirectory": "apps/cold-graphql/dist/admin-ui",
+          "outputDirectory": "dist/admin-ui",
           "watchPaths": [
             "libs/nest/prisma/**"
           ],
