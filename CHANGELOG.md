@@ -1,3 +1,10 @@
+## [1.341.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.6...v1.341.7) (2024-08-28)
+
+
+### Bug Fixes
+
+* update build and start commands for debugging ([88abbf1](https://github.com/ColdPBC/cold-monorepo/commit/88abbf18eddc7c4fae73c0c25b197cd40ec7e152))
+
 ## [1.341.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.5...v1.341.6) (2024-08-28)
 
 
