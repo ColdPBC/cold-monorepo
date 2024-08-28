@@ -182,6 +182,9 @@
           },
           "memory": 2,
           "buildType": "nixpacks",
+          "installCommand": "corepack enable pnpm && pnpm install",
+          "buildCommand": "pnpm run build",
+          "startCommand": "pnpm run start",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
