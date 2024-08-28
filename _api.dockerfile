@@ -62,7 +62,7 @@ RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..."
 RUN npx nx reset
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
-USER node
+USER root
 WORKDIR /home/node/app
 
 ADD --chown=node:node ./apps/cold-api/project.json /home/node/app/

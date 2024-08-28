@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ['nodejs']
+
+[variables]
+port = "9001"
+
+[expose]
+ports = ["9001"]
