@@ -1,3 +1,10 @@
+## [1.340.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.1...v1.340.2) (2024-08-28)
+
+
+### Bug Fixes
+
+* handle undefined borderRadius and add TODO comment ([3010a19](https://github.com/ColdPBC/cold-monorepo/commit/3010a19369c6c748a42c7424a74a3aff8118cdde))
+
 ## [1.340.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.0...v1.340.1) (2024-08-28)
 
 
