@@ -67,7 +67,7 @@
           "name": "cold-api",
           "domain": "api.coldclimate.com",
           "basePath": ".",
-          "cpu": 1,
+          "cpu": 0.87,
           "port": 7001,
           "type": "web",
           "ci": {
@@ -76,11 +76,11 @@
           },
           "target": {
             "type": "ecs-ec2",
-            "clusterInstanceSize": "t3.2xlarge",
+            "clusterInstanceSize": "t3.xlarge",
             "clusterMinInstances": 1,
             "clusterMaxInstances": 4
           },
-          "memory": 2,
+          "memory": 3,
           "buildType": "nixpacks",
           "installCommand": "corepack enable yarn && yarn install",
           "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-ui:build:production",
@@ -95,7 +95,7 @@
           "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
-          "enableCloudfrontSwr": true,
+          "enableCloudfrontSwr": false,
           "versionHistoryCount": 10,
           "dockerLabels": {
             "com.datadoghq.tags.environment": "production",
