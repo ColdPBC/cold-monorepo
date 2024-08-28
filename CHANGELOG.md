@@ -1,3 +1,10 @@
+# [1.339.0-cold-000.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.1-cold-000.1...v1.339.0-cold-000.1) (2024-08-28)
+
+
+### Features
+
+* configure instance size for CI in flightcontrol.json ([7dc1a01](https://github.com/ColdPBC/cold-monorepo/commit/7dc1a012372e326c380b61862847a08c0a1300ec))
+
 ## [1.338.1-cold-000.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.0...v1.338.1-cold-000.1) (2024-08-28)
 
 
