@@ -1,3 +1,10 @@
+## [1.344.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.344.1...v1.344.2) (2024-08-28)
+
+
+### Bug Fixes
+
+* update build and start commands in flightcontrol.json ([6896a90](https://github.com/ColdPBC/cold-monorepo/commit/6896a90dba4cb3b2d98121d6dc85d56209ec99b2))
+
 ## [1.344.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.344.0...v1.344.1) (2024-08-28)
 
 
