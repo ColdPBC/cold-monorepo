@@ -1,3 +1,10 @@
+## [1.341.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.1...v1.341.2) (2024-08-28)
+
+
+### Bug Fixes
+
+* update install command and add new environment variables ([db5ab42](https://github.com/ColdPBC/cold-monorepo/commit/db5ab426378f2720461d209e7b77c36c4c0e8179))
+
 ## [1.341.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.0...v1.341.1) (2024-08-28)
 
 
