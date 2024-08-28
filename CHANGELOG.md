@@ -1,3 +1,10 @@
+## [1.340.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.0...v1.340.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* **tsconfig:** update exclude patterns to exclude react library files ([94f51ec](https://github.com/ColdPBC/cold-monorepo/commit/94f51ec92a5e8460b4cf60cae6313263932cfa90))
+
 # [1.340.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.339.1...v1.340.0) (2024-08-28)
 
 
