@@ -1,3 +1,10 @@
+## [1.341.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.0...v1.341.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* update EC2 instance sizes in flightcontrol configuration ([443c374](https://github.com/ColdPBC/cold-monorepo/commit/443c374d464f82c4a1b701d8d31caac3c465a866))
+
 # [1.341.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.3...v1.341.0) (2024-08-28)
 
 
