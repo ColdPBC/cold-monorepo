@@ -175,10 +175,16 @@
             "instanceSize": "t3a.4xlarge"
           },
           "memory": 3,
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3a.xlarge",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 4
+          },
           "buildType": "nixpacks",
           "basePath": "./apps/cold-graphql",
-          "buildCommand": "graphweaver build",
-          "startCommand": "graphweaver start",
+          "buildCommand": "cd apps/cold-graphql && ggraphweaver build",
+          "startCommand": "cd apps/cold-graphql && graphweaver start",
           "watchPaths": [
             "apps/cold-graphql/src/**",
             "libs/nest/prisma/**"
