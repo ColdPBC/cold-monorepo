@@ -174,20 +174,14 @@
             "type": "ec2",
             "instanceSize": "t3a.4xlarge"
           },
-          "target": {
-            "type": "ecs-ec2",
-            "clusterInstanceSize": "t3.xlarge",
-            "clusterMinInstances": 1,
-            "clusterMaxInstances": 4
-          },
           "memory": 3,
           "buildType": "nixpacks",
+          "basePath": "./apps/cold-graphql",
+          "buildCommand": "graphweaver build",
+          "startCommand": "graphweaver start",
           "watchPaths": [
-            "apps/cold-api/src/**",
-            "apps/cold-api/test/**",
-            "libs/nest/prisma/**",
-            "libs/nest/src/**",
-            "_api.dockerfile"
+            "apps/cold-graphql/src/**",
+            "libs/nest/prisma/**"
           ],
           "maxInstances": 2,
           "minInstances": 1,
@@ -218,7 +212,8 @@
             "DD_SERVICE": "cold-graphql",
             "DD_ENV": "production",
             "FC_ENV": "production",
-            "NODE_ENV": "production"
+            "NODE_ENV": "production",
+            "PORT": "9001"
           },
           "sidecars": [
             {
@@ -235,7 +230,6 @@
               ],
               "envVariables": {
                 "DD_SERVICE": "cold-datadog-api-production",
-                "ECS_FARGATE": true,
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_API_KEY": {
