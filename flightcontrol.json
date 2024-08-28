@@ -280,7 +280,7 @@
           "singlePageApp": true,
           "buildType": "nixpacks",
           "basePath": "./apps/cold-graphql",
-          "installCommand": "pnpm install",
+          "installCommand": "corepack enable pnpm && pnpm install",
           "buildCommand": "pnpm run build",
           "outputDirectory": "dist/admin-ui",
           "watchPaths": [
