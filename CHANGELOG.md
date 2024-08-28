@@ -1,3 +1,10 @@
+## [1.342.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.342.0...v1.342.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* update introspection configuration and clean up imports ([7a67f32](https://github.com/ColdPBC/cold-monorepo/commit/7a67f32d617f07a877202aeab1fd75575a8d7708))
+
 # [1.342.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.8...v1.342.0) (2024-08-28)
 
 
