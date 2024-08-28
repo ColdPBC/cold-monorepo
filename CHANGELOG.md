@@ -1,3 +1,10 @@
+## [1.340.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.2...v1.340.3) (2024-08-28)
+
+
+### Bug Fixes
+
+* enable vertical scrolling on documents page ([184cf0d](https://github.com/ColdPBC/cold-monorepo/commit/184cf0db284ddc06ef866b0a45bf52e094f0f137))
+
 ## [1.340.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.1...v1.340.2) (2024-08-28)
 
 
