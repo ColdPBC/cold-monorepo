@@ -70,17 +70,10 @@
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "t3a.medium"
+            "instanceSize": "t3a.4xlarge"
           },
           "memory": 2,
-          "buildType": "docker",
-          "dockerfilePath": "_api.dockerfile",
-          "dockerContext": ".",
-          "containerImage": {
-            "registryId": "cold-ecr-fc-r123elz",
-            "repository": "api-docker-images",
-            "tag": "main"
-          },
+          "buildType": "nixpacks",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
@@ -122,6 +115,108 @@
           "sidecars": [
             {
               "name": "cold-datadog-api-production",
+              "image": "datadog/agent",
+              "cpuAllotment": 0.5,
+              "memoryAllotment": 0.25,
+              "enableNetworking": true,
+              "logging": true,
+              "ports": [
+                8125,
+                5001,
+                5000
+              ],
+              "envVariables": {
+                "DD_SERVICE": "cold-datadog-api-production",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
+                "DD_API_KEY": {
+                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
+                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
+                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
+                "DD_SITE": "us5.datadoghq.com",
+                "DD_APM_ENABLED": true,
+                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+                "DD_APPSEC_ENABLED": true,
+                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+                "DD_DYNO_HOST": true,
+                "DD_ENABLE_DBM": true,
+                "DD_IAST_ENABLED": true,
+                "DD_LISTENERS": 2,
+                "DD_LOGS_INJECTION": true,
+                "DD_LOGS_ENABLED": true,
+                "DD_METRICS_ENABLED": true,
+                "DD_PROCESS_AGENT": true,
+                "DD_PROCESS_AGENT_ENABLED": true,
+                "DD_PROFILING_ENABLED": true,
+                "DD_REMOTE_CONFIGURATION_ENABLED": true,
+                "DD_USE_DOGSTATSD": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "cold-graphql-fc-production",
+          "name": "cold-graphql",
+          "cpu": 0.87,
+          "port": 9001,
+          "type": "web",
+          "ci": {
+            "type": "ec2",
+            "instanceSize": "t3a.4xlarge"
+          },
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3.xlarge",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 4
+          },
+          "memory": 3,
+          "buildType": "nixpacks",
+          "watchPaths": [
+            "apps/cold-api/src/**",
+            "apps/cold-api/test/**",
+            "libs/nest/prisma/**",
+            "libs/nest/src/**",
+            "_api.dockerfile"
+          ],
+          "maxInstances": 2,
+          "minInstances": 2,
+          "healthCheckPath": "/health",
+          "containerInsights": true,
+          "enableCloudfrontSwr": true,
+          "versionHistoryCount": 10,
+          "dockerLabels": {
+            "com.datadoghq.tags.environment": "production",
+            "com.datadoghq.tags.env": "production",
+            "com.datadoghq.tags.service": "cold-graphql",
+            "com.datadoghq.ad.check_names": "[\"postgres\"]",
+            "com.datadoghq.ad.init_configs": "[{}]",
+            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-graphql-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]",
+            "com.datadoghq.tags.version": "1.0.0"
+          },
+          "autoscaling": {
+            "cpuThreshold": 70,
+            "memoryThreshold": 60,
+            "cooldownTimerSecs": 300,
+            "requestsPerTarget": 50
+          },
+          "experimental": {
+            "healthCheckTimeout": 15,
+            "healthCheckInterval": 35
+          },
+          "envVariables": {
+            "DD_SERVICE": "cold-graphql",
+            "DD_ENV": "production",
+            "FC_ENV": "production",
+            "NODE_ENV": "production"
+          },
+          "sidecars": [
+            {
+              "name": "cold-datadog-graphql-production",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -251,22 +346,22 @@
         },
         {
           "id": "cold-api-fc-staging",
-          "cpu": 1,
+          "cpu": 0.5,
           "name": "cold-api",
           "domain": "api.coldclimate.online",
           "port": 7001,
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "t2.medium"
+            "instanceSize": "t3a.4xlarge"
           },
           "target": {
             "type": "ecs-ec2",
-            "clusterInstanceSize": "t2.medium",
+            "clusterInstanceSize": "t3.medium",
             "clusterMinInstances": 1,
             "clusterMaxInstances": 2
           },
-          "memory": 2,
+          "memory": 1,
           "buildType": "docker",
           "dockerfilePath": "_api.dockerfile",
           "dockerContext": ".",
@@ -283,8 +378,8 @@
             "cooldownTimerSecs": 60,
             "requestsPerTarget": 160
           },
-          "maxInstances": 3,
-          "minInstances": 2,
+          "maxInstances": 1,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": false,
