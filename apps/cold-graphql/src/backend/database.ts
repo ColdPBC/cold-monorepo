@@ -6,7 +6,7 @@ export const connection = {
   connectionManagerId: 'postgresql',
   mikroOrmConfig: {
     driverOptions: {
-      connection: { ssl: { rejectUnauthorized: false } },
+      connection: process.env.NODE_ENV === 'development' ? {} : { ssl: { rejectUnauthorized: false } },
     },
     entities: entities,
     driver: PostgreSqlDriver,
@@ -14,7 +14,7 @@ export const connection = {
     host: connectionValues()?.host,
     user: connectionValues()?.user,
     password: connectionValues()?.password,
-    port: +connectionValues()?.port,
+    port: connectionValues()?.port,
     pool: { min: 2, max: 50 },
   },
 };

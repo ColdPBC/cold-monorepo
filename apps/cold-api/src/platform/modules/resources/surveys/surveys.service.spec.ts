@@ -12,6 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as store from 'cache-manager';
 import { authenticatedUserExample, generateSurveyMock, generateSurveyTypesMock } from '../_global/global.examples';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { undefined } from 'zod';
 
 describe('Survey Service', () => {
   let service: SurveysService;
@@ -87,11 +88,11 @@ describe('Survey Service', () => {
     service = module.get<SurveysService>(SurveysService);
     prismaService = module.get<PrismaService>(PrismaService);
 
-    jest.spyOn(prismaService.survey_definitions, 'delete').mockResolvedValue(null);
-    jest.spyOn(prismaService.survey_definitions, 'create').mockResolvedValue(origin);
-    jest.spyOn(prismaService.survey_definitions, 'findMany').mockResolvedValue(surveys);
-    jest.spyOn(prismaService.survey_definitions, 'findUnique').mockResolvedValue(origin);
-    jest.spyOn(prismaService.survey_definitions, 'update').mockResolvedValue(updated);
+    jest.spyOn(prismaService.survey_definitions, 'delete').mockResolvedValue(null as any);
+    jest.spyOn(prismaService.survey_definitions, 'create').mockResolvedValue(origin as any);
+    jest.spyOn(prismaService.survey_definitions, 'findMany').mockResolvedValue(surveys as any);
+    jest.spyOn(prismaService.survey_definitions, 'findUnique').mockResolvedValue(origin as any);
+    jest.spyOn(prismaService.survey_definitions, 'update').mockResolvedValue(updated as any);
   });
 
   it('should be defined', () => {
@@ -99,39 +100,160 @@ describe('Survey Service', () => {
   });
 
   it('should return survey definition by type', async () => {
-    const result = await service.findDefinitionByType({ user: authenticatedUserExample }, generateSurveyTypesMock());
+    const result = await service.findDefinitionByType(
+      {
+        organization: {
+          id: '',
+          name: '',
+          display_name: '',
+          enabled_connections: null,
+          branding: null,
+          phone: null,
+          email: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          isTest: false,
+          website: null,
+          deleted: false,
+        },
+        user: authenticatedUserExample,
+      },
+      generateSurveyTypesMock(),
+    );
     expect(result).toEqual(surveys);
   });
 
   it('should create a new survey definition', async () => {
-    const result = await service.create(origin, { user: authenticatedUserExample });
+    const result = await service.create(origin as any, {
+      organization: {
+        id: '',
+        name: '',
+        display_name: '',
+        enabled_connections: null,
+        branding: null,
+        phone: null,
+        email: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        isTest: false,
+        website: null,
+        deleted: false,
+      },
+      user: authenticatedUserExample,
+    });
     expect(result).toEqual(origin);
   });
 
   it('should update a survey', async () => {
-    const result = await service.update(updated.name, updated, { user: authenticatedUserExample });
+    const result = await service.update(updated.name, updated as any, {
+      organization: {
+        id: '',
+        name: '',
+        display_name: '',
+        enabled_connections: null,
+        branding: null,
+        phone: null,
+        email: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        isTest: false,
+        website: null,
+        deleted: false,
+      },
+      user: authenticatedUserExample,
+    });
     //expect(result).toEqual(updated);
   });
 
   it('should delete a survey', async () => {
-    await service.remove(origin.name, { user: authenticatedUserExample });
+    await service.remove(origin.name, {
+      organization: {
+        id: '',
+        name: '',
+        display_name: '',
+        enabled_connections: null,
+        branding: null,
+        phone: null,
+        email: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        isTest: false,
+        website: null,
+        deleted: false,
+      },
+      user: authenticatedUserExample,
+    });
     expect(prismaService.survey_definitions.delete).toHaveBeenCalledWith({ where: { name: origin.name } });
   });
 
   it('should throw an error when trying to get a survey that does not exist', async () => {
     jest.spyOn(prismaService.survey_definitions, 'findUnique').mockResolvedValue(null);
-    await expect(service.findOne(origin.name, { user: authenticatedUserExample })).rejects.toThrow();
+    await expect(
+      service.findOne(origin.name, {
+        organization: {
+          id: '',
+          name: '',
+          display_name: '',
+          enabled_connections: null,
+          branding: null,
+          phone: null,
+          email: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          isTest: false,
+          website: null,
+          deleted: false,
+        },
+        user: authenticatedUserExample,
+      }),
+    ).rejects.toThrow();
   });
 
   it('should throw an error when trying to update a survey that does not exist', async () => {
     jest.spyOn(prismaService.survey_definitions, 'findUnique').mockResolvedValue(null);
-    await expect(service.update(origin.name, generateSurveyMock(), { user: authenticatedUserExample })).rejects.toThrow();
+    await expect(
+      service.update(origin.name, generateSurveyMock() as any, {
+        organization: {
+          id: '',
+          name: '',
+          display_name: '',
+          enabled_connections: null,
+          branding: null,
+          phone: null,
+          email: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          isTest: false,
+          website: null,
+          deleted: false,
+        },
+        user: authenticatedUserExample,
+      }),
+    ).rejects.toThrow();
   });
 
   it('should throw an error when trying to delete a survey that does not exist', async () => {
     jest.spyOn(prismaService.survey_definitions, 'delete').mockImplementation(() => {
       throw new Error('Record to delete does not exist.');
     });
-    await expect(service.remove(origin.name, { user: authenticatedUserExample })).rejects.toThrow();
+    await expect(
+      service.remove(origin.name, {
+        organization: {
+          id: '',
+          name: '',
+          display_name: '',
+          enabled_connections: null,
+          branding: null,
+          phone: null,
+          email: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          isTest: false,
+          website: null,
+          deleted: false,
+        },
+        user: authenticatedUserExample,
+      }),
+    ).rejects.toThrow();
   });
 });

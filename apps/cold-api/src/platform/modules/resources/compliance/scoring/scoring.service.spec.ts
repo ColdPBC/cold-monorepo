@@ -1,15 +1,14 @@
-import { ComplianceScoringService } from './scoring.service';
-import { generateMockData } from '@coldpbc/nest';
-
+import { generateMockData } from '../../surveys/filter/fixtures/mocks';
+import { ScoringService } from './scoring.service';
 describe('ScoringService', () => {
   let scoredSurvey: any;
 
-  let service: ComplianceScoringService = new ComplianceScoringService();
+  let service: ScoringService = new ScoringService();
 
   const complianceSets = ['rei_pia_2024', 'rei_pia_2023'];
   for (const complianceSet of complianceSets) {
     const mockData = generateMockData(complianceSet);
-    scoredSurvey = service.scoreSurvey(mockData.definition);
+    scoredSurvey = service.scoreAssesment(mockData.definition);
 
     it('should be defined', () => {
       expect(service).toBeDefined();

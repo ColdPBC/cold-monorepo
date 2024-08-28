@@ -7,7 +7,6 @@ import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl } from '../../acl_policies';
 
 @Entity({ tableName: 'organization_compliance_notes' })
-@ApplyAccessControlList(default_acl)
 export class OrganizationComplianceNote {
   @PrimaryKey({ type: 'text' })
   id!: string;

@@ -18,7 +18,6 @@ export enum OrganizationFilesType {
 }
 
 @Entity({ tableName: 'organization_files' })
-@ApplyAccessControlList(default_acl)
 export class OrganizationFile {
   @Property({ type: 'text', nullable: true })
   bucket?: string;

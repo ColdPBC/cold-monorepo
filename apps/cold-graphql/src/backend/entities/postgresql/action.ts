@@ -5,7 +5,6 @@ import { ApplyAccessControlList, AuthorizationContext } from '@exogee/graphweave
 import { default_acl } from '../../acl_policies';
 
 @Entity({ tableName: 'actions' })
-@ApplyAccessControlList(default_acl)
 export class Action {
   @PrimaryKey({ type: 'text' })
   id!: string;

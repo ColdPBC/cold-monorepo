@@ -1,6 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CacheService, fullReqExample, PrismaService } from '@coldpbc/nest';
+import { CacheService, PrismaService } from '@coldpbc/nest';
 import { actionTemplatePatchExample, actionTemplatePostExample } from './examples/action-template.examples';
 
 import { SurveysService } from '../surveys/surveys.service';
@@ -8,6 +8,7 @@ import { v4 } from 'uuid';
 import { ActionTemplatesService } from './action-templates.service';
 import { ActionsService } from './actions.service';
 import { mockDeep } from 'jest-mock-extended';
+import { fullReqExample } from '../_global/global.examples';
 
 describe('ActionsService', () => {
   let service: ActionTemplatesService;

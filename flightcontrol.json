@@ -188,8 +188,8 @@
           "memory": 2,
           "buildType": "nixpacks",
           "installCommand": "corepack enable pnpm && pnpm install",
-          "buildCommand": "ls -la && pwd && pnpm run build",
-          "startCommand": "ls -la && pwd && pnpm run start",
+          "buildCommand": "pnpm run build",
+          "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
           "watchPaths": [
             "libs/nest/prisma/**"
