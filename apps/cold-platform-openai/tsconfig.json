@@ -1,7 +1,21 @@
 {
   "extends": "../../tsconfig.base.json",
   "files": [],
-  "include": [],
+  "exclude": [
+    "**/node_modules/**",
+    "**/lib/**",
+    "**/dist/**",
+    "**/apps/cold-api/**",
+    "**/apps/cold-api-e2e/**",
+    "**/apps/cold-graphql/**",
+    "**/apps/cold-graphql-e2e/**",
+    "**/apps/cold-ui-e2e/**",
+    "**/apps/cold-ui/**",
+    "**/apps/cold-platform-bayou/**",
+    "**/apps/cold-platform-bayou-e2e/**",
+    "**/apps/cold-platform-climatiq-e2e/**",
+    "**/apps/cold-platform-climatiq/**"
+  ],
   "references": [
     {
       "path": "./tsconfig.app.json"
