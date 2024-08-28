@@ -65,6 +65,7 @@
           "id": "cold-api-fc-production",
           "name": "cold-api",
           "domain": "api.coldclimate.com",
+          "basePath": "./apps/cold-api",
           "cpu": 1,
           "port": 7001,
           "type": "web",
