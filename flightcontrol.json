@@ -82,8 +82,9 @@
           },
           "memory": 1,
           "buildType": "nixpacks",
+          "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:production",
+          "startCommand": "yarn dlx nx run cold-api:serve:production",
           "installCommand": "corepack enable yarn && yarn install",
-          "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-ui:build:production",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
@@ -425,7 +426,8 @@
           "memory": 1,
           "buildType": "nixpacks",
           "installCommand": "corepack enable yarn && yarn install",
-          "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-ui:build:production",
+          "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:staging",
+          "startCommand": "yarn dlx nx run cold-api:serve:staging",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
