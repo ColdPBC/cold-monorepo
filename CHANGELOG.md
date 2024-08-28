@@ -1,3 +1,10 @@
+## [1.339.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.339.0...v1.339.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* update flightcontrol target and commands ([b3dd0c5](https://github.com/ColdPBC/cold-monorepo/commit/b3dd0c536f9ad56aeb19c06ce2e5c1ab501dab3a))
+
 # [1.339.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.2...v1.339.0) (2024-08-28)
 
 
