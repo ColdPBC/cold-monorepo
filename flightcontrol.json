@@ -70,11 +70,11 @@
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "t3a.4xlarge"
+            "instanceSize": "t3.2xlarge"
           },
           "target": {
             "type": "ecs-ec2",
-            "clusterInstanceSize": "t3a.xlarge",
+            "clusterInstanceSize": "t3.2xlarge",
             "clusterMinInstances": 1,
             "clusterMaxInstances": 4
           },
@@ -363,7 +363,7 @@
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "t3a.4xlarge"
+            "instanceSize": "t3.2xlarge"
           },
           "target": {
             "type": "ecs-ec2",
