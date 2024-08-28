@@ -72,6 +72,12 @@
             "type": "ec2",
             "instanceSize": "t3a.4xlarge"
           },
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3a.xlarge",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 4
+          },
           "memory": 2,
           "buildType": "nixpacks",
           "watchPaths": [
@@ -81,8 +87,8 @@
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
-          "maxInstances": 4,
-          "minInstances": 2,
+          "maxInstances": 2,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
@@ -116,8 +122,8 @@
             {
               "name": "cold-datadog-api-production",
               "image": "datadog/agent",
-              "cpuAllotment": 0.5,
-              "memoryAllotment": 0.25,
+              "cpuAllotment": 1,
+              "memoryAllotment": 1,
               "enableNetworking": true,
               "logging": true,
               "ports": [
@@ -161,7 +167,7 @@
         {
           "id": "cold-graphql-fc-production",
           "name": "cold-graphql",
-          "cpu": 0.87,
+          "cpu": 1,
           "port": 9001,
           "type": "web",
           "ci": {
@@ -184,7 +190,7 @@
             "_api.dockerfile"
           ],
           "maxInstances": 2,
-          "minInstances": 2,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
