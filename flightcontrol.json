@@ -67,7 +67,7 @@
           "name": "cold-api",
           "domain": "api.coldclimate.com",
           "basePath": ".",
-          "cpu": 0.5,
+          "cpu": 1,
           "port": 7001,
           "type": "web",
           "ci": {
@@ -75,12 +75,9 @@
             "instanceSize": "t3.2xlarge"
           },
           "target": {
-            "type": "ecs-ec2",
-            "clusterInstanceSize": "t3.xlarge",
-            "clusterMinInstances": 1,
-            "clusterMaxInstances": 4
+            "type": "fargate"
           },
-          "memory": 1,
+          "memory": 2,
           "buildType": "nixpacks",
           "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:production",
           "startCommand": "yarn dlx nx run cold-api:serve:production",
@@ -408,7 +405,7 @@
         },
         {
           "id": "cold-api-fc-staging",
-          "cpu": 1,
+          "cpu": 0.5,
           "name": "cold-api",
           "domain": "api.coldclimate.online",
           "port": 7001,
@@ -418,12 +415,9 @@
             "instanceSize": "t3.2xlarge"
           },
           "target": {
-            "type": "ecs-ec2",
-            "clusterInstanceSize": "t3.xlarge",
-            "clusterMinInstances": 1,
-            "clusterMaxInstances": 2
+            "type": "fargate"
           },
-          "memory": 1,
+          "memory": 2,
           "buildType": "nixpacks",
           "installCommand": "corepack enable yarn && yarn install",
           "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:staging",
