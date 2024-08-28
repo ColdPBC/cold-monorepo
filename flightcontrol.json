@@ -182,7 +182,7 @@
           },
           "memory": 2,
           "buildType": "nixpacks",
-          "installCommand": "corepack enable pnpm && pnpm install",
+          "installCommand": "cd apps/cold-graphql && corepack enable pnpm && pnpm install",
           "buildCommand": "pnpm run build",
           "startCommand": "pnpm run start",
 
@@ -277,7 +277,7 @@
           "singlePageApp": true,
           "buildType": "nixpacks",
           "basePath": ".",
-          "installCommand": "corepack enable pnpm && pnpm install",
+          "installCommand": "cd apps/cold-graphql && corepack enable pnpm && pnpm install",
           "buildCommand": "pnpm run build",
           "outputDirectory": "apps/cold-graphql/dist/admin-ui",
           "watchPaths": [
@@ -307,7 +307,11 @@
             "VITE_DD_RUM_CLIENT_TOKEN": "pub92f690b0e4706ca7b9d2e7d7481f383e",
             "VITE_DD_SITE": "us5.datadoghq.com",
             "VITE_DD_VERSION": "1.70.0",
-            "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c1a"
+            "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c1a",
+            "AUTH_BASE_URI": "http://localhost:9000",
+            "AUTH_WHITELIST_DOMAINS": "localhost",
+            "VITE_AUTH_CLIENT_ID": "CxonhKwqNec6L8uTKynydwo11s4VdrmU",
+            "VITE_AUTH_ZERO_DOMAIN": "cold-climate-production.us.auth0.com"
           }
         },
         {
