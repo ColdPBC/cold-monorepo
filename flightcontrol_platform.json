@@ -10,19 +10,27 @@
         "branch": "main",
         "trigger": "manual"
       },
-      "vpc": {
-        "id": "vpc-0adff7558db4535e2",
-        "cidr": "10.192.0.0/16"
-      },
+
       "services": [
         {
           "id": "cold-platform-openai-production",
           "name": "cold-platform-openai",
           "domain": "openai.coldclimate.com",
-          "cpu": 1,
           "port": 7003,
-          "type": "fargate",
-          "memory": 2,
+          "type": "web",
+          "ci": {
+            "type": "ec2"
+          },
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3.xlarge",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 4
+          },
+          "cpu": 1,
+          "memory": 3,
+          "maxInstances": 2,
+          "minInstances": 2,
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
@@ -30,8 +38,6 @@
             "libs/nest/src/**",
             "_platform.dockerfile"
           ],
-          "maxInstances": 2,
-          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
@@ -122,19 +128,26 @@
         "branch": "main",
         "trigger": "manual"
       },
-      "vpc": {
-        "id": "vpc-060fc621728026ddf",
-        "cidr": "10.192.0.0/16"
-      },
       "services": [
         {
           "id": "cold-platform-openai-staging",
           "name": "cold-platform-openai",
           "domain": "openai.coldclimate.online",
-          "cpu": 1,
           "port": 7003,
-          "type": "fargate",
-          "memory": 2,
+          "type": "web",
+          "ci": {
+            "type": "ec2"
+          },
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3a.medium",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 4
+          },
+          "cpu": 0.5,
+          "memory": 1,
+          "maxInstances": 2,
+          "minInstances": 2,
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
@@ -142,8 +155,6 @@
             "libs/nest/src/**",
             "_platform.dockerfile"
           ],
-          "maxInstances": 3,
-          "minInstances": 2,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
@@ -236,17 +247,17 @@
         },
         "trigger": "manual"
       },
-      "vpc": {
-        "id": "vpc-0d5a6014067dda3b2",
-        "cidr": "10.192.0.0/16"
-      },
       "services": [
         {
           "id": "cold-platform-openai-preview",
           "name": "cold-platform-openai",
           "cpu": 1,
           "port": 7001,
-          "type": "fargate",
+          "type": "web",
+          "ci": {
+            "type": "ec2",
+            "instanceSize": "t3a.medium"
+          },
           "memory": 2,
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",

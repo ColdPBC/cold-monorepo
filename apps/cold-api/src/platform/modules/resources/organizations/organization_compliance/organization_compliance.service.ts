@@ -50,10 +50,10 @@ export class OrganizationComplianceService extends BaseWorker {
           base_update_topic: `ui/${process.env.NODE_ENV}/${orgId}/${compliance_name}`,
           service: openAI_definition,
           compliance,
+          organization,
           token: headers['authorization'].replace('Bearer ', ''),
         },
         user,
-        orgId,
       );
 
       this.mqtt.publishMQTT('public', {
@@ -149,11 +149,11 @@ export class OrganizationComplianceService extends BaseWorker {
         {
           on_update_url: `/organizations/${orgId}/surveys/${compliance_name}`,
           surveys,
+          organization,
           service: openAI_definition,
           compliance,
         },
         user,
-        orgId,
       );
 
       this.mqtt.publishMQTT('public', {

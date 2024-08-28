@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.1.1",
-  "version": "1.335.0-COLD-957.1",
+  "version": "1.334.4",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
@@ -18,8 +18,7 @@
     "format": "prettier --write \"apps/cold-api/src/**/*.ts\" \"apps/cold-api/test/**/*.ts\"",
     "lint": "eslint apps/**/*.ts --fix",
     "prebuild": "yarn barrels",
-    "barrels": "yarn dlx barrelsby -D -l all --directory ./libs/react/src -d ./libs/nest/src -e ./libs/nest/src/validation/generated -e stories.tsx -e react-app-env -e private.tsx -e spec.ts -e jest.config.ts -S -H",
-    "start": "yarn dlx nx serve",
+    "barrels": "yarn dlx barrelsby -D -l all --directory ./libs/react/src -d ./libs/nest/src -d apps/cold-platform-openai/src/extraction/schemas -e ./libs/nest/src/validation/generated -e stories.tsx -e react-app-env -e private.tsx -e spec.ts -e jest.config.ts -S -H",
     "start:prod": "yarn dlx nx serve-static",
     "setVersion": "node updateVersion.mjs $(git tag --sort=committerdate | tail -1 | cut -b 2-100) $(git branch --show)",
     "clearVersion": "node updateVersion.mjs '' $(git branch --show)",
@@ -101,8 +100,6 @@
     "@semantic-release/exec": "^6.0.3",
     "@sendgrid/mail": "^7.7.0",
     "@storybook/testing-react": "^2.0.1",
-    "@stripe/react-stripe-js": "^2.8.0",
-    "@stripe/stripe-js": "^4.3.0",
     "@tailwindcss/forms": "^0.5.3",
     "@types/luxon": "^3.3.2",
     "@types/numeral": "^2.0.4",

@@ -12,6 +12,8 @@ import {
   DarklyService,
   FilteringService,
   GuidPrefixes,
+  IAuthenticatedUser,
+  IRequest,
   MqttService,
   PrismaService,
 } from '@coldpbc/nest';
@@ -26,7 +28,7 @@ import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { FPSession, FreeplayService } from '../freeplay/freeplay.service';
 import { FormattedPrompt } from 'freeplay/thin';
-import { compliance_sections, organizations } from '@prisma/client';
+import { compliance_sections, file_types, organization_files, organizations } from '@prisma/client';
 
 @Injectable()
 export class ChatService extends BaseWorker implements OnModuleInit {
@@ -584,12 +586,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       });
 
       // Find the index for the organization
-      const idx = await this.pc.getIndex(organization.name);
+      const idx = await this.pc.getIndex();
 
       // If the index does not exist, create it
       if (!idx) {
         this.logger.warn(`Index ${organization.name} not found; creating...`);
-        await this.pc.getIndexDetails(organization.name);
+        await this.pc.getIndexDetails();
 
         // Clear existing vectors since the index was just created
         const vectors = await this.prisma.vector_records.findMany({ where: { organization_id: organization.id } });
@@ -752,13 +754,13 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       });
 
       // Find the index for the organization
-      const idx = await this.pc.getIndex(organization.name);
+      const idx = await this.pc.getIndex();
 
       // If the index does not exist, create it
       if (!idx) {
         this.logger.warn(`Index ${organization.name} not found; creating...`);
 
-        await this.pc.getIndexDetails(organization.name);
+        await this.pc.getIndexDetails();
 
         // Clear existing vectors since the index was just created
         const vectors = await this.prisma.vector_records.findMany({ where: { organization_id: organization.id } });
@@ -1357,5 +1359,37 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     }
 
     return false;
+  }
+
+  async classifyDocuments(req: IRequest, type?: file_types) {
+    const organizations = await this.prisma.organizations.findMany();
+    const { user } = req;
+    for (const org of organizations) {
+      await this.classifyOrgDocuments(org, user, type);
+    }
+  }
+
+  async classifyOrgDocuments(org: organizations, user: IAuthenticatedUser, type?: file_types) {
+    const where = {
+      organization_id: org.id,
+    };
+
+    if (type) {
+      where['type'] = type;
+    }
+
+    const files = await this.prisma.organization_files.findMany({
+      where,
+    });
+
+    for (const file of files) {
+      await this.processFiles(org, user, file);
+    }
+  }
+
+  async processFiles(organization: organizations, user: IAuthenticatedUser, file: organization_files) {
+    const index = await this.pc.getIndex();
+
+    return await this.pc.uploadData(organization, user, file, index);
   }
 }

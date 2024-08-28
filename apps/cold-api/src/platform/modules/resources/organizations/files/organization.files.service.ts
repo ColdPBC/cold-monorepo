@@ -186,7 +186,7 @@ export class OrganizationFilesService extends BaseWorker {
         //const routingKey = get(this.openAI.definition, 'rabbitMQ.publishOptions.routing_key', 'dead_letter');
         //await this.events.sendPlatformEvent(routingKey, 'file.uploaded', { existing, user, organization: org }, req);
 
-        await this.events.sendIntegrationEvent(false, 'file.uploaded', existing, user, orgId);
+        await this.events.sendIntegrationEvent(false, 'file.uploaded', { ...existing, organization }, user);
 
         existingFiles.push(existing);
 
@@ -242,7 +242,7 @@ export class OrganizationFilesService extends BaseWorker {
   }
 
   async deleteFile(req: IRequest, orgId: string, fileIds: string[]) {
-    const { user, url } = req;
+    const { user, url, organization } = req;
     try {
       const org = await this.helper.getOrganizationById(orgId, req.user, true);
 
@@ -268,7 +268,7 @@ export class OrganizationFilesService extends BaseWorker {
           },
         });
 
-        await this.events.sendIntegrationEvent(false, 'file.deleted', { file, vectors }, user, orgId);
+        await this.events.sendIntegrationEvent(false, 'file.deleted', { file, vectors, organization }, user);
 
         await this.prisma.organization_files.delete({
           where: {

@@ -6,6 +6,7 @@ import { PineconeModule } from '../pinecone/pinecone.module';
 import { PineconeService } from '../pinecone/pinecone.service';
 import { LangchainModule } from '../langchain/langchain.module';
 import { CrawlerController } from './crawler.controller';
+import { ExtractionModule } from '../extraction/extraction.module';
 
 @Module({})
 export class CrawlerModule {
@@ -20,6 +21,7 @@ export class CrawlerModule {
           name: 'pinecone',
         }),
         PineconeModule,
+        ExtractionModule,
         LangchainModule,
       ],
       controllers: [CrawlerController],

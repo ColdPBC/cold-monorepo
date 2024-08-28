@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, OnModuleInit, Param, Patch, Post, Query, Req, UploadedFiles, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import multerS3 from 'multer-s3';
-import { allRoles, coldAndCompanyAdmins, HttpExceptionFilter, IAuthenticatedUser, IRequest, JwtAuthGuard, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
+import { allRoles, coldAndCompanyAdmins, HttpExceptionFilter, IAuthenticatedUser, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { OrganizationFilesService } from './organization.files.service';
@@ -8,6 +8,7 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(OrgUserInterceptor)
 @ApiOAuth2(['openid', 'email', 'profile'])
 @ApiTags('Organizations', 'files')
 @UseFilters(new HttpExceptionFilter(OrganizationFilesController.name))

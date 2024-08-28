@@ -4,7 +4,7 @@
     "outDir": "../../dist/out-tsc",
     "declaration": true,
     "types": ["node"],
-    "target": "es2021",
+    "target": "es2022",
     "composite": true
   },
   "include": ["prisma/seeds/*.ts","src/**/*.ts", "../validation/**/*.ts"],

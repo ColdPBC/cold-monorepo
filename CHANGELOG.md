@@ -1,4 +1,155 @@
-# [1.335.0-COLD-957.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.4...v1.335.0-COLD-957.1) (2024-08-21)
+## [1.340.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.2...v1.340.3) (2024-08-28)
+
+
+### Bug Fixes
+
+* enable vertical scrolling on documents page ([184cf0d](https://github.com/ColdPBC/cold-monorepo/commit/184cf0db284ddc06ef866b0a45bf52e094f0f137))
+
+## [1.340.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.1...v1.340.2) (2024-08-28)
+
+
+### Bug Fixes
+
+* handle undefined borderRadius and add TODO comment ([3010a19](https://github.com/ColdPBC/cold-monorepo/commit/3010a19369c6c748a42c7424a74a3aff8118cdde))
+
+## [1.340.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.0...v1.340.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* **tsconfig:** update exclude patterns to exclude react library files ([94f51ec](https://github.com/ColdPBC/cold-monorepo/commit/94f51ec92a5e8460b4cf60cae6313263932cfa90))
+
+# [1.340.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.339.1...v1.340.0) (2024-08-28)
+
+
+### Features
+
+* remove cold-graphql configuration ([fc64c92](https://github.com/ColdPBC/cold-monorepo/commit/fc64c929dc6274bca212564c0ff706b2136220cc))
+
+## [1.339.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.339.0...v1.339.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* update flightcontrol target and commands ([b3dd0c5](https://github.com/ColdPBC/cold-monorepo/commit/b3dd0c536f9ad56aeb19c06ce2e5c1ab501dab3a))
+
+# [1.339.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.2...v1.339.0) (2024-08-28)
+
+
+### Features
+
+* update flight control configuration for cold-graphql ([a94a77a](https://github.com/ColdPBC/cold-monorepo/commit/a94a77a503c08f9f434bf7c816f5f287c4599954))
+
+## [1.338.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.1...v1.338.2) (2024-08-28)
+
+
+### Bug Fixes
+
+* adjust instance configurations and resource allocations ([85506af](https://github.com/ColdPBC/cold-monorepo/commit/85506af7354cecc9273bb3d899c41e3eb6366162))
+
+## [1.338.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.0...v1.338.1) (2024-08-27)
+
+
+### Bug Fixes
+
+* correct service name and update configuration paths ([75557f9](https://github.com/ColdPBC/cold-monorepo/commit/75557f9be35bf77d236e627fc6b68a3ba07603cb))
+
+# [1.338.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.4...v1.338.0) (2024-08-27)
+
+
+### Features
+
+* add XLSX file extraction service with PDF conversion and upload to S3 ([e6616e0](https://github.com/ColdPBC/cold-monorepo/commit/e6616e0c811580665852462bba5d46e5215e15d2))
+
+## [1.337.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.3...v1.337.4) (2024-08-26)
+
+
+### Bug Fixes
+
+* **pinecone.service:** add null checks and improve error handling in uploadData method ([ed83d18](https://github.com/ColdPBC/cold-monorepo/commit/ed83d189bc9a1324c1708801c559769b71c1ef5b))
+
+## [1.337.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.2...v1.337.3) (2024-08-24)
+
+
+### Bug Fixes
+
+* refine date extraction and schema descriptions ([338a8c2](https://github.com/ColdPBC/cold-monorepo/commit/338a8c2d96abc00d89b7602f9cb18952d2460e6f))
+
+## [1.337.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.1...v1.337.2) (2024-08-24)
+
+
+### Bug Fixes
+
+* enhance file classification in chat service ([9ef04da](https://github.com/ColdPBC/cold-monorepo/commit/9ef04dabb5c371a70d2f5396924282d1e904e9d6))
+* handle date parsing errors and refine response format ([f7723f9](https://github.com/ColdPBC/cold-monorepo/commit/f7723f90e9c55acb610943de38227c303fa2385a))
+* improve file processing for various content types ([e530de1](https://github.com/ColdPBC/cold-monorepo/commit/e530de18d60c8d801bdfead5892e2765d37ccb53))
+
+## [1.337.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.0...v1.337.1) (2024-08-24)
+
+
+### Bug Fixes
+
+* **chat.service:** add missing await for async operations ([30ece5a](https://github.com/ColdPBC/cold-monorepo/commit/30ece5ac3b1711d0d989bcfc84f3a2f524c0132c))
+
+# [1.337.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.336.0...v1.337.0) (2024-08-24)
+
+
+### Bug Fixes
+
+* **crawler:** update method calls to getIndexDetails and getIndex ([28bd3c1](https://github.com/ColdPBC/cold-monorepo/commit/28bd3c15746f80cc0ce3e6be5edfcec64c51b23b))
+* **events:** refactor sendIntegrationEvent to simplify orgId handling ([f78b06c](https://github.com/ColdPBC/cold-monorepo/commit/f78b06ce69183694988d5c71f5c6675d3ae596dd))
+* include organization in compliance service requests ([4312065](https://github.com/ColdPBC/cold-monorepo/commit/431206507c18e452d9feba7139bbb610b1f0aa31))
+* include organization in integration events ([8d96856](https://github.com/ColdPBC/cold-monorepo/commit/8d96856c8c07d3f5aac421da06fb3fe8eb9abed2))
+* **job.consumer:** remove unnecessary organization name parameter in deleteFileJob ([7965574](https://github.com/ColdPBC/cold-monorepo/commit/796557498fc2553465f2526ac6a341ee305d59aa))
+* **organization.controller:** simplify organization deletion logic ([75a8e16](https://github.com/ColdPBC/cold-monorepo/commit/75a8e168b8fa6dc2c5a005c2f1fa4d98eca81b55))
+* **organization.service:** correct parameter passed to sendIntegrationEvent function ([8858695](https://github.com/ColdPBC/cold-monorepo/commit/88586958aabfaa6d3551b61f2075a3ebd8c72231))
+* update index retrieval and add document classification methods ([be1bb11](https://github.com/ColdPBC/cold-monorepo/commit/be1bb11632c7e8f641e967f580a75da03c451ad7))
+* update organization handling in Rabbit service ([f535a89](https://github.com/ColdPBC/cold-monorepo/commit/f535a89aa820585542379442bf515b8bac3128fc))
+* use correct variable name for organization in integrations service ([e03c4ee](https://github.com/ColdPBC/cold-monorepo/commit/e03c4eee75eba0195133b99e1b998754f97b95bb))
+
+
+### Features
+
+* add classification endpoints to trigger extraction on existing files ([cbe9be4](https://github.com/ColdPBC/cold-monorepo/commit/cbe9be4a42c68cbd08e049d95c51e0e5aa62efef))
+* enhance activation process with organization data ([b41827c](https://github.com/ColdPBC/cold-monorepo/commit/b41827cfda03783242bc16f66b490c61ae475c11))
+* enhance classification and extraction with organization context ([f313349](https://github.com/ColdPBC/cold-monorepo/commit/f3133491e674854fbcbdf6b9debeb2ee1db76e0b))
+
+# [1.336.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.335.0...v1.336.0) (2024-08-23)
+
+
+### Bug Fixes
+
+* correct uploadStreamToS3 function parameter type ([b32d07b](https://github.com/ColdPBC/cold-monorepo/commit/b32d07b14dab3c9ac1a1b40c7c0397a893e6fc81))
+* ensure orgId parameter starts with 'org_' in org-user-interceptor service ([7f3fbef](https://github.com/ColdPBC/cold-monorepo/commit/7f3fbef2f077dd16f9fdc876de281648346826dd))
+* **logging:** initialize DarklyService during onModuleInit ([6b58460](https://github.com/ColdPBC/cold-monorepo/commit/6b58460a71afb004fa7c5ba6e44f0a542b4ddd93))
+
+
+### Features
+
+* add bluesign schema for certificate extraction ([d6b0900](https://github.com/ColdPBC/cold-monorepo/commit/d6b09001f75a664ed4ed1f62b87009489192c8c4))
+* add classification schema for document extraction ([75f14c4](https://github.com/ColdPBC/cold-monorepo/commit/75f14c4f2f1ba0aee2a2301c35ebd8a8c03f7f0c))
+* add default extraction schema for unknown document types ([4ea7591](https://github.com/ColdPBC/cold-monorepo/commit/4ea7591c71929b2efea32226649f7e41c1301c5d))
+* add default platform integrations on organization creation ([8eab6f2](https://github.com/ColdPBC/cold-monorepo/commit/8eab6f2b4b88e3c3d5c6dd26f657d1a2b9f56ad6))
+* add default policy schema for extraction module ([fe4abc1](https://github.com/ColdPBC/cold-monorepo/commit/fe4abc1c97c4f0b99d6240632276eb41ab913b10))
+* add default statement schema for document extraction ([3a821c0](https://github.com/ColdPBC/cold-monorepo/commit/3a821c0499284c6d63c4e3ef114faf1dbf0a754f))
+* add default test schema for extraction ([b3d74df](https://github.com/ColdPBC/cold-monorepo/commit/b3d74df575c7cb62916d7cfba9d31d0a3697e265))
+* add ExtractionModule to AppModule ([476b8f8](https://github.com/ColdPBC/cold-monorepo/commit/476b8f809fbe088bf03e0ad63519165e03de8bc6))
+* add ExtractionModule to cold-platform-openai app ([122dd7f](https://github.com/ColdPBC/cold-monorepo/commit/122dd7fa87bb5d685edefb8b331ed45251d9646e))
+* add ExtractionModule to CrawlerModule ([5f6b759](https://github.com/ColdPBC/cold-monorepo/commit/5f6b759479cd6a35e38df32df4667c58c5856a07))
+* add ExtractionService for AI-based content classification and data extraction ([41f8a75](https://github.com/ColdPBC/cold-monorepo/commit/41f8a75b817b4c9997688e615c93835efdfe007b))
+* add global.schema.ts for extraction module ([4135a2f](https://github.com/ColdPBC/cold-monorepo/commit/4135a2fa430a4728c815bcd3562390521277bc18))
+* add Integrations enum value ([4267bdd](https://github.com/ColdPBC/cold-monorepo/commit/4267bdd5465591a9fa734ef6857e39d536d65352))
+* add interceptor to organization files controller and adjust delete test orgs logic ([a37059c](https://github.com/ColdPBC/cold-monorepo/commit/a37059c6dc43fa3f36efe38788fcb01925361b8d))
+* add intertek.schema.ts to facility extraction from test documents ([d87d2bf](https://github.com/ColdPBC/cold-monorepo/commit/d87d2bf03f0b3ad59c4ddf0a7f12bc909ff37a15))
+* add metadata column to organization_files table ([fbbc309](https://github.com/ColdPBC/cold-monorepo/commit/fbbc3097af67698c7e94c4292312482a7be0a3db))
+* add schema for default certificate ([e69b97b](https://github.com/ColdPBC/cold-monorepo/commit/e69b97b5146e6af01afadc381a9137bbb961bd3d))
+* add schema for TUV Rheinland documents ([71fd8b8](https://github.com/ColdPBC/cold-monorepo/commit/71fd8b83e1c6ecdb3698fc557ba2c5e265d4c984))
+* add SGS schema for test document extraction ([02af502](https://github.com/ColdPBC/cold-monorepo/commit/02af502d49aeb5cfe89857530568e4227e6cc870))
+* add wrap schema definition for certificate extraction ([a8aff80](https://github.com/ColdPBC/cold-monorepo/commit/a8aff80f63a31abc4f3dc0ee3a79c9b84e9eb1dd))
+* enhance PDF handling in langchain loader service ([3eb199c](https://github.com/ColdPBC/cold-monorepo/commit/3eb199c555bd4362e83c27eedb3e90616a559ba2))
+* integrate ExtractionService and S3Service for PDF content handling ([489c250](https://github.com/ColdPBC/cold-monorepo/commit/489c250ac466773efce7261549563e64fce3c287))
+
+# [1.335.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.4...v1.335.0) (2024-08-20)
 
 
 ### Bug Fixes
@@ -7,9 +158,9 @@
 * replace logError with logBrowser, adjust compliance set loading background ([5e0925b](https://github.com/ColdPBC/cold-monorepo/commit/5e0925b582b1e8a2b7707f01153ce5a1ec84b25c))
 
 
+
 ### Features
 
-* add BillingPage component and route ([db84530](https://github.com/ColdPBC/cold-monorepo/commit/db845302271b9f5f61ca6613bacf66e0f098408a))
 * add supplier removal functionality for materials ([7787e8a](https://github.com/ColdPBC/cold-monorepo/commit/7787e8aaecb3ebcba7915b0ba0d44c035b8220cd))
 
 ## [1.334.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.334.3...v1.334.4) (2024-08-19)

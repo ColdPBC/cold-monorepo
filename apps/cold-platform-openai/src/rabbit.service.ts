@@ -166,7 +166,7 @@ export class RabbitService extends BaseWorker {
       }
       case 'organization.created': {
         try {
-          const pcResponse = await this.pc.getIndexDetails(parsed.organization.name);
+          const pcResponse = await this.pc.getIndexDetails();
           const response = await this.appService.createAssistant(parsed);
           if (parsed.organization.website) {
             let url = parsed.organization.website;
@@ -194,8 +194,8 @@ export class RabbitService extends BaseWorker {
         let pcResponse, response;
 
         try {
-          pcResponse = await this.pc.deleteIndex(parsed.organization.name);
-          this.logger.info('Pinecone index deleted', pcResponse);
+          await this.pc.deleteNamespace(parsed.organization.name);
+          this.logger.info('Pinecone namespace deleted', pcResponse);
         } catch (e) {
           this.logger.error('Failed to delete Pinecone index', e);
         }

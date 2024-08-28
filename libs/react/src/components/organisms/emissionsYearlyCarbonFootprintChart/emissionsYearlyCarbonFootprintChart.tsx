@@ -32,7 +32,10 @@ import numeral from 'numeral';
 const _EmissionsYearlyCarbonFootprintChart = () => {
   const chartRef = React.useRef(null);
   const { selectedFacility, selectedYear, setSelectedYear, data } = useContext(ColdEmissionsContext);
+  // TODO: Fix the issue below!
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { logBrowser } = useColdContext();
+
   const { emissions, yearOptions } = data;
   const yearsData: {
     [year: string]: {
@@ -140,14 +143,14 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
       }
       if (isArray(yearsChartData.datasets[scopeIndex].backgroundColor)) {
         if (selectedYear.value === 'all') {
-          // @ts-ignore
+          // @ts-expect-error - fix this error
           yearsChartData.datasets[scopeIndex].backgroundColor.push(defaultScopeColors[parseInt(scope) - 1]);
         } else {
           if (year === selectedYear.value) {
-            // @ts-ignore
+            // @ts-expect-error - fix this error
             yearsChartData.datasets[scopeIndex].backgroundColor.push(defaultScopeColors[parseInt(scope) - 1]);
           } else {
-            // @ts-ignore
+            // @ts-expect-error - fix this error
             yearsChartData.datasets[scopeIndex].backgroundColor.push(opacity(defaultScopeColors[parseInt(scope) - 1], 0.5));
           }
         }
@@ -299,6 +302,12 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
 
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement, LineController, BarController, Tooltip);
 
+  type BorderRadiusType = {
+    topLeft: number;
+    topRight: number;
+    bottomLeft: number;
+    bottomRight: number;
+  };
   const barPlugins: PluginType[] = [ChartDataLabels];
 
   forOwn(yearsData, (emissions, year) => {
@@ -317,58 +326,35 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
     });
     if (specificYearChartData.length === 1) {
       const firstDataSet = yearsChartData.datasets[specificYearChartData[0]];
-      const firstBorderRadiuses = get(
-        firstDataSet,
-        'borderRadius',
-        Array<{
-          topLeft: number;
-          topRight: number;
-          bottomLeft: number;
-          bottomRight: number;
-        }>(),
-      );
-      firstBorderRadiuses.push({
-        topLeft: 4,
-        topRight: 4,
-        bottomLeft: 4,
-        bottomRight: 4,
-      });
+      const firstBorderRadiuses = get(firstDataSet, 'borderRadius', Array<BorderRadiusType>());
+      if (Array.isArray(firstBorderRadiuses)) {
+        firstBorderRadiuses.push({
+          topLeft: 4,
+          topRight: 4,
+          bottomLeft: 4,
+          bottomRight: 4,
+        });
+      }
       set(yearsChartData.datasets[firstDataSetIndex], 'borderRadius', firstBorderRadiuses);
     } else {
       const firstDataSet = yearsChartData.datasets[specificYearChartData[0]];
       const lastDataSet = yearsChartData.datasets[specificYearChartData[specificYearChartData.length - 1]];
-      const firstBorderRadiuses = get(
-        firstDataSet,
-        'borderRadius',
-        Array<{
-          topLeft: number;
-          topRight: number;
-          bottomLeft: number;
-          bottomRight: number;
-        }>(),
-      );
-      const lastBorderRadiuses = get(
-        lastDataSet,
-        'borderRadius',
-        Array<{
-          topLeft: number;
-          topRight: number;
-          bottomLeft: number;
-          bottomRight: number;
-        }>(),
-      );
-      firstBorderRadiuses.push({
-        topLeft: 0,
-        topRight: 0,
-        bottomLeft: 4,
-        bottomRight: 4,
-      });
-      lastBorderRadiuses.push({
-        topLeft: 4,
-        topRight: 4,
-        bottomLeft: 0,
-        bottomRight: 0,
-      });
+      const firstBorderRadiuses = get(firstDataSet, 'borderRadius', Array<BorderRadiusType>());
+      const lastBorderRadiuses = get(lastDataSet, 'borderRadius', Array<BorderRadiusType>());
+      if (Array.isArray(firstBorderRadiuses) && Array.isArray(lastBorderRadiuses)) {
+        firstBorderRadiuses.push({
+          topLeft: 0,
+          topRight: 0,
+          bottomLeft: 4,
+          bottomRight: 4,
+        });
+        lastBorderRadiuses.push({
+          topLeft: 4,
+          topRight: 4,
+          bottomLeft: 0,
+          bottomRight: 0,
+        });
+      }
       set(yearsChartData.datasets[lastDataSetIndex], 'borderRadius', lastBorderRadiuses);
       set(yearsChartData.datasets[lastDataSetIndex], 'minBarLength', 5);
       set(yearsChartData.datasets[firstDataSetIndex], 'borderRadius', firstBorderRadiuses);

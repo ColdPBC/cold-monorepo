@@ -1,12 +1,14 @@
-import { Controller, Delete, Injectable, NotFoundException, Param, Put, Req, UseFilters, UseGuards } from '@nestjs/common';
-import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, PrismaService, Role, Roles, RolesGuard } from '@coldpbc/nest';
+import { Controller, Delete, Get, Injectable, NotFoundException, Param, Put, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, IRequest, JwtAuthGuard, OrgUserInterceptor, PrismaService, Role, Roles, RolesGuard } from '@coldpbc/nest';
 import { ChatService } from './chat.service';
 import { ApiOAuth2 } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { PineconeService } from '../pinecone/pinecone.service';
+import { file_types } from '@prisma/client';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(OrgUserInterceptor)
 @ApiOAuth2(['openid', 'email', 'profile'])
 @Controller()
 @UseFilters(new HttpExceptionFilter(ChatController.name))
@@ -57,20 +59,23 @@ export class ChatController extends BaseWorker {
     }
   }
 
+  @Get('classify')
+  @Roles(Role.ColdAdmin)
+  async classify(@Req() req: IRequest, @Query('type') type?: file_types) {
+    return this.chatService.classifyDocuments(req, type);
+  }
+
+  @Get('classify/organization/:orgId/files')
+  @Roles(Role.ColdAdmin)
+  async classifyOrgFiles(@Param('orgId') orgId: string, @Req() req: IRequest, @Query('type') type?: file_types) {
+    return this.chatService.classifyOrgDocuments(req.organization, req.user, type);
+  }
+
   // Add methods here
   @Put('organization/:orgId/search')
   @Roles(Role.ColdAdmin)
   // @ts-expect-error - TS6133: 'session' is declared but its value is never read.
-  async search(
-    @Param('orgId') orgId: string,
-    @Req()
-    req: {
-      body: { prompt?: string; query?: string };
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
-  ) {
+  async search(@Param('orgId') orgId: string, @Req() req: IRequest) {
     const company = await this.prisma.organizations.findUnique({
       where: {
         id: orgId,

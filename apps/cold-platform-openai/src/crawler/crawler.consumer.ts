@@ -74,8 +74,8 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
         await this.addToSeen(job.data?.organization?.name, job.data.url);
       }
 
-      const details = await this.pc.getIndexDetails(job.data.organization.name);
-      const index = await this.pc.getIndex(details.indexName);
+      const details = await this.pc.getIndexDetails();
+      const index = await this.pc.getIndex();
 
       // Check if we should continue crawling
       if (this.urlBlocked(job.data.url)) {

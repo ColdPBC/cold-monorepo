@@ -1,5 +1,5 @@
-import { ConflictException, Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IAuthenticatedUser, PrismaService } from '@coldpbc/nest';
+import { BadRequestException, ConflictException, Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
+import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
 import { Pinecone, PineconeRecord, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { ConfigService } from '@nestjs/config';
 import { Document } from '@langchain/core/documents';
@@ -7,7 +7,10 @@ import OpenAI from 'openai';
 import { LangchainLoaderService } from '../langchain/langchain.loader.service';
 import { organization_files, organizations } from '@prisma/client';
 import { InjectQueue } from '@nestjs/bull';
+import { fromBuffer } from 'pdf2pic';
 import { Queue } from 'bull';
+import { ExtractionService } from '../extraction/extraction.service';
+import { ExtractionXlsxService } from '../extraction/extraction.xlsx.service';
 
 export type PineconeMetadata = {
   url: string;
@@ -18,8 +21,8 @@ export type PineconeMetadata = {
 
 @Injectable()
 export class PineconeService extends BaseWorker implements OnModuleInit {
-  public pinecone: Pinecone;
-  public openai: OpenAI;
+  private pinecone: Pinecone;
+  private openai: OpenAI;
   idGenerator = new Cuid2Generator(GuidPrefixes.Vector);
 
   constructor(
@@ -28,6 +31,9 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     readonly darkly: DarklyService,
     readonly lc: LangchainLoaderService,
     readonly prisma: PrismaService,
+    readonly s3: S3Service,
+    readonly extraction: ExtractionService,
+    readonly xlsxService: ExtractionXlsxService,
     @InjectQueue('pinecone') readonly queue: Queue,
   ) {
     super(PineconeService.name);
@@ -37,30 +43,12 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     });
   }
 
-  async getIndexDetails(org_name) {
-    /*let config = await this.darkly.getJSONFlag(
-      'config-embedding-model',
-
-      {
-        kind: 'organization',
-        key: org_name,
-        name: org_name,
-      },
-    );*/
-
-    let config = {
+  async getIndexDetails(indexName?: string) {
+    const config = {
       dimension: 3072,
       model: 'text-embedding-3-large',
-      index: 'cold-clients-3-large',
+      index: indexName ? indexName : 'cold-clients-3-large',
     };
-
-    if (!config.index || !config) {
-      config = {
-        dimension: 3072,
-        model: 'text-embedding-3-large',
-        index: 'cold-clients-3-large',
-      };
-    }
 
     await this.createIndex(config.index, config.dimension);
 
@@ -72,9 +60,9 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       throw new Error(`Organization not found: ${org.id}`);
     }
 
-    const details = await this.getIndexDetails(org.name);
+    const details = await this.getIndexDetails();
 
-    const index = await this.getIndex(details.indexName);
+    const index = await this.getIndex();
 
     try {
       switch (type) {
@@ -228,9 +216,17 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   }
 
   async getContext(message: string, namespace: string, indexName: string, minScore = 0.0, getOnlyText = true): Promise<string | ScoredPineconeRecord[]> {
-    const indexDetails = await this.getIndexDetails(indexName);
+    const indexDetails = await this.getIndexDetails();
     // Get the embeddings of the input message
-    const embedding = await this.embedString(message, indexName);
+    message =
+      message
+        .replace(/\n/g, ' ')
+        // eslint-disable-next-line no-control-regex
+        .replace(/[\x00-\x08\x0E-\x1F\x7F-\uFFFF]/g, '')
+        // eslint-disable-next-line
+        .replace(/[^\x01-\x7F\n\r!\"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~A-Za-z0-9]/g, '') || '';
+
+    const embedding = await this.embedString(message);
 
     // Retrieve the matches for the embeddings from the specified namespace
     const matches = await this.getMatchesFromEmbeddings(embedding, 5, namespace, indexDetails.indexName);
@@ -283,6 +279,19 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     return docs.join('\n');
   }
 
+  async gets3File(file: any, user) {
+    const bucket = `cold-api-uploaded-files`;
+
+    const extension = file.key.split('.').pop();
+    const s3File = await this.s3.getObject(user, bucket, file.key);
+
+    if (!s3File.Body) {
+      throw new Error(`File not found: ${file.key}`);
+    }
+
+    return { s3File, extension };
+  }
+
   // The function `getMatchesFromEmbeddings` is used to retrieve matches for the given embeddings
   async getMatchesFromEmbeddings(embeddings: number[], topK: number, namespace: string, indexName: string): Promise<ScoredPineconeRecord<PineconeMetadata>[]> {
     // Obtain a client for Pinecone
@@ -319,7 +328,15 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
   async embedWebContent(doc: Document, metadata: any) {
     // Generate OpenAI embeddings for the document content
-    const embedding = await this.embedString(doc.pageContent, metadata.organization);
+    doc.pageContent =
+      doc.pageContent
+        .replace(/\n/g, ' ')
+        // eslint-disable-next-line no-control-regex
+        .replace(/[\x00-\x08\x0E-\x1F\x7F-\uFFFF]/g, '')
+        // eslint-disable-next-line
+        .replace(/[^\x01-\x7F\n\r!\"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~A-Za-z0-9]/g, '') || '';
+
+    const embedding = await this.embedString(doc.pageContent);
 
     // Return the vector embedding object
     const record = {
@@ -337,8 +354,16 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
   async embedDocument(doc: Document, org_file: any, org_name: string): Promise<PineconeRecord> {
     try {
+      doc.pageContent =
+        doc.pageContent
+          .replace(/\n/g, ' ')
+          // eslint-disable-next-line no-control-regex
+          .replace(/[\x00-\x08\x0E-\x1F\x7F-\uFFFF]/g, '')
+          // eslint-disable-next-line
+          .replace(/[^\x01-\x7F\n\r!\"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~A-Za-z0-9]/g, '') || '';
+
       // Generate OpenAI embeddings for the document content
-      const embedding = await this.embedString(doc.pageContent, org_name);
+      const embedding = await this.embedString(doc.pageContent);
 
       // Return the vector embedding object
       const record = {
@@ -358,7 +383,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         },
       } as PineconeRecord;
 
-      const indexDetails = await this.getIndexDetails(org_name);
+      const indexDetails = await this.getIndexDetails();
 
       try {
         await this.prisma.vector_records.create({
@@ -385,8 +410,16 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
   async embedWebDocument(doc: Document, org: any): Promise<PineconeRecord> {
     try {
+      doc.pageContent =
+        doc.pageContent
+          .replace(/\n/g, ' ')
+          // eslint-disable-next-line no-control-regex
+          .replace(/[\x00-\x08\x0E-\x1F\x7F-\uFFFF]/g, '')
+          // eslint-disable-next-line
+          .replace(/[^\x01-\x7F\n\r!\"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~A-Za-z0-9]/g, '') || '';
+
       // Generate OpenAI embeddings for the document content
-      const embedding = await this.embedString(doc.pageContent, org.name);
+      const embedding = await this.embedString(doc.pageContent);
 
       // Return the vector embedding object
       const record = {
@@ -409,17 +442,16 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async embedString(input: string, org_name: string) {
+  async embedString(input: string) {
     try {
       if (!input) {
         throw new Error(`Input is requrired: ${input}`);
       }
 
-      const indexDetail = await this.getIndexDetails(org_name);
+      const indexDetail = await this.getIndexDetails();
       const embeddingConfig = {
         model: indexDetail.config.model,
-        // eslint-disable-next-line no-control-regex
-        input: input?.replace(/\n/g, ' ').replace(/[\x00-\x08\x0E-\x1F\x7F-\uFFFF]/g, '') || '',
+        input,
       };
 
       const response = await this.openai.embeddings.create(embeddingConfig);
@@ -433,7 +465,11 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
   async uploadData(organization: any, user: any, filePayload: any, index: any) {
     try {
-      if (filePayload.vector_records && filePayload.vector_records.length > 0) {
+      if (!filePayload) {
+        throw new Error('No file payload found');
+      }
+
+      if (filePayload?.vector_records && filePayload?.vector_records.length > 0) {
         for (const v of filePayload.vector_records) {
           this.logger.info(`checking if ${v.id} of ${filePayload.original_name} exists in db`);
           const found = await index.namespace(organization.name).query({
@@ -448,21 +484,174 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
             this.logger.info(`upserted ${v.id} of ${filePayload.original_name} to namespace ${organization.name} in index ${index.name}`);
           }
         }
-      } else {
-        // Load the document content from the file and split it into chunks
-        const content = await this.lc.getDocContent(filePayload, user);
+      }
 
-        // Get the vector embeddings for the document
-        const embeddings = await Promise.all(content.flat().map(doc => this.embedDocument(doc, filePayload, organization.name)));
-        for (const v of embeddings) {
-          const record = { id: v.id, values: v.values, metadata: v.metadata };
-          index.namespace(organization.name).upsert([record]);
+      let extension = filePayload?.key.split('.').pop();
+
+      let bytes: Uint8Array = new Uint8Array();
+
+      if (['png', 'jpg', 'gif', 'bmp', 'tiff', 'heic'].includes(extension.toLowerCase())) {
+        const url = await this.s3.getSignedURL(user, filePayload?.bucket, filePayload?.key, 3600);
+        const response = await this.extraction.extractDataFromContent(url, user, filePayload, organization);
+
+        if (response) {
+          // Encode the JSON string to a byte array
+          const encoder = new TextEncoder();
+          bytes = encoder.encode(JSON.stringify(response));
         }
+      } else if (extension === 'xlsx') {
+        const pdfBytes = await this.convertXlsToPdf(user, filePayload, organization);
+
+        if (!pdfBytes) {
+          throw new Error(`Failed to convert ${filePayload.original_name} to pdf`);
+        }
+
+        bytes = pdfBytes;
+        // set extension to PDF since it's now been converted
+        extension = 'pdf';
+      } else {
+        // Process All Others
+        const bucket = `cold-api-uploaded-files`;
+        const s3File = await this.s3.getObject(user, bucket, filePayload?.key);
+
+        if (!s3File?.Body) {
+          throw new Error(`File not found: ${filePayload?.key}`);
+        }
+
+        bytes = await s3File?.Body?.transformToByteArray();
+      }
+
+      if (!bytes || bytes.length < 1) {
+        throw new Error(`No bytes found in ${filePayload?.original_name}`);
+      }
+
+      // Load the document content from the file and split it into chunks
+      const content = await this.lc.getDocContent(extension, bytes, user);
+
+      if (Array.isArray(content) && content.length > 0) {
+        // Store the vector embeddings for the document
+        await this.persistEmbeddings(index, content, filePayload, organization);
+
+        await this.extraction.extractDataFromContent(content, user, filePayload, organization);
+      } else {
+        // Attempt to convert PDF to Image since no text content found
+        this.logger.warn(`No text content found in ${filePayload?.original_name}; converting to image`);
+
+        bytes = content['bytes'];
+
+        const url = await this.converPdfToImage(bytes, filePayload, user, organization);
+
+        if (!url) {
+          throw new Error(`No image url found in ${filePayload?.original_name}`);
+        }
+
+        const extracted = await this.extraction.extractDataFromContent(url, user, filePayload, organization);
+
+        if (extracted) {
+          // Encode the JSON string to a byte array
+          const encoder = new TextEncoder();
+          bytes = encoder.encode(JSON.stringify(extracted));
+        }
+
+        // Create embedding for content
+        const embedding = (await this.lc.getDocContent('txt', bytes, user)) as Document<Record<string, any>>[];
+
+        await this.persistEmbeddings(index, embedding, filePayload, organization);
       }
     } catch (e) {
-      this.logger.error('Error upserting chunk', { error: e, namespace: organization.name });
+      this.logger.error(e.message, { error: e, namespace: organization.name, file: filePayload });
 
       this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'failed' });
+    }
+  }
+
+  private async convertXlsToPdf(user: any, filePayload: any, organization: any) {
+    // Process Spreadsheet
+    try {
+      const s3File = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
+      const bytes = await s3File?.Body?.transformToByteArray();
+
+      if (!bytes) {
+        throw new BadRequestException('Failed to load file');
+      }
+
+      const fileData = await this.xlsxService.convertXLS(bytes, filePayload, user, organization);
+
+      if (!fileData || !fileData.file || !fileData.bytes) {
+        throw new Error(`Failed to convert ${filePayload.original_name} to pdf`);
+      }
+
+      return fileData.bytes;
+    } catch (e) {
+      this.logger.error('Error converting xlsx to image', { error: e, namespace: organization.name });
+      return undefined;
+    }
+  }
+
+  async converPdfToImage(content: Uint8Array, filePayload: { original_name: any[] }, user: IAuthenticatedUser, organization: organizations) {
+    const convert = fromBuffer(Buffer.from(content), { format: 'png', quality: 100, density: 100 });
+
+    try {
+      const image = await convert(1, { responseType: 'buffer' });
+
+      if (!image.buffer) {
+        throw new Error(`No image found in ${filePayload.original_name}`);
+      }
+
+      const s3Image = await this.s3.uploadStreamToS3(user, organization.id, {
+        originalname: `${filePayload.original_name.toString().replace(`${filePayload.original_name.toString().split('.').pop()}`, 'png')}`,
+        buffer: image.buffer,
+      });
+
+      const orgFile = await this.prisma.organization_files.upsert({
+        where: {
+          s3Key: {
+            bucket: s3Image.bucket,
+            key: s3Image.key,
+            organization_id: organization.id,
+          },
+        },
+        create: {
+          id: new Cuid2Generator(GuidPrefixes.OrganizationFile).scopedId,
+          organization_id: organization.id,
+          bucket: s3Image.bucket,
+          key: s3Image.key,
+          original_name: `${filePayload.original_name.toString().replace(`${filePayload.original_name.toString().split('.').pop()}`, 'png')}`,
+          mimetype: 'image/png',
+          encoding: 'base64',
+          contentType: 'image/png',
+          checksum: await S3Service.calculateBufferChecksum(image.buffer),
+          size: image.buffer.length,
+        },
+        update: {
+          key: s3Image.key,
+          original_name: `${filePayload.original_name.toString().replace(`${filePayload.original_name.toString().split('.').pop()}`, 'png')}`,
+          mimetype: 'image/png',
+          encoding: 'base64',
+          contentType: 'image/png',
+          checksum: await S3Service.calculateBufferChecksum(image.buffer),
+          size: image.buffer.length,
+        },
+      });
+
+      this.logger.info(`converted ${filePayload.original_name} to image ${orgFile.original_name}`, { file: orgFile });
+
+      const url = await this.s3.getSignedURL(user, s3Image.bucket, s3Image.key, 3600);
+
+      return url;
+    } catch (e) {
+      this.logger.error('Error converting pdf to image', { error: e, namespace: organization.name });
+
+      return null;
+    }
+  }
+
+  async persistEmbeddings(index: any, content: Document<Record<string, any>>[], filePayload: any, organization: { name: string }) {
+    // Get the vector embeddings for the document
+    const embeddings = await Promise.all(content.flat().map(doc => this.embedDocument(doc, filePayload, organization.name)));
+    for (const v of embeddings) {
+      const record = { id: v.id, values: v.values, metadata: v.metadata };
+      index.namespace(organization.name).upsert([record]);
     }
   }
 
@@ -483,7 +672,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         this.logger.warn(message);
       }*/
 
-      const details = indexDetails || (await this.getIndexDetails(organization.name));
+      const details = indexDetails || (await this.getIndexDetails());
 
       const org_file = await this.prisma.organization_files.findUnique({
         where: {
@@ -499,7 +688,11 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         },
       });
 
-      const index = await this.getIndex(organization.name);
+      const index = await this.getIndex();
+
+      if (!org_file) {
+        throw new Error(`File not found: ${filePayload.id}`);
+      }
 
       await this.uploadData(organization, user, org_file, index);
     } catch (error) {
@@ -518,7 +711,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         },
       });
 
-      throw new Error('Failed to ingest your data');
+      throw new Error('Failed to ingest data');
     }
   }
 
@@ -538,8 +731,8 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   }
 
   async loadWebFile(url: string, org: organizations) {
-    const details = await this.getIndexDetails(org.name);
-    const index = await this.getIndex(details.indexName);
+    const details = await this.getIndexDetails();
+    const index = await this.getIndex();
     const response = await this.lc.getWebFileContent(url);
     // Get the vector embeddings for the document
     const embeddings = await Promise.all(response.flat().map(doc => this.embedWebDocument(doc, org)));
@@ -569,8 +762,8 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async getIndex(targetIndex: string) {
-    const details = await this.getIndexDetails(targetIndex);
+  async getIndex() {
+    const details = await this.getIndexDetails();
 
     if (!this.pinecone) {
       await this.onModuleInit();
@@ -610,7 +803,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         waitUntilReady: true,
       });
 
-      this.logger.info(`created index for ${targetIndex}`);
+      this.logger.info(`created ${targetIndex} index`);
       this.metrics.increment('pinecone.index', 1, { index: targetIndex, status: 'created' });
       return idx;
     } catch (e) {
@@ -627,10 +820,19 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
 
     try {
-      const indexDetails = await this.getIndexDetails(targetIndex);
-      await this.pinecone.deleteIndex(indexDetails.indexName);
+      if (!this.pinecone) {
+        await this.onModuleInit();
+      }
 
-      return { message: 'Index deleted successfully.' };
+      const response = await this.pinecone.listIndexes();
+      if (response?.indexes?.some(item => item.name === targetIndex)) {
+        const indexDetails = this.pinecone.index(targetIndex);
+        if (!indexDetails) {
+          await this.pinecone.deleteIndex(targetIndex);
+        }
+      }
+
+      return { message: `Deleted ${targetIndex} index successfully.` };
     } catch (error) {
       this.logger.error(error.message, { stack: error.stack, message: error.message });
       throw error;
@@ -650,8 +852,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
       const webVectorIds = webVectors.map(v => v.id);
 
-      const details = await this.getIndexDetails(org.name);
-      const index = await this.getIndex(details.indexName);
+      const index = await this.getIndex();
       // delete from pinecone
       if (webVectorIds.length > 0) {
         await index.namespace(org.name).deleteMany(webVectorIds);
@@ -677,8 +878,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   }
 
   async deleteNamespace(namespace: string) {
-    const details = await this.getIndexDetails(namespace);
-    const index = await this.getIndex(details.indexName);
+    const index = await this.getIndex();
     await index.namespace(namespace).deleteAll();
   }
 }

@@ -5,6 +5,8 @@ import { LangchainLoaderService } from '../langchain/langchain.loader.service';
 import { PrismaModule } from '@coldpbc/nest';
 import { BullModule } from '@nestjs/bull';
 import { PineconeConsumer } from './pinecone.consumer';
+import { ExtractionService } from '../extraction/extraction.service';
+import { ExtractionModule } from '../extraction/extraction.module';
 
 @Module({
   imports: [
@@ -13,8 +15,9 @@ import { PineconeConsumer } from './pinecone.consumer';
     }),
     LangchainModule,
     PrismaModule,
+    ExtractionModule,
   ],
-  providers: [PineconeService, LangchainLoaderService, PineconeConsumer],
+  providers: [PineconeService, LangchainLoaderService, PineconeConsumer, ExtractionService],
   exports: [PineconeService],
 })
 export class PineconeModule {}

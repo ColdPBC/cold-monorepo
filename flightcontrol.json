@@ -16,6 +16,9 @@
           "domain": "app.coldclimate.com",
           "name": "cold-ui",
           "type": "static",
+          "ci": {
+            "type": "ec2"
+          },
           "singlePageApp": true,
           "buildType": "nixpacks",
           "basePath": ".",
@@ -64,15 +67,19 @@
           "domain": "api.coldclimate.com",
           "cpu": 1,
           "port": 7001,
-          "type": "fargate",
-          "memory": 2,
-          "dockerfilePath": "_api.dockerfile",
-          "dockerContext": ".",
-          "containerImage": {
-            "registryId": "cold-ecr-fc-r123elz",
-            "repository": "api-docker-images",
-            "tag": "main"
+          "type": "web",
+          "ci": {
+            "type": "ec2",
+            "instanceSize": "t3a.4xlarge"
           },
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3a.xlarge",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 4
+          },
+          "memory": 2,
+          "buildType": "nixpacks",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
@@ -80,8 +87,8 @@
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
-          "maxInstances": 4,
-          "minInstances": 2,
+          "maxInstances": 2,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
@@ -115,8 +122,8 @@
             {
               "name": "cold-datadog-api-production",
               "image": "datadog/agent",
-              "cpuAllotment": 0.5,
-              "memoryAllotment": 0.25,
+              "cpuAllotment": 1,
+              "memoryAllotment": 1,
               "enableNetworking": true,
               "logging": true,
               "ports": [
@@ -125,7 +132,7 @@
                 5000
               ],
               "envVariables": {
-                "DD_SERVICE": "cold-datadog-openai-production",
+                "DD_SERVICE": "cold-datadog-api-production",
                 "ECS_FARGATE": true,
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
@@ -195,6 +202,9 @@
           "name": "cold-ui",
           "domain": "app.coldclimate.online",
           "type": "static",
+          "ci": {
+            "type": "ec2"
+          },
           "singlePageApp": true,
           "buildType": "nixpacks",
           "basePath": ".",
@@ -240,12 +250,23 @@
         },
         {
           "id": "cold-api-fc-staging",
-          "cpu": 1,
+          "cpu": 0.5,
           "name": "cold-api",
           "domain": "api.coldclimate.online",
           "port": 7001,
-          "type": "fargate",
-          "memory": 2,
+          "type": "web",
+          "ci": {
+            "type": "ec2",
+            "instanceSize": "t3a.4xlarge"
+          },
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3.medium",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 2
+          },
+          "memory": 1,
+          "buildType": "docker",
           "dockerfilePath": "_api.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
@@ -261,8 +282,8 @@
             "cooldownTimerSecs": 60,
             "requestsPerTarget": 160
           },
-          "maxInstances": 3,
-          "minInstances": 2,
+          "maxInstances": 1,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": false,
@@ -373,6 +394,9 @@
           "id": "cold-ui-preview",
           "name": "cold-ui",
           "type": "static",
+          "ci": {
+            "type": "ec2"
+          },
           "singlePageApp": true,
           "buildType": "nixpacks",
           "basePath": ".",
@@ -421,7 +445,18 @@
           "name": "cold-api",
           "cpu": 1,
           "port": 7001,
-          "type": "fargate",
+          "type": "web",
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t2.medium",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 1
+          },
+          "ci": {
+            "type": "ec2",
+            "instanceSize": "t2.medium"
+          },
+          "buildType": "nodejs",
           "memory": 2,
           "dockerfilePath": "_api.dockerfile",
           "dockerContext": ".",
