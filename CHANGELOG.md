@@ -1,3 +1,10 @@
+## [1.341.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.5...v1.341.6) (2024-08-28)
+
+
+### Bug Fixes
+
+* update install command to enable corepack for pnpm ([373649a](https://github.com/ColdPBC/cold-monorepo/commit/373649a496b2e13a60caef6e990c3a42004be9eb))
+
 ## [1.341.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.4...v1.341.5) (2024-08-28)
 
 
