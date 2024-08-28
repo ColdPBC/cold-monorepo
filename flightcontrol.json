@@ -65,7 +65,7 @@
           "id": "cold-api-fc-production",
           "name": "cold-api",
           "domain": "api.coldclimate.com",
-          "basePath": "./apps/cold-api",
+          "basePath": ".",
           "cpu": 1,
           "port": 7001,
           "type": "web",
@@ -81,6 +81,8 @@
           },
           "memory": 2,
           "buildType": "nixpacks",
+          "installCommand": "corepack enable yarn@latest && yarn install",
+          "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-ui:build:production",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
