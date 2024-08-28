@@ -1,3 +1,17 @@
+# [1.341.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.3...v1.341.0) (2024-08-28)
+
+
+### Bug Fixes
+
+* update EC2 instance sizes in flightcontrol configuration ([e8bbb5c](https://github.com/ColdPBC/cold-monorepo/commit/e8bbb5c6295e5bc67268ad6b2d4e8f959c0b1be5))
+* update flight control configuration ([5f0e34f](https://github.com/ColdPBC/cold-monorepo/commit/5f0e34f3ff82a622eab9bdc46443d5ed99489d08))
+
+
+### Features
+
+* add new npm commands for install, build, and start in flightcontrol.json ([50d5d75](https://github.com/ColdPBC/cold-monorepo/commit/50d5d75501552ef9a18a4e4b34a4d2bd5608e190))
+* configure instance size for CI in flightcontrol.json ([7dc1a01](https://github.com/ColdPBC/cold-monorepo/commit/7dc1a012372e326c380b61862847a08c0a1300ec))
+
 ## [1.340.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.340.2...v1.340.3) (2024-08-28)
 
 
