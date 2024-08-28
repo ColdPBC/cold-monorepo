@@ -1,3 +1,10 @@
+## [1.338.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.1...v1.338.2) (2024-08-28)
+
+
+### Bug Fixes
+
+* adjust instance configurations and resource allocations ([85506af](https://github.com/ColdPBC/cold-monorepo/commit/85506af7354cecc9273bb3d899c41e3eb6366162))
+
 ## [1.338.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.0...v1.338.1) (2024-08-27)
 
 
