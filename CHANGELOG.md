@@ -1,3 +1,10 @@
+## [1.338.1-cold-000.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.0...v1.338.1-cold-000.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* correct service name and update configuration paths ([75557f9](https://github.com/ColdPBC/cold-monorepo/commit/75557f9be35bf77d236e627fc6b68a3ba07603cb))
+
 # [1.338.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.337.4...v1.338.0) (2024-08-27)
 
 
