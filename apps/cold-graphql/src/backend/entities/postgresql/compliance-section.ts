@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, OneToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { ComplianceDefinition } from './compliance-definition';
 import { ComplianceQuestion } from './compliance-question';
 import { ComplianceSectionDependencyChain } from './compliance-section-dependency-chain';
@@ -24,7 +24,7 @@ export class ComplianceSection {
 	@Property({ type: 'datetime', length: 3 })
 	updatedAt!: Date;
 
-	@OneToOne({ entity: () => ComplianceSectionGroup, ref: true, unique: 'compliance_sections_compliance_section_group_id_key_key' })
+	@ManyToOne({ entity: () => ComplianceSectionGroup, ref: true })
 	complianceSectionGroup!: Ref<ComplianceSectionGroup>;
 
 	@Property({ type: 'integer' })
@@ -45,6 +45,6 @@ export class ComplianceSection {
 	@ManyToOne({ entity: () => ComplianceDefinition, ref: true, nullable: true, index: 'compliance_sections_compliance_definition_id_idx' })
 	complianceDefinition?: Ref<ComplianceDefinition>;
 
-	@OneToOne({ entity: () => ComplianceQuestion, mappedBy: 'complianceSection' })
-	complianceSectionInverse?: ComplianceQuestion;
+	@OneToMany({ entity: () => ComplianceQuestion, mappedBy: 'complianceSection' })
+	complianceQuestions = new Collection<ComplianceQuestion>(this);
 }

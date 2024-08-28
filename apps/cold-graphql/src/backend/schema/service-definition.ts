@@ -33,8 +33,8 @@ export class ServiceDefinition {
 	@Field(() => ServiceDefinitionsType)
 	type!: string;
 
-	@RelationshipField<ServiceDefinition>(() => Integration, { id: (entity) => entity.serviceDefinitionInverse?.id })
-	serviceDefinitionInverse?: Integration;
+	@RelationshipField<Integration>(() => [Integration], { relatedField: 'serviceDefinition' })
+	integrations!: Integration[];
 
 	@RelationshipField<SupportedUtility>(() => [SupportedUtility], { relatedField: 'serviceDefinition' })
 	supportedUtilities!: SupportedUtility[];

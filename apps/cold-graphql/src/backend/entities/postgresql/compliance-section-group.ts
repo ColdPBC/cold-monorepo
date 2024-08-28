@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, OneToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { ComplianceDefinition } from './compliance-definition';
 import { ComplianceSection } from './compliance-section';
 
@@ -31,6 +31,6 @@ export class ComplianceSectionGroup {
 	@ManyToOne({ entity: () => ComplianceDefinition, ref: true, nullable: true, index: 'compliance_section_groups_compliance_definition_id_idx' })
 	complianceDefinition?: Ref<ComplianceDefinition>;
 
-	@OneToOne({ entity: () => ComplianceSection, mappedBy: 'complianceSectionGroup' })
-	complianceSectionGroupInverse?: ComplianceSection;
+	@OneToMany({ entity: () => ComplianceSection, mappedBy: 'complianceSectionGroup' })
+	complianceSections = new Collection<ComplianceSection>(this);
 }

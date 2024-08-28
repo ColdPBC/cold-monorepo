@@ -1,4 +1,4 @@
-import { Collection, Entity, ManyToOne, OneToMany, OneToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { Emission } from './emission';
 import { Organization } from './organization';
 import { OrganizationFacility } from './organization-facility';
@@ -11,7 +11,7 @@ export class Integration {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
-	@OneToOne({ entity: () => ServiceDefinition, ref: true, unique: 'integrations_service_definition_id_facility_id_key' })
+	@ManyToOne({ entity: () => ServiceDefinition, ref: true })
 	serviceDefinition!: Ref<ServiceDefinition>;
 
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'integrations_organization_id_idx' })

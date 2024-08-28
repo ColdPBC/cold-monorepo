@@ -1,4 +1,4 @@
-import { Collection, Entity, ManyToOne, OneToMany, OneToOne, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
 import { Organization } from './organization';
 import { SurveyDefinition } from './survey-definition';
 import { SurveyStatus } from './survey-status';
@@ -9,7 +9,7 @@ export class SurveyDatum {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
-	@OneToOne({ entity: () => Organization, ref: true, unique: 'survey_data_organization_id_survey_definition_id_key' })
+	@ManyToOne({ entity: () => Organization, ref: true })
 	organization!: Ref<Organization>;
 
 	@Property({ type: 'json' })

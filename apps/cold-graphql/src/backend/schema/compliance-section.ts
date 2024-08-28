@@ -51,6 +51,6 @@ export class ComplianceSection {
 	@RelationshipField<ComplianceSection>(() => ComplianceDefinition, { id: (entity) => entity.complianceDefinition?.id, nullable: true })
 	complianceDefinition?: ComplianceDefinition;
 
-	@RelationshipField<ComplianceSection>(() => ComplianceQuestion, { id: (entity) => entity.complianceSectionInverse?.id })
-	complianceSectionInverse?: ComplianceQuestion;
+	@RelationshipField<ComplianceQuestion>(() => [ComplianceQuestion], { relatedField: 'complianceSection' })
+	complianceQuestions!: ComplianceQuestion[];
 }

@@ -4,8 +4,8 @@
     "description": "Cold GraphQL API",
     "packageManager": "pnpm@9.8.0",
     "scripts": {
-        "build": "ls -la && pwd && graphweaver build",
-        "start": "ls -la && pwd && graphweaver start",
+        "build": "graphweaver build",
+        "start": "graphweaver start",
         "watch": "graphweaver watch",
         "sync": "graphweaver import postgresql --host 127.0.0.1 --password postgres --user postgres --database colddb --port 5432"
     },

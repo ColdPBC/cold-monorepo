@@ -9,65 +9,71 @@ import { OrganizationClaim } from './organization-claim';
 import { UtilityBill } from './utility-bill';
 import { OrganizationFacility as OrmOrganizationFacility } from '../entities';
 import { connection } from '../database';
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { default_acl } from '../acl_policies';
 
 @Entity<OrganizationFacility>('OrganizationFacility', {
-	provider: new MikroBackendProvider(OrmOrganizationFacility, connection),
+  provider: new MikroBackendProvider(OrmOrganizationFacility, connection),
 })
+@ApplyAccessControlList(default_acl)
 export class OrganizationFacility {
-	@Field(() => ID, { primaryKeyField: true })
-	id!: string;
+  @Field(() => ID, { primaryKeyField: true })
+  id!: string;
 
-	@RelationshipField<OrganizationFacility>(() => Organization, { id: (entity) => entity.organization?.id })
-	organization!: Organization;
+  @RelationshipField<OrganizationFacility>(() => Organization, { id: entity => entity.organization?.id })
+  organization!: Organization;
 
-	@Field(() => String, { adminUIOptions: {summaryField:true} })
-	name!: string;
+  @Field(() => String, { adminUIOptions: { summaryField: true } })
+  name!: string;
 
-	@Field(() => String, { nullable: true })
-	city?: string;
+  @Field(() => String, { nullable: true })
+  city?: string;
 
-	@Field(() => String, { nullable: true })
-	country?: string;
+  @Field(() => String, { nullable: true })
+  country?: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+  @Field(() => ISODateStringScalar)
+  createdAt!: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+  @Field(() => ISODateStringScalar)
+  updatedAt!: Date;
 
-	@Field(() => String, { nullable: true })
-	addressLine2?: string;
+  @Field(() => String, { nullable: true })
+  addressLine2?: string;
 
-	@Field(() => String, { nullable: true })
-	postalCode?: string;
+  @Field(() => String, { nullable: true })
+  postalCode?: string;
 
-	@Field(() => Boolean)
-	deleted = false;
+  @Field(() => Boolean)
+  deleted = false;
 
-	@Field(() => GraphQLJSON, { nullable: true })
-	metadata?: Record<string, unknown>;
+  @Field(() => GraphQLJSON, { nullable: true })
+  metadata?: Record<string, unknown>;
 
-	@Field(() => String, { nullable: true })
-	stateProvince?: string;
+  @Field(() => String, { nullable: true })
+  stateProvince?: string;
 
-	@Field(() => String, { nullable: true })
-	addressLine1?: string;
+  @Field(() => String, { nullable: true })
+  addressLine1?: string;
 
-	@Field(() => Boolean, { nullable: true })
-	supplier = false;
+  @Field(() => Boolean, { nullable: true })
+  supplier = false;
 
-	@RelationshipField<Emission>(() => [Emission], { relatedField: 'organizationFacility' })
-	emissions!: Emission[];
+  @Field(() => Number, { nullable: true })
+  supplierTier?: number;
 
-	@RelationshipField<Integration>(() => [Integration], { relatedField: 'organizationFacility' })
-	integrations!: Integration[];
+  @RelationshipField<Emission>(() => [Emission], { relatedField: 'organizationFacility' })
+  emissions!: Emission[];
 
-	@RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'organizationFacility' })
-	materialSuppliers!: MaterialSupplier[];
+  @RelationshipField<Integration>(() => [Integration], { relatedField: 'organizationFacility' })
+  integrations!: Integration[];
 
-	@RelationshipField<OrganizationClaim>(() => [OrganizationClaim], { relatedField: 'organizationFacility' })
-	organizationClaims!: OrganizationClaim[];
+  @RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'organizationFacility' })
+  materialSuppliers!: MaterialSupplier[];
 
-	@RelationshipField<UtilityBill>(() => [UtilityBill], { relatedField: 'organizationFacility' })
-	utilityBills!: UtilityBill[];
+  @RelationshipField<OrganizationClaim>(() => [OrganizationClaim], { relatedField: 'organizationFacility' })
+  organizationClaims!: OrganizationClaim[];
+
+  @RelationshipField<UtilityBill>(() => [UtilityBill], { relatedField: 'organizationFacility' })
+  utilityBills!: UtilityBill[];
 }
