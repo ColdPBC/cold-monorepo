@@ -1,3 +1,10 @@
+# [1.344.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.343.0...v1.344.0) (2024-08-28)
+
+
+### Features
+
+* update resource allocations and config settings ([a2f2c73](https://github.com/ColdPBC/cold-monorepo/commit/a2f2c7340bcb1757ef4c75831b882e5c7d0fe9c4))
+
 # [1.343.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.342.1...v1.343.0) (2024-08-28)
 
 
