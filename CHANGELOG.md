@@ -1,3 +1,10 @@
+## [1.341.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.2...v1.341.3) (2024-08-28)
+
+
+### Bug Fixes
+
+* update install and base path in flightcontrol.json and clean dependencies in package.json ([5e2378b](https://github.com/ColdPBC/cold-monorepo/commit/5e2378b8a4ef6079387c70d94ccceff1f589876c))
+
 ## [1.341.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.341.1...v1.341.2) (2024-08-28)
 
 
