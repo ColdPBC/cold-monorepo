@@ -1,3 +1,10 @@
+# [1.339.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.2...v1.339.0) (2024-08-28)
+
+
+### Features
+
+* update flight control configuration for cold-graphql ([a94a77a](https://github.com/ColdPBC/cold-monorepo/commit/a94a77a503c08f9f434bf7c816f5f287c4599954))
+
 ## [1.338.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.338.1...v1.338.2) (2024-08-28)
 
 
