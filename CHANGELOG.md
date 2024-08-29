@@ -1,3 +1,10 @@
+## [1.346.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.5...v1.346.6) (2024-08-29)
+
+
+### Bug Fixes
+
+* increase EC2 instance storage from 60 to 120 in flightcontrol.json ([73e1700](https://github.com/ColdPBC/cold-monorepo/commit/73e170007daa2578639e9469b5188ea652fd70db))
+
 ## [1.346.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.4...v1.346.5) (2024-08-29)
 
 
