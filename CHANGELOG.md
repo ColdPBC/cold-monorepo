@@ -1,3 +1,10 @@
+## [1.347.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.347.1...v1.347.2) (2024-08-29)
+
+
+### Bug Fixes
+
+* update dependencies and adjust OrganizationFacility entity formatting ([43bf795](https://github.com/ColdPBC/cold-monorepo/commit/43bf7951182662aed43f70d83e756214acf116d6))
+
 ## [1.347.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.347.0...v1.347.1) (2024-08-29)
 
 
