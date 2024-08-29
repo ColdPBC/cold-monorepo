@@ -1,3 +1,10 @@
+## [1.346.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.2...v1.346.3) (2024-08-29)
+
+
+### Bug Fixes
+
+* Update configuration to support Dockerfile environment variable injection ([48ab0f5](https://github.com/ColdPBC/cold-monorepo/commit/48ab0f5a44b035e832f67c136558ef6ec296329a))
+
 ## [1.346.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.1...v1.346.2) (2024-08-29)
 
 
