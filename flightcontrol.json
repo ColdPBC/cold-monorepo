@@ -87,16 +87,15 @@
           "installCommand": "corepack enable yarn && yarn install",
           "watchPaths": [
             "apps/cold-api/src/**",
-            "apps/cold-api/test/**",
-            "libs/nest/prisma/**",
-            "libs/nest/src/**",
-            "_api.dockerfile"
+            "libs/nest/prisma/schema.prisma",
+            "libs/nest/src/lib/**"
           ],
-          "maxInstances": 1,
+          "maxInstances": 2,
           "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": false,
+          "includeEnvVariablesInBuild": true,
           "versionHistoryCount": 10,
           "dockerLabels": {
             "com.datadoghq.tags.environment": "production",
@@ -193,8 +192,9 @@
           "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
           "watchPaths": [
-            "libs/nest/prisma/**"
+            "libs/nest/prisma/prisma.schema"
           ],
+          "includeEnvVariablesInBuild": true,
           "maxInstances": 2,
           "minInstances": 1,
           "healthCheckPath": "/health",
@@ -289,7 +289,7 @@
           "buildCommand": "pnpm run build",
           "outputDirectory": "dist/admin-ui",
           "watchPaths": [
-            "libs/nest/prisma/**"
+            "libs/nest/prisma/prisma.schema"
           ],
           "envVariables": {
             "VITE_APP_VERSION": "1.0.0",
