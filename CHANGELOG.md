@@ -1,3 +1,10 @@
+## [1.344.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.344.3...v1.344.4) (2024-08-29)
+
+
+### Bug Fixes
+
+* adjust resource allocations and scaling parameters in flightcontrol.json ([7ea802b](https://github.com/ColdPBC/cold-monorepo/commit/7ea802ba30aacb0cd5cd405c2d41b52805d30eff))
+
 ## [1.344.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.344.2...v1.344.3) (2024-08-29)
 
 
