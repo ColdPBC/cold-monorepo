@@ -1,3 +1,10 @@
+# [1.349.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.348.0...v1.349.0) (2024-08-29)
+
+
+### Features
+
+* add new configurations for cold-graphql and cold-graphql-ui in flightcontrol.json ([9c3891e](https://github.com/ColdPBC/cold-monorepo/commit/9c3891e19c37a20750a11fedb57f691864c39fad))
+
 # [1.348.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.347.4...v1.348.0) (2024-08-29)
 
 
