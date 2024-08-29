@@ -1,3 +1,10 @@
+# [1.346.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.345.0...v1.346.0) (2024-08-29)
+
+
+### Features
+
+* update flight control configuration for watch paths and environment variables ([4c4bba8](https://github.com/ColdPBC/cold-monorepo/commit/4c4bba82aba6d24ac539482859309aaf71ebf0a6))
+
 # [1.345.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.344.5...v1.345.0) (2024-08-29)
 
 
