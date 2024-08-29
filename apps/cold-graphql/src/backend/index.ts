@@ -1,9 +1,8 @@
-/* cold-graphql Graphweaver Project */
 import Graphweaver from '@exogee/graphweaver-server';
+import fastify from 'fastify';
 import './schema';
 
-import { AuthZero, setAddUserToContext, setImplicitAllow, setAdministratorRoleName, UserProfile } from '@exogee/graphweaver-auth';
-import { UserProfileType } from '@exogee/graphweaver-auth/lib/user-profile';
+import { AuthZero, setAddUserToContext, setAdministratorRoleName } from '@exogee/graphweaver-auth';
 import { addUserToContext } from './cold_profile';
 
 export const authZero = new AuthZero();
@@ -19,5 +18,3 @@ export const graphweaver = new Graphweaver({
     maxAliases: { n: 50 },
   },
 });
-
-//export const handler = graphweaver.handler();
