@@ -72,7 +72,8 @@
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "t3.2xlarge"
+            "instanceSize": "t3.2xlarge",
+            "instanceStorage": 60
           },
           "target": {
             "type": "ecs-ec2",
@@ -415,7 +416,8 @@
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "t3.2xlarge"
+            "instanceSize": "t3.2xlarge",
+            "instanceStorage": 60
           },
           "target": {
             "type": "ecs-ec2",
