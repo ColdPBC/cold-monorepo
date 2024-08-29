@@ -1,3 +1,10 @@
+## [1.344.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.344.2...v1.344.3) (2024-08-29)
+
+
+### Bug Fixes
+
+* update instanceStorage for CI ([86c108e](https://github.com/ColdPBC/cold-monorepo/commit/86c108ec5b2e5038b7e31cb84101c2ced56f02e4))
+
 ## [1.344.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.344.1...v1.344.2) (2024-08-28)
 
 
