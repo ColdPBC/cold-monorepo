@@ -96,6 +96,7 @@
           "containerInsights": true,
           "enableCloudfrontSwr": false,
           "includeEnvVariablesInBuild": true,
+          "injectEnvVariablesInDockerfile": true,
           "versionHistoryCount": 10,
           "dockerLabels": {
             "com.datadoghq.tags.environment": "production",
@@ -195,6 +196,7 @@
             "libs/nest/prisma/prisma.schema"
           ],
           "includeEnvVariablesInBuild": true,
+          "injectEnvVariablesInDockerfile": true,
           "maxInstances": 2,
           "minInstances": 1,
           "healthCheckPath": "/health",
@@ -433,6 +435,8 @@
             "apps/cold-api/src/**",
             "libs/nest/prisma/prisma.schema"
           ],
+          "includeEnvVariablesInBuild": true,
+          "injectEnvVariablesInDockerfile": true,
           "maxInstances": 2,
           "minInstances": 1,
           "autoscaling": {
