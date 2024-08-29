@@ -80,7 +80,7 @@
             "clusterMinInstances": 1,
             "clusterMaxInstances": 4
           },
-          "memory": 3,
+          "memory": 2,
           "buildType": "nixpacks",
           "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:production",
           "startCommand": "yarn dlx nx run cold-api:serve:production",
@@ -186,7 +186,7 @@
             "clusterMinInstances": 1,
             "clusterMaxInstances": 4
           },
-          "memory": 3,
+          "memory": 2,
           "buildType": "nixpacks",
           "installCommand": "corepack enable pnpm && pnpm install",
           "buildCommand": "pnpm run build",
@@ -425,7 +425,7 @@
             "clusterMinInstances": 1,
             "clusterMaxInstances": 4
           },
-          "memory": 3,
+          "memory": 2,
           "buildType": "nixpacks",
           "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:production",
           "startCommand": "yarn dlx nx run cold-api:serve:production",
