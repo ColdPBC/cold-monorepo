@@ -88,8 +88,7 @@
           "installCommand": "corepack enable yarn && yarn install",
           "watchPaths": [
             "apps/cold-api/src/**",
-            "libs/nest/prisma/schema.prisma",
-            "libs/nest/src/lib/**"
+            "libs/nest/prisma/schema.prisma"
           ],
           "maxInstances": 2,
           "minInstances": 1,
