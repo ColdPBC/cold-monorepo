@@ -15,8 +15,8 @@ importers:
         specifier: ^2.1.3
         version: 2.1.3
       '@exogee/graphweaver':
-        specifier: 2.2.7
-        version: 2.2.7(encoding@0.1.13)
+        specifier: ^2.3.0
+        version: 2.3.0(encoding@0.1.13)
       '@exogee/graphweaver-admin-ui-components':
         specifier: ^2.3.0
         version: 2.3.0(@codemirror/language@6.0.0)(@types/node@22.1.0)(@types/react@18.3.3)(csstype@3.1.3)(formik@2.4.6(react@18.3.1))(graphql-ws@5.16.0(graphql@16.9.0))(graphql@16.9.0)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.26.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
@@ -1273,9 +1273,6 @@ packages:
   '@exogee/graphweaver-scalars@2.2.1':
     resolution: {integrity: sha512-XpAqe8oO579p4+/8y2E3Kn5BEQZXH1q37tiyKZTOa3WCxWw/AyMtQooUj7HaFaDRh17KbBQmx3q7hNnt1NacyA==}
 
-  '@exogee/graphweaver-scalars@2.2.7':
-    resolution: {integrity: sha512-8pNNi47SQXDW43fhwO9R/7OWQC5HNI0JjlFLVpdBa9YDoGu29xvjb/EphyZyTEEKQt4y8k0ktvz5iP9NVbuKAQ==}
-
   '@exogee/graphweaver-scalars@2.3.0':
     resolution: {integrity: sha512-sHzrhNgR5sK+aowhiFIc2bMZyKVutgTT/9BEX0dkYo4BwD4S2SNrgk0jALsCz57hI9ASe+bM0Ut5NIS0WaKqvw==}
 
@@ -1288,17 +1285,11 @@ packages:
   '@exogee/graphweaver@2.2.1':
     resolution: {integrity: sha512-KT1kRuME1a4yCW54GPj8kNmJ+Wa/ly+27jUVuNlEeWMHAJPmuJ9r/iHWRv2yTeJ4F+NWUZrsRQiNABJXr1gapw==}
 
-  '@exogee/graphweaver@2.2.7':
-    resolution: {integrity: sha512-BM0UnLH61PV+3NRtAwi2HA38sj2q2C5aki06hTcXneAoWdDjpXKvgPxpd8m097luB6yocKRRvlSBwVgbwJwp+Q==}
-
   '@exogee/graphweaver@2.3.0':
     resolution: {integrity: sha512-zpnHXUGayr037oAk5nfUfRtRcNU0buYFRP2LEQFxj6kHKns3YcOyp92Pi8ssIgnVxadD464tBccWNPnqoGa9iA==}
 
   '@exogee/logger@2.2.1':
     resolution: {integrity: sha512-q7uSRIWFZyPcB4inR4wRs4929S0O/QprwbMSGqF5BHx3OMm4pH8dOeVg/JZnlYbhSduGox+JCNu0b1P8VYLj2A==}
-
-  '@exogee/logger@2.2.7':
-    resolution: {integrity: sha512-+JSSkOP3hysFMXovM3mjp1fug7uWxNTckGik2e8u+plDI1j7CKXN+q/o5vm3FeeCp6i4bqmrV3gdRDdq4FnOFA==}
 
   '@exogee/logger@2.3.0':
     resolution: {integrity: sha512-f178RmjLDXMea6xk7dErMEN8+vRk64z5v8n+FSWxSN4q4ipkJWUohKP/+CjRie/PQICi/BS2iVx6Kaix+aA9mA==}
@@ -9500,13 +9491,6 @@ snapshots:
     transitivePeerDependencies:
       - graphql
 
-  '@exogee/graphweaver-scalars@2.2.7(graphql@16.9.0)':
-    dependencies:
-      graphql-scalars: 1.23.0(graphql@16.9.0)
-      luxon: 3.5.0
-    transitivePeerDependencies:
-      - graphql
-
   '@exogee/graphweaver-scalars@2.3.0(graphql@16.9.0)':
     dependencies:
       graphql-scalars: 1.23.0(graphql@16.9.0)
@@ -9576,29 +9560,6 @@ snapshots:
       - encoding
       - supports-color
 
-  '@exogee/graphweaver@2.2.7(encoding@0.1.13)':
-    dependencies:
-      '@apollo/server': 4.11.0(encoding@0.1.13)(graphql@16.9.0)
-      '@exogee/graphweaver-scalars': 2.2.7(graphql@16.9.0)
-      '@exogee/logger': 2.2.7
-      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
-      '@opentelemetry/api': 1.9.0
-      '@opentelemetry/core': 1.25.1(@opentelemetry/api@1.9.0)
-      '@opentelemetry/exporter-trace-otlp-http': 0.52.1(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources': 1.25.1(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-node': 0.52.1(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-base': 1.25.1(@opentelemetry/api@1.9.0)
-      async-mutex: 0.5.0
-      class-validator: 0.14.1
-      dataloader: 2.2.2
-      graphql: 16.9.0
-      graphql-parse-resolve-info: 4.13.0(graphql@16.9.0)
-      graphql-query-complexity: 1.0.0(graphql@16.9.0)
-      pluralize: 8.0.0
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-
   '@exogee/graphweaver@2.3.0(encoding@0.1.13)':
     dependencies:
       '@apollo/server': 4.11.0(encoding@0.1.13)(graphql@16.9.0)
@@ -9623,10 +9584,6 @@ snapshots:
       - supports-color
 
   '@exogee/logger@2.2.1':
-    dependencies:
-      pino: 9.3.2
-
-  '@exogee/logger@2.2.7':
     dependencies:
       pino: 9.3.2
 
