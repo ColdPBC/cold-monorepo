@@ -18,7 +18,7 @@
           "type": "static",
           "ci": {
             "type": "ec2",
-            "instanceStorage": 60
+            "instanceStorage": 120
           },
           "singlePageApp": true,
           "buildType": "nixpacks",
@@ -364,7 +364,7 @@
           "type": "static",
           "ci": {
             "type": "ec2",
-            "instanceStorage": 60
+            "instanceStorage": 120
           },
           "singlePageApp": true,
           "buildType": "nixpacks",
