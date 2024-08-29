@@ -1,3 +1,10 @@
+## [1.346.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.1...v1.346.2) (2024-08-29)
+
+
+### Bug Fixes
+
+* update watchPaths in flightcontrol.json ([9c25924](https://github.com/ColdPBC/cold-monorepo/commit/9c259242a42a4f9e8a37139b6eedefe768bcbd93))
+
 ## [1.346.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.0...v1.346.1) (2024-08-29)
 
 
