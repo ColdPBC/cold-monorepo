@@ -1,3 +1,10 @@
+# [1.347.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.7...v1.347.0) (2024-08-29)
+
+
+### Features
+
+* update backend and frontend dependencies, remove unused code ([fa70148](https://github.com/ColdPBC/cold-monorepo/commit/fa701487df2afc5d65f41df3c0f563ffd9b9ec94))
+
 ## [1.346.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.6...v1.346.7) (2024-08-29)
 
 
