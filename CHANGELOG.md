@@ -1,3 +1,10 @@
+## [1.344.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.344.4...v1.344.5) (2024-08-29)
+
+
+### Bug Fixes
+
+* reduce memory allocation for multiple services ([baf671c](https://github.com/ColdPBC/cold-monorepo/commit/baf671cba3af254dbc0bdcfee7afd0b2e4272318))
+
 ## [1.344.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.344.3...v1.344.4) (2024-08-29)
 
 
