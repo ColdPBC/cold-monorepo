@@ -1,3 +1,10 @@
+# [1.350.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.349.0...v1.350.0) (2024-08-29)
+
+
+### Features
+
+* update flightcontrol configurations for cold-api deployment ([44f8063](https://github.com/ColdPBC/cold-monorepo/commit/44f80631a51228549c69aab4082f2bb7bee5cf1d))
+
 # [1.349.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.348.0...v1.349.0) (2024-08-29)
 
 
