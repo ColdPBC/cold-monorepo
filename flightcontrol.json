@@ -67,7 +67,7 @@
           "name": "cold-api",
           "domain": "api.coldclimate.com",
           "basePath": ".",
-          "cpu": 2,
+          "cpu": 1,
           "port": 7001,
           "type": "web",
           "ci": {
@@ -78,9 +78,9 @@
             "type": "ecs-ec2",
             "clusterInstanceSize": "t3.xlarge",
             "clusterMinInstances": 1,
-            "clusterMaxInstances": 2
+            "clusterMaxInstances": 4
           },
-          "memory": 4,
+          "memory": 3,
           "buildType": "nixpacks",
           "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:production",
           "startCommand": "yarn dlx nx run cold-api:serve:production",
@@ -184,9 +184,9 @@
             "type": "ecs-ec2",
             "clusterInstanceSize": "t3.xlarge",
             "clusterMinInstances": 1,
-            "clusterMaxInstances": 3
+            "clusterMaxInstances": 4
           },
-          "memory": 2,
+          "memory": 3,
           "buildType": "nixpacks",
           "installCommand": "corepack enable pnpm && pnpm install",
           "buildCommand": "pnpm run build",
@@ -196,7 +196,7 @@
             "libs/nest/prisma/**"
           ],
           "maxInstances": 2,
-          "minInstances": 2,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": false,
@@ -412,7 +412,7 @@
           "id": "cold-api-fc-staging",
           "name": "cold-api",
           "domain": "api.coldclimate.online",
-          "cpu": 2,
+          "cpu": 1,
           "port": 7001,
           "type": "web",
           "ci": {
@@ -423,9 +423,9 @@
             "type": "ecs-ec2",
             "clusterInstanceSize": "t3.xlarge",
             "clusterMinInstances": 1,
-            "clusterMaxInstances": 2
+            "clusterMaxInstances": 4
           },
-          "memory": 4,
+          "memory": 3,
           "buildType": "nixpacks",
           "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:production",
           "startCommand": "yarn dlx nx run cold-api:serve:production",
@@ -437,7 +437,7 @@
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
-          "maxInstances": 1,
+          "maxInstances": 2,
           "minInstances": 1,
           "autoscaling": {
             "cpuThreshold": 70,
