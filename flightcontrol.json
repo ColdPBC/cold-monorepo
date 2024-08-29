@@ -82,6 +82,7 @@
             "clusterMaxInstances": 4
           },
           "memory": 4,
+          "buildType": "docker",
           "dockerfilePath": "_api.dockerfile",
           "dockerContext": ".",
           "containerImage": {
