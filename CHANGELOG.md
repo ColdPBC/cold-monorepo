@@ -1,3 +1,10 @@
+## [1.347.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.347.0...v1.347.1) (2024-08-29)
+
+
+### Bug Fixes
+
+* **config:** update build commands to improve build process efficiency ([5b79eed](https://github.com/ColdPBC/cold-monorepo/commit/5b79eedd7e9854a6a15d8da06ed979072a9863e7))
+
 # [1.347.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.7...v1.347.0) (2024-08-29)
 
 
