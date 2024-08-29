@@ -180,6 +180,7 @@
         {
           "id": "cold-graphql-api-production",
           "name": "cold-graphql-api",
+          "domain": "graphql.coldclimate.com",
           "cpu": 2,
           "port": 9001,
           "type": "web",
@@ -286,6 +287,7 @@
         {
           "id": "cold-graphiql-ui-fc-production",
           "name": "cold-graphql-ui",
+          "domain": "graphiql.coldclimate.com",
           "type": "static",
           "ci": {
             "type": "ec2",
@@ -435,10 +437,14 @@
             "clusterMaxInstances": 4
           },
           "memory": 2,
-          "buildType": "nixpacks",
-          "buildCommand": "yarn prebuild && yarn dlx nx run cold-api:build:production",
-          "startCommand": "yarn dlx nx run cold-api:serve:production",
-          "installCommand": "corepack enable yarn && yarn install",
+          "buildType": "docker",
+          "dockerfilePath": "_api.dockerfile",
+          "dockerContext": ".",
+          "containerImage": {
+            "registryId": "cold-ecr-fc-r123elz",
+            "repository": "api-docker-images",
+            "tag": "main"
+          },
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
@@ -529,6 +535,7 @@
         {
           "id": "cold-graphql-api-fc-staging",
           "name": "cold-graphql-api",
+          "domain": "graphql.coldclimate.online",
           "cpu": 2,
           "port": 9001,
           "type": "web",
@@ -635,6 +642,7 @@
         {
           "id": "cold-graphql-ui-fc-staging",
           "name": "cold-graphql-ui",
+          "domain": "graphiql.coldclimate.online",
           "type": "static",
           "ci": {
             "type": "ec2",
