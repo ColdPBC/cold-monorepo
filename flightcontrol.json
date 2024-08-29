@@ -70,13 +70,10 @@
           "basePath": ".",
           "cpu": 2,
           "port": 7001,
-          "type": "web",
+          "type": "fargate",
           "ci": {
             "type": "ec2",
             "instanceStorage": 60
-          },
-          "target": {
-            "type": "fargate"
           },
           "memory": 4,
           "buildType": "docker",
@@ -536,16 +533,10 @@
           "domain": "api.coldclimate.online",
           "cpu": 1,
           "port": 7001,
-          "type": "web",
+          "type": "fargate",
           "ci": {
             "type": "ec2",
             "instanceStorage": 60
-          },
-          "target": {
-            "type": "ecs-ec2",
-            "clusterInstanceSize": "t3.xlarge",
-            "clusterMinInstances": 1,
-            "clusterMaxInstances": 4
           },
           "memory": 2,
           "buildType": "docker",
