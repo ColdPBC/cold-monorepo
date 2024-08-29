@@ -1,3 +1,10 @@
+## [1.346.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.3...v1.346.4) (2024-08-29)
+
+
+### Bug Fixes
+
+* **database.config.ts:** correct regex pattern for PostgreSQL URL parsing ([d3801a4](https://github.com/ColdPBC/cold-monorepo/commit/d3801a44f6f1737b283ccb3e55dc590e12e90f49))
+
 ## [1.346.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.2...v1.346.3) (2024-08-29)
 
 
