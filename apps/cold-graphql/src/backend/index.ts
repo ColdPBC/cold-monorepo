@@ -1,5 +1,4 @@
 import Graphweaver from '@exogee/graphweaver-server';
-import fastify from 'fastify';
 import './schema';
 
 import { AuthZero, setAddUserToContext, setAdministratorRoleName } from '@exogee/graphweaver-auth';
