@@ -1,3 +1,10 @@
+## [1.346.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.6...v1.346.7) (2024-08-29)
+
+
+### Bug Fixes
+
+* **nx.json:** remove redundant build dependency ([77ba8cf](https://github.com/ColdPBC/cold-monorepo/commit/77ba8cfbbf9621320f0e974159aae002e39e9f83))
+
 ## [1.346.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.346.5...v1.346.6) (2024-08-29)
 
 
