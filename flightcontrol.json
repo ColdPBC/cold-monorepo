@@ -72,7 +72,6 @@
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "t3.2xlarge",
             "instanceStorage": 60
           },
           "target": {
@@ -179,7 +178,7 @@
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "t3.2xlarge"
+            "instanceStorage": 60
           },
           "target": {
             "type": "ecs-ec2",
@@ -280,7 +279,8 @@
           "name": "cold-graphiql",
           "type": "static",
           "ci": {
-            "type": "ec2"
+            "type": "ec2",
+            "instanceStorage": 60
           },
           "singlePageApp": true,
           "buildType": "nixpacks",
@@ -362,7 +362,8 @@
           "domain": "app.coldclimate.online",
           "type": "static",
           "ci": {
-            "type": "ec2"
+            "type": "ec2",
+            "instanceStorage": 60
           },
           "singlePageApp": true,
           "buildType": "nixpacks",
@@ -416,7 +417,6 @@
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "t3.2xlarge",
             "instanceStorage": 60
           },
           "target": {
