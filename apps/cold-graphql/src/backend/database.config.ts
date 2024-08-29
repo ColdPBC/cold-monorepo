@@ -4,7 +4,9 @@ export const connectionValues = () => {
     throw new Error('DATABASE_URL is not set');
   }
   if (url) {
-    const match = url.match(/postgresql|postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/);
+    const pattern = /postgres(?:ql)?:\/\/([^:]+):([^@]+)@([^:]+):(\d+)/;
+    const match = url.match(pattern);
+
     if (match) {
       const [, user, password, host, dbName] = match;
       return { user, password, host, port: 5432, dbName };
