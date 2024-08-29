@@ -87,8 +87,7 @@
           "startCommand": "yarn dlx nx run cold-api:serve:production",
           "installCommand": "corepack enable yarn && yarn install",
           "watchPaths": [
-            "apps/cold-api/src/**",
-            "libs/nest/prisma/schema.prisma"
+            "apps/cold-api/src/**"
           ],
           "maxInstances": 2,
           "minInstances": 1,
@@ -432,8 +431,7 @@
           "startCommand": "yarn dlx nx run cold-api:serve:production",
           "installCommand": "corepack enable yarn && yarn install",
           "watchPaths": [
-            "apps/cold-api/src/**",
-            "libs/nest/prisma/prisma.schema"
+            "apps/cold-api/src/**"
           ],
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
