@@ -83,7 +83,7 @@
           },
           "memory": 4,
           "buildType": "nixpacks",
-          "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:production",
+          "buildCommand": "yarn postinstall && yarn dlx nx run cold-api:build:production",
           "startCommand": "yarn dlx nx run cold-api:serve:production",
           "installCommand": "corepack enable yarn && yarn install",
           "watchPaths": [
@@ -427,7 +427,7 @@
           },
           "memory": 2,
           "buildType": "nixpacks",
-          "buildCommand": "yarn postinstall && yarn prebuild && yarn dlx nx run cold-api:build:production",
+          "buildCommand": "yarn prebuild && yarn dlx nx run cold-api:build:production",
           "startCommand": "yarn dlx nx run cold-api:serve:production",
           "installCommand": "corepack enable yarn && yarn install",
           "watchPaths": [
