@@ -1,3 +1,10 @@
+# [1.348.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.347.4...v1.348.0) (2024-08-29)
+
+
+### Features
+
+* add buildType field to flightcontrol.json ([2d3ec62](https://github.com/ColdPBC/cold-monorepo/commit/2d3ec62b0a72dd49c097414c9ad02691c217d27e))
+
 ## [1.347.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.347.3...v1.347.4) (2024-08-29)
 
 
