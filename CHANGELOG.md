@@ -1,3 +1,10 @@
+## [1.347.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.347.3...v1.347.4) (2024-08-29)
+
+
+### Bug Fixes
+
+* **flightcontrol.json:** update build setup to use custom Docker configuration ([a887877](https://github.com/ColdPBC/cold-monorepo/commit/a887877d5327122c8f3ad8366ec96d95158e34c4))
+
 ## [1.347.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.347.2...v1.347.3) (2024-08-29)
 
 
