@@ -1,3 +1,10 @@
+## [1.347.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.347.2...v1.347.3) (2024-08-29)
+
+
+### Bug Fixes
+
+* update dependencies in pnpm-lock.yaml to latest versions ([af27116](https://github.com/ColdPBC/cold-monorepo/commit/af271168982a1bd92e76a6e1e2eaf25eed323347))
+
 ## [1.347.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.347.1...v1.347.2) (2024-08-29)
 
 
