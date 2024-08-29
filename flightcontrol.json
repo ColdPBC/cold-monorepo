@@ -17,7 +17,8 @@
           "name": "cold-ui",
           "type": "static",
           "ci": {
-            "type": "ec2"
+            "type": "ec2",
+            "instanceStorage": 60
           },
           "singlePageApp": true,
           "buildType": "nixpacks",
