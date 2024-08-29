@@ -371,7 +371,6 @@
           "buildCommand": "yarn prebuild && yarn dlx nx run cold-ui:build:production",
           "outputDirectory": "dist/apps/cold-ui",
           "watchPaths": [
-            "apps/cold-ui/**",
             "libs/react/src/**"
           ],
           "envVariables": {
@@ -432,10 +431,7 @@
           "installCommand": "corepack enable yarn && yarn install",
           "watchPaths": [
             "apps/cold-api/src/**",
-            "apps/cold-api/test/**",
-            "libs/nest/prisma/**",
-            "libs/nest/src/**",
-            "_api.dockerfile"
+            "libs/nest/prisma/prisma.schema"
           ],
           "maxInstances": 2,
           "minInstances": 1,
