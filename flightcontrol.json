@@ -178,8 +178,8 @@
           ]
         },
         {
-          "id": "cold-graphql-fc-production",
-          "name": "cold-graphql",
+          "id": "cold-graphql-api-production",
+          "name": "cold-graphql-api",
           "cpu": 2,
           "port": 9001,
           "type": "web",
@@ -284,8 +284,8 @@
           ]
         },
         {
-          "id": "cold-graphiql-fc-production",
-          "name": "cold-graphiql",
+          "id": "cold-graphiql-ui-fc-production",
+          "name": "cold-graphql-ui",
           "type": "static",
           "ci": {
             "type": "ec2",
@@ -528,7 +528,7 @@
         },
         {
           "id": "cold-graphql-api-fc-staging",
-          "name": "cold-graphql",
+          "name": "cold-graphql-api",
           "cpu": 2,
           "port": 9001,
           "type": "web",
