@@ -1,3 +1,10 @@
+## [1.351.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.0...v1.351.1) (2024-08-30)
+
+
+### Bug Fixes
+
+* update API service IDs for production and staging environments ([b4eee63](https://github.com/ColdPBC/cold-monorepo/commit/b4eee6356b2f4c32ac30ee27284a74b8530883a3))
+
 # [1.351.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.350.0...v1.351.0) (2024-08-30)
 
 
