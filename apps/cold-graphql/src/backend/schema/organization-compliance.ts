@@ -11,59 +11,56 @@ import { OrganizationComplianceResponse } from './organization-compliance-respon
 import { OrganizationComplianceStatus } from './organization-compliance-status';
 import { OrganizationCompliance as OrmOrganizationCompliance } from '../entities';
 import { connection } from '../database';
-import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../acl_policies';
 
 @Entity<OrganizationCompliance>('OrganizationCompliance', {
-  provider: new MikroBackendProvider(OrmOrganizationCompliance, connection),
+	provider: new MikroBackendProvider(OrmOrganizationCompliance, connection),
 })
-@ApplyAccessControlList(default_acl)
 export class OrganizationCompliance {
-  @Field(() => ID, { primaryKeyField: true })
-  id!: string;
+	@Field(() => ID, { primaryKeyField: true })
+	id!: string;
 
-  @Field(() => String)
-  description!: string;
+	@Field(() => String)
+	description!: string;
 
-  @Field(() => String)
-  complianceDefinitionName!: string;
+	@Field(() => String)
+	complianceDefinitionName!: string;
 
-  @Field(() => GraphQLJSON, { nullable: true })
-  metadata?: Record<string, unknown>;
+	@Field(() => GraphQLJSON, { nullable: true })
+	metadata?: Record<string, unknown>;
 
-  @Field(() => ISODateStringScalar)
-  createdAt!: Date;
+	@Field(() => ISODateStringScalar)
+	createdAt!: Date;
 
-  @Field(() => ISODateStringScalar)
-  updatedAt!: Date;
+	@Field(() => ISODateStringScalar)
+	updatedAt!: Date;
 
-  @RelationshipField<OrganizationCompliance>(() => Organization, { id: entity => entity.organization?.id })
-  organization!: Organization;
+	@RelationshipField<OrganizationCompliance>(() => Organization, { id: (entity) => entity.organization?.id })
+	organization!: Organization;
 
-  @Field(() => Boolean)
-  deleted = false;
+	@Field(() => Boolean)
+	deleted = false;
 
-  @Field(() => Boolean)
-  visible = true;
+	@Field(() => Boolean)
+	visible = true;
 
-  @RelationshipField<OrganizationCompliance>(() => ComplianceDefinition, { id: entity => entity.complianceDefinition?.id, nullable: true })
-  complianceDefinition?: ComplianceDefinition;
+	@RelationshipField<OrganizationCompliance>(() => ComplianceDefinition, { id: (entity) => entity.complianceDefinition?.id, nullable: true })
+	complianceDefinition?: ComplianceDefinition;
 
-  @RelationshipField<OrganizationComplianceAiResponseFile>(() => [OrganizationComplianceAiResponseFile], { relatedField: 'organizationCompliance' })
-  organizationComplianceAiResponseFiles!: OrganizationComplianceAiResponseFile[];
+	@RelationshipField<OrganizationComplianceAiResponseFile>(() => [OrganizationComplianceAiResponseFile], { relatedField: 'organizationCompliance' })
+	organizationComplianceAiResponseFiles!: OrganizationComplianceAiResponseFile[];
 
-  @RelationshipField<OrganizationComplianceAiResponse>(() => [OrganizationComplianceAiResponse], { relatedField: 'organizationCompliance' })
-  organizationComplianceAiResponses!: OrganizationComplianceAiResponse[];
+	@RelationshipField<OrganizationComplianceAiResponse>(() => [OrganizationComplianceAiResponse], { relatedField: 'organizationCompliance' })
+	organizationComplianceAiResponses!: OrganizationComplianceAiResponse[];
 
-  @RelationshipField<OrganizationComplianceNote>(() => [OrganizationComplianceNote], { relatedField: 'organizationCompliance' })
-  organizationComplianceNotes!: OrganizationComplianceNote[];
+	@RelationshipField<OrganizationComplianceNote>(() => [OrganizationComplianceNote], { relatedField: 'organizationCompliance' })
+	organizationComplianceNotes!: OrganizationComplianceNote[];
 
-  @RelationshipField<OrganizationComplianceQuestionBookmark>(() => [OrganizationComplianceQuestionBookmark], { relatedField: 'organizationCompliance' })
-  organizationComplianceQuestionBookmarks!: OrganizationComplianceQuestionBookmark[];
+	@RelationshipField<OrganizationComplianceQuestionBookmark>(() => [OrganizationComplianceQuestionBookmark], { relatedField: 'organizationCompliance' })
+	organizationComplianceQuestionBookmarks!: OrganizationComplianceQuestionBookmark[];
 
-  @RelationshipField<OrganizationComplianceResponse>(() => [OrganizationComplianceResponse], { relatedField: 'organizationCompliance' })
-  organizationComplianceResponses!: OrganizationComplianceResponse[];
+	@RelationshipField<OrganizationComplianceResponse>(() => [OrganizationComplianceResponse], { relatedField: 'organizationCompliance' })
+	organizationComplianceResponses!: OrganizationComplianceResponse[];
 
-  @RelationshipField<OrganizationComplianceStatus>(() => [OrganizationComplianceStatus], { relatedField: 'organizationCompliance' })
-  organizationComplianceStatuses!: OrganizationComplianceStatus[];
+	@RelationshipField<OrganizationComplianceStatus>(() => [OrganizationComplianceStatus], { relatedField: 'organizationCompliance' })
+	organizationComplianceStatuses!: OrganizationComplianceStatus[];
 }

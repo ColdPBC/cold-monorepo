@@ -3,7 +3,7 @@ import { Organization } from './organization';
 import { OrganizationClaim } from './organization-claim';
 import { ProductMaterial } from './product-material';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../../acl_policies';
+import { cold_admin_only, default_acl } from '../../acl_policies';
 
 @Entity({ tableName: 'products' })
 @ApplyAccessControlList(default_acl)

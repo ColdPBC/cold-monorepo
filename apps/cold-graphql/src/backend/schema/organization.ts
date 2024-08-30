@@ -21,13 +21,10 @@ import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
 import { Organization as OrmOrganization } from '../entities';
 import { connection } from '../database';
-import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../acl_policies';
 
 @Entity<Organization>('Organization', {
   provider: new MikroBackendProvider(OrmOrganization, connection),
 })
-@ApplyAccessControlList(default_acl)
 export class Organization {
   @Field(() => ID, { primaryKeyField: true })
   id!: string;
