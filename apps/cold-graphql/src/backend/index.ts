@@ -1,7 +1,7 @@
 import Graphweaver from '@exogee/graphweaver-server';
 import './schema';
 
-import { AuthZero, setAddUserToContext, setAdministratorRoleName } from '@exogee/graphweaver-auth';
+import { AuthZero, setAddUserToContext, setAdministratorRoleName, setImplicitAllow } from '@exogee/graphweaver-auth';
 import { addUserToContext } from './cold_profile';
 
 export const authZero = new AuthZero();
@@ -14,6 +14,6 @@ export const graphweaver = new Graphweaver({
     introspection: process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging',
   },
   graphQLArmorOptions: {
-    maxAliases: { n: 50 },
+    maxAliases: { n: 60 },
   },
 });
