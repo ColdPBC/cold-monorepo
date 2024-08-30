@@ -286,7 +286,6 @@
         {
           "id": "cold-graphiql-ui-fc-production",
           "name": "cold-graphql-ui",
-          "domain": "graphiql.coldclimate.com",
           "type": "static",
           "ci": {
             "type": "ec2",
