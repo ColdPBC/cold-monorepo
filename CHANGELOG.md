@@ -1,3 +1,17 @@
+# [1.351.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.350.0...v1.351.0) (2024-08-30)
+
+
+### Bug Fixes
+
+* correctly parse and use database URL for connection ([6193da5](https://github.com/ColdPBC/cold-monorepo/commit/6193da52566b401c10ff2f3816e0d7dc5e34eb75))
+
+
+### Features
+
+* add access control lists to entities ([2b4bbbe](https://github.com/ColdPBC/cold-monorepo/commit/2b4bbbed1477d13d1728a08ea4f8a43d320f5424))
+* add public_acl policy for user roles ([046ae6b](https://github.com/ColdPBC/cold-monorepo/commit/046ae6b1a52f078edcce8f7e1d33f832db45d98c))
+* update maxAliases limit and auth setup in backend configuration ([0427aaf](https://github.com/ColdPBC/cold-monorepo/commit/0427aaf5888ff2f83bb41c9e8d05a41033b86fc1))
+
 # [1.350.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.349.0...v1.350.0) (2024-08-29)
 
 
