@@ -402,5 +402,11 @@
     "vite-tsconfig-paths": "^4.0.2",
     "vitest": "~0.32.0",
     "web-vitals": "^2.1.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "eslint --fix",
+      "pre-push": "npx -p semantic-release -p -p @semantic-release/commit-analyzer -p @semantic-release/git -p @semantic-release/npm semantic-release"
+    }
   }
 }
