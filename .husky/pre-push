@@ -1,5 +1,3 @@
 # This pre-push file
 #!/bin/bash
 
-eslint --fix
-prettier --write
