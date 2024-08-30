@@ -1,3 +1,11 @@
+## [1.351.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.1...v1.351.2) (2024-08-30)
+
+
+### Bug Fixes
+
+* **flightcontrol:** remove obsolete domain field from cold-api-ec2 configuration ([3fcf50d](https://github.com/ColdPBC/cold-monorepo/commit/3fcf50dc97533619668d7360e6186f79910ff9bd))
+* remove obsolete domain field from flightcontrol.json ([a886cdb](https://github.com/ColdPBC/cold-monorepo/commit/a886cdbd5d47b85a0a10f2826755a793811aea1d))
+
 ## [1.351.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.0...v1.351.1) (2024-08-30)
 
 
