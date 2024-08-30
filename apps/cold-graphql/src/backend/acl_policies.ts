@@ -8,6 +8,23 @@ export interface ColdContext extends AuthorizationContext {
 
 export type OrgContext = { user: { org_id: string; roles: string[] } };
 
+export const public_acl = {
+  'company:member': {
+    read: () => true,
+    write: () => false,
+  },
+  'company:admin': {
+    read: () => true,
+    write: () => false,
+  },
+  'company:owner': {
+    read: () => true,
+    write: () => false,
+  },
+  'cold:admin': {
+    all: (context: ColdContext) => !!context?.user?.roles?.includes('cold:admin'),
+  },
+};
 export const queryNullOrgs = {
   'company:member': {
     read: (context: OrgContext) => ({
