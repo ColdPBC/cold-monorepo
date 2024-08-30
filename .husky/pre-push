@@ -3,4 +3,3 @@
 
 eslint --fix
 prettier --write
-npx -p semantic-release -p @semantic-release/commit-analyzer -p @semantic-release/git -p @semantic-release/npm semantic-release

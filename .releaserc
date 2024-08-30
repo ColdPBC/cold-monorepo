@@ -1,5 +1,5 @@
 {
-    "branches": [ {"name": "main", "prerelease": false}, { "name": "[cCoOlLdD]*-[0-9]*", "prerelease": true } ],
+    "branches": [ {"name": "main", "prerelease": false} ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
