@@ -8,7 +8,7 @@ export const connectionValues = () => {
     const match = url.match(pattern);
 
     if (match) {
-      const [, user, password, host, dbName] = match;
+      const [, user, password, host, port, dbName] = match;
       return { user, password, host, port: 5432, dbName };
     }
   }
