@@ -73,7 +73,7 @@
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.16",
     "@langchain/pinecone": "^0.0.3",
-    "@launchdarkly/node-server-sdk": "^8.1.0",
+    "@launchdarkly/node-server-sdk": "^9.5.2",
     "@mdx-js/rollup": "^2.3.0",
     "@mikro-orm/core": "6.3.5",
     "@mikro-orm/knex": "6.3.5",
