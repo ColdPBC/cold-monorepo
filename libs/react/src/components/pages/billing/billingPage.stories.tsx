@@ -2,7 +2,7 @@ import { StoryMockProvider } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { BillingPage } from '@coldpbc/components';
-import { getStripeHandlers } from '../../../__mocks__/stripe/stripeHandlers';
+import { getStripeHandlers } from '../../../__mocks__/stripeHandlers';
 
 const meta: Meta<typeof BillingPage> = {
   title: 'Pages/BillingPage',

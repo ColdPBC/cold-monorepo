@@ -41,7 +41,7 @@ export const getStripeAPIUrl = (path: string) => {
   return `${resolveStripeIntegrationUrl()}${path}`;
 };
 
-const stripeHandlers = [
+export const stripeHandlers = [
   rest.get(getStripeAPIUrl('/stripe_products'), (req, res, ctx) => {
     return res(ctx.json(getStripeProductsMock()));
   }),
