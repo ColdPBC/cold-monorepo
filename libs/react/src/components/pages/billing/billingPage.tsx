@@ -28,9 +28,9 @@ const _BillingPage = () => {
     },
     any,
     any
-  >(['/products'], stripeFetcher);
+  >(['/stripe_products'], stripeFetcher);
 
-  const paymentUpdatePortalSessionSWR = useSWR<Stripe.BillingPortal.Session, any, any>(orgId ? [`portal_session/${orgId}`, 'GET'] : null, stripeFetcher);
+  const paymentUpdatePortalSessionSWR = useSWR<Stripe.BillingPortal.Session, any, any>(orgId ? [`/portal_session/${orgId}`, 'GET'] : null, stripeFetcher);
 
   if (subscriptionSWR.isLoading || productsSWR.isLoading || paymentUpdatePortalSessionSWR.isLoading) {
     return <Spinner />;

@@ -165,7 +165,8 @@
             "DD_SERVICE": "cold-platform-stripe",
             "DD_ENV": "production",
             "NODE_ENV": "production",
-            "FC_ENV": "production"
+            "FC_ENV": "production",
+            "STRIPE_FRONTEND_URL": "https://app.coldclimate.com"
           },
           "sidecars": [
             {
@@ -378,7 +379,8 @@
             "DD_SERVICE": "cold-platform-openai",
             "DD_ENV": "staging",
             "NODE_ENV": "staging",
-            "FC_ENV": "staging"
+            "FC_ENV": "staging",
+            "STRIPE_FRONTEND_URL": "https://app.coldclimate.online"
           },
           "sidecars": [
             {

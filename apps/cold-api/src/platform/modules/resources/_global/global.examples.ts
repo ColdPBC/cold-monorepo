@@ -45,6 +45,7 @@ export const fullReqExample = {
     isTest: false,
     website: null,
     deleted: false,
+    metadata: null,
   },
 };
 export const noBodyReqExample = { headers: {}, query: {}, user: authenticatedUserExample, organization: fullReqExample.organization };

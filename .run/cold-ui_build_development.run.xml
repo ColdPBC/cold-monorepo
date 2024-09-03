@@ -4,7 +4,6 @@
     <option name="nx-targets" value="build" />
     <option name="nx-target-configuration" value="development" />
     <envs>
-      <env name="NODE_OPTIONS" value="--max-old-space-size=8192" />
       <env name="VITE_API_BASE_URL" value="http://localhost:7001" />
       <env name="VITE_AUTH0_CLIENT_ID" value="7AtWz1WzXMty9QN38zrkfUj2JqxqpiFI" />
       <env name="VITE_AUTH0_COLD_ORGANIZATION" value="org_VWv3Al9pLEI4CaOH" />
@@ -14,6 +13,7 @@
       <env name="VITE_LD_CLIENT_SIDE_ID" value="644ff1c8bcbd7a123c4ee990" />
       <env name="VITE_MQTT_URL" value="wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com:443" />
       <env name="VITE_NODE_ENV" value="development" />
+      <env name="NODE_OPTIONS" value="--max-old-space-size=8192" />
     </envs>
     <option name="arguments" value="--max-old-space-size=8192" />
     <method v="2">

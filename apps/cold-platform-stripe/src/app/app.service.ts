@@ -13,7 +13,7 @@ export class AppService {
   constructor(readonly config: ConfigService, readonly prisma: PrismaService) {
     this.key = this.config.getOrThrow('STRIPE_API_KEY');
     this.stripe = new Stripe(this.key);
-    this.frontendUrl = 'http://localhost:4200';
+    this.frontendUrl = this.config.getOrThrow('STRIPE_FRONTEND_URL');
   }
 
   getProducts() {
@@ -74,7 +74,7 @@ export class AppService {
     }
     return await this.stripe.billingPortal.sessions.create({
       customer: customerId,
-      return_url: `${this.frontendUrl}/billing`,
+      return_url: `${this.frontendUrl}/settings/billing`,
       flow_data: {
         type: 'payment_method_update',
       },

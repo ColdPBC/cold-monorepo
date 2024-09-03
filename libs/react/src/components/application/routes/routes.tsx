@@ -44,7 +44,7 @@ export const ColdRoutes = () => {
         <Route path={'/suppliers/:id'} element={ldFlags.showSuppliersPageCold890 ? <SupplierDetail /> : <Navigate to={'/compliance'} replace={true} />} />
         <Route path={'/materials'} element={ldFlags.showMaterialsPageCold912 ? <MaterialsPage /> : <Navigate to={'/compliance'} replace={true} />} />
         <Route path={'/materials/:id'} element={ldFlags.showMaterialsPageCold912 ? <MaterialDetail /> : <Navigate to={'/compliance'} replace={true} />} />
-        <Route path={'/billing'} element={<BillingPage />} />
+        <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={'/compliance'} replace={true} />} />
       </>
     );
   };

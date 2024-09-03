@@ -11,7 +11,7 @@ import {
 } from './datagridMock';
 import { getSurveyFormDataByName, getSurveysMock } from './surveyDataMock';
 import { getRoles } from './roleMock';
-import { resolveAPIUrl } from '@coldpbc/fetchers';
+import { resolveAPIUrl, resolveStripeIntegrationUrl } from '@coldpbc/fetchers';
 import { getOrganizationMock, getOrganizationsMock } from './organizationMock';
 import { getPoliciesSignedMock, getPolicyMockByName } from './policyMock';
 import { auth0UserMock } from './userMock';
@@ -35,8 +35,24 @@ import { getNotesMock } from './notesMock';
 import { getClaimsMock, getSupplierClaimsMock } from './claimsMock';
 import { getSupplierMockById, getSupplierWithCertificationClaimsMock } from './suppliersMock';
 import { getMaterialDetailMockById, getMaterialsMock } from './materialsMock';
+import { getCustomerWithOutSubscriptionMock, getPortalSessionMock, getStripeProductsMock } from './stripe';
 
-// Even if this uses vite as a bundler, it still uses the NODE_ENV variable
+export const getStripeAPIUrl = (path: string) => {
+  return `${resolveStripeIntegrationUrl()}${path}`;
+};
+
+const stripeHandlers = [
+  rest.get(getStripeAPIUrl('/stripe_products'), (req, res, ctx) => {
+    return res(ctx.json(getStripeProductsMock()));
+  }),
+  rest.get(getStripeAPIUrl('/customer_subscriptions/:orgId'), (req, res, ctx) => {
+    return res(ctx.json(getCustomerWithOutSubscriptionMock()));
+  }),
+  rest.get(getStripeAPIUrl('/portal_session/:orgId'), (req, res, ctx) => {
+    return res(ctx.json(getPortalSessionMock()));
+  }),
+];
+
 export const getApiUrl = (path: string) => {
   return `${resolveAPIUrl()}${path}`;
 };
@@ -55,6 +71,7 @@ export const handlers = [
      this is useful if you want to make sure your mocks match what the API is returning.
      */
 
+  ...stripeHandlers,
   //Mock SideBar Request
   rest.get(getApiUrl('/components/sidebar_navigation'), (req, res, ctx) => {
     return res(ctx.json({ ...getSidebarMock() }));

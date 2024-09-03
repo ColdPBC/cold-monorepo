@@ -12,7 +12,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as store from 'cache-manager';
 import { authenticatedUserExample, generateSurveyMock, generateSurveyTypesMock } from '../_global/global.examples';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { undefined } from 'zod';
 
 describe('Survey Service', () => {
   let service: SurveysService;
@@ -115,6 +114,7 @@ describe('Survey Service', () => {
           isTest: false,
           website: null,
           deleted: false,
+          metadata: null,
         },
         user: authenticatedUserExample,
       },
@@ -138,6 +138,7 @@ describe('Survey Service', () => {
         isTest: false,
         website: null,
         deleted: false,
+        metadata: null,
       },
       user: authenticatedUserExample,
     });
@@ -159,6 +160,7 @@ describe('Survey Service', () => {
         isTest: false,
         website: null,
         deleted: false,
+        metadata: null,
       },
       user: authenticatedUserExample,
     });
@@ -180,6 +182,7 @@ describe('Survey Service', () => {
         isTest: false,
         website: null,
         deleted: false,
+        metadata: null,
       },
       user: authenticatedUserExample,
     });
@@ -203,6 +206,7 @@ describe('Survey Service', () => {
           isTest: false,
           website: null,
           deleted: false,
+          metadata: null,
         },
         user: authenticatedUserExample,
       }),
@@ -226,6 +230,7 @@ describe('Survey Service', () => {
           isTest: false,
           website: null,
           deleted: false,
+          metadata: null,
         },
         user: authenticatedUserExample,
       }),
@@ -251,6 +256,7 @@ describe('Survey Service', () => {
           isTest: false,
           website: null,
           deleted: false,
+          metadata: null,
         },
         user: authenticatedUserExample,
       }),
