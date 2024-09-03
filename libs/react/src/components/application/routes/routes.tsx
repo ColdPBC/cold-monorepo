@@ -4,6 +4,7 @@ import {
   ActionsOverview,
   BillingPage,
   CarbonFootprint,
+  CompliancePage,
   ComplianceRoutes,
   DashboardLayout,
   DocumentsPage,
@@ -29,7 +30,7 @@ export const ColdRoutes = () => {
   const getFilteredRoutes = () => {
     return (
       <>
-        <Route path={'/'} element={<Navigate to={'/compliance'} replace={true} />} />
+        <Route path={'/'} element={<CompliancePage />} />
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
         {ldFlags.showActions261 && <Route path={'/actions'} element={<ActionsOverview />} />}

@@ -329,6 +329,7 @@ model organizations {
   claims                                    claims[]
   facility_footprints                       facility_footprints[]
   compliance_responses                      compliance_responses[]
+  metadata                                  Json?
 }
 
 /// @namespace Organization_Facilities
@@ -1029,7 +1030,7 @@ view compliance_responses {
 }
 
 view organization_claims_view {
-  facility_id            String       @id
+  facility_id            String        @id
   facility_name          String?
   address_line_1         String?
   address_line_2         String?

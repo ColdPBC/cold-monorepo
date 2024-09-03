@@ -1028,6 +1028,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       updated_at: Date;
       isTest: boolean;
       deleted: boolean;
+      metadata: Prisma.JsonValue;
     },
     compliance,
     aiResponseEntity,
@@ -1108,6 +1109,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       updated_at: Date;
       isTest: boolean;
       deleted: boolean;
+      metadata: Prisma.JsonValue;
     },
     user: IAuthenticatedUser,
   ) {
