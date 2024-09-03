@@ -13,8 +13,8 @@
       <env name="VITE_LD_CLIENT_SIDE_ID" value="644ff1af639dda130d202037" />
       <env name="VITE_MQTT_URL" value="wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com:443" />
       <env name="VITE_OPENAI_URL" value="https://openai.coldclimate.online" />
-      <env name="VITE_STRIPE_INTEGRATION_URL" value="http://localhost:7005/" />
       <env name="VITE_STRIPE_BILLING_URL" value="https://billing.stripe.com/p/login/test_5kA7uv53VcIa3kY144" />
+      <env name="VITE_STRIPE_INTEGRATION_URL" value="http://localhost:7005" />
     </envs>
     <option name="arguments" value="" />
     <method v="2" />

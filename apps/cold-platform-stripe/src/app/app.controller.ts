@@ -7,7 +7,7 @@ import { JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('products')
+  @Get('stripe_products')
   getProducts() {
     return this.appService.getProducts();
   }
