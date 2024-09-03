@@ -25356,7 +25356,7 @@ __metadata:
     swagger-ui-express: "npm:^4.6.3"
     swagger2openapi: "npm:^7.0.8"
     swr: "npm:^2.1.5"
-    tailwind-merge: "npm:^1.14.0"
+    tailwind-merge: "npm:^2.5.2"
     tailwindcss: "npm:^3.3.2"
     ts-jest: "npm:^29.1.0"
     ts-loader: "npm:^9.2.3"
@@ -50924,10 +50924,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwind-merge@npm:^1.14.0":
-  version: 1.14.0
-  resolution: "tailwind-merge@npm:1.14.0"
-  checksum: 10/35ff3c3a7f89111acbdef879130064229ce7deee017fd75f17d07135aa4bcc213e049c35d6bd5000de4dc3219e25f7a03295952736d1fee1423535c55775b1e7
+"tailwind-merge@npm:^2.5.2":
+  version: 2.5.2
+  resolution: "tailwind-merge@npm:2.5.2"
+  checksum: 10/9f51ae7277a0ba51d9bec774bc9013c1b8736129b52d97886098689ea51bc7a894f6c7e857217019d92925c935ca18a53f24b4b416be4be363ef16cfb2ce480d
   languageName: node
   linkType: hard
 
