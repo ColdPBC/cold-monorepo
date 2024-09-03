@@ -35,7 +35,7 @@ import { getNotesMock } from './notesMock';
 import { getClaimsMock, getSupplierClaimsMock } from './claimsMock';
 import { getSupplierMockById, getSupplierWithCertificationClaimsMock } from './suppliersMock';
 import { getMaterialDetailMockById, getMaterialsMock } from './materialsMock';
-import { getCustomerWithOutSubscriptionMock, getPortalSessionMock, getStripeProductsMock } from './stripe';
+import { getCustomerWithSubscriptionMock, getPortalSessionMock, getStripeProductsMock } from './stripe';
 
 export const getStripeAPIUrl = (path: string) => {
   return `${resolveStripeIntegrationUrl()}${path}`;
@@ -46,7 +46,7 @@ const stripeHandlers = [
     return res(ctx.json(getStripeProductsMock()));
   }),
   rest.get(getStripeAPIUrl('/customer_subscriptions/:orgId'), (req, res, ctx) => {
-    return res(ctx.json(getCustomerWithOutSubscriptionMock()));
+    return res(ctx.json(getCustomerWithSubscriptionMock()));
   }),
   rest.get(getStripeAPIUrl('/portal_session/:orgId'), (req, res, ctx) => {
     return res(ctx.json(getPortalSessionMock()));
