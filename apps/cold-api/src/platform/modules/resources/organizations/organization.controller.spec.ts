@@ -71,7 +71,7 @@ describe('Organization Controller', () => {
   });
 
   it('GetOrganizations called', async () => {
-    await controller.getOrganizations(true, { name: 'name', id: null });
+    await controller.getOrganizations(fullReqExample, true, { name: 'name', id: '' });
     expect(service.getOrganizations).toHaveBeenCalled();
   });
 

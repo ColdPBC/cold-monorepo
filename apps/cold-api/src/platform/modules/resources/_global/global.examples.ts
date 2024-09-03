@@ -27,10 +27,29 @@ export const authenticatedUserExample = {
   isMember: false,
 };
 
-export const fullReqExample = { headers: {}, body: {}, query: {}, user: authenticatedUserExample };
-export const noBodyReqExample = { headers: {}, query: {}, user: authenticatedUserExample };
-export const noBodyOrQueryReqExample = { headers: {}, user: authenticatedUserExample };
-export const noHeadersOrQueryOrBodyReqExample = { user: authenticatedUserExample };
+export const fullReqExample = {
+  headers: {},
+  body: {},
+  query: {},
+  user: authenticatedUserExample,
+  organization: {
+    id: '',
+    name: '',
+    display_name: '',
+    enabled_connections: null,
+    branding: null,
+    phone: null,
+    email: null,
+    created_at: new Date(),
+    updated_at: new Date(),
+    isTest: false,
+    website: null,
+    deleted: false,
+  },
+};
+export const noBodyReqExample = { headers: {}, query: {}, user: authenticatedUserExample, organization: fullReqExample.organization };
+export const noBodyOrQueryReqExample = { headers: {}, user: authenticatedUserExample, organization: fullReqExample.organization };
+export const noHeadersOrQueryOrBodyReqExample = { user: authenticatedUserExample, organization: fullReqExample.organization };
 export const testOrgNameExample = 'Test Organization';
 
 export const generateSurveyTypesMock = () => {

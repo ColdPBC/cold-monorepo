@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "commonjs",
+    "types": ["node"],
+  },
+  "exclude": [
+    "jest.config.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "**/apps/cold-api/**",
+    "**/apps/cold-api-e2e/**",
+    "**/apps/cold-ui-e2e/**",
+    "**/apps/cold-ui/**",
+    "**/apps/cold-platform-bayou/**",
+    "**/apps/cold-platform-bayou-e2e/**",
+    "**/apps/cold-platform-climatiq-e2e/**",
+    "**/apps/cold-platform-climatiq/**",
+    "**/apps/cold-platform-openai/**",
+    "**/apps/cold-platform-openai-e2e/**"
+  ],
+  "include": ["src/**/*.ts"]
+}

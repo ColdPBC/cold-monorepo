@@ -1,0 +1,17 @@
+[phases.setup]
+nixPkgs = ['nodejs']
+
+[phases.install]
+installCommand = "corepack enable pnpm && pnpm install"
+
+[phases.build]
+buildCommand = "cd app && pnpm build"
+
+[phases.start]
+startCommand = "cd app && pnpm start"
+
+[variables]
+port = "9001"
+
+[expose]
+ports = ["9001"]

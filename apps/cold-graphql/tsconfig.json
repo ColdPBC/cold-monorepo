@@ -1,0 +1,40 @@
+{
+    "compilerOptions": {
+        "resolveJsonModule": true,
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "noEmit": true,
+        "noUnusedLocals": false,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "strict": true,
+        "sourceMap": false,
+        "moduleResolution":"node",
+        "forceConsistentCasingInFileNames": true,
+        "isolatedModules": true,
+        "preserveConstEnums": true,
+        "target": "es2020",
+        "module": "CommonJS",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true
+    },
+    "exclude": [
+      "**/node_modules/**",
+      "**/lib/**",
+      "**/dist/**",
+      "**/apps/cold-api/**",
+      "**/apps/cold-api-e2e/**",
+      "**/apps/cold-ui-e2e/**",
+      "**/apps/cold-ui/**",
+      "**/apps/cold-platform-bayou/**",
+      "**/apps/cold-platform-bayou-e2e/**",
+      "**/apps/cold-platform-climatiq-e2e/**",
+      "**/apps/cold-platform-climatiq/**",
+      "**/apps/cold-platform-openai/**",
+      "**/apps/cold-platform-openai-e2e/**"
+    ],
+    "include": [
+        "./src/**/*.ts",
+    ]
+}
