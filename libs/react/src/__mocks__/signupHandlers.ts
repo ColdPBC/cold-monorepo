@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 import { getEmptyPoliciesSignedMock, getPolicyMockByName } from './policyMock';
-import { getApiUrl } from './handlers';
+import { getApiUrl } from './_default/handlers';
 import { auth0UserMock } from './userMock';
 import { getSidebarMock } from './sidebarMock';
 import { getCategoriesDataMock, getFootprintDataMock } from './categoriesMock';

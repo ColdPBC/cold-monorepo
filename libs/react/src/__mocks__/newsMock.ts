@@ -13,8 +13,7 @@ export function getNewsDefault() {
     {
       title: 'Save the Planet, Put Down that Hamburger',
       url: 'https://www.nytimes.com/2023/07/21/climate/diet-vegan-meat-emissions.html',
-      image_url:
-        'https://static01.nyt.com/images/2023/07/21/science/21CLI-VEGAN/21CLI-VEGAN-facebookJumbo.jpg',
+      image_url: 'https://static01.nyt.com/images/2023/07/21/science/21CLI-VEGAN/21CLI-VEGAN-facebookJumbo.jpg',
       published_at: subWeeks(new Date(), 6).toISOString(),
       source_name: 'The New York Times',
     },
@@ -32,8 +31,7 @@ export function getNewsAllMissingProperties() {
     },
     {
       url: 'https://www.nytimes.com/2023/07/21/climate/diet-vegan-meat-emissions.html',
-      image_url:
-        'https://static01.nyt.com/images/2023/07/21/science/21CLI-VEGAN/21CLI-VEGAN-facebookJumbo.jpg',
+      image_url: 'https://static01.nyt.com/images/2023/07/21/science/21CLI-VEGAN/21CLI-VEGAN-facebookJumbo.jpg',
       published_at: subWeeks(new Date(), 6).toISOString(),
       source_name: 'The New York Times',
     },
@@ -52,8 +50,7 @@ export function getNewsSomeMissingProperties() {
     {
       title: 'Save the Planet, Put Down that Hamburger',
       url: 'https://www.nytimes.com/2023/07/21/climate/diet-vegan-meat-emissions.html',
-      image_url:
-        'https://static01.nyt.com/images/2023/07/21/science/21CLI-VEGAN/21CLI-VEGAN-facebookJumbo.jpg',
+      image_url: 'https://static01.nyt.com/images/2023/07/21/science/21CLI-VEGAN/21CLI-VEGAN-facebookJumbo.jpg',
       published_at: subWeeks(new Date(), 6).toISOString(),
       source_name: 'The New York Times',
     },

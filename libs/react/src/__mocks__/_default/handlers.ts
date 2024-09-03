@@ -1,6 +1,6 @@
 import { rest } from 'msw';
-import { getSidebarMock } from './sidebarMock';
-import { getCategoriesDataMock, getFootprintDataMock } from './categoriesMock';
+import { getSidebarMock } from '../sidebarMock';
+import { getCategoriesDataMock, getFootprintDataMock } from '../categoriesMock';
 import {
   getDataGridCompaniesMock,
   getDataGridUsersMock,
@@ -8,15 +8,15 @@ import {
   getDefaultFormDefinitionGridMock,
   getOrganizationMembersMock,
   getTeamMemberDataGridMock,
-} from './datagridMock';
-import { getSurveyFormDataByName, getSurveysMock } from './surveyDataMock';
-import { getRoles } from './roleMock';
+} from '../datagridMock';
+import { getSurveyFormDataByName, getSurveysMock } from '../surveyDataMock';
+import { getRoles } from '../roleMock';
 import { resolveAPIUrl, resolveStripeIntegrationUrl } from '@coldpbc/fetchers';
-import { getOrganizationMock, getOrganizationsMock } from './organizationMock';
-import { getPoliciesSignedMock, getPolicyMockByName } from './policyMock';
-import { auth0UserMock } from './userMock';
-import { getNewsDefault } from './newsMock';
-import { getActionMock, getActionsMock } from './action';
+import { getOrganizationMock, getOrganizationsMock } from '../organizationMock';
+import { getPoliciesSignedMock, getPolicyMockByName } from '../policyMock';
+import { auth0UserMock } from '../userMock';
+import { getNewsDefault } from '../newsMock';
+import { getActionMock, getActionsMock } from '../action';
 import { v4 as uuidv4 } from 'uuid';
 import {
   getAllComplianceMocks,
@@ -25,17 +25,17 @@ import {
   getQuestionAIDetailsMock,
   getQuestionnaireContainerMock,
   getQuestionnaireSidebarComplianceMock,
-} from './complianceMock';
-import { getDocumentsListTableMock } from './componentMock';
-import { getFilesWithCertificateClaimsMock } from './filesMock';
-import { returnUpdatedSurvey } from './helpers';
+} from '../complianceMock';
+import { getDocumentsListTableMock } from '../componentMock';
+import { getFilesWithCertificateClaimsMock } from '../filesMock';
+import { returnUpdatedSurvey } from '../helpers';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
-import { getDefaultEmissionMock } from './emissionMocks';
-import { getNotesMock } from './notesMock';
-import { getClaimsMock, getSupplierClaimsMock } from './claimsMock';
-import { getSupplierMockById, getSupplierWithCertificationClaimsMock } from './suppliersMock';
-import { getMaterialDetailMockById, getMaterialsMock } from './materialsMock';
-import { getCustomerWithSubscriptionMock, getPortalSessionMock, getStripeProductsMock } from './stripe';
+import { getDefaultEmissionMock } from '../emissionMocks';
+import { getNotesMock } from '../notesMock';
+import { getClaimsMock, getSupplierClaimsMock } from '../claimsMock';
+import { getSupplierMockById, getSupplierWithCertificationClaimsMock } from '../suppliersMock';
+import { getMaterialDetailMockById, getMaterialsMock } from '../materialsMock';
+import { getCustomerWithSubscriptionMock, getPortalSessionMock, getStripeProductsMock } from '../stripeMocks';
 
 export const getStripeAPIUrl = (path: string) => {
   return `${resolveStripeIntegrationUrl()}${path}`;

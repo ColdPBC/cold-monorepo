@@ -1,6 +1,6 @@
 import { rest } from 'msw';
-import { getStripeAPIUrl } from './handlers';
-import { getCustomerWithOutSubscriptionMock } from './stripe';
+import { getStripeAPIUrl } from './_default';
+import { getCustomerWithOutSubscriptionMock } from './stripeMocks';
 
 export const getStripeHandlers = {
   noSubscription: [

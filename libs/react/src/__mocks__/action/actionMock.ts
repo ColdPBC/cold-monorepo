@@ -6,8 +6,7 @@ export const getActionMock = (): ActionPayload => {
     updated_at: '2023-10-11T21:19:38.441Z',
     action: {
       title: 'Renewable Energy Procurement',
-      overview:
-        "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
+      overview: "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
       objective_description: `Purchasing RECs is the next best way to decarbonize your electricity footprint if you can’t develop renewable energy resources on-site. RECs - Renewable Energy Certificates - give your organization the right to claim the environmental benefits of renewable energy generated and delivered to the grid. Though they do not not physically alter the actual electricity powering your facilities, RECs can help to drive future market demand for renewables development in your grid region while also directly decreasing your carbon footprint. Not all RECs provide the same environmental benefit, however. Cold makes sure our RECs provide the maximum benefit possible in your electricity market.`,
       process_description:
         '1. Determine how much electricity you use in each facility\n2. Cold evaluates your renewable electricity purchasing options for each facility\n3. Select the best available option for renewable electricity and purchase',
@@ -31,8 +30,7 @@ export const getActionMock = (): ActionPayload => {
         {
           assignee: null,
           description: 'Test Step 2',
-          overview:
-            "Determine your facility's annual electricity consumption in kWh and send to Cold",
+          overview: "Determine your facility's annual electricity consumption in kWh and send to Cold",
           complete: '2022-09-27 18:00:00.000',
         },
         {
@@ -90,8 +88,7 @@ export const getActionsMock = (): ActionPayload[] => {
       updated_at: '2023-10-09T21:19:38.441Z',
       action: {
         title: 'Renewable Energy Procurement',
-        overview:
-          "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
+        overview: "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
         objective_description: 'Test Objective Description',
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
@@ -108,8 +105,7 @@ export const getActionsMock = (): ActionPayload[] => {
           },
           {
             assignee: null,
-            overview:
-              "Determine your facility's annual electricity consumption in kWh and send to Cold",
+            overview: "Determine your facility's annual electricity consumption in kWh and send to Cold",
             description: 'Test Step 2',
             complete: '2022-09-27 18:00:00.000',
           },
@@ -140,8 +136,7 @@ export const getActionsMock = (): ActionPayload[] => {
       updated_at: '2023-09-09T21:19:38.441Z',
       action: {
         title: 'Manage and record e-waste',
-        overview:
-          'Lorem ipsum dolor sit amet, consec tetur. Lorem ipsum dolor sit amet, consec tetur.',
+        overview: 'Lorem ipsum dolor sit amet, consec tetur. Lorem ipsum dolor sit amet, consec tetur.',
         objective_description: 'Test Objective Description',
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
@@ -288,12 +283,8 @@ export const getActionsMock = (): ActionPayload[] => {
   ];
 };
 
-export const getActionsMockBySubCategoryName = (
-  subCategoryName: string,
-): ActionPayload[] => {
-  return getActionsMock().filter(
-    (action) => action.action.subcategory === subCategoryName,
-  );
+export const getActionsMockBySubCategoryName = (subCategoryName: string): ActionPayload[] => {
+  return getActionsMock().filter(action => action.action.subcategory === subCategoryName);
 };
 
 export const getActionMockNoResources = (): ActionPayload => {
@@ -301,12 +292,10 @@ export const getActionMockNoResources = (): ActionPayload => {
     ...getActionMock(),
     action: {
       ...getActionMock().action,
-      dependent_surveys: getActionMock().action.dependent_surveys.map(
-        (survey) => ({
-          ...survey,
-          submitted: true,
-        }),
-      ),
+      dependent_surveys: getActionMock().action.dependent_surveys.map(survey => ({
+        ...survey,
+        submitted: true,
+      })),
       ready_to_execute: true,
       resources: undefined,
     },
@@ -318,14 +307,12 @@ export const getActionAllStepsComplete = (): ActionPayload => {
     ...getActionMock(),
     action: {
       ...getActionMock().action,
-      dependent_surveys: getActionMock().action.dependent_surveys.map(
-        (survey) => ({
-          ...survey,
-          submitted: true,
-        }),
-      ),
+      dependent_surveys: getActionMock().action.dependent_surveys.map(survey => ({
+        ...survey,
+        submitted: true,
+      })),
       ready_to_execute: true,
-      steps: getActionMock().action.steps.map((step) => ({
+      steps: getActionMock().action.steps.map(step => ({
         ...step,
         complete: '2023-12-10T20:25:22.648Z',
       })),
@@ -338,12 +325,10 @@ export const getActionNoDueDateSet = (): ActionPayload => {
     ...getActionMock(),
     action: {
       ...getActionMock().action,
-      dependent_surveys: getActionMock().action.dependent_surveys.map(
-        (survey) => ({
-          ...survey,
-          submitted: true,
-        }),
-      ),
+      dependent_surveys: getActionMock().action.dependent_surveys.map(survey => ({
+        ...survey,
+        submitted: true,
+      })),
       ready_to_execute: true,
       due_date: undefined,
     },
