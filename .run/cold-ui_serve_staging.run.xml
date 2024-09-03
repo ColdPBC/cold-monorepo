@@ -13,6 +13,8 @@
       <env name="VITE_LD_CLIENT_SIDE_ID" value="644fe7fe13a8fb12f3ca0c19" />
       <env name="VITE_MQTT_URL" value="wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com:443" />
       <env name="VITE_NODE_ENV" value="staging" />
+      <env name="VITE_STRIPE_INTEGRATION_URL" value="https://api.coldclimate.online/" />
+      <env name="VITE_STRIPE_CLIENT_ID" value="ca_QkNDdoP1laM3n0cJv1UrHB6K7geatzmN" />
     </envs>
     <option name="arguments" value="" />
     <method v="2" />

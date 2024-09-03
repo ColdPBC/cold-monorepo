@@ -330,6 +330,7 @@ model organizations {
   facility_footprints                       facility_footprints[]
   compliance_responses                      compliance_responses[]
   attribute_assurances                      attribute_assurances[]
+  metadata                                  Json?
 }
 
 /// @namespace Organization_Facilities

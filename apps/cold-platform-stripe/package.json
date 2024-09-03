@@ -1,0 +1,37 @@
+{
+  "service": {
+    "name": "cold-platform-stripe",
+    "label": "Stripe",
+    "service_type": "platform",
+    "definition": {
+      "logo_url": "./assets/black_logo.png",
+      "platform_url": "https://www.stripe.com",
+      "show": true,
+      "facilities": false,
+      "mqtt": {
+        "publishes_to": {
+          "user": "ui/:ENVIRONMENT:/:ORG_ID:/:EMAIL:",
+          "org": "ui/:ENVIRONMENT:/:ORG_ID:/#",
+          "public": "system/:ENVIRONMENT:/public",
+          "cold": "system/:ENVIRONMENT:/cold"
+        },
+        "subscribes_to": {
+          "base_topic": "/platform/stripe",
+          "qos": 0
+        }
+      },
+      "rabbitMQ": {
+        "rpcOptions": {
+          "queue": "cold.platform.stripe",
+          "routing_key": "cold.platform.stripe.rpc",
+          "exchange": "amq.direct"
+        },
+        "publishOptions": {
+          "queue": "cold.platform.stripe",
+          "routing_key": "cold.platform.stripe",
+          "exchange": "amq.direct"
+        }
+      }
+    }
+  }
+}

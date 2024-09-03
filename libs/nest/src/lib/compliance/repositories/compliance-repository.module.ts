@@ -1,4 +1,4 @@
-import { Global, Module, forwardRef } from '@nestjs/common';
+import { forwardRef, Global, Module } from '@nestjs/common';
 import { PrismaModule } from '../../prisma';
 
 import { CacheService, ColdCacheModule } from '../../cache';
@@ -16,13 +16,14 @@ import { ComplianceQuestionBookmarksRepository } from './compliance-question-boo
 import { ComplianceNotesRepository } from './compliance-notes';
 import { ComplianceNoteLinksRepository } from './compliance-note-links';
 import { ComplianceNoteFilesRepository } from './compliance-note-files';
-import { OrganizationsRepository } from '../../organizations';
-import { ProductsRepository } from '../../organizations';
+import { OrganizationsRepository, ProductsRepository } from '../../organizations';
+import { DarklyService } from '../../darkly';
 
 @Global()
 @Module({
   imports: [PrismaModule, ColdCacheModule.forRootAsync(), forwardRef(() => ScoringModule), forwardRef(() => FilteringModule)],
   providers: [
+    DarklyService,
     OrganizationsRepository,
     ProductsRepository,
     ComplianceSectionsRepository,

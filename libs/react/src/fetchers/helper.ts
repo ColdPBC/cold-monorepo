@@ -1,4 +1,4 @@
-import {get} from 'lodash';
+import { get } from 'lodash';
 
 /**
  * Helper function to resolve URL based on where the app is running.
@@ -13,4 +13,8 @@ export const resolveAPIUrl = (): string => {
 
 export const resolveNodeEnv = (): string => {
   return get(import.meta.env, 'VITE_DD_ENV', 'development');
+};
+
+export const resolveStripeIntegrationUrl = (): string => {
+  return import.meta.env.STORYBOOK_API_URL || get(import.meta.env, 'VITE_STRIPE_INTEGRATION_URL', 'http://localhost:7005');
 };
