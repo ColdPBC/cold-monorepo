@@ -383,7 +383,6 @@ model organization_claims {
   id                       String                   @id @default(cuid())
   claim_id                 String
   organization_facility_id String?
-  organization_file_id     String
   issued_date              DateTime?                @default(now())
   effective_date           DateTime?                @default(now())
   created_at               DateTime                 @default(now())
@@ -395,16 +394,28 @@ model organization_claims {
   claim                    claims                   @relation(fields: [claim_id], references: [id], onDelete: Cascade)
   material                 materials?               @relation(fields: [material_id], references: [id])
   facility                 organization_facilities? @relation(fields: [organization_facility_id], references: [id])
-  organization_file        organization_files       @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
   organization             organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   product                  products?                @relation(fields: [product_id], references: [id])
+  organization_files       organization_files?      @relation(fields: [organization_filesId], references: [id])
+  organization_filesId     String?
 
   @@index([claim_id], map: "organization_claims_claim_id_idx1")
   @@index([material_id], map: "organization_claims_material_id_idx1")
   @@index([organization_facility_id])
-  @@index([organization_file_id], map: "organization_claims_organization_file_id_idx1")
   @@index([organization_id], map: "organization_claims_organization_id_idx1")
   @@index([product_id], map: "organization_claims_product_id_idx1")
+}
+
+model claim_assurances {
+  id                    String  @id @default(cuid())
+  organization_claim_id String
+  organization_id       String
+  organization_file_id               String?
+  material_id           String?
+  product_id            String?
+
+  material            materials? @relation(fields: [material_id], references: [id])
+  organization_claim organization_claims @relation(fields: [organization_claim_id], references: [id], onDelete: Cascade)
 }
 
 model products {
@@ -1029,7 +1040,7 @@ view compliance_responses {
 }
 
 view organization_claims_view {
-  facility_id            String       @id
+  facility_id            String        @id
   facility_name          String?
   address_line_1         String?
   address_line_2         String?
