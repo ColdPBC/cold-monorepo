@@ -20,16 +20,8 @@ export class AppService {
     return this.stripe.products.list();
   }
 
-  async getCustomerSubscriptions(passedOrgId: string) {
-    const org = await this.prisma.organizations.findUnique({
-      where: {
-        id: passedOrgId,
-      },
-    });
-    if (!org) {
-      return new Error('Organization not found');
-    }
-    const customerId = this.getStripeCustomerId(org);
+  async getCustomerSubscriptions(req: IRequest) {
+    const customerId = this.getStripeCustomerId(req.organization);
     let currentSubscription: Stripe.Subscription | null = null;
     let paymentMethod: Stripe.PaymentMethod | null = null;
     if (customerId) {
@@ -59,16 +51,8 @@ export class AppService {
     };
   }
 
-  async createPortalSession(orgId: string) {
-    const org = await this.prisma.organizations.findUnique({
-      where: {
-        id: orgId,
-      },
-    });
-    if (!org) {
-      return new Error('Organization not found');
-    }
-    const customerId = this.getStripeCustomerId(org);
+  async createPortalSession(req: IRequest) {
+    const customerId = this.getStripeCustomerId(req.organization);
     if (!customerId) {
       return new Error('No customer id found');
     }
@@ -79,6 +63,20 @@ export class AppService {
         type: 'payment_method_update',
       },
     });
+  }
+
+  createCustomer(req: IRequest) {
+    return this.stripe.customers.create({
+      ...req.body,
+    });
+  }
+
+  deleteCustomer(req: IRequest) {
+    const customerId = this.getStripeCustomerId(req.organization);
+    if (!customerId) {
+      return new Error('No customer id found');
+    }
+    return this.stripe.customers.del(customerId);
   }
 
   private getStripeCustomerId(org: IRequest['organization']): string | undefined {

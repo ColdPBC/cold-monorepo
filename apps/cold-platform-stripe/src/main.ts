@@ -7,6 +7,8 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
+import { patchNestjsSwagger } from '@anatine/zod-nestjs';
+import { OpenapiModule } from '@coldpbc/nest';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule.forRootAsync());
@@ -28,6 +30,12 @@ async function bootstrap() {
     }
   };
   app.enableCors({ allowedHeaders: '*', exposedHeaders: '*', origin: `${getOrigin()}` });
+  OpenapiModule.register(app, {
+    title: 'Cold Stripe API',
+    tosUrl: 'https://app.coldclimate.com/terms',
+    description: 'Cold Stripe API',
+  });
+  patchNestjsSwagger();
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}/`);
 }
