@@ -23,8 +23,8 @@ export class PromptsService extends BaseWorker {
   frequency_penalty: number;
   presence_penalty: number;
   stop: string;
-  has_docs: boolean = false;
-  is_rag: boolean = false;
+  has_docs = false;
+  is_rag = false;
 
   condense_template: string;
 

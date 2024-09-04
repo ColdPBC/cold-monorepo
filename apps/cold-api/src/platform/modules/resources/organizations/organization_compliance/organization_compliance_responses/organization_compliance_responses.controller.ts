@@ -64,8 +64,8 @@ export class OrganizationComplianceResponsesController {
   getGroupResponses(
     @Param('name') name: string,
     @Req() req: IRequest,
-    @Query('take', new ParseIntPipe({ optional: true })) take: number = 100,
-    @Query('skip', new ParseIntPipe({ optional: true })) skip: number = 0,
+    @Query('take', new ParseIntPipe({ optional: true })) take = 100,
+    @Query('skip', new ParseIntPipe({ optional: true })) skip = 0,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
     @Query('bpc', new ParseBoolPipe({ optional: true })) bpc: boolean,
@@ -92,8 +92,8 @@ export class OrganizationComplianceResponsesController {
     @Param('name') name: string,
     @Param('sgId') sgId: string,
     @Req() req: IRequest,
-    @Query('take', new ParseIntPipe({ optional: true })) take: number = 100,
-    @Query('skip', new ParseIntPipe({ optional: true })) skip: number = 0,
+    @Query('take', new ParseIntPipe({ optional: true })) take = 100,
+    @Query('skip', new ParseIntPipe({ optional: true })) skip = 0,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
   ) {
@@ -126,9 +126,9 @@ export class OrganizationComplianceResponsesController {
     @Param('sgId') sgId: string,
     @Param('sId') sId: string,
     @Req() req: IRequest,
-    @Query('take', new ParseIntPipe({ optional: true })) take: number = 100,
-    @Query('skip', new ParseIntPipe({ optional: true })) skip: number = 0,
-    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean = true,
+    @Query('take', new ParseIntPipe({ optional: true })) take = 100,
+    @Query('skip', new ParseIntPipe({ optional: true })) skip = 0,
+    @Query('responses', new ParseBoolPipe({ optional: true })) responses = true,
   ) {
     return this.organizationComplianceResponsesService.getQuestionsBySectionId(name, sgId, sId, req, {
       responses,
@@ -166,8 +166,8 @@ export class OrganizationComplianceResponsesController {
     @Param('sId') sId: string,
     @Param('qId') qId: string,
     @Req() req: IRequest,
-    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean = true,
-    @Query('references', new ParseBoolPipe({ optional: true })) references: boolean = true,
+    @Query('responses', new ParseBoolPipe({ optional: true })) responses = true,
+    @Query('references', new ParseBoolPipe({ optional: true })) references = true,
   ) {
     return this.organizationComplianceResponsesService.getQuestionResponseById(name, sgId, sId, qId, req, { responses, references });
   }

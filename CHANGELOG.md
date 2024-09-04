@@ -1,3 +1,10 @@
+## [1.351.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.2...v1.351.3) (2024-09-04)
+
+
+### Bug Fixes
+
+* correct organization files field naming and validation logic ([eeddbc0](https://github.com/ColdPBC/cold-monorepo/commit/eeddbc06dc32035f2e7ff699545e6abef4829c59))
+
 ## [1.351.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.1...v1.351.2) (2024-08-30)
 
 

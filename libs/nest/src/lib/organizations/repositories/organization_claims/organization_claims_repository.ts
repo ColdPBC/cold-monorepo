@@ -65,15 +65,18 @@ export class OrganizationClaimsRepository extends BaseWorker {
       throw new NotFoundException(`Claim with id ${data.claim_id} not found`);
     }
 
-    const file = await this.prisma.organization_files.findUnique({
-      where: {
-        id: data.organization_file_id,
-        organization_id: org.id,
-      },
-    });
+    let file;
+    if (data.organization_files_id) {
+      const file = await this.prisma.organization_files.findUnique({
+        where: {
+          id: data.organization_files_id,
+          organization_id: org.id,
+        },
+      });
 
-    if (!file) {
-      throw new NotFoundException(`File with id ${data.organization_file_id} not found`);
+      if (!file) {
+        throw new NotFoundException(`File with id ${data.organization_files_id} not found`);
+      }
     }
 
     data.id = new Cuid2Generator(GuidPrefixes.Claims).scopedId;
@@ -90,7 +93,7 @@ export class OrganizationClaimsRepository extends BaseWorker {
     } catch (e) {
       if (e.code === 'P2002') {
         throw new ConflictException(
-          `${org.name} already has a claim for: claim: ${data.claim_id}, facility: ${data.organization_facility_id} and file: ${data.organization_file_id}`,
+          `${org.name} already has a claim for: claim: ${data.claim_id}, facility: ${data.organization_facility_id} and file: ${data.organization_files_id}`,
         );
       }
       this.logger.error(e);

@@ -4,8 +4,8 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class LangchainService extends BaseWorker implements OnModuleInit {
-  openAIapiKey: string = '';
-  returnSourceDocuments: boolean = true;
+  openAIapiKey = '';
+  returnSourceDocuments = true;
 
   constructor(readonly config: ConfigService, readonly darkly: DarklyService) {
     super(LangchainService.name);

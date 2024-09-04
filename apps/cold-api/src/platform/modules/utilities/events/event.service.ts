@@ -31,7 +31,7 @@ export class EventService extends BaseWorker {
       throw new Error('User is required, when authenticated request object is not provided');
     }
 
-    let org: string = '';
+    let org = '';
     if (!orgId) {
       // If orgId is not provided, try to extract it from the request or the user's claims
       if (requestOrUser instanceof Request && !requestOrUser['params'].orgId) {

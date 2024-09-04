@@ -55,7 +55,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     return { indexName: config.index, config };
   }
 
-  async syncOrgFiles(user: IAuthenticatedUser, org: any, delay: number = 0, type: 'web' | 'files' | 'all') {
+  async syncOrgFiles(user: IAuthenticatedUser, org: any, delay = 0, type: 'web' | 'files' | 'all') {
     if (!org) {
       throw new Error(`Organization not found: ${org.id}`);
     }
