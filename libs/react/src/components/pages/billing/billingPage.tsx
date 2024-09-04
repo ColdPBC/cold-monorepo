@@ -36,7 +36,7 @@ const _BillingPage = () => {
     return <Spinner />;
   }
 
-  logBrowser('Billing Page', 'error', { subscriptionSWR, productsSWR, paymentUpdatePortalSessionSWR });
+  logBrowser('Billing Page', 'info', { subscriptionSWR: subscriptionSWR.data, productsSWR: productsSWR.data, paymentUpdatePortalSessionSWR: paymentUpdatePortalSessionSWR.data });
 
   if (isAxiosError(subscriptionSWR.data) || isAxiosError(productsSWR.data)) {
     logBrowser('Error fetching data', 'error', { subscriptionSWR, productsSWR });
