@@ -396,8 +396,8 @@ model organization_claims {
   facility                 organization_facilities? @relation(fields: [organization_facility_id], references: [id])
   organization             organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   product                  products?                @relation(fields: [product_id], references: [id])
-  organization_files       organization_files?      @relation(fields: [organization_filesId], references: [id])
-  organization_filesId     String?
+  organization_files       organization_files?      @relation(fields: [organization_files_id], references: [id])
+  organization_files_id    String?
 
   @@index([claim_id], map: "organization_claims_claim_id_idx1")
   @@index([material_id], map: "organization_claims_material_id_idx1")
