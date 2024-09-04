@@ -32,9 +32,6 @@
           "exchange": "amq.direct"
         }
       }
-    },
-    "scripts": {
-      "openApi": "yarn dlx -p swagger2openapi swagger2openapi --outfile openapi.json http://0.0.0.0:7005/v1/json"
     }
   }
 }
