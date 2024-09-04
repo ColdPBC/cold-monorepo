@@ -1,3 +1,10 @@
+## [1.351.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.3...v1.351.4) (2024-09-04)
+
+
+### Bug Fixes
+
+* **prisma:** correct field naming inconsistencies in organization relationships ([8e56548](https://github.com/ColdPBC/cold-monorepo/commit/8e56548849d0ffd338c3e76f1acddd9ae25596c1))
+
 ## [1.351.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.2...v1.351.3) (2024-09-04)
 
 
