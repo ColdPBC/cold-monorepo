@@ -302,7 +302,8 @@ const _DocumentsPage = () => {
 
   return (
     <div className="relative overflow-y-auto h-full w-full">
-      <MainContent title="Documents" headerElement={getPageButtons()}>
+      <MainContent title="Documents" className={'gap-[40px]'} headerElement={getPageButtons()}>
+        <DocumentsHeaderTypes files={files} />
         <DataGrid
           rows={tableRows}
           columns={columns}
