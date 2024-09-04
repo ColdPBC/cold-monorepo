@@ -13,7 +13,7 @@ import { PromptsService } from '../prompts/prompts.service';
 export class AssistantService extends BaseWorker implements OnModuleInit {
   client: OpenAI;
   service: service_definitions;
-  topic: string = '';
+  topic = '';
   model: string;
 
   constructor(

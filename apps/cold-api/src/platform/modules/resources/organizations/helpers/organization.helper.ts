@@ -8,7 +8,7 @@ export class OrganizationHelper extends BaseWorker {
     super(OrganizationHelper.name);
   }
 
-  async getOrganizations(bpc: boolean = false): Promise<Array<organizations>> {
+  async getOrganizations(bpc = false): Promise<Array<organizations>> {
     let orgs: Array<organizations> = [];
     if (!bpc) {
       orgs = (await this.cache.get('organizations')) as Array<organizations>;
@@ -24,7 +24,7 @@ export class OrganizationHelper extends BaseWorker {
     return orgs;
   }
 
-  async getOrganizationById(id: string, user: AuthenticatedUser, bpc: boolean = false): Promise<organizations> {
+  async getOrganizationById(id: string, user: AuthenticatedUser, bpc = false): Promise<organizations> {
     if (!user.isColdAdmin && user.coldclimate_claims.org_id !== id) {
       throw new UnauthorizedException(`User is not authorized to access organization ${id}`);
     }
