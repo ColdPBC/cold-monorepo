@@ -26,6 +26,7 @@
           "maxInstances": 2,
           "minInstances": 2,
           "dockerfilePath": "_platform.dockerfile",
+          "buildType": "docker",
           "dockerContext": ".",
           "watchPaths": [
             "apps/cold-platform-openai/src/**",
@@ -125,6 +126,7 @@
           "memory": 4,
           "maxInstances": 2,
           "minInstances": 2,
+          "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
@@ -178,7 +180,6 @@
                 "DD_ENV": "production",
                 "NODE_ENV": "production",
                 "FC_ENV": "production",
-                "ECS_FARGATE": true,
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_API_KEY": {
@@ -236,6 +237,7 @@
           "memory": 1,
           "maxInstances": 2,
           "minInstances": 2,
+          "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
@@ -333,6 +335,7 @@
           "memory": 2,
           "maxInstances": 1,
           "minInstances": 1,
+          "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
@@ -438,12 +441,13 @@
           "name": "cold-platform-openai",
           "cpu": 1,
           "port": 7001,
-          "type": "web",
+          "type": "fargate",
           "ci": {
             "type": "ec2",
             "instanceSize": "t3a.medium"
           },
           "memory": 2,
+          "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
