@@ -564,7 +564,7 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-openai",
+            "DD_SERVICE": "cold-platform-stripe",
             "DD_ENV": "staging",
             "NODE_ENV": "staging",
             "FC_ENV": "staging",
