@@ -406,18 +406,6 @@ model organization_claims {
   @@index([product_id], map: "organization_claims_product_id_idx1")
 }
 
-model claim_assurances {
-  id                    String  @id @default(cuid())
-  organization_claim_id String
-  organization_id       String
-  organization_file_id               String?
-  material_id           String?
-  product_id            String?
-
-  material            materials? @relation(fields: [material_id], references: [id])
-  organization_claim organization_claims @relation(fields: [organization_claim_id], references: [id], onDelete: Cascade)
-}
-
 model products {
   id                  String                @id @default(cuid())
   name                String                @unique
