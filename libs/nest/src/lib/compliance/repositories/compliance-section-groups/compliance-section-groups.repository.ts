@@ -50,6 +50,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
           created_at: true,
           updated_at: true,
           deleted: true,
+          compliance_definition_id: true,
         })
         .parse(sectionGroup);
 
