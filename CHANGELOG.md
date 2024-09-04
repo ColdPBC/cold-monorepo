@@ -1,3 +1,10 @@
+## [1.351.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.4...v1.351.5) (2024-09-04)
+
+
+### Bug Fixes
+
+* allow creation without compliance_defnition_id ([44bbd60](https://github.com/ColdPBC/cold-monorepo/commit/44bbd60e269de4d9886f0c05ebd198e39ff110d9))
+
 ## [1.351.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.3...v1.351.4) (2024-09-04)
 
 
