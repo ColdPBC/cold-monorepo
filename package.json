@@ -363,7 +363,6 @@
     "jest-canvas-mock": "^2.5.0",
     "jest-environment-node": "^29.4.1",
     "jest-mock-extended": "^3.0.5",
-    "lodash": "^4.17.21",
     "npm-which": "^3.0.1",
     "nx-cloud": "^19.0.0",
     "postcss-cli": "^10.1.0",
