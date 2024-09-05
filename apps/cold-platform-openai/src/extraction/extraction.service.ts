@@ -150,7 +150,7 @@ export class ExtractionService extends BaseWorker {
       ];
 
       let schema;
-      let extraction_name: string = 'default_extraction';
+      let extraction_name = 'default_extraction';
 
       // determine the extraction schema and extraction name to use based on the classification
       switch (parsedClassification.type) {

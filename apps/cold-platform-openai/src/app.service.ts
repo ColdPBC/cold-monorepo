@@ -17,7 +17,7 @@ export type OpenAIAssistant = {
 export class AppService extends BaseWorker implements OnModuleInit {
   client: OpenAI;
   service: service_definitions;
-  topic: string = '';
+  topic = '';
 
   constructor(readonly config: ConfigService, readonly prisma: PrismaService, readonly rabbit: ColdRabbitService, readonly darkly: DarklyService, readonly tools: Tools) {
     super(AppService.name);

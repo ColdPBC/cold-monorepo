@@ -55,7 +55,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     this.openAIapiKey = this.config.getOrThrow('OPENAI_API_KEY');
   }
 
-  async onModuleInit() {}
+  async onModuleInit() {
+    this.logger.info('OpenAI Chat Service Initialized');
+  }
 
   /**
    * Reset the AI responses when re-processing a survey
@@ -471,8 +473,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
      * This prompt is used to condense the chat history and follow-up question into a single standalone question for the purpose
      * of providing context to the AI model to query the vector index for the most relevant information.
      */
-    let rephrased_question: string = '';
-    const lastMessage: string = '';
+    let rephrased_question = '';
+    const lastMessage = '';
 
     // If there are messages, get the last message and include it in the prompt
 

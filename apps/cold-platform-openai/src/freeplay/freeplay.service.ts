@@ -47,7 +47,7 @@ export class FreeplayService extends BaseWorker implements OnModuleInit {
     return this.client.sessions.create({ customMetadata: metadata });
   }
 
-  async getPrompt(template_name: string, variables: any, formatted: boolean = true) {
+  async getPrompt(template_name: string, variables: any, formatted = true) {
     if (formatted)
       return await this.client.prompts.getFormatted({
         projectId: 'f98682e7-7dec-4d9c-a74b-28819dca3e3a',

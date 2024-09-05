@@ -1,29 +1,29 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UseFilters, Req } from '@nestjs/common';
-import { ClaimsService } from './claims.service';
+import { SustainabilityAttributesService } from './sustainability_attributes.service';
 import { HttpExceptionFilter, IRequest, JwtAuthGuard, OrgUserInterceptor, Role, Roles, RolesGuard } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
-import { claims } from '@prisma/client';
+import { sustainability_attributes } from '@prisma/client';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseInterceptors(OrgUserInterceptor)
 @ApiOAuth2(['openid', 'email', 'profile'])
-@ApiTags('Claims')
-@UseFilters(new HttpExceptionFilter(ClaimsController.name))
-@Controller('claims')
-export class ClaimsController {
-  constructor(private readonly claim: ClaimsService) {}
+@ApiTags('Sustainability Attributes')
+@UseFilters(new HttpExceptionFilter(SustainabilityAttributesController.name))
+@Controller('sustainability_attributes')
+export class SustainabilityAttributesController {
+  constructor(private readonly claim: SustainabilityAttributesService) {}
 
   @Post()
   @Roles(Role.ColdAdmin)
-  create(@Req() req: IRequest, @Body() createClaimDto: claims) {
+  create(@Req() req: IRequest, @Body() createClaimDto: sustainability_attributes) {
     return this.claim.create(req.organization, req.user, createClaimDto);
   }
 
   @Patch(':id')
   @Roles(Role.ColdAdmin)
-  update(@Req() req: IRequest, @Param('id') id: string, @Body() updateClaimDto: claims) {
+  update(@Req() req: IRequest, @Param('id') id: string, @Body() updateClaimDto: sustainability_attributes) {
     updateClaimDto.id = id;
     return this.claim.update(req.organization, req.user, updateClaimDto);
   }
