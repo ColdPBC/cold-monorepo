@@ -3,7 +3,7 @@ import { Emission } from './emission';
 import { Integration } from './integration';
 import { MaterialSupplier } from './material-supplier';
 import { Organization } from './organization';
-import { OrganizationClaim } from './organization-claim';
+import { OrganizationAttribute } from './organization-attribute';
 import { UtilityBill } from './utility-bill';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl } from '../../acl_policies';
@@ -65,8 +65,8 @@ export class OrganizationFacility {
   @OneToMany({ entity: () => MaterialSupplier, mappedBy: 'organizationFacility' })
   materialSuppliers = new Collection<MaterialSupplier>(this);
 
-  @OneToMany({ entity: () => OrganizationClaim, mappedBy: 'organizationFacility' })
-  organizationClaims = new Collection<OrganizationClaim>(this);
+  @OneToMany({ entity: () => OrganizationAttribute, mappedBy: 'organizationFacility' })
+  organizationAttributes = new Collection<OrganizationAttribute>(this);
 
   @OneToMany({ entity: () => UtilityBill, mappedBy: 'organizationFacility' })
   utilityBills = new Collection<UtilityBill>(this);

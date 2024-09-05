@@ -3,10 +3,13 @@ import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { PrismaMigration as OrmPrismaMigration } from '../entities';
 import { connection } from '../database';
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { cold_admin_only, default_acl } from '../acl_policies';
 
 @Entity<PrismaMigration>('PrismaMigration', {
   provider: new MikroBackendProvider(OrmPrismaMigration, connection),
 })
+@ApplyAccessControlList(cold_admin_only)
 export class PrismaMigration {
   @Field(() => ID, { primaryKeyField: true })
   id!: string;
