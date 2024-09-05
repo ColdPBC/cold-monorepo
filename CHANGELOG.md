@@ -1,3 +1,19 @@
+# [1.352.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.6...v1.352.0) (2024-09-05)
+
+
+### Bug Fixes
+
+* correct log level and data format for billing page ([a2dbf4d](https://github.com/ColdPBC/cold-monorepo/commit/a2dbf4d16515bcc65961b86bd25c1851b4a09fc6))
+
+
+### Features
+
+* add BillingPage component and route ([db84530](https://github.com/ColdPBC/cold-monorepo/commit/db845302271b9f5f61ca6613bacf66e0f098408a))
+* add cold-platform-stripe application ([c256d1c](https://github.com/ColdPBC/cold-monorepo/commit/c256d1c254be58ef06ed49e209c4602ab3fd7d49))
+* enhance AppService with logging and extend BaseWorker ([9b8fbb0](https://github.com/ColdPBC/cold-monorepo/commit/9b8fbb0e256a7fb01a107b9ad433e0792c698d8b))
+* integrate Stripe embedded checkout on the Billing page ([80fe74c](https://github.com/ColdPBC/cold-monorepo/commit/80fe74c6a6e624265c5484ea87c5539c686c8ed4))
+* refactor and expand Stripe service functionality ([f774764](https://github.com/ColdPBC/cold-monorepo/commit/f77476481bcda617c875494be9d8788c195604ac))
+
 ## [1.351.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.5...v1.351.6) (2024-09-05)
 
 
