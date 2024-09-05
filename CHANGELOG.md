@@ -1,3 +1,10 @@
+# [1.355.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.354.0...v1.355.0) (2024-09-05)
+
+
+### Features
+
+* update database schema for attribute assurances ([2436551](https://github.com/ColdPBC/cold-monorepo/commit/24365513cd20c1a79ea6bf6dafe68557f1c691ab))
+
 # [1.354.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.353.2...v1.354.0) (2024-09-05)
 
 
