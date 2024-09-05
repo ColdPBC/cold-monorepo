@@ -13,8 +13,24 @@
       <env name="VITE_LD_CLIENT_SIDE_ID" value="644fe7fe13a8fb12f3ca0c19" />
       <env name="VITE_MQTT_URL" value="wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com:443" />
       <env name="VITE_NODE_ENV" value="staging" />
-      <env name="VITE_STRIPE_BILLING_URL" value="https://billing.stripe.com/p/login/test_5kA7uv53VcIa3kY144" />
-      <env name="VITE_STRIPE_INTEGRATION_URL" value="http://localhost:7005" />
+    </envs>
+    <option name="arguments" value="" />
+    <method v="2" />
+  </configuration>
+  <configuration default="false" name="cold-ui:serve:staging" type="NxRunConfigurationType" folderName="UI">
+    <option name="nx-projects" value="cold-ui" />
+    <option name="nx-targets" value="serve" />
+    <option name="nx-target-configuration" value="development" />
+    <envs>
+      <env name="VITE_API_BASE_URL" value="http://localhost:7001" />
+      <env name="VITE_AUTH0_CLIENT_ID" value="i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3" />
+      <env name="VITE_AUTH0_COLD_ORGANIZATION" value="org_VWv3Al9pLEI4CaOH" />
+      <env name="VITE_AUTH0_DOMAIN" value="cold-climate-staging.us.auth0.com" />
+      <env name="VITE_COLD_API_AUDIENCE" value="https://api.coldclimate.online/" />
+      <env name="VITE_DD_ENV" value="staging" />
+      <env name="VITE_GRAPHQL_URL" value="https://graphql.coldclimate.online" />
+      <env name="VITE_LD_CLIENT_SIDE_ID" value="644ff1af639dda130d202037" />
+      <env name="VITE_MQTT_URL" value="wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com:443" />
     </envs>
     <option name="arguments" value="" />
     <method v="2" />

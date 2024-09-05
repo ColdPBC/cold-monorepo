@@ -45,6 +45,7 @@
   "dependencies": {
     "@anatine/zod-nestjs": "^2.0.3",
     "@anatine/zod-openapi": "^2.2.0",
+    "@apollo/client": "^3.11.8",
     "@auth0/auth0-react": "^2.1.0",
     "@auth0/auth0-spa-js": "^2.1.2",
     "@aws-sdk/client-kms": "^3.509.0",
