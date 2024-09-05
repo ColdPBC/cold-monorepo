@@ -1,3 +1,10 @@
+## [1.353.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.353.0...v1.353.1) (2024-09-05)
+
+
+### Bug Fixes
+
+* update VITE_STRIPE_INTEGRATION_URL values ([ae6d77b](https://github.com/ColdPBC/cold-monorepo/commit/ae6d77b36a4834e64a7e6de7c29692dde5e7fb22))
+
 # [1.353.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.352.0...v1.353.0) (2024-09-05)
 
 
