@@ -478,7 +478,7 @@
           },
           "target": {
             "type": "ecs-ec2",
-            "clusterInstanceSize": "t2.micro",
+            "clusterInstanceSize": "t2.medium",
             "clusterMinInstances": 1,
             "clusterMaxInstances": 1
           },
