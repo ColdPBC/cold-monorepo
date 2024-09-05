@@ -341,28 +341,28 @@ model organizations {
 /// @zod.import(["import { organization_facilitiesSchema } from '../../custom'"])
 /// @actions
 model organization_facilities {
-  id                  String                @id @default(cuid())
-  organization_id     String
-  name                String
-  city                String?
-  country             String?
-  created_at          DateTime              @default(now())
-  updated_at          DateTime              @updatedAt
-  address_line_2      String?
-  postal_code         String?
-  deleted             Boolean               @default(false)
-  metadata            Json?
-  state_province      String?
-  address_line_1      String?
-  supplier_tier                Int?
-  supplier            Boolean?              @default(false)
+  id                      String                    @id @default(cuid())
+  organization_id         String
+  name                    String
+  city                    String?
+  country                 String?
+  created_at              DateTime                  @default(now())
+  updated_at              DateTime                  @updatedAt
+  address_line_2          String?
+  postal_code             String?
+  deleted                 Boolean                   @default(false)
+  metadata                Json?
+  state_province          String?
+  address_line_1          String?
+  supplier_tier           Int?
+  supplier                Boolean?                  @default(false)
   organization_attributes organization_attributes[]
-  emissions           emissions[]
-  integrations        integrations[]
-  organization        organizations         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  utility_bills       utility_bills[]
-  product_suppliers   suppliers_view[]
-  material_suppliers  material_suppliers[]
+  emissions               emissions[]
+  integrations            integrations[]
+  organization            organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  utility_bills           utility_bills[]
+  product_suppliers       suppliers_view[]
+  material_suppliers      material_suppliers[]
 
   @@index([organization_id], map: "organization_facilities_organization_id_idx1")
 }
@@ -396,7 +396,7 @@ model organization_attributes {
   deleted                     Boolean                   @default(false)
   material_id                 String?
   product_id                  String?
-  organization_file_id      String?
+  organization_file_id        String?
   organization_id             String
   attribute_assurance         attribute_assurances[]
   organization                organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
@@ -426,6 +426,8 @@ model attribute_assurances {
   updated_at                 DateTime                 @updatedAt
   organization               organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   organization_attribute     organization_attributes? @relation(fields: [organization_attributes_id], references: [id], onDelete: Cascade)
+  organization_files         organization_files?      @relation(fields: [organization_filesId], references: [id])
+  organization_filesId       String?
 
   @@index([organization_attributes_id], map: "attribute_assurances_org_claim_id_idx1")
   @@index([organization_id], map: "attribute_assurances_organization_id_idx1")
@@ -433,30 +435,30 @@ model attribute_assurances {
 }
 
 model products {
-  id                  String                @id @default(cuid())
-  name                String                @unique
-  created_at          DateTime              @default(now())
-  updated_at          DateTime              @updatedAt
-  deleted             Boolean               @default(false)
-  organization_id     String
+  id                      String                    @id @default(cuid())
+  name                    String                    @unique
+  created_at              DateTime                  @default(now())
+  updated_at              DateTime                  @updatedAt
+  deleted                 Boolean                   @default(false)
+  organization_id         String
   organization_attributes organization_attributes[]
-  product_materials   product_materials[]
-  organization        organizations         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  product_materials       product_materials[]
+  organization            organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
   @@index([organization_id], map: "products_organization_id_idx1")
 }
 
 model materials {
-  id                  String                @id @default(cuid())
-  name                String                @unique
-  created_at          DateTime              @default(now())
-  updated_at          DateTime              @updatedAt
-  deleted             Boolean               @default(false)
-  organization_id     String
+  id                      String                    @id @default(cuid())
+  name                    String                    @unique
+  created_at              DateTime                  @default(now())
+  updated_at              DateTime                  @updatedAt
+  deleted                 Boolean                   @default(false)
+  organization_id         String
   organization_attributes organization_attributes[]
-  material_suppliers  material_suppliers[]
-  organization        organizations         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  product_materials   product_materials[]
+  material_suppliers      material_suppliers[]
+  organization            organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  product_materials       product_materials[]
 
   @@index([organization_id], map: "materials_organization_id_idx1")
 }
@@ -638,7 +640,7 @@ model organization_files {
   expires_at                                DateTime?
   effective_end_date                        DateTime?
   effective_start_date                      DateTime?
-  organization_attributes                       organization_attributes[]
+  organization_attributes                   organization_attributes[]
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
   organization_compliance_note_files        organization_compliance_note_files[]
   integration                               integrations?                               @relation(fields: [integration_id], references: [id], onDelete: Cascade)
