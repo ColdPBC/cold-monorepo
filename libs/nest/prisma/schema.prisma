@@ -644,6 +644,7 @@ model organization_files {
   integration                               integrations?                               @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   organization                              organizations                               @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   vector_records                            vector_records[]
+  attribute_assurances                      attribute_assurances[]
 
   @@unique([organization_id, id], name: "orgFileId")
   @@unique([organization_id, openai_file_id], name: "openaiFileId")
