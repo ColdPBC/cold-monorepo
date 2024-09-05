@@ -235,7 +235,7 @@
           ],
           "healthCheckPath": "/health",
           "containerInsights": true,
-          "enableCloudfrontSwr": true,
+          "enableCloudfrontSwr": false,
           "versionHistoryCount": 10,
           "dockerLabels": {
             "com.datadoghq.tags.environment": "production",
@@ -543,7 +543,7 @@
           ],
           "healthCheckPath": "/health",
           "containerInsights": true,
-          "enableCloudfrontSwr": true,
+          "enableCloudfrontSwr": false,
           "versionHistoryCount": 10,
           "dockerLabels": {
             "com.datadoghq.tags.environment": "staging",
