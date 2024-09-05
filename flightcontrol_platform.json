@@ -226,6 +226,7 @@
           "memory": 3,
           "maxInstances": 2,
           "minInstances": 2,
+          "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
@@ -534,6 +535,7 @@
           "memory": 1,
           "maxInstances": 2,
           "minInstances": 2,
+          "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
