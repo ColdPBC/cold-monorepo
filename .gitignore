@@ -62,3 +62,8 @@ package-lock.json
 !.yarn/versions
 /.env
 **/index.ts
+
+
+/.run/build (staging).run.xml
+/.run/watch (staging).run.xml
+/.run/start (staging).run.xml
