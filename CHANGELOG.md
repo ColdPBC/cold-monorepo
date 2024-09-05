@@ -1,3 +1,10 @@
+## [1.353.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.353.1...v1.353.2) (2024-09-05)
+
+
+### Bug Fixes
+
+* change ECS cluster instance size to t2.medium ([04c21dc](https://github.com/ColdPBC/cold-monorepo/commit/04c21dc853cc17c2c0831fccd21a49acdf7b5237))
+
 ## [1.353.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.353.0...v1.353.1) (2024-09-05)
 
 
