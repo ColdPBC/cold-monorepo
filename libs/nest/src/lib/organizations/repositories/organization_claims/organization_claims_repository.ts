@@ -11,7 +11,7 @@ export class OrganizationClaimsRepository extends BaseWorker {
     super(OrganizationClaimsRepository.name);
   }
 
-  async createClaim(org: organizations, user: IAuthenticatedUser, data: organization_claims) {
+  async createClaim(org: organizations, user: IAuthenticatedUser, data: organization_attributes) {
     if (!data.claim_id) {
       throw new BadRequestException('Certification ID is required');
     }
@@ -65,15 +65,18 @@ export class OrganizationClaimsRepository extends BaseWorker {
       throw new NotFoundException(`Claim with id ${data.claim_id} not found`);
     }
 
-    const file = await this.prisma.organization_files.findUnique({
-      where: {
-        id: data.organization_file_id,
-        organization_id: org.id,
-      },
-    });
+    let file;
+    if (data.organization_files_id) {
+      file = await this.prisma.organization_files.findUnique({
+        where: {
+          id: data.organization_file_id,
+          organization_id: org.id,
+        },
+      });
 
-    if (!file) {
-      throw new NotFoundException(`File with id ${data.organization_file_id} not found`);
+      if (!file) {
+        throw new NotFoundException(`File with id ${data.organization_file_id} not found`);
+      }
     }
 
     data.id = new Cuid2Generator(GuidPrefixes.Claims).scopedId;

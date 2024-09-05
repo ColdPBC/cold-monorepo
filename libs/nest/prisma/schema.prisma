@@ -312,7 +312,7 @@ model organizations {
   deleted                                   Boolean                                     @default(false)
   actions                                   actions[]
   category_data                             category_data[]
-  organization_claims                       organization_claims[]
+  organization_attributes                   organization_attributes[]
   integrations                              integrations[]
   materials                                 materials[]
   organization_compliance                   organization_compliance[]
@@ -326,9 +326,10 @@ model organizations {
   survey_status                             survey_status[]
   utility_bills                             utility_bills[]
   vector_records                            vector_records[]
-  claims                                    claims[]
+  sustainability_attributes                 sustainability_attributes[]
   facility_footprints                       facility_footprints[]
   compliance_responses                      compliance_responses[]
+  attribute_assurances                      attribute_assurances[]
 }
 
 /// @namespace Organization_Facilities
@@ -352,8 +353,9 @@ model organization_facilities {
   metadata            Json?
   state_province      String?
   address_line_1      String?
+  supplier_tier                Int?
   supplier            Boolean?              @default(false)
-  organization_claims organization_claims[]
+  organization_attributes organization_attributes[]
   emissions           emissions[]
   integrations        integrations[]
   organization        organizations         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
@@ -364,47 +366,69 @@ model organization_facilities {
   @@index([organization_id], map: "organization_facilities_organization_id_idx1")
 }
 
-model claims {
-  id                  String                @id @default(cuid())
-  organization_id     String?
-  name                String
-  created_at          DateTime              @default(now())
-  updated_at          DateTime              @updatedAt
-  deleted             Boolean               @default(false)
-  level               claim_levels
-  type                claim_types
-  organization_claims organization_claims[]
-  organization        organizations?        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+model sustainability_attributes {
+  id                      String                    @id @default(cuid())
+  organization_id         String?
+  name                    String
+  created_at              DateTime                  @default(now())
+  updated_at              DateTime                  @updatedAt
+  deleted                 Boolean                   @default(false)
+  level                   claim_levels
+  type                    claim_types
+  organization_attributes organization_attributes[]
+  organization            organizations?            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  metadata                Json?
 
   @@unique([organization_id, name], name: "orgIdName")
+  @@index([organization_id], map: "sustainability_attributes_organization_id_idx1")
+  @@index([level], map: "sustainability_attributes_level_idx1")
+  @@index([type], map: "sustainability_attributes_type_idx1")
 }
 
-model organization_claims {
-  id                       String                   @id @default(cuid())
-  claim_id                 String
-  organization_facility_id String?
-  organization_file_id     String
-  issued_date              DateTime?                @default(now())
-  effective_date           DateTime?                @default(now())
-  created_at               DateTime                 @default(now())
-  updated_at               DateTime                 @updatedAt
-  deleted                  Boolean                  @default(false)
-  material_id              String?
-  product_id               String?
-  organization_id          String
-  claim                    claims                   @relation(fields: [claim_id], references: [id], onDelete: Cascade)
-  material                 materials?               @relation(fields: [material_id], references: [id])
-  facility                 organization_facilities? @relation(fields: [organization_facility_id], references: [id])
-  organization_file        organization_files       @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
-  organization             organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  product                  products?                @relation(fields: [product_id], references: [id])
+// Joins the sustainability attributes with the organization entities (facilities, products, materials)
+model organization_attributes {
+  id                          String                    @id @default(cuid())
+  sustainability_attribute_id String
+  organization_facility_id    String?
+  created_at                  DateTime                  @default(now())
+  updated_at                  DateTime                  @updatedAt
+  deleted                     Boolean                   @default(false)
+  material_id                 String?
+  product_id                  String?
+  organization_file_id      String?
+  organization_id             String
+  attribute_assurance         attribute_assurances[]
+  organization                organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  sustainability_attribute    sustainability_attributes @relation(fields: [sustainability_attribute_id], references: [id], onDelete: Cascade)
+  facility                    organization_facilities?  @relation(fields: [organization_facility_id], references: [id])
+  product                     products?                 @relation(fields: [product_id], references: [id])
+  material                    materials?                @relation(fields: [material_id], references: [id])
+  organization_file           organization_files?       @relation(fields: [organization_file_id], references: [id])
 
-  @@index([claim_id], map: "organization_claims_claim_id_idx1")
-  @@index([material_id], map: "organization_claims_material_id_idx1")
+  @@index([organization_id], map: "organization_attributes_organization_id_idx1")
+  @@index([sustainability_attribute_id], map: "organization_attributes_attribute_id_idx1")
   @@index([organization_facility_id])
-  @@index([organization_file_id], map: "organization_claims_organization_file_id_idx1")
+  @@index([organization_file_id], map: "organization_attributes_organization_file_id_idx1")
   @@index([organization_id], map: "organization_claims_organization_id_idx1")
-  @@index([product_id], map: "organization_claims_product_id_idx1")
+  @@index([product_id], map: "organization_attributes_product_id_idx1")
+  @@index([material_id], map: "organization_attributes_material_id_idx1")
+}
+
+model attribute_assurances {
+  id                         String                   @id @default(cuid())
+  organization_id            String
+  effective_start_date       DateTime
+  effective_end_date         DateTime
+  organization_attributes_id String?
+  organization_file_id       String?
+  created_at                 DateTime                 @default(now())
+  updated_at                 DateTime                 @updatedAt
+  organization               organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  organization_attribute     organization_attributes? @relation(fields: [organization_attributes_id], references: [id], onDelete: Cascade)
+
+  @@index([organization_attributes_id], map: "attribute_assurances_org_claim_id_idx1")
+  @@index([organization_id], map: "attribute_assurances_organization_id_idx1")
+  @@index([organization_file_id], map: "attribute_assurances_organization_file_id_idx1")
 }
 
 model products {
@@ -414,7 +438,7 @@ model products {
   updated_at          DateTime              @updatedAt
   deleted             Boolean               @default(false)
   organization_id     String
-  organization_claims organization_claims[]
+  organization_attributes organization_attributes[]
   product_materials   product_materials[]
   organization        organizations         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
@@ -428,7 +452,7 @@ model materials {
   updated_at          DateTime              @updatedAt
   deleted             Boolean               @default(false)
   organization_id     String
-  organization_claims organization_claims[]
+  organization_attributes organization_attributes[]
   material_suppliers  material_suppliers[]
   organization        organizations         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   product_materials   product_materials[]
@@ -613,7 +637,7 @@ model organization_files {
   expires_at                                DateTime?
   effective_end_date                        DateTime?
   effective_start_date                      DateTime?
-  organization_claims                       organization_claims[]
+  organization_attributes                       organization_attributes[]
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
   organization_compliance_note_files        organization_compliance_note_files[]
   integration                               integrations?                               @relation(fields: [integration_id], references: [id], onDelete: Cascade)
@@ -1013,8 +1037,7 @@ view compliance_responses {
   compliance_section_groups              compliance_section_groups?            @relation(fields: [compliance_section_group_id], references: [id])
   compliance_sections                    compliance_sections?                  @relation(fields: [compliance_section_id], references: [id])
   compliance_questions                   compliance_questions?                 @relation(fields: [compliance_question_id], references: [id])
-
-  organization organizations? @relation(fields: [organization_id], references: [id])
+  organization                           organizations?                        @relation(fields: [organization_id], references: [id])
 
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
   @@index([organization_id])
@@ -1029,7 +1052,7 @@ view compliance_responses {
 }
 
 view organization_claims_view {
-  facility_id            String       @id
+  facility_id            String        @id
   facility_name          String?
   address_line_1         String?
   address_line_2         String?
@@ -1064,6 +1087,7 @@ view suppliers_view {
   postal_code             String?
   metadata                Json?
   supplier                Boolean?
+  supplier_tier           Int?
   organization_facilities organization_facilities? @relation(fields: [id], references: [id])
 }
 
