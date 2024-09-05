@@ -9,11 +9,12 @@ SELECT
   of.state_province,
   of.postal_code,
   of.metadata,
-  of.supplier
+  of.supplier,
+  of.supplier_tier
 FROM
   (
     organization_facilities of
-    JOIN organizations o ON (of.organization_id = o.id)
+    JOIN organizations o ON ((of.organization_id = o.id))
   )
 WHERE
   (of.supplier IS TRUE);

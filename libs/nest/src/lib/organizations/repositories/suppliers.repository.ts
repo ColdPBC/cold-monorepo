@@ -16,7 +16,7 @@ export class SuppliersRepository extends BaseWorker {
     postal_code: true,
     country: true,
     metadata: true,
-    organization_claims: {
+    organization_attributes: {
       select: {
         id: true,
         claim_id: true,
@@ -25,6 +25,7 @@ export class SuppliersRepository extends BaseWorker {
         material: true,
         product: true,
         facility: true,
+        attribute_assurances: true,
         organization_file: {
           select: {
             id: true,
@@ -39,6 +40,7 @@ export class SuppliersRepository extends BaseWorker {
             mimetype: true,
             size: true,
             checksum: true,
+            attribute_assurance: true,
           },
         },
         claim: {
