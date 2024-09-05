@@ -1,3 +1,24 @@
+## [1.351.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.5...v1.351.6) (2024-09-05)
+
+
+### Bug Fixes
+
+* rename organization_files_id to organization_file_id ([9826201](https://github.com/ColdPBC/cold-monorepo/commit/98262013869935227dcc50f07f9aa6557cdffa0a))
+
+## [1.351.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.4...v1.351.5) (2024-09-04)
+
+
+### Bug Fixes
+
+* allow creation without compliance_defnition_id ([44bbd60](https://github.com/ColdPBC/cold-monorepo/commit/44bbd60e269de4d9886f0c05ebd198e39ff110d9))
+
+## [1.351.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.3...v1.351.4) (2024-09-04)
+
+
+### Bug Fixes
+
+* **prisma:** correct field naming inconsistencies in organization relationships ([8e56548](https://github.com/ColdPBC/cold-monorepo/commit/8e56548849d0ffd338c3e76f1acddd9ae25596c1))
+
 ## [1.351.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.2...v1.351.3) (2024-09-04)
 
 
