@@ -1,3 +1,10 @@
+# [1.353.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.352.0...v1.353.0) (2024-09-05)
+
+
+### Features
+
+* add buildType attribute to flight control platform configurations ([4113e44](https://github.com/ColdPBC/cold-monorepo/commit/4113e44948ef28f3f7e6c58ce3d1cae485b47e79))
+
 # [1.352.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.6...v1.352.0) (2024-09-05)
 
 
