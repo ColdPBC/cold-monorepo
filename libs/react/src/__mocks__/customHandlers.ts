@@ -16,7 +16,7 @@ import { getNewsAllMissingProperties, getNewsDefault, getNewsSomeMissingProperti
 import { ActionPayload } from '@coldpbc/interfaces';
 import { getOrganizationMembersMock } from './datagridMock';
 import { getFilesWithCertificateClaimsMock } from './filesMock';
-import { getApiUrl } from './handlers';
+import { getApiUrl } from './_default/handlers';
 import { getSingleYearsEmissionMock } from './emissionMocks';
 
 export const getFootprintHandler = {

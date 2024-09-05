@@ -329,6 +329,7 @@ model organizations {
   claims                                    claims[]
   facility_footprints                       facility_footprints[]
   compliance_responses                      compliance_responses[]
+  metadata                                  Json?
 }
 
 /// @namespace Organization_Facilities

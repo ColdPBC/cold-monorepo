@@ -1,6 +1,6 @@
 import { rest } from 'msw';
-import { getSidebarMock } from './sidebarMock';
-import { getCategoriesDataMock, getFootprintDataMock } from './categoriesMock';
+import { getSidebarMock } from '../sidebarMock';
+import { getCategoriesDataMock, getFootprintDataMock } from '../categoriesMock';
 import {
   getDataGridCompaniesMock,
   getDataGridUsersMock,
@@ -8,15 +8,15 @@ import {
   getDefaultFormDefinitionGridMock,
   getOrganizationMembersMock,
   getTeamMemberDataGridMock,
-} from './datagridMock';
-import { getSurveyFormDataByName, getSurveysMock } from './surveyDataMock';
-import { getRoles } from './roleMock';
-import { resolveAPIUrl } from '@coldpbc/fetchers';
-import { getOrganizationMock, getOrganizationsMock } from './organizationMock';
-import { getPoliciesSignedMock, getPolicyMockByName } from './policyMock';
-import { auth0UserMock } from './userMock';
-import { getNewsDefault } from './newsMock';
-import { getActionMock, getActionsMock } from './action';
+} from '../datagridMock';
+import { getSurveyFormDataByName, getSurveysMock } from '../surveyDataMock';
+import { getRoles } from '../roleMock';
+import { resolveAPIUrl, resolveStripeIntegrationUrl } from '@coldpbc/fetchers';
+import { getOrganizationMock, getOrganizationsMock } from '../organizationMock';
+import { getPoliciesSignedMock, getPolicyMockByName } from '../policyMock';
+import { auth0UserMock } from '../userMock';
+import { getNewsDefault } from '../newsMock';
+import { getActionMock, getActionsMock } from '../action';
 import { v4 as uuidv4 } from 'uuid';
 import {
   getAllComplianceMocks,
@@ -25,18 +25,34 @@ import {
   getQuestionAIDetailsMock,
   getQuestionnaireContainerMock,
   getQuestionnaireSidebarComplianceMock,
-} from './complianceMock';
-import { getDocumentsListTableMock } from './componentMock';
-import { getFilesWithCertificateClaimsMock } from './filesMock';
-import { returnUpdatedSurvey } from './helpers';
+} from '../complianceMock';
+import { getDocumentsListTableMock } from '../componentMock';
+import { getFilesWithCertificateClaimsMock } from '../filesMock';
+import { returnUpdatedSurvey } from '../helpers';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
-import { getDefaultEmissionMock } from './emissionMocks';
-import { getNotesMock } from './notesMock';
-import { getClaimsMock, getSupplierClaimsMock } from './claimsMock';
-import { getSupplierMockById, getSupplierWithCertificationClaimsMock } from './suppliersMock';
-import { getMaterialDetailMockById, getMaterialsMock } from './materialsMock';
+import { getDefaultEmissionMock } from '../emissionMocks';
+import { getNotesMock } from '../notesMock';
+import { getClaimsMock, getSupplierClaimsMock } from '../claimsMock';
+import { getSupplierMockById, getSupplierWithCertificationClaimsMock } from '../suppliersMock';
+import { getMaterialDetailMockById, getMaterialsMock } from '../materialsMock';
+import { getCustomerWithSubscriptionMock, getPortalSessionMock, getStripeProductsMock } from '../stripeMocks';
 
-// Even if this uses vite as a bundler, it still uses the NODE_ENV variable
+export const getStripeAPIUrl = (path: string) => {
+  return `${resolveStripeIntegrationUrl()}${path}`;
+};
+
+export const stripeHandlers = [
+  rest.get(getStripeAPIUrl('/stripe_products'), (req, res, ctx) => {
+    return res(ctx.json(getStripeProductsMock()));
+  }),
+  rest.get(getStripeAPIUrl('/customer_subscriptions/:orgId'), (req, res, ctx) => {
+    return res(ctx.json(getCustomerWithSubscriptionMock()));
+  }),
+  rest.get(getStripeAPIUrl('/portal_session/:orgId'), (req, res, ctx) => {
+    return res(ctx.json(getPortalSessionMock()));
+  }),
+];
+
 export const getApiUrl = (path: string) => {
   return `${resolveAPIUrl()}${path}`;
 };
@@ -55,6 +71,7 @@ export const handlers = [
      this is useful if you want to make sure your mocks match what the API is returning.
      */
 
+  ...stripeHandlers,
   //Mock SideBar Request
   rest.get(getApiUrl('/components/sidebar_navigation'), (req, res, ctx) => {
     return res(ctx.json({ ...getSidebarMock() }));

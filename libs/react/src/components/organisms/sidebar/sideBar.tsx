@@ -36,6 +36,10 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
   const { logBrowser } = useColdContext();
 
   const filterSidebar = (item: NavbarItem) => {
+    if (item.items) {
+      item.items = item.items.filter(filterSidebar);
+    }
+
     if (item.key === 'actions_key') {
       const hasActions = actionsData && actionsData?.length > 0;
 
@@ -54,6 +58,8 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
       return ldFlags.showSuppliersPageCold890;
     } else if (item.key === 'materials_key') {
       return ldFlags.showMaterialsPageCold912;
+    } else if (item.key === 'settings_billing_key') {
+      return ldFlags.showBillingPageCold957;
     } else {
       return true;
     }
