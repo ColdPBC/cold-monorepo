@@ -1,3 +1,10 @@
+## [1.351.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.5...v1.351.6) (2024-09-05)
+
+
+### Bug Fixes
+
+* rename organization_files_id to organization_file_id ([9826201](https://github.com/ColdPBC/cold-monorepo/commit/98262013869935227dcc50f07f9aa6557cdffa0a))
+
 ## [1.351.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.4...v1.351.5) (2024-09-04)
 
 
