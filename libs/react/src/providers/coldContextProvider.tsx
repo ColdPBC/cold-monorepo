@@ -9,6 +9,7 @@ import { datadogRum } from '@datadog/browser-rum';
 import { ErrorType } from '../enums/errors';
 import { ColdMQTTProvider } from './coldMQTTProvider';
 import { datadogLogs, StatusType } from '@datadog/browser-logs';
+import { ColdApolloProvider } from './coldApolloProvider';
 
 export interface ColdContextProviderProps {
   auth0Options: Auth0ProviderOptions;
@@ -62,7 +63,9 @@ export const ColdContextProvider = (props: PropsWithChildren<ColdContextProvider
         <ColdAuthProvider>
           <ColdAxiosInterceptorProvider>
             <ColdLDProvider>
-              <ColdMQTTProvider>{children}</ColdMQTTProvider>
+              <ColdMQTTProvider>
+                <ColdApolloProvider>{children}</ColdApolloProvider>
+              </ColdMQTTProvider>
             </ColdLDProvider>
           </ColdAxiosInterceptorProvider>
         </ColdAuthProvider>

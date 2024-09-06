@@ -1,11 +1,11 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { getStripeAPIUrl } from './_default';
 import { getCustomerWithOutSubscriptionMock } from './stripeMocks';
 
 export const getStripeHandlers = {
   noSubscription: [
-    rest.get(getStripeAPIUrl('/customer_subscriptions/:orgId'), (req, res, ctx) => {
-      return res(ctx.json(getCustomerWithOutSubscriptionMock()));
+    http.get(getStripeAPIUrl('/customer_subscriptions/:orgId'), async ({ request, params, cookies }) => {
+      return HttpResponse.json(getCustomerWithOutSubscriptionMock());
     }),
   ],
 };
