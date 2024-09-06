@@ -1,3 +1,10 @@
+## [1.355.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.355.0...v1.355.1) (2024-09-06)
+
+
+### Bug Fixes
+
+* **prisma-migration.ts:** remove unnecessary ACL annotation ([c72b6e3](https://github.com/ColdPBC/cold-monorepo/commit/c72b6e3558a503537ba5f2ac3484bfc5b00bd71e))
+
 # [1.355.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.354.0...v1.355.0) (2024-09-05)
 
 
