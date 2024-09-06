@@ -1,3 +1,104 @@
+# [1.357.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.356.0...v1.357.0) (2024-09-06)
+
+
+### Features
+
+* apply access control lists to multiple entities ([225c914](https://github.com/ColdPBC/cold-monorepo/commit/225c914b610c702eca35da035e959cab1a1bca04))
+
+# [1.356.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.355.1...v1.356.0) (2024-09-06)
+
+
+### Features
+
+* add metadata to organization entity and schema, update access control for vector records ([44d8960](https://github.com/ColdPBC/cold-monorepo/commit/44d8960d683de41c8e1dd5636250e51ce4465bbb))
+
+## [1.355.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.355.0...v1.355.1) (2024-09-06)
+
+
+### Bug Fixes
+
+* **prisma-migration.ts:** remove unnecessary ACL annotation ([c72b6e3](https://github.com/ColdPBC/cold-monorepo/commit/c72b6e3558a503537ba5f2ac3484bfc5b00bd71e))
+
+# [1.355.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.354.0...v1.355.0) (2024-09-05)
+
+
+### Features
+
+* update database schema for attribute assurances ([2436551](https://github.com/ColdPBC/cold-monorepo/commit/24365513cd20c1a79ea6bf6dafe68557f1c691ab))
+
+# [1.354.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.353.2...v1.354.0) (2024-09-05)
+
+
+### Bug Fixes
+
+* allow creation without compliance_defnition_id ([c120f55](https://github.com/ColdPBC/cold-monorepo/commit/c120f5559cadc8826589db770d89940d7a831dcb))
+* change ECS cluster instance size to t2.medium ([aabffe6](https://github.com/ColdPBC/cold-monorepo/commit/aabffe62535a101a191d68da54bd0c3eb71e9861))
+* correct log level and data format for billing page ([0e50dcf](https://github.com/ColdPBC/cold-monorepo/commit/0e50dcf6a83c554f2dc231f174637e08c1694744))
+* update VITE_STRIPE_INTEGRATION_URL values ([97e19cd](https://github.com/ColdPBC/cold-monorepo/commit/97e19cd57f4185313209ac6c51c832f5d9ae6761))
+
+
+### Features
+
+* add assurance changes to graphQL ([7491beb](https://github.com/ColdPBC/cold-monorepo/commit/7491beb3b4d014dc2e8c6973195788771a0fea3b))
+* add BillingPage component and route ([a219564](https://github.com/ColdPBC/cold-monorepo/commit/a219564a73056eb8b790ba6dfa749698f3d5fa73))
+* add buildType attribute to flight control platform configurations ([f88b0ad](https://github.com/ColdPBC/cold-monorepo/commit/f88b0add578df1d72757a2163253b7e1cb211309))
+* add cold-platform-stripe application ([17095d5](https://github.com/ColdPBC/cold-monorepo/commit/17095d5fb7b79839d2155d4dfc7fbd99518185d8))
+* add supplier tier column to organization facilities table ([75163ed](https://github.com/ColdPBC/cold-monorepo/commit/75163ed16b19143e41c411c0b69518def5c07732))
+* enhance AppService with logging and extend BaseWorker ([eb754cd](https://github.com/ColdPBC/cold-monorepo/commit/eb754cd20f89e50f627e8a3a4540e7acad212661))
+* integrate Stripe embedded checkout on the Billing page ([b28cc12](https://github.com/ColdPBC/cold-monorepo/commit/b28cc12650e492a51bb56a6c3db313e035f4f938))
+* refactor and expand Stripe service functionality ([f542830](https://github.com/ColdPBC/cold-monorepo/commit/f542830c32fe5e93ddf89fe2b0f8d696555a91f6))
+
+## [1.353.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.353.1...v1.353.2) (2024-09-05)
+
+
+### Bug Fixes
+
+* change ECS cluster instance size to t2.medium ([04c21dc](https://github.com/ColdPBC/cold-monorepo/commit/04c21dc853cc17c2c0831fccd21a49acdf7b5237))
+
+## [1.353.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.353.0...v1.353.1) (2024-09-05)
+
+
+### Bug Fixes
+
+* update VITE_STRIPE_INTEGRATION_URL values ([ae6d77b](https://github.com/ColdPBC/cold-monorepo/commit/ae6d77b36a4834e64a7e6de7c29692dde5e7fb22))
+
+# [1.353.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.352.0...v1.353.0) (2024-09-05)
+
+
+### Features
+
+* add buildType attribute to flight control platform configurations ([4113e44](https://github.com/ColdPBC/cold-monorepo/commit/4113e44948ef28f3f7e6c58ce3d1cae485b47e79))
+
+# [1.352.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.6...v1.352.0) (2024-09-05)
+
+
+### Bug Fixes
+
+* correct log level and data format for billing page ([a2dbf4d](https://github.com/ColdPBC/cold-monorepo/commit/a2dbf4d16515bcc65961b86bd25c1851b4a09fc6))
+
+
+### Features
+
+* add BillingPage component and route ([db84530](https://github.com/ColdPBC/cold-monorepo/commit/db845302271b9f5f61ca6613bacf66e0f098408a))
+* add cold-platform-stripe application ([c256d1c](https://github.com/ColdPBC/cold-monorepo/commit/c256d1c254be58ef06ed49e209c4602ab3fd7d49))
+* enhance AppService with logging and extend BaseWorker ([9b8fbb0](https://github.com/ColdPBC/cold-monorepo/commit/9b8fbb0e256a7fb01a107b9ad433e0792c698d8b))
+* integrate Stripe embedded checkout on the Billing page ([80fe74c](https://github.com/ColdPBC/cold-monorepo/commit/80fe74c6a6e624265c5484ea87c5539c686c8ed4))
+* refactor and expand Stripe service functionality ([f774764](https://github.com/ColdPBC/cold-monorepo/commit/f77476481bcda617c875494be9d8788c195604ac))
+
+## [1.351.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.5...v1.351.6) (2024-09-05)
+
+
+### Bug Fixes
+
+* rename organization_files_id to organization_file_id ([9826201](https://github.com/ColdPBC/cold-monorepo/commit/98262013869935227dcc50f07f9aa6557cdffa0a))
+
+## [1.351.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.4...v1.351.5) (2024-09-04)
+
+
+### Bug Fixes
+
+* allow creation without compliance_defnition_id ([44bbd60](https://github.com/ColdPBC/cold-monorepo/commit/44bbd60e269de4d9886f0c05ebd198e39ff110d9))
+
 ## [1.351.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.351.3...v1.351.4) (2024-09-04)
 
 

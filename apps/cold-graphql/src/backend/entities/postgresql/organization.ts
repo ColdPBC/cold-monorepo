@@ -1,11 +1,11 @@
 import { Collection, Entity, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Action } from './action';
+import { AttributeAssurance } from './attribute-assurance';
 import { CategoryDatum } from './category-datum';
-import { Claim } from './claim';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { Material } from './material';
-import { OrganizationClaim } from './organization-claim';
+import { OrganizationAttribute } from './organization-attribute';
 import { OrganizationCompliance } from './organization-compliance';
 import { OrganizationComplianceAiResponse } from './organization-compliance-ai-response';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
@@ -15,10 +15,11 @@ import { OrganizationFile } from './organization-file';
 import { Product } from './product';
 import { SurveyDatum } from './survey-datum';
 import { SurveyStatus } from './survey-status';
+import { SustainabilityAttribute } from './sustainability-attribute';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
-import { default_acl } from '../../acl_policies';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { default_acl } from '../../acl_policies';
 
 @Entity({ tableName: 'organizations' })
 @ApplyAccessControlList(default_acl)
@@ -60,14 +61,17 @@ export class Organization {
   @Property({ type: 'boolean', default: false })
   deleted = false;
 
+  @Property({ type: 'json', nullable: true })
+  metadata?: Record<string, unknown>;
+
   @OneToMany({ entity: () => Action, mappedBy: 'organization' })
   actions = new Collection<Action>(this);
 
+  @OneToMany({ entity: () => AttributeAssurance, mappedBy: 'organization' })
+  attributeAssurances = new Collection<AttributeAssurance>(this);
+
   @OneToMany({ entity: () => CategoryDatum, mappedBy: 'organization' })
   categoryData = new Collection<CategoryDatum>(this);
-
-  @OneToMany({ entity: () => Claim, mappedBy: 'organization' })
-  claims = new Collection<Claim>(this);
 
   @OneToMany({ entity: () => FacilityFootprint, mappedBy: 'organization' })
   facilityFootprints = new Collection<FacilityFootprint>(this);
@@ -78,8 +82,8 @@ export class Organization {
   @OneToMany({ entity: () => Material, mappedBy: 'organization' })
   materials = new Collection<Material>(this);
 
-  @OneToMany({ entity: () => OrganizationClaim, mappedBy: 'organization' })
-  organizationClaims = new Collection<OrganizationClaim>(this);
+  @OneToMany({ entity: () => OrganizationAttribute, mappedBy: 'organization' })
+  organizationAttributes = new Collection<OrganizationAttribute>(this);
 
   @OneToMany({ entity: () => OrganizationCompliance, mappedBy: 'organization' })
   organizationCompliances = new Collection<OrganizationCompliance>(this);
@@ -107,6 +111,9 @@ export class Organization {
 
   @OneToMany({ entity: () => SurveyStatus, mappedBy: 'organization' })
   surveyStatuses = new Collection<SurveyStatus>(this);
+
+  @OneToMany({ entity: () => SustainabilityAttribute, mappedBy: 'organization' })
+  sustainabilityAttributes = new Collection<SustainabilityAttribute>(this);
 
   @OneToMany({ entity: () => UtilityBill, mappedBy: 'organization' })
   utilityBills = new Collection<UtilityBill>(this);

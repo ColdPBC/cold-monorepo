@@ -1,9 +1,9 @@
-import { getOrganizationMembersMock } from "./datagridMock";
+import { getOrganizationMembersMock } from './datagridMock';
 
 export function getMembersNoInvitations() {
-    const membersMock = {...getOrganizationMembersMock()};
-    return {
-        ...membersMock,
-        members: membersMock?.members.filter(member => !member.invitee)
-    };
+  const membersMock = { ...getOrganizationMembersMock() };
+  return {
+    ...membersMock,
+    members: membersMock?.members.filter(member => !member.invitee),
+  };
 }

@@ -5,10 +5,10 @@ import { ComplianceSectionGroup } from './compliance-section-group';
 import { OrganizationCompliance } from './organization-compliance';
 import { OrganizationCompliancesOld } from './organization-compliances-old';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl, public_acl } from '../../acl_policies';
+import { default_acl } from '../../acl_policies';
 
 @Entity({ tableName: 'compliance_definitions' })
-@ApplyAccessControlList(public_acl)
+@ApplyAccessControlList(default_acl)
 export class ComplianceDefinition {
   @PrimaryKey({ type: 'text' })
   id!: string;

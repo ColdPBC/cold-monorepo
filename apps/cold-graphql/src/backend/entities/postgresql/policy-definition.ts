@@ -1,7 +1,7 @@
 import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 import { PolicyDatum } from './policy-datum';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { cold_admin_only, default_acl, public_acl } from '../../acl_policies';
+import { public_acl } from '../../acl_policies';
 
 @Entity({ tableName: 'policy_definitions' })
 @ApplyAccessControlList(public_acl)

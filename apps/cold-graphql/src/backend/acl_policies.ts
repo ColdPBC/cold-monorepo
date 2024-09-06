@@ -51,24 +51,45 @@ export const queryNullOrgs = {
 
 export const default_acl = {
   'company:member': {
-    read: (context: OrgContext) => ({ organization: context.user.org_id }),
-    write: (context: OrgContext) => ({ organization: context.user.org_id }),
+    read: (context: OrgContext) => {
+      console.log('using company:owner', context);
+      return { organization: context.user.org_id };
+    },
+    write: (context: OrgContext) => {
+      console.log('using company:owner', context);
+      return { organization: context.user.org_id };
+    },
   },
   'company:admin': {
-    read: (context: OrgContext) => ({ organization: context.user.org_id }),
-    write: (context: OrgContext) => ({ organization: context.user.org_id }),
+    read: (context: OrgContext) => {
+      console.log('using company:owner', context);
+      return { organization: context.user.org_id };
+    },
+    write: (context: OrgContext) => {
+      console.log('using company:owner', context);
+      return { organization: context.user.org_id };
+    },
   },
   'company:owner': {
-    read: (context: OrgContext) => ({ organization: context.user.org_id }),
+    read: (context: OrgContext) => {
+      console.log('using company:owner', context);
+      return { organization: context.user.org_id };
+    },
     write: (context: OrgContext) => ({ organization: context.user.org_id }),
   },
   'cold:admin': {
-    all: (context: OrgContext) => context.user.roles.includes('cold:admin'),
+    all: (context: OrgContext) => {
+      console.log('using cold admin only', context);
+      return context.user.roles.includes('cold:admin');
+    },
   },
 };
 
 export const cold_admin_only: AccessControlList<unknown, Context> = {
   'cold:admin': {
-    all: (context: ColdContext) => !!context?.user?.roles?.includes('cold:admin'),
+    all: (context: ColdContext) => {
+      console.log('using cold admin only', context);
+      return !!context?.user?.roles?.includes('cold:admin');
+    },
   },
 };

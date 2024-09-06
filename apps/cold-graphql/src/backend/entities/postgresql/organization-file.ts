@@ -1,7 +1,8 @@
 import { Collection, Entity, Enum, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
+import { AttributeAssurance } from './attribute-assurance';
 import { Integration } from './integration';
 import { Organization } from './organization';
-import { OrganizationClaim } from './organization-claim';
+import { OrganizationAttribute } from './organization-attribute';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
 import { OrganizationComplianceNoteFile } from './organization-compliance-note-file';
 import { VectorRecord } from './vector-record';
@@ -102,8 +103,11 @@ export class OrganizationFile {
   @Property({ type: 'json', nullable: true })
   metadata?: Record<string, unknown>;
 
-  @OneToMany({ entity: () => OrganizationClaim, mappedBy: 'organizationFile' })
-  organizationClaims = new Collection<OrganizationClaim>(this);
+  @OneToMany({ entity: () => AttributeAssurance, mappedBy: 'organizationFile' })
+  attributeAssurances = new Collection<AttributeAssurance>(this);
+
+  @OneToMany({ entity: () => OrganizationAttribute, mappedBy: 'organizationFile' })
+  organizationAttributes = new Collection<OrganizationAttribute>(this);
 
   @OneToMany({ entity: () => OrganizationComplianceAiResponseFile, mappedBy: 'organizationFile' })
   organizationComplianceAiResponseFiles = new Collection<OrganizationComplianceAiResponseFile>(this);

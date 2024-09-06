@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 import { getAIAnsweredSurveyMock, getJourneyOverviewMock, getSurveyFormDataByName, getSurveyMockSomeCompleted, getSurveysMock } from './surveyDataMock';
-import { getApiUrl } from './handlers';
+import { getApiUrl } from './_default/handlers';
 import { findIndex } from 'lodash';
 
 export const getSurveyHandler = {

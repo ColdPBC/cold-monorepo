@@ -12,7 +12,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as store from 'cache-manager';
 import { authenticatedUserExample, generateSurveyMock, generateSurveyTypesMock } from '../_global/global.examples';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { undefined } from 'zod';
 
 describe('Survey Service', () => {
   let service: SurveysService;
@@ -23,6 +22,22 @@ describe('Survey Service', () => {
   origin.type = surveyType;
   updated.type = surveyType;
   const surveys = [origin];
+
+  const orgMock = {
+    id: '',
+    name: '',
+    display_name: '',
+    enabled_connections: null,
+    branding: null,
+    phone: null,
+    email: null,
+    created_at: new Date(),
+    updated_at: new Date(),
+    isTest: false,
+    website: null,
+    deleted: false,
+    metadata: null,
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -102,20 +117,7 @@ describe('Survey Service', () => {
   it('should return survey definition by type', async () => {
     const result = await service.findDefinitionByType(
       {
-        organization: {
-          id: '',
-          name: '',
-          display_name: '',
-          enabled_connections: null,
-          branding: null,
-          phone: null,
-          email: null,
-          created_at: new Date(),
-          updated_at: new Date(),
-          isTest: false,
-          website: null,
-          deleted: false,
-        },
+        organization: orgMock,
         user: authenticatedUserExample,
       },
       generateSurveyTypesMock(),
@@ -125,20 +127,7 @@ describe('Survey Service', () => {
 
   it('should create a new survey definition', async () => {
     const result = await service.create(origin as any, {
-      organization: {
-        id: '',
-        name: '',
-        display_name: '',
-        enabled_connections: null,
-        branding: null,
-        phone: null,
-        email: null,
-        created_at: new Date(),
-        updated_at: new Date(),
-        isTest: false,
-        website: null,
-        deleted: false,
-      },
+      organization: orgMock,
       user: authenticatedUserExample,
     });
     expect(result).toEqual(origin);
@@ -146,20 +135,7 @@ describe('Survey Service', () => {
 
   it('should update a survey', async () => {
     const result = await service.update(updated.name, updated as any, {
-      organization: {
-        id: '',
-        name: '',
-        display_name: '',
-        enabled_connections: null,
-        branding: null,
-        phone: null,
-        email: null,
-        created_at: new Date(),
-        updated_at: new Date(),
-        isTest: false,
-        website: null,
-        deleted: false,
-      },
+      organization: orgMock,
       user: authenticatedUserExample,
     });
     //expect(result).toEqual(updated);
@@ -167,20 +143,7 @@ describe('Survey Service', () => {
 
   it('should delete a survey', async () => {
     await service.remove(origin.name, {
-      organization: {
-        id: '',
-        name: '',
-        display_name: '',
-        enabled_connections: null,
-        branding: null,
-        phone: null,
-        email: null,
-        created_at: new Date(),
-        updated_at: new Date(),
-        isTest: false,
-        website: null,
-        deleted: false,
-      },
+      organization: orgMock,
       user: authenticatedUserExample,
     });
     expect(prismaService.survey_definitions.delete).toHaveBeenCalledWith({ where: { name: origin.name } });
@@ -190,20 +153,7 @@ describe('Survey Service', () => {
     jest.spyOn(prismaService.survey_definitions, 'findUnique').mockResolvedValue(null);
     await expect(
       service.findOne(origin.name, {
-        organization: {
-          id: '',
-          name: '',
-          display_name: '',
-          enabled_connections: null,
-          branding: null,
-          phone: null,
-          email: null,
-          created_at: new Date(),
-          updated_at: new Date(),
-          isTest: false,
-          website: null,
-          deleted: false,
-        },
+        organization: orgMock,
         user: authenticatedUserExample,
       }),
     ).rejects.toThrow();
@@ -213,20 +163,7 @@ describe('Survey Service', () => {
     jest.spyOn(prismaService.survey_definitions, 'findUnique').mockResolvedValue(null);
     await expect(
       service.update(origin.name, generateSurveyMock() as any, {
-        organization: {
-          id: '',
-          name: '',
-          display_name: '',
-          enabled_connections: null,
-          branding: null,
-          phone: null,
-          email: null,
-          created_at: new Date(),
-          updated_at: new Date(),
-          isTest: false,
-          website: null,
-          deleted: false,
-        },
+        organization: orgMock,
         user: authenticatedUserExample,
       }),
     ).rejects.toThrow();
@@ -238,20 +175,7 @@ describe('Survey Service', () => {
     });
     await expect(
       service.remove(origin.name, {
-        organization: {
-          id: '',
-          name: '',
-          display_name: '',
-          enabled_connections: null,
-          branding: null,
-          phone: null,
-          email: null,
-          created_at: new Date(),
-          updated_at: new Date(),
-          isTest: false,
-          website: null,
-          deleted: false,
-        },
+        organization: orgMock,
         user: authenticatedUserExample,
       }),
     ).rejects.toThrow();

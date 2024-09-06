@@ -1,6 +1,5 @@
 import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
 import { Organization } from './organization';
-import { OrganizationClaim } from './organization-claim';
 import { ProductMaterial } from './product-material';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl } from '../../acl_policies';
@@ -34,9 +33,6 @@ export class Product {
 
   @ManyToOne({ entity: () => Organization, ref: true })
   organization!: Ref<Organization>;
-
-  @OneToMany({ entity: () => OrganizationClaim, mappedBy: 'product' })
-  organizationClaims = new Collection<OrganizationClaim>(this);
 
   @OneToMany({ entity: () => ProductMaterial, mappedBy: 'product' })
   productMaterials = new Collection<ProductMaterial>(this);

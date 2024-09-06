@@ -1,0 +1,61 @@
+{
+  "name": "cold-platform-stripe",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cold-platform-stripe/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/cold-platform-stripe",
+        "main": "apps/cold-platform-stripe/src/main.ts",
+        "tsConfig": "apps/cold-platform-stripe/tsconfig.app.json",
+        "assets": ["apps/cold-platform-stripe/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/cold-platform-stripe/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {},
+        "staging": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "cold-platform-stripe:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "cold-platform-stripe:build:development"
+        },
+        "staging": {
+          "buildTarget": "cold-platform-stripe:build:staging"
+        },
+        "production": {
+          "buildTarget": "cold-platform-stripe:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/cold-platform-stripe/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/cold-platform-stripe/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

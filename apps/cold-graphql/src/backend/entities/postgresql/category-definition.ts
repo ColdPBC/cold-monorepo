@@ -1,10 +1,7 @@
 import { Collection, Entity, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { CategoryDatum } from './category-datum';
-import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl, public_acl } from '../../acl_policies';
 
 @Entity({ tableName: 'category_definitions' })
-@ApplyAccessControlList(public_acl)
 export class CategoryDefinition {
   @PrimaryKey({ type: 'text' })
   id!: string;

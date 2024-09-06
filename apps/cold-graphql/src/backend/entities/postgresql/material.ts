@@ -1,7 +1,7 @@
 import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
 import { MaterialSupplier } from './material-supplier';
 import { Organization } from './organization';
-import { OrganizationClaim } from './organization-claim';
+import { OrganizationAttribute } from './organization-attribute';
 import { ProductMaterial } from './product-material';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl } from '../../acl_policies';
@@ -31,8 +31,8 @@ export class Material {
   @OneToMany({ entity: () => MaterialSupplier, mappedBy: 'material' })
   materialSuppliers = new Collection<MaterialSupplier>(this);
 
-  @OneToMany({ entity: () => OrganizationClaim, mappedBy: 'material' })
-  organizationClaims = new Collection<OrganizationClaim>(this);
+  @OneToMany({ entity: () => OrganizationAttribute, mappedBy: 'material' })
+  organizationAttributes = new Collection<OrganizationAttribute>(this);
 
   @OneToMany({ entity: () => ProductMaterial, mappedBy: 'material' })
   productMaterials = new Collection<ProductMaterial>(this);

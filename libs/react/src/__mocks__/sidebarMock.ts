@@ -86,6 +86,11 @@ export function getSidebarMock() {
               label: 'Users',
               route: '/settings/users',
             },
+            {
+              key: 'settings_billing_key',
+              label: 'Billing',
+              route: '/settings/billing',
+            },
           ],
           label: 'Settings',
           roles: ['cold:admin', 'company:admin', 'company:owner'],

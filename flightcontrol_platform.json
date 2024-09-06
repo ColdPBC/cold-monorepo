@@ -10,103 +10,11 @@
         "branch": "main",
         "trigger": "manual"
       },
-
+      "vpc": {
+        "id": "vpc-0adff7558db4535e2",
+        "cidr": "10.192.0.0/16"
+      },
       "services": [
-        {
-          "id": "cold-platform-openai-production",
-          "name": "cold-platform-openai",
-          "domain": "openai.coldclimate.com",
-          "port": 7003,
-          "type": "fargate",
-          "ci": {
-            "type": "ec2"
-          },
-          "cpu": 1,
-          "memory": 3,
-          "maxInstances": 2,
-          "minInstances": 2,
-          "dockerfilePath": "_platform.dockerfile",
-          "buildType": "docker",
-          "dockerContext": ".",
-          "watchPaths": [
-            "apps/cold-platform-openai/src/**",
-            "libs/nest/src/**",
-            "_platform.dockerfile"
-          ],
-          "healthCheckPath": "/health",
-          "containerInsights": true,
-          "enableCloudfrontSwr": false,
-          "versionHistoryCount": 10,
-          "dockerLabels": {
-            "com.datadoghq.tags.environment": "production",
-            "com.datadoghq.tags.env": "production",
-            "com.datadoghq.tags.service": "cold-platform-openai",
-            "com.datadoghq.ad.check_names": "[\"postgres\"]",
-            "com.datadoghq.ad.init_configs": "[{}]",
-            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]",
-            "com.datadoghq.tags.version": "1.0.0"
-          },
-          "autoscaling": {
-            "cpuThreshold": 90,
-            "memoryThreshold": 90,
-            "cooldownTimerSecs": 300,
-            "requestsPerTarget": 500
-          },
-          "experimental": {
-            "healthCheckTimeout": 15,
-            "healthCheckInterval": 35
-          },
-          "envVariables": {
-            "DD_SERVICE": "cold-platform-openai",
-            "DD_ENV": "production",
-            "NODE_ENV": "production",
-            "FC_ENV": "production"
-          },
-          "sidecars": [
-            {
-              "name": "cold-datadog-openai-production",
-              "image": "datadog/agent",
-              "cpuAllotment": 0.5,
-              "memoryAllotment": 0.25,
-              "enableNetworking": true,
-              "logging": true,
-              "ports": [
-                8125,
-                5001,
-                5000
-              ],
-              "envVariables": {
-                "DD_ENV": "production",
-                "NODE_ENV": "production",
-                "FC_ENV": "production",
-                "ECS_FARGATE": true,
-                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
-                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
-                "DD_API_KEY": {
-                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-                },
-                "DD_AGENT_MAJOR_VERSION": "7",
-                "DD_LOG_LEVEL": "ERROR",
-                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
-                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
-                "DD_SERVICE": "cold-platform-openai",
-                "DD_SITE": "us5.datadoghq.com",
-                "DD_APM_ENABLED": true,
-                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
-                "DD_APPSEC_ENABLED": true,
-                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
-                "DD_METRICS_ENABLED": true,
-                "DD_ENABLE_DBM": true,
-                "DD_LOGS_INJECTION": true,
-                "DD_LOGS_ENABLED": true,
-                "DD_IAST_ENABLED": true,
-                "DD_PROCESS_AGENT": true,
-                "DD_PROFILING_ENABLED": true,
-                "DD_REMOTE_CONFIGURATION_ENABLED": true
-              }
-            }
-          ]
-        },
         {
           "id": "cold-platform-openai-ec2-production",
           "name": "cold-platform-openai",
@@ -114,13 +22,15 @@
           "port": 7003,
           "type": "web",
           "ci": {
-            "type": "ec2"
+            "type": "ec2",
+            "instanceStorage": 60
           },
           "target": {
             "type": "ecs-ec2",
             "clusterInstanceSize": "t3.xlarge",
             "clusterMinInstances": 1,
             "clusterMaxInstances": 4
+
           },
           "cpu": 2,
           "memory": 4,
@@ -206,6 +116,109 @@
               }
             }
           ]
+        },
+        {
+          "id": "cold-platform-stripe-production",
+          "name": "cold-platform-stripe",
+          "domain": "stripe.coldclimate.com",
+          "port": 7005,
+          "type": "web",
+          "ci": {
+            "type": "ec2",
+            "instanceStorage": 60
+          },
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3.xlarge",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 4
+          },
+          "cpu": 1,
+          "memory": 3,
+          "maxInstances": 2,
+          "minInstances": 2,
+          "buildType": "docker",
+          "dockerfilePath": "_platform.dockerfile",
+          "dockerContext": ".",
+          "watchPaths": [
+            "apps/cold-platform-stripe/src/**",
+            "libs/nest/src/**",
+            "_platform.dockerfile"
+          ],
+          "healthCheckPath": "/health",
+          "containerInsights": true,
+          "enableCloudfrontSwr": false,
+          "versionHistoryCount": 10,
+          "dockerLabels": {
+            "com.datadoghq.tags.environment": "production",
+            "com.datadoghq.tags.env": "production",
+            "com.datadoghq.tags.service": "cold-platform-stripe",
+            "com.datadoghq.ad.check_names": "[\"postgres\"]",
+            "com.datadoghq.ad.init_configs": "[{}]",
+            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]",
+            "com.datadoghq.tags.version": "1.0.0"
+          },
+          "autoscaling": {
+            "cpuThreshold": 90,
+            "memoryThreshold": 90,
+            "cooldownTimerSecs": 300,
+            "requestsPerTarget": 500
+          },
+          "experimental": {
+            "healthCheckTimeout": 15,
+            "healthCheckInterval": 35
+          },
+          "envVariables": {
+            "DD_SERVICE": "cold-platform-stripe",
+            "DD_ENV": "production",
+            "NODE_ENV": "production",
+            "FC_ENV": "production",
+            "STRIPE_FRONTEND_URL": "https://app.coldclimate.com"
+          },
+          "sidecars": [
+            {
+              "name": "cold-datadog-stripe-production",
+              "image": "datadog/agent",
+              "cpuAllotment": 0.5,
+              "memoryAllotment": 0.25,
+              "enableNetworking": true,
+              "logging": true,
+              "ports": [
+                8125,
+                5001,
+                5000
+              ],
+              "envVariables": {
+                "DD_ENV": "production",
+                "NODE_ENV": "production",
+                "FC_ENV": "production",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
+                "DD_API_KEY": {
+                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
+                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
+                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
+                "DD_SERVICE": "cold-platform-stripe",
+                "DD_SITE": "us5.datadoghq.com",
+                "DD_APM_ENABLED": true,
+                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+                "DD_APPSEC_ENABLED": true,
+                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+                "DD_METRICS_ENABLED": true,
+                "DD_ENABLE_DBM": true,
+                "DD_LOGS_INJECTION": true,
+                "DD_LOGS_ENABLED": true,
+                "DD_IAST_ENABLED": true,
+                "DD_PROCESS_AGENT": true,
+                "DD_PROFILING_ENABLED": true,
+                "DD_REMOTE_CONFIGURATION_ENABLED": true
+              }
+            }
+          ]
         }
       ],
       "envVariables": {
@@ -223,99 +236,11 @@
         "branch": "main",
         "trigger": "manual"
       },
+      "vpc": {
+        "id": "vpc-060fc621728026ddf",
+        "cidr": "10.192.0.0/16"
+      },
       "services": [
-        {
-          "id": "cold-platform-openai-staging",
-          "name": "cold-platform-openai",
-          "domain": "openai.coldclimate.online",
-          "port": 7003,
-          "type": "fargate",
-          "ci": {
-            "type": "ec2"
-          },
-          "cpu": 0.5,
-          "memory": 1,
-          "maxInstances": 2,
-          "minInstances": 2,
-          "buildType": "docker",
-          "dockerfilePath": "_platform.dockerfile",
-          "dockerContext": ".",
-          "watchPaths": [
-            "apps/cold-platform-openai/src/**",
-            "libs/nest/src/**",
-            "_platform.dockerfile"
-          ],
-          "healthCheckPath": "/health",
-          "containerInsights": true,
-          "enableCloudfrontSwr": false,
-          "versionHistoryCount": 10,
-          "dockerLabels": {
-            "com.datadoghq.tags.environment": "staging",
-            "com.datadoghq.tags.env": "staging",
-            "com.datadoghq.tags.service": "cold-platform-openai",
-            "com.datadoghq.ad.check_names": "[\"postgres\"]",
-            "com.datadoghq.ad.init_configs": "[{}]",
-            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
-          },
-          "autoscaling": {
-            "cpuThreshold": 60,
-            "memoryThreshold": 60,
-            "cooldownTimerSecs": 300,
-            "requestsPerTarget": 30
-          },
-          "experimental": {
-            "healthCheckTimeout": 15,
-            "healthCheckInterval": 35
-          },
-          "envVariables": {
-            "DD_SERVICE": "cold-platform-openai",
-            "DD_ENV": "staging",
-            "NODE_ENV": "staging",
-            "FC_ENV": "staging"
-          },
-          "sidecars": [
-            {
-              "name": "cold-datadog-openai-staging",
-              "image": "datadog/agent",
-              "cpuAllotment": 0.5,
-              "memoryAllotment": 0.25,
-              "enableNetworking": true,
-              "logging": true,
-              "ports": [
-                8125,
-                5001,
-                5000
-              ],
-              "envVariables": {
-                "DD_ENV": "staging",
-                "NODE_ENV": "staging",
-                "ECS_FARGATE": true,
-                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
-                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
-                "DD_AGENT_MAJOR_VERSION": "7",
-                "DD_LOG_LEVEL": "ERROR",
-                "DD_API_KEY": {
-                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-                },
-                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
-                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
-                "DD_SERVICE": "cold-platform-openai",
-                "DD_SITE": "us5.datadoghq.com",
-                "DD_APM_ENABLED": true,
-                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
-                "DD_APPSEC_ENABLED": true,
-                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
-                "DD_METRICS_ENABLED": true,
-                "DD_ENABLE_DBM": true,
-                "DD_LOGS_INJECTION": true,
-                "DD_IAST_ENABLED": true,
-                "DD_PROCESS_AGENT": true,
-                "DD_PROFILING_ENABLED": true,
-                "DD_REMOTE_CONFIGURATION_ENABLED": true
-              }
-            }
-          ]
-        },
         {
           "id": "cold-platform-openai-ec2-staging",
           "name": "cold-platform-openai",
@@ -323,7 +248,8 @@
           "port": 7003,
           "type": "web",
           "ci": {
-            "type": "ec2"
+            "type": "ec2",
+            "instanceStorage": 60
           },
           "target": {
             "type": "ecs-ec2",
@@ -413,6 +339,106 @@
               }
             }
           ]
+        },
+        {
+          "id": "cold-platform-stripe-staging",
+          "name": "cold-platform-stripe",
+          "domain": "stripe.coldclimate.online",
+          "port": 7005,
+          "type": "web",
+          "ci": {
+            "type": "ec2",
+            "instanceStorage": 60
+          },
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t3.medium",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 2
+          },
+          "cpu": 1,
+          "memory": 2,
+          "maxInstances": 1,
+          "minInstances": 1,
+          "buildType": "docker",
+          "dockerfilePath": "_platform.dockerfile",
+          "dockerContext": ".",
+          "watchPaths": [
+            "apps/cold-platform-stripe/src/**",
+            "libs/nest/src/**",
+            "_platform.dockerfile"
+          ],
+          "healthCheckPath": "/health",
+          "containerInsights": true,
+          "enableCloudfrontSwr": false,
+          "versionHistoryCount": 10,
+          "dockerLabels": {
+            "com.datadoghq.tags.environment": "staging",
+            "com.datadoghq.tags.env": "staging",
+            "com.datadoghq.tags.service": "cold-platform-stripe",
+            "com.datadoghq.ad.check_names": "[\"postgres\"]",
+            "com.datadoghq.ad.init_configs": "[{}]",
+            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
+          },
+          "autoscaling": {
+            "cpuThreshold": 60,
+            "memoryThreshold": 60,
+            "cooldownTimerSecs": 300,
+            "requestsPerTarget": 30
+          },
+          "experimental": {
+            "healthCheckTimeout": 15,
+            "healthCheckInterval": 35
+          },
+          "envVariables": {
+            "DD_SERVICE": "cold-platform-stripe",
+            "DD_ENV": "staging",
+            "NODE_ENV": "staging",
+            "FC_ENV": "staging",
+            "STRIPE_FRONTEND_URL": "https://app.coldclimate.online"
+          },
+          "sidecars": [
+            {
+              "name": "cold-datadog-stripe-staging",
+              "image": "datadog/agent",
+              "cpuAllotment": 0.5,
+              "memoryAllotment": 0.25,
+              "enableNetworking": true,
+              "logging": true,
+              "ports": [
+                8125,
+                5001,
+                5000
+              ],
+              "envVariables": {
+                "DD_ENV": "staging",
+                "NODE_ENV": "staging",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
+                "DD_API_KEY": {
+                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
+                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
+                "DD_SERVICE": "cold-platform-stripe",
+                "DD_SITE": "us5.datadoghq.com",
+                "DD_APM_ENABLED": true,
+                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+                "DD_APPSEC_ENABLED": true,
+                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+                "DD_METRICS_ENABLED": true,
+                "DD_ENABLE_DBM": true,
+                "DD_LOGS_INJECTION": true,
+                "DD_IAST_ENABLED": true,
+                "DD_PROCESS_AGENT": true,
+                "DD_PROFILING_ENABLED": true,
+                "DD_REMOTE_CONFIGURATION_ENABLED": true
+              }
+            }
+          ]
         }
       ],
       "envVariables": {
@@ -435,16 +461,26 @@
         },
         "trigger": "manual"
       },
+      "vpc": {
+        "id": "vpc-0d5a6014067dda3b2",
+        "cidr": "10.192.0.0/16"
+      },
       "services": [
         {
           "id": "cold-platform-openai-preview",
           "name": "cold-platform-openai",
-          "cpu": 1,
+          "cpu": 2,
           "port": 7001,
-          "type": "fargate",
+          "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceSize": "t3a.medium"
+            "instanceStorage": 60
+          },
+          "target": {
+            "type": "ecs-ec2",
+            "clusterInstanceSize": "t2.medium",
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 1
           },
           "memory": 2,
           "buildType": "docker",
@@ -535,9 +571,9 @@
         "DD_API_KEY": {
           "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
         },
-        "NODE_ENV": "staging",
-        "DD_ENV": "staging",
-        "FC_ENV": "staging"
+        "NODE_ENV": "test",
+        "DD_ENV": "test",
+        "FC_ENV": "test"
       }
     }
   ]

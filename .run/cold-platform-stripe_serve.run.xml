@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="cold-platform-stripe:serve" type="NxRunConfigurationType" folderName="Stripe">
+    <option name="nx-projects" value="cold-platform-stripe" />
+    <option name="nx-targets" value="serve" />
+    <option name="nx-target-configuration" value="" />
+    <envs>
+      <env name="DD_SERVICE" value="cold-platform-stripe" />
+      <env name="LOG_FORMAT" value="pretty" />
+      <env name="NODE_ENV" value="production" />
+      <env name="PORT" value="7005" />
+      <env name="STRIPE_FRONTEND_URL" value="http://localhost:4200" />
+    </envs>
+    <option name="arguments" value="" />
+    <method v="2" />
+  </configuration>
+</component>

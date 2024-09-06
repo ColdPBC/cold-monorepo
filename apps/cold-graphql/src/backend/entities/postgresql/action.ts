@@ -2,10 +2,10 @@ import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { ActionTemplate } from './action-template';
 import { Organization } from './organization';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl, public_acl } from '../../acl_policies';
+import { default_acl } from '../../acl_policies';
 
 @Entity({ tableName: 'actions' })
-@ApplyAccessControlList(public_acl)
+@ApplyAccessControlList(default_acl)
 export class Action {
   @PrimaryKey({ type: 'text' })
   id!: string;

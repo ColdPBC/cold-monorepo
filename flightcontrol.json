@@ -60,7 +60,9 @@
             "VITE_DD_SITE": "us5.datadoghq.com",
             "VITE_DD_VERSION": "1.70.0",
             "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c1a",
-            "NIXPACKS_VERSION": "1.26.1"
+            "NIXPACKS_VERSION": "1.26.1",
+            "VITE_STRIPE_INTEGRATION_URL": "https://stripe.coldclimate.com",
+            "VITE_STRIPE_BILLING_URL": "https://billing.stripe.com/p/login/7sI16O8EQfZpby8288"
           }
         },
         {
@@ -414,7 +416,9 @@
             "VITE_DD_RUM_CLIENT_TOKEN": "pub92f690b0e4706ca7b9d2e7d7481f383e",
             "VITE_DD_SERVICE": "cold-ui",
             "VITE_DD_SITE": "us5.datadoghq.com",
-            "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c19"
+            "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c19",
+            "VITE_STRIPE_INTEGRATION_URL": "https://stripe.coldclimate.online",
+            "VITE_STRIPE_BILLING_URL": "https://billing.stripe.com/p/login/test_5kA7uv53VcIa3kY144"
           }
         },
         {

@@ -885,7 +885,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
-  async deleteComplianceResponse(org: organizations, compliance_definition_name: string, sgId: string, sId: string, qId: string, user: IAuthenticatedUser, type: string = 'ai') {
+  async deleteComplianceResponse(org: organizations, compliance_definition_name: string, sgId: string, sId: string, qId: string, user: IAuthenticatedUser, type = 'ai') {
     const start = new Date();
     await this.cacheService.delete(this.getCacheKey(org, compliance_definition_name), true);
 
@@ -1028,6 +1028,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       updated_at: Date;
       isTest: boolean;
       deleted: boolean;
+      metadata: Prisma.JsonValue;
     },
     compliance,
     aiResponseEntity,
@@ -1095,20 +1096,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       additional_context: Prisma.JsonValue | null;
       deleted: boolean;
     },
-    org: {
-      id: string;
-      name: string;
-      enabled_connections: Prisma.JsonValue;
-      display_name: string;
-      branding: Prisma.JsonValue | null;
-      phone: string | null;
-      website: string | null;
-      email: string | null;
-      created_at: Date;
-      updated_at: Date;
-      isTest: boolean;
-      deleted: boolean;
-    },
+    org: organizations,
     user: IAuthenticatedUser,
   ) {
     start = new Date();
