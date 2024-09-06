@@ -1,0 +1,4 @@
+schema: ''
+extensions:
+  diff:
+    baseSchema: your-base-schema-here

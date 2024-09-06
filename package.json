@@ -32,7 +32,9 @@
     "chromatic": "yarn dlx chromatic --project-token=chpt_8c97d5f04267902 --exit-once-uploaded --onlyChanged --exit-zero-on-changes",
     "start:graph": "graphweaver start",
     "watch:graph": "graphweaver watch",
-    "sync:graph": "graphweaver import postgresql --host 127.0.0.1 --password postgres --user postgres --database colddb --port 5432"
+    "sync:graph": "graphweaver import postgresql --host 127.0.0.1 --password postgres --user postgres --database colddb --port 5432",
+    "graphql:diff": "graphql diff",
+    "graphql:similar": "graphql similar"
   },
   "prisma": {
     "generate": {
@@ -243,6 +245,8 @@
     "@commitlint/config-conventional": "^17.7.0",
     "@datadog/datadog-ci": "^2.19.1",
     "@golevelup/ts-jest": "^0.4.0",
+    "@graphql-cli/diff": "2.1.0",
+    "@graphql-cli/similar": "2.1.0",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
     "@nx-tools/nx-prisma": "^6.1.0",
@@ -358,6 +362,7 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-unused-imports": "^3.0.0",
     "fakerator": "^0.3.6",
+    "graphql-cli": "4.1.0",
     "husky": "^8.0.3",
     "jest": "^29.6.4",
     "jest-canvas-mock": "^2.5.0",
