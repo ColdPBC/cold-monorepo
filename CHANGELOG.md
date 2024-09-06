@@ -1,3 +1,10 @@
+# [1.356.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.355.1...v1.356.0) (2024-09-06)
+
+
+### Features
+
+* add metadata to organization entity and schema, update access control for vector records ([44d8960](https://github.com/ColdPBC/cold-monorepo/commit/44d8960d683de41c8e1dd5636250e51ce4465bbb))
+
 ## [1.355.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.355.0...v1.355.1) (2024-09-06)
 
 
