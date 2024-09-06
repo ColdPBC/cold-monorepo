@@ -1,12 +1,11 @@
 import Graphweaver from '@exogee/graphweaver-server';
 import './schema';
 
-import { AuthZero, setAddUserToContext, setAdministratorRoleName, setImplicitAllow } from '@exogee/graphweaver-auth';
+import { AuthZero, setAddUserToContext, setAdministratorRoleName } from '@exogee/graphweaver-auth';
 import { addUserToContext } from './cold_profile';
 import { createLogger } from 'winston';
-import { omit } from 'lodash';
 import * as winston from 'winston';
-import { utilities as nestWinstonModuleUtilities } from 'nest-winston/dist/winston.utilities';
+import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
 export const authZero = new AuthZero();
 
 setAddUserToContext(addUserToContext);
