@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { getActionAllStepsComplete, getActionMock, getActionMockNoResources, getActionNoDueDateSet, getActionsMock } from './action';
 import {
   getCategoriesDataMock,
@@ -20,88 +20,88 @@ import { getApiUrl } from './_default/handlers';
 import { getSingleYearsEmissionMock } from './emissionMocks';
 
 export const getFootprintHandler = {
-  default: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
-    return res(ctx.json(getFootprintDataMock()));
+  default: http.get('*/organizations/:orgId/categories/company_decarbonization', ({ request, params, cookies }) => {
+    return HttpResponse.json(getFootprintDataMock());
   }),
-  handle404: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
-    return res(ctx.status(404));
+  handle404: http.get('*/organizations/:orgId/categories/company_decarbonization', ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 404 });
   }),
-  empty: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
-    return res(ctx.json(getFootprintEmptyDataMock()));
+  empty: http.get('*/organizations/:orgId/categories/company_decarbonization', ({ request, params, cookies }) => {
+    return HttpResponse.json(getFootprintEmptyDataMock());
   }),
-  getFootprintDataFacilitiesAllFootprintsNull: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
-    return res(ctx.json(getFootprintDataFacilitiesAllFootprintsNull()));
+  getFootprintDataFacilitiesAllFootprintsNull: http.get('*/organizations/:orgId/categories/company_decarbonization', ({ request, params, cookies }) => {
+    return HttpResponse.json(getFootprintDataFacilitiesAllFootprintsNull());
   }),
-  fiveSubCats: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
-    return res(ctx.json(getFootprintDataMockFiveSubCats()));
+  fiveSubCats: http.get('*/organizations/:orgId/categories/company_decarbonization', ({ request, params, cookies }) => {
+    return HttpResponse.json(getFootprintDataMockFiveSubCats());
   }),
-  twoSubCats: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
-    return res(ctx.json(getFootprintDataMockTwoSubCats()));
+  twoSubCats: http.get('*/organizations/:orgId/categories/company_decarbonization', ({ request, params, cookies }) => {
+    return HttpResponse.json(getFootprintDataMockTwoSubCats());
   }),
-  threeSubCats: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
-    return res(ctx.json(getFootprintDataMockThreeSubCats()));
+  threeSubCats: http.get('*/organizations/:orgId/categories/company_decarbonization', ({ request, params, cookies }) => {
+    return HttpResponse.json(getFootprintDataMockThreeSubCats());
   }),
-  allNullFootprintValues: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
-    return res(ctx.json(getFootprintAllNullFootprintValues()));
+  allNullFootprintValues: http.get('*/organizations/:orgId/categories/company_decarbonization', ({ request, params, cookies }) => {
+    return HttpResponse.json(getFootprintAllNullFootprintValues());
   }),
 };
 
 export const getCategoriesHandler = {
-  default: rest.get('*/organizations/:orgId/categories', (req, res, ctx) => {
-    return res(ctx.json(getCategoriesDataMock()));
+  default: http.get('*/organizations/:orgId/categories', ({ request, params, cookies }) => {
+    return HttpResponse.json(getCategoriesDataMock());
   }),
-  handle404: rest.get('*/organizations/:orgId/categories', (req, res, ctx) => {
-    return res(ctx.status(404));
+  handle404: http.get('*/organizations/:orgId/categories', ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 404 });
   }),
-  empty: rest.get('*/organizations/:orgId/categories', (req, res, ctx) => {
-    return res(ctx.json(getCategoriesEmptyDataMock()));
+  empty: http.get('*/organizations/:orgId/categories', ({ request, params, cookies }) => {
+    return HttpResponse.json(getCategoriesEmptyDataMock());
   }),
 };
 
 export const getMembersHandler = {
-  noInvitations: rest.get('*/organizations/*/members', (req, res, ctx) => {
-    return res(ctx.json(getMembersNoInvitations()));
+  noInvitations: http.get('*/organizations/*/members', ({ request, params, cookies }) => {
+    return HttpResponse.json(getMembersNoInvitations());
   }),
 };
 
 export const getNewsHandler = {
-  default: rest.get('*/news', (req, res, ctx) => {
-    return res(ctx.json(getNewsDefault()));
+  default: http.get('*/news', ({ request, params, cookies }) => {
+    return HttpResponse.json(getNewsDefault());
   }),
-  empty: rest.get('*/news', (req, res, ctx) => {
-    return res(ctx.json([]));
+  empty: http.get('*/news', ({ request, params, cookies }) => {
+    return HttpResponse.json([]);
   }),
-  allMissingProperties: rest.get('*/news', (req, res, ctx) => {
-    return res(ctx.json(getNewsAllMissingProperties()));
+  allMissingProperties: http.get('*/news', ({ request, params, cookies }) => {
+    return HttpResponse.json(getNewsAllMissingProperties());
   }),
-  someMissingProperties: rest.get('*/news', (req, res, ctx) => {
-    return res(ctx.json(getNewsSomeMissingProperties()));
+  someMissingProperties: http.get('*/news', ({ request, params, cookies }) => {
+    return HttpResponse.json(getNewsSomeMissingProperties());
   }),
-  fourNewsItems: rest.get('*/news', (req, res, ctx) => {
-    return res(ctx.json([...getNewsDefault(), ...getNewsDefault()]));
+  fourNewsItems: http.get('*/news', ({ request, params, cookies }) => {
+    return HttpResponse.json([...getNewsDefault(), ...getNewsDefault()]);
   }),
 };
 
 export const getActionHandler = {
-  default: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
-    return res(ctx.json(getActionMock()));
+  default: http.get('*/organizations/*/actions/*', ({ request, params, cookies }) => {
+    return HttpResponse.json(getActionMock());
   }),
-  noResources: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
-    return res(ctx.json(getActionMockNoResources()));
+  noResources: http.get('*/organizations/*/actions/*', ({ request, params, cookies }) => {
+    return HttpResponse.json(getActionMockNoResources());
   }),
-  allStepsComplete: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
-    return res(ctx.json(getActionAllStepsComplete()));
+  allStepsComplete: http.get('*/organizations/*/actions/*', ({ request, params, cookies }) => {
+    return HttpResponse.json(getActionAllStepsComplete());
   }),
   subcategoryActionDetailsCard: [
-    rest.patch('*/organizations/*/actions/:actionId', (req, res, ctx) => {
-      return res(ctx.json({}));
+    http.patch('*/organizations/*/actions/:actionId', ({ request, params, cookies }) => {
+      return HttpResponse.json({});
     }),
   ],
   subCategoryActionsList: [
-    rest.patch('*/organizations/*/actions/:actionId', (req, res, ctx) => {
-      return res(ctx.json({}));
+    http.patch('*/organizations/*/actions/:actionId', ({ request, params, cookies }) => {
+      return HttpResponse.json({});
     }),
-    rest.get('*/organizations/*/actions', (req, res, ctx) => {
+    http.get('*/organizations/*/actions', ({ request, params, cookies }) => {
       const facilitiesActions = getActionsMock().filter(action => action.action.subcategory === 'facilities');
       facilitiesActions[0].action.dependent_surveys.forEach((survey, index) => {
         survey.submitted = index === 0;
@@ -121,17 +121,17 @@ export const getActionHandler = {
           return actionPayload;
         }
       });
-      return res(ctx.json(actions));
+      return HttpResponse.json(actions);
     }),
   ],
-  noDueDateSet: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
-    return res(ctx.json(getActionNoDueDateSet()));
+  noDueDateSet: http.get('*/organizations/*/actions/*', ({ request, params, cookies }) => {
+    return HttpResponse.json(getActionNoDueDateSet());
   }),
   subCategoryActionsListActionsStarted: [
-    rest.patch('*/organizations/*/actions/:actionId', (req, res, ctx) => {
-      return res(ctx.json({}));
+    http.patch('*/organizations/*/actions/:actionId', ({ request, params, cookies }) => {
+      return HttpResponse.json({});
     }),
-    rest.get('*/organizations/*/actions', (req, res, ctx) => {
+    http.get('*/organizations/*/actions', ({ request, params, cookies }) => {
       const facilitiesActions = getActionsMock().filter(action => action.action.subcategory === 'facilities');
       // set all facilities actions surveys to submitted and ready to execute to true
       facilitiesActions.forEach(action => {
@@ -148,50 +148,48 @@ export const getActionHandler = {
           return actionPayload;
         }
       });
-      return res(ctx.json(actions));
+      return HttpResponse.json(actions);
     }),
   ],
-  usersAssigned: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
+  usersAssigned: http.get('*/organizations/*/actions/*', ({ request, params, cookies }) => {
     // set action assignees and some step assignees
     const members = getOrganizationMembersMock().members;
-    return res(
-      ctx.json({
-        ...getActionAllStepsComplete(),
-        action: {
-          ...getActionAllStepsComplete().action,
-          assignee: {
-            email: members[0].email,
-            name: members[0].name,
-            family_name: members[0].family_name,
-            given_name: members[0].given_name,
-            picture: members[0].picture,
-          },
-          steps: getActionAllStepsComplete().action.steps.map((step, index) => {
-            if (index === 0) {
-              return {
-                ...step,
-                assignee: {
-                  email: members[0].email,
-                  name: members[0].name,
-                  family_name: members[0].family_name,
-                  given_name: members[0].given_name,
-                  picture: members[0].picture,
-                },
-                complete: null,
-              };
-            } else {
-              return {
-                ...step,
-                complete: null,
-              };
-            }
-          }),
+    return HttpResponse.json({
+      ...getActionAllStepsComplete(),
+      action: {
+        ...getActionAllStepsComplete().action,
+        assignee: {
+          email: members[0].email,
+          name: members[0].name,
+          family_name: members[0].family_name,
+          given_name: members[0].given_name,
+          picture: members[0].picture,
         },
-      } as ActionPayload),
-    );
+        steps: getActionAllStepsComplete().action.steps.map((step, index) => {
+          if (index === 0) {
+            return {
+              ...step,
+              assignee: {
+                email: members[0].email,
+                name: members[0].name,
+                family_name: members[0].family_name,
+                given_name: members[0].given_name,
+                picture: members[0].picture,
+              },
+              complete: null,
+            };
+          } else {
+            return {
+              ...step,
+              complete: null,
+            };
+          }
+        }),
+      },
+    } as ActionPayload);
   }),
   subcategoryActionsOverviewCard: [
-    rest.get('*/organizations/*/actions', (req, res, ctx) => {
+    http.get('*/organizations/*/actions', ({ request, params, cookies }) => {
       const facilitiesActions = getActionsMock().filter(action => action.action.subcategory === 'facilities');
       facilitiesActions[0].action.dependent_surveys.forEach((survey, index) => {
         survey.submitted = true;
@@ -212,11 +210,11 @@ export const getActionHandler = {
           return actionPayload;
         }
       });
-      return res(ctx.json(actions));
+      return HttpResponse.json(actions);
     }),
   ],
   actionsOverview: [
-    rest.get('*/organizations/*/actions', (req, res, ctx) => {
+    http.get('*/organizations/*/actions', ({ request, params, cookies }) => {
       const actions = getActionsMock().map((actionPayload, index) => {
         // set all the surveys to submitted and ready to execute to true
         actionPayload.action.dependent_surveys.forEach(survey => {
@@ -225,42 +223,41 @@ export const getActionHandler = {
         actionPayload.action.ready_to_execute = true;
         return actionPayload;
       });
-      return res(ctx.json(actions));
+      return HttpResponse.json(actions);
     }),
   ],
 };
 
 export const getDocumentListHandler = {
   default: [
-    rest.get(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
-      return res(ctx.json(getFilesWithCertificateClaimsMock()));
+    http.get(getApiUrl('/organizations/:orgId/files'), ({ request, params, cookies }) => {
+      return HttpResponse.json(getFilesWithCertificateClaimsMock());
     }),
 
-    rest.post(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
-      return res(ctx.json({}), ctx.status(201));
+    http.post(getApiUrl('/organizations/:orgId/files'), ({ request, params, cookies }) => {
+      return HttpResponse.json({}, { status: 201 });
     }),
   ],
   noFiles: [
-    rest.get(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
-      return res(ctx.json([]));
+    http.get(getApiUrl('/organizations/:orgId/files'), ({ request, params, cookies }) => {
+      return HttpResponse.json([]);
     }),
 
-    rest.post(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
-      return res(ctx.json({}), ctx.status(201));
+    http.post(getApiUrl('/organizations/:orgId/files'), ({ request, params, cookies }) => {
+      return HttpResponse.json({}, { status: 201 });
     }),
   ],
 };
 
 export const getEmissionsOverviewCardHandler = {
   empty: [
-    rest.get(getApiUrl('/organizations/:orgId/footprints'), (req, res, ctx) => {
-      // return 404
-      return res(ctx.status(404));
+    http.get(getApiUrl('/organizations/:orgId/footprints'), ({ request, params, cookies }) => {
+      return HttpResponse.json({}, { status: 404 });
     }),
   ],
   singleYear: [
-    rest.get(getApiUrl('/organizations/:orgId/footprints'), (req, res, ctx) => {
-      return res(ctx.json(getSingleYearsEmissionMock()));
+    http.get(getApiUrl('/organizations/:orgId/footprints'), ({ request, params, cookies }) => {
+      return HttpResponse.json(getSingleYearsEmissionMock());
     }),
   ],
 };

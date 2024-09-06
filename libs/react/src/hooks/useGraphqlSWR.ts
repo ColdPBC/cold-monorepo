@@ -1,7 +1,9 @@
 import useSWR, { SWRConfiguration, SWRResponse } from 'swr';
 import { useContext } from 'react';
 import { ColdApolloContext } from '@coldpbc/providers';
-import { ApolloQueryResult, gql } from '@apollo/client';
+import { ApolloQueryResult } from '@apollo/client';
+import { queries } from '@coldpbc/lib';
+import { get } from 'lodash';
 
 export const useGraphQLSWR = <Data = any, Error = any>(key: string | null, config?: SWRConfiguration) => {
   const { client } = useContext(ColdApolloContext);
@@ -9,11 +11,14 @@ export const useGraphQLSWR = <Data = any, Error = any>(key: string | null, confi
   return useSWR(
     key,
     (key: string) => {
-      return client?.query({
-        query: gql`
-          ${key}
-        `,
-      });
+      const query = get(queries, key, null);
+      if (query) {
+        return client?.query({
+          query: query,
+        });
+      } else {
+        return undefined;
+      }
     },
     config,
   ) as SWRResponse<ApolloQueryResult<any>, Error, any>;

@@ -3,7 +3,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManager, ComplianceRoutes } from '@coldpbc/components';
 import { Routes } from 'react-router-dom';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 
 const meta: Meta<typeof ComplianceManager> = {
   title: 'Pages/ComplianceManager',
@@ -40,13 +40,13 @@ export const Error: Story = {
         initialEntries: ['/compliance/rei_pia_2024'],
       }}
       handlers={[
-        rest.get(getApiUrl('/compliance/:name/organizations/:orgId/responses/counts'), (req, res, ctx) => {
+        http.get(getApiUrl('/compliance/:name/organizations/:orgId/responses/counts'), ({ request, params, cookies }) => {
           // return 500 server error
-          return res(ctx.status(500));
+          return HttpResponse.json({}, { status: 500 });
         }),
-        rest.get(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/responses'), (req, res, ctx) => {
+        http.get(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/responses'), ({ request, params, cookies }) => {
           // return 500 server error
-          return res(ctx.status(500));
+          return HttpResponse.json({}, { status: 500 });
         }),
       ]}>
       <Routes>{ComplianceRoutes()}</Routes>

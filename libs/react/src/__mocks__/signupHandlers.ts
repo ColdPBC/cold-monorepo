@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { getEmptyPoliciesSignedMock, getPolicyMockByName } from './policyMock';
 import { getApiUrl } from './_default/handlers';
 import { auth0UserMock } from './userMock';
@@ -19,133 +19,117 @@ import { getSurveyFormDataByName } from './surveyDataMock';
 
 export const getSignUpHandler = {
   DEFAULT: [
-    rest.patch(`*/members/:emailOrId`, (req, res, ctx) => {
-      return res(
-        ctx.json({
-          ...auth0UserMock,
-          given_name: null,
-          family_name: null,
-        }),
-      );
+    http.patch(`*/members/:emailOrId`, async ({ request, params, cookies }) => {
+      return HttpResponse.json({
+        ...auth0UserMock,
+        given_name: null,
+        family_name: null,
+      });
     }),
-    rest.post(`*/organizations`, (req, res, ctx) => {
-      const body = req.body as {
+    http.post(`*/organizations`, async ({ request, params, cookies }) => {
+      const body = (await request.json()) as {
         display_name: string;
       };
-      return res(
-        ctx.json({
-          ...getOrganizationMock(),
-          display_name: body.display_name,
-        }),
-      );
+      return HttpResponse.json({
+        ...getOrganizationMock(),
+        display_name: body.display_name,
+      });
     }),
-    rest.post(`*/policies/:id/signed`, (req, res, ctx) => {
-      const body = req.body as {
+    http.post(`*/policies/:id/signed`, async ({ request, params, cookies }) => {
+      const body = (await request.json()) as {
         name: string;
       };
-      return res(ctx.json({}));
+      return HttpResponse.json({});
     }),
-    rest.get('*/policies/signed/user', (req, res, ctx) => {
-      return res(ctx.json(getEmptyPoliciesSignedMock()));
+    http.get('*/policies/signed/user', async ({ request, params, cookies }) => {
+      return HttpResponse.json(getEmptyPoliciesSignedMock());
     }),
-    rest.get('*/policies/:name', (req, res, ctx) => {
-      const name = req.params.name as string;
-      return res(ctx.json(getPolicyMockByName(name)));
+    http.get('*/policies/:name', async ({ request, params, cookies }) => {
+      const name = params.name as string;
+      return HttpResponse.json(getPolicyMockByName(name));
     }),
-    rest.get('*/members/:emailOrId', (req, res, ctx) => {
-      const emailOrId = req.params.emailOrId as string;
-      return res(
-        ctx.json({
-          ...auth0UserMock,
-          given_name: null,
-          family_name: null,
-        }),
-      );
+    http.get('*/members/:emailOrId', async ({ request, params, cookies }) => {
+      const emailOrId = params.emailOrId as string;
+      return HttpResponse.json({
+        ...auth0UserMock,
+        given_name: null,
+        family_name: null,
+      });
     }),
   ],
   newCompanyAndUser: [
-    rest.patch(`*/members/:emailOrId`, (req, res, ctx) => {
-      return res(
-        ctx.json({
-          ...auth0UserMock,
-          given_name: null,
-          family_name: null,
-        }),
-      );
+    http.patch(`*/members/:emailOrId`, async ({ request, params, cookies }) => {
+      return HttpResponse.json({
+        ...auth0UserMock,
+        given_name: null,
+        family_name: null,
+      });
     }),
-    rest.post(`*/organizations`, (req, res, ctx) => {
-      const body = req.body as {
+    http.post(`*/organizations`, async ({ request, params, cookies }) => {
+      const body = (await request.json()) as {
         display_name: string;
       };
-      return res(
-        ctx.json({
-          ...getOrganizationMock(),
-          display_name: body.display_name,
-        }),
-      );
+      return HttpResponse.json({
+        ...getOrganizationMock(),
+        display_name: body.display_name,
+      });
     }),
-    rest.post(`*/policies/:id/signed`, (req, res, ctx) => {
-      const body = req.body as {
+    http.post(`*/policies/:id/signed`, async ({ request, params, cookies }) => {
+      const body = (await request.json()) as {
         name: string;
       };
-      return res(ctx.json({}));
+      return HttpResponse.json({});
     }),
-    rest.get('*/policies/signed/user', (req, res, ctx) => {
-      return res(ctx.json(getEmptyPoliciesSignedMock()));
+    http.get('*/policies/signed/user', async ({ request, params, cookies }) => {
+      return HttpResponse.json(getEmptyPoliciesSignedMock());
     }),
-    rest.get('*/policies/:name', (req, res, ctx) => {
-      const name = req.params.name as string;
-      return res(ctx.json(getPolicyMockByName(name)));
+    http.get('*/policies/:name', async ({ request, params, cookies }) => {
+      const name = params.name as string;
+      return HttpResponse.json(getPolicyMockByName(name));
     }),
-    rest.get('*/members/:emailOrId', (req, res, ctx) => {
-      const emailOrId = req.params.emailOrId as string;
-      return res(
-        ctx.json({
-          ...auth0UserMock,
-          given_name: 'null',
-          family_name: 'null',
-        }),
-      );
+    http.get('*/members/:emailOrId', async ({ request, params, cookies }) => {
+      const emailOrId = params.emailOrId as string;
+      return HttpResponse.json({
+        ...auth0UserMock,
+        given_name: 'null',
+        family_name: 'null',
+      });
     }),
   ],
   server500Error: [
-    rest.patch(`*/members/:emailOrId`, (req, res, ctx) => {
-      return res(
-        ctx.json({
-          ...auth0UserMock,
-          given_name: 'null',
-          family_name: 'null',
-        }),
-      );
+    http.patch(`*/members/:emailOrId`, async ({ request, params, cookies }) => {
+      return HttpResponse.json({
+        ...auth0UserMock,
+        given_name: 'null',
+        family_name: 'null',
+      });
     }),
-    rest.post(`*/organizations`, (req, res, ctx) => {
-      const body = req.body as {
+    http.post(`*/organizations`, async ({ request, params, cookies }) => {
+      const body = (await request.json()) as {
         display_name: string;
       };
-      return res(ctx.status(500));
+      return HttpResponse.json({}, { status: 500 });
     }),
-    rest.post(`*/policies/:id/signed`, (req, res, ctx) => {
-      const body = req.body as {
+    http.post(`*/policies/:id/signed`, async ({ request, params, cookies }) => {
+      const body = (await request.json()) as {
         name: string;
       };
-      return res(ctx.status(500));
+      return HttpResponse.json({}, { status: 500 });
     }),
-    rest.get('*/policies/signed/user', (req, res, ctx) => {
-      return res(ctx.json(getEmptyPoliciesSignedMock()));
+    http.get('*/policies/signed/user', async ({ request, params, cookies }) => {
+      return HttpResponse.json(getEmptyPoliciesSignedMock());
     }),
-    rest.get('*/policies/:name', (req, res, ctx) => {
-      const name = req.params.name as string;
-      return res(ctx.json(getPolicyMockByName(name)));
+    http.get('*/policies/:name', async ({ request, params, cookies }) => {
+      const name = params.name as string;
+      return HttpResponse.json(getPolicyMockByName(name));
     }),
-    rest.get('*/members/:emailOrId', (req, res, ctx) => {
-      const emailOrId = req.params.emailOrId as string;
-      return res(
-        ctx.json({
-          ...auth0UserMock,
-          given_name: null,
-          family_name: null,
-        }),
-      );
+    http.get('*/members/:emailOrId', async ({ request, params, cookies }) => {
+      const emailOrId = params.emailOrId as string;
+      return HttpResponse.json({
+        ...auth0UserMock,
+        given_name: null,
+        family_name: null,
+      });
     }),
   ],
 };
@@ -153,93 +137,94 @@ export const getSignUpHandler = {
 export const getSignupHandlersForApplicationSignup = {
   DEFAULT: [
     [
-      rest.get(getApiUrl('/components/sidebar_navigation'), (req, res, ctx) => {
-        return res(ctx.json({ ...getSidebarMock() }));
+      http.get(getApiUrl('/components/sidebar_navigation'), async ({ request, params, cookies }) => {
+        return HttpResponse.json({ ...getSidebarMock() });
       }),
 
       // Mock data for journey modules
-      rest.get(getApiUrl('/categories'), (req, res, ctx) => {
-        return res(ctx.json({ ...getCategoriesDataMock() }));
+      http.get(getApiUrl('/categories'), async ({ request, params, cookies }) => {
+        return HttpResponse.json({ ...getCategoriesDataMock() });
       }),
 
       // Mock data for footprint modules
-      rest.get(getApiUrl('/categories/company_decarbonization'), (req, res, ctx) => {
-        return res(ctx.json({ ...getFootprintDataMock() }));
+      http.get(getApiUrl('/categories/company_decarbonization'), async ({ request, params, cookies }) => {
+        return HttpResponse.json({ ...getFootprintDataMock() });
       }),
 
-      rest.get(getApiUrl('/company-users'), (req, res, ctx) => {
-        return res(ctx.json(getDataGridUsersMock()));
+      http.get(getApiUrl('/company-users'), async ({ request, params, cookies }) => {
+        return HttpResponse.json(getDataGridUsersMock());
       }),
 
-      rest.get(getApiUrl('/components/team_member_table'), (req, res, ctx) => {
-        return res(ctx.json(getTeamMemberDataGridMock()));
+      http.get(getApiUrl('/components/team_member_table'), async ({ request, params, cookies }) => {
+        return HttpResponse.json(getTeamMemberDataGridMock());
       }),
 
-      rest.get(getApiUrl('/components/datagrid'), (req, res, ctx) => {
-        return res(ctx.json(getDefaultFormDefinitionGridMock()));
+      http.get(getApiUrl('/components/datagrid'), async ({ request, params, cookies }) => {
+        return HttpResponse.json(getDefaultFormDefinitionGridMock());
       }),
 
-      rest.get(getApiUrl('/data/datagrid'), (req, res, ctx) => {
-        return res(ctx.json({ ...getDefaultFormDataGridMock() }));
+      http.get(getApiUrl('/data/datagrid'), async ({ request, params, cookies }) => {
+        return HttpResponse.json({ ...getDefaultFormDataGridMock() });
       }),
 
-      rest.post(getApiUrl('/invites'), (req, res, ctx) => {
-        return res(ctx.json({}));
+      http.post(getApiUrl('/invites'), async ({ request, params, cookies }) => {
+        return HttpResponse.json({});
       }),
 
-      rest.delete(getApiUrl('/invites/:id'), (req, res, ctx) => {
-        return res(ctx.json({ ...getDefaultFormDataGridMock() }));
+      http.delete(getApiUrl('/invites/:id'), async ({ request, params, cookies }) => {
+        return HttpResponse.json({ ...getDefaultFormDataGridMock() });
       }),
 
-      rest.get(getApiUrl('/companies/:id'), (req, res, ctx) => {
-        const { id } = req.params;
-        return res(ctx.json({ ...getDataGridCompaniesMock(id as string) }));
+      http.get(getApiUrl('/companies/:id'), async ({ request, params, cookies }) => {
+        const { id } = params;
+        return HttpResponse.json({ ...getDataGridCompaniesMock(id as string) });
       }),
 
-      rest.get(getApiUrl('/organizations/:orgId'), (req, res, ctx) => {
-        const { orgId } = req.params;
-        return res(ctx.json({ ...getOrganizationMock() }));
+      http.get(getApiUrl('/organizations/:orgId'), async ({ request, params, cookies }) => {
+        const { orgId } = params;
+        return HttpResponse.json({ ...getOrganizationMock() });
       }),
 
-      rest.get(getApiUrl('/organizations/:orgId/members'), (req, res, ctx) => {
-        const { orgId } = req.params;
+      http.get(getApiUrl('/organizations/:orgId/members'), async ({ request, params, cookies }) => {
+        const { orgId } = params;
         const mock = getOrganizationMembersMock();
-        return res(ctx.json({ ...getOrganizationMembersMock() }));
+        return HttpResponse.json({ ...getOrganizationMembersMock() });
       }),
 
-      rest.post(getApiUrl('/organizations/:orgId/members/:userId/role/:roleName'), async (req, res, ctx) => {
-        const { orgId, userId, roleName } = req.params;
+      http.post(getApiUrl('/organizations/:orgId/members/:userId/role/:roleName'), async ({ request, params, cookies }) => {
+        const { orgId, userId, roleName } = params;
         await changeUserRoles(orgId as string, userId as string, roleName as string);
-        return res(ctx.json({}));
+        return HttpResponse.json({});
       }),
 
-      rest.delete(getApiUrl('/organizations/:orgId/member'), async (req, res, ctx) => {
-        const { orgId } = req.params;
+      http.delete(getApiUrl('/organizations/:orgId/member'), async ({ request, params, cookies }) => {
+        const { orgId } = params;
         let data: { members: string[] };
-        if (req.body) {
-          data = req.body as { members: string[] };
+        if (await request.json()) {
+          data = (await request.json()) as { members: string[] };
           await removeUserFromOrganization(data.members, orgId as string);
         }
-        return res(ctx.json({}));
+        return HttpResponse.json({});
       }),
 
-      rest.delete(getApiUrl('/organizations/:orgId/invitation'), async (req, res, ctx) => {
+      http.delete(getApiUrl('/organizations/:orgId/invitation'), async ({ request, params, cookies }) => {
         let data: {
           org_id: string;
           user_email: string;
         };
-        if (req.body) {
-          data = req.body as {
+        const body = await request.json();
+        if (body) {
+          data = body as {
             org_id: string;
             user_email: string;
           };
           await deleteUserInvitation(data.org_id, data.user_email);
         }
-        return res(ctx.json({}));
+        return HttpResponse.json({});
       }),
 
-      rest.post(getApiUrl('/organizations/:orgId/invitation'), async (req, res, ctx) => {
-        const data = req.body as {
+      http.post(getApiUrl('/organizations/:orgId/invitation'), async ({ request, params, cookies }) => {
+        const data = (await request.json()) as {
           org_id: string;
           user_email: string;
           inviter_name: string;
@@ -250,17 +235,17 @@ export const getSignupHandlersForApplicationSignup = {
             const { org_id, user_email, inviter_name, roleId } = data;
             await sendInvitation(org_id, user_email, inviter_name, roleId);
           }
-          return res(ctx.json({}));
+          return HttpResponse.json({});
         } catch (error) {
           let message;
           if (error instanceof Error) message = error.message;
           else message = String(error);
-          return res(ctx.status(500), ctx.json({ message: message }));
+          return HttpResponse.json({ message: message }, { status: 500 });
         }
       }),
 
-      rest.patch(getApiUrl('/organizations/:orgId/invitation'), async (req, res, ctx) => {
-        const data = req.body as {
+      http.patch(getApiUrl('/organizations/:orgId/invitation'), async ({ request, params, cookies }) => {
+        const data = (await request.json()) as {
           org_id: string;
           user_email: string;
           inviter_name: string;
@@ -270,27 +255,25 @@ export const getSignupHandlersForApplicationSignup = {
           const { org_id, user_email, inviter_name, roleId } = data;
           await resendInvitation(org_id, user_email);
         }
-        return res(ctx.json({}));
+        return HttpResponse.json({});
       }),
 
-      rest.post(getApiUrl('/resources/:name'), async (req, res, ctx) => {
-        return res(ctx.json({}));
+      http.post(getApiUrl('/resources/:name'), async ({ request, params, cookies }) => {
+        return HttpResponse.json({});
       }),
 
-      rest.get(getApiUrl('/roles'), async (req, res, ctx) => {
-        return res(ctx.json(getRoles()));
+      http.get(getApiUrl('/roles'), async ({ request, params, cookies }) => {
+        return HttpResponse.json(getRoles());
       }),
 
-      rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
-        const { name } = req.params;
+      http.get(getApiUrl('/organizations/:orgId/surveys/:name'), async ({ request, params, cookies }) => {
+        const { name } = params;
 
-        return res(ctx.json(getSurveyFormDataByName(name as string)));
+        return HttpResponse.json(getSurveyFormDataByName(name as string));
       }),
 
-      rest.put(getApiUrl('/organizations/:orgId/surveys/:name'), async (req, res, ctx) => {
-        const { data } = await req.json();
-
-        return res(ctx.json({}));
+      http.put(getApiUrl('/organizations/:orgId/surveys/:name'), async ({ request, params, cookies }) => {
+        return HttpResponse.json({});
       }),
     ],
     getSignUpHandler.DEFAULT,
