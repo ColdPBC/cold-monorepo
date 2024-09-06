@@ -8,33 +8,33 @@ import { AttributeAssurance as OrmAttributeAssurance } from '../entities';
 import { connection } from '../database';
 
 @Entity<AttributeAssurance>('AttributeAssurance', {
-  provider: new MikroBackendProvider(OrmAttributeAssurance, connection),
+	provider: new MikroBackendProvider(OrmAttributeAssurance, connection),
 })
 export class AttributeAssurance {
-  @Field(() => ID, { primaryKeyField: true })
-  id!: string;
+	@Field(() => ID, { primaryKeyField: true })
+	id!: string;
 
-  @RelationshipField<AttributeAssurance>(() => Organization, { id: entity => entity.organization?.id })
-  organization!: Organization;
+	@RelationshipField<AttributeAssurance>(() => Organization, { id: (entity) => entity.organization?.id })
+	organization!: Organization;
 
-  @Field(() => ISODateStringScalar)
-  effectiveStartDate!: Date;
+	@Field(() => ISODateStringScalar)
+	effectiveStartDate!: Date;
 
-  @Field(() => ISODateStringScalar)
-  effectiveEndDate!: Date;
+	@Field(() => ISODateStringScalar)
+	effectiveEndDate!: Date;
 
-  @RelationshipField<AttributeAssurance>(() => OrganizationAttribute, { id: entity => entity.organizationAttribute?.id, nullable: true })
-  organizationAttribute?: OrganizationAttribute;
+	@RelationshipField<AttributeAssurance>(() => OrganizationAttribute, { id: (entity) => entity.organizationAttribute?.id, nullable: true })
+	organizationAttribute?: OrganizationAttribute;
 
-  @Field(() => String, { nullable: true })
-  organizationFileId?: string;
+	@Field(() => String, { nullable: true })
+	organizationFileId?: string;
 
-  @Field(() => ISODateStringScalar)
-  createdAt!: Date;
+	@Field(() => ISODateStringScalar)
+	createdAt!: Date;
 
-  @Field(() => ISODateStringScalar)
-  updatedAt!: Date;
+	@Field(() => ISODateStringScalar)
+	updatedAt!: Date;
 
-  @RelationshipField<AttributeAssurance>(() => OrganizationFile, { id: entity => entity.organizationFile?.id, nullable: true })
-  organizationFile?: OrganizationFile;
+	@RelationshipField<AttributeAssurance>(() => OrganizationFile, { id: (entity) => entity.organizationFile?.id, nullable: true })
+	organizationFile?: OrganizationFile;
 }
