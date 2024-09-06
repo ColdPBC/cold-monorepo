@@ -3,9 +3,6 @@ import './schema';
 
 import { AuthZero, setAddUserToContext, setAdministratorRoleName } from '@exogee/graphweaver-auth';
 import { addUserToContext } from './cold_profile';
-import { createLogger } from 'winston';
-import * as winston from 'winston';
-import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
 export const authZero = new AuthZero();
 
 setAddUserToContext(addUserToContext);
@@ -28,26 +25,6 @@ export const graphweaver = new Graphweaver({
 				context,
 			};
 		},
-		logger: createLogger({
-			defaultMeta: {
-				service: process.env['DD_SERVICE'] || meta?.service || 'graphweaver',
-				version: process.env['DD_VERSION'] || meta?.version,
-				environment: process.env['NODE_ENV'] || meta?.environment,
-				context: 'graphweaver',
-				tags: ['nest.js', 'winston'],
-			},
-			transports: [
-				new winston.transports.Console({
-					format:
-						process.env['NODE_ENV'] === 'development' || process.env['LOG_FORMAT'] === 'pretty'
-							? winston.format.combine(winston.format.combine(winston.format.timestamp(), nestWinstonModuleUtilities.format.nestLike()))
-							: winston.format.combine(winston.format.timestamp(), winston.format.json(), winston.format.align()),
-				}),
-			],
-		}).child({
-			context: meta.service,
-			meta,
-		}),
 	},
 	graphQLArmorOptions: {
 		maxAliases: { n: 60 },
