@@ -61,6 +61,9 @@ export class Organization {
   @Property({ type: 'boolean', default: false })
   deleted = false;
 
+  @Property({ type: 'json', nullable: true })
+  metadata?: Record<string, unknown>;
+
   @OneToMany({ entity: () => Action, mappedBy: 'organization' })
   actions = new Collection<Action>(this);
 

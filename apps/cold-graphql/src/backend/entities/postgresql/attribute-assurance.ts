@@ -23,12 +23,16 @@ export class AttributeAssurance {
   @ManyToOne({ entity: () => OrganizationAttribute, ref: true, fieldName: 'organization_attributes_id', nullable: true, index: 'attribute_assurances_org_claim_id_idx1' })
   organizationAttribute?: Ref<OrganizationAttribute>;
 
-  @ManyToOne({ entity: () => OrganizationFile, ref: true, nullable: true, index: 'attribute_assurances_organization_file_id_idx1' })
-  organizationFile?: Ref<OrganizationFile>;
+  @Index({ name: 'attribute_assurances_organization_file_id_idx1' })
+  @Property({ type: 'text', nullable: true })
+  organizationFileId?: string;
 
   @Property({ type: 'datetime', length: 3 })
   createdAt!: Date;
 
   @Property({ type: 'datetime', length: 3 })
   updatedAt!: Date;
+
+  @ManyToOne({ entity: () => OrganizationFile, ref: true, fieldName: 'organization_filesId', nullable: true })
+  organizationFile?: Ref<OrganizationFile>;
 }

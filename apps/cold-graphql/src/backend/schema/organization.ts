@@ -63,6 +63,9 @@ export class Organization {
 	@Field(() => Boolean)
 	deleted = false;
 
+	@Field(() => GraphQLJSON, { nullable: true })
+	metadata?: Record<string, unknown>;
+
 	@RelationshipField<Action>(() => [Action], { relatedField: 'organization' })
 	actions!: Action[];
 

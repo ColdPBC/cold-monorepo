@@ -2,10 +2,10 @@ import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { Organization } from './organization';
 import { OrganizationFile } from './organization-file';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../../acl_policies';
+import { cold_admin_only } from '../../acl_policies';
 
 @Entity({ tableName: 'vector_records' })
-@ApplyAccessControlList(default_acl)
+@ApplyAccessControlList(cold_admin_only)
 export class VectorRecord {
   @PrimaryKey({ type: 'text' })
   id!: string;

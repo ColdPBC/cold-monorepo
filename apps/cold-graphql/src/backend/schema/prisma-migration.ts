@@ -3,35 +3,32 @@ import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { PrismaMigration as OrmPrismaMigration } from '../entities';
 import { connection } from '../database';
-import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { cold_admin_only, default_acl } from '../acl_policies';
 
 @Entity<PrismaMigration>('PrismaMigration', {
-  provider: new MikroBackendProvider(OrmPrismaMigration, connection),
+	provider: new MikroBackendProvider(OrmPrismaMigration, connection),
 })
-@ApplyAccessControlList(cold_admin_only)
 export class PrismaMigration {
-  @Field(() => ID, { primaryKeyField: true })
-  id!: string;
+	@Field(() => ID, { primaryKeyField: true })
+	id!: string;
 
-  @Field(() => String)
-  checksum!: string;
+	@Field(() => String)
+	checksum!: string;
 
-  @Field(() => ISODateStringScalar, { nullable: true })
-  finishedAt?: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	finishedAt?: Date;
 
-  @Field(() => String)
-  migrationName!: string;
+	@Field(() => String)
+	migrationName!: string;
 
-  @Field(() => String, { nullable: true })
-  logs?: string;
+	@Field(() => String, { nullable: true })
+	logs?: string;
 
-  @Field(() => ISODateStringScalar, { nullable: true })
-  rolledBackAt?: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	rolledBackAt?: Date;
 
-  @Field(() => ISODateStringScalar)
-  startedAt!: Date;
+	@Field(() => ISODateStringScalar)
+	startedAt!: Date;
 
-  @Field(() => Number)
-  appliedStepsCount = 0;
+	@Field(() => Number)
+	appliedStepsCount = 0;
 }
