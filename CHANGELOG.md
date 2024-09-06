@@ -1,3 +1,10 @@
+# [1.357.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.356.0...v1.357.0) (2024-09-06)
+
+
+### Features
+
+* apply access control lists to multiple entities ([225c914](https://github.com/ColdPBC/cold-monorepo/commit/225c914b610c702eca35da035e959cab1a1bca04))
+
 # [1.356.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.355.1...v1.356.0) (2024-09-06)
 
 
