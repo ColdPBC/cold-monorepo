@@ -10,5 +10,6 @@ export interface IRequest {
   query?: any;
   headers?: any;
   body?: any;
+  metadata?: any;
   // Add other necessary fields
 }

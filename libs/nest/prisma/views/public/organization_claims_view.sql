@@ -8,6 +8,7 @@ SELECT
   ofac.postal_code,
   ofac.country,
   ofac.supplier,
+  ofac.supplier_tier,
   c.id AS claim_id,
   c.name AS claim_name,
   c.level AS claim_level,
@@ -28,11 +29,11 @@ FROM
           organization_facilities ofac
           JOIN organizations o ON ((ofac.organization_id = o.id))
         )
-        LEFT JOIN certification_claims cc ON ((ofac.id = cc.organization_facility_id))
+        LEFT JOIN organization_claims oc ON ((ofac.id = oc.organization_facility_id))
       )
-      LEFT JOIN certifications c ON ((cc.certification_id = c.id))
+      LEFT JOIN claims c ON ((oc.claim_id = c.id))
     )
-    LEFT JOIN organization_files of ON ((cc.organization_file_id = of.id))
+    LEFT JOIN organization_files of ON ((oc.organization_file_id = of.id))
   )
 GROUP BY
   ofac.id,

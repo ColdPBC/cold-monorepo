@@ -1,9 +1,9 @@
 import { PrismaMigration } from './prisma-migration';
 import { ActionTemplate } from './action-template';
 import { Action } from './action';
+import { AttributeAssurance } from './attribute-assurance';
 import { CategoryDatum } from './category-datum';
 import { CategoryDefinition } from './category-definition';
-import { Claim } from './claim';
 import { ComplianceDefinition } from './compliance-definition';
 import { ComplianceQuestionDependencyChain } from './compliance-question-dependency-chain';
 import { ComplianceQuestion } from './compliance-question';
@@ -18,7 +18,7 @@ import { Integration } from './integration';
 import { MaterialSupplier } from './material-supplier';
 import { Material } from './material';
 import { News } from './news';
-import { OrganizationClaim } from './organization-claim';
+import { OrganizationAttribute } from './organization-attribute';
 import { OrganizationCompliance } from './organization-compliance';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
 import { OrganizationComplianceAiResponse } from './organization-compliance-ai-response';
@@ -41,15 +41,16 @@ import { SupportedUtility } from './supported-utility';
 import { SurveyDatum } from './survey-datum';
 import { SurveyDefinition } from './survey-definition';
 import { SurveyStatus } from './survey-status';
+import { SustainabilityAttribute } from './sustainability-attribute';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
 
 export * from './prisma-migration';
 export * from './action-template';
 export * from './action';
+export * from './attribute-assurance';
 export * from './category-datum';
 export * from './category-definition';
-export * from './claim';
 export * from './compliance-definition';
 export * from './compliance-question-dependency-chain';
 export * from './compliance-question';
@@ -64,7 +65,7 @@ export * from './integration';
 export * from './material-supplier';
 export * from './material';
 export * from './news';
-export * from './organization-claim';
+export * from './organization-attribute';
 export * from './organization-compliance';
 export * from './organization-compliance-ai-response-file';
 export * from './organization-compliance-ai-response';
@@ -87,6 +88,7 @@ export * from './supported-utility';
 export * from './survey-datum';
 export * from './survey-definition';
 export * from './survey-status';
+export * from './sustainability-attribute';
 export * from './utility-bill';
 export * from './vector-record';
 
@@ -94,9 +96,9 @@ export const entities = [
 	PrismaMigration,
 	ActionTemplate,
 	Action,
+	AttributeAssurance,
 	CategoryDatum,
 	CategoryDefinition,
-	Claim,
 	ComplianceDefinition,
 	ComplianceQuestionDependencyChain,
 	ComplianceQuestion,
@@ -111,7 +113,7 @@ export const entities = [
 	MaterialSupplier,
 	Material,
 	News,
-	OrganizationClaim,
+	OrganizationAttribute,
 	OrganizationCompliance,
 	OrganizationComplianceAiResponseFile,
 	OrganizationComplianceAiResponse,
@@ -134,6 +136,7 @@ export const entities = [
 	SurveyDatum,
 	SurveyDefinition,
 	SurveyStatus,
+	SustainabilityAttribute,
 	UtilityBill,
 	VectorRecord,
 ];

@@ -1,9 +1,10 @@
 import { Entity, Field, ID, RelationshipField, graphweaverMetadata } from '@exogee/graphweaver';
 import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { AttributeAssurance } from './attribute-assurance';
 import { Integration } from './integration';
 import { Organization } from './organization';
-import { OrganizationClaim } from './organization-claim';
+import { OrganizationAttribute } from './organization-attribute';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
 import { OrganizationComplianceNoteFile } from './organization-compliance-note-file';
 import { VectorRecord } from './vector-record';
@@ -97,8 +98,11 @@ export class OrganizationFile {
 	@Field(() => GraphQLJSON, { nullable: true })
 	metadata?: Record<string, unknown>;
 
-	@RelationshipField<OrganizationClaim>(() => [OrganizationClaim], { relatedField: 'organizationFile' })
-	organizationClaims!: OrganizationClaim[];
+	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'organizationFile' })
+	attributeAssurances!: AttributeAssurance[];
+
+	@RelationshipField<OrganizationAttribute>(() => [OrganizationAttribute], { relatedField: 'organizationFile' })
+	organizationAttributes!: OrganizationAttribute[];
 
 	@RelationshipField<OrganizationComplianceAiResponseFile>(() => [OrganizationComplianceAiResponseFile], { relatedField: 'organizationFile' })
 	organizationComplianceAiResponseFiles!: OrganizationComplianceAiResponseFile[];

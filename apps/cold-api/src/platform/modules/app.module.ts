@@ -15,7 +15,7 @@ import { ComplianceDefinitionModule } from './resources/compliance/compliance-de
 import { EventsModule } from './utilities/events/events.module';
 import { OrganizationModule } from './resources/organizations/organization.module';
 import { ComplianceSetModule } from './resources/compliance/compliance-set.module';
-import { ClaimsModule } from './resources/claims/claims.module';
+import { SustainabilityAttributesModule } from './resources/sustainability_attributes/sustainability_attributes.module';
 
 @Module({})
 export class AppModule {
@@ -45,7 +45,7 @@ export class AppModule {
         FacilitiesModule,
         ComplianceDefinitionModule,
         ComplianceSetModule,
-        ClaimsModule,
+        SustainabilityAttributesModule,
       ],
       providers: [],
       exports: [],

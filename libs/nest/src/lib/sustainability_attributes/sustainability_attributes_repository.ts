@@ -2,16 +2,16 @@ import { BadRequestException, Injectable, NotFoundException, UnprocessableEntity
 import { BaseWorker } from '../worker';
 import { PrismaService } from '../prisma';
 import { IAuthenticatedUser } from '../primitives';
-import { claim_types, claims, organizations } from '@prisma/client';
+import { claim_types, sustainability_attributes, organizations } from '@prisma/client';
 import { Cuid2Generator, GuidPrefixes } from '../utility';
 
 @Injectable()
-export class ClaimsRepository extends BaseWorker {
+export class SustainabilityAttributesRepository extends BaseWorker {
   constructor(readonly prisma: PrismaService) {
-    super(ClaimsRepository.name);
+    super(SustainabilityAttributesRepository.name);
   }
 
-  async createClaim(org: organizations, user: IAuthenticatedUser, data: claims) {
+  async createClaim(org: organizations, user: IAuthenticatedUser, data: any) {
     const start = new Date();
     data.id = new Cuid2Generator(GuidPrefixes.Claims).scopedId;
 
@@ -22,7 +22,7 @@ export class ClaimsRepository extends BaseWorker {
       data.type = claim_types.INTERNAL;
     }
 
-    const certification = this.prisma.claims.create({
+    const certification = this.prisma.sustainability_attributes.create({
       data: data,
     });
 
@@ -33,7 +33,7 @@ export class ClaimsRepository extends BaseWorker {
     return certification;
   }
 
-  async createClaims(org: organizations, user: IAuthenticatedUser, data: claims[]) {
+  async createClaims(org: organizations, user: IAuthenticatedUser, data: any[]) {
     const start = new Date();
     data = data.map(d => {
       if (!d.name) {
@@ -49,7 +49,7 @@ export class ClaimsRepository extends BaseWorker {
       return d;
     });
 
-    const policies = this.prisma.claims.createMany({
+    const policies = this.prisma.sustainability_attributes.createMany({
       data: data,
     });
 
@@ -60,9 +60,11 @@ export class ClaimsRepository extends BaseWorker {
     return policies;
   }
 
-  async updateClaim(org: organizations, user: IAuthenticatedUser, data: claims) {
+  async updateClaim(org: organizations, user: IAuthenticatedUser, data: Partial<any>) {
     const start = new Date();
-    const policy = this.prisma.claims.update({
+    data.metadata = data.metadata || null;
+
+    const policy = this.prisma.sustainability_attributes.update({
       where: {
         id: data.id,
       },
@@ -78,7 +80,7 @@ export class ClaimsRepository extends BaseWorker {
 
   async deleteClaim(org: organizations, user: IAuthenticatedUser, id: string) {
     const start = new Date();
-    const policy = this.prisma.claims.delete({
+    const policy = this.prisma.sustainability_attributes.delete({
       where: {
         id: id,
       },
@@ -97,11 +99,11 @@ export class ClaimsRepository extends BaseWorker {
         name: true,
         level: true,
         type: true,
-        organization_claims: true,
+        organization_attributes: true,
       },
     };
 
-    const certifications = await this.prisma.claims.findMany(queryOptions);
+    const certifications = await this.prisma.sustainability_attributes.findMany(queryOptions);
 
     if (!certifications || certifications.length === 0) {
       throw new NotFoundException(`No Certifications found`);
@@ -124,7 +126,7 @@ export class ClaimsRepository extends BaseWorker {
       },
     };
 
-    const claims = await this.prisma.claims.findMany(queryOptions);
+    const claims = await this.prisma.sustainability_attributes.findMany(queryOptions);
 
     if (!claims || claims.length === 0) {
       throw new NotFoundException(`No Certifications found`);
@@ -135,7 +137,7 @@ export class ClaimsRepository extends BaseWorker {
 
   async findOne(org: organizations, user: IAuthenticatedUser, filters?: { name?: string; id?: string }) {
     if (filters?.id || filters?.name) {
-      const claim = await this.prisma.claims.findUnique({
+      const claim = await this.prisma.sustainability_attributes.findUnique({
         where: {
           id: filters.id,
           name: filters.name,

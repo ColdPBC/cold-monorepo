@@ -55,7 +55,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     this.openAIapiKey = this.config.getOrThrow('OPENAI_API_KEY');
   }
 
-  async onModuleInit() {}
+  async onModuleInit() {
+    this.logger.info('OpenAI Chat Service Initialized');
+  }
 
   /**
    * Reset the AI responses when re-processing a survey
