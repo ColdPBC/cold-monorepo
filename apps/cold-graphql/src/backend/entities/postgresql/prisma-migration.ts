@@ -3,7 +3,6 @@ import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { cold_admin_only } from '../../acl_policies';
 
 @Entity({ tableName: '_prisma_migrations' })
-@ApplyAccessControlList(cold_admin_only)
 export class PrismaMigration {
   @PrimaryKey({ type: 'string', length: 36 })
   id!: string;
