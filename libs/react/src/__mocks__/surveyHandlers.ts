@@ -1,67 +1,55 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { getAIAnsweredSurveyMock, getJourneyOverviewMock, getSurveyFormDataByName, getSurveyMockSomeCompleted, getSurveysMock } from './surveyDataMock';
 import { getApiUrl } from './_default/handlers';
 import { findIndex } from 'lodash';
 
 export const getSurveyHandler = {
   DEFAULT: [
-    rest.get(getApiUrl('*/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
-      const { name } = req.params;
+    http.get(getApiUrl('*/organizations/:orgId/surveys/:name'), async ({ request, params, cookies }) => {
+      const { name } = params;
 
-      return res(ctx.json(getSurveyFormDataByName(name as string)));
+      return HttpResponse.json(getSurveyFormDataByName(name as string));
     }),
 
-    rest.put(getApiUrl('*/organizations/:orgId/surveys/:name'), async (req, res, ctx) => {
-      const { data } = await req.json();
-
-      return res(ctx.json({}));
+    http.put(getApiUrl('*/organizations/:orgId/surveys/:name'), async ({ request, params, cookies }) => {
+      return HttpResponse.json({});
     }),
   ],
   initialIncomplete: [
-    rest.get(getApiUrl('*/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
-      const { name } = req.params;
-
-      return res(
-        ctx.json({
-          ...getJourneyOverviewMock(),
-          definition: {
-            ...getJourneyOverviewMock().definition,
-            submitted: undefined,
-          },
-        }),
-      );
+    http.get(getApiUrl('*/organizations/:orgId/surveys/:name'), async ({ request, params, cookies }) => {
+      return HttpResponse.json({
+        ...getJourneyOverviewMock(),
+        definition: {
+          ...getJourneyOverviewMock().definition,
+          submitted: undefined,
+        },
+      });
     }),
 
-    rest.put(getApiUrl('*/organizations/:orgId/surveys/:name'), async (req, res, ctx) => {
-      const { data } = await req.json();
-
-      return res(ctx.json({}));
+    http.put(getApiUrl('*/organizations/:orgId/surveys/:name'), async ({ request, params, cookies }) => {
+      return HttpResponse.json({});
     }),
   ],
   incompleteSurvey: [
-    rest.get(getApiUrl('*/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
-      const { name } = req.params;
+    http.get(getApiUrl('*/organizations/:orgId/surveys/:name'), async ({ request, params, cookies }) => {
+      const { name } = params;
 
-      return res(
-        ctx.json({
-          ...getSurveyMockSomeCompleted(),
-          definition: {
-            ...getSurveyMockSomeCompleted().definition,
-            submitted: undefined,
-          },
-        }),
-      );
+      return HttpResponse.json({
+        ...getSurveyMockSomeCompleted(),
+        definition: {
+          ...getSurveyMockSomeCompleted().definition,
+          submitted: undefined,
+        },
+      });
     }),
 
-    rest.put(getApiUrl('*/organizations/:orgId/surveys/:name'), async (req, res, ctx) => {
-      const { data } = await req.json();
-
-      return res(ctx.json({}));
+    http.put(getApiUrl('*/organizations/:orgId/surveys/:name'), async ({ request, params, cookies }) => {
+      return HttpResponse.json({});
     }),
   ],
   nextSteps: [
-    rest.get(getApiUrl('*/organizations/:orgId/surveys'), (req, res, ctx) => {
-      const { name } = req.params;
+    http.get(getApiUrl('*/organizations/:orgId/surveys'), async ({ request, params, cookies }) => {
+      const { name } = params;
       const surveys = getSurveysMock();
       const qaalibTestIndex = findIndex(surveys, { name: 'qaalib_test' });
       surveys[qaalibTestIndex] = {
@@ -214,13 +202,12 @@ export const getSurveyHandler = {
           },
         },
       };
-      return res(ctx.json(surveys));
+      return HttpResponse.json(surveys);
     }),
   ],
   getAiAnsweredSurvey: [
-    rest.get(getApiUrl('*/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
-      const { name } = req.params;
-      return res(ctx.json(getAIAnsweredSurveyMock()));
+    http.get(getApiUrl('*/organizations/:orgId/surveys/:name'), async ({ request, params, cookies }) => {
+      return HttpResponse.json(getAIAnsweredSurveyMock());
     }),
   ],
 };

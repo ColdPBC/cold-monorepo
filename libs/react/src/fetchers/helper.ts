@@ -18,3 +18,7 @@ export const resolveNodeEnv = (): string => {
 export const resolveStripeIntegrationUrl = (): string => {
   return import.meta.env.STORYBOOK_API_URL || get(import.meta.env, 'VITE_STRIPE_INTEGRATION_URL', 'http://localhost:7005');
 };
+
+export const resolveGraphQLUrl = (): string => {
+  return `${import.meta.env.STORYBOOK_API_URL || get(import.meta.env, 'VITE_GRAPHQL_URL', 'http://localhost:9001')}/`;
+};

@@ -1,14 +1,7 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { getSidebarMock } from '../sidebarMock';
 import { getCategoriesDataMock, getFootprintDataMock } from '../categoriesMock';
-import {
-  getDataGridCompaniesMock,
-  getDataGridUsersMock,
-  getDefaultFormDataGridMock,
-  getDefaultFormDefinitionGridMock,
-  getOrganizationMembersMock,
-  getTeamMemberDataGridMock,
-} from '../datagridMock';
+import { getDataGridCompaniesMock, getDataGridUsersMock, getDefaultFormDataGridMock, getOrganizationMembersMock, getTeamMemberDataGridMock } from '../datagridMock';
 import { getSurveyFormDataByName, getSurveysMock } from '../surveyDataMock';
 import { getRoles } from '../roleMock';
 import { resolveAPIUrl, resolveStripeIntegrationUrl } from '@coldpbc/fetchers';
@@ -42,14 +35,14 @@ export const getStripeAPIUrl = (path: string) => {
 };
 
 export const stripeHandlers = [
-  rest.get(getStripeAPIUrl('/stripe_products'), (req, res, ctx) => {
-    return res(ctx.json(getStripeProductsMock()));
+  http.get(getStripeAPIUrl('/stripe_products'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getStripeProductsMock());
   }),
-  rest.get(getStripeAPIUrl('/customer_subscriptions/:orgId'), (req, res, ctx) => {
-    return res(ctx.json(getCustomerWithSubscriptionMock()));
+  http.get(getStripeAPIUrl('/customer_subscriptions/:orgId'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getCustomerWithSubscriptionMock());
   }),
-  rest.get(getStripeAPIUrl('/portal_session/:orgId'), (req, res, ctx) => {
-    return res(ctx.json(getPortalSessionMock()));
+  http.get(getStripeAPIUrl('/portal_session/:orgId'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getPortalSessionMock());
   }),
 ];
 
@@ -73,348 +66,344 @@ export const handlers = [
 
   ...stripeHandlers,
   //Mock SideBar Request
-  rest.get(getApiUrl('/components/sidebar_navigation'), (req, res, ctx) => {
-    return res(ctx.json({ ...getSidebarMock() }));
+  http.get(getApiUrl('/components/sidebar_navigation'), ({ request, params, cookies }) => {
+    return HttpResponse.json({ ...getSidebarMock() });
   }),
 
   // Mock data for journey modules
-  rest.get(getApiUrl('/organizations/:orgId/categories'), (req, res, ctx) => {
-    return res(ctx.json({ ...getCategoriesDataMock() }));
+  http.get(getApiUrl('/organizations/:orgId/categories'), ({ request, params, cookies }) => {
+    return HttpResponse.json({ ...getCategoriesDataMock() });
   }),
 
   // Mock data for footprint modules
-  rest.get(getApiUrl('/organizations/:orgId/categories/company_decarbonization'), (req, res, ctx) => {
-    return res(ctx.json({ ...getFootprintDataMock() }));
+  http.get(getApiUrl('/organizations/:orgId/categories/company_decarbonization'), ({ request, params, cookies }) => {
+    return HttpResponse.json({ ...getFootprintDataMock() });
   }),
 
-  rest.get(getApiUrl('/company-users'), (req, res, ctx) => {
-    return res(ctx.json(getDataGridUsersMock()));
+  http.get(getApiUrl('/company-users'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getDataGridUsersMock());
   }),
 
-  rest.get(getApiUrl('/components/team_member_table'), (req, res, ctx) => {
-    return res(ctx.json(getTeamMemberDataGridMock()));
+  http.get(getApiUrl('/components/team_member_table'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getTeamMemberDataGridMock());
   }),
 
-  rest.get(getApiUrl('/components/datagrid'), (req, res, ctx) => {
-    return res(ctx.json(getDefaultFormDefinitionGridMock()));
+  http.get(getApiUrl('/components/datagrid'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getDefaultFormDataGridMock());
   }),
 
-  rest.get(getApiUrl('/data/datagrid'), (req, res, ctx) => {
-    return res(ctx.json({ ...getDefaultFormDataGridMock() }));
+  http.get(getApiUrl('/data/datagrid'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getDefaultFormDataGridMock());
   }),
 
-  rest.post(getApiUrl('/invites'), (req, res, ctx) => {
-    return res(ctx.json({}));
+  http.post(getApiUrl('/invites'), ({ request, params, cookies }) => {
+    return HttpResponse.json({});
   }),
 
-  rest.delete(getApiUrl('/invites/:id'), (req, res, ctx) => {
-    return res(ctx.json({ ...getDefaultFormDataGridMock() }));
+  http.delete(getApiUrl('/invites/:id'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getDefaultFormDataGridMock());
   }),
 
-  rest.get(getApiUrl('/companies/:id'), (req, res, ctx) => {
-    const { id } = req.params;
-    return res(ctx.json({ ...getDataGridCompaniesMock(id as string) }));
+  http.get(getApiUrl('/companies/:id'), ({ request, params, cookies }) => {
+    const { id } = params;
+    return HttpResponse.json(getDataGridCompaniesMock(id as string));
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId'), (req, res, ctx) => {
-    const { orgId } = req.params;
-    return res(ctx.json({ ...getOrganizationMock() }));
+  http.get(getApiUrl('/organizations/:orgId'), ({ request, params, cookies }) => {
+    return HttpResponse.json({ ...getOrganizationMock() });
   }),
 
-  rest.get(getApiUrl('/organizations'), (req, res, ctx) => {
-    return res(ctx.json(getOrganizationsMock()));
+  http.get(getApiUrl('/organizations'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getOrganizationsMock());
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/members'), (req, res, ctx) => {
-    const { orgId } = req.params;
+  http.get(getApiUrl('/organizations/:orgId/members'), ({ request, params, cookies }) => {
+    const { orgId } = params;
     const mock = getOrganizationMembersMock();
-    return res(ctx.json({ ...getOrganizationMembersMock() }));
+    return HttpResponse.json({ ...getOrganizationMembersMock() });
   }),
 
-  rest.put(getApiUrl('/organizations/:orgId/roles/:roleName/members/:userId'), async (req, res, ctx) => {
-    const { orgId, roleName, userId } = req.params;
-    return res(
-      ctx.json({
-        ...getOrganizationMembersMock(),
-        members: getOrganizationMembersMock().members.map(member => {
-          if (member.user_id === userId) {
-            member.role = roleName as string;
-          }
-          return member;
-        }),
+  http.put(getApiUrl('/organizations/:orgId/roles/:roleName/members/:userId'), async ({ request, params, cookies }) => {
+    const { orgId, roleName, userId } = params;
+    return HttpResponse.json({
+      ...getOrganizationMembersMock(),
+      members: getOrganizationMembersMock().members.map(member => {
+        if (member.user_id === userId) {
+          member.role = roleName as string;
+        }
+        return member;
       }),
-    );
+    });
   }),
 
-  rest.delete(getApiUrl('/organizations/:orgId/members'), async (req, res, ctx) => {
-    return res(ctx.json({}));
+  http.delete(getApiUrl('/organizations/:orgId/members'), async ({ request, params, cookies }) => {
+    return HttpResponse.json({});
   }),
 
-  rest.delete(getApiUrl('/organizations/:orgId/invitations/:userId'), async (req, res, ctx) => {
-    return res(ctx.json({}));
+  http.delete(getApiUrl('/organizations/:orgId/invitations/:userId'), async ({ request, params, cookies }) => {
+    return HttpResponse.json({});
   }),
 
-  rest.post(getApiUrl('/organizations/:orgId/invitation'), async (req, res, ctx) => {
-    const data = req.body as {
+  http.post(getApiUrl('/organizations/:orgId/invitation'), async ({ request, params, cookies }) => {
+    const data = (await request.json()) as {
       user_email: string;
       inviter_name: string;
       roleId: string;
     };
-    const { orgId } = req.params;
+    const { orgId } = params;
 
     try {
       const { user_email, inviter_name, roleId } = data;
-      return res(
-        ctx.json({
-          id: uuidv4(),
-          client_id: 'i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3',
-          inviter: {
-            name: inviter_name,
-          },
-          invitee: {
-            email: user_email,
-          },
-          invitation_url: '',
-          ticket_id: 'KpfUpW3PE6GwqgNsLUlLfwdkZS4373XO',
-          created_at: new Date().toISOString(),
-          expires_at: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-          organization_id: orgId,
-          roles: [roleId],
-        }),
-      );
+      return HttpResponse.json({
+        id: uuidv4(),
+        client_id: 'i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3',
+        inviter: {
+          name: inviter_name,
+        },
+        invitee: {
+          email: user_email,
+        },
+        invitation_url: '',
+        ticket_id: 'KpfUpW3PE6GwqgNsLUlLfwdkZS4373XO',
+        created_at: new Date().toISOString(),
+        expires_at: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        organization_id: orgId,
+        roles: [roleId],
+      });
     } catch (error) {
       let message;
       if (error instanceof Error) message = error.message;
       else message = String(error);
-      return res(ctx.status(500), ctx.json({ message: message }));
+      return HttpResponse.json({ message: message }, { status: 500 });
     }
   }),
 
-  rest.post(getApiUrl('/resources/:name'), async (req, res, ctx) => {
-    return res(ctx.json({}));
+  http.post(getApiUrl('/resources/:name'), async ({ request, params, cookies }) => {
+    return HttpResponse.json({});
   }),
 
-  rest.get(getApiUrl('/roles'), async (req, res, ctx) => {
-    return res(ctx.json(getRoles()));
+  http.get(getApiUrl('/roles'), async ({ request, params, cookies }) => {
+    return HttpResponse.json(getRoles());
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
-    const { name } = req.params;
+  http.get(getApiUrl('/organizations/:orgId/surveys/:name'), ({ request, params, cookies }) => {
+    const { name } = params;
 
-    return res(ctx.json(getSurveyFormDataByName(name as string)));
+    return HttpResponse.json(getSurveyFormDataByName(name as string));
   }),
 
-  rest.put(getApiUrl('/organizations/:orgId/surveys/:name'), async (req, res, ctx) => {
-    const response = await req.json();
+  http.put(getApiUrl('/organizations/:orgId/surveys/:name'), async ({ request, params, cookies }) => {
+    const response = (await request.json()) as ComplianceSurveyPayloadType;
     const surveys = getSurveysMock() as ComplianceSurveyPayloadType[];
     const updatedSurvey = returnUpdatedSurvey(response, surveys);
-    return res(ctx.json(updatedSurvey));
+    return HttpResponse.json(updatedSurvey);
   }),
 
-  rest.patch(getApiUrl(`/members/:emailOrId`), (req, res, ctx) => {
-    return res(ctx.json({}));
+  http.patch(getApiUrl(`/members/:emailOrId`), ({ request, params, cookies }) => {
+    return HttpResponse.json({});
   }),
 
-  rest.post(getApiUrl(`/organizations`), (req, res, ctx) => {
-    const body = req.body as {
+  http.post(getApiUrl(`/organizations`), async ({ request, params, cookies }) => {
+    const body = (await request.json()) as {
       name: string;
     };
-    return res(ctx.json({}));
+    return HttpResponse.json({});
   }),
 
-  rest.post(getApiUrl(`/policies/:id/signed`), (req, res, ctx) => {
-    const body = req.body as {
+  http.post(getApiUrl(`/policies/:id/signed`), async ({ request, params, cookies }) => {
+    const body = (await request.json()) as {
       name: string;
     };
-    return res(ctx.json({}));
+    return HttpResponse.json({});
   }),
 
-  rest.get(getApiUrl('/policies/signed/user'), (req, res, ctx) => {
-    return res(ctx.json(getPoliciesSignedMock()));
+  http.get(getApiUrl('/policies/signed/user'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getPoliciesSignedMock());
   }),
 
-  rest.get(getApiUrl('/policies/:name'), (req, res, ctx) => {
-    const name = req.params.name as string;
-    return res(ctx.json(getPolicyMockByName(name)));
+  http.get(getApiUrl('/policies/:name'), ({ request, params, cookies }) => {
+    const name = params.name as string;
+    return HttpResponse.json(getPolicyMockByName(name));
   }),
 
-  rest.get(getApiUrl('/members/:emailOrId'), (req, res, ctx) => {
-    return res(ctx.json(auth0UserMock));
+  http.get(getApiUrl('/members/:emailOrId'), ({ request, params, cookies }) => {
+    return HttpResponse.json(auth0UserMock);
   }),
 
-  rest.get(getApiUrl('/news'), (req, res, ctx) => {
-    return res(ctx.json(getNewsDefault()));
+  http.get(getApiUrl('/news'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getNewsDefault());
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/actions'), (req, res, ctx) => {
-    return res(ctx.json([...getActionsMock()]));
+  http.get(getApiUrl('/organizations/:orgId/actions'), ({ request, params, cookies }) => {
+    return HttpResponse.json([...getActionsMock()]);
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/actions/:id'), (req, res, ctx) => {
-    return res(ctx.json({ ...getActionMock() }));
+  http.get(getApiUrl('/organizations/:orgId/actions/:id'), ({ request, params, cookies }) => {
+    return HttpResponse.json({ ...getActionMock() });
   }),
 
-  rest.patch(getApiUrl('/organizations/:orgId/actions/:actionId'), (req, res, ctx) => {
-    return res(ctx.json({}));
+  http.patch(getApiUrl('/organizations/:orgId/actions/:actionId'), ({ request, params, cookies }) => {
+    return HttpResponse.json({});
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/surveys'), (req, res, ctx) => {
-    return res(ctx.json(getSurveysMock()));
+  http.get(getApiUrl('/organizations/:orgId/surveys'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getSurveysMock());
   }),
 
-  rest.get(getApiUrl('/components/documents_list_table'), (req, res, ctx) => {
-    return res(ctx.json(getDocumentsListTableMock()));
+  http.get(getApiUrl('/components/documents_list_table'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getDocumentsListTableMock());
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
-    return res(ctx.json(getFilesWithCertificateClaimsMock()));
+  http.get(getApiUrl('/organizations/:orgId/files'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getFilesWithCertificateClaimsMock());
   }),
 
-  rest.post(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
-    return res(ctx.json({}), ctx.status(201));
+  http.post(getApiUrl('/organizations/:orgId/files'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/footprints'), (req, res, ctx) => {
-    return res(ctx.json(getDefaultEmissionMock()));
+  http.get(getApiUrl('/organizations/:orgId/footprints'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getDefaultEmissionMock());
   }),
 
-  rest.get(getApiUrl('/compliance/:complianceName/organizations/:orgId/section_groups/responses'), (req, res, ctx) => {
-    return res(ctx.json(getQuestionnaireSidebarComplianceMock()));
+  http.get(getApiUrl('/compliance/:complianceName/organizations/:orgId/section_groups/responses'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getQuestionnaireSidebarComplianceMock());
   }),
 
-  rest.get(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/responses'), (req, res, ctx) => {
+  http.get(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/responses'), ({ request, params, cookies }) => {
     // get query params from url
-    const { name, orgId, sectionGroupId, sectionId } = req.params as {
+    const { name, orgId, sectionGroupId, sectionId } = params as {
       name: string;
       orgId: string;
       sectionGroupId: string;
       sectionId: string;
     };
-    const responses = req.url.searchParams.get('responses') as string;
-    const responsesBool = responses === 'true';
-    return res(ctx.json(getQuestionnaireContainerMock(sectionGroupId, sectionId)));
+    return HttpResponse.json(getQuestionnaireContainerMock(sectionGroupId, sectionId));
   }),
 
   // delete compliance question bookmark
-  rest.delete(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/bookmarks'), (req, res, ctx) => {
+  http.delete(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/bookmarks'), ({ request, params, cookies }) => {
     // return 200 status code
-    return res(ctx.status(200));
+    return HttpResponse.json({}, { status: 200 });
   }),
 
   // create compliance question bookmark
-  rest.post(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/bookmarks'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.post(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/bookmarks'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
   // answer compliance question in questionnaire
-  rest.put(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/questions/:id/responses'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.put(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/questions/:id/responses'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
-  rest.get(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes'), (req, res, ctx) => {
-    const { name, orgId, id } = req.params as { name: string; orgId: string; id: string };
+  http.get(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes'), ({ request, params, cookies }) => {
+    const { name, orgId, id } = params as { name: string; orgId: string; id: string };
 
-    return res(ctx.json(getNotesMock(id)));
+    return HttpResponse.json(getNotesMock(id));
   }),
 
   // POST /compliance/${name}/organizations/${orgId}/questions/${focusQuestion?.key}/notes
-  rest.post(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.post(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
   // PATCH /compliance/${name}/organizations/${orgId}/questions/${focusQuestion?.key}/notes/${firstNote.id}
-  rest.patch(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes/:noteId'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.patch(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes/:noteId'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
   // delete compliance question response
-  rest.delete(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/questions/:id/responses'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.delete(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/questions/:id/responses'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
-  rest.get(getApiUrl('/compliance/:name/organizations/:orgId/responses/counts'), (req, res, ctx) => {
-    return res(ctx.json(getComplianceCountsMock()));
+  http.get(getApiUrl('/compliance/:name/organizations/:orgId/responses/counts'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getComplianceCountsMock());
   }),
 
-  rest.get(getApiUrl('/compliance/all/organizations/:orgId'), (req, res, ctx) => {
-    return res(ctx.json(getAllComplianceMocks()));
+  http.get(getApiUrl('/compliance/all/organizations/:orgId'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getAllComplianceMocks());
   }),
 
-  rest.get(getApiUrl('/compliance/:name'), (req, res, ctx) => {
-    const name = req.params.name as string;
-    return res(ctx.json(getComplianceMockByName(name)));
+  http.get(getApiUrl('/compliance/:name'), ({ request, params, cookies }) => {
+    const name = params.name as string;
+    return HttpResponse.json(getComplianceMockByName(name));
   }),
 
-  rest.get(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/questions/:questionId/responses'), (req, res, ctx) => {
-    const { name, orgId, sectionGroupId, sectionId, questionId } = req.params as {
-      name: string;
-      orgId: string;
-      sectionGroupId: string;
-      sectionId: string;
-      questionId: string;
-    };
-    return res(ctx.json(getQuestionAIDetailsMock(sectionGroupId, sectionId, questionId)));
+  http.get(
+    getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/questions/:questionId/responses'),
+    ({ request, params, cookies }) => {
+      const { name, orgId, sectionGroupId, sectionId, questionId } = params as {
+        name: string;
+        orgId: string;
+        sectionGroupId: string;
+        sectionId: string;
+        questionId: string;
+      };
+      return HttpResponse.json(getQuestionAIDetailsMock(sectionGroupId, sectionId, questionId));
+    },
+  ),
+
+  http.get(getApiUrl('/claims'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getClaimsMock());
   }),
 
-  rest.get(getApiUrl('/claims'), (req, res, ctx) => {
-    return res(ctx.json(getClaimsMock()));
+  http.get(getApiUrl('/organizations/:orgId/suppliers'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getSupplierWithCertificationClaimsMock());
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/suppliers'), (req, res, ctx) => {
-    return res(ctx.json(getSupplierWithCertificationClaimsMock()));
+  http.get(getApiUrl('/organizations/:orgId/suppliers/claims/names'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getSupplierClaimsMock());
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/suppliers/claims/names'), (req, res, ctx) => {
-    return res(ctx.json(getSupplierClaimsMock()));
+  http.get(getApiUrl('/organizations/:orgId/suppliers/:id'), ({ request, params, cookies }) => {
+    const { orgId, id } = params as { orgId: string; id: string };
+    return HttpResponse.json(getSupplierMockById(id));
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/suppliers/:id'), (req, res, ctx) => {
-    const { orgId, id } = req.params as { orgId: string; id: string };
-    return res(ctx.json(getSupplierMockById(id)));
+  http.patch(getApiUrl('/organizations/:orgId/files/:fileId'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
-  rest.patch(getApiUrl('/organizations/:orgId/files/:fileId'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.post(getApiUrl('/compliance/:name/organizations/:orgId'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
-  rest.post(getApiUrl('/compliance/:name/organizations/:orgId'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.put(getApiUrl('/compliance/:name/organizations/:orgI/activate'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
-  rest.put(getApiUrl('/compliance/:name/organizations/:orgI/activate'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.delete(getApiUrl('/organizations/:orgId/files/:fileId'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
-  rest.delete(getApiUrl('/organizations/:orgId/files/:fileId'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.post(getApiUrl('/compliance/:name/organizations/:orgId'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
-  rest.post(getApiUrl('/compliance/:name/organizations/:orgId'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.get(getApiUrl('/organizations/:orgId/materials'), ({ request, params, cookies }) => {
+    return HttpResponse.json(getMaterialsMock());
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/materials'), (req, res, ctx) => {
-    return res(ctx.json(getMaterialsMock()));
+  http.get(getApiUrl('/organizations/:orgId/materials/:id'), ({ request, params, cookies }) => {
+    const { id } = params as { id: string };
+    return HttpResponse.json(getMaterialDetailMockById(id));
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/materials/:id'), (req, res, ctx) => {
-    const { id } = req.params as { id: string };
-    return res(ctx.json(getMaterialDetailMockById(id)));
+  http.patch(getApiUrl('/organizations/:orgId/materials/:id'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
-  rest.patch(getApiUrl('/organizations/:orgId/materials/:id'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.delete(getApiUrl('/organizations/:orgId/materials/:id'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
-  rest.delete(getApiUrl('/organizations/:orgId/materials/:id'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.post(getApiUrl('/organizations/:orgId/materials/:materialId/supplier/:supplierId'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 
-  rest.post(getApiUrl('/organizations/:orgId/materials/:materialId/supplier/:supplierId'), (req, res, ctx) => {
-    return res(ctx.status(200));
-  }),
-
-  rest.delete(getApiUrl('/organizations/:orgId/materials/:materialId/supplier/:supplierId'), (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.delete(getApiUrl('/organizations/:orgId/materials/:materialId/supplier/:supplierId'), ({ request, params, cookies }) => {
+    return HttpResponse.json({}, { status: 200 });
   }),
 ];

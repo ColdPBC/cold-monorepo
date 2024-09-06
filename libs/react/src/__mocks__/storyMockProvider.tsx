@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useEffect } from 'react';
 import ColdContext, { ColdContextType } from '../context/coldContext';
 import { worker } from './browser';
-import { DefaultBodyType, MockedRequest, RestHandler } from 'msw';
+import { HttpHandler } from 'msw';
 import { SWRConfig, SWRResponse } from 'swr';
 import { MemoryRouter, MemoryRouterProps } from 'react-router-dom';
 import { Auth0ProviderOptions } from '@auth0/auth0-react';
@@ -20,9 +20,13 @@ import {
 import { getAllFilesMock } from './filesMock';
 import { getComplianceCountsMock, getComplianceMock, getQuestionnaireSidebarComplianceMock } from './complianceMock';
 import { AIDetails, ComplianceManagerCountsPayload, ComplianceSidebarPayload } from '@coldpbc/interfaces';
+import { graphqlMocks } from './graphql';
+import { ColdApolloContext } from '@coldpbc/providers';
+import { createMockClient } from 'mock-apollo-client';
+import { forEach } from 'lodash';
 
 export interface StoryMockProviderProps {
-  handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
+  handlers?: HttpHandler[];
   memoryRouterProps?: MemoryRouterProps;
   coldContext?: ColdContextType;
   wizardContext?: WizardContextType;
@@ -137,6 +141,12 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
     setFocusQuestion: props.complianceQuestionnaireContext?.setFocusQuestion ?? setComplianceQuestionnaireFocusQuestion,
   };
 
+  const client = createMockClient();
+
+  forEach(graphqlMocks, mock => {
+    client.setRequestHandler(mock.query, mock.resolver);
+  });
+
   return (
     // so swr doesn't cache between stories
     <ColdContext.Provider value={coldContextValue}>
@@ -164,9 +174,14 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
           }}>
           <ColdComplianceManagerContext.Provider value={complianceManagerContextValue}>
             <ColdComplianceQuestionnaireContext.Provider value={complianceQuestionnaireContextValue}>
-              <SWRConfig value={{ provider: () => new Map() }}>
-                <MemoryRouter {...props.memoryRouterProps}>{props.children}</MemoryRouter>
-              </SWRConfig>
+              <ColdApolloContext.Provider
+                value={{
+                  client: client,
+                }}>
+                <SWRConfig value={{ provider: () => new Map() }}>
+                  <MemoryRouter {...props.memoryRouterProps}>{props.children}</MemoryRouter>
+                </SWRConfig>
+              </ColdApolloContext.Provider>
             </ColdComplianceQuestionnaireContext.Provider>
           </ColdComplianceManagerContext.Provider>
         </ColdMQTTContext.Provider>
