@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, ClaimsRepository, IAuthenticatedUser } from '@coldpbc/nest';
-import { organizations, claims } from '@prisma/client';
+import { BaseWorker, SustainabilityAttributesRepository, IAuthenticatedUser } from '@coldpbc/nest';
+import { organizations, sustainability_attributes } from '@prisma/client';
 
 @Injectable()
-export class ClaimsService extends BaseWorker {
-  constructor(private readonly claimsRepository: ClaimsRepository) {
-    super(ClaimsService.name);
+export class SustainabilityAttributesService extends BaseWorker {
+  constructor(private readonly claimsRepository: SustainabilityAttributesRepository) {
+    super(SustainabilityAttributesService.name);
   }
 
-  create(org: organizations, user: IAuthenticatedUser, createClaimDto: claims) {
+  create(org: organizations, user: IAuthenticatedUser, createClaimDto: sustainability_attributes) {
     return this.claimsRepository.createClaim(org, user, createClaimDto);
   }
 
-  update(org: organizations, user: IAuthenticatedUser, updateClaimDto: claims) {
+  update(org: organizations, user: IAuthenticatedUser, updateClaimDto: sustainability_attributes) {
     return this.claimsRepository.updateClaim(org, user, updateClaimDto);
   }
 

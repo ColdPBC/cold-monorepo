@@ -2,17 +2,17 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException, 
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 import { IAuthenticatedUser } from '../../../primitives';
-import { organization_claims, claim_types, organizations } from '@prisma/client';
+import { organization_attributes, claim_types, organizations } from '@prisma/client';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 
 @Injectable()
-export class OrganizationClaimsRepository extends BaseWorker {
+export class OrganizationAttributesRepository extends BaseWorker {
   constructor(readonly prisma: PrismaService) {
-    super(OrganizationClaimsRepository.name);
+    super(OrganizationAttributesRepository.name);
   }
 
-  async createClaim(org: organizations, user: IAuthenticatedUser, data: organization_claims) {
-    if (!data.claim_id) {
+  async createClaim(org: organizations, user: IAuthenticatedUser, data: organization_attributes) {
+    if (!data.sustainability_attribute_id) {
       throw new BadRequestException('Certification ID is required');
     }
 
@@ -55,19 +55,19 @@ export class OrganizationClaimsRepository extends BaseWorker {
       }
     }
 
-    const claim = await this.prisma.claims.findUnique({
+    const claim = await this.prisma.sustainability_attributes.findUnique({
       where: {
-        id: data.claim_id,
+        id: data.sustainability_attribute_id,
       },
     });
 
     if (!claim) {
-      throw new NotFoundException(`Claim with id ${data.claim_id} not found`);
+      throw new NotFoundException(`Sustainability attribute: ${data.sustainability_attribute_id} not found`);
     }
 
     let file;
     if (data.organization_file_id) {
-      const file = await this.prisma.organization_files.findUnique({
+      file = await this.prisma.organization_files.findUnique({
         where: {
           id: data.organization_file_id,
           organization_id: org.id,
@@ -83,7 +83,7 @@ export class OrganizationClaimsRepository extends BaseWorker {
     data.organization_id = org.id;
 
     try {
-      const orgClaim = await this.prisma.organization_claims.create({
+      const orgClaim = await this.prisma.organization_attributes.create({
         data,
       });
 
@@ -93,7 +93,7 @@ export class OrganizationClaimsRepository extends BaseWorker {
     } catch (e) {
       if (e.code === 'P2002') {
         throw new ConflictException(
-          `${org.name} already has a claim for: claim: ${data.claim_id}, facility: ${data.organization_facility_id} and file: ${data.organization_file_id}`,
+          `${org.name} already has a claim for: claim: ${data.sustainability_attribute_id}, facility: ${data.organization_facility_id} and file: ${data.organization_file_id}`,
         );
       }
       this.logger.error(e);
@@ -101,12 +101,12 @@ export class OrganizationClaimsRepository extends BaseWorker {
     }
   }
 
-  async updateClaim(org: organizations, user: IAuthenticatedUser, id: string, data: organization_claims) {
-    if (!data.claim_id) {
+  async updateAttribute(org: organizations, user: IAuthenticatedUser, id: string, data: organization_attributes) {
+    if (!data.sustainability_attribute_id) {
       throw new BadRequestException('Certification ID is required');
     }
 
-    const policy = this.prisma.organization_claims.update({
+    const policy = this.prisma.organization_attributes.update({
       where: {
         organization_id: org.id,
         id: data.id,
@@ -117,15 +117,15 @@ export class OrganizationClaimsRepository extends BaseWorker {
     return policy;
   }
 
-  async deleteClaim(org: organizations, user: IAuthenticatedUser, id: string) {
-    const policy = this.prisma.organization_claims.delete({
+  async deleteAttribute(org: organizations, user: IAuthenticatedUser, id: string) {
+    const policy = this.prisma.organization_attributes.delete({
       where: {
         organization_id: org.id,
         id: id,
       },
     });
 
-    this.logger.log(`Compliance Policy ${id} deleted`, { organization: org, user, policy });
+    this.logger.log(`Organization Attribute ${id} deleted`, { organization: org, user, policy });
 
     return policy;
   }
@@ -144,7 +144,7 @@ export class OrganizationClaimsRepository extends BaseWorker {
       },
     };
 
-    const claims = await this.prisma.organization_claims.findMany(queryOptions);
+    const claims = await this.prisma.organization_attributes.findMany(queryOptions);
 
     if (!claims || claims.length === 0) {
       throw new NotFoundException(`No Certifications found`);
@@ -172,7 +172,7 @@ export class OrganizationClaimsRepository extends BaseWorker {
       },
     };
 
-    const claims = await this.prisma.organization_claims.findMany(queryOptions);
+    const claims = await this.prisma.organization_attributes.findMany(queryOptions);
 
     if (!claims || claims.length === 0) {
       throw new NotFoundException(`No Certification claims found`);
@@ -183,7 +183,7 @@ export class OrganizationClaimsRepository extends BaseWorker {
 
   async findOne(org: organizations, user: IAuthenticatedUser, filters?: { name?: string; id?: string }) {
     if (filters?.id || filters?.name) {
-      const claim = await this.prisma.organization_claims.findUnique({
+      const claim = await this.prisma.organization_attributes.findUnique({
         where: {
           id: filters.id,
           organization_id: org.id,
