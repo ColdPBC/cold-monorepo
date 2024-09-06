@@ -394,6 +394,7 @@ export type AttributeAssurance = {
   organizationAttribute?: Maybe<OrganizationAttribute>;
   organizationAttribute_aggregate?: Maybe<AggregationResult>;
   organizationFile?: Maybe<OrganizationFile>;
+  organizationFileId?: Maybe<Scalars['String']['output']>;
   organizationFile_aggregate?: Maybe<AggregationResult>;
   organization_aggregate?: Maybe<AggregationResult>;
   updatedAt: Scalars['ISOString']['output'];
@@ -438,6 +439,7 @@ export type AttributeAssuranceCreateOrUpdateInput = {
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   organizationAttribute?: InputMaybe<OrganizationAttributeCreateOrUpdateInput>;
   organizationFile?: InputMaybe<OrganizationFileCreateOrUpdateInput>;
+  organizationFileId?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
@@ -449,6 +451,7 @@ export type AttributeAssuranceInsertInput = {
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   organizationAttribute?: InputMaybe<OrganizationAttributeCreateOrUpdateInput>;
   organizationFile?: InputMaybe<OrganizationFileCreateOrUpdateInput>;
+  organizationFileId?: InputMaybe<Scalars['String']['input']>;
   updatedAt: Scalars['ISOString']['input'];
 };
 
@@ -461,6 +464,7 @@ export type AttributeAssuranceUpdateInput = {
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   organizationAttribute?: InputMaybe<OrganizationAttributeCreateOrUpdateInput>;
   organizationFile?: InputMaybe<OrganizationFileCreateOrUpdateInput>;
+  organizationFileId?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
@@ -508,6 +512,18 @@ export type AttributeAssurancesListFilter = {
   organization?: InputMaybe<OrganizationsListFilter>;
   organizationAttribute?: InputMaybe<OrganizationAttributesListFilter>;
   organizationFile?: InputMaybe<OrganizationFilesListFilter>;
+  organizationFileId?: InputMaybe<Scalars['String']['input']>;
+  organizationFileId_gt?: InputMaybe<Scalars['String']['input']>;
+  organizationFileId_gte?: InputMaybe<Scalars['String']['input']>;
+  organizationFileId_ilike?: InputMaybe<Scalars['String']['input']>;
+  organizationFileId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  organizationFileId_like?: InputMaybe<Scalars['String']['input']>;
+  organizationFileId_lt?: InputMaybe<Scalars['String']['input']>;
+  organizationFileId_lte?: InputMaybe<Scalars['String']['input']>;
+  organizationFileId_ne?: InputMaybe<Scalars['String']['input']>;
+  organizationFileId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  organizationFileId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  organizationFileId_null?: InputMaybe<Scalars['Boolean']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -525,6 +541,7 @@ export type AttributeAssurancesOrderByInput = {
   effectiveEndDate?: InputMaybe<Sort>;
   effectiveStartDate?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
+  organizationFileId?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
 };
 
@@ -5990,6 +6007,7 @@ export type Organization = {
   isTest: Scalars['Boolean']['output'];
   materials: Array<Material>;
   materials_aggregate?: Maybe<AggregationResult>;
+  metadata?: Maybe<Scalars['JSON']['output']>;
   name: Scalars['String']['output'];
   organizationAttributes: Array<OrganizationAttribute>;
   organizationAttributes_aggregate?: Maybe<AggregationResult>;
@@ -7990,6 +8008,7 @@ export type OrganizationCreateOrUpdateInput = {
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
   isTest?: InputMaybe<Scalars['Boolean']['input']>;
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organizationAttributes?: InputMaybe<Array<OrganizationAttributeCreateOrUpdateInput>>;
   organizationComplianceAiResponseFiles?: InputMaybe<Array<OrganizationComplianceAiResponseFileCreateOrUpdateInput>>;
@@ -8891,6 +8910,7 @@ export type OrganizationInsertInput = {
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
   isTest: Scalars['Boolean']['input'];
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
   name: Scalars['String']['input'];
   organizationAttributes?: InputMaybe<Array<OrganizationAttributeCreateOrUpdateInput>>;
   organizationComplianceAiResponseFiles?: InputMaybe<Array<OrganizationComplianceAiResponseFileCreateOrUpdateInput>>;
@@ -8926,6 +8946,7 @@ export type OrganizationUpdateInput = {
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
   isTest?: InputMaybe<Scalars['Boolean']['input']>;
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organizationAttributes?: InputMaybe<Array<OrganizationAttributeCreateOrUpdateInput>>;
   organizationComplianceAiResponseFiles?: InputMaybe<Array<OrganizationComplianceAiResponseFileCreateOrUpdateInput>>;
@@ -9020,6 +9041,12 @@ export type OrganizationsListFilter = {
   isTest_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   isTest_null?: InputMaybe<Scalars['Boolean']['input']>;
   materials?: InputMaybe<MaterialsListFilter>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  metadata_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  metadata_ne?: InputMaybe<Scalars['JSON']['input']>;
+  metadata_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  metadata_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  metadata_null?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_gt?: InputMaybe<Scalars['String']['input']>;
   name_gte?: InputMaybe<Scalars['String']['input']>;
@@ -9090,6 +9117,7 @@ export type OrganizationsOrderByInput = {
   enabledConnections?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   isTest?: InputMaybe<Sort>;
+  metadata?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
   phone?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;

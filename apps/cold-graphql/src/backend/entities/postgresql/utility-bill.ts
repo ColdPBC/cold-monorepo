@@ -2,39 +2,36 @@ import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { Integration } from './integration';
 import { Organization } from './organization';
 import { OrganizationFacility } from './organization-facility';
-import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../../acl_policies';
 
 @Entity({ tableName: 'utility_bills' })
-@ApplyAccessControlList(default_acl)
 export class UtilityBill {
-  @PrimaryKey({ type: 'text' })
-  id!: string;
+	@PrimaryKey({ type: 'text' })
+	id!: string;
 
-  @ManyToOne({ entity: () => Integration, ref: true })
-  integration!: Ref<Integration>;
+	@ManyToOne({ entity: () => Integration, ref: true })
+	integration!: Ref<Integration>;
 
-  @Property({ type: 'datetime', length: 3 })
-  periodFrom!: Date;
+	@Property({ type: 'datetime', length: 3 })
+	periodFrom!: Date;
 
-  @Property({ type: 'datetime', length: 3 })
-  periodTo!: Date;
+	@Property({ type: 'datetime', length: 3 })
+	periodTo!: Date;
 
-  @Property({ type: 'json' })
-  data!: Record<string, unknown>;
+	@Property({ type: 'json' })
+	data!: Record<string, unknown>;
 
-  @Property({ type: 'datetime', length: 3 })
-  createdAt!: Date;
+	@Property({ type: 'datetime', length: 3 })
+	createdAt!: Date;
 
-  @Property({ type: 'datetime', length: 3 })
-  updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3 })
+	updatedAt!: Date;
 
-  @ManyToOne({ entity: () => Organization, ref: true })
-  organization!: Ref<Organization>;
+	@ManyToOne({ entity: () => Organization, ref: true })
+	organization!: Ref<Organization>;
 
-  @ManyToOne({ entity: () => OrganizationFacility, ref: true, fieldName: 'facility_id' })
-  organizationFacility!: Ref<OrganizationFacility>;
+	@ManyToOne({ entity: () => OrganizationFacility, ref: true, fieldName: 'facility_id' })
+	organizationFacility!: Ref<OrganizationFacility>;
 
-  @Property({ type: 'boolean', default: false })
-  deleted = false;
+	@Property({ type: 'boolean', default: false })
+	deleted = false;
 }
