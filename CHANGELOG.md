@@ -1,3 +1,17 @@
+# [1.358.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.357.0...v1.358.0) (2024-09-06)
+
+
+### Bug Fixes
+
+* simplify VITE_GRAPHQL_URL configurations in flightcontrol.json ([9450641](https://github.com/ColdPBC/cold-monorepo/commit/945064166283d1c79aad6c7dbc11626c09a37ed6))
+
+
+### Features
+
+* add Apollo Client integration for improved GraphQL handling ([79d5763](https://github.com/ColdPBC/cold-monorepo/commit/79d5763ff117849460236474ffaebb80254ed5ba))
+* add variables parameter to useGraphQLSWR hook ([dd7287f](https://github.com/ColdPBC/cold-monorepo/commit/dd7287f3b1a9d0df78fbcbbeedea54327408c02a))
+* update Mock Service Worker and refactor API handlers ([6d447e7](https://github.com/ColdPBC/cold-monorepo/commit/6d447e7afacf49d73e7d05f970856314a5ed742f))
+
 # [1.357.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.356.0...v1.357.0) (2024-09-06)
 
 
