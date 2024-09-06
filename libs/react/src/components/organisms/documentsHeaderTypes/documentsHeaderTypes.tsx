@@ -1,6 +1,6 @@
 import { Files } from '@coldpbc/interfaces';
 import { Card, DocumentsHeaderType } from '@coldpbc/components';
-import { cloneDeep, forEach, keys, orderBy, toArray } from 'lodash';
+import { cloneDeep, forEach, keys, orderBy } from 'lodash';
 import { FileTypes } from '@coldpbc/enums';
 
 export const DocumentsHeaderTypes = (props: { files: Files[] }) => {
@@ -25,18 +25,28 @@ export const DocumentsHeaderTypes = (props: { files: Files[] }) => {
 
   const fileTypes: {
     [key: string]: { title: string; amount: number; totalAmount: number };
-  } = {};
-
-  forEach(toArray(FileTypes), type => {
-    if ([FileTypes.ASSESSMENT, FileTypes.POLICY].includes(type)) {
-      return;
-    }
-    fileTypes[type] = {
-      title: getFileTypeTitle(type),
+  } = {
+    [FileTypes.CERTIFICATE]: {
+      title: getFileTypeTitle(FileTypes.CERTIFICATE),
       amount: 0,
       totalAmount: files.length,
-    };
-  });
+    },
+    [FileTypes.STATEMENT]: {
+      title: getFileTypeTitle(FileTypes.STATEMENT),
+      amount: 0,
+      totalAmount: files.length,
+    },
+    [FileTypes.TEST_RESULTS]: {
+      title: getFileTypeTitle(FileTypes.TEST_RESULTS),
+      amount: 0,
+      totalAmount: files.length,
+    },
+    [FileTypes.OTHER]: {
+      title: getFileTypeTitle(FileTypes.OTHER),
+      amount: 0,
+      totalAmount: files.length,
+    },
+  };
 
   forEach(files, file => {
     if ([FileTypes.OTHER, FileTypes.ASSESSMENT, FileTypes.POLICY].includes(file.type)) {
