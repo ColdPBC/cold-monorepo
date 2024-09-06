@@ -5,7 +5,7 @@ import { ApolloQueryResult } from '@apollo/client';
 import { queries } from '@coldpbc/lib';
 import { get } from 'lodash';
 
-export const useGraphQLSWR = <Data = any, Error = any>(key: string | null, config?: SWRConfiguration) => {
+export const useGraphQLSWR = <Data = any, Error = any>(key: string | null, variables?: any, config?: SWRConfiguration) => {
   const { client } = useContext(ColdApolloContext);
 
   return useSWR(
@@ -15,6 +15,7 @@ export const useGraphQLSWR = <Data = any, Error = any>(key: string | null, confi
       if (query) {
         return client?.query({
           query: query,
+          variables: variables,
         });
       } else {
         return undefined;
