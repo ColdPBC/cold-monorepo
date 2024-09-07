@@ -1,3 +1,10 @@
+# [1.359.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.358.1...v1.359.0) (2024-09-07)
+
+
+### Features
+
+* add ACL entity maps for cold-graphql module ([12493e8](https://github.com/ColdPBC/cold-monorepo/commit/12493e8a89a9a8362c61d0a02170310da13f3770))
+
 ## [1.358.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.358.0...v1.358.1) (2024-09-06)
 
 
