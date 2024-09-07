@@ -11,16 +11,16 @@ export type OrgContext = {
 
 export const read_only_acl = {
 	'company:member': {
-		read: (context: OrgContext) => ({ organization: context.user.org_id }),
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
 	},
 	'company:admin': {
-		read: (context: OrgContext) => ({ organization: context.user.org_id }),
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
 	},
 	'company:owner': {
-		read: (context: OrgContext) => ({ organization: context.user.org_id }),
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
 	},
 	'cold:admin': {
-		all: (context: OrgContext) => ({ organization: context.user.org_id }),
+		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 	},
 };
 
@@ -46,7 +46,7 @@ export const allow_null_orgs_acl = {
 		create: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 		update: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 		delete: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
-		all: (context: OrgContext) => ({ organization: context.user.org_id }),
+		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 	},
 };
 
@@ -59,21 +59,21 @@ export const default_acl = {
 		delete: (context: OrgContext) => false,
 	},
 	'company:admin': {
-		read: (context: OrgContext) => ({ organization: context.user.org_id }),
-		write: (context: OrgContext) => ({ organization: context.user.org_id }),
-		create: (context: OrgContext) => ({ organization: context.user.org_id }),
-		update: (context: OrgContext) => ({ organization: context.user.org_id }),
-		delete: (context: OrgContext) => ({ organization: context.user.org_id }),
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		write: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		create: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		update: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		delete: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
 	},
 	'company:owner': {
-		read: (context: OrgContext) => ({ organization: context.user.org_id }),
-		write: (context: OrgContext) => ({ organization: context.user.org_id }),
-		create: (context: OrgContext) => ({ organization: context.user.org_id }),
-		update: (context: OrgContext) => ({ organization: context.user.org_id }),
-		delete: (context: OrgContext) => ({ organization: context.user.org_id }),
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		write: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		create: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		update: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		delete: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
 	},
 	'cold:admin': {
-		read: (context: OrgContext) => ({ organization: context.user.org_id }),
+		read: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 		/*all: (context: any) => {
 			console.log('using cold admin only', context);
 			return context?.user?.roles?.includes('cold:admin');
