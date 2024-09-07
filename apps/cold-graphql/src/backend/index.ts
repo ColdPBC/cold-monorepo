@@ -13,7 +13,6 @@ const meta = { service: 'graphweaver', environment: process.env.NODE_ENV || 'dev
 export const graphweaver = new Graphweaver({
 	apolloServerOptions: {
 		introspection: process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging',
-		status400ForVariableCoercionErrors: true,
 		hideSchemaDetailsFromClientErrors: process.env.NODE_ENV !== 'development',
 		includeStacktraceInErrorResponses: process.env.NODE_ENV === 'development',
 		formatError: (error, context) => {

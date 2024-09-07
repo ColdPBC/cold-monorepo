@@ -1,5 +1,8 @@
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { default_acl } from '../../acl_policies';
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
+@ApplyAccessControlList(default_acl)
 @Entity({ tableName: '_prisma_migrations' })
 export class PrismaMigration {
 	@PrimaryKey({ type: 'string', length: 36 })

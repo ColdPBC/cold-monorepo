@@ -1,7 +1,10 @@
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { default_acl } from '../../acl_policies';
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { ComplianceDefinition } from './compliance-definition';
 import { Organization } from './organization';
 
+@ApplyAccessControlList(default_acl)
 @Entity({ tableName: 'organization_compliances_old' })
 export class OrganizationCompliancesOld {
 	@PrimaryKey({ type: 'text' })

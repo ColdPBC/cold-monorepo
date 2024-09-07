@@ -14,10 +14,10 @@
       <env name="AUTH_WHITELIST_DOMAINS" value="localhost" />
       <env name="CDK_DEFAULT_ACCOUNT" value="375787979112" />
       <env name="CDK_DEFAULT_REGION" value="us-east-1" />
-      <env name="DATABASE_URL" value="postgresql://flightcontrol:iceberg-appear-LINEAGE-whatnot-rwanda@cold-rds-fc-staging-wu5r098z.cpl8jzl9xy1d.us-east-1.rds.amazonaws.com:5432/flightcontrol" />
       <env name="NODE_ENV" value="staging" />
       <env name="VITE_AUTH_CLIENT_ID" value="i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3" />
       <env name="VITE_AUTH_ZERO_DOMAIN" value="cold-climate-staging.us.auth0.com" />
+      <env name="DATABASE_URL" value="postgresql://flightcontrol:iceberg-appear-LINEAGE-whatnot-rwanda@cold-rds-fc-staging-wu5r098z.cpl8jzl9xy1d.us-east-1.rds.amazonaws.com:5432/flightcontrol" />
     </envs>
     <method v="2" />
   </configuration>
