@@ -1,7 +1,7 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://cold-public-assets.s3.us-east-2.amazonaws.com/Asset+4Logotype_Preferred.svg" width="699" alt="Cold Climate Logo" /></a>
+  <a href="http://nestjs.com/" target="blank"><img alt="GraphQL_Logo.svg" height="300" src="GraphQL_Logo.svg" width="600"/> </a>
 </p>
-<center><img alt="GraphQL_Logo.svg" height="300" src="GraphQL_Logo.svg" width="100"/></center>
+<img src="https://cold-public-assets.s3.us-east-2.amazonaws.com/Asset+4Logotype_Preferred.svg" width="400" alt="Cold Climate Logo" />
 
 # Cold Climate GraphQL API
 
