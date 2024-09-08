@@ -3,11 +3,8 @@ import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exo
 
 import { OrgContext } from '../../acl_policies';
 import { ConsoleLogger } from '@nestjs/common';
-import { MQTTPayloadType, MqttService } from '../../libs/mqtt/mqtt.service';
-import { action } from '@storybook/addon-actions';
 
 const logger = new ConsoleLogger('organization-hooks');
-const mqttService = new MqttService('organization-hooks');
 
 export const beforeCreateHook = (params: CreateOrUpdateHookParams<unknown, OrgContext>) => {
 	logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });
@@ -26,20 +23,6 @@ export const beforeReadHook = async (params: ReadHookParams<unknown, OrgContext>
 
 export const afterReadHook = async (params: ReadHookParams<unknown, OrgContext>) => {
 	logger.log('afterReadHook', { user: params.context.user, arguments: params.args });
-	const payload: MQTTPayloadType = {
-		action: 'get',
-		status: 'complete',
-		swr_key: '',
-		org_id: params.context.user.org_id,
-		data: params.entities,
-	};
-	await Promise.all([
-		mqttService.connect(params.context),
-		mqttService.publishMQTT(payload, {
-			user: params.context.user,
-			arguments: params.args,
-		}),
-	]);
 	return params;
 };
 
