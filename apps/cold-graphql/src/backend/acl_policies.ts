@@ -1,95 +1,83 @@
-import { AccessControlList, AuthorizationContext } from '@exogee/graphweaver-auth';
-import { Context } from 'node:vm';
+import { ConsoleLogger } from '@nestjs/common';
+const logger = new ConsoleLogger('Acl_Policies');
 
-export interface ColdContext extends AuthorizationContext {
-  org_id?: string;
-  org_name?: string;
-}
-
-export type OrgContext = { user: { org_id: string; roles: string[] } };
-
-export const public_acl = {
-  'company:member': {
-    read: () => true,
-    write: () => false,
-  },
-  'company:admin': {
-    read: () => true,
-    write: () => false,
-  },
-  'company:owner': {
-    read: () => true,
-    write: () => false,
-  },
-  'cold:admin': {
-    all: (context: ColdContext) => !!context?.user?.roles?.includes('cold:admin'),
-  },
-};
-export const queryNullOrgs = {
-  'company:member': {
-    read: (context: OrgContext) => ({
-      $or: [{ organization: context.user.org_id }, { organization: null }],
-    }),
-    write: (context: OrgContext) => ({ organization: context.user.org_id }),
-  },
-  'company:admin': {
-    read: (context: OrgContext) => ({
-      $or: [{ organization: context.user.org_id }, { organization: null }],
-    }),
-    write: (context: OrgContext) => ({ organization: context.user.org_id }),
-  },
-  'company:owner': {
-    read: (context: OrgContext) => ({
-      $or: [{ organization: context.user.org_id }, { organization: null }],
-    }),
-    write: (context: OrgContext) => ({ organization: context.user.org_id }),
-  },
-  'cold:admin': {
-    all: (context: OrgContext) => context.user.roles.includes('cold:admin'),
-  },
+export type OrgContext = {
+	user: { org_id: string; roles: string[]; email: string };
+	token: { coldclimate_claims: { org_id: string; email: string; roles: string[]; sub: string; permissions: string[] } };
 };
 
+export const read_only_acl = {
+	'company:member': {
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+	},
+	'company:admin': {
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+	},
+	'company:owner': {
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+	},
+	'cold:admin': {
+		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+	},
+};
+
+export const allow_null_orgs_acl = {
+	'company:member': {
+		read: (context: OrgContext) => ({
+			$or: [{ organization: context.user.org_id }, { organization: null }],
+		}),
+	},
+	'company:admin': {
+		read: (context: OrgContext) => ({
+			$or: [{ organization: context.user.org_id }, { organization: null }],
+		}),
+	},
+	'company:owner': {
+		read: (context: OrgContext) => ({
+			$or: [{ organization: context.user.org_id }, { organization: null }],
+		}),
+	},
+	'cold:admin': {
+		read: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		write: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		create: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		update: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		delete: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+	},
+};
+
+type aclResponse =
+	| { organization: { id: string } }
+	| {
+			$or: [{ organization: unknown }, { organization: unknown }];
+	  }
+	| boolean;
 export const default_acl = {
-  'company:member': {
-    read: (context: OrgContext) => {
-      console.log('using company:owner', context);
-      return { organization: context.user.org_id };
-    },
-    write: (context: OrgContext) => {
-      console.log('using company:owner', context);
-      return { organization: context.user.org_id };
-    },
-  },
-  'company:admin': {
-    read: (context: OrgContext) => {
-      console.log('using company:owner', context);
-      return { organization: context.user.org_id };
-    },
-    write: (context: OrgContext) => {
-      console.log('using company:owner', context);
-      return { organization: context.user.org_id };
-    },
-  },
-  'company:owner': {
-    read: (context: OrgContext) => {
-      console.log('using company:owner', context);
-      return { organization: context.user.org_id };
-    },
-    write: (context: OrgContext) => ({ organization: context.user.org_id }),
-  },
-  'cold:admin': {
-    all: (context: OrgContext) => {
-      console.log('using cold admin only', context);
-      return context.user.roles.includes('cold:admin');
-    },
-  },
+	'company:member': {
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+	},
+	'company:admin': {
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		write: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		create: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		update: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		delete: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+	},
+	'company:owner': {
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		write: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		create: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		update: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		delete: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+	},
+	'cold:admin': {
+		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+	},
 };
 
-export const cold_admin_only: AccessControlList<unknown, Context> = {
-  'cold:admin': {
-    all: (context: ColdContext) => {
-      console.log('using cold admin only', context);
-      return !!context?.user?.roles?.includes('cold:admin');
-    },
-  },
+export const cold_admin_only = {
+	'cold:admin': {
+		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+	},
 };

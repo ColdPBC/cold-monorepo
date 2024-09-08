@@ -1,3 +1,17 @@
+# [1.359.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.358.1...v1.359.0) (2024-09-07)
+
+
+### Features
+
+* add ACL entity maps for cold-graphql module ([12493e8](https://github.com/ColdPBC/cold-monorepo/commit/12493e8a89a9a8362c61d0a02170310da13f3770))
+
+## [1.358.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.358.0...v1.358.1) (2024-09-06)
+
+
+### Bug Fixes
+
+* remove unused imports and clean up import paths ([b80a2ba](https://github.com/ColdPBC/cold-monorepo/commit/b80a2ba438de6707fd877f30c697d7ab4543288a))
+
 # [1.358.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.357.0...v1.358.0) (2024-09-06)
 
 

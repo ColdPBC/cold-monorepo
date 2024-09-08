@@ -1,3 +1,10 @@
+import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
+import * as hooks from './organization-hooks';
+
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { default_acl } from '../../acl_policies';
+import { OrgContext } from '../../acl_policies';
+
 import { Collection, Entity, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Action } from './action';
 import { AttributeAssurance } from './attribute-assurance';
@@ -18,106 +25,142 @@ import { SurveyStatus } from './survey-status';
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
-import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../../acl_policies';
 
-@Entity({ tableName: 'organizations' })
 @ApplyAccessControlList(default_acl)
+@Entity({ tableName: 'organizations' })
 export class Organization {
-  @PrimaryKey({ type: 'text' })
-  id!: string;
+	@PrimaryKey({ type: 'text' })
+	id!: string;
 
-  @Unique({ name: 'organizations_name_key' })
-  @Property({ type: 'text' })
-  name!: string;
+	@Unique({ name: 'organizations_name_key' })
+	@Property({ type: 'text' })
+	name!: string;
 
-  @Property({ type: 'json' })
-  enabledConnections!: Record<string, unknown>;
+	@Property({ type: 'json' })
+	enabledConnections!: Record<string, unknown>;
 
-  @Property({ type: 'text' })
-  displayName!: string;
+	@Property({ type: 'text' })
+	displayName!: string;
 
-  @Property({ type: 'json', nullable: true })
-  branding?: Record<string, unknown>;
+	@Property({ type: 'json', nullable: true })
+	branding?: Record<string, unknown>;
 
-  @Property({ type: 'text', nullable: true })
-  phone?: string;
+	@Property({ type: 'text', nullable: true })
+	phone?: string;
 
-  @Property({ type: 'text', nullable: true })
-  email?: string;
+	@Property({ type: 'text', nullable: true })
+	email?: string;
 
-  @Property({ type: 'datetime', length: 3 })
-  createdAt!: Date;
+	@Property({ type: 'datetime', length: 3 })
+	createdAt!: Date;
 
-  @Property({ type: 'datetime', length: 3 })
-  updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3 })
+	updatedAt!: Date;
 
-  @Property({ fieldName: 'isTest', type: 'boolean', default: false })
-  isTest = false;
+	@Property({ fieldName: 'isTest', type: 'boolean', default: false })
+	isTest = false;
 
-  @Property({ type: 'text', nullable: true })
-  website?: string;
+	@Property({ type: 'text', nullable: true })
+	website?: string;
 
-  @Property({ type: 'boolean', default: false })
-  deleted = false;
+	@Property({ type: 'boolean', default: false })
+	deleted = false;
 
-  @Property({ type: 'json', nullable: true })
-  metadata?: Record<string, unknown>;
+	@Property({ type: 'json', nullable: true })
+	metadata?: Record<string, unknown>;
 
-  @OneToMany({ entity: () => Action, mappedBy: 'organization' })
-  actions = new Collection<Action>(this);
+	@OneToMany({ entity: () => Action, mappedBy: 'organization' })
+	actions = new Collection<Action>(this);
 
-  @OneToMany({ entity: () => AttributeAssurance, mappedBy: 'organization' })
-  attributeAssurances = new Collection<AttributeAssurance>(this);
+	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'organization' })
+	attributeAssurances = new Collection<AttributeAssurance>(this);
 
-  @OneToMany({ entity: () => CategoryDatum, mappedBy: 'organization' })
-  categoryData = new Collection<CategoryDatum>(this);
+	@OneToMany({ entity: () => CategoryDatum, mappedBy: 'organization' })
+	categoryData = new Collection<CategoryDatum>(this);
 
-  @OneToMany({ entity: () => FacilityFootprint, mappedBy: 'organization' })
-  facilityFootprints = new Collection<FacilityFootprint>(this);
+	@OneToMany({ entity: () => FacilityFootprint, mappedBy: 'organization' })
+	facilityFootprints = new Collection<FacilityFootprint>(this);
 
-  @OneToMany({ entity: () => Integration, mappedBy: 'organization' })
-  integrations = new Collection<Integration>(this);
+	@OneToMany({ entity: () => Integration, mappedBy: 'organization' })
+	integrations = new Collection<Integration>(this);
 
-  @OneToMany({ entity: () => Material, mappedBy: 'organization' })
-  materials = new Collection<Material>(this);
+	@OneToMany({ entity: () => Material, mappedBy: 'organization' })
+	materials = new Collection<Material>(this);
 
-  @OneToMany({ entity: () => OrganizationAttribute, mappedBy: 'organization' })
-  organizationAttributes = new Collection<OrganizationAttribute>(this);
+	@OneToMany({ entity: () => OrganizationAttribute, mappedBy: 'organization' })
+	organizationAttributes = new Collection<OrganizationAttribute>(this);
 
-  @OneToMany({ entity: () => OrganizationCompliance, mappedBy: 'organization' })
-  organizationCompliances = new Collection<OrganizationCompliance>(this);
+	@OneToMany({ entity: () => OrganizationCompliance, mappedBy: 'organization' })
+	organizationCompliances = new Collection<OrganizationCompliance>(this);
 
-  @OneToMany({ entity: () => OrganizationComplianceAiResponseFile, mappedBy: 'organization' })
-  organizationComplianceAiResponseFiles = new Collection<OrganizationComplianceAiResponseFile>(this);
+	@OneToMany({ entity: () => OrganizationComplianceAiResponseFile, mappedBy: 'organization' })
+	organizationComplianceAiResponseFiles = new Collection<OrganizationComplianceAiResponseFile>(this);
 
-  @OneToMany({ entity: () => OrganizationComplianceAiResponse, mappedBy: 'organization' })
-  organizationComplianceAiResponses = new Collection<OrganizationComplianceAiResponse>(this);
+	@OneToMany({ entity: () => OrganizationComplianceAiResponse, mappedBy: 'organization' })
+	organizationComplianceAiResponses = new Collection<OrganizationComplianceAiResponse>(this);
 
-  @OneToMany({ entity: () => OrganizationCompliancesOld, mappedBy: 'organization' })
-  organizationCompliancesOlds = new Collection<OrganizationCompliancesOld>(this);
+	@OneToMany({ entity: () => OrganizationCompliancesOld, mappedBy: 'organization' })
+	organizationCompliancesOlds = new Collection<OrganizationCompliancesOld>(this);
 
-  @OneToMany({ entity: () => OrganizationFacility, mappedBy: 'organization' })
-  organizationFacilities = new Collection<OrganizationFacility>(this);
+	@OneToMany({ entity: () => OrganizationFacility, mappedBy: 'organization' })
+	organizationFacilities = new Collection<OrganizationFacility>(this);
 
-  @OneToMany({ entity: () => OrganizationFile, mappedBy: 'organization' })
-  organizationFiles = new Collection<OrganizationFile>(this);
+	@OneToMany({ entity: () => OrganizationFile, mappedBy: 'organization' })
+	organizationFiles = new Collection<OrganizationFile>(this);
 
-  @OneToMany({ entity: () => Product, mappedBy: 'organization' })
-  products = new Collection<Product>(this);
+	@OneToMany({ entity: () => Product, mappedBy: 'organization' })
+	products = new Collection<Product>(this);
 
-  @OneToMany({ entity: () => SurveyDatum, mappedBy: 'organization' })
-  surveyData = new Collection<SurveyDatum>(this);
+	@OneToMany({ entity: () => SurveyDatum, mappedBy: 'organization' })
+	surveyData = new Collection<SurveyDatum>(this);
 
-  @OneToMany({ entity: () => SurveyStatus, mappedBy: 'organization' })
-  surveyStatuses = new Collection<SurveyStatus>(this);
+	@OneToMany({ entity: () => SurveyStatus, mappedBy: 'organization' })
+	surveyStatuses = new Collection<SurveyStatus>(this);
 
-  @OneToMany({ entity: () => SustainabilityAttribute, mappedBy: 'organization' })
-  sustainabilityAttributes = new Collection<SustainabilityAttribute>(this);
+	@OneToMany({ entity: () => SustainabilityAttribute, mappedBy: 'organization' })
+	sustainabilityAttributes = new Collection<SustainabilityAttribute>(this);
 
-  @OneToMany({ entity: () => UtilityBill, mappedBy: 'organization' })
-  utilityBills = new Collection<UtilityBill>(this);
+	@OneToMany({ entity: () => UtilityBill, mappedBy: 'organization' })
+	utilityBills = new Collection<UtilityBill>(this);
 
-  @OneToMany({ entity: () => VectorRecord, mappedBy: 'organization' })
-  vectorRecords = new Collection<VectorRecord>(this);
+	@OneToMany({ entity: () => VectorRecord, mappedBy: 'organization' })
+	vectorRecords = new Collection<VectorRecord>(this);
+	/**
+ 	** START GENERATED HOOKS SECTION
+ 	**/
+	@Hook(HookRegister.BEFORE_CREATE)
+	async beforeCreate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+		return hooks.beforeCreateHook(params);
+	}
+	@Hook(HookRegister.AFTER_CREATE)
+	async afterCreate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+		return hooks.afterCreateHook(params);
+	}
+	@Hook(HookRegister.BEFORE_READ)
+	async beforeRead(params: ReadHookParams<unknown, OrgContext>) {
+		return hooks.beforeReadHook(params);
+	}
+	@Hook(HookRegister.AFTER_READ)
+	async afterRead(params: ReadHookParams<unknown, OrgContext>) {
+		return hooks.afterReadHook(params);
+	}
+	@Hook(HookRegister.BEFORE_UPDATE)
+	async beforeUpdate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+		return hooks.beforeUpdateHook(params);
+	}
+	@Hook(HookRegister.AFTER_UPDATE)
+	async afterUpdate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+		return hooks.afterUpdateHook(params);
+	}
+	@Hook(HookRegister.BEFORE_DELETE)
+	async beforeDelete(params: DeleteHookParams<unknown, OrgContext>) {
+		return hooks.beforeDeleteHook(params);
+	}
+	@Hook(HookRegister.AFTER_DELETE)
+	async afterDelete(params: DeleteHookParams<unknown, OrgContext>) {
+		return hooks.afterDeleteHook(params);
+	}
+	/**
+ 	** END GENERATED HOOKS SECTION
+ 	**/
 }

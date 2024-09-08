@@ -1,54 +1,97 @@
+import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
+import * as hooks from './compliance-question-dependency-chain-hooks';
+
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { read_only_acl } from '../../acl_policies';
+import { OrgContext } from '../../acl_policies';
+
 import { Collection, Entity, Index, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { ComplianceQuestion } from './compliance-question';
-import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../../acl_policies';
 
+@ApplyAccessControlList(read_only_acl)
 @Entity({ tableName: 'compliance_question_dependency_chains' })
-@ApplyAccessControlList(default_acl)
 export class ComplianceQuestionDependencyChain {
-  @PrimaryKey({ type: 'text' })
-  id!: string;
+	@PrimaryKey({ type: 'text' })
+	id!: string;
 
-  @Property({ type: 'json' })
-  dependencyChain!: Record<string, unknown>;
+	@Property({ type: 'json' })
+	dependencyChain!: Record<string, unknown>;
 
-  @Index({ name: 'compliance_question_dependency_chains_compliance_question_i_idx' })
-  @Unique({ name: 'compliance_question_dependency_chains_compliance_question_i_key' })
-  @Property({ type: 'text' })
-  complianceQuestionId!: string;
+	@Index({ name: 'compliance_question_dependency_chains_compliance_question_i_idx' })
+	@Unique({ name: 'compliance_question_dependency_chains_compliance_question_i_key' })
+	@Property({ type: 'text' })
+	complianceQuestionId!: string;
 
-  @Index({ name: 'compliance_question_dependency_chains_compliance_question_k_idx' })
-  @Property({ type: 'text' })
-  complianceQuestionKey!: string;
+	@Index({ name: 'compliance_question_dependency_chains_compliance_question_k_idx' })
+	@Property({ type: 'text' })
+	complianceQuestionKey!: string;
 
-  @Index({ name: 'compliance_question_dependency_chains_compliance_section_id_idx' })
-  @Property({ type: 'text' })
-  complianceSectionId!: string;
+	@Index({ name: 'compliance_question_dependency_chains_compliance_section_id_idx' })
+	@Property({ type: 'text' })
+	complianceSectionId!: string;
 
-  @Index({ name: 'compliance_question_dependency_chains_compliance_section_ke_idx' })
-  @Property({ type: 'text' })
-  complianceSectionKey!: string;
+	@Index({ name: 'compliance_question_dependency_chains_compliance_section_ke_idx' })
+	@Property({ type: 'text' })
+	complianceSectionKey!: string;
 
-  @Index({ name: 'compliance_question_dependency_chains_compliance_section_gr_idx' })
-  @Property({ type: 'text' })
-  complianceSectionGroupId!: string;
+	@Index({ name: 'compliance_question_dependency_chains_compliance_section_gr_idx' })
+	@Property({ type: 'text' })
+	complianceSectionGroupId!: string;
 
-  @Index({ name: 'compliance_question_dependency_chains_compliance_definition_idx' })
-  @Property({ type: 'text' })
-  complianceDefinitionName!: string;
+	@Index({ name: 'compliance_question_dependency_chains_compliance_definition_idx' })
+	@Property({ type: 'text' })
+	complianceDefinitionName!: string;
 
-  @Property({ type: 'text' })
-  dependencyExpression!: string;
+	@Property({ type: 'text' })
+	dependencyExpression!: string;
 
-  @Property({ type: 'datetime', length: 3 })
-  createdAt!: Date;
+	@Property({ type: 'datetime', length: 3 })
+	createdAt!: Date;
 
-  @Property({ type: 'datetime', length: 3 })
-  updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3 })
+	updatedAt!: Date;
 
-  @Property({ type: 'boolean', default: false })
-  deleted = false;
+	@Property({ type: 'boolean', default: false })
+	deleted = false;
 
-  @OneToMany({ entity: () => ComplianceQuestion, mappedBy: 'complianceQuestionDependencyChain' })
-  complianceQuestions = new Collection<ComplianceQuestion>(this);
+	@OneToMany({ entity: () => ComplianceQuestion, mappedBy: 'complianceQuestionDependencyChain' })
+	complianceQuestions = new Collection<ComplianceQuestion>(this);
+	/**
+ 	** START GENERATED HOOKS SECTION
+ 	**/
+	@Hook(HookRegister.BEFORE_CREATE)
+	async beforeCreate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+		return hooks.beforeCreateHook(params);
+	}
+	@Hook(HookRegister.AFTER_CREATE)
+	async afterCreate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+		return hooks.afterCreateHook(params);
+	}
+	@Hook(HookRegister.BEFORE_READ)
+	async beforeRead(params: ReadHookParams<unknown, OrgContext>) {
+		return hooks.beforeReadHook(params);
+	}
+	@Hook(HookRegister.AFTER_READ)
+	async afterRead(params: ReadHookParams<unknown, OrgContext>) {
+		return hooks.afterReadHook(params);
+	}
+	@Hook(HookRegister.BEFORE_UPDATE)
+	async beforeUpdate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+		return hooks.beforeUpdateHook(params);
+	}
+	@Hook(HookRegister.AFTER_UPDATE)
+	async afterUpdate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+		return hooks.afterUpdateHook(params);
+	}
+	@Hook(HookRegister.BEFORE_DELETE)
+	async beforeDelete(params: DeleteHookParams<unknown, OrgContext>) {
+		return hooks.beforeDeleteHook(params);
+	}
+	@Hook(HookRegister.AFTER_DELETE)
+	async afterDelete(params: DeleteHookParams<unknown, OrgContext>) {
+		return hooks.afterDeleteHook(params);
+	}
+	/**
+ 	** END GENERATED HOOKS SECTION
+ 	**/
 }
