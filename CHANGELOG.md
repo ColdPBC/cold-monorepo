@@ -1,3 +1,10 @@
+# [1.360.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.359.0...v1.360.0) (2024-09-08)
+
+
+### Features
+
+* add entity hooks for various models ([ed0b316](https://github.com/ColdPBC/cold-monorepo/commit/ed0b3164db8b5d74c8aa7b7384339fcced829104))
+
 # [1.359.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.358.1...v1.359.0) (2024-09-07)
 
 
