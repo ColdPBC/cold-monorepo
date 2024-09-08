@@ -1,7 +1,4 @@
-import { AccessControlList, AuthorizationContext, AccessType } from '@exogee/graphweaver-auth';
-import { Context } from 'node:vm';
 import { ConsoleLogger } from '@nestjs/common';
-
 const logger = new ConsoleLogger('Acl_Policies');
 
 export type OrgContext = {
@@ -50,13 +47,15 @@ export const allow_null_orgs_acl = {
 	},
 };
 
+type aclResponse =
+	| { organization: { id: string } }
+	| {
+			$or: [{ organization: unknown }, { organization: unknown }];
+	  }
+	| boolean;
 export const default_acl = {
 	'company:member': {
-		read: (context: OrgContext) => ({ organization: context.user.org_id }),
-		write: (context: OrgContext) => false,
-		create: (context: OrgContext) => false,
-		update: (context: OrgContext) => false,
-		delete: (context: OrgContext) => false,
+		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
 	},
 	'company:admin': {
 		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
@@ -73,19 +72,12 @@ export const default_acl = {
 		delete: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
 	},
 	'cold:admin': {
-		read: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
-		/*all: (context: any) => {
-			console.log('using cold admin only', context);
-			return context?.user?.roles?.includes('cold:admin');
-		},*/
+		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 	},
 };
 
 export const cold_admin_only = {
 	'cold:admin': {
-		all: (context: any) => {
-			console.log('using cold admin only', context);
-			return !!context?.user?.roles?.includes('cold:admin');
-		},
+		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 	},
 };
