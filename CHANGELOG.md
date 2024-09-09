@@ -1,3 +1,10 @@
+# [1.363.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.362.1...v1.363.0) (2024-09-09)
+
+
+### Features
+
+* add logger module for backend ([49f9946](https://github.com/ColdPBC/cold-monorepo/commit/49f9946e0668eef6939c331e9e277e0580dbbe62))
+
 ## [1.362.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.362.0...v1.362.1) (2024-09-09)
 
 
