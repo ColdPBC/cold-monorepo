@@ -1,3 +1,10 @@
+# [1.361.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.360.0...v1.361.0) (2024-09-09)
+
+
+### Features
+
+* Extend tsconfig and implement custom logger service ([d1b14f2](https://github.com/ColdPBC/cold-monorepo/commit/d1b14f26094788eec3b1a191af564bf711927852))
+
 # [1.360.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.359.0...v1.360.0) (2024-09-08)
 
 
