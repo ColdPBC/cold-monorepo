@@ -1,3 +1,10 @@
+## [1.362.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.362.0...v1.362.1) (2024-09-09)
+
+
+### Bug Fixes
+
+* **backend:** replace ConsoleLogger with WorkerLogger for hook files ([fb5b179](https://github.com/ColdPBC/cold-monorepo/commit/fb5b1799a645c696cf148969c1febf3785e1a5a6))
+
 # [1.362.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.361.1...v1.362.0) (2024-09-09)
 
 
