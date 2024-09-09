@@ -1,3 +1,10 @@
+## [1.361.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.361.0...v1.361.1) (2024-09-09)
+
+
+### Bug Fixes
+
+* correct tsconfig, package script, and database config, and rename generator script ([3cd314b](https://github.com/ColdPBC/cold-monorepo/commit/3cd314b9126581c9d444499377d6e703cb90bbc6))
+
 # [1.361.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.360.0...v1.361.0) (2024-09-09)
 
 
