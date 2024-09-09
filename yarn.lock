@@ -9639,31 +9639,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@launchdarkly/js-sdk-common@npm:1.1.0":
-  version: 1.1.0
-  resolution: "@launchdarkly/js-sdk-common@npm:1.1.0"
-  checksum: 10/daa959039970ceb860746da9cb7c4dea975dcac71ed8c1bad42ff29e558ea0f85f58f72b801f578cef073cc98f5195ef1e72cab6bee9ca99c1dd56551e472c68
+"@launchdarkly/js-sdk-common@npm:2.8.0":
+  version: 2.8.0
+  resolution: "@launchdarkly/js-sdk-common@npm:2.8.0"
+  checksum: 10/4ea27cf6088abb236cd2fb95f7baab3940b3c5cec0b95ad66be1e0e092d93d6de0b17ef38bac624b4d18716ddf9e6cd6b6d2dd6a553dbfeb7ba5a97367ff00b5
   languageName: node
   linkType: hard
 
-"@launchdarkly/js-server-sdk-common@npm:1.2.3":
-  version: 1.2.3
-  resolution: "@launchdarkly/js-server-sdk-common@npm:1.2.3"
+"@launchdarkly/js-server-sdk-common@npm:2.6.1":
+  version: 2.6.1
+  resolution: "@launchdarkly/js-server-sdk-common@npm:2.6.1"
   dependencies:
-    "@launchdarkly/js-sdk-common": "npm:1.1.0"
+    "@launchdarkly/js-sdk-common": "npm:2.8.0"
     semver: "npm:7.5.4"
-  checksum: 10/448509777e2de954c0d58852f7b81adb21e6b1120aa59917bdea62a3d9cdf5cd68259bd5a79c24aeae4d557d0fa2b18b8bed056c54b107cae560da95641ca3dd
+  checksum: 10/55134c5d348a955110437ddcc7b51903fbc2378dae5ebaaa82c346f63b731c6b4977cca51d847fc4693b4c3f04b6ca9615299e7cee556699c6af5d6e366a2d62
   languageName: node
   linkType: hard
 
-"@launchdarkly/node-server-sdk@npm:^8.1.0":
-  version: 8.2.6
-  resolution: "@launchdarkly/node-server-sdk@npm:8.2.6"
+"@launchdarkly/node-server-sdk@npm:^9.5.4":
+  version: 9.5.4
+  resolution: "@launchdarkly/node-server-sdk@npm:9.5.4"
   dependencies:
-    "@launchdarkly/js-server-sdk-common": "npm:1.2.3"
+    "@launchdarkly/js-server-sdk-common": "npm:2.6.1"
     https-proxy-agent: "npm:^5.0.1"
-    launchdarkly-eventsource: "npm:2.0.1"
-  checksum: 10/682c2828d8512710a7d6803a72b47a6d543925067d9cfed911bb818944df1332f179692b73eaacbb3aea56fc1273b4b081c5dc2d1ea5639a95fd6d034a9b6041
+    launchdarkly-eventsource: "npm:2.0.3"
+  checksum: 10/5da6c5e958213bdb121c40e94278f39f7d04005d464492bb76250abba1267b174609deda3889f2fe381fed3d2010d507422754c767d48d44d2c996f99a83a51a
   languageName: node
   linkType: hard
 
@@ -25869,7 +25869,7 @@ __metadata:
     "@headlessui/react": "npm:^1.7.15"
     "@heroicons/react": "npm:^2.0.16"
     "@langchain/pinecone": "npm:^0.0.3"
-    "@launchdarkly/node-server-sdk": "npm:^8.1.0"
+    "@launchdarkly/node-server-sdk": "npm:^9.5.4"
     "@mdx-js/rollup": "npm:^2.3.0"
     "@mikro-orm/core": "npm:6.3.5"
     "@mikro-orm/knex": "npm:6.3.5"
@@ -38952,10 +38952,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"launchdarkly-eventsource@npm:2.0.1":
-  version: 2.0.1
-  resolution: "launchdarkly-eventsource@npm:2.0.1"
-  checksum: 10/fbeec348a52b8fa9a37bcd1a32f597422250e87b80617dc5c3859255b441c4b7b8949d632d8cc10392f96917bd5f870bccdc7b0338279daba37a96d9ab311154
+"launchdarkly-eventsource@npm:2.0.3":
+  version: 2.0.3
+  resolution: "launchdarkly-eventsource@npm:2.0.3"
+  checksum: 10/b0a13a5f4fd718421f9025156c88733e0cb53e1b3d8f91661f582c7353ff3efa579f5f007af1e57bb7f7bc3fbffc72d71616c636012c0c7626e6302f03092c25
   languageName: node
   linkType: hard
 
