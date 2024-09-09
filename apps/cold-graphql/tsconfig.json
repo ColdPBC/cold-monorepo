@@ -1,5 +1,4 @@
 {
-	"extends": "../../tsconfig.base.json",
     "compilerOptions": {
         "resolveJsonModule": true,
         "outDir": "./dist",
@@ -9,7 +8,7 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "strict": true,
-        "sourceMap": false,
+        "sourceMap": true,
         "moduleResolution":"node",
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
@@ -18,12 +17,10 @@
         "module": "CommonJS",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-        "skipLibCheck": true,
-	      "paths": {
-		      "@coldpbc/nest": ["../../libs/nest/src"],
-	      }
+        "skipLibCheck": true
     },
     "exclude": [
+	    "**/libs/**",
       "**/node_modules/**",
       "**/dist/**",
       "**/apps/cold-api/**",

@@ -47,9 +47,9 @@ importers:
       '@mikro-orm/postgresql':
         specifier: 6.3.5
         version: 6.3.5(@mikro-orm/core@6.3.5)
-      '@nestjs/common':
-        specifier: ^10.4.1
-        version: 10.4.1(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      fast-safe-stringify:
+        specifier: ^2.1.1
+        version: 2.1.1
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -65,10 +65,16 @@ importers:
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
+      winston:
+        specifier: ^3.14.2
+        version: 3.14.2
     devDependencies:
       '@types/jest':
         specifier: ^29.5.12
         version: 29.5.12
+      '@types/lodash':
+        specifier: ^4.17.7
+        version: 4.17.7
       '@types/node':
         specifier: 22.1.0
         version: 22.1.0
@@ -2872,6 +2878,9 @@ packages:
 
   '@types/keyv@3.1.4':
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
+
+  '@types/lodash@4.17.7':
+    resolution: {integrity: sha512-8wTvZawATi/lsmNu10/j2hk1KEP0IvjubqPE3cu1Xz7xfXXt5oCq3SNUz4fMIP4XGF9Ky+Ue2tBA3hcS7LSBlA==}
 
   '@types/long@4.0.2':
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
@@ -11555,6 +11564,8 @@ snapshots:
   '@types/keyv@3.1.4':
     dependencies:
       '@types/node': 22.1.0
+
+  '@types/lodash@4.17.7': {}
 
   '@types/long@4.0.2': {}
 

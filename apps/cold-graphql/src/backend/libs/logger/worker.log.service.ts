@@ -1,18 +1,15 @@
-import { LoggerService } from '@nestjs/common';
 import safeStringify from 'fast-safe-stringify';
 import winstonConfig from './winston.config';
 import winston, { createLogger } from 'winston';
 import { merge } from 'lodash';
-import { ConfigService } from '@nestjs/config'; /// test
 //import tracer from 'dd-trace';
 //import formats from 'dd-trace/ext/formats'; /// test
 
 /// test
-export class WorkerLogger implements LoggerService {
+export class WorkerLogger {
 	tags: any;
 	logger: winston.Logger;
 	context: string;
-	config: ConfigService;
 	isDev: boolean;
 
 	/**
@@ -21,20 +18,19 @@ export class WorkerLogger implements LoggerService {
 	 * @param meta
 	 */
 	constructor(className: string, meta?: any) {
-		this.config = new ConfigService();
 		this.context = className;
 		this.logger = createLogger(winstonConfig(className, meta)).child({
 			context: className,
 			meta,
 		});
 
-		this.isDev = this.config.get('NODE_ENV') !== 'production' && this.config.get('NODE_ENV') !== 'staging';
+		this.isDev = process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging';
 
 		this.tags = {
 			app: 'cold-graphql',
 			version: '1.0.0',
-			environment: this.config.get('NODE_ENV'),
-			service: this.config.get('DD_SERVICE'),
+			environment: process.env.NODE_ENV,
+			service: process.env.DD_SERVICE,
 		};
 	}
 

@@ -1,7 +1,7 @@
 import * as winston from 'winston';
 import { omit } from 'lodash';
 import { utilities as nestWinstonModuleUtilities } from 'nest-winston/dist/winston.utilities'; // Testing
-// Testing
+
 const winstonConfig = (context: string, meta?: any) => {
 	const config = {
 		service: 'cold-graphql',

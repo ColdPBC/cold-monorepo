@@ -1,5 +1,6 @@
-import { ConsoleLogger } from '@nestjs/common';
-const logger = new ConsoleLogger('Acl_Policies');
+import { WorkerLogger } from './libs/logger';
+
+const logger = new WorkerLogger('ApplyAclToEntities');
 
 export type OrgContext = {
 	user: { org_id: string; roles: string[]; email: string };
