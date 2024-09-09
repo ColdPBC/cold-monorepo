@@ -1,19 +1,18 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { get, map } from 'lodash';
-import { ConsoleLogger } from '@nestjs/common';
 import { GetSecretValueResponse, SecretsManager } from '@aws-sdk/client-secrets-manager';
 import process from 'process';
 import { fromSSO } from '@aws-sdk/credential-provider-sso';
-import { logger } from 'nx/src/utils/logger';
+import { WorkerLogger } from '../logger';
 
 @Injectable()
 export class SecretsService {
 	client: SecretsManager | undefined;
-	logger: ConsoleLogger;
+	logger: WorkerLogger;
 	ready = false;
 
 	constructor() {
-		this.logger = new ConsoleLogger(SecretsService.name);
+		this.logger = new WorkerLogger(SecretsService.name);
 	}
 
 	async init() {

@@ -53,6 +53,7 @@ type aclResponse =
 			$or: [{ organization: unknown }, { organization: unknown }];
 	  }
 	| boolean;
+
 export const default_acl = {
 	'company:member': {
 		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),

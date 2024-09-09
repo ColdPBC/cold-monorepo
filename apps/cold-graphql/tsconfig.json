@@ -1,4 +1,5 @@
 {
+	"extends": "../../tsconfig.base.json",
     "compilerOptions": {
         "resolveJsonModule": true,
         "outDir": "./dist",
@@ -19,9 +20,11 @@
         "esModuleInterop": true,
         "skipLibCheck": true
     },
+	"paths": {
+		"@coldpbc/nest": ["../../libs/nest/src"],
+	},
     "exclude": [
       "**/node_modules/**",
-      "**/lib/**",
       "**/dist/**",
       "**/apps/cold-api/**",
       "**/apps/cold-api-e2e/**",

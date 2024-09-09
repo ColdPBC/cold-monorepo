@@ -20,9 +20,10 @@ import {
 	BEFORE_DELETE_HOOK_FUNCTION,
 	AFTER_DELETE_HOOK_FUNCTION,
 } from './entity_hooks';
-import { ConsoleLogger } from '@nestjs/common';
 
-const logger = new ConsoleLogger('ACLGenerator');
+import { WorkerLogger } from '../src/backend/libs/logger';
+
+const logger = new WorkerLogger('ACLGenerator');
 
 const directoryPath = path.join(__dirname, '../src/backend/entities/postgresql');
 const orgContextImport = `import { OrgContext } from '../../acl_policies';`;
@@ -55,7 +56,7 @@ function writeGeneratedHooksToEntityClass(updatedDataWithImport: string, filePat
 		if (err) {
 			return logger.error('Unable to write file: ' + err);
 		}
-		logger.log(`Updated file: ${file}`);
+		logger.info(`Updated file: ${file}`);
 	});
 	return updatedDataWithHooks;
 }
@@ -110,8 +111,8 @@ function createHookSidecarFile(entityHookFilePath: string, entityHookFileName: s
 	const entityHookContent = `// ${entityHookFileName} Sidecar - Entity hooks for ${entityHookFileName.split('-')[0]}
 	${importGraphWeaverHookClasses.replace('Hook, HookRegister, ', '')}
 	${orgContextImport}
-	import { ConsoleLogger } from '@nestjs/common';
-	const logger = new ConsoleLogger('${entityHookFileName.split('.')[0]}')
+	import { WorkerLogger } from '../../libs/logger';
+	const logger = new WorkerLogger('${entityHookFileName.split('.')[0]}')
 		
 		${BEFORE_CREATE_HOOK_FUNCTION}
 		${AFTER_CREATE_HOOK_FUNCTION}
@@ -127,7 +128,7 @@ function createHookSidecarFile(entityHookFilePath: string, entityHookFileName: s
 		if (err) {
 			return logger.error('Unable to write entity hook file: ' + err);
 		}
-		logger.log(`Created entity hook file: ${entityHookFileName}`);
+		logger.info(`Created entity hook file: ${entityHookFileName}`);
 	});
 }
 
@@ -168,7 +169,7 @@ fs.readdir(directoryPath, (err, files) => {
 					const entityHookFilePath = path.join(directoryPath, entityHookFileName);
 
 					fs.access(entityHookFilePath, fs.constants.F_OK, err => {
-						if (err) {
+						if (err || process.env.OVERWRITE_SIDECARS === 'true') {
 							createHookSidecarFile(entityHookFilePath, entityHookFileName);
 
 							const importHookFunctions = `import * as hooks from './${entityHookFileName.split('.')[0]}';\n`;
@@ -178,7 +179,7 @@ fs.readdir(directoryPath, (err, files) => {
 								if (err) {
 									return logger.error('Unable to write file: ' + err);
 								}
-								logger.log(`Updated entity file: ${file}`);
+								logger.info(`Updated entity file: ${file}`);
 							});
 						} else {
 							logger.warn(`Skipping entity hook definition generation as file already exists: ${entityHookFileName}`);
