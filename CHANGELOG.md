@@ -1,3 +1,10 @@
+# [1.362.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.361.1...v1.362.0) (2024-09-09)
+
+
+### Features
+
+* Add PostgreSQL entities and schema imports ([c719b5f](https://github.com/ColdPBC/cold-monorepo/commit/c719b5fc5b5d90097323f4837f5172ad5db83f67))
+
 ## [1.361.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.361.0...v1.361.1) (2024-09-09)
 
 
