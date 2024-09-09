@@ -18,11 +18,11 @@
         "module": "CommonJS",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+	      "paths": {
+		      "@coldpbc/nest": ["../../libs/nest/src"],
+	      }
     },
-	"paths": {
-		"@coldpbc/nest": ["../../libs/nest/src"],
-	},
     "exclude": [
       "**/node_modules/**",
       "**/dist/**",

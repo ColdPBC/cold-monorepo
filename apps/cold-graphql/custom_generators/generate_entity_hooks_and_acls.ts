@@ -35,7 +35,7 @@ const orgContextImport = `import { OrgContext } from '../../acl_policies';`;
  * @param {string} file - The name of the entity class file.
  * @return {string} - The updated data with generated hooks.
  */
-function writeGeneratedHooksToEntityClass(updatedDataWithImport: string, filePath: string, file: string) {
+function writeGeneratedHooksToEntityClass(updatedDataWithImport: string, filePath: string, file: string): string {
 	const classEndIndex = updatedDataWithImport.lastIndexOf('}');
 	const updatedDataWithHooks = [
 		updatedDataWithImport.slice(0, classEndIndex),
@@ -69,7 +69,7 @@ function writeGeneratedHooksToEntityClass(updatedDataWithImport: string, filePat
  *
  * @return {Object} - The ACL import statement and generated ACL data.
  */
-function generateACLData(entityDecoratorMatch: RegExpMatchArray, data: string) {
+function generateACLData(entityDecoratorMatch: RegExpMatchArray, data: string): { aclImportStatement: string | undefined; generatedAclData: unknown } {
 	const tableName = entityDecoratorMatch[1];
 
 	const isInReadOnly = readOnlyEntities.includes(tableName);
@@ -79,7 +79,7 @@ function generateACLData(entityDecoratorMatch: RegExpMatchArray, data: string) {
 
 	if ([isInReadOnly, isInColdAdmin, isInIncludeNullOrgs, isInRestricted].filter(Boolean).length > 1) {
 		logger.error(`Table name ${tableName} appears in more than one entity set.`);
-		return { aclImportStatement: null, generatedAclData: null };
+		return { aclImportStatement: undefined, generatedAclData: undefined };
 	}
 
 	let aclName = 'default_acl';

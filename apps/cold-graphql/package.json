@@ -7,7 +7,7 @@
         "build": "graphweaver build",
         "start": "graphweaver start",
         "watch": "graphweaver watch",
-        "sync": "graphweaver import postgresql -o --host 127.0.0.1 --password postgres --user postgres --database colddb --port 5432 && ts-node ./custom_generators/update_database_connection.ts && ts-node ./custom_generators/apply_acl_to_entities.ts"
+        "sync": "graphweaver import postgresql -o --host 127.0.0.1 --password postgres --user postgres --database colddb --port 5432 && ts-node ./custom_generators/update_database_connection.ts && ts-node custom_generators/generate_entity_hooks_and_acls.ts"
     },
     "dependencies": {
         "@as-integrations/aws-lambda": "3.1.0",
