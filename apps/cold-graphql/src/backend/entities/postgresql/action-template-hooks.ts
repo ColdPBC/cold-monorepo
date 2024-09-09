@@ -2,8 +2,8 @@
 	import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 	import { OrgContext } from '../../acl_policies';
-	import { ConsoleLogger } from '@nestjs/common';
-	const logger = new ConsoleLogger('action-template-hooks')
+	import { WorkerLogger } from '../../libs/logger';
+	const logger = new WorkerLogger('action-template-hooks')
 		
 		
 	export const beforeCreateHook = (params: CreateOrUpdateHookParams<unknown, OrgContext>) => {

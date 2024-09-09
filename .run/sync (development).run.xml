@@ -16,7 +16,7 @@
       <env name="CDK_DEFAULT_REGION" value="us-east-1" />
       <env name="DATABASE_URL" value="postgres://postgres:postgres@localhost:5432/colddb" />
       <env name="NODE_ENV" value="development" />
-      <env name="OVERWRITE_SIDECARS" value="false" />
+      <env name="OVERWRITE_SIDECARS" value="true" />
       <env name="VITE_AUTH_CLIENT_ID" value="7AtWz1WzXMty9QN38zrkfUj2JqxqpiFI" />
       <env name="VITE_AUTH_ZERO_DOMAIN" value="dev-6qt527e13qyo4ls6.us.auth0.com" />
     </envs>

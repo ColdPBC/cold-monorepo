@@ -172,10 +172,7 @@ fs.readdir(directoryPath, (err, files) => {
 						if (err || process.env.OVERWRITE_SIDECARS === 'true') {
 							createHookSidecarFile(entityHookFilePath, entityHookFileName);
 
-							const importHookFunctions = `import * as hooks from './${entityHookFileName.split('.')[0]}';\n`;
-							const finalUpdatedData = importHookFunctions + updatedDataWithHooks;
-
-							fs.writeFile(filePath, finalUpdatedData, 'utf8', err => {
+							fs.writeFile(filePath, updatedDataWithHooks, 'utf8', err => {
 								if (err) {
 									return logger.error('Unable to write file: ' + err);
 								}
