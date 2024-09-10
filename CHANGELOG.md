@@ -1,3 +1,10 @@
+# [1.365.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.364.0...v1.365.0) (2024-09-10)
+
+
+### Features
+
+* update logging and remove unused imports ([4b12bf2](https://github.com/ColdPBC/cold-monorepo/commit/4b12bf2d49b3c23b27769b6177d9a638d01871c5))
+
 # [1.364.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.363.1...v1.364.0) (2024-09-10)
 
 
