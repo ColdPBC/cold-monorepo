@@ -13,10 +13,13 @@ export const useGraphQLSWR = <Data = any, Error = any>(key: string | null, varia
     (key: string) => {
       const query = get(queries, key, null);
       if (query) {
-        return client?.query({
-          query: query,
-          variables: variables,
-        });
+        return client
+          ?.query({
+            query: query,
+            variables: variables,
+          })
+          .then(response => response)
+          .catch(error => error);
       } else {
         return undefined;
       }
