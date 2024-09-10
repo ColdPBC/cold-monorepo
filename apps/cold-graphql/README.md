@@ -222,8 +222,6 @@ Notice the slight change in the hook functions. They now point to a generated si
 	import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 	import { OrgContext } from '../../acl_policies';
-	import { ConsoleLogger } from '@nestjs/common';
-	const logger = new ConsoleLogger('product-hooks')
 
 	export const beforeCreateHook = (params: CreateOrUpdateHookParams<unknown, OrgContext>) => {
 		logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });

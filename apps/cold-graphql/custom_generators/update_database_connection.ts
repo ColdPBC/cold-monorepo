@@ -1,9 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { ConsoleLogger } from '@nestjs/common';
+import { WorkerLogger } from '../src/backend/libs/logger';
 
 const databaseFile = path.join(__dirname, '../src/backend/database.ts');
-const logger = new ConsoleLogger('DatabaseConnectionGenerator');
+const logger = new WorkerLogger('DatabaseConnectionGenerator');
 
 const newMikroOrmConfig = `{
   driverOptions: {

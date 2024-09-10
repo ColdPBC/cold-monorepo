@@ -11,7 +11,6 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { connection } from '../../database';
 import { DynamicEventSubscriber } from '../../event_subscriber';
 import { get, set } from 'lodash';
-import { UnauthorizedException } from '@nestjs/common';
 import { MQTTPayloadType, MqttService } from '../../libs/mqtt/mqtt.service';
 
 export class OrganizationHooks {
