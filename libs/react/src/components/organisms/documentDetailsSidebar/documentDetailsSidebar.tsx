@@ -269,7 +269,7 @@ const _DocumentDetailsSidebar = (props: {
 		);
 	};
 
-	console.log({ file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
+	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
 
 	return (
 		<div
