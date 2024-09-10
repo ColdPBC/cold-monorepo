@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode } from 'react';
 import { Claims, FilesWithAssurances, InputOption } from '@coldpbc/interfaces';
 import { BaseButton, ColdIcon, DocumentDetailsMenu, DocumentMaterialsTable, DocumentSuppliersTable, ErrorFallback, Select, Spinner } from '@coldpbc/components';
 import { ButtonTypes, FileTypes, IconNames } from '@coldpbc/enums';
@@ -32,7 +32,9 @@ const _DocumentDetailsSidebar = (props: {
 		}
 	};
 
-	const getInitialFileState = ():
+	const getInitialFileState = (
+		file: FilesWithAssurances | undefined,
+	):
 		| Partial<{
 				id: string;
 				type: string;
@@ -87,11 +89,7 @@ const _DocumentDetailsSidebar = (props: {
 				sustainabilityAttribute: string | undefined;
 		  }>
 		| undefined
-	>(getInitialFileState());
-
-	useEffect(() => {
-		setFileState(getInitialFileState());
-	}, [file]);
+	>(getInitialFileState(file));
 
 	const documentTypeOptions: InputOption[] = toArray(FileTypes).map((type, index) => {
 		const name = capitalize(type.replace(/_/g, ' '));
@@ -117,9 +115,7 @@ const _DocumentDetailsSidebar = (props: {
 					name={'sustainabilityAttribute'}
 					value={fileState?.sustainabilityAttribute}
 					onChange={(e: InputOption) => {
-						if (file) {
-							setFileState({ ...fileState, sustainabilityAttribute: e.name });
-						}
+						setFileState({ ...fileState, sustainabilityAttribute: e.name });
 					}}
 					buttonClassName={'w-full border-[1.5px] border-gray-90 rounded-[8px]'}
 				/>
@@ -321,9 +317,7 @@ const _DocumentDetailsSidebar = (props: {
 									name={'type'}
 									value={capitalize(fileState.type?.replace(/_/g, ' '))}
 									onChange={(e: InputOption) => {
-										if (file) {
-											setFileState({ ...fileState, type: FileTypes[e.value] });
-										}
+										setFileState({ ...fileState, type: FileTypes[e.value] });
 									}}
 									buttonClassName={'w-full border-[1.5px] border-gray-90 rounded-[8px]'}
 								/>

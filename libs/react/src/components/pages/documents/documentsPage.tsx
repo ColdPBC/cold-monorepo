@@ -22,24 +22,6 @@ const _DocumentsPage = () => {
 	const allFiles = useGraphQLSWR('GET_ALL_FILES');
 	const allSustainabilityAttributes = useGraphQLSWR('GET_ALL_SUS_ATTRIBUTES');
 
-	const selectDocument = (id: string) => {
-		const document = files.find(file => file.id === id);
-		if (selectedDocument && selectedDocument.id === id) {
-			setSelectedDocument(undefined);
-		}
-		if (document) {
-			setSelectedDocument(document);
-		}
-	};
-
-	const updateFile = async () => {
-		await allFiles.mutate();
-	};
-
-	const onSidebarClose = () => {
-		setSelectedDocument(undefined);
-	};
-
 	useEffect(() => {
 		const files = get(allFiles.data, 'data.organizationFiles', []);
 		if (files) {
@@ -60,11 +42,6 @@ const _DocumentsPage = () => {
 	if (allFiles.isLoading || allSustainabilityAttributes.isLoading) {
 		return <Spinner />;
 	}
-
-	console.log({
-		allFiles: allFiles.data,
-		allSustainabilityAttributes: allSustainabilityAttributes.data,
-	});
 
 	const getPageButtons = () => {
 		return (
@@ -117,6 +94,23 @@ const _DocumentsPage = () => {
 				type: ToastMessage.SUCCESS,
 			});
 		}
+	};
+
+	const selectDocument = (id: string) => {
+		const document = files.find(file => file.id === id);
+		if (selectedDocument && selectedDocument.id === id) {
+			setSelectedDocument(undefined);
+		} else {
+			setSelectedDocument(document);
+		}
+	};
+
+	const updateFile = async () => {
+		await allFiles.mutate();
+	};
+
+	const onSidebarClose = () => {
+		setSelectedDocument(undefined);
 	};
 
 	return (

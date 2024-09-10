@@ -1,9 +1,11 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
-import { MuiDataGrid } from '@coldpbc/components';
+import { ErrorFallback, MuiDataGrid } from '@coldpbc/components';
 import { GridColDef } from '@mui/x-data-grid';
 import { HexColors } from '@coldpbc/themes';
+import { withErrorBoundary } from 'react-error-boundary';
+import React from 'react';
 
-export const DocumentMaterialsTable = (props: { assurances: FilesWithAssurances['attributeAssurances'] }) => {
+const _DocumentMaterialsTable = (props: { assurances: FilesWithAssurances['attributeAssurances'] }) => {
 	const { assurances } = props;
 
 	// table with columns for each material. Name, associated supplier
@@ -70,3 +72,10 @@ export const DocumentMaterialsTable = (props: { assurances: FilesWithAssurances[
 		/>
 	);
 };
+
+export const DocumentMaterialsTable = withErrorBoundary(_DocumentMaterialsTable, {
+	FallbackComponent: props => <ErrorFallback {...props} />,
+	onError: (error, info) => {
+		console.error('Error occurred in DocumentMaterialsTable: ', error);
+	},
+});

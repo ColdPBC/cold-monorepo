@@ -1,11 +1,12 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
-import { MuiDataGrid } from '@coldpbc/components';
+import { ErrorFallback, MuiDataGrid } from '@coldpbc/components';
 import { GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import capitalize from 'lodash/capitalize';
 import React, { ReactNode } from 'react';
 import { HexColors } from '@coldpbc/themes';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const DocumentSuppliersTable = (props: { assurances: FilesWithAssurances['attributeAssurances'] }) => {
+const _DocumentSuppliersTable = (props: { assurances: FilesWithAssurances['attributeAssurances'] }) => {
 	const { assurances } = props;
 
 	const renderAssociatedMaterials = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
@@ -109,3 +110,10 @@ export const DocumentSuppliersTable = (props: { assurances: FilesWithAssurances[
 		/>
 	);
 };
+
+export const DocumentSuppliersTable = withErrorBoundary(_DocumentSuppliersTable, {
+	FallbackComponent: props => <ErrorFallback {...props} />,
+	onError: (error, info) => {
+		console.error('Error occurred in DocumentSuppliersTable: ', error);
+	},
+});
