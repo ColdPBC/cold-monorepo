@@ -1,3 +1,10 @@
+# [1.364.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.363.1...v1.364.0) (2024-09-10)
+
+
+### Features
+
+* add new dependencies for aws-sdk, mqtt, cuid2, and zod ([fe599a3](https://github.com/ColdPBC/cold-monorepo/commit/fe599a35e7473ca35249eb635733e198df2c0cdf))
+
 ## [1.363.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.363.0...v1.363.1) (2024-09-10)
 
 
