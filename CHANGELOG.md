@@ -1,3 +1,10 @@
+## [1.363.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.363.0...v1.363.1) (2024-09-10)
+
+
+### Bug Fixes
+
+* refactor spacing and add additional metrics and events in compliance service ([1603a18](https://github.com/ColdPBC/cold-monorepo/commit/1603a18af49cdb77141920032469fe9556da0df4))
+
 # [1.363.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.362.1...v1.363.0) (2024-09-09)
 
 
