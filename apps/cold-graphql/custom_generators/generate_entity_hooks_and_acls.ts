@@ -30,24 +30,25 @@ const orgContextImport = `import { OrgContext } from '../../acl_policies';`;
 
 /**
  * Writes generated hooks to entity class file.
+ * @param entityClassName
  * @param {string} updatedDataWithImport - The updated data (with import statements) of the entity class.
  * @param {string} filePath - The path of the entity class file.
  * @param {string} file - The name of the entity class file.
  * @return {string} - The updated data with generated hooks.
  */
-function writeGeneratedHooksToEntityClass(updatedDataWithImport: string, filePath: string, file: string): string {
+function writeGeneratedHooksToEntityClass(entityClassName: string, updatedDataWithImport: string, filePath: string, file: string): string {
 	const classEndIndex = updatedDataWithImport.lastIndexOf('}');
 	const updatedDataWithHooks = [
 		updatedDataWithImport.slice(0, classEndIndex),
 		`\t/**\n \t** START GENERATED HOOKS SECTION\n \t**/
-	${BEFORE_CREATE}
-	${AFTER_CREATE}
-	${BEFORE_READ}
-	${AFTER_READ}
-	${BEFORE_UPDATE}
-	${AFTER_UPDATE}
-	${BEFORE_DELETE}
-	${AFTER_DELETE}
+	${BEFORE_CREATE(entityClassName)}
+	${AFTER_CREATE(entityClassName)}
+	${BEFORE_READ(entityClassName)}
+	${AFTER_READ(entityClassName)}
+	${BEFORE_UPDATE(entityClassName)}
+	${AFTER_UPDATE(entityClassName)}
+	${BEFORE_DELETE(entityClassName)}
+	${AFTER_DELETE(entityClassName)}
 	/**\n \t** END GENERATED HOOKS SECTION\n \t**/\n`,
 		updatedDataWithImport.slice(classEndIndex),
 	].join('');
@@ -84,9 +85,9 @@ function generateACLData(entityDecoratorMatch: RegExpMatchArray, data: string): 
 
 	let aclName = 'default_acl';
 
-	if (readOnlyEntities.includes(tableName)) {
+	if (isInReadOnly) {
 		aclName = 'read_only_acl';
-	} else if (coldAdminEntities.includes(tableName)) {
+	} else if (isInColdAdmin || isInRestricted) {
 		aclName = 'cold_admin_only';
 	} else if (includeNullOrgs.includes(tableName)) {
 		aclName = 'allow_null_orgs_acl';
@@ -104,24 +105,26 @@ function generateACLData(entityDecoratorMatch: RegExpMatchArray, data: string): 
 /**
  * Creates a hook sidecar file with the specified entity hook file path and name.
  *
+ * @param entityClassName
  * @param {string} entityHookFilePath - The path to the entity hook file.
  * @param {string} entityHookFileName - The name of the entity hook file.
  */
-function createHookSidecarFile(entityHookFilePath: string, entityHookFileName: string) {
+function createHookSidecarFile(entityClassName: string, entityHookFilePath: string, entityHookFileName: string) {
 	const entityHookContent = `// ${entityHookFileName} Sidecar - Entity hooks for ${entityHookFileName.split('-')[0]}
 	${importGraphWeaverHookClasses.replace('Hook, HookRegister, ', '')}
 	${orgContextImport}
 	import { WorkerLogger } from '../../libs/logger';
+	import { ${entityClassName} } from './${entityHookFileName.split('.')[0]}';
 	const logger = new WorkerLogger('${entityHookFileName.split('.')[0]}')
 		
-		${BEFORE_CREATE_HOOK_FUNCTION}
-		${AFTER_CREATE_HOOK_FUNCTION}
-		${BEFORE_READ_HOOK_FUNCTION}
-		${AFTER_READ_HOOK_FUNCTION}
-		${BEFORE_UPDATE_HOOK_FUNCTION}
-		${AFTER_UPDATE_HOOK_FUNCTION}
-		${BEFORE_DELETE_HOOK_FUNCTION}
-		${AFTER_DELETE_HOOK_FUNCTION}
+	${BEFORE_CREATE_HOOK_FUNCTION(entityClassName)}
+	${AFTER_CREATE_HOOK_FUNCTION(entityClassName)}
+	${BEFORE_READ_HOOK_FUNCTION(entityClassName)}
+	${AFTER_READ_HOOK_FUNCTION(entityClassName)}
+	${BEFORE_UPDATE_HOOK_FUNCTION(entityClassName)}
+	${AFTER_UPDATE_HOOK_FUNCTION(entityClassName)}
+	${BEFORE_DELETE_HOOK_FUNCTION(entityClassName)}
+	${AFTER_DELETE_HOOK_FUNCTION(entityClassName)}
 	`;
 
 	fs.writeFile(entityHookFilePath, entityHookContent, 'utf8', err => {
@@ -137,6 +140,7 @@ fs.readdir(directoryPath, (err, files) => {
 		return console.error('Unable to scan directory: ' + err);
 	}
 
+	let filesSkipped = false;
 	files.forEach(file => {
 		const entityFileName = file.split('.')[0];
 
@@ -147,7 +151,11 @@ fs.readdir(directoryPath, (err, files) => {
 			}
 
 			const entityDecoratorMatch = data.match(/@Entity\(\{ tableName: '(\w+)' \}\)/);
+			const entityClassName = data.match(/export class (\w+)/);
 
+			if (!entityClassName) {
+				return;
+			}
 			if (entityDecoratorMatch) {
 				const { aclImportStatement, generatedAclData } = generateACLData(entityDecoratorMatch, data);
 
@@ -156,21 +164,21 @@ fs.readdir(directoryPath, (err, files) => {
 					return;
 				}
 
-				const entityHookFileName = `${entityFileName}-hooks.ts`;
-				const entityHookImport = `import * as hooks from './${entityHookFileName.split('.')[0]}';\n`;
+				const entityHookFileName = `${entityFileName}.hooks`;
+				const entityHookImport = `import * as hooks from './${entityHookFileName}';\n`;
 
 				const updatedDataWithImport = importGraphWeaverHookClasses + entityHookImport + aclImportStatement + '\n' + generatedAclData;
 
 				const classDeclarationMatch = updatedDataWithImport.match(/export class (\w+)/);
 
 				if (classDeclarationMatch) {
-					const updatedDataWithHooks = writeGeneratedHooksToEntityClass(updatedDataWithImport, filePath, file);
+					const updatedDataWithHooks = writeGeneratedHooksToEntityClass(entityClassName[1], updatedDataWithImport, filePath, file);
 
-					const entityHookFilePath = path.join(directoryPath, entityHookFileName);
+					const entityHookFilePath = path.join(directoryPath, `${entityHookFileName}.ts`);
 
 					fs.access(entityHookFilePath, fs.constants.F_OK, err => {
 						if (err || process.env.OVERWRITE_SIDECARS === 'true') {
-							createHookSidecarFile(entityHookFilePath, entityHookFileName);
+							createHookSidecarFile(entityClassName[1], entityHookFilePath, entityHookFileName);
 
 							fs.writeFile(filePath, updatedDataWithHooks, 'utf8', err => {
 								if (err) {
@@ -179,11 +187,15 @@ fs.readdir(directoryPath, (err, files) => {
 								logger.info(`Updated entity file: ${file}`);
 							});
 						} else {
-							logger.warn(`Skipping entity hook definition generation as file already exists: ${entityHookFileName}`);
+							filesSkipped = true;
+							logger.warn(`Skipping; file already exists: ${entityHookFileName}.ts`);
 						}
 					});
 				}
 			}
 		});
 	});
+	if (filesSkipped) {
+		logger.info('Some files were skipped. Set the environment variable OVERWRITE_SIDECARS=true to overwrite during generation.');
+	}
 });

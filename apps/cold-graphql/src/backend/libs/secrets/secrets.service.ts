@@ -1,11 +1,9 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
 import { get, map } from 'lodash';
 import { GetSecretValueResponse, SecretsManager } from '@aws-sdk/client-secrets-manager';
 import process from 'process';
 import { fromSSO } from '@aws-sdk/credential-provider-sso';
 import { WorkerLogger } from '../logger';
 
-@Injectable()
 export class SecretsService {
 	client: SecretsManager | undefined;
 	logger: WorkerLogger;
@@ -96,10 +94,6 @@ export class SecretsService {
 			if (result.SecretString) {
 				secret = JSON.parse(result.SecretString);
 			}
-
-			await map(Object.keys(secret), key => {
-				this.logger.log(`${key} loaded`);
-			});
 
 			this.logger.log(`Secrets loaded for ${secretName}`);
 

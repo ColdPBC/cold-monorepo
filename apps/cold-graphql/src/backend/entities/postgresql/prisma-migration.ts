@@ -1,13 +1,13 @@
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
-import * as hooks from './prisma-migration-hooks';
+import * as hooks from './prisma-migration.hooks';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../../acl_policies';
+import { cold_admin_only } from '../../acl_policies';
 import { OrgContext } from '../../acl_policies';
 
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
-@ApplyAccessControlList(default_acl)
+@ApplyAccessControlList(cold_admin_only)
 @Entity({ tableName: '_prisma_migrations' })
 export class PrismaMigration {
 	@PrimaryKey({ type: 'string', length: 36 })
@@ -37,35 +37,35 @@ export class PrismaMigration {
  	** START GENERATED HOOKS SECTION
  	**/
 	@Hook(HookRegister.BEFORE_CREATE)
-	async beforeCreate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+	async beforeCreate(params: CreateOrUpdateHookParams<typeof PrismaMigration, OrgContext>) {
 		return hooks.beforeCreateHook(params);
 	}
 	@Hook(HookRegister.AFTER_CREATE)
-	async afterCreate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+	async afterCreate(params: CreateOrUpdateHookParams<typeof PrismaMigration, OrgContext>) {
 		return hooks.afterCreateHook(params);
 	}
 	@Hook(HookRegister.BEFORE_READ)
-	async beforeRead(params: ReadHookParams<unknown, OrgContext>) {
+	async beforeRead(params: ReadHookParams<typeof PrismaMigration, OrgContext>) {
 		return hooks.beforeReadHook(params);
 	}
 	@Hook(HookRegister.AFTER_READ)
-	async afterRead(params: ReadHookParams<unknown, OrgContext>) {
+	async afterRead(params: ReadHookParams<typeof PrismaMigration, OrgContext>) {
 		return hooks.afterReadHook(params);
 	}
 	@Hook(HookRegister.BEFORE_UPDATE)
-	async beforeUpdate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+	async beforeUpdate(params: CreateOrUpdateHookParams<typeof PrismaMigration, OrgContext>) {
 		return hooks.beforeUpdateHook(params);
 	}
 	@Hook(HookRegister.AFTER_UPDATE)
-	async afterUpdate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
+	async afterUpdate(params: CreateOrUpdateHookParams<typeof PrismaMigration, OrgContext>) {
 		return hooks.afterUpdateHook(params);
 	}
 	@Hook(HookRegister.BEFORE_DELETE)
-	async beforeDelete(params: DeleteHookParams<unknown, OrgContext>) {
+	async beforeDelete(params: DeleteHookParams<typeof PrismaMigration, OrgContext>) {
 		return hooks.beforeDeleteHook(params);
 	}
 	@Hook(HookRegister.AFTER_DELETE)
-	async afterDelete(params: DeleteHookParams<unknown, OrgContext>) {
+	async afterDelete(params: DeleteHookParams<typeof PrismaMigration, OrgContext>) {
 		return hooks.afterDeleteHook(params);
 	}
 	/**

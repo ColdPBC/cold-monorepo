@@ -100,7 +100,7 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.info(message, { meta: optionalParams, ...this.tags });
+		this.logger.info(message, { meta: safeStringify(optionalParams), ...this.tags });
 	}
 
 	verbose(message: string, optionalParams?: any | any[]): void {

@@ -1,4 +1,4 @@
-import { ConsoleLogger } from '@nestjs/common';
+import { WorkerLogger } from '../logger';
 import * as mqtt from 'mqtt';
 import { get } from 'lodash';
 import { init, isCuid } from '@paralleldrive/cuid2';
@@ -26,7 +26,7 @@ export class MqttService {
 	private iotEndpoint = 'a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com';
 	private clientId: string;
 	mqttClient: mqtt.MqttClient | undefined;
-	logger: ConsoleLogger;
+	logger: WorkerLogger;
 	entity: string;
 	secrets: any;
 	ssm: SecretsService | undefined;
@@ -37,13 +37,15 @@ export class MqttService {
 			length: 24,
 		});
 		this.clientId = cuid();
-		this.logger = new ConsoleLogger(`mqtt-${entity}`);
+		this.logger = new WorkerLogger(`mqtt-${entity}`);
 	}
 
 	async init() {
 		this.ssm = new SecretsService();
 		this.secrets = await this.ssm.getSecrets('core');
 		this.iotEndpoint = this.secrets.IOT_ENDPOINT;
+
+		await this.connect();
 	}
 	/**
 	 * "x-auth0-domain": "dev-6qt527e13qyo4ls6.us.auth0.com",
@@ -100,7 +102,7 @@ export class MqttService {
 
 			// Handle MQTT events
 			this.mqttClient.on('connect', () => {
-				this.logger.log(`${context.token.coldclimate_claims.email} Connected to AWS IoT Core`);
+				this.logger.log(`${context?.token?.coldclimate_claims?.email} Connected to AWS IoT Core`);
 				// You can subscribe to topics or perform other actions here
 			});
 
@@ -177,23 +179,23 @@ export class MqttService {
 
 	/**
 	 * Publish MQTT Message
-	 * @param target
 	 * @param payload
+	 * @param context
 	 * @param topic (optional) | Overrides the topic that would be derived from the target
 	 */
-	publishMQTT(payload: any, context: any, topic?: string): void {
+	async publishMQTT(payload: MQTTPayloadType, context: any, topic?: string): Promise<void> {
 		try {
 			const inputs = this.validate(payload);
 
 			topic = topic ? topic : `ui/${process.env.NODE_ENV || 'development'}/${get(payload, 'org_id')}/${get(context.token, 'coldclimate_claims.email')}`;
 
-			if (this.mqttClient && topic) {
-				this.mqttClient.publish(topic, JSON.stringify(inputs));
-
-				this.logger.log(`Published to topic: ${topic}`);
-			} else {
-				this.logger.error('MQTT client is not connected');
+			if (!this.mqttClient) {
+				this.mqttClient = await this.connect(context);
 			}
+
+			this.mqttClient.publish(topic, JSON.stringify(inputs));
+
+			this.logger.log(`Published to topic: ${topic}`);
 		} catch (e: any) {
 			this.logger.error(e.message, e);
 		}

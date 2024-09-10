@@ -1,9 +1,11 @@
+import { Organization } from './entities/postgresql';
 import { WorkerLogger } from './libs/logger';
 
 const logger = new WorkerLogger('ApplyAclToEntities');
 
 export type OrgContext = {
-	user: { org_id: string; roles: string[]; email: string };
+	organization: null | Organization;
+	user: { organization?: any; org_id: string; roles: string[]; email: string };
 	token: { coldclimate_claims: { org_id: string; email: string; roles: string[]; sub: string; permissions: string[] } };
 };
 

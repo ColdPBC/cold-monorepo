@@ -3,7 +3,7 @@
         "resolveJsonModule": true,
         "outDir": "./dist",
         "rootDir": "./src",
-        "noEmit": true,
+        "noEmit": false,
         "noUnusedLocals": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
