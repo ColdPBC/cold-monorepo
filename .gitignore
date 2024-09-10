@@ -61,9 +61,9 @@ package-lock.json
 !.yarn/sdks
 !.yarn/versions
 /.env
-**/index.ts
 
-
+/libs/nest/**/index.ts
+/apps/cold-platform-openai/**/index.ts
 /.run/build (staging).run.xml
 /.run/watch (staging).run.xml
 /.run/start (staging).run.xml

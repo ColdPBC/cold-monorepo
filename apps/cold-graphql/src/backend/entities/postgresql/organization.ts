@@ -1,5 +1,5 @@
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
-import * as hooks from './organization-hooks';
+import * as hooks from './organization.hooks';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl } from '../../acl_policies';
@@ -25,6 +25,7 @@ import { SurveyStatus } from './survey-status';
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
+import { OrganizationHooks } from './organization.hooks';
 
 @ApplyAccessControlList(default_acl)
 @Entity({ tableName: 'organizations' })
@@ -126,41 +127,41 @@ export class Organization {
 	@OneToMany({ entity: () => VectorRecord, mappedBy: 'organization' })
 	vectorRecords = new Collection<VectorRecord>(this);
 	/**
- 	** START GENERATED HOOKS SECTION
- 	**/
+	 ** START GENERATED HOOKS SECTION
+	 **/
 	@Hook(HookRegister.BEFORE_CREATE)
-	async beforeCreate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
-		return hooks.beforeCreateHook(params);
+	async beforeCreate(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
+		return new OrganizationHooks().beforeCreateHook(params);
 	}
 	@Hook(HookRegister.AFTER_CREATE)
-	async afterCreate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
-		return hooks.afterCreateHook(params);
+	async afterCreate(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
+		return new OrganizationHooks().afterCreateHook(params);
 	}
 	@Hook(HookRegister.BEFORE_READ)
-	async beforeRead(params: ReadHookParams<unknown, OrgContext>) {
-		return hooks.beforeReadHook(params);
+	async beforeRead(params: ReadHookParams<typeof Organization, OrgContext>) {
+		return new OrganizationHooks().beforeReadHook(params);
 	}
 	@Hook(HookRegister.AFTER_READ)
-	async afterRead(params: ReadHookParams<unknown, OrgContext>) {
-		return hooks.afterReadHook(params);
+	async afterRead(params: ReadHookParams<typeof Organization, OrgContext>) {
+		return new OrganizationHooks().afterReadHook(params);
 	}
 	@Hook(HookRegister.BEFORE_UPDATE)
-	async beforeUpdate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
-		return hooks.beforeUpdateHook(params);
+	async beforeUpdate(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
+		return new OrganizationHooks().beforeUpdateHook(params);
 	}
 	@Hook(HookRegister.AFTER_UPDATE)
-	async afterUpdate(params: CreateOrUpdateHookParams<unknown, OrgContext>) {
-		return hooks.afterUpdateHook(params);
+	async afterUpdate(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
+		return new OrganizationHooks().afterUpdateHook(params);
 	}
 	@Hook(HookRegister.BEFORE_DELETE)
-	async beforeDelete(params: DeleteHookParams<unknown, OrgContext>) {
-		return hooks.beforeDeleteHook(params);
+	async beforeDelete(params: DeleteHookParams<typeof Organization, OrgContext>) {
+		return new OrganizationHooks().beforeDeleteHook(params);
 	}
 	@Hook(HookRegister.AFTER_DELETE)
-	async afterDelete(params: DeleteHookParams<unknown, OrgContext>) {
-		return hooks.afterDeleteHook(params);
+	async afterDelete(params: DeleteHookParams<typeof Organization, OrgContext>) {
+		return new OrganizationHooks().afterDeleteHook(params);
 	}
 	/**
- 	** END GENERATED HOOKS SECTION
- 	**/
+	 ** END GENERATED HOOKS SECTION
+	 **/
 }

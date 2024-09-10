@@ -1,3 +1,66 @@
+# [1.365.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.364.0...v1.365.0) (2024-09-10)
+
+
+### Features
+
+* update logging and remove unused imports ([4b12bf2](https://github.com/ColdPBC/cold-monorepo/commit/4b12bf2d49b3c23b27769b6177d9a638d01871c5))
+
+# [1.364.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.363.1...v1.364.0) (2024-09-10)
+
+
+### Features
+
+* add new dependencies for aws-sdk, mqtt, cuid2, and zod ([fe599a3](https://github.com/ColdPBC/cold-monorepo/commit/fe599a35e7473ca35249eb635733e198df2c0cdf))
+
+## [1.363.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.363.0...v1.363.1) (2024-09-10)
+
+
+### Bug Fixes
+
+* refactor spacing and add additional metrics and events in compliance service ([1603a18](https://github.com/ColdPBC/cold-monorepo/commit/1603a18af49cdb77141920032469fe9556da0df4))
+
+# [1.363.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.362.1...v1.363.0) (2024-09-09)
+
+
+### Features
+
+* add logger module for backend ([49f9946](https://github.com/ColdPBC/cold-monorepo/commit/49f9946e0668eef6939c331e9e277e0580dbbe62))
+
+## [1.362.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.362.0...v1.362.1) (2024-09-09)
+
+
+### Bug Fixes
+
+* **backend:** replace ConsoleLogger with WorkerLogger for hook files ([fb5b179](https://github.com/ColdPBC/cold-monorepo/commit/fb5b1799a645c696cf148969c1febf3785e1a5a6))
+
+# [1.362.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.361.1...v1.362.0) (2024-09-09)
+
+
+### Features
+
+* Add PostgreSQL entities and schema imports ([c719b5f](https://github.com/ColdPBC/cold-monorepo/commit/c719b5fc5b5d90097323f4837f5172ad5db83f67))
+
+## [1.361.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.361.0...v1.361.1) (2024-09-09)
+
+
+### Bug Fixes
+
+* correct tsconfig, package script, and database config, and rename generator script ([3cd314b](https://github.com/ColdPBC/cold-monorepo/commit/3cd314b9126581c9d444499377d6e703cb90bbc6))
+
+# [1.361.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.360.0...v1.361.0) (2024-09-09)
+
+
+### Features
+
+* Extend tsconfig and implement custom logger service ([d1b14f2](https://github.com/ColdPBC/cold-monorepo/commit/d1b14f26094788eec3b1a191af564bf711927852))
+
+# [1.360.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.359.0...v1.360.0) (2024-09-08)
+
+
+### Features
+
+* add entity hooks for various models ([ed0b316](https://github.com/ColdPBC/cold-monorepo/commit/ed0b3164db8b5d74c8aa7b7384339fcced829104))
+
 # [1.359.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.358.1...v1.359.0) (2024-09-07)
 
 

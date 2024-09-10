@@ -10,819 +10,810 @@ import { EventService } from '../../../utilities/events/event.service';
 @Global()
 @Injectable()
 export class ComplianceDefinitionService extends BaseWorker {
-  exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
-  openAI_definition: any;
+	exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
+	openAI_definition: any;
 
-  constructor(
-    readonly darkly: DarklyService,
-    readonly prisma: PrismaService,
-    readonly cache: CacheService,
-    readonly mqtt: MqttService,
-    readonly event: EventService,
-    readonly definitions: ComplianceDefinitionsRepository,
-  ) {
-    super('ComplianceDefinitionService');
-  }
+	constructor(
+		readonly darkly: DarklyService,
+		readonly prisma: PrismaService,
+		readonly cache: CacheService,
+		readonly mqtt: MqttService,
+		readonly event: EventService,
+		readonly definitions: ComplianceDefinitionsRepository,
+	) {
+		super('ComplianceDefinitionService');
+	}
 
-  override async onModuleInit() {
-    this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
-      this.exclude_orgs = value;
-    });
-  }
+	override async onModuleInit() {
+		this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
+			this.exclude_orgs = value;
+		});
+	}
 
-  async activate(orgId: string, req: IRequest, compliance_name: string): Promise<any> {
-    const { user, url, headers, organization } = req;
-    const compliance_definition = await this.prisma.compliance_definitions.findUnique({
-      where: {
-        name: compliance_name,
-      },
-    });
+	async activate(orgId: string, req: IRequest, compliance_name: string): Promise<any> {
+		const { user, url, headers, organization } = req;
+		const compliance_definition = await this.prisma.compliance_definitions.findUnique({
+			where: {
+				name: compliance_name,
+			},
+		});
 
-    if (!compliance_definition) {
-      throw new NotFoundException(`${compliance_name} compliance definition does not exist`);
-    }
+		if (!compliance_definition) {
+			throw new NotFoundException(`${compliance_name} compliance definition does not exist`);
+		}
 
-    const useComplianceFlow = await this.darkly.getBooleanFlag('dynamic-enable-compliance-flow', false, {
-      kind: 'org-compliance-set',
-      key: orgId,
-      name: compliance_name,
-    });
+		// try the new way first....
+		const compliance: any = await this.prisma.organization_compliance.findUnique({
+			where: {
+				orgIdCompNameKey: {
+					organization_id: orgId,
+					compliance_definition_name: compliance_name,
+				},
+			},
+			select: {
+				id: true,
+				compliance_definition_name: true,
+				organization: true,
+				compliance_definition: {
+					select: {
+						id: true,
+						name: true,
+						title: true,
+						version: true,
+						compliance_section_groups: {
+							select: {
+								id: true,
+								title: true,
+								order: true,
+								compliance_sections: {
+									select: {
+										id: true,
+										key: true,
+										title: true,
+										order: true,
+										dependency_expression: true,
+										compliance_questions: {
+											select: {
+												id: true,
+												key: true,
+												order: true,
+												prompt: true,
+												component: true,
+												tooltip: true,
+												placeholder: true,
+												rubric: true,
+												options: true,
+												coresponding_question: true,
+												dependency_expression: true,
+												question_summary: true,
+												additional_context: true,
+												compliance_section_id: true,
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		});
 
-    if (useComplianceFlow) {
-      // try the new way first....
-      const compliance: any = await this.prisma.organization_compliance.findUnique({
-        where: {
-          orgIdCompNameKey: {
-            organization_id: orgId,
-            compliance_definition_name: compliance_name,
-          },
-        },
-        select: {
-          id: true,
-          compliance_definition_name: true,
-          organization: true,
-          compliance_definition: {
-            select: {
-              id: true,
-              name: true,
-              title: true,
-              version: true,
-              compliance_section_groups: {
-                select: {
-                  id: true,
-                  title: true,
-                  order: true,
-                  compliance_sections: {
-                    select: {
-                      id: true,
-                      key: true,
-                      title: true,
-                      order: true,
-                      dependency_expression: true,
-                      compliance_questions: {
-                        select: {
-                          id: true,
-                          key: true,
-                          order: true,
-                          prompt: true,
-                          component: true,
-                          tooltip: true,
-                          placeholder: true,
-                          rubric: true,
-                          options: true,
-                          coresponding_question: true,
-                          dependency_expression: true,
-                          question_summary: true,
-                          additional_context: true,
-                          compliance_section_id: true,
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      });
+		if (!compliance) {
+			throw new NotFoundException(`Compliance ${compliance_name} not found for org ${orgId}`);
+		}
 
-      if (!compliance) {
-        throw new NotFoundException(`Compliance ${compliance_name} not found for org ${orgId}`);
-      }
+		/**
+		 *  resource: string,
+		 *     source: string,
+		 *     event: string,
+		 *     status: string,
+		 *     options: {
+		 *       start?: Date;
+		 *       sendEvent?: boolean;
+		 *       tags: { [key: string]: any };
+		 *     },
+		 */
 
-      await this.event.sendIntegrationEvent(
-        false,
-        'compliance_flow.enabled',
-        {
-          base_update_topic: `ui/${process.env.NODE_ENV}/${orgId}/${compliance_name}`,
-          service: this.openAI_definition,
-          compliance,
-          organization,
-          token: headers['authorization'].replace('Bearer ', ''),
-        },
-        user,
-      );
+		await this.event.sendIntegrationEvent(
+			false,
+			'cold.compliance.ai.activated',
+			{
+				base_update_topic: `ui/${process.env.NODE_ENV}/${orgId}/${compliance_name}`,
+				service: this.openAI_definition,
+				compliance,
+				organization,
+				token: headers['authorization'].replace('Bearer ', ''),
+			},
+			user,
+		);
 
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'create',
-        status: 'complete',
-        data: {
-          event: 'compliance_flow.enabled',
-          base_update_topic: `ui/${process.env.NODE_ENV}/${orgId}/${compliance_name}`,
-          service: this.openAI_definition,
-        },
-      });
-    } else {
-      // then try the old way
-      const compliance = await this.prisma.organization_compliances_old.findFirst({
-        where: {
-          organization_id: orgId,
-          compliance_id: compliance_definition.id,
-        },
-        include: {
-          compliance_definition: true,
-        },
-      });
+		await this.event.sendIntegrationEvent(
+			false,
+			'compliance_flow.enabled',
+			{
+				base_update_topic: `ui/${process.env.NODE_ENV}/${orgId}/${compliance_name}`,
+				service: compliance_definition,
+				compliance,
+				organization,
+				token: headers['authorization'].replace('Bearer ', ''),
+			},
+			user,
+		);
 
-      if (!compliance) {
-        throw new NotFoundException(`Compliance ${compliance_name} not found for org ${orgId}`);
-      }
+		this.metrics.increment('cold.compliance.ai', 1, {
+			event: 'activated',
+			compliance: compliance_name,
+			organization_id: organization.id,
+			organization_name: organization.name,
+			email: user.coldclimate_claims.email,
+		});
 
-      let surveyNames: string[];
-      if (Array.isArray(compliance.surveys_override) && compliance.surveys_override.length > 0) {
-        surveyNames = compliance.surveys_override as string[];
-      } else {
-        surveyNames = compliance.compliance_definition.surveys as string[];
-      }
+		this.metrics.event(
+			'Compliance AI Activated',
+			`${user.coldclimate_claims.email} from ${organization.name} activated AI process for ${compliance_name}`,
+			{
+				alert_type: 'success',
+				date_happened: new Date(),
+				priority: 'normal',
+			},
+			{
+				event: 'activated',
+				compliance: compliance_name,
+				organization_id: organization.id,
+				organization_name: organization.name,
+				email: user.coldclimate_claims.email,
+			},
+		);
 
-      const surveys: any[] = [];
+		this.mqtt.publishMQTT('public', {
+			swr_key: url,
+			action: 'create',
+			status: 'complete',
+			data: {
+				event: 'compliance_flow.enabled',
+				base_update_topic: `ui/${process.env.NODE_ENV}/${orgId}/${compliance_name}`,
+				service: compliance_definition,
+			},
+		});
 
-      for (const name of surveyNames) {
-        const survey = await this.prisma.survey_definitions.findFirst({
-          where: {
-            name: name,
-          },
-        });
-        if (survey) {
-          surveys.push(survey);
-        } else {
-          this.logger.error(`Survey ${name} referenced in ${Array.isArray(compliance.surveys_override) ? 'surveys_override' : 'surveys'} array not found for ${compliance_name}`);
-          throw new NotFoundException(
-            `Survey ${name} referenced in ${Array.isArray(compliance.surveys_override) ? 'surveys_override' : 'surveys'} array not found for ${compliance_name}`,
-          );
-        }
-      }
+		this.mqtt.publishMQTT('public', {
+			swr_key: url,
+			action: 'create',
+			status: 'complete',
+			data: {
+				event: 'compliance_flow.enabled',
+				base_update_topic: `ui/${process.env.NODE_ENV}/${orgId}/${compliance_name}`,
+				service: this.openAI_definition,
+			},
+		});
+	}
 
-      await this.event.sendIntegrationEvent(
-        false,
-        'compliance_automation.enabled',
-        {
-          on_update_url: `/organizations/${orgId}/surveys/${compliance_name}`,
-          surveys,
-          organization,
-          service: this.openAI_definition,
-          compliance,
-        },
-        user,
-      );
+	async injectSurvey(req: IRequest, name: string, survey: any) {
+		const compliance = await this.prisma.compliance_definitions.findUnique({
+			where: {
+				name: name,
+			},
+		});
 
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'create',
-        status: 'complete',
-        data: {
-          compliance,
-        },
-      });
-    }
-  }
+		if (!compliance) {
+			throw new NotFoundException(`Compliance with name ${name} does not exist`);
+		}
 
-  async injectSurvey(req: IRequest, name: string, survey: any) {
-    const compliance = await this.prisma.compliance_definitions.findUnique({
-      where: {
-        name: name,
-      },
-    });
+		await this.importSurveyStructure(Object.assign({ ...compliance, survey_definition: survey }));
+	}
 
-    if (!compliance) {
-      throw new NotFoundException(`Compliance with name ${name} does not exist`);
-    }
+	/***
+	 * This action creates a new compliance definition
+	 * @param req
+	 * @param complianceDefinition
+	 */
+	async create(req: IRequest, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
+		//await this.cache.delete(`compliance:${complianceDefinition.name}:organizations:${req.organization.id}`, true);
 
-    await this.importSurveyStructure(Object.assign({ ...compliance, survey_definition: survey }));
-  }
+		const { user, url } = req;
+		this.setTags({ user: user.coldclimate_claims, compliance_definition: complianceDefinition });
 
-  /***
-   * This action creates a new compliance definition
-   * @param req
-   * @param complianceDefinition
-   */
-  async create(req: IRequest, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
-    //await this.cache.delete(`compliance:${complianceDefinition.name}:organizations:${req.organization.id}`, true);
+		try {
+			const existing = await this.prisma.compliance_definitions.findUnique({
+				where: {
+					name: complianceDefinition.name,
+				},
+			});
 
-    const { user, url } = req;
-    this.setTags({ user: user.coldclimate_claims, compliance_definition: complianceDefinition });
+			if (existing) {
+				throw new BadRequestException(`A compliance definition with the name ${complianceDefinition.name} already exists`);
+			}
 
-    try {
-      const existing = await this.prisma.compliance_definitions.findUnique({
-        where: {
-          name: complianceDefinition.name,
-        },
-      });
+			complianceDefinition.id = new Cuid2Generator(GuidPrefixes.ComplianceDefinition).scopedId;
 
-      if (existing) {
-        throw new BadRequestException(`A compliance definition with the name ${complianceDefinition.name} already exists`);
-      }
+			const response = await this.prisma.compliance_definitions.create({
+				data: omit(complianceDefinition, ['survey_definition']),
+			});
 
-      complianceDefinition.id = new Cuid2Generator(GuidPrefixes.ComplianceDefinition).scopedId;
+			if (complianceDefinition.survey_definition) {
+				await this.importSurveyStructure(complianceDefinition);
+			}
 
-      const response = await this.prisma.compliance_definitions.create({
-        data: omit(complianceDefinition, ['survey_definition']),
-      });
+			this.mqtt.publishMQTT('public', {
+				swr_key: url,
+				action: 'create',
+				status: 'complete',
+				data: response,
+			});
 
-      if (complianceDefinition.survey_definition) {
-        await this.importSurveyStructure(complianceDefinition);
-      }
+			this.logger.info('created compliance definition', response);
 
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'create',
-        status: 'complete',
-        data: response,
-      });
+			return response as unknown as ComplianceDefinition;
+		} catch (e) {
+			this.metrics.increment('cold.api.surveys.create', this.tags);
+			this.mqtt.publishMQTT('public', {
+				swr_key: url,
+				action: 'create',
+				status: 'failed',
+				data: {
+					definition: complianceDefinition,
+					error: e.message,
+				},
+			});
 
-      this.logger.info('created compliance definition', response);
+			throw e;
+		}
+	}
 
-      return response as unknown as ComplianceDefinition;
-    } catch (e) {
-      this.metrics.increment('cold.api.surveys.create', this.tags);
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'create',
-        status: 'failed',
-        data: {
-          definition: complianceDefinition,
-          error: e.message,
-        },
-      });
+	async importSurveyStructure(compliance: any) {
+		let survey: any;
+		if (!compliance.survey_definition && compliance.surveys.length > 0) {
+			survey = await this.prisma.survey_definitions.findUnique({
+				where: {
+					name: compliance.surveys[0],
+				},
+			});
 
-      throw e;
-    }
-  }
+			if (!survey) {
+				this.logger.error(`Survey ${compliance.surveys[0]} not found`);
+			}
+		} else if (compliance?.survey_definition?.sections) {
+			survey = compliance.survey_definition;
+		}
 
-  async importSurveyStructure(compliance: any) {
-    let survey: any;
-    if (!compliance.survey_definition && compliance.surveys.length > 0) {
-      survey = await this.prisma.survey_definitions.findUnique({
-        where: {
-          name: compliance.surveys[0],
-        },
-      });
+		if (survey) {
+			for (const [key, value] of Object.entries(survey.sections)) {
+				const sectionKey = key;
+				const sectionValue: any = value;
 
-      if (!survey) {
-        this.logger.error(`Survey ${compliance.surveys[0]} not found`);
-      }
-    } else if (compliance?.survey_definition?.sections) {
-      survey = compliance.survey_definition;
-    }
+				const compliance_section_group = await this.prisma.compliance_section_groups.upsert({
+					where: {
+						compDefNameTitle: {
+							compliance_definition_name: compliance.name,
+							title: sectionValue.section_type || compliance.name,
+						},
+					},
+					create: {
+						id: new Cuid2Generator(GuidPrefixes.SectionGroup).scopedId,
+						order: 0,
+						title: sectionValue.section_type || compliance.name,
+						compliance_definition_name: compliance.name,
+					},
+					update: {
+						title: sectionValue.section_type || compliance.name,
+						compliance_definition_name: compliance.name,
+					},
+				});
 
-    if (survey) {
-      for (const [key, value] of Object.entries(survey.sections)) {
-        const sectionKey = key;
-        const sectionValue: any = value;
+				this.logger.log(`created compliance section group: ${sectionValue.title} for ${compliance.name}`, {
+					section_group: compliance_section_group,
+					compliance_definition: compliance,
+				});
 
-        const compliance_section_group = await this.prisma.compliance_section_groups.upsert({
-          where: {
-            compDefNameTitle: {
-              compliance_definition_name: compliance.name,
-              title: sectionValue.section_type || compliance.name,
-            },
-          },
-          create: {
-            id: new Cuid2Generator(GuidPrefixes.SectionGroup).scopedId,
-            order: 0,
-            title: sectionValue.section_type || compliance.name,
-            compliance_definition_name: compliance.name,
-          },
-          update: {
-            title: sectionValue.section_type || compliance.name,
-            compliance_definition_name: compliance.name,
-          },
-        });
+				const comp_section = await this.prisma.compliance_sections.upsert({
+					where: {
+						compSecGroupKey: {
+							compliance_section_group_id: compliance_section_group.id,
+							key: sectionKey,
+						},
+					},
+					create: {
+						id: new Cuid2Generator(GuidPrefixes.ComplianceSection).scopedId,
+						key: sectionKey,
+						title: sectionValue.title,
+						order: sectionValue.category_idx as number,
+						dependency_expression: sectionValue?.dependency?.expression,
+						compliance_definition_name: compliance.name,
+						compliance_section_group_id: compliance_section_group.id,
+					},
+					update: {
+						title: sectionValue.title,
+						order: sectionValue.category_idx as number,
+						dependency_expression: sectionValue?.dependency?.expression,
+						compliance_definition_name: compliance.name,
+					},
+				});
 
-        this.logger.log(`created compliance section group: ${sectionValue.title} for ${compliance.name}`, {
-          section_group: compliance_section_group,
-          compliance_definition: compliance,
-        });
+				this.logger.log(`created new compliance section: ${key}:${sectionValue.title} for ${compliance.name}`, {
+					section: comp_section,
+					section_group: compliance_section_group,
+					compliance_definition: compliance,
+				});
 
-        const comp_section = await this.prisma.compliance_sections.upsert({
-          where: {
-            compSecGroupKey: {
-              compliance_section_group_id: compliance_section_group.id,
-              key: sectionKey,
-            },
-          },
-          create: {
-            id: new Cuid2Generator(GuidPrefixes.ComplianceSection).scopedId,
-            key: sectionKey,
-            title: sectionValue.title,
-            order: sectionValue.category_idx as number,
-            dependency_expression: sectionValue?.dependency?.expression,
-            compliance_definition_name: compliance.name,
-            compliance_section_group_id: compliance_section_group.id,
-          },
-          update: {
-            title: sectionValue.title,
-            order: sectionValue.category_idx as number,
-            dependency_expression: sectionValue?.dependency?.expression,
-            compliance_definition_name: compliance.name,
-          },
-        });
+				for (const [qkey, qvalue] of Object.entries(sectionValue.follow_up)) {
+					const questionKey = qkey;
+					const questionValue: any = qvalue;
+					const questionData = {
+						key: questionKey,
+						order: questionValue.idx as number,
+						prompt: questionValue.prompt,
+						component: questionValue.component,
+						tooltip: questionValue.tooltip,
+						placeholder: questionValue.placeholder,
+						rubric: questionValue.rubric,
+						options: questionValue.options,
+						compliance_definition_name: compliance.name,
+						coresponding_question: questionValue.coresponding_question,
+						dependency_expression: questionValue?.dependency?.expression,
+						question_summary: questionValue.question_summary,
+						additional_context: questionValue.additional_context,
+						compliance_section_id: comp_section.id,
+					};
 
-        this.logger.log(`created new compliance section: ${key}:${sectionValue.title} for ${compliance.name}`, {
-          section: comp_section,
-          section_group: compliance_section_group,
-          compliance_definition: compliance,
-        });
+					if (!Array.isArray(questionValue.options) || questionValue.options.length < 1) {
+						delete questionData.options;
+					}
 
-        for (const [qkey, qvalue] of Object.entries(sectionValue.follow_up)) {
-          const questionKey = qkey;
-          const questionValue: any = qvalue;
-          const questionData = {
-            key: questionKey,
-            order: questionValue.idx as number,
-            prompt: questionValue.prompt,
-            component: questionValue.component,
-            tooltip: questionValue.tooltip,
-            placeholder: questionValue.placeholder,
-            rubric: questionValue.rubric,
-            options: questionValue.options,
-            compliance_definition_name: compliance.name,
-            coresponding_question: questionValue.coresponding_question,
-            dependency_expression: questionValue?.dependency?.expression,
-            question_summary: questionValue.question_summary,
-            additional_context: questionValue.additional_context,
-            compliance_section_id: comp_section.id,
-          };
+					await this.prisma.compliance_questions.upsert({
+						where: {
+							compSecKey: {
+								key: questionKey,
+								compliance_section_id: comp_section.id,
+							},
+						},
+						create: {
+							id: new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId,
+							...questionData,
+						},
+						update: {
+							...questionData,
+						},
+					});
 
-          if (!Array.isArray(questionValue.options) || questionValue.options.length < 1) {
-            delete questionData.options;
-          }
+					this.logger.log(`created new compliance question: ${questionKey} under ${key} for ${compliance.name}`, {
+						question: questionData,
+						section: comp_section,
+						section_group: compliance_section_group,
+						compliance_definition: compliance,
+					});
+				}
+			}
 
-          await this.prisma.compliance_questions.upsert({
-            where: {
-              compSecKey: {
-                key: questionKey,
-                compliance_section_id: comp_section.id,
-              },
-            },
-            create: {
-              id: new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId,
-              ...questionData,
-            },
-            update: {
-              ...questionData,
-            },
-          });
+			const definition = this.prisma.compliance_definitions.findUnique({
+				where: {
+					id: compliance.id,
+				},
+				include: {
+					compliance_section_groups: {
+						select: {
+							id: true,
+							title: true,
+							order: true,
+							compliance_sections: {
+								select: {
+									id: true,
+									key: true,
+									title: true,
+									order: true,
+									dependency_expression: true,
+									compliance_definition_name: true,
+									compliance_section_group_id: true,
+									compliance_questions: {
+										select: {
+											id: true,
+											key: true,
+											order: true,
+											prompt: true,
+											component: true,
+											tooltip: true,
+											placeholder: true,
+											rubric: true,
+											options: true,
+											coresponding_question: true,
+											dependency_expression: true,
+											question_summary: true,
+											additional_context: true,
+											compliance_section_id: true,
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			});
 
-          this.logger.log(`created new compliance question: ${questionKey} under ${key} for ${compliance.name}`, {
-            question: questionData,
-            section: comp_section,
-            section_group: compliance_section_group,
-            compliance_definition: compliance,
-          });
-        }
-      }
+			if (!definition) {
+				throw new NotFoundException(`Unable to find compliance definition with name: ${compliance.name}`);
+			}
 
-      const definition = this.prisma.compliance_definitions.findUnique({
-        where: {
-          id: compliance.id,
-        },
-        include: {
-          compliance_section_groups: {
-            select: {
-              id: true,
-              title: true,
-              order: true,
-              compliance_sections: {
-                select: {
-                  id: true,
-                  key: true,
-                  title: true,
-                  order: true,
-                  dependency_expression: true,
-                  compliance_definition_name: true,
-                  compliance_section_group_id: true,
-                  compliance_questions: {
-                    select: {
-                      id: true,
-                      key: true,
-                      order: true,
-                      prompt: true,
-                      component: true,
-                      tooltip: true,
-                      placeholder: true,
-                      rubric: true,
-                      options: true,
-                      coresponding_question: true,
-                      dependency_expression: true,
-                      question_summary: true,
-                      additional_context: true,
-                      compliance_section_id: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      });
+			return definition;
+		}
 
-      if (!definition) {
-        throw new NotFoundException(`Unable to find compliance definition with name: ${compliance.name}`);
-      }
+		throw new NotFoundException(`Survey definition not found for ${compliance.name}`);
+	}
 
-      return definition;
-    }
+	/***
+	 * This action creates/updates a compliance for org
+	 * @param req
+	 * @param name
+	 * @param orgId
+	 * @param bpc
+	 */
+	async createOrgCompliance(req: IRequest, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
+		const { user, url } = req;
+		this.setTags({ user: user.coldclimate_claims });
+		try {
+			await this.cache.delete(`organizations:${orgId}:compliance:${name}:legacy_org_compliance`);
 
-    throw new NotFoundException(`Survey definition not found for ${compliance.name}`);
-  }
+			const definition = await this.findOne(name, req, bpc);
 
-  /***
-   * This action creates/updates a compliance for org
-   * @param req
-   * @param name
-   * @param orgId
-   * @param bpc
-   */
-  async createOrgCompliance(req: IRequest, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
-    const { user, url } = req;
-    this.setTags({ user: user.coldclimate_claims });
-    try {
-      await this.cache.delete(`organizations:${orgId}:compliance:${name}:legacy_org_compliance`);
+			const data: any = {
+				organization_id: orgId,
+				compliance_id: definition.id,
+			};
 
-      const definition = await this.findOne(name, req, bpc);
+			if (req.body.surveys_override) {
+				data.surveys_override = req.body.surveys_override;
+			}
 
-      const data: any = {
-        organization_id: orgId,
-        compliance_id: definition.id,
-      };
+			const compliance = await this.prisma.organization_compliance.upsert({
+				where: {
+					orgIdCompNameKey: {
+						organization_id: orgId,
+						compliance_definition_name: name,
+					},
+				},
+				create: {
+					id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
+					description: definition.title,
+					compliance_definition_name: definition.name,
+					organization_id: orgId,
+				},
+				update: {
+					description: definition.title,
+					compliance_definition_name: definition.name,
+					organization_id: orgId,
+				},
+			});
 
-      if (req.body.surveys_override) {
-        data.surveys_override = req.body.surveys_override;
-      }
+			await this.prisma.organization_compliances_old.upsert({
+				where: {
+					orgKeyCompKey: {
+						organization_id: orgId,
+						compliance_id: definition.id,
+					},
+				},
+				update: { ...data },
+				create: { ...data },
 
-      const compliance = await this.prisma.organization_compliance.upsert({
-        where: {
-          orgIdCompNameKey: {
-            organization_id: orgId,
-            compliance_definition_name: name,
-          },
-        },
-        create: {
-          id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
-          description: definition.title,
-          compliance_definition_name: definition.name,
-          organization_id: orgId,
-        },
-        update: {
-          description: definition.title,
-          compliance_definition_name: definition.name,
-          organization_id: orgId,
-        },
-      });
+				include: {
+					organization: true,
+					compliance_definition: true,
+				},
+			});
 
-      await this.prisma.organization_compliances_old.upsert({
-        where: {
-          orgKeyCompKey: {
-            organization_id: orgId,
-            compliance_id: definition.id,
-          },
-        },
-        update: { ...data },
-        create: { ...data },
+			await this.cache.set(`organizations:${orgId}:compliance:${name}:legacy_org_compliance`, compliance, { update: true });
 
-        include: {
-          organization: true,
-          compliance_definition: true,
-        },
-      });
+			this.logger.info(`created ${name} compliance for ${orgId}`, {
+				compliance_definition: name,
+				organization: { id: orgId },
+			});
 
-      await this.cache.set(`organizations:${orgId}:compliance:${name}:legacy_org_compliance`, compliance, { update: true });
+			this.mqtt.publishMQTT('ui', {
+				org_id: orgId,
+				user: user,
+				swr_key: url,
+				action: 'create',
+				status: 'complete',
+				data: {
+					...compliance,
+				},
+			});
 
-      this.logger.info(`created ${name} compliance for ${orgId}`, {
-        compliance_definition: name,
-        organization: { id: orgId },
-      });
+			return compliance as any;
+		} catch (e) {
+			this.logger.error(e.message, { error: e });
 
-      this.mqtt.publishMQTT('ui', {
-        org_id: orgId,
-        user: user,
-        swr_key: url,
-        action: 'create',
-        status: 'complete',
-        data: {
-          ...compliance,
-        },
-      });
+			this.mqtt.publishMQTT('ui', {
+				org_id: orgId,
+				user: user,
+				swr_key: url,
+				action: 'create',
+				status: 'failed',
+				data: {
+					error: e.message,
+				},
+			});
+			throw e;
+		}
+	}
 
-      return compliance as any;
-    } catch (e) {
-      this.logger.error(e.message, { error: e });
+	/***
+	 * This action returns all compliance definitions
+	 * @param bpc
+	 */
+	async getAll(): Promise<compliance_definitions[]> {
+		const deflist = await this.definitions.getComplianceDefinitions();
 
-      this.mqtt.publishMQTT('ui', {
-        org_id: orgId,
-        user: user,
-        swr_key: url,
-        action: 'create',
-        status: 'failed',
-        data: {
-          error: e.message,
-        },
-      });
-      throw e;
-    }
-  }
+		if (!Array.isArray(deflist) || deflist.length < 1) {
+			throw new NotFoundException(`Unable to find any compliance definitions`);
+		}
 
-  /***
-   * This action returns all compliance definitions
-   * @param bpc
-   */
-  async getAll(): Promise<compliance_definitions[]> {
-    const deflist = await this.definitions.getComplianceDefinitions();
+		return deflist;
+	}
 
-    if (!Array.isArray(deflist) || deflist.length < 1) {
-      throw new NotFoundException(`Unable to find any compliance definitions`);
-    }
+	/***
+	 * This action returns all compliance definitions for an org
+	 * @param bpc
+	 */
+	async getAllByOrg(req: IRequest, bpc: boolean): Promise<compliance_definitions[]> {
+		const deflist = await this.definitions.getComplianceDefinitionsByOrgId(req, bpc);
 
-    return deflist;
-  }
+		if (!Array.isArray(deflist) || deflist.length < 1) {
+			throw new NotFoundException(`Unable to find any compliance definitions`);
+		}
 
-  /***
-   * This action returns all compliance definitions for an org
-   * @param bpc
-   */
-  async getAllByOrg(req: IRequest, bpc: boolean): Promise<compliance_definitions[]> {
-    const deflist = await this.definitions.getComplianceDefinitionsByOrgId(req, bpc);
+		return deflist;
+	}
 
-    if (!Array.isArray(deflist) || deflist.length < 1) {
-      throw new NotFoundException(`Unable to find any compliance definitions`);
-    }
-
-    return deflist;
-  }
-
-  /***
-   * This action returns all compliances activated for an org
-   * @param req
-   * @param orgId
-   * @param bpc
-   */
-  async findOrgCompliances(req: IRequest, bpc?: boolean): Promise<OrgCompliance[]> {
-    if (!bpc) {
-      /*const cached = (await this.cache.get(`compliance_definitions:org:${orgId}`)) as OrgCompliance[];
+	/***
+	 * This action returns all compliances activated for an org
+	 * @param req
+	 * @param orgId
+	 * @param bpc
+	 */
+	async findOrgCompliances(req: IRequest, bpc?: boolean): Promise<OrgCompliance[]> {
+		if (!bpc) {
+			/*const cached = (await this.cache.get(`compliance_definitions:org:${orgId}`)) as OrgCompliance[];
 
       if (cached && cached.length) {
         return cached;
       }*/
-    }
+		}
 
-    this.logger.warn('compliance-definitions.findOrgCompliances() IS DEPRECATED', { organization: req.organization, user: req.user });
+		this.logger.warn('compliance-definitions.findOrgCompliances() IS DEPRECATED', { organization: req.organization, user: req.user });
 
-    const orgCompliances = (await this.prisma.organization_compliances_old.findMany({
-      where: {
-        organization_id: req.organization.id,
-      },
-      include: {
-        organization: true,
-        compliance_definition: true,
-      },
-    })) as unknown as OrgCompliance[];
+		const orgCompliances = (await this.prisma.organization_compliances_old.findMany({
+			where: {
+				organization_id: req.organization.id,
+			},
+			include: {
+				organization: true,
+				compliance_definition: true,
+			},
+		})) as unknown as OrgCompliance[];
 
-    if (!orgCompliances || orgCompliances.length == 0) {
-      return [];
-    }
+		if (!orgCompliances || orgCompliances.length == 0) {
+			return [];
+		}
 
-    orgCompliances.map((compliance: any) => {
-      if (compliance.surveys_override) {
-        compliance.compliance_definition.surveys = compliance.surveys_override;
-      }
-    });
-    //await this.cache.set(`organizations:${req.organization.id}:compliance:${name}:legacy_org_compliance`, orgCompliances, { update: true });
+		orgCompliances.map((compliance: any) => {
+			if (compliance.surveys_override) {
+				compliance.compliance_definition.surveys = compliance.surveys_override;
+			}
+		});
+		//await this.cache.set(`organizations:${req.organization.id}:compliance:${name}:legacy_org_compliance`, orgCompliances, { update: true });
 
-    return orgCompliances;
-  }
+		return orgCompliances;
+	}
 
-  /**
-   * This action returns a compliance definition by name
-   * @param name
-   * @param req
-   * @param bypassCache
-   */
-  async findOne(name: string, req: IRequest, bypassCache?: boolean): Promise<ComplianceDefinition> {
-    const { user, organization } = req;
-    this.setTags({ user: user.coldclimate_claims, bpc: bypassCache });
+	/**
+	 * This action returns a compliance definition by name
+	 * @param name
+	 * @param req
+	 * @param bypassCache
+	 */
+	async findOne(name: string, req: IRequest, bypassCache?: boolean): Promise<ComplianceDefinition> {
+		const { user, organization } = req;
+		this.setTags({ user: user.coldclimate_claims, bpc: bypassCache });
 
-    /*if (!bypassCache) {
+		/*if (!bypassCache) {
       const cached = (await this.cache.get(`compliance_definitions:${name}`)) as ComplianceDefinition;
 
       if (cached) {
         return cached;
       }
     }*/
-    try {
-      const def = (await this.prisma.compliance_definitions.findUnique({
-        where: { name: name },
-      })) as ComplianceDefinition;
+		try {
+			const def = (await this.prisma.compliance_definitions.findUnique({
+				where: { name: name },
+			})) as ComplianceDefinition;
 
-      if (!def) {
-        throw new NotFoundException({ organization, user }, `Unable to find compliance definition with name: ${name}`);
-      }
+			if (!def) {
+				throw new NotFoundException({ organization, user }, `Unable to find compliance definition with name: ${name}`);
+			}
 
-      await this.cache.set(`compliance:${name}`, def, { update: true });
+			await this.cache.set(`compliance:${name}`, def, { update: true });
 
-      return def;
-    } catch (e) {
-      this.logger.error(e.message, { error: e, organization, user });
-      throw e;
-    }
-  }
+			return def;
+		} catch (e) {
+			this.logger.error(e.message, { error: e, organization, user });
+			throw e;
+		}
+	}
 
-  /***
-   * This action updates a named compliance definition
-   * @param name
-   * @param complianceDefinition
-   * @param req
-   */
-  async update(name: string, complianceDefinition: ComplianceDefinition, req: IRequest): Promise<ComplianceDefinition> {
-    const { user, url, organization, method } = req;
-    this.setTags({
-      user: user.coldclimate_claims,
-      compliance_definition: complianceDefinition,
-    });
+	/***
+	 * This action updates a named compliance definition
+	 * @param name
+	 * @param complianceDefinition
+	 * @param req
+	 */
+	async update(name: string, complianceDefinition: ComplianceDefinition, req: IRequest): Promise<ComplianceDefinition> {
+		const { user, url, organization, method } = req;
+		this.setTags({
+			user: user.coldclimate_claims,
+			compliance_definition: complianceDefinition,
+		});
 
-    try {
-      await this.cache.delete(`compliance:${name}`, true);
+		try {
+			await this.cache.delete(`compliance:${name}`, true);
 
-      const def = await this.findOne(name, req, true);
+			const def = await this.findOne(name, req, true);
 
-      if (!def) {
-        throw new NotFoundException({ url, method, organization, user }, `Unable to find compliance definition with name: ${name}`);
-      }
+			if (!def) {
+				throw new NotFoundException({ url, method, organization, user }, `Unable to find compliance definition with name: ${name}`);
+			}
 
-      const definition = await this.prisma.compliance_definitions.update({
-        where: { name: name },
-        data: complianceDefinition,
-      });
+			const definition = await this.prisma.compliance_definitions.update({
+				where: { name: name },
+				data: complianceDefinition,
+			});
 
-      this.setTags({ status: 'completed' });
+			this.setTags({ status: 'completed' });
 
-      this.logger.info('updated definition', { organization, user, definition: pick(definition, ['name', 'title', 'version']) });
+			this.logger.info('updated definition', { organization, user, definition: pick(definition, ['name', 'title', 'version']) });
 
-      this.metrics.increment('cold.api.surveys.update', 1, this.tags);
+			this.metrics.increment('cold.api.surveys.update', 1, this.tags);
 
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'update',
-        status: 'complete',
-        data: {
-          user,
-          organization,
-          definition: pick(definition, ['name', 'title', 'version']),
-        },
-      });
+			this.mqtt.publishMQTT('public', {
+				swr_key: url,
+				action: 'update',
+				status: 'complete',
+				data: {
+					user,
+					organization,
+					definition: pick(definition, ['name', 'title', 'version']),
+				},
+			});
 
-      return definition as unknown as ComplianceDefinition;
-    } catch (e) {
-      this.logger.error(e.message, { error: e, organization, user });
+			return definition as unknown as ComplianceDefinition;
+		} catch (e) {
+			this.logger.error(e.message, { error: e, organization, user });
 
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'create',
-        status: 'failed',
-        data: {
-          error: e.message,
-          organization,
-          user,
-          definition: pick(complianceDefinition, ['name', 'title', 'version']),
-        },
-      });
+			this.mqtt.publishMQTT('public', {
+				swr_key: url,
+				action: 'create',
+				status: 'failed',
+				data: {
+					error: e.message,
+					organization,
+					user,
+					definition: pick(complianceDefinition, ['name', 'title', 'version']),
+				},
+			});
 
-      throw e;
-    }
-  }
+			throw e;
+		}
+	}
 
-  /***
-   * This action removes a named compliance definition
-   * @param name
-   * @param req
-   */
-  async remove(name: string, req: IRequest) {
-    const { user, url, organization } = req;
-    this.setTags({
-      compliance_definition_name: name,
-      organization,
-      user: user.coldclimate_claims,
-      ...this.tags,
-    });
+	/***
+	 * This action removes a named compliance definition
+	 * @param name
+	 * @param req
+	 */
+	async remove(name: string, req: IRequest) {
+		const { user, url, organization } = req;
+		this.setTags({
+			compliance_definition_name: name,
+			organization,
+			user: user.coldclimate_claims,
+			...this.tags,
+		});
 
-    try {
-      await this.cache.delete(`compliance:${name}`, true);
+		try {
+			await this.cache.delete(`compliance:${name}`, true);
 
-      await this.prisma.compliance_definitions.delete({ where: { name: name } });
+			await this.prisma.compliance_definitions.delete({ where: { name: name } });
 
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'delete',
-        status: 'complete',
-        data: {},
-      });
+			this.mqtt.publishMQTT('public', {
+				swr_key: url,
+				action: 'delete',
+				status: 'complete',
+				data: {},
+			});
 
-      this.logger.info(`deleted compliance definition: ${name}`, { compliance_name: name, organization, user });
-    } catch (e) {
-      this.logger.error(e.message, { error: e, organization, user });
+			this.logger.info(`deleted compliance definition: ${name}`, { compliance_name: name, organization, user });
+		} catch (e) {
+			this.logger.error(e.message, { error: e, organization, user });
 
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'delete',
-        status: 'failed',
-        data: {
-          error: e.message,
-        },
-      });
+			this.mqtt.publishMQTT('public', {
+				swr_key: url,
+				action: 'delete',
+				status: 'failed',
+				data: {
+					error: e.message,
+				},
+			});
 
-      throw e;
-    }
-  }
+			throw e;
+		}
+	}
 
-  /***
-   * This action deactivates a named compliance for an org
-   * @param name
-   * @param orgId
-   * @param req
-   * @param bpc
-   */
-  async deactivate(name: string, orgId: string, req: IRequest, bpc?: boolean) {
-    const { user, url, organization } = req;
-    this.setTags({
-      compliance_definition_name: name,
-      user: user.coldclimate_claims,
-      organization,
-      ...this.tags,
-    });
-    let compliance: OrgCompliance;
-    try {
-      const def = await this.findOne(name, req, bpc);
+	/***
+	 * This action deactivates a named compliance for an org
+	 * @param name
+	 * @param orgId
+	 * @param req
+	 * @param bpc
+	 */
+	async deactivate(name: string, orgId: string, req: IRequest, bpc?: boolean) {
+		const { user, url, organization } = req;
+		this.setTags({
+			compliance_definition_name: name,
+			user: user.coldclimate_claims,
+			organization,
+			...this.tags,
+		});
+		let compliance: OrgCompliance;
+		try {
+			const def = await this.findOne(name, req, bpc);
 
-      // Delete old Org Compliances first
-      compliance = (await this.prisma.organization_compliances_old.findFirst({
-        where: {
-          organization_id: organization.id,
-          compliance_id: def.id,
-        },
-      })) as OrgCompliance;
+			// Delete old Org Compliances first
+			compliance = (await this.prisma.organization_compliances_old.findFirst({
+				where: {
+					organization_id: organization.id,
+					compliance_id: def.id,
+				},
+			})) as OrgCompliance;
 
-      if (!compliance) {
-        throw new NotFoundException(`Unable to find compliance definition with name: ${name} and org: ${organization.id}`);
-      }
+			if (!compliance) {
+				throw new NotFoundException(`Unable to find compliance definition with name: ${name} and org: ${organization.id}`);
+			}
 
-      await this.prisma.organization_compliances_old.delete({ where: { id: compliance.id } });
+			await this.prisma.organization_compliances_old.delete({ where: { id: compliance.id } });
 
-      // Delete new Org Compliance record
-      compliance = (await this.prisma.organization_compliance.findUnique({
-        where: {
-          orgIdCompNameKey: {
-            organization_id: organization.id,
-            compliance_definition_name: name,
-          },
-        },
-      })) as unknown as OrgCompliance;
+			// Delete new Org Compliance record
+			compliance = (await this.prisma.organization_compliance.findUnique({
+				where: {
+					orgIdCompNameKey: {
+						organization_id: organization.id,
+						compliance_definition_name: name,
+					},
+				},
+			})) as unknown as OrgCompliance;
 
-      if (compliance) {
-        await this.prisma.organization_compliance.delete({ where: { id: compliance.id } });
-      }
+			if (compliance) {
+				await this.prisma.organization_compliance.delete({ where: { id: compliance.id } });
+			}
 
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'delete',
-        status: 'complete',
-        data: {},
-      });
+			this.mqtt.publishMQTT('public', {
+				swr_key: url,
+				action: 'delete',
+				status: 'complete',
+				data: {},
+			});
 
-      this.logger.info(`deactivated compliance definition: ${name} for org: ${organization.id}`, { id: def.id, name: def.name, organization, user });
-    } catch (e) {
-      this.logger.error(e.message, { error: e, organization, user });
+			this.logger.info(`deactivated compliance definition: ${name} for org: ${organization.id}`, { id: def.id, name: def.name, organization, user });
+		} catch (e) {
+			this.logger.error(e.message, { error: e, organization, user });
 
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'delete',
-        status: 'failed',
-        data: {
-          error: e.message,
-        },
-      });
+			this.mqtt.publishMQTT('public', {
+				swr_key: url,
+				action: 'delete',
+				status: 'failed',
+				data: {
+					error: e.message,
+				},
+			});
 
-      throw e;
-    }
-  }
+			throw e;
+		}
+	}
 }

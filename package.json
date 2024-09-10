@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.4.1",
-  "version": "1.359.0",
+  "version": "1.365.0",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
@@ -181,7 +181,7 @@
     "markdown-to-jsx": "^7.3.2",
     "multer": "^1.4.5-lts.1",
     "multer-s3": "^3.0.1",
-    "nest-winston": "^1.9.3",
+    "nest-winston": "^1.9.7",
     "nestjs-ddtrace": "^4.0.0",
     "nestjs-hot-shots": "^2.0.18",
     "nestjs-zod": "^3.0.0",
@@ -228,7 +228,7 @@
     "typeorm": "0.3.21-dev.e7649d2",
     "url-loader": "^4.1.1",
     "uuid": "^9.0.1",
-    "winston": "^3.9.0",
+    "winston": "^3.14.2",
     "xlsx": "^0.18.5",
     "yarn": "^1.22.22",
     "zod": "^3.22.4",
