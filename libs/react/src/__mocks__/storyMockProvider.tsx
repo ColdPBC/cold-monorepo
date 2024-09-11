@@ -22,7 +22,7 @@ import { getComplianceCountsMock, getComplianceMock, getQuestionnaireSidebarComp
 import { AIDetails, ComplianceManagerCountsPayload, ComplianceSidebarPayload } from '@coldpbc/interfaces';
 import { defaultGraphqlMocks } from './graphql';
 import { ColdApolloContext } from '@coldpbc/providers';
-import { createMockClient } from 'mock-apollo-client';
+import { createMockClient, RequestHandler } from 'mock-apollo-client';
 import { forEach } from 'lodash';
 import { DocumentNode } from '@apollo/client';
 
@@ -42,7 +42,7 @@ export interface StoryMockProviderProps {
 	complianceQuestionnaireContext?: Partial<ComplianceQuestionnaireContextType>;
 	graphqlMocks?: {
 		query: DocumentNode;
-		resolver: () => Promise<any>;
+		handler: RequestHandler;
 	}[];
 }
 
@@ -149,7 +149,7 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
 	const client = createMockClient();
 
 	forEach(props.graphqlMocks ? props.graphqlMocks : defaultGraphqlMocks, mock => {
-		client.setRequestHandler(mock.query, mock.resolver);
+		client.setRequestHandler(mock.query, mock.handler);
 	});
 
 	return (

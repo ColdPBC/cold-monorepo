@@ -2,14 +2,15 @@ import { GET_ALL_FILES, GET_ALL_ORGS, GET_ALL_SUS_ATTRIBUTES } from '@coldpbc/li
 import { getFilesWithAssurances, getFilesWithoutAssurances } from '../filesMock';
 import { getClaimsMock } from '../claimsMock';
 import { DocumentNode } from '@apollo/client';
+import { RequestHandler } from 'mock-apollo-client';
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
-	resolver: () => Promise<any>;
+	handler: RequestHandler;
 }[] = [
 	{
 		query: GET_ALL_ORGS,
-		resolver: () =>
+		handler: () =>
 			Promise.resolve({
 				data: {
 					organizations: [
@@ -259,7 +260,7 @@ export const defaultGraphqlMocks: {
 	},
 	{
 		query: GET_ALL_FILES,
-		resolver: () =>
+		handler: () =>
 			Promise.resolve({
 				data: {
 					organizationFiles: getFilesWithoutAssurances(),
@@ -268,7 +269,7 @@ export const defaultGraphqlMocks: {
 	},
 	{
 		query: GET_ALL_SUS_ATTRIBUTES,
-		resolver: () =>
+		handler: () =>
 			Promise.resolve({
 				data: {
 					sustainabilityAttributes: getClaimsMock(),
@@ -277,10 +278,13 @@ export const defaultGraphqlMocks: {
 	},
 ];
 
-export const filesWithAssurancesMocks = [
+export const filesWithAssurancesMocks: {
+	query: DocumentNode;
+	handler: RequestHandler;
+}[] = [
 	{
 		query: GET_ALL_FILES,
-		resolver: () =>
+		handler: (variables: any) =>
 			Promise.resolve({
 				data: {
 					organizationFiles: getFilesWithAssurances(),
@@ -289,7 +293,7 @@ export const filesWithAssurancesMocks = [
 	},
 	{
 		query: GET_ALL_SUS_ATTRIBUTES,
-		resolver: () =>
+		handler: () =>
 			Promise.resolve({
 				data: {
 					sustainabilityAttributes: getClaimsMock(),
