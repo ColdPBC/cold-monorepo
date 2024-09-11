@@ -1,3 +1,20 @@
+# [1.369.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.368.0...v1.369.0) (2024-09-11)
+
+
+### Bug Fixes
+
+* add error boundaries to document tables and clean up documents page ([eb4541b](https://github.com/ColdPBC/cold-monorepo/commit/eb4541b63a3b7df774ddfe821bdbb2782cda4761))
+* add organization filter to GET_ALL_FILES query ([af87d45](https://github.com/ColdPBC/cold-monorepo/commit/af87d4584f21480225ddefff2b6ab836af1dcafb))
+* update IDs and improve state handling for document components ([5757143](https://github.com/ColdPBC/cold-monorepo/commit/5757143501376e021f7fb04d4203d806b6ce95c6))
+
+
+### Features
+
+* add DocumentsHeaderTypes with file categorization in documentsPage ([1ba26f0](https://github.com/ColdPBC/cold-monorepo/commit/1ba26f0f64024fa89f993297da07237d4e4a7b73))
+* add DocumentSuppliersTable and enhance ColdApolloProvider with useEffect ([b6e8caa](https://github.com/ColdPBC/cold-monorepo/commit/b6e8caa2eacb88b946492b01b577da51d7e25612))
+* update document header types and enhance documents table ([2ace82f](https://github.com/ColdPBC/cold-monorepo/commit/2ace82f0bfab7019a91c123b4785243e9c6ab898))
+* update documentsTable component styles and column definitions ([ee3560d](https://github.com/ColdPBC/cold-monorepo/commit/ee3560d20d9ee3653d89b948cbe15be9e9c6f0d3))
+
 # [1.368.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.367.0...v1.368.0) (2024-09-11)
 
 
