@@ -1,246 +1,84 @@
-import React, { Key, LegacyRef } from 'react';
+import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { getFilesWithCertificateClaimsMock } from '@coldpbc/mocks';
+import { getClaimsMock, getFilesWithAssurances, getFilesWithoutAssurances } from '@coldpbc/mocks';
 import { DocumentDetailsSidebar } from '@coldpbc/components';
-import { Files } from '@coldpbc/interfaces';
+import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
 
 const meta = {
-  title: 'Organisms/DocumentDetailsSidebar',
-  component: DocumentDetailsSidebar,
-  tags: ['autodocs'],
-  decorators: [withKnobs],
+	title: 'Organisms/DocumentDetailsSidebar',
+	component: DocumentDetailsSidebar,
+	tags: ['autodocs'],
+	decorators: [withKnobs],
 } satisfies Meta<typeof DocumentDetailsSidebar>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: args => {
-    return <SidebarStory {...args} />;
-  },
-  args: {
-    file: getFilesWithCertificateClaimsMock()[0],
-    innerRef: React.createRef(),
-    isLoading: false,
-    signedUrl: '',
-  },
+export const NoAssurances: Story = {
+	render: args => {
+		return <SidebarStory {...args} />;
+	},
+	args: {
+		file: getFilesWithoutAssurances()[0],
+		innerRef: React.createRef(),
+		isLoading: false,
+		signedUrl: '',
+		sustainabilityAttributes: getClaimsMock(),
+	},
 };
 
-export const NoDates: Story = {
-  render: args => {
-    return <SidebarStory {...args} />;
-  },
-  args: {
-    file: {
-      ...getFilesWithCertificateClaimsMock()[0],
-      effective_end_date: null,
-      effective_start_date: null,
-    },
-    innerRef: React.createRef(),
-    isLoading: false,
-    signedUrl: '',
-  },
+export const WithAssurancesSupplierClaim: Story = {
+	render: args => {
+		return <SidebarStory {...args} />;
+	},
+	args: {
+		file: getFilesWithAssurances()[0],
+		innerRef: React.createRef(),
+		isLoading: false,
+		signedUrl: '',
+		sustainabilityAttributes: getClaimsMock(),
+	},
 };
 
-export const LongName: Story = {
-  render: args => {
-    return <SidebarStory {...args} />;
-  },
-  args: {
-    file: {
-      ...getFilesWithCertificateClaimsMock()[0],
-      original_name: 'long file name without underscores and dashes with longer parts.pdf',
-      effective_end_date: null,
-      effective_start_date: null,
-    },
-    innerRef: React.createRef(),
-    isLoading: false,
-    signedUrl: '',
-  },
+export const WithAssurancesMaterialClaim: Story = {
+	render: args => {
+		return <SidebarStory {...args} />;
+	},
+	args: {
+		file: getFilesWithAssurances()[1],
+		innerRef: React.createRef(),
+		isLoading: false,
+		signedUrl: '',
+		sustainabilityAttributes: getClaimsMock(),
+	},
 };
-
-export const LongNameNoSpaces: Story = {
-  render: args => {
-    return <SidebarStory {...args} />;
-  },
-  args: {
-    file: {
-      ...getFilesWithCertificateClaimsMock()[0],
-      original_name: 'long_file_name_with_underscores_and_dashes_with_longer_parts.pdf',
-      effective_end_date: null,
-      effective_start_date: null,
-    },
-    innerRef: React.createRef(),
-    isLoading: false,
-    signedUrl: '',
-  },
-};
-
-export const WithClaims: Story = {
-  render: args => {
-    return <SidebarStory {...args} />;
-  },
-  args: {
-    file: {
-      ...getFilesWithCertificateClaimsMock()[0],
-      organization_claims: [
-        {
-          id: 'claim_cov42be44dd54mb6y90ef5fq',
-          claim_id: 'cert_n081cl70wmqsl1uydmkgmxke',
-          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
-          material: null,
-          product: null,
-          claim: {
-            id: 'cert_n081cl70wmqsl1uydmkgmxke',
-            name: 'WRAP Certified',
-            level: 'Supplier',
-            type: 'TEST',
-          },
-          facility: {
-            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
-            name: 'KNK',
-          },
-        },
-        {
-          id: 'claim_cov42be44dd54mb6y90ef',
-          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
-          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
-          material: {
-            id: 'mat_n081cl70wmqsl1uydmkgmxke',
-            name: 'Spandex 1',
-            material_suppliers: [],
-            organization_claims: [],
-          },
-          product: null,
-          claim: {
-            id: 'cert_n081cl70wmqsl1uydmkgmxke',
-            name: 'Pfas Test',
-            level: 'Supplier',
-            type: 'TEST',
-          },
-          facility: {
-            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
-            name: 'KNK',
-          },
-        },
-        {
-          id: 'claim_cov42be44dd54mb6y90ef',
-          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
-          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
-          material: {
-            id: 'mat_n081cl70wmqsl1uydmkgmxke',
-            name: 'Spandex 2',
-            material_suppliers: [],
-            organization_claims: [],
-          },
-          product: null,
-          claim: {
-            id: 'cert_n081cl70wmqsl1uydmkgmxke',
-            name: 'Pfas Test',
-            level: 'Supplier',
-            type: 'TEST',
-          },
-          facility: {
-            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
-            name: 'KNK',
-          },
-        },
-        {
-          id: 'claim_cov42be44dd54mb6y90ef',
-          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
-          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
-          material: {
-            id: 'mat_n081cl70wmqsl1uydmkgmxke',
-            name: 'Spandex 2',
-            material_suppliers: [],
-            organization_claims: [],
-          },
-          product: null,
-          claim: {
-            id: 'cert_n081cl70wmqsl1uydmkgmxke',
-            name: 'bluesign',
-            level: 'Supplier',
-            type: 'TEST',
-          },
-          facility: {
-            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
-            name: 'KNK',
-          },
-        },
-        {
-          id: 'claim_cov42be44dd54mb6y90ef',
-          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
-          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
-          material: {
-            id: 'mat_n081cl70wmqsl1uydmkgmxke',
-            name: 'Spandex 2',
-            material_suppliers: [],
-            organization_claims: [],
-          },
-          product: null,
-          claim: {
-            id: 'cert_n081cl70wmqsl1uydmkgmxke',
-            name: 'rsl',
-            level: 'Supplier',
-            type: 'TEST',
-          },
-          facility: {
-            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
-            name: 'KNK',
-          },
-        },
-        {
-          id: 'claim_cov42be44dd54mb6y90ef',
-          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
-          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
-          material: {
-            id: 'mat_n081cl70wmqsl1uydmkgmxke',
-            name: 'Spandex 2',
-            material_suppliers: [],
-            organization_claims: [],
-          },
-          product: null,
-          claim: {
-            id: 'cert_n081cl70wmqsl1uydmkgmxke',
-            name: 'Supplier COC',
-            level: 'Supplier',
-            type: 'TEST',
-          },
-          facility: {
-            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
-            name: 'KNK',
-          },
-        },
-      ],
-    },
-    innerRef: React.createRef(),
-    isLoading: false,
-    signedUrl: '',
-  },
-};
-
 const SidebarStory = (props: {
-  file: Files | undefined;
-  innerRef: React.RefObject<HTMLDivElement>;
-  ref?: LegacyRef<any> | undefined;
-  key?: Key | null | undefined;
-  closeSidebar: () => void;
+	file: FilesWithAssurances | undefined;
+	sustainabilityAttributes: Claims[];
+	refreshFiles: () => void;
+	closeSidebar: () => void;
+	innerRef: React.RefObject<HTMLDivElement>;
+	deleteFile: (id: string) => void;
+	isLoading: boolean;
+	downloadFile: (url: string | undefined) => void;
+	signedUrl: string | undefined;
 }) => {
-  const { file, innerRef } = props;
-  const [selectedFile, setSelectedFile] = React.useState<Files | undefined>(file);
-  return (
-    <DocumentDetailsSidebar
-      file={selectedFile}
-      updateFile={setSelectedFile}
-      closeSidebar={() => setSelectedFile(undefined)}
-      innerRef={innerRef}
-      deleteFile={() => {
-        setSelectedFile(undefined);
-      }}
-      downloadFile={() => {}}
-      signedUrl={''}
-      isLoading={false}
-    />
-  );
+	const { file, innerRef, sustainabilityAttributes } = props;
+	const [selectedFile, setSelectedFile] = React.useState<FilesWithAssurances | undefined>(file);
+	return (
+		<DocumentDetailsSidebar
+			file={selectedFile}
+			sustainabilityAttributes={sustainabilityAttributes}
+			refreshFiles={() => {}}
+			closeSidebar={() => setSelectedFile(undefined)}
+			innerRef={innerRef}
+			deleteFile={() => {
+				setSelectedFile(undefined);
+			}}
+			downloadFile={() => {}}
+			signedUrl={''}
+			isLoading={false}
+		/>
+	);
 };

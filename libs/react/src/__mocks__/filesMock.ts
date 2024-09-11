@@ -1,107 +1,230 @@
-import { Files } from '@coldpbc/interfaces';
+import { Files, FilesWithAssurances } from '@coldpbc/interfaces';
 import { addDays } from 'date-fns';
 import { FileTypes } from '@coldpbc/enums';
 
 export function getAllFilesMock() {
-  return [
-    {
-      id: 'clrl1562j0009mgk60trjvcyy',
-      object: 'assistant.file',
-      assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
-      bucket: 'cold-api-uploaded-files',
-      key: 'staging/org_cAD7FM8ONewFumnY/qaalib.farah@coldclimate.com/wordpress-pdf-invoice-plugin-sample.pdf',
-      original_name: 'wordpress-pdf-invoice-plugin-sample.pdf',
-      checksum: 'd41d8cd98f00b204e9800998ecf8427e',
-      organization_id: 'org_cAD7FM8ONewFumnY',
-      openai_assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
-      openai_file_id: 'file-ARQyPWCo7Li29GPbPL2bpJcf',
-      integration_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
-      mimetype: 'application/pdf',
-      size: 43627,
-      acl: 'private',
-      contentType: 'application/pdf',
-      encoding: '7bit',
-      fieldname: 'file',
-      location: 'https://cold-api-uploaded-files.s3.us-east-1.amazonaws.com/staging/org_cAD7FM8ONewFumnY/qaalib.farah%40coldclimate.com/wordpress-pdf-invoice-plugin-sample.pdf',
-      versionId: 'pJ2fIdrMpb7lgZecDuLg2z2vfiHX249n',
-      updated_at: '2024-05-01T20:00:00.000Z',
-      created_at: '2024-05-01T20:00:00.000Z',
-    },
-    {
-      id: 'clrl0wzkr0007mgk6uncv7u8k',
-      object: 'assistant.file',
-      assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
-      bucket: 'cold-api-uploaded-files',
-      key: 'staging/org_cAD7FM8ONewFumnY/qaalib.farah@coldclimate.com/sample.pdf',
-      original_name: 'sample.pdf',
-      checksum: 'd41d8cd98f00b204e9800998ecf8427e',
-      organization_id: 'org_cAD7FM8ONewFumnY',
-      openai_assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
-      openai_file_id: 'file-OUw0zSDm8d6KDWwxXWESU7tn',
-      integration_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
-      mimetype: 'application/pdf',
-      size: 357602,
-      acl: 'private',
-      contentType: 'application/pdf',
-      encoding: '7bit',
-      fieldname: 'file',
-      location: 'https://cold-api-uploaded-files.s3.us-east-1.amazonaws.com/staging/org_cAD7FM8ONewFumnY/qaalib.farah%40coldclimate.com/sample.pdf',
-      versionId: '3PF2iN17HgJuD4.o5RCT3xWmVO2rMKCa',
-      updated_at: '2024-04-29T20:00:00.000Z',
-      created_at: '2024-04-29T20:00:00.000Z',
-    },
-  ];
+	return [
+		{
+			id: 'clrl1562j0009mgk60trjvcyy',
+			object: 'assistant.file',
+			assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
+			bucket: 'cold-api-uploaded-files',
+			key: 'staging/org_cAD7FM8ONewFumnY/qaalib.farah@coldclimate.com/wordpress-pdf-invoice-plugin-sample.pdf',
+			original_name: 'wordpress-pdf-invoice-plugin-sample.pdf',
+			checksum: 'd41d8cd98f00b204e9800998ecf8427e',
+			organization_id: 'org_cAD7FM8ONewFumnY',
+			openai_assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
+			openai_file_id: 'file-ARQyPWCo7Li29GPbPL2bpJcf',
+			integration_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
+			mimetype: 'application/pdf',
+			size: 43627,
+			acl: 'private',
+			contentType: 'application/pdf',
+			encoding: '7bit',
+			fieldname: 'file',
+			location: 'https://cold-api-uploaded-files.s3.us-east-1.amazonaws.com/staging/org_cAD7FM8ONewFumnY/qaalib.farah%40coldclimate.com/wordpress-pdf-invoice-plugin-sample.pdf',
+			versionId: 'pJ2fIdrMpb7lgZecDuLg2z2vfiHX249n',
+			updated_at: '2024-05-01T20:00:00.000Z',
+			created_at: '2024-05-01T20:00:00.000Z',
+		},
+		{
+			id: 'clrl0wzkr0007mgk6uncv7u8k',
+			object: 'assistant.file',
+			assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
+			bucket: 'cold-api-uploaded-files',
+			key: 'staging/org_cAD7FM8ONewFumnY/qaalib.farah@coldclimate.com/sample.pdf',
+			original_name: 'sample.pdf',
+			checksum: 'd41d8cd98f00b204e9800998ecf8427e',
+			organization_id: 'org_cAD7FM8ONewFumnY',
+			openai_assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
+			openai_file_id: 'file-OUw0zSDm8d6KDWwxXWESU7tn',
+			integration_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
+			mimetype: 'application/pdf',
+			size: 357602,
+			acl: 'private',
+			contentType: 'application/pdf',
+			encoding: '7bit',
+			fieldname: 'file',
+			location: 'https://cold-api-uploaded-files.s3.us-east-1.amazonaws.com/staging/org_cAD7FM8ONewFumnY/qaalib.farah%40coldclimate.com/sample.pdf',
+			versionId: '3PF2iN17HgJuD4.o5RCT3xWmVO2rMKCa',
+			updated_at: '2024-04-29T20:00:00.000Z',
+			created_at: '2024-04-29T20:00:00.000Z',
+		},
+	];
 }
 
 export function getFilesWithCertificateClaimsMock(): Files[] {
-  return [
-    {
-      id: '1',
-      original_name: 'PFAS-Test Certificate.pdf',
-      effective_start_date: addDays(new Date(), 5).toISOString(),
-      effective_end_date: addDays(new Date(), 5).toISOString(),
-      type: FileTypes.CERTIFICATE,
-      organization_claims: [],
-    },
-    {
-      id: '2',
-      original_name: 'Lead-Test Certificate.pdf',
-      effective_start_date: null,
-      effective_end_date: null,
-      type: FileTypes.CERTIFICATE,
-      organization_claims: [],
-    },
-    {
-      id: '3',
-      original_name: 'phthalate Certificate.pdf',
-      effective_start_date: null,
-      effective_end_date: null,
-      type: FileTypes.CERTIFICATE,
-      organization_claims: [],
-    },
-    {
-      id: '4',
-      original_name: 'bluesign Certificate without date.pdf',
-      effective_start_date: null,
-      effective_end_date: null,
-      type: FileTypes.CERTIFICATE,
-      organization_claims: [],
-    },
-    {
-      id: '5',
-      original_name: 'bluesign Certificate expiring soon.pdf',
-      effective_start_date: addDays(new Date(), 5).toISOString(),
-      effective_end_date: addDays(new Date(), 5).toISOString(),
-      type: FileTypes.CERTIFICATE,
-      organization_claims: [],
-    },
-    {
-      id: '6',
-      original_name: 'PFAS-Test Certificate Want, Inc.pdf',
-      effective_start_date: addDays(new Date(), 70).toISOString(),
-      effective_end_date: addDays(new Date(), 70).toISOString(),
-      type: FileTypes.CERTIFICATE,
-      organization_claims: [],
-    },
-  ];
+	return [
+		{
+			id: '1',
+			original_name: 'PFAS-Test Certificate.pdf',
+			effective_start_date: addDays(new Date(), 5).toISOString(),
+			effective_end_date: addDays(new Date(), 5).toISOString(),
+			type: FileTypes.CERTIFICATE,
+			organization_claims: [],
+		},
+		{
+			id: '2',
+			original_name: 'Lead-Test Certificate.pdf',
+			effective_start_date: null,
+			effective_end_date: null,
+			type: FileTypes.CERTIFICATE,
+			organization_claims: [],
+		},
+		{
+			id: '3',
+			original_name: 'phthalate Certificate.pdf',
+			effective_start_date: null,
+			effective_end_date: null,
+			type: FileTypes.CERTIFICATE,
+			organization_claims: [],
+		},
+		{
+			id: '4',
+			original_name: 'bluesign Certificate without date.pdf',
+			effective_start_date: null,
+			effective_end_date: null,
+			type: FileTypes.CERTIFICATE,
+			organization_claims: [],
+		},
+		{
+			id: '5',
+			original_name: 'bluesign Certificate expiring soon.pdf',
+			effective_start_date: addDays(new Date(), 5).toISOString(),
+			effective_end_date: addDays(new Date(), 5).toISOString(),
+			type: FileTypes.CERTIFICATE,
+			organization_claims: [],
+		},
+		{
+			id: '6',
+			original_name: 'PFAS-Test Certificate Want, Inc.pdf',
+			effective_start_date: addDays(new Date(), 70).toISOString(),
+			effective_end_date: addDays(new Date(), 70).toISOString(),
+			type: FileTypes.CERTIFICATE,
+			organization_claims: [],
+		},
+	];
+}
+
+export function getFilesWithoutAssurances(): FilesWithAssurances[] {
+	return [
+		{
+			id: '1',
+			originalName: 'PFAS-Test Certificate.pdf',
+			createdAt: '2024-05-01T20:00:00.000Z',
+			type: FileTypes.OTHER,
+			attributeAssurances: [],
+			metadata: null,
+		},
+		{
+			id: '2',
+			originalName: 'PFAS-Test Certificate.pdf',
+			createdAt: '2024-05-02T20:00:00.000Z',
+			type: FileTypes.OTHER,
+			attributeAssurances: [],
+			metadata: null,
+		},
+		{
+			id: '3',
+			originalName: 'PFAS-Test Certificate.pdf',
+			createdAt: '2024-05-03T20:00:00.000Z',
+			type: FileTypes.OTHER,
+			attributeAssurances: [],
+			metadata: null,
+		},
+	];
+}
+
+export function getFilesWithAssurances(): FilesWithAssurances[] {
+	return [
+		{
+			id: '1',
+			originalName: 'PFAS-Test Certificate.pdf',
+			createdAt: '2024-05-01T20:00:00.000Z',
+			type: FileTypes.CERTIFICATE,
+			attributeAssurances: [
+				{
+					id: '1',
+					effectiveStartDate: addDays(new Date(), 1).toISOString(),
+					effectiveEndDate: addDays(new Date(), 70).toISOString(),
+					sustainabilityAttribute: {
+						name: 'PFAS',
+					},
+					supplier: {
+						id: '1',
+						name: 'Supplier',
+						country: 'US',
+						supplierTier: 2,
+						materialSuppliers: [
+							{
+								material: {
+									id: '1',
+									name: 'Material',
+								},
+							},
+						],
+					},
+					material: null,
+				},
+			],
+			metadata: {
+				summary: 'This is a summary',
+			},
+		},
+		{
+			id: '2',
+			originalName: 'Lead-Test Certificate.pdf',
+			createdAt: '2024-05-01T20:00:00.000Z',
+			type: FileTypes.CERTIFICATE,
+			attributeAssurances: [
+				{
+					id: '2',
+					effectiveStartDate: addDays(new Date(), 1).toISOString(),
+					effectiveEndDate: addDays(new Date(), 70).toISOString(),
+					sustainabilityAttribute: {
+						name: 'bluesign',
+					},
+					material: {
+						id: '1',
+						name: 'Material 1',
+						materialSuppliers: [
+							{
+								supplier: {
+									id: '1',
+									name: 'Supplier',
+									supplierTier: 2,
+								},
+							},
+						],
+					},
+					supplier: null,
+				},
+				{
+					id: '3',
+					effectiveStartDate: addDays(new Date(), 1).toISOString(),
+					effectiveEndDate: addDays(new Date(), 70).toISOString(),
+					sustainabilityAttribute: {
+						name: 'bluesign',
+					},
+					material: {
+						id: '2',
+						name: 'Material 2',
+						materialSuppliers: [
+							{
+								supplier: {
+									id: '1',
+									name: 'Supplier',
+									supplierTier: 1,
+								},
+							},
+						],
+					},
+					supplier: null,
+				},
+			],
+			metadata: {
+				summary: 'This is a summary',
+			},
+		},
+	];
 }
