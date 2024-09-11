@@ -102,8 +102,7 @@ export class MqttService {
 
 			// Handle MQTT events
 			this.mqttClient.on('connect', () => {
-				this.logger.log(`${context?.token?.coldclimate_claims?.email} Connected to AWS IoT Core`);
-				// You can subscribe to topics or perform other actions here
+				this.logger.log(`Connected to AWS IoT Core`);
 			});
 
 			this.mqttClient.on('error', error => {

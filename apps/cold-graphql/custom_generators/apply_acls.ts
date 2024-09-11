@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { coldAdminEntities, includeNullOrgs, organizationEntity, readOnlyEntities, restrictedEntities } from '../src/backend/acl_to_entity_maps';
+import { coldAdminEntities, includeNullOrgs, organizationEntity, readOnlyEntities, restrictedEntities } from '../src/backend/libs/acls/acl_to_entity_maps';
 import { WorkerLogger } from '../src/backend/libs/logger';
 
 const directoryPath = path.join(__dirname, '../src/backend/entities/postgresql');
@@ -20,14 +20,20 @@ function applyAclsToEntities() {
 					return console.error('Unable to read file: ' + err);
 				}
 
+				// Find the tableName from the @Entity decorator line
 				const entityDecoratorMatch = data.match(/@Entity\(\{ tableName: '(\w+)' \}\)/);
 				if (entityDecoratorMatch) {
 					const tableName = entityDecoratorMatch[1];
 
+					// This entity is an organization entity, which means we need to apply the organization_acl which is slightly different
 					const isOrganizationEntity = organizationEntity.includes(tableName);
+					// This entity was found in readonly array
 					const isInReadOnly = readOnlyEntities.includes(tableName);
+					// This entity was found in cold:admin only array
 					const isInColdAdmin = coldAdminEntities.includes(tableName);
+					// This entity was found in includeNullOrgs array which allows for the query to have null org_id
 					const isInIncludeNullOrgs = includeNullOrgs.includes(tableName);
+					// This entity was found in restrictedEntities array which means it should only be accessible by cold:admin
 					const isInRestricted = restrictedEntities.includes(tableName);
 
 					if ([isInReadOnly, isInColdAdmin, isInIncludeNullOrgs, isInRestricted].filter(Boolean).length > 1) {
@@ -35,18 +41,24 @@ function applyAclsToEntities() {
 						return;
 					}
 
+					// Apply default_acl unless it's overridden by one of the other acl policies below
 					let aclName = 'default_acl';
 
 					if (isInReadOnly) {
+						// apply read only acl
 						aclName = 'read_only_acl';
 					} else if (isInColdAdmin || isInRestricted) {
+						// apply cold admin only acl
 						aclName = 'cold_admin_only';
 					} else if (includeNullOrgs.includes(tableName)) {
+						// apply allow null orgs acl
 						aclName = 'allow_null_orgs_acl';
 					} else if (isOrganizationEntity) {
+						// apply organization acl
 						aclName = 'organization_acl';
 					}
 
+					// Generate the aclDecoratorString and aclImportStatement
 					const aclDecoratorString = `@ApplyAccessControlList(${aclName})`;
 					const aclImportStatement = `\nimport { ApplyAccessControlList } from '@exogee/graphweaver-auth';\nimport { ${aclName} } from '../../acl_policies';\n${orgContextImport}\n`;
 

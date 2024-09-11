@@ -1,12 +1,20 @@
 import { EventSubscriber, EventArgs, FlushEventArgs, TransactionEventArgs } from '@mikro-orm/core';
-import { WorkerLogger } from './libs/logger'; // Adjust the import path as needed
+import { BaseSidecar } from '../entities/base.sidecar';
+import { MqttService } from '../libs/mqtt/mqtt.service';
+import { WorkerLogger } from '../libs/logger'; // Adjust the import path as needed
 
 export class MQTTSubscriber implements EventSubscriber {
-	logger = new WorkerLogger('MQTTSubscriber');
-	// entity life cycle events
-	onInit<T>(args: EventArgs<T>): void {
-		this.logger.debug(`onInit: ${args.em.name}`, args.entity);
+	mqtt: MqttService;
+	logger: WorkerLogger = new WorkerLogger('MQTTSubscriber');
+
+	constructor() {
+		this.mqtt = new MqttService('MQTTSubscriber');
 	}
+
+	async init() {
+		await this.mqtt.connect();
+	}
+	// entity life cycle events
 	async onLoad<T>(args: EventArgs<T>): Promise<void> {
 		this.logger.info(`onLoad: ${args.em.name}`, args.entity);
 	}

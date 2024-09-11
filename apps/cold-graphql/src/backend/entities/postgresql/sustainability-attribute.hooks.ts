@@ -1,10 +1,9 @@
 // SustainabilityAttribute Hooks
 import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 import { BaseSidecar } from '../base.sidecar';
-import { OrgContext } from '../../acl_policies';
+import { OrgContext } from '../../libs/acls/acl_policies';
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { set } from 'lodash';
-import { v4 } from 'uuid';
 
 export class SustainabilityAttributeHooks extends BaseSidecar {
 	constructor() {

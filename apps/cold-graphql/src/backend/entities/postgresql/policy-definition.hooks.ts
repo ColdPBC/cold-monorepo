@@ -1,7 +1,7 @@
 // PolicyDefinition Hooks
 import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 import { BaseSidecar } from '../base.sidecar';
-import { OrgContext } from '../../acl_policies';
+import { OrgContext } from '../../libs/acls/acl_policies';
 import { PolicyDefinition } from './policy-definition';
 
 export class PolicyDefinitionHooks extends BaseSidecar {

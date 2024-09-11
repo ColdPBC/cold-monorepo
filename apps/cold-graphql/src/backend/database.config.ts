@@ -1,5 +1,6 @@
 import { entities } from './entities';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { MQTTSubscriber } from './subscribers/mqtt_subscriber';
 
 export const connectionValues = () => {
 	const url = process.env.DATABASE_URL;
@@ -25,7 +26,6 @@ export const getConnection = () => ({
 		},
 		entities: [...entities],
 		//metadataProvider: ReflectMetadataProvider,
-		//subscribers: [DynamicEventSubscriber],
 		driver: PostgreSqlDriver,
 		...connectionValues(),
 		pool: { min: 2, max: 50 },

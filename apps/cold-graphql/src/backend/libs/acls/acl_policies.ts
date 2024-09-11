@@ -1,5 +1,5 @@
-import { Organization } from './entities/postgresql';
-import { WorkerLogger } from './libs/logger';
+import { Organization } from '../../entities/postgresql';
+import { WorkerLogger } from '../logger';
 
 const logger = new WorkerLogger('ApplyAclToEntities');
 
