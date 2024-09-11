@@ -148,15 +148,15 @@ const _DocumentsTable = (props: {
 			field: 'name',
 			headerName: 'Name',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
-			flex: 1,
+			width: 200,
 			cellClassName: 'text-tc-primary font-bold',
 		},
 		{
 			field: 'uploaded',
 			headerName: 'Uploaded',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
-			width: 150,
 			type: 'date',
+			width: 150,
 			renderCell: renderUploadDate,
 		},
 		{
@@ -172,7 +172,7 @@ const _DocumentsTable = (props: {
 			field: 'expiration',
 			headerName: 'Expiration',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
-			type: 'string',
+			type: 'date',
 			width: 100,
 			renderCell: renderDate,
 		},
@@ -182,6 +182,13 @@ const _DocumentsTable = (props: {
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 			width: 100,
 			type: 'singleSelect',
+			valueGetter: value => {
+				if (value === FileTypes.TEST_RESULTS) {
+					return 'Test Result';
+				} else {
+					return capitalize(value);
+				}
+			},
 			valueFormatter: (value: FileTypes) => {
 				if (value === FileTypes.TEST_RESULTS) {
 					return 'Test Result';
@@ -202,7 +209,7 @@ const _DocumentsTable = (props: {
 			headerName: 'Sustainability Attribute',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 			type: 'singleSelect',
-			width: 300,
+			width: 200,
 			valueOptions: sustainabilityAttributes.map(attribute => attribute.name),
 		},
 		{
@@ -210,7 +217,7 @@ const _DocumentsTable = (props: {
 			headerName: 'Associated Records',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 			flex: 1,
-			minWidth: 180,
+			minWidth: 300,
 			type: 'singleSelect',
 			valueOptions: toArray(allAssociatedRecords),
 			renderCell: renderAssociatedRecords,
@@ -227,62 +234,64 @@ const _DocumentsTable = (props: {
 	});
 
 	return (
-		<DataGrid
-			rows={tableRows}
-			columns={columns}
-			rowHeight={37}
-			getRowClassName={() => {
-				return 'text-tc-primary cursor-pointer';
-			}}
-			className={'text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto'}
-			sx={{
-				'--DataGrid-overlayHeight': '300px',
-				'--DataGrid-rowBorderColor': HexColors.gray[30],
-				'& .MuiTablePagination-root': {
-					color: HexColors.tc.primary,
-				},
-				'& .MuiDataGrid-withBorderColor': {
-					borderColor: HexColors.gray[30],
-				},
-				'& .MuiDataGrid-columnHeaderTitle': {
-					fontWeight: 'bold',
-				},
-				'& .MuiDataGrid-cell:focus': {
-					outline: 'none',
-				},
-				'& .MuiDataGrid-cell:focus-within': {
-					outline: 'none',
-				},
-				'& .MuiDataGrid-columnHeader:focus': {
-					outline: 'none',
-				},
-				'& .MuiDataGrid-columnHeader:focus-within': {
-					outline: 'none',
-				},
-			}}
-			slotProps={{
-				filterPanel: {
-					sx: {
-						'& .MuiInput-input': {
-							backgroundColor: 'transparent',
-							fontFamily: 'Inter',
-							fontSize: '14px',
-							padding: '4px 0px 5px',
-							height: '32px',
-						},
-						'& .MuiDataGrid-filterFormColumnInput': {
-							backgroundColor: 'transparent',
+		<div className={'w-full'}>
+			<DataGrid
+				rows={tableRows}
+				columns={columns}
+				rowHeight={37}
+				getRowClassName={() => {
+					return 'text-tc-primary cursor-pointer';
+				}}
+				className={'text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto'}
+				sx={{
+					'--DataGrid-overlayHeight': '300px',
+					'--DataGrid-rowBorderColor': HexColors.gray[30],
+					'& .MuiTablePagination-root': {
+						color: HexColors.tc.primary,
+					},
+					'& .MuiDataGrid-withBorderColor': {
+						borderColor: HexColors.gray[30],
+					},
+					'& .MuiDataGrid-columnHeaderTitle': {
+						fontWeight: 'bold',
+					},
+					'& .MuiDataGrid-cell:focus': {
+						outline: 'none',
+					},
+					'& .MuiDataGrid-cell:focus-within': {
+						outline: 'none',
+					},
+					'& .MuiDataGrid-columnHeader:focus': {
+						outline: 'none',
+					},
+					'& .MuiDataGrid-columnHeader:focus-within': {
+						outline: 'none',
+					},
+				}}
+				slotProps={{
+					filterPanel: {
+						sx: {
+							'& .MuiInput-input': {
+								backgroundColor: 'transparent',
+								fontFamily: 'Inter',
+								fontSize: '14px',
+								padding: '4px 0px 5px',
+								height: '32px',
+							},
+							'& .MuiDataGrid-filterFormColumnInput': {
+								backgroundColor: 'transparent',
+							},
 						},
 					},
-				},
-			}}
-			columnHeaderHeight={40}
-			onRowClick={onRowClick}
-			autoHeight={true}
-			slots={{
-				noRowsOverlay: MUIDataGridNoRowsOverlay,
-			}}
-		/>
+				}}
+				columnHeaderHeight={40}
+				onRowClick={onRowClick}
+				autoHeight={true}
+				slots={{
+					noRowsOverlay: MUIDataGridNoRowsOverlay,
+				}}
+			/>
+		</div>
 	);
 };
 
