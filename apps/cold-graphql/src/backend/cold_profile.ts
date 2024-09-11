@@ -6,24 +6,23 @@ import { WorkerLogger } from './libs/logger';
 
 const logger = new WorkerLogger('ColdProfile');
 export interface ColdProfile<T> extends UserProfile<T> {
-	org_id: string;
-	org_name: string;
 	organization: any;
+	isAdmin: boolean;
+	isOwner: boolean;
+	isMember: boolean;
+	isColdAdmin: boolean;
 }
 
-export interface ColdProfileData<T> extends UserProfileData<T> {
-	org_id: string;
-	org_name: string;
-}
+export type ColdProfileData<T> = UserProfileData<T>;
 
 export const addUserToContext = async (userId: string, token: any) => {
 	const profile: ColdProfile<ColdProfileData<any>> = {
-		displayName: '',
-		name: {},
-		org_id: '',
-		org_name: '',
-		username: '',
 		id: userId,
+		isAdmin: token.coldclimate_claims.roles.includes('company:admin'),
+		isOwner: token.coldclimate_claims.roles.includes('company:owner'),
+		isMember: token.coldclimate_claims.roles.includes('company:member'),
+		isColdAdmin: token.coldclimate_claims.roles.includes('cold:admin'),
+		displayName: token.coldclimate_claims.email,
 		roles: token.coldclimate_claims.roles,
 		type: UserProfileType.USER,
 		email: token.coldclimate_claims.email,

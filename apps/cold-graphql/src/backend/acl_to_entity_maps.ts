@@ -28,5 +28,7 @@ export const readOnlyEntities: string[] = [
 	'utility_bills',
 ];
 
+export const organizationEntity: string[] = ['organizations'];
+
 // These entities should not be exposed via any API.
 export const restrictedEntities: string[] = ['_prisma_migrations', 'vector_records'];

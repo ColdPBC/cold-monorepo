@@ -1,6 +1,7 @@
 import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { AttributeAssurance } from './attribute-assurance';
 import { MaterialSupplier } from './material-supplier';
 import { Organization } from './organization';
 import { ProductMaterial } from './product-material';
@@ -28,6 +29,9 @@ export class Material {
 
 	@RelationshipField<Material>(() => Organization, { id: (entity) => entity.organization?.id })
 	organization!: Organization;
+
+	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'material' })
+	attributeAssurances!: AttributeAssurance[];
 
 	@RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'material' })
 	materialSuppliers!: MaterialSupplier[];

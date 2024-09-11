@@ -1,7 +1,8 @@
 import { SustainabilityAttributeHooks } from './sustainability-attribute.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Entity, Enum, Index, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { Collection, Entity, Enum, Index, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { AttributeAssurance } from './attribute-assurance';
 import { Organization } from './organization';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -30,7 +31,7 @@ export class SustainabilityAttribute {
 		this.sidecar = new SustainabilityAttributeHooks();
 	}
 
-	@PrimaryKey({ type: 'text' })
+	@PrimaryKey({ type: 'uuid' })
 	id!: string;
 
 	@ManyToOne({ entity: () => Organization, ref: true, nullable: true, index: 'sustainability_attributes_organization_id_idx1' })
@@ -39,10 +40,10 @@ export class SustainabilityAttribute {
 	@Property({ type: 'text' })
 	name!: string;
 
-	@Property({ type: 'datetime', length: 3 })
+	@Property({ type: 'datetime', length: 6 })
 	createdAt!: Date;
 
-	@Property({ type: 'datetime', length: 3 })
+	@Property({ type: 'datetime', length: 6 })
 	updatedAt!: Date;
 
 	@Property({ type: 'boolean', default: false })
@@ -58,6 +59,9 @@ export class SustainabilityAttribute {
 
 	@Property({ type: 'json', nullable: true })
 	metadata?: Record<string, unknown>;
+
+	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'sustainabilityAttribute' })
+	attributeAssurances = new Collection<AttributeAssurance>(this);
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof SustainabilityAttribute, OrgContext>) {

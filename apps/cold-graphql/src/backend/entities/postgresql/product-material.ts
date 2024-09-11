@@ -18,22 +18,22 @@ export class ProductMaterial {
 		this.sidecar = new ProductMaterialHooks();
 	}
 
-	@PrimaryKey({ type: 'text' })
+	@PrimaryKey({ type: 'uuid' })
 	id!: string;
 
-	@ManyToOne({ entity: () => Product, ref: true, index: 'product_materials_product_id_idx' })
+	@ManyToOne({ entity: () => Product, ref: true, index: 'product_materials_product_id_idx1' })
 	product!: Ref<Product>;
 
-	@ManyToOne({ entity: () => Material, ref: true, index: 'product_materials_material_id_idx' })
+	@ManyToOne({ entity: () => Material, ref: true, index: 'product_materials_material_id_idx1' })
 	material!: Ref<Material>;
 
 	@Property({ type: 'text' })
 	materialSupplierId!: string;
 
-	@Property({ type: 'datetime', length: 3 })
+	@Property({ type: 'datetime', length: 6 })
 	createdAt!: Date;
 
-	@Property({ type: 'datetime', length: 3 })
+	@Property({ type: 'datetime', length: 6 })
 	updatedAt!: Date;
 
 	@Hook(HookRegister.BEFORE_CREATE)

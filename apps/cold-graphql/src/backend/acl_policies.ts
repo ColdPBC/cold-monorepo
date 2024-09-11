@@ -5,39 +5,69 @@ const logger = new WorkerLogger('ApplyAclToEntities');
 
 export type OrgContext = {
 	organization: null | Organization;
-	user: { organization?: any; org_id: string; roles: string[]; email: string };
+	user: {
+		organization?: any;
+		org_id: string;
+		roles: string[];
+		email: string;
+		isMember: boolean;
+		isAdmin: boolean;
+		isOwner: boolean;
+		isColdAdmin: boolean;
+	};
 	token: { coldclimate_claims: { org_id: string; email: string; roles: string[]; sub: string; permissions: string[] } };
 };
 
-export const read_only_acl = {
+const organization_scoped = (context: OrgContext) => ({
+	$or: [{ organization_id: context.user.organization.id }, { organization: { id: context.user.organization.id } }, { organization_id: null }],
+});
+
+export const organization_acl = {
 	'company:member': {
-		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		read: (context: OrgContext) => ({ id: context.user.organization.id }),
 	},
 	'company:admin': {
-		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		read: (context: OrgContext) => ({ id: context.user.organization.id }),
+		write: (context: OrgContext) => ({ id: context.user.organization.id }),
 	},
 	'company:owner': {
-		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		read: (context: OrgContext) => ({ id: context.user.organization.id }),
+		write: (context: OrgContext) => ({ id: context.user.organization.id }),
 	},
 	'cold:admin': {
 		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 	},
 };
 
+export const read_only_acl = {
+	'company:member': {
+		read: (context: OrgContext) => context?.user?.isMember,
+	},
+	'company:admin': {
+		read: (context: OrgContext) => context?.user?.isAdmin,
+	},
+	'company:owner': {
+		read: (context: OrgContext) => context?.user?.isOwner,
+	},
+	'cold:admin': {
+		all: (context: OrgContext) => context?.user?.isColdAdmin,
+	},
+};
+
 export const allow_null_orgs_acl = {
 	'company:member': {
 		read: (context: OrgContext) => ({
-			$or: [{ organization: context.user.org_id }, { organization: null }],
+			$or: [organization_scoped(context), { organization: null }],
 		}),
 	},
 	'company:admin': {
 		read: (context: OrgContext) => ({
-			$or: [{ organization: context.user.org_id }, { organization: null }],
+			$or: [organization_scoped(context), { organization: null }],
 		}),
 		write: (context: OrgContext) => ({ organization: context.user.org_id }),
 		'company:owner': {
 			read: (context: OrgContext) => ({
-				$or: [{ organization: context.user.org_id }, { organization: null }],
+				$or: [organization_scoped, { organization: null }],
 			}),
 		},
 		'cold:admin': {
@@ -53,23 +83,23 @@ type aclResponse =
 	  }
 	| boolean;
 
+export const attribute_assurances_acl = {
+	'company:member': {
+		read: organization_scoped,
+	},
+};
+
 export const default_acl = {
 	'company:member': {
-		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		read: organization_scoped,
 	},
 	'company:admin': {
-		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
-		write: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
-		create: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
-		update: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
-		delete: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		read: organization_scoped,
+		write: organization_scoped,
 	},
 	'company:owner': {
-		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
-		write: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
-		create: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
-		update: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
-		delete: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
+		read: organization_scoped,
+		write: organization_scoped,
 	},
 	'cold:admin': {
 		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),

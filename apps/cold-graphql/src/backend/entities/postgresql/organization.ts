@@ -22,10 +22,10 @@ import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../../acl_policies';
+import { organization_acl } from '../../acl_policies';
 import { OrgContext } from '../../acl_policies';
 
-@ApplyAccessControlList(default_acl)
+@ApplyAccessControlList(organization_acl)
 @Entity({ tableName: 'organizations' })
 export class Organization {
 	sidecar: OrganizationHooks;

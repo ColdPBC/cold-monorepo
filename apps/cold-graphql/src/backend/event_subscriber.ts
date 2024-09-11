@@ -1,9 +1,8 @@
 import { EventSubscriber, EventArgs, FlushEventArgs, TransactionEventArgs } from '@mikro-orm/core';
-import { entities } from './entities';
 import { WorkerLogger } from './libs/logger'; // Adjust the import path as needed
 
-export class DynamicEventSubscriber implements EventSubscriber {
-	logger = new WorkerLogger('DynamicEventSubscriber');
+export class MQTTSubscriber implements EventSubscriber {
+	logger = new WorkerLogger('MQTTSubscriber');
 	// entity life cycle events
 	onInit<T>(args: EventArgs<T>): void {
 		this.logger.debug(`onInit: ${args.em.name}`, args.entity);
@@ -18,7 +17,7 @@ export class DynamicEventSubscriber implements EventSubscriber {
 		this.logger.info(`afterRead: ${args.em.name}`, args.entity);
 	}
 	async beforeCreate<T>(args: EventArgs<T>): Promise<void> {
-		this.logger.debug(`beforeCreate: ${args.em.name}`, args.entity);
+		this.logger.debug(`Creating: ${args.em.name}`, args.entity);
 	}
 	async afterCreate<T>(args: EventArgs<T>): Promise<void> {
 		this.logger.debug(`afterCreate: ${args.em.name}`, args.entity);

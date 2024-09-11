@@ -4,6 +4,7 @@ import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../acl_policies';
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { set } from 'lodash';
+import { v4 } from 'uuid';
 
 export class SustainabilityAttributeHooks extends BaseSidecar {
 	constructor() {
@@ -22,9 +23,12 @@ export class SustainabilityAttributeHooks extends BaseSidecar {
 
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof SustainabilityAttribute, OrgContext>) {
 		this.logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });
-		for (const item of params.args.items) {
-			set(item, 'id', this.id.generate('susatr').scopedId);
+		if (!params.context.user.isColdAdmin) {
+			for (const item of params.args.items) {
+				set(item, 'organization_id', params.context.user.organization.id);
+			}
 		}
+
 		return params;
 	}
 

@@ -2,6 +2,7 @@ import { MaterialHooks } from './material.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
+import { AttributeAssurance } from './attribute-assurance';
 import { MaterialSupplier } from './material-supplier';
 import { Organization } from './organization';
 import { ProductMaterial } from './product-material';
@@ -19,24 +20,27 @@ export class Material {
 		this.sidecar = new MaterialHooks();
 	}
 
-	@PrimaryKey({ type: 'text' })
+	@PrimaryKey({ type: 'uuid' })
 	id!: string;
 
 	@Unique({ name: 'materials_name_key' })
 	@Property({ type: 'text' })
 	name!: string;
 
-	@Property({ type: 'datetime', length: 3 })
+	@Property({ type: 'datetime', length: 6 })
 	createdAt!: Date;
 
-	@Property({ type: 'datetime', length: 3 })
+	@Property({ type: 'datetime', length: 6 })
 	updatedAt!: Date;
 
 	@Property({ type: 'boolean', default: false })
 	deleted = false;
 
-	@ManyToOne({ entity: () => Organization, ref: true, index: 'materials_organization_id_idx' })
+	@ManyToOne({ entity: () => Organization, ref: true, index: 'materials_organization_id_idx1' })
 	organization!: Ref<Organization>;
+
+	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'material' })
+	attributeAssurances = new Collection<AttributeAssurance>(this);
 
 	@OneToMany({ entity: () => MaterialSupplier, mappedBy: 'material' })
 	materialSuppliers = new Collection<MaterialSupplier>(this);

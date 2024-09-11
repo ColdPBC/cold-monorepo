@@ -1,9 +1,13 @@
 import { AttributeAssuranceHooks } from './attribute-assurance.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Entity, Index, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { Material } from './material';
 import { Organization } from './organization';
+import { OrganizationFacility } from './organization-facility';
 import { OrganizationFile } from './organization-file';
+import { Product } from './product';
+import { SustainabilityAttribute } from './sustainability-attribute';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl } from '../../acl_policies';
@@ -18,11 +22,26 @@ export class AttributeAssurance {
 		this.sidecar = new AttributeAssuranceHooks();
 	}
 
-	@PrimaryKey({ type: 'text' })
+	@PrimaryKey({ type: 'uuid' })
 	id!: string;
+
+	@ManyToOne({ entity: () => OrganizationFacility, ref: true, nullable: true, index: 'attribute_assurances_organization_facility_id_idx' })
+	organizationFacility?: Ref<OrganizationFacility>;
 
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'attribute_assurances_organization_id_idx1' })
 	organization!: Ref<Organization>;
+
+	@ManyToOne({ entity: () => SustainabilityAttribute, ref: true, index: 'attribute_assurances_attribute_id_idx1' })
+	sustainabilityAttribute!: Ref<SustainabilityAttribute>;
+
+	@ManyToOne({ entity: () => Material, ref: true, nullable: true, index: 'attribute_assurancess_material_id_idx1' })
+	material?: Ref<Material>;
+
+	@ManyToOne({ entity: () => Product, ref: true, nullable: true, index: 'attribute_assurances_product_id_idx1' })
+	product?: Ref<Product>;
+
+	@ManyToOne({ entity: () => OrganizationFile, ref: true, nullable: true, index: 'attribute_assurances_organization_file_id_idx1' })
+	organizationFile?: Ref<OrganizationFile>;
 
 	@Property({ type: 'datetime', length: 3 })
 	effectiveStartDate!: Date;
@@ -30,30 +49,11 @@ export class AttributeAssurance {
 	@Property({ type: 'datetime', length: 3 })
 	effectiveEndDate!: Date;
 
-	@ManyToOne({ entity: () => OrganizationFile, ref: true, nullable: true, index: 'attribute_assurances_organization_file_id_idx1' })
-	organizationFile?: Ref<OrganizationFile>;
-
-	@Property({ type: 'datetime', length: 3 })
+	@Property({ type: 'datetime', length: 6 })
 	createdAt!: Date;
 
-	@Property({ type: 'datetime', length: 3 })
+	@Property({ type: 'datetime', length: 6 })
 	updatedAt!: Date;
-
-	@Index({ name: 'attribute_assurancess_material_id_idx1' })
-	@Property({ type: 'text', nullable: true })
-	materialId?: string;
-
-	@Index({ name: 'attribute_assurances_organization_facility_id_idx' })
-	@Property({ type: 'text', nullable: true })
-	organizationFacilityId?: string;
-
-	@Index({ name: 'attribute_assurances_product_id_idx1' })
-	@Property({ type: 'text', nullable: true })
-	productId?: string;
-
-	@Index({ name: 'attribute_assurances_attribute_id_idx1' })
-	@Property({ type: 'text' })
-	sustainabilityAttributeId!: string;
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof AttributeAssurance, OrgContext>) {

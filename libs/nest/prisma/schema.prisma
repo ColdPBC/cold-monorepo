@@ -313,23 +313,23 @@ model organizations {
   actions                                   actions[]
   category_data                             category_data[]
   integrations                              integrations[]
-  materials                                 materials[]
   organization_compliance                   organization_compliance[]
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
   organization_compliance_ai_responses      organization_compliance_ai_responses[]
   organization_compliances_old              organization_compliances_old[]
   facilities                                organization_facilities[]
   organization_files                        organization_files[]
-  products                                  products[]
   survey_data                               survey_data[]
   survey_status                             survey_status[]
   utility_bills                             utility_bills[]
   vector_records                            vector_records[]
-  sustainability_attributes                 sustainability_attributes[]
   facility_footprints                       facility_footprints[]
   compliance_responses                      compliance_responses[]
-  attribute_assurances                      attribute_assurances[]
   metadata                                  Json?
+  sustainability_attributes                 sustainability_attributes[]
+  attribute_assurances                      attribute_assurances[]
+  products                                  products[]
+  materials                                 materials[]
 }
 
 /// @namespace Organization_Facilities
@@ -360,112 +360,10 @@ model organization_facilities {
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   utility_bills        utility_bills[]
   product_suppliers    suppliers_view[]
-  material_suppliers   material_suppliers[]
   attribute_assurances attribute_assurances[]
+  material_suppliers   material_suppliers[]
 
   @@index([organization_id], map: "organization_facilities_organization_id_idx1")
-}
-
-model sustainability_attributes {
-  id                   String                 @id @default(cuid())
-  organization_id      String?
-  name                 String
-  created_at           DateTime               @default(now())
-  updated_at           DateTime               @updatedAt
-  deleted              Boolean                @default(false)
-  level                claim_levels
-  type                 claim_types
-  organization         organizations?         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  metadata             Json?
-  attribute_assurances attribute_assurances[]
-
-  @@unique([organization_id, name], name: "orgIdName")
-  @@index([organization_id], map: "sustainability_attributes_organization_id_idx1")
-  @@index([level], map: "sustainability_attributes_level_idx1")
-  @@index([type], map: "sustainability_attributes_type_idx1")
-}
-
-model attribute_assurances {
-  id                          String                    @id @default(cuid())
-  sustainability_attribute_id String
-  organization_facility_id    String?
-  organization_id             String
-  material_id                 String?
-  product_id                  String?
-  organization_file_id        String?
-  effective_start_date        DateTime
-  effective_end_date          DateTime
-  created_at                  DateTime                  @default(now())
-  updated_at                  DateTime                  @updatedAt
-  organization                organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  organization_files          organization_files?       @relation(fields: [organization_file_id], references: [id])
-  material                    materials?                @relation(fields: [material_id], references: [id])
-  product                     products?                 @relation(fields: [product_id], references: [id])
-  supplier                    organization_facilities?  @relation(fields: [organization_facility_id], references: [id])
-  sustainability_attribute    sustainability_attributes @relation(fields: [sustainability_attribute_id], references: [id], onDelete: Cascade)
-
-  @@index([organization_id], map: "attribute_assurances_organization_id_idx1")
-  @@index([organization_file_id], map: "attribute_assurances_organization_file_id_idx1")
-  @@index([sustainability_attribute_id], map: "attribute_assurances_attribute_id_idx1")
-  @@index([organization_facility_id])
-  @@index([product_id], map: "attribute_assurances_product_id_idx1")
-  @@index([material_id], map: "attribute_assurancess_material_id_idx1")
-}
-
-model products {
-  id                   String                 @id @default(cuid())
-  name                 String                 @unique
-  created_at           DateTime               @default(now())
-  updated_at           DateTime               @updatedAt
-  deleted              Boolean                @default(false)
-  organization_id      String
-  product_materials    product_materials[]
-  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  attribute_assurances attribute_assurances[]
-
-  @@index([organization_id], map: "products_organization_id_idx1")
-}
-
-model materials {
-  id                   String                 @id @default(cuid())
-  name                 String                 @unique
-  created_at           DateTime               @default(now())
-  updated_at           DateTime               @updatedAt
-  deleted              Boolean                @default(false)
-  organization_id      String
-  material_suppliers   material_suppliers[]
-  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  product_materials    product_materials[]
-  attribute_assurances attribute_assurances[]
-
-  @@index([organization_id], map: "materials_organization_id_idx1")
-}
-
-model material_suppliers {
-  id          String                  @id @default(cuid())
-  material_id String
-  supplier_id String
-  created_at  DateTime                @default(now())
-  updated_at  DateTime                @updatedAt
-  material    materials               @relation(fields: [material_id], references: [id], onDelete: Cascade)
-  supplier    organization_facilities @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
-
-  @@unique([material_id, supplier_id], name: "materialSupplierKey")
-  @@index([material_id], map: "material_suppliers_material_id_idx1")
-}
-
-model product_materials {
-  id                   String    @id @default(cuid())
-  product_id           String
-  material_id          String
-  material_supplier_id String
-  created_at           DateTime  @default(now())
-  updated_at           DateTime  @updatedAt
-  material             materials @relation(fields: [material_id], references: [id], onDelete: Cascade)
-  product              products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
-
-  @@index([material_id], map: "product_materials_material_id_idx1")
-  @@index([product_id], map: "product_materials_product_id_idx1")
 }
 
 model service_definitions {
@@ -696,6 +594,109 @@ model facility_footprints {
   @@unique([facility_id, type, value], name: "facilityFootprintKey")
 }
 
+model sustainability_attributes {
+  id                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_id      String?
+  name                 String
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime               @updatedAt @db.Timestamptz(6)
+  deleted              Boolean                @default(false)
+  level                claim_levels
+  type                 claim_types
+  organization         organizations?         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  metadata             Json?
+  attribute_assurances attribute_assurances[]
+
+  @@unique([organization_id, name], name: "orgIdName")
+  @@index([organization_id], map: "sustainability_attributes_organization_id_idx1")
+  @@index([level], map: "sustainability_attributes_level_idx1")
+  @@index([type], map: "sustainability_attributes_type_idx1")
+}
+
+model attribute_assurances {
+  id                          String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  organization_facility_id    String?
+  organization_id             String
+  sustainability_attribute_id String                    @db.Uuid
+  material_id                 String?                   @db.Uuid
+  product_id                  String?                   @db.Uuid
+  organization_file_id        String?
+  effective_start_date        DateTime
+  effective_end_date          DateTime
+  created_at                  DateTime                  @default(now()) @db.Timestamptz(6)
+  updated_at                  DateTime                  @updatedAt @db.Timestamptz(6)
+  organization                organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  organization_files          organization_files?       @relation(fields: [organization_file_id], references: [id])
+  material                    materials?                @relation(fields: [material_id], references: [id])
+  product                     products?                 @relation(fields: [product_id], references: [id])
+  supplier                    organization_facilities?  @relation(fields: [organization_facility_id], references: [id])
+  sustainability_attribute    sustainability_attributes @relation(fields: [sustainability_attribute_id], references: [id], onDelete: Cascade)
+
+  @@index([organization_id], map: "attribute_assurances_organization_id_idx1")
+  @@index([organization_file_id], map: "attribute_assurances_organization_file_id_idx1")
+  @@index([sustainability_attribute_id], map: "attribute_assurances_attribute_id_idx1")
+  @@index([organization_facility_id])
+  @@index([product_id], map: "attribute_assurances_product_id_idx1")
+  @@index([material_id], map: "attribute_assurancess_material_id_idx1")
+}
+
+model products {
+  id                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name                 String                 @unique
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime               @updatedAt @db.Timestamptz(6)
+  deleted              Boolean                @default(false)
+  organization_id      String
+  materials            product_materials[]
+  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  attribute_assurances attribute_assurances[]
+
+  @@index([organization_id], map: "products_organization_id_idx1")
+}
+
+model materials {
+  id                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name                 String                 @unique
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime               @updatedAt @db.Timestamptz(6)
+  deleted              Boolean                @default(false)
+  organization_id      String
+  material_suppliers   material_suppliers[]
+  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  attribute_assurances attribute_assurances[]
+  product_materials    product_materials[]
+
+  @@index([organization_id], map: "materials_organization_id_idx1")
+}
+
+model material_suppliers {
+  id          String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  material_id String                  @db.Uuid
+  supplier_id String
+  created_at  DateTime                @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime                @updatedAt @db.Timestamptz(6)
+  material    materials               @relation(fields: [material_id], references: [id], onDelete: Cascade)
+  supplier    organization_facilities @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+
+  @@unique([material_id, supplier_id], name: "materialSupplierKey")
+  @@index([supplier_id], map: "material_suppliers_supplier_id_idx1")
+  @@index([material_id], map: "material_suppliers_material_id_idx1")
+}
+
+model product_materials {
+  id                   String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  product_id           String    @db.Uuid
+  material_id          String    @db.Uuid
+  material_supplier_id String
+  created_at           DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime  @updatedAt @db.Timestamptz(6)
+  material             materials @relation(fields: [material_id], references: [id], onDelete: Cascade)
+  product              products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([material_id], map: "product_materials_material_id_idx1")
+  @@index([product_id], map: "product_materials_product_id_idx1")
+}
+
 model organization_compliance {
   id                                        String                                       @id
   description                               String
@@ -788,7 +789,7 @@ model compliance_sections {
 }
 
 model compliance_questions {
-  id                                      String                                       @id
+  id                                      String                                       @id @default(cuid())
   key                                     String
   order                                   Int
   prompt                                  String

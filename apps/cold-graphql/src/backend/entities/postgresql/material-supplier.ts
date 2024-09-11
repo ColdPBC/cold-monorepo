@@ -18,19 +18,19 @@ export class MaterialSupplier {
 		this.sidecar = new MaterialSupplierHooks();
 	}
 
-	@PrimaryKey({ type: 'text' })
+	@PrimaryKey({ type: 'uuid' })
 	id!: string;
 
-	@ManyToOne({ entity: () => Material, ref: true, index: 'material_suppliers_material_id_idx' })
+	@ManyToOne({ entity: () => Material, ref: true, index: 'material_suppliers_material_id_idx1' })
 	material!: Ref<Material>;
 
-	@ManyToOne({ entity: () => OrganizationFacility, ref: true, fieldName: 'supplier_id' })
+	@ManyToOne({ entity: () => OrganizationFacility, ref: true, fieldName: 'supplier_id', index: 'material_suppliers_supplier_id_idx1' })
 	organizationFacility!: Ref<OrganizationFacility>;
 
-	@Property({ type: 'datetime', length: 3 })
+	@Property({ type: 'datetime', length: 6 })
 	createdAt!: Date;
 
-	@Property({ type: 'datetime', length: 3 })
+	@Property({ type: 'datetime', length: 6 })
 	updatedAt!: Date;
 
 	@Hook(HookRegister.BEFORE_CREATE)

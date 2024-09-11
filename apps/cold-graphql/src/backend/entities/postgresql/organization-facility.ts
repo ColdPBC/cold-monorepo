@@ -2,6 +2,7 @@ import { OrganizationFacilityHooks } from './organization-facility.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { AttributeAssurance } from './attribute-assurance';
 import { Emission } from './emission';
 import { Integration } from './integration';
 import { MaterialSupplier } from './material-supplier';
@@ -65,6 +66,9 @@ export class OrganizationFacility {
 
 	@Property({ type: 'integer', nullable: true })
 	supplierTier?: number;
+
+	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'organizationFacility' })
+	attributeAssurances = new Collection<AttributeAssurance>(this);
 
 	@OneToMany({ entity: () => Emission, mappedBy: 'organizationFacility' })
 	emissions = new Collection<Emission>(this);

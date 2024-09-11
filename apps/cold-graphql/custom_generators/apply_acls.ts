@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { coldAdminEntities, includeNullOrgs, readOnlyEntities, restrictedEntities } from './acl_to_entity_maps';
+import { coldAdminEntities, includeNullOrgs, organizationEntity, readOnlyEntities, restrictedEntities } from '../src/backend/acl_to_entity_maps';
 import { WorkerLogger } from '../src/backend/libs/logger';
 
 const directoryPath = path.join(__dirname, '../src/backend/entities/postgresql');
@@ -24,6 +24,7 @@ function applyAclsToEntities() {
 				if (entityDecoratorMatch) {
 					const tableName = entityDecoratorMatch[1];
 
+					const isOrganizationEntity = organizationEntity.includes(tableName);
 					const isInReadOnly = readOnlyEntities.includes(tableName);
 					const isInColdAdmin = coldAdminEntities.includes(tableName);
 					const isInIncludeNullOrgs = includeNullOrgs.includes(tableName);
@@ -42,6 +43,8 @@ function applyAclsToEntities() {
 						aclName = 'cold_admin_only';
 					} else if (includeNullOrgs.includes(tableName)) {
 						aclName = 'allow_null_orgs_acl';
+					} else if (isOrganizationEntity) {
+						aclName = 'organization_acl';
 					}
 
 					const aclDecoratorString = `@ApplyAccessControlList(${aclName})`;

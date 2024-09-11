@@ -1,6 +1,7 @@
 import { Entity, Field, ID, RelationshipField, graphweaverMetadata } from '@exogee/graphweaver';
 import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { AttributeAssurance } from './attribute-assurance';
 import { Organization } from './organization';
 import { SustainabilityAttributesLevel, SustainabilityAttributesType, SustainabilityAttribute as OrmSustainabilityAttribute } from '../entities';
 import { connection } from '../database';
@@ -38,4 +39,7 @@ export class SustainabilityAttribute {
 
 	@Field(() => GraphQLJSON, { nullable: true })
 	metadata?: Record<string, unknown>;
+
+	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'sustainabilityAttribute' })
+	attributeAssurances!: AttributeAssurance[];
 }
