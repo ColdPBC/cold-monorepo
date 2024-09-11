@@ -340,27 +340,28 @@ model organizations {
 /// @zod.import(["import { organization_facilitiesSchema } from '../../custom'"])
 /// @actions
 model organization_facilities {
-  id                 String               @id @default(cuid())
-  organization_id    String
-  name               String
-  city               String?
-  country            String?
-  created_at         DateTime             @default(now())
-  updated_at         DateTime             @updatedAt
-  address_line_2     String?
-  postal_code        String?
-  deleted            Boolean              @default(false)
-  metadata           Json?
-  state_province     String?
-  address_line_1     String?
-  supplier_tier      Int?
-  supplier           Boolean?             @default(false)
-  emissions          emissions[]
-  integrations       integrations[]
-  organization       organizations        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  utility_bills      utility_bills[]
-  product_suppliers  suppliers_view[]
-  material_suppliers material_suppliers[]
+  id                   String                 @id @default(cuid())
+  organization_id      String
+  name                 String
+  city                 String?
+  country              String?
+  created_at           DateTime               @default(now())
+  updated_at           DateTime               @updatedAt
+  address_line_2       String?
+  postal_code          String?
+  deleted              Boolean                @default(false)
+  metadata             Json?
+  state_province       String?
+  address_line_1       String?
+  supplier_tier        Int?
+  supplier             Boolean?               @default(false)
+  emissions            emissions[]
+  integrations         integrations[]
+  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  utility_bills        utility_bills[]
+  product_suppliers    suppliers_view[]
+  material_suppliers   material_suppliers[]
+  attribute_assurances attribute_assurances[]
 
   @@index([organization_id], map: "organization_facilities_organization_id_idx1")
 }
@@ -384,7 +385,7 @@ model sustainability_attributes {
 }
 
 model attribute_assurances {
-  id                          String              @id @default(cuid())
+  id                          String                   @id @default(cuid())
   sustainability_attribute_id String
   organization_facility_id    String?
   organization_id             String
@@ -393,10 +394,13 @@ model attribute_assurances {
   organization_file_id        String?
   effective_start_date        DateTime
   effective_end_date          DateTime
-  created_at                  DateTime            @default(now())
-  updated_at                  DateTime            @updatedAt
-  organization                organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  organization_files          organization_files? @relation(fields: [organization_file_id], references: [id])
+  created_at                  DateTime                 @default(now())
+  updated_at                  DateTime                 @updatedAt
+  organization                organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  organization_files          organization_files?      @relation(fields: [organization_file_id], references: [id])
+  material                    materials?               @relation(fields: [material_id], references: [id])
+  product                     products?                @relation(fields: [product_id], references: [id])
+  supplier                    organization_facilities? @relation(fields: [organization_facility_id], references: [id])
 
   @@index([organization_id], map: "attribute_assurances_organization_id_idx1")
   @@index([organization_file_id], map: "attribute_assurances_organization_file_id_idx1")
@@ -407,28 +411,30 @@ model attribute_assurances {
 }
 
 model products {
-  id                String              @id @default(cuid())
-  name              String              @unique
-  created_at        DateTime            @default(now())
-  updated_at        DateTime            @updatedAt
-  deleted           Boolean             @default(false)
-  organization_id   String
-  product_materials product_materials[]
-  organization      organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  id                   String                 @id @default(cuid())
+  name                 String                 @unique
+  created_at           DateTime               @default(now())
+  updated_at           DateTime               @updatedAt
+  deleted              Boolean                @default(false)
+  organization_id      String
+  product_materials    product_materials[]
+  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  attribute_assurances attribute_assurances[]
 
   @@index([organization_id], map: "products_organization_id_idx1")
 }
 
 model materials {
-  id                 String               @id @default(cuid())
-  name               String               @unique
-  created_at         DateTime             @default(now())
-  updated_at         DateTime             @updatedAt
-  deleted            Boolean              @default(false)
-  organization_id    String
-  material_suppliers material_suppliers[]
-  organization       organizations        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  product_materials  product_materials[]
+  id                   String                 @id @default(cuid())
+  name                 String                 @unique
+  created_at           DateTime               @default(now())
+  updated_at           DateTime               @updatedAt
+  deleted              Boolean                @default(false)
+  organization_id      String
+  material_suppliers   material_suppliers[]
+  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  product_materials    product_materials[]
+  attribute_assurances attribute_assurances[]
 
   @@index([organization_id], map: "materials_organization_id_idx1")
 }

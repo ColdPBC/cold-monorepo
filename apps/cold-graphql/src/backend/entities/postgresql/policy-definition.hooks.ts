@@ -2,11 +2,6 @@
 import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../acl_policies';
-import { WorkerLogger } from '../../libs/logger';
-import { getConnection } from '../../database.config';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { get, set } from 'lodash';
-import { MQTTPayloadType, MqttService } from '../../libs/mqtt/mqtt.service';
 import { PolicyDefinition } from './policy-definition';
 
 export class PolicyDefinitionHooks extends BaseSidecar {
