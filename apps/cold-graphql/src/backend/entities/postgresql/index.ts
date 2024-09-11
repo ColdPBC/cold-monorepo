@@ -18,7 +18,6 @@ import { Integration } from './integration';
 import { MaterialSupplier } from './material-supplier';
 import { Material } from './material';
 import { News } from './news';
-import { OrganizationAttribute } from './organization-attribute';
 import { OrganizationCompliance } from './organization-compliance';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
 import { OrganizationComplianceAiResponse } from './organization-compliance-ai-response';
@@ -65,7 +64,6 @@ export * from './integration';
 export * from './material-supplier';
 export * from './material';
 export * from './news';
-export * from './organization-attribute';
 export * from './organization-compliance';
 export * from './organization-compliance-ai-response-file';
 export * from './organization-compliance-ai-response';
@@ -113,7 +111,6 @@ export const entities = [
 	MaterialSupplier,
 	Material,
 	News,
-	OrganizationAttribute,
 	OrganizationCompliance,
 	OrganizationComplianceAiResponseFile,
 	OrganizationComplianceAiResponse,

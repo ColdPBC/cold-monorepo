@@ -1,18 +1,17 @@
+import { OrganizationFileHooks } from './organization-file.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
-import * as hooks from './organization-file.hooks';
-
-import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../../acl_policies';
-import { OrgContext } from '../../acl_policies';
 
 import { Collection, Entity, Enum, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
 import { AttributeAssurance } from './attribute-assurance';
 import { Integration } from './integration';
 import { Organization } from './organization';
-import { OrganizationAttribute } from './organization-attribute';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
 import { OrganizationComplianceNoteFile } from './organization-compliance-note-file';
 import { VectorRecord } from './vector-record';
+
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { default_acl } from '../../acl_policies';
+import { OrgContext } from '../../acl_policies';
 
 export enum OrganizationFilesType {
 	CERTIFICATE = 'CERTIFICATE',
@@ -26,6 +25,12 @@ export enum OrganizationFilesType {
 @ApplyAccessControlList(default_acl)
 @Entity({ tableName: 'organization_files' })
 export class OrganizationFile {
+	sidecar: OrganizationFileHooks;
+
+	constructor() {
+		this.sidecar = new OrganizationFileHooks();
+	}
+
 	@Property({ type: 'text', nullable: true })
 	bucket?: string;
 
@@ -111,9 +116,6 @@ export class OrganizationFile {
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'organizationFile' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 
-	@OneToMany({ entity: () => OrganizationAttribute, mappedBy: 'organizationFile' })
-	organizationAttributes = new Collection<OrganizationAttribute>(this);
-
 	@OneToMany({ entity: () => OrganizationComplianceAiResponseFile, mappedBy: 'organizationFile' })
 	organizationComplianceAiResponseFiles = new Collection<OrganizationComplianceAiResponseFile>(this);
 
@@ -122,42 +124,68 @@ export class OrganizationFile {
 
 	@OneToMany({ entity: () => VectorRecord, mappedBy: 'organizationFile' })
 	vectorRecords = new Collection<VectorRecord>(this);
-	/**
- 	** START GENERATED HOOKS SECTION
- 	**/
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof OrganizationFile, OrgContext>) {
-		return hooks.beforeCreateHook(params);
+		if(!this.sidecar) {
+	    this.sidecar = new OrganizationFileHooks();
+	  }
+    return await this.sidecar.beforeCreateHook(params);
 	}
+
 	@Hook(HookRegister.AFTER_CREATE)
 	async afterCreate(params: CreateOrUpdateHookParams<typeof OrganizationFile, OrgContext>) {
-		return hooks.afterCreateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFileHooks();
+	  }
+    return await this.sidecar.afterCreateHook(params);
 	}
+
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHookParams<typeof OrganizationFile, OrgContext>) {
-		return hooks.beforeReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFileHooks();
+	  }
+	  return await this.sidecar.beforeReadHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHookParams<typeof OrganizationFile, OrgContext>) {
-		return hooks.afterReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFileHooks();
+	  }
+	  return await this.sidecar.afterReadHook(params);
 	}
+	
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHookParams<typeof OrganizationFile, OrgContext>) {
-		return hooks.beforeUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFileHooks();
+	  }
+	  return await this.sidecar.beforeUpdateHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHookParams<typeof OrganizationFile, OrgContext>) {
-		return hooks.afterUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFileHooks();
+	  }
+	  return await this.sidecar.afterUpdateHook(params);
 	}
+	
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHookParams<typeof OrganizationFile, OrgContext>) {
-		return hooks.beforeDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFileHooks();
+	  }
+	  return await this.sidecar.beforeDeleteHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHookParams<typeof OrganizationFile, OrgContext>) {
-		return hooks.afterDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFileHooks();
+	  }
+	  return await this.sidecar.afterDeleteHook(params);
 	}
-	/**
- 	** END GENERATED HOOKS SECTION
- 	**/
 }

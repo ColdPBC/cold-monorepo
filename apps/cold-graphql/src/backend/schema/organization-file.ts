@@ -4,7 +4,6 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AttributeAssurance } from './attribute-assurance';
 import { Integration } from './integration';
 import { Organization } from './organization';
-import { OrganizationAttribute } from './organization-attribute';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
 import { OrganizationComplianceNoteFile } from './organization-compliance-note-file';
 import { VectorRecord } from './vector-record';
@@ -100,9 +99,6 @@ export class OrganizationFile {
 
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'organizationFile' })
 	attributeAssurances!: AttributeAssurance[];
-
-	@RelationshipField<OrganizationAttribute>(() => [OrganizationAttribute], { relatedField: 'organizationFile' })
-	organizationAttributes!: OrganizationAttribute[];
 
 	@RelationshipField<OrganizationComplianceAiResponseFile>(() => [OrganizationComplianceAiResponseFile], { relatedField: 'organizationFile' })
 	organizationComplianceAiResponseFiles!: OrganizationComplianceAiResponseFile[];

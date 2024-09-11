@@ -1,16 +1,22 @@
+import { PolicyDatumHooks } from './policy-datum.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
-import * as hooks from './policy-datum.hooks';
+
+import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { PolicyDefinition } from './policy-definition';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl } from '../../acl_policies';
 import { OrgContext } from '../../acl_policies';
 
-import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
-import { PolicyDefinition } from './policy-definition';
-
 @ApplyAccessControlList(default_acl)
 @Entity({ tableName: 'policy_data' })
 export class PolicyDatum {
+	sidecar: PolicyDatumHooks;
+
+	constructor() {
+		this.sidecar = new PolicyDatumHooks();
+	}
+
 	@Property({ type: 'text' })
 	email!: string;
 
@@ -25,42 +31,68 @@ export class PolicyDatum {
 
 	@PrimaryKey({ type: 'integer' })
 	id!: number;
-	/**
- 	** START GENERATED HOOKS SECTION
- 	**/
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof PolicyDatum, OrgContext>) {
-		return hooks.beforeCreateHook(params);
+		if(!this.sidecar) {
+	    this.sidecar = new PolicyDatumHooks();
+	  }
+    return await this.sidecar.beforeCreateHook(params);
 	}
+
 	@Hook(HookRegister.AFTER_CREATE)
 	async afterCreate(params: CreateOrUpdateHookParams<typeof PolicyDatum, OrgContext>) {
-		return hooks.afterCreateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new PolicyDatumHooks();
+	  }
+    return await this.sidecar.afterCreateHook(params);
 	}
+
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHookParams<typeof PolicyDatum, OrgContext>) {
-		return hooks.beforeReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new PolicyDatumHooks();
+	  }
+	  return await this.sidecar.beforeReadHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHookParams<typeof PolicyDatum, OrgContext>) {
-		return hooks.afterReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new PolicyDatumHooks();
+	  }
+	  return await this.sidecar.afterReadHook(params);
 	}
+	
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHookParams<typeof PolicyDatum, OrgContext>) {
-		return hooks.beforeUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new PolicyDatumHooks();
+	  }
+	  return await this.sidecar.beforeUpdateHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHookParams<typeof PolicyDatum, OrgContext>) {
-		return hooks.afterUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new PolicyDatumHooks();
+	  }
+	  return await this.sidecar.afterUpdateHook(params);
 	}
+	
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHookParams<typeof PolicyDatum, OrgContext>) {
-		return hooks.beforeDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new PolicyDatumHooks();
+	  }
+	  return await this.sidecar.beforeDeleteHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHookParams<typeof PolicyDatum, OrgContext>) {
-		return hooks.afterDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new PolicyDatumHooks();
+	  }
+	  return await this.sidecar.afterDeleteHook(params);
 	}
-	/**
- 	** END GENERATED HOOKS SECTION
- 	**/
 }

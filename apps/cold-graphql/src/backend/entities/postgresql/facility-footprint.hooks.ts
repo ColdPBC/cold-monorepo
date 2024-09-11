@@ -1,57 +1,65 @@
-// facility-footprint.hooks Sidecar - Entity hooks for facility
-	import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-	import { OrgContext } from '../../acl_policies';
-	import { WorkerLogger } from '../../libs/logger';
-	import { FacilityFootprint } from './facility-footprint';
-	const logger = new WorkerLogger('facility-footprint')
-		
+// FacilityFootprint Hooks
+import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
+import { BaseSidecar } from '../base.sidecar';
+import { OrgContext } from '../../acl_policies';
+import { WorkerLogger } from '../../libs/logger';
+import { getConnection } from '../../database.config';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { get, set } from 'lodash';
+import { MQTTPayloadType, MqttService } from '../../libs/mqtt/mqtt.service';
+import { FacilityFootprint } from './facility-footprint';
+
+export class FacilityFootprintHooks extends BaseSidecar {
+	constructor() {
+		super(FacilityFootprintHooks.name, FacilityFootprint);
+	}
 	
-	export const beforeCreateHook = (params: CreateOrUpdateHookParams<typeof FacilityFootprint, OrgContext>) => {
-		logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });
+	async beforeReadHook(params: ReadHookParams<typeof FacilityFootprint, OrgContext>) {
+		this.logger.log('beforeReadHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
 
 	
-	export const afterCreateHook = (params: CreateOrUpdateHookParams<typeof FacilityFootprint, OrgContext>) => {
-		logger.log('afterCreateHook', { user: params.context.user, arguments: params.args });
+	async afterReadHook(params: ReadHookParams<typeof FacilityFootprint, OrgContext>) {
+		this.logger.log('afterReadHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
 
 	
-	export const beforeReadHook = (params: ReadHookParams<typeof FacilityFootprint, OrgContext>) => {
-		logger.log('beforeReadHook', { user: params.context.user, arguments: params.args });
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof FacilityFootprint, OrgContext>) {
+		this.logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
 
 	
-	export const afterReadHook = (params: ReadHookParams<typeof FacilityFootprint, OrgContext>) => {
-		logger.log('afterReadHook', { user: params.context.user, arguments: params.args });
+	async afterCreateHook(params: CreateOrUpdateHookParams<typeof FacilityFootprint, OrgContext>) {
+		this.logger.log('afterCreateHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
 
 	
-	export const beforeUpdateHook = (params: CreateOrUpdateHookParams<typeof FacilityFootprint, OrgContext>) => {
-		logger.log('beforeUpdateHook', { user: params.context.user, arguments: params.args });
+	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof FacilityFootprint, OrgContext>) {
+		this.logger.log('beforeUpdateHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
 
 	
-	export const afterUpdateHook = (params: CreateOrUpdateHookParams<typeof FacilityFootprint, OrgContext>) => {
-		logger.log('afterUpdateHook', { user: params.context.user, arguments: params.args });
+	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof FacilityFootprint, OrgContext>) {
+		this.logger.log('afterUpdateHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
 
 	
-	export const beforeDeleteHook = (params: DeleteHookParams<typeof FacilityFootprint, OrgContext>) => {
-		logger.log('beforeDeleteHook', { user: params.context.user, arguments: params.args });
+	async beforeDeleteHook(params: DeleteHookParams<typeof FacilityFootprint, OrgContext>) {
+		this.logger.log('beforeDeleteHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
 
 	
-	export const afterDeleteHook = (params: DeleteHookParams<typeof FacilityFootprint, OrgContext>) => {
-		logger.log('afterDeleteHook', { user: params.context.user, arguments: params.args });
+	async afterDeleteHook(params: DeleteHookParams<typeof FacilityFootprint, OrgContext>) {
+		this.logger.log('afterDeleteHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
 
-	
+}

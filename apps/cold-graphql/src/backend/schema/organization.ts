@@ -7,7 +7,6 @@ import { CategoryDatum } from './category-datum';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { Material } from './material';
-import { OrganizationAttribute } from './organization-attribute';
 import { OrganizationCompliance } from './organization-compliance';
 import { OrganizationComplianceAiResponse } from './organization-compliance-ai-response';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
@@ -83,9 +82,6 @@ export class Organization {
 
 	@RelationshipField<Material>(() => [Material], { relatedField: 'organization' })
 	materials!: Material[];
-
-	@RelationshipField<OrganizationAttribute>(() => [OrganizationAttribute], { relatedField: 'organization' })
-	organizationAttributes!: OrganizationAttribute[];
 
 	@RelationshipField<OrganizationCompliance>(() => [OrganizationCompliance], { relatedField: 'organization' })
 	organizationCompliances!: OrganizationCompliance[];

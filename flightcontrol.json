@@ -70,7 +70,7 @@
           "id": "cold-api-ec2-production",
           "name": "cold-api-ec2",
           "basePath": ".",
-          "cpu": 2,
+          "cpu": 1,
           "port": 7001,
           "type": "web",
           "ci": {
@@ -83,7 +83,7 @@
             "clusterMinInstances": 1,
             "clusterMaxInstances": 4
           },
-          "memory": 4,
+          "memory": 3,
           "buildType": "docker",
           "dockerfilePath": "_api.dockerfile",
           "dockerContext": ".",

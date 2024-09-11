@@ -1,18 +1,23 @@
+import { ProductHooks } from './product.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
-import * as hooks from './product.hooks';
+
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
+import { Organization } from './organization';
+import { ProductMaterial } from './product-material';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl } from '../../acl_policies';
 import { OrgContext } from '../../acl_policies';
 
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
-import { Organization } from './organization';
-import { OrganizationAttribute } from './organization-attribute';
-import { ProductMaterial } from './product-material';
-
 @ApplyAccessControlList(default_acl)
 @Entity({ tableName: 'products' })
 export class Product {
+	sidecar: ProductHooks;
+
+	constructor() {
+		this.sidecar = new ProductHooks();
+	}
+
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
@@ -32,47 +37,70 @@ export class Product {
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'products_organization_id_idx' })
 	organization!: Ref<Organization>;
 
-	@OneToMany({ entity: () => OrganizationAttribute, mappedBy: 'product' })
-	organizationAttributes = new Collection<OrganizationAttribute>(this);
-
 	@OneToMany({ entity: () => ProductMaterial, mappedBy: 'product' })
 	productMaterials = new Collection<ProductMaterial>(this);
-	/**
- 	** START GENERATED HOOKS SECTION
- 	**/
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
-		return hooks.beforeCreateHook(params);
+		if(!this.sidecar) {
+	    this.sidecar = new ProductHooks();
+	  }
+    return await this.sidecar.beforeCreateHook(params);
 	}
+
 	@Hook(HookRegister.AFTER_CREATE)
 	async afterCreate(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
-		return hooks.afterCreateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new ProductHooks();
+	  }
+    return await this.sidecar.afterCreateHook(params);
 	}
+
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHookParams<typeof Product, OrgContext>) {
-		return hooks.beforeReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new ProductHooks();
+	  }
+	  return await this.sidecar.beforeReadHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHookParams<typeof Product, OrgContext>) {
-		return hooks.afterReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new ProductHooks();
+	  }
+	  return await this.sidecar.afterReadHook(params);
 	}
+	
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
-		return hooks.beforeUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new ProductHooks();
+	  }
+	  return await this.sidecar.beforeUpdateHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
-		return hooks.afterUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new ProductHooks();
+	  }
+	  return await this.sidecar.afterUpdateHook(params);
 	}
+	
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHookParams<typeof Product, OrgContext>) {
-		return hooks.beforeDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new ProductHooks();
+	  }
+	  return await this.sidecar.beforeDeleteHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHookParams<typeof Product, OrgContext>) {
-		return hooks.afterDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new ProductHooks();
+	  }
+	  return await this.sidecar.afterDeleteHook(params);
 	}
-	/**
- 	** END GENERATED HOOKS SECTION
- 	**/
 }

@@ -34,19 +34,15 @@ export const allow_null_orgs_acl = {
 		read: (context: OrgContext) => ({
 			$or: [{ organization: context.user.org_id }, { organization: null }],
 		}),
-	},
-	'company:owner': {
-		read: (context: OrgContext) => ({
-			$or: [{ organization: context.user.org_id }, { organization: null }],
-		}),
-	},
-	'cold:admin': {
-		read: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
-		write: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
-		create: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
-		update: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
-		delete: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
-		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		write: (context: OrgContext) => ({ organization: context.user.org_id }),
+		'company:owner': {
+			read: (context: OrgContext) => ({
+				$or: [{ organization: context.user.org_id }, { organization: null }],
+			}),
+		},
+		'cold:admin': {
+			all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		},
 	},
 };
 

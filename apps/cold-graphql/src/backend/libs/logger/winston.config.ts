@@ -9,12 +9,12 @@ const winstonConfig = (context: string, meta?: any) => {
 		environment: process.env['NODE_ENV'] || meta?.environment,
 		...omit(meta, ['service', 'version', 'environment']),
 		context: context,
-		tags: ['nest.js', 'winston'],
+		tags: ['graphweaver', 'winston'],
 		transports: [
 			new winston.transports.Console({
 				format:
 					process.env['NODE_ENV'] === 'development' || process.env['LOG_FORMAT'] === 'pretty'
-						? winston.format.combine(winston.format.combine(winston.format.timestamp(), nestWinstonModuleUtilities.format.nestLike()))
+						? winston.format.combine(winston.format.combine(winston.format.timestamp(), nestWinstonModuleUtilities.format.nestLike('cold-graphql-api')))
 						: winston.format.combine(winston.format.timestamp(), winston.format.json(), winston.format.align()),
 			}),
 		],
