@@ -67,7 +67,7 @@ const _DocumentSuppliersTable = (props: { assurances: FilesWithAssurances['attri
 		const supplierTier = supplier?.supplierTier || 0;
 		const associatedMaterials = supplier?.materialSuppliers.map(materialSupplier => materialSupplier.material.name) || [];
 		return {
-			id: supplier?.id || index.toString(),
+			id: assurance.id,
 			name: supplierName,
 			country: supplierCountry,
 			tier: supplierTier,

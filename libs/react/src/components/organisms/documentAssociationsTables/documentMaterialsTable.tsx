@@ -32,7 +32,7 @@ const _DocumentMaterialsTable = (props: { assurances: FilesWithAssurances['attri
 		const supplier = materialSuppliers.find(supplier => supplier.supplier.supplierTier === 2);
 		const supplierName = supplier ? supplier.supplier.name : '';
 		return {
-			id: assurance?.material?.name,
+			id: assurance.id,
 			name: materialName,
 			supplier: supplierName,
 		};

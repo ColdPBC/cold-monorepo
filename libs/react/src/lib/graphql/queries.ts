@@ -19,6 +19,7 @@ export const GET_ALL_FILES = gql`
 			type
 			metadata
 			attributeAssurances {
+				id
 				effectiveStartDate
 				effectiveEndDate
 				sustainabilityAttribute {

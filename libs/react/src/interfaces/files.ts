@@ -31,6 +31,7 @@ export interface FilesWithAssurances {
 }
 
 export interface AttributeAssurance {
+	id: string;
 	effectiveStartDate: string;
 	effectiveEndDate: string;
 	supplier: null | {

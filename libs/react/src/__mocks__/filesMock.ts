@@ -144,6 +144,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 			type: FileTypes.CERTIFICATE,
 			attributeAssurances: [
 				{
+					id: '1',
 					effectiveStartDate: addDays(new Date(), 1).toISOString(),
 					effectiveEndDate: addDays(new Date(), 70).toISOString(),
 					sustainabilityAttribute: {
@@ -177,6 +178,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 			type: FileTypes.CERTIFICATE,
 			attributeAssurances: [
 				{
+					id: '2',
 					effectiveStartDate: addDays(new Date(), 1).toISOString(),
 					effectiveEndDate: addDays(new Date(), 70).toISOString(),
 					sustainabilityAttribute: {
@@ -198,6 +200,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 					supplier: null,
 				},
 				{
+					id: '3',
 					effectiveStartDate: addDays(new Date(), 1).toISOString(),
 					effectiveEndDate: addDays(new Date(), 70).toISOString(),
 					sustainabilityAttribute: {

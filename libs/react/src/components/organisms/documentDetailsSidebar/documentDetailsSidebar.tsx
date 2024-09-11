@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import { Claims, FilesWithAssurances, InputOption } from '@coldpbc/interfaces';
 import { BaseButton, ColdIcon, DocumentDetailsMenu, DocumentMaterialsTable, DocumentSuppliersTable, ErrorFallback, Select, Spinner } from '@coldpbc/components';
 import { ButtonTypes, FileTypes, IconNames } from '@coldpbc/enums';
@@ -71,7 +71,6 @@ const _DocumentDetailsSidebar = (props: {
 			if (hasSustainabilityAttribute) {
 				fileState['sustainabilityAttribute'] = file.attributeAssurances[0]?.sustainabilityAttribute?.name;
 			}
-
 			return fileState;
 		} else {
 			return undefined;
@@ -89,7 +88,12 @@ const _DocumentDetailsSidebar = (props: {
 				sustainabilityAttribute: string | undefined;
 		  }>
 		| undefined
-	>(getInitialFileState(file));
+	>(undefined);
+
+	useEffect(() => {
+		// listen to file changes and update the file state
+		setFileState(getInitialFileState(file));
+	}, [file]);
 
 	const documentTypeOptions: InputOption[] = toArray(FileTypes).map((type, index) => {
 		const name = capitalize(type.replace(/_/g, ' '));
@@ -241,12 +245,16 @@ const _DocumentDetailsSidebar = (props: {
 				return null;
 			}
 			const claimLevel = attribute.level;
-			if (claimLevel === 'MATERIAL') {
-				element = <DocumentMaterialsTable assurances={file?.attributeAssurances || []} />;
-			} else if (claimLevel === 'SUPPLIER') {
-				element = <DocumentSuppliersTable assurances={file?.attributeAssurances || []} />;
-			} else {
-				element = <DocumentSuppliersTable assurances={[]} />;
+			switch (claimLevel) {
+				case 'MATERIAL':
+					element = <DocumentMaterialsTable assurances={file?.attributeAssurances || []} />;
+					break;
+				case 'SUPPLIER':
+					element = <DocumentSuppliersTable assurances={file?.attributeAssurances || []} />;
+					break;
+				default:
+					element = <DocumentSuppliersTable assurances={[]} />;
+					break;
 			}
 		} else {
 			element = <DocumentSuppliersTable assurances={[]} />;
