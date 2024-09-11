@@ -1,5 +1,5 @@
 import { DataGrid, GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridValidRowModel, MuiEvent } from '@mui/x-data-grid';
-import { ClaimStatus, IconNames } from '@coldpbc/enums';
+import { ClaimStatus, FileTypes, IconNames } from '@coldpbc/enums';
 import { ColdIcon, ErrorFallback, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays, format } from 'date-fns';
@@ -7,8 +7,9 @@ import capitalize from 'lodash/capitalize';
 import React from 'react';
 import { get, toArray, uniqWith } from 'lodash';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
-import { getDateActiveStatus } from '@coldpbc/lib';
+import { getDateActiveStatus, listFilterOperators, listSortComparator } from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
+import { useColdContext } from '@coldpbc/hooks';
 
 const _DocumentsTable = (props: {
 	files: FilesWithAssurances[];
@@ -18,6 +19,7 @@ const _DocumentsTable = (props: {
 	selectDocument: (id: string) => void;
 }) => {
 	const { files, sustainabilityAttributes, selectedDocument, setSelectedDocument, selectDocument } = props;
+	const { logBrowser } = useColdContext();
 
 	const renderUploadDate = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
 		let dateString = '--';
@@ -179,11 +181,27 @@ const _DocumentsTable = (props: {
 			headerName: 'Type',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 			width: 100,
+			type: 'singleSelect',
+			valueFormatter: (value: FileTypes) => {
+				if (value === FileTypes.TEST_RESULTS) {
+					return 'Test Result';
+				} else {
+					return capitalize(value);
+				}
+			},
+			valueOptions: toArray(FileTypes).map(type => {
+				if (type === FileTypes.TEST_RESULTS) {
+					return 'Test Result';
+				} else {
+					return capitalize(type);
+				}
+			}),
 		},
 		{
 			field: 'sustainability_attribute',
 			headerName: 'Sustainability Attribute',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
+			type: 'singleSelect',
 			width: 300,
 			valueOptions: sustainabilityAttributes.map(attribute => attribute.name),
 		},
@@ -196,8 +214,17 @@ const _DocumentsTable = (props: {
 			type: 'singleSelect',
 			valueOptions: toArray(allAssociatedRecords),
 			renderCell: renderAssociatedRecords,
+			sortComparator: listSortComparator,
+			filterOperators: listFilterOperators,
 		},
 	];
+
+	logBrowser('DocumentsTable', 'info', {
+		files,
+		sustainabilityAttributes,
+		selectedDocument,
+		selectDocument,
+	});
 
 	return (
 		<DataGrid

@@ -12,12 +12,11 @@ export const DocumentsHeaderTypes = (props: { files: FilesWithAssurances[] }) =>
 	const getFileTypeTitle = (type: string) => {
 		switch (type) {
 			case FileTypes.CERTIFICATE:
-				return 'Certificate';
+				return 'Certificates';
 			case FileTypes.TEST_RESULTS:
-				return 'Testing Documents';
+				return 'Test Documents';
 			case FileTypes.STATEMENT:
 				return 'Statements';
-			case FileTypes.OTHER:
 			default:
 				return 'Other';
 		}
