@@ -1,3 +1,11 @@
+# [1.368.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.367.0...v1.368.0) (2024-09-11)
+
+
+### Features
+
+* add relations to attribute_assurances and clean up hooks ([2854d83](https://github.com/ColdPBC/cold-monorepo/commit/2854d83ff20c6a2bfbba1bbd3c989d3cffbe3adb))
+* add sustainability attribute relation to attribute assurances ([275267d](https://github.com/ColdPBC/cold-monorepo/commit/275267dda9a83d847067932d6f14c3d52cdc8286))
+
 # [1.367.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.366.1...v1.367.0) (2024-09-11)
 
 
