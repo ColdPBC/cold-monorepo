@@ -19,7 +19,13 @@ const _DocumentsPage = () => {
 	const { addToastMessage } = useAddToastMessage();
 	const selectedFileURLSWR = useOrgSWR<string>(selectedDocument ? [`/files/${selectedDocument?.id}/url`, 'GET'] : null, axiosFetcher);
 	const ref = React.useRef<HTMLDivElement>(null);
-	const allFiles = useGraphQLSWR('GET_ALL_FILES');
+	const allFiles = useGraphQLSWR('GET_ALL_FILES', {
+		filter: {
+			organization: {
+				id: orgId,
+			},
+		},
+	});
 	const allSustainabilityAttributes = useGraphQLSWR('GET_ALL_SUS_ATTRIBUTES');
 
 	useEffect(() => {
