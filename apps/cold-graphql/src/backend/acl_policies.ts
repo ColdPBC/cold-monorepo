@@ -41,7 +41,7 @@ export const allow_null_orgs_acl = {
 			}),
 		},
 		'cold:admin': {
-			all: true,
+			all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 		},
 	},
 };

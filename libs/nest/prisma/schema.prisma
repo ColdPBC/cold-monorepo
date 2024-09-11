@@ -367,16 +367,17 @@ model organization_facilities {
 }
 
 model sustainability_attributes {
-  id              String         @id @default(cuid())
-  organization_id String?
-  name            String
-  created_at      DateTime       @default(now())
-  updated_at      DateTime       @updatedAt
-  deleted         Boolean        @default(false)
-  level           claim_levels
-  type            claim_types
-  organization    organizations? @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  metadata        Json?
+  id                   String                 @id @default(cuid())
+  organization_id      String?
+  name                 String
+  created_at           DateTime               @default(now())
+  updated_at           DateTime               @updatedAt
+  deleted              Boolean                @default(false)
+  level                claim_levels
+  type                 claim_types
+  organization         organizations?         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  metadata             Json?
+  attribute_assurances attribute_assurances[]
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "sustainability_attributes_organization_id_idx1")
@@ -385,7 +386,7 @@ model sustainability_attributes {
 }
 
 model attribute_assurances {
-  id                          String                   @id @default(cuid())
+  id                          String                    @id @default(cuid())
   sustainability_attribute_id String
   organization_facility_id    String?
   organization_id             String
@@ -394,13 +395,14 @@ model attribute_assurances {
   organization_file_id        String?
   effective_start_date        DateTime
   effective_end_date          DateTime
-  created_at                  DateTime                 @default(now())
-  updated_at                  DateTime                 @updatedAt
-  organization                organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  organization_files          organization_files?      @relation(fields: [organization_file_id], references: [id])
-  material                    materials?               @relation(fields: [material_id], references: [id])
-  product                     products?                @relation(fields: [product_id], references: [id])
-  supplier                    organization_facilities? @relation(fields: [organization_facility_id], references: [id])
+  created_at                  DateTime                  @default(now())
+  updated_at                  DateTime                  @updatedAt
+  organization                organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  organization_files          organization_files?       @relation(fields: [organization_file_id], references: [id])
+  material                    materials?                @relation(fields: [material_id], references: [id])
+  product                     products?                 @relation(fields: [product_id], references: [id])
+  supplier                    organization_facilities?  @relation(fields: [organization_facility_id], references: [id])
+  sustainability_attribute    sustainability_attributes @relation(fields: [sustainability_attribute_id], references: [id], onDelete: Cascade)
 
   @@index([organization_id], map: "attribute_assurances_organization_id_idx1")
   @@index([organization_file_id], map: "attribute_assurances_organization_file_id_idx1")
