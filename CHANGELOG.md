@@ -1,3 +1,10 @@
+# [1.370.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.369.0...v1.370.0) (2024-09-11)
+
+
+### Features
+
+* add sustainability attribute relation to attribute assurances ([cd4b208](https://github.com/ColdPBC/cold-monorepo/commit/cd4b208c6f14356f1f9bc1a86d5677d698f55a16))
+
 # [1.369.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.368.0...v1.369.0) (2024-09-11)
 
 
