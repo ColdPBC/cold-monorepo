@@ -20,7 +20,7 @@ export const read_only_acl = {
 		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
 	},
 	'cold:admin': {
-		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		all: false,
 	},
 };
 
@@ -76,7 +76,7 @@ export const default_acl = {
 		delete: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
 	},
 	'cold:admin': {
-		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		all: true,
 	},
 };
 

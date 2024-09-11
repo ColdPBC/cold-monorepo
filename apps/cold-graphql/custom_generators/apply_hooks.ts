@@ -85,6 +85,9 @@ fs.readdir(entityPath, (err, files) => {
 	}
 
 	files.forEach(file => {
+		if (file.endsWith('.ts') && file.endsWith('.hooks.ts')) {
+			return;
+		}
 		const filePath = path.join(entityPath, file);
 		fs.readFile(filePath, 'utf8', (err, data) => {
 			if (err) {

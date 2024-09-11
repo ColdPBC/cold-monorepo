@@ -27,11 +27,7 @@ export const getConnection = () => ({
 		//metadataProvider: ReflectMetadataProvider,
 		//subscribers: [DynamicEventSubscriber],
 		driver: PostgreSqlDriver,
-		user: connectionValues().user,
-		password: connectionValues().password,
-		host: connectionValues().host,
-		port: connectionValues().port,
-		dbName: connectionValues().dbName,
+		...connectionValues(),
 		pool: { min: 2, max: 50 },
 	},
 });
