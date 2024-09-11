@@ -5,7 +5,6 @@ import { Emission } from './emission';
 import { Integration } from './integration';
 import { MaterialSupplier } from './material-supplier';
 import { Organization } from './organization';
-import { OrganizationAttribute } from './organization-attribute';
 import { UtilityBill } from './utility-bill';
 import { OrganizationFacility as OrmOrganizationFacility } from '../entities';
 import { connection } from '../database';
@@ -67,9 +66,6 @@ export class OrganizationFacility {
 
 	@RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'organizationFacility' })
 	materialSuppliers!: MaterialSupplier[];
-
-	@RelationshipField<OrganizationAttribute>(() => [OrganizationAttribute], { relatedField: 'organizationFacility' })
-	organizationAttributes!: OrganizationAttribute[];
 
 	@RelationshipField<UtilityBill>(() => [UtilityBill], { relatedField: 'organizationFacility' })
 	utilityBills!: UtilityBill[];

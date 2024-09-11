@@ -1,18 +1,24 @@
+import { UtilityBillHooks } from './utility-bill.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
-import * as hooks from './utility-bill.hooks';
-
-import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { read_only_acl } from '../../acl_policies';
-import { OrgContext } from '../../acl_policies';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { Integration } from './integration';
 import { Organization } from './organization';
 import { OrganizationFacility } from './organization-facility';
 
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { read_only_acl } from '../../acl_policies';
+import { OrgContext } from '../../acl_policies';
+
 @ApplyAccessControlList(read_only_acl)
 @Entity({ tableName: 'utility_bills' })
 export class UtilityBill {
+	sidecar: UtilityBillHooks;
+
+	constructor() {
+		this.sidecar = new UtilityBillHooks();
+	}
+
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
@@ -42,42 +48,68 @@ export class UtilityBill {
 
 	@Property({ type: 'boolean', default: false })
 	deleted = false;
-	/**
- 	** START GENERATED HOOKS SECTION
- 	**/
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof UtilityBill, OrgContext>) {
-		return hooks.beforeCreateHook(params);
+		if(!this.sidecar) {
+	    this.sidecar = new UtilityBillHooks();
+	  }
+    return await this.sidecar.beforeCreateHook(params);
 	}
+
 	@Hook(HookRegister.AFTER_CREATE)
 	async afterCreate(params: CreateOrUpdateHookParams<typeof UtilityBill, OrgContext>) {
-		return hooks.afterCreateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new UtilityBillHooks();
+	  }
+    return await this.sidecar.afterCreateHook(params);
 	}
+
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHookParams<typeof UtilityBill, OrgContext>) {
-		return hooks.beforeReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new UtilityBillHooks();
+	  }
+	  return await this.sidecar.beforeReadHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHookParams<typeof UtilityBill, OrgContext>) {
-		return hooks.afterReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new UtilityBillHooks();
+	  }
+	  return await this.sidecar.afterReadHook(params);
 	}
+	
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHookParams<typeof UtilityBill, OrgContext>) {
-		return hooks.beforeUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new UtilityBillHooks();
+	  }
+	  return await this.sidecar.beforeUpdateHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHookParams<typeof UtilityBill, OrgContext>) {
-		return hooks.afterUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new UtilityBillHooks();
+	  }
+	  return await this.sidecar.afterUpdateHook(params);
 	}
+	
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHookParams<typeof UtilityBill, OrgContext>) {
-		return hooks.beforeDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new UtilityBillHooks();
+	  }
+	  return await this.sidecar.beforeDeleteHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHookParams<typeof UtilityBill, OrgContext>) {
-		return hooks.afterDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new UtilityBillHooks();
+	  }
+	  return await this.sidecar.afterDeleteHook(params);
 	}
-	/**
- 	** END GENERATED HOOKS SECTION
- 	**/
 }

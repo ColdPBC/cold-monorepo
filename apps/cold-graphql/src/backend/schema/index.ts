@@ -18,7 +18,6 @@ import './integration';
 import './material-supplier';
 import './material';
 import './news';
-import './organization-attribute';
 import './organization-compliance';
 import './organization-compliance-ai-response-file';
 import './organization-compliance-ai-response';
