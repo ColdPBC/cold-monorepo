@@ -1,9 +1,5 @@
+import { OrganizationHooks } from './organization.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
-import * as hooks from './organization.hooks';
-
-import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../../acl_policies';
-import { OrgContext } from '../../acl_policies';
 
 import { Collection, Entity, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Action } from './action';
@@ -12,7 +8,6 @@ import { CategoryDatum } from './category-datum';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { Material } from './material';
-import { OrganizationAttribute } from './organization-attribute';
 import { OrganizationCompliance } from './organization-compliance';
 import { OrganizationComplianceAiResponse } from './organization-compliance-ai-response';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
@@ -25,11 +20,20 @@ import { SurveyStatus } from './survey-status';
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
-import { OrganizationHooks } from './organization.hooks';
+
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { default_acl } from '../../acl_policies';
+import { OrgContext } from '../../acl_policies';
 
 @ApplyAccessControlList(default_acl)
 @Entity({ tableName: 'organizations' })
 export class Organization {
+	sidecar: OrganizationHooks;
+
+	constructor() {
+		this.sidecar = new OrganizationHooks();
+	}
+
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
@@ -88,9 +92,6 @@ export class Organization {
 	@OneToMany({ entity: () => Material, mappedBy: 'organization' })
 	materials = new Collection<Material>(this);
 
-	@OneToMany({ entity: () => OrganizationAttribute, mappedBy: 'organization' })
-	organizationAttributes = new Collection<OrganizationAttribute>(this);
-
 	@OneToMany({ entity: () => OrganizationCompliance, mappedBy: 'organization' })
 	organizationCompliances = new Collection<OrganizationCompliance>(this);
 
@@ -126,42 +127,68 @@ export class Organization {
 
 	@OneToMany({ entity: () => VectorRecord, mappedBy: 'organization' })
 	vectorRecords = new Collection<VectorRecord>(this);
-	/**
-	 ** START GENERATED HOOKS SECTION
-	 **/
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
-		return new OrganizationHooks().beforeCreateHook(params);
+		if(!this.sidecar) {
+	    this.sidecar = new OrganizationHooks();
+	  }
+    return await this.sidecar.beforeCreateHook(params);
 	}
+
 	@Hook(HookRegister.AFTER_CREATE)
 	async afterCreate(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
-		return new OrganizationHooks().afterCreateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationHooks();
+	  }
+    return await this.sidecar.afterCreateHook(params);
 	}
+
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHookParams<typeof Organization, OrgContext>) {
-		return new OrganizationHooks().beforeReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationHooks();
+	  }
+	  return await this.sidecar.beforeReadHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHookParams<typeof Organization, OrgContext>) {
-		return new OrganizationHooks().afterReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationHooks();
+	  }
+	  return await this.sidecar.afterReadHook(params);
 	}
+	
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
-		return new OrganizationHooks().beforeUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationHooks();
+	  }
+	  return await this.sidecar.beforeUpdateHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
-		return new OrganizationHooks().afterUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationHooks();
+	  }
+	  return await this.sidecar.afterUpdateHook(params);
 	}
+	
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHookParams<typeof Organization, OrgContext>) {
-		return new OrganizationHooks().beforeDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationHooks();
+	  }
+	  return await this.sidecar.beforeDeleteHook(params);
 	}
+	
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHookParams<typeof Organization, OrgContext>) {
-		return new OrganizationHooks().afterDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationHooks();
+	  }
+	  return await this.sidecar.afterDeleteHook(params);
 	}
-	/**
-	 ** END GENERATED HOOKS SECTION
-	 **/
 }

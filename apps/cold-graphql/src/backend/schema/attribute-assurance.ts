@@ -2,7 +2,6 @@ import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Organization } from './organization';
-import { OrganizationAttribute } from './organization-attribute';
 import { OrganizationFile } from './organization-file';
 import { AttributeAssurance as OrmAttributeAssurance } from '../entities';
 import { connection } from '../database';
@@ -23,11 +22,8 @@ export class AttributeAssurance {
 	@Field(() => ISODateStringScalar)
 	effectiveEndDate!: Date;
 
-	@RelationshipField<AttributeAssurance>(() => OrganizationAttribute, { id: (entity) => entity.organizationAttribute?.id, nullable: true })
-	organizationAttribute?: OrganizationAttribute;
-
-	@Field(() => String, { nullable: true })
-	organizationFileId?: string;
+	@RelationshipField<AttributeAssurance>(() => OrganizationFile, { id: (entity) => entity.organizationFile?.id, nullable: true })
+	organizationFile?: OrganizationFile;
 
 	@Field(() => ISODateStringScalar)
 	createdAt!: Date;
@@ -35,6 +31,15 @@ export class AttributeAssurance {
 	@Field(() => ISODateStringScalar)
 	updatedAt!: Date;
 
-	@RelationshipField<AttributeAssurance>(() => OrganizationFile, { id: (entity) => entity.organizationFile?.id, nullable: true })
-	organizationFile?: OrganizationFile;
+	@Field(() => String, { nullable: true })
+	materialId?: string;
+
+	@Field(() => String, { nullable: true })
+	organizationFacilityId?: string;
+
+	@Field(() => String, { nullable: true })
+	productId?: string;
+
+	@Field(() => String)
+	sustainabilityAttributeId!: string;
 }

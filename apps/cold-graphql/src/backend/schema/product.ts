@@ -2,7 +2,6 @@ import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Organization } from './organization';
-import { OrganizationAttribute } from './organization-attribute';
 import { ProductMaterial } from './product-material';
 import { Product as OrmProduct } from '../entities';
 import { connection } from '../database';
@@ -28,9 +27,6 @@ export class Product {
 
 	@RelationshipField<Product>(() => Organization, { id: (entity) => entity.organization?.id })
 	organization!: Organization;
-
-	@RelationshipField<OrganizationAttribute>(() => [OrganizationAttribute], { relatedField: 'product' })
-	organizationAttributes!: OrganizationAttribute[];
 
 	@RelationshipField<ProductMaterial>(() => [ProductMaterial], { relatedField: 'product' })
 	productMaterials!: ProductMaterial[];

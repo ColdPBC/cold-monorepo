@@ -1,3 +1,32 @@
+# [1.368.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.367.0...v1.368.0) (2024-09-11)
+
+
+### Features
+
+* add relations to attribute_assurances and clean up hooks ([2854d83](https://github.com/ColdPBC/cold-monorepo/commit/2854d83ff20c6a2bfbba1bbd3c989d3cffbe3adb))
+* add sustainability attribute relation to attribute assurances ([275267d](https://github.com/ColdPBC/cold-monorepo/commit/275267dda9a83d847067932d6f14c3d52cdc8286))
+
+# [1.367.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.366.1...v1.367.0) (2024-09-11)
+
+
+### Features
+
+* integrate PolicyDefinitionHooks for entity lifecycle management ([4de9ecb](https://github.com/ColdPBC/cold-monorepo/commit/4de9ecbdc2729c235144b140eb704706ed54f9e8))
+
+## [1.366.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.366.0...v1.366.1) (2024-09-11)
+
+
+### Bug Fixes
+
+* correct acl policies for 'cold:admin' role ([9a48f5e](https://github.com/ColdPBC/cold-monorepo/commit/9a48f5e576802afd78057341fe6d14e0a207b47d))
+
+# [1.366.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.365.0...v1.366.0) (2024-09-11)
+
+
+### Features
+
+* drop `organization_attributes` table and associated columns ([7c83a57](https://github.com/ColdPBC/cold-monorepo/commit/7c83a571bd280d479ac58c2649170b2cc5bb2330))
+
 # [1.365.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.364.0...v1.365.0) (2024-09-10)
 
 

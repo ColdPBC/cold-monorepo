@@ -1,3 +1,6 @@
+import { entities } from './entities';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+
 export const connectionValues = () => {
 	const url = process.env.DATABASE_URL;
 	if (!url) {
@@ -13,3 +16,18 @@ export const connectionValues = () => {
 		throw new Error(`DATABASE_URL is not valid: ${url}`);
 	}
 };
+
+export const getConnection = () => ({
+	connectionManagerId: 'postgresql',
+	mikroOrmConfig: {
+		driverOptions: {
+			connection: process.env.NODE_ENV === 'development' ? {} : { ssl: { rejectUnauthorized: false } },
+		},
+		entities: [...entities],
+		//metadataProvider: ReflectMetadataProvider,
+		//subscribers: [DynamicEventSubscriber],
+		driver: PostgreSqlDriver,
+		...connectionValues(),
+		pool: { min: 2, max: 50 },
+	},
+});

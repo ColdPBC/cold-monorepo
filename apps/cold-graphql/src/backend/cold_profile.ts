@@ -1,8 +1,6 @@
 import { UserProfile, UserProfileData, UserProfileType } from '@exogee/graphweaver-auth';
-import { entities, Organization } from './entities';
-import { PostgreSqlDriver, ReflectMetadataProvider } from '@mikro-orm/postgresql';
-import { connectionValues } from './database.config';
-import { DynamicEventSubscriber } from './event_subscriber';
+import { Organization } from './entities';
+import { getConnection } from './database.config';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { WorkerLogger } from './libs/logger';
 
@@ -44,20 +42,7 @@ export const addUserToContext = async (userId: string, token: any) => {
 		orgFilter = { id: token.coldclimate_claims.org_id };
 	}
 
-	const provider = new MikroBackendProvider(Organization, {
-		connectionManagerId: 'postgresql',
-		mikroOrmConfig: {
-			driverOptions: {
-				connection: process.env.NODE_ENV === 'development' ? {} : { ssl: { rejectUnauthorized: false } },
-			},
-			entities: entities,
-			driver: PostgreSqlDriver,
-			metadataProvider: ReflectMetadataProvider,
-			...connectionValues(),
-			subscribers: [DynamicEventSubscriber],
-			pool: { min: 2, max: 50 },
-		},
-	});
+	const provider = new MikroBackendProvider(Organization, getConnection());
 
 	const org = await provider.findOne(orgFilter);
 
@@ -65,7 +50,7 @@ export const addUserToContext = async (userId: string, token: any) => {
 		throw new Error(`Organization ${orgFilter.id || orgFilter.name} not found`);
 	}
 
-	logger.info(`Assigning organization: ${org.name} to user profile`);
+	logger.info(`Assigning organization: ${org.name} to ${profile.email} profile`);
 
 	profile.organization = {
 		id: org.id,

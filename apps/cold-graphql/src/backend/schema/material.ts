@@ -3,7 +3,6 @@ import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { MaterialSupplier } from './material-supplier';
 import { Organization } from './organization';
-import { OrganizationAttribute } from './organization-attribute';
 import { ProductMaterial } from './product-material';
 import { Material as OrmMaterial } from '../entities';
 import { connection } from '../database';
@@ -32,9 +31,6 @@ export class Material {
 
 	@RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'material' })
 	materialSuppliers!: MaterialSupplier[];
-
-	@RelationshipField<OrganizationAttribute>(() => [OrganizationAttribute], { relatedField: 'material' })
-	organizationAttributes!: OrganizationAttribute[];
 
 	@RelationshipField<ProductMaterial>(() => [ProductMaterial], { relatedField: 'material' })
 	productMaterials!: ProductMaterial[];
