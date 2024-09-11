@@ -5,108 +5,108 @@ import { Application } from './application';
 import { auth0UserMock, getCategoriesHandler, getFootprintHandler, getSignupHandlersForApplicationSignup, StoryMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof Application> = {
-  title: 'Application/Application',
-  component: Application,
-  tags: ['autodocs'],
-  decorators: [withKnobs],
+	title: 'Application/Application',
+	component: Application,
+	tags: ['autodocs'],
+	decorators: [withKnobs],
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider>
-        <Application />
-      </StoryMockProvider>
-    );
-  },
+	render: () => {
+		return (
+			<StoryMockProvider>
+				<Application />
+			</StoryMockProvider>
+		);
+	},
 };
 
 export const Loading: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider>
-        <Application />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {
-    auth0AddOn: null,
-  },
+	render: () => {
+		return (
+			<StoryMockProvider>
+				<Application />
+			</StoryMockProvider>
+		);
+	},
+	parameters: {
+		auth0AddOn: null,
+	},
 };
 
 export const EmptyFootprintData: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider handlers={[getFootprintHandler.empty, getCategoriesHandler.empty]}>
-        <Application />
-      </StoryMockProvider>
-    );
-  },
+	render: () => {
+		return (
+			<StoryMockProvider handlers={[getFootprintHandler.empty, getCategoriesHandler.empty]}>
+				<Application />
+			</StoryMockProvider>
+		);
+	},
 };
 
 export const NeedsSignup: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider handlers={getSignupHandlersForApplicationSignup.DEFAULT}>
-        <Application />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {
-    auth0AddOn: {
-      user: {
-        ...auth0UserMock,
-        coldclimate_claims: '',
-        family_name: null,
-        given_name: null,
-      },
-    },
-  },
+	render: () => {
+		return (
+			<StoryMockProvider handlers={getSignupHandlersForApplicationSignup.DEFAULT}>
+				<Application />
+			</StoryMockProvider>
+		);
+	},
+	parameters: {
+		auth0AddOn: {
+			user: {
+				...auth0UserMock,
+				coldclimate_claims: '',
+				family_name: null,
+				given_name: null,
+			},
+		},
+	},
 };
 
 export const Handle404 = () => {
-  return (
-    <StoryMockProvider handlers={[getFootprintHandler.handle404, getCategoriesHandler.handle404]}>
-      <Application />
-    </StoryMockProvider>
-  );
+	return (
+		<StoryMockProvider handlers={[getFootprintHandler.handle404, getCategoriesHandler.handle404]}>
+			<Application />
+		</StoryMockProvider>
+	);
 };
 
 export const ColdAdmin: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider>
-        <Application />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {
-    auth0AddOn: {
-      user: {
-        coldclimate_claims: {
-          roles: ['cold:admin'],
-        },
-      },
-    },
-  },
+	render: () => {
+		return (
+			<StoryMockProvider>
+				<Application />
+			</StoryMockProvider>
+		);
+	},
+	parameters: {
+		auth0AddOn: {
+			user: {
+				coldclimate_claims: {
+					roles: ['company:admin', 'cold:admin'],
+				},
+			},
+		},
+	},
 };
 
 export const NewSideBar: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider>
-        <Application />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showNewNavigationCold698: true,
-      },
-    },
-  },
+	render: () => {
+		return (
+			<StoryMockProvider>
+				<Application />
+			</StoryMockProvider>
+		);
+	},
+	parameters: {
+		launchdarkly: {
+			flags: {
+				showNewNavigationCold698: true,
+			},
+		},
+	},
 };
