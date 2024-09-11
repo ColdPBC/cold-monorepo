@@ -1,3 +1,10 @@
+## [1.366.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.366.0...v1.366.1) (2024-09-11)
+
+
+### Bug Fixes
+
+* correct acl policies for 'cold:admin' role ([9a48f5e](https://github.com/ColdPBC/cold-monorepo/commit/9a48f5e576802afd78057341fe6d14e0a207b47d))
+
 # [1.366.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.365.0...v1.366.0) (2024-09-11)
 
 
