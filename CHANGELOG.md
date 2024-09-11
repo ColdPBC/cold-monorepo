@@ -1,3 +1,10 @@
+# [1.367.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.366.1...v1.367.0) (2024-09-11)
+
+
+### Features
+
+* integrate PolicyDefinitionHooks for entity lifecycle management ([4de9ecb](https://github.com/ColdPBC/cold-monorepo/commit/4de9ecbdc2729c235144b140eb704706ed54f9e8))
+
 ## [1.366.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.366.0...v1.366.1) (2024-09-11)
 
 
