@@ -1,3 +1,10 @@
+# [1.366.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.365.0...v1.366.0) (2024-09-11)
+
+
+### Features
+
+* drop `organization_attributes` table and associated columns ([7c83a57](https://github.com/ColdPBC/cold-monorepo/commit/7c83a571bd280d479ac58c2649170b2cc5bb2330))
+
 # [1.365.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.364.0...v1.365.0) (2024-09-10)
 
 
