@@ -20,7 +20,7 @@ export const read_only_acl = {
 		read: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
 	},
 	'cold:admin': {
-		all: false,
+		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 	},
 };
 
@@ -41,11 +41,6 @@ export const allow_null_orgs_acl = {
 		}),
 	},
 	'cold:admin': {
-		read: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
-		write: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
-		create: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
-		update: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
-		delete: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 	},
 };
@@ -76,7 +71,7 @@ export const default_acl = {
 		delete: (context: OrgContext) => ({ organization: { id: context.user.org_id } }),
 	},
 	'cold:admin': {
-		all: true,
+		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
 	},
 };
 
