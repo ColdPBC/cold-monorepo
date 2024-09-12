@@ -1,8 +1,19 @@
-import { GET_ALL_FILES, GET_ALL_ORGS, GET_ALL_SUS_ATTRIBUTES } from '@coldpbc/lib';
-import { getFilesWithAssurances, getFilesWithoutAssurances } from '../filesMock';
+import {
+	CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
+	GET_ALL_FILES,
+	GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+	GET_ALL_ORGS,
+	GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+	GET_ALL_SUS_ATTRIBUTES,
+	UPDATE_DOCUMENT_ASSURANCE,
+	UPDATE_DOCUMENT_FIELDS,
+} from '@coldpbc/lib';
+import { getFilesWithAssurances, getFilesWithoutAssurances, materialsForAssurancesMock, suppliersForAssurancesMock } from '../filesMock';
 import { getClaimsMock } from '../claimsMock';
 import { DocumentNode } from '@apollo/client';
 import { RequestHandler } from 'mock-apollo-client';
+import { get } from 'lodash';
+import { FileTypes } from '@coldpbc/enums';
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
@@ -275,6 +286,72 @@ export const defaultGraphqlMocks: {
 					sustainabilityAttributes: getClaimsMock(),
 				},
 			}),
+	},
+	{
+		query: GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					materials: materialsForAssurancesMock,
+				},
+			}),
+	},
+	{
+		query: GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					suppliers: suppliersForAssurancesMock,
+				},
+			}),
+	},
+	{
+		query: CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
+		handler: variables => {
+			const effectiveStartDate = get(variables, 'input.effectiveStartDate', new Date().toISOString());
+			const effectiveEndDate = get(variables, 'input.effectiveEndDate', new Date().toISOString());
+			return Promise.resolve({
+				data: {
+					createAttributeAssurance: {
+						effectiveStartDate,
+						effectiveEndDate,
+						supplier: null,
+						material: null,
+					},
+				},
+			});
+		},
+	},
+	{
+		query: UPDATE_DOCUMENT_FIELDS,
+		handler: variables => {
+			const createdAt = new Date().toISOString();
+			const type = get(variables, 'input.type', FileTypes.OTHER);
+			return Promise.resolve({
+				data: {
+					updateOrganizationFile: {
+						originalName: 'test',
+						createdAt: createdAt,
+						type: type,
+					},
+				},
+			});
+		},
+	},
+	{
+		query: UPDATE_DOCUMENT_ASSURANCE,
+		handler: variables => {
+			const effectiveStartDate = get(variables, 'input.effectiveStartDate', new Date().toISOString());
+			const effectiveEndDate = get(variables, 'input.effectiveEndDate', new Date().toISOString());
+			return Promise.resolve({
+				data: {
+					updateAttributeAssurance: {
+						effectiveStartDate: effectiveStartDate,
+						effectiveEndDate: effectiveEndDate,
+					},
+				},
+			});
+		},
 	},
 ];
 

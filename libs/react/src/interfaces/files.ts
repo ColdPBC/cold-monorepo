@@ -58,6 +58,8 @@ export interface AttributeAssurance {
 		}[];
 	};
 	sustainabilityAttribute: {
+		id: string;
 		name: string;
+		level: string;
 	} | null;
 }

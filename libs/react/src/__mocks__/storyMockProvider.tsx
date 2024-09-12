@@ -148,7 +148,17 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
 
 	const client = createMockClient();
 
-	forEach(props.graphqlMocks ? props.graphqlMocks : defaultGraphqlMocks, mock => {
+	const mergedMocks = defaultGraphqlMocks;
+	forEach(props.graphqlMocks, mock => {
+		const index = mergedMocks.findIndex(defaultMock => defaultMock.query === mock.query);
+		if (index !== -1) {
+			mergedMocks[index] = mock;
+		} else {
+			mergedMocks.push(mock);
+		}
+	});
+
+	mergedMocks.forEach(mock => {
 		client.setRequestHandler(mock.query, mock.handler);
 	});
 

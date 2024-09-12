@@ -2,7 +2,7 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { getClaimsMock, getFilesWithAssurances, getFilesWithoutAssurances } from '@coldpbc/mocks';
-import { DocumentDetailsSidebar } from '@coldpbc/components';
+import { DocumentDetailsSidebar, DocumentsAddAssuranceModal } from '@coldpbc/components';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
 
 const meta = {
@@ -66,19 +66,26 @@ const SidebarStory = (props: {
 }) => {
 	const { file, innerRef, sustainabilityAttributes } = props;
 	const [selectedFile, setSelectedFile] = React.useState<FilesWithAssurances | undefined>(file);
+	const [addAssuranceFile, setAddAssuranceFile] = React.useState<FilesWithAssurances | undefined>(undefined);
 	return (
-		<DocumentDetailsSidebar
-			file={selectedFile}
-			sustainabilityAttributes={sustainabilityAttributes}
-			refreshFiles={() => {}}
-			closeSidebar={() => setSelectedFile(undefined)}
-			innerRef={innerRef}
-			deleteFile={() => {
-				setSelectedFile(undefined);
-			}}
-			downloadFile={() => {}}
-			signedUrl={''}
-			isLoading={false}
-		/>
+		<>
+			<DocumentDetailsSidebar
+				file={selectedFile}
+				sustainabilityAttributes={sustainabilityAttributes}
+				refreshFiles={() => {}}
+				closeSidebar={() => setSelectedFile(undefined)}
+				innerRef={innerRef}
+				deleteFile={() => {
+					setSelectedFile(undefined);
+				}}
+				downloadFile={() => {}}
+				signedUrl={''}
+				isLoading={false}
+				addAssurance={(id: string) => {
+					setAddAssuranceFile(file);
+				}}
+			/>
+			<DocumentsAddAssuranceModal documentToAddAssurance={addAssuranceFile} setDocumentToAddAssurance={setAddAssuranceFile} />
+		</>
 	);
 };
