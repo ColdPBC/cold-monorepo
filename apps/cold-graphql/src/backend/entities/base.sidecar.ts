@@ -12,6 +12,5 @@ export class BaseSidecar {
 		this.logger = new WorkerLogger('organization');
 		this.id = new Cuid2Generator(entity.name);
 		this.mqtt = mqttService;
-		this.secrets = secrets.then(secrets => secrets);
 	}
 }

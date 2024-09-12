@@ -26,9 +26,9 @@ export const getConnection = () => ({
 			connection: process.env.NODE_ENV === 'development' ? {} : { ssl: { rejectUnauthorized: false } },
 		},
 		entities: [...entities],
+		...connectionValues(),
 		//metadataProvider: ReflectMetadataProvider,
 		driver: PostgreSqlDriver,
-		...connectionValues(),
 		pool: { min: 2, max: 50 },
 	},
 });

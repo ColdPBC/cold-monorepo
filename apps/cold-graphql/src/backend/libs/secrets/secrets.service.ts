@@ -112,8 +112,8 @@ export class SecretsService {
 }
 
 const ss: SecretsService = new SecretsService();
-const secrets = ss.getSecrets('core').then(secrets => {
-	return secrets;
-});
+const secrets = async (): Promise<any> => {
+	return await ss.getSecrets('core');
+};
 
 export { ss, secrets };

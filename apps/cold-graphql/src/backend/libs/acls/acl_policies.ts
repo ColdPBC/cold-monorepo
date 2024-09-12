@@ -35,7 +35,7 @@ export const organization_acl = {
 		write: (context: OrgContext) => ({ id: context.user.organization.id }),
 	},
 	'cold:admin': {
-		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		all: true,
 	},
 };
 
@@ -102,12 +102,12 @@ export const default_acl = {
 		write: (context: OrgContext) => ({ organization: { id: context.user.organization.id } }),
 	},
 	'cold:admin': {
-		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		all: (context: OrgContext) => true,
 	},
 };
 
 export const cold_admin_only = {
 	'cold:admin': {
-		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		all: true,
 	},
 };

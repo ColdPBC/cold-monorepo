@@ -29,8 +29,8 @@ export class SustainabilityAttributeHooks extends BaseSidecar {
 		if (!params.context.user.isColdAdmin) {
 			for (const item of params.args.items) {
 				set(item, 'organization.id', params.context.user.organization.id);
-				set(item, 'updated_at', new Date());
-				set(item, 'created_at', new Date());
+				set(item, 'updatedAt', new Date());
+				set(item, 'createdAt', new Date());
 			}
 		}
 

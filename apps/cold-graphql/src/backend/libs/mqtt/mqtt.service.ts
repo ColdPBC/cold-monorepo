@@ -29,17 +29,20 @@ export class MqttService {
 	logger: WorkerLogger;
 	entity: string;
 	secrets: any;
-	ssm: SecretsService | undefined;
-
 	constructor(entity: string) {
 		this.entity = entity;
 		const cuid = init({
 			length: 24,
 		});
-		this.secrets = secrets.then(secrets => secrets);
 		this.clientId = cuid();
 		this.logger = new WorkerLogger(`mqtt-${entity}`);
+		this.getResolvedSecrets();
+	}
+
+	async getResolvedSecrets() {
+		this.secrets = await secrets();
 		this.iotEndpoint = this.secrets.IOT_ENDPOINT;
+		//await this.connect('MQTTService');
 	}
 
 	/**

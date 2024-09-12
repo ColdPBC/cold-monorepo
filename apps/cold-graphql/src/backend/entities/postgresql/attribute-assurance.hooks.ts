@@ -29,8 +29,8 @@ export class AttributeAssuranceHooks extends BaseSidecar {
 			if (!params.context.user.isColdAdmin) {
 				set(item, 'organization.id', params.context.user.organization.id);
 			}
-			set(item, 'updated_at', new Date());
-			set(item, 'created_at', new Date());
+			set(item, 'updatedAt', new Date());
+			set(item, 'createdAt', new Date());
 		}
 		return params;
 	}
@@ -43,7 +43,7 @@ export class AttributeAssuranceHooks extends BaseSidecar {
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof AttributeAssurance, OrgContext>) {
 		this.logger.log('beforeUpdateHook', { user: params.context.user, arguments: params.args });
 		for (const item of params.args.items) {
-			set(item, 'updated_at', new Date());
+			set(item, 'updatedAt', new Date());
 			if (!params.context.user.isColdAdmin) {
 				set(item, 'organization.id', params.context.user.organization.id);
 			}

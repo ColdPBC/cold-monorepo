@@ -28,8 +28,8 @@ export class MaterialSupplierHooks extends BaseSidecar {
 		this.logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });
 
 		for (const item of params.args.items) {
-			set(item, 'updated_at', new Date());
-			set(item, 'created_at', new Date());
+			set(item, 'updatedAt', new Date());
+			set(item, 'createdAt', new Date());
 		}
 
 		return params;
@@ -44,8 +44,7 @@ export class MaterialSupplierHooks extends BaseSidecar {
 		this.logger.log('beforeUpdateHook', { user: params.context.user, arguments: params.args });
 
 		for (const item of params.args.items) {
-			set(item, 'updated_at', new Date());
-			set(item, 'created_at', new Date());
+			set(item, 'updatedAt', new Date());
 		}
 
 		return params;
