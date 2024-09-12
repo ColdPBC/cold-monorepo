@@ -10,8 +10,7 @@ import { Organization } from './organization';
 import { UtilityBill } from './utility-bill';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl } from '../../libs/acls/acl_policies';
-import { OrgContext } from '../../libs/acls/acl_policies';
+import { default_acl, OrgContext } from '../../libs/acls/acl_policies';
 
 @ApplyAccessControlList(default_acl)
 @Entity({ tableName: 'organization_facilities' })
@@ -84,65 +83,65 @@ export class OrganizationFacility {
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof OrganizationFacility, OrgContext>) {
-		if (!this.sidecar) {
-			this.sidecar = new OrganizationFacilityHooks();
-		}
-		return await this.sidecar.beforeCreateHook(params);
+		if(!this.sidecar) {
+	    this.sidecar = new OrganizationFacilityHooks();
+	  }
+    return await this.sidecar.beforeCreateHook(params);
 	}
 
 	@Hook(HookRegister.AFTER_CREATE)
 	async afterCreate(params: CreateOrUpdateHookParams<typeof OrganizationFacility, OrgContext>) {
-		if (!this.sidecar) {
-			this.sidecar = new OrganizationFacilityHooks();
-		}
-		return await this.sidecar.afterCreateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFacilityHooks();
+	  }
+    return await this.sidecar.afterCreateHook(params);
 	}
 
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHookParams<typeof OrganizationFacility, OrgContext>) {
-		if (!this.sidecar) {
-			this.sidecar = new OrganizationFacilityHooks();
-		}
-		return await this.sidecar.beforeReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFacilityHooks();
+	  }
+	  return await this.sidecar.beforeReadHook(params);
 	}
-
+	
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHookParams<typeof OrganizationFacility, OrgContext>) {
-		if (!this.sidecar) {
-			this.sidecar = new OrganizationFacilityHooks();
-		}
-		return await this.sidecar.afterReadHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFacilityHooks();
+	  }
+	  return await this.sidecar.afterReadHook(params);
 	}
-
+	
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHookParams<typeof OrganizationFacility, OrgContext>) {
-		if (!this.sidecar) {
-			this.sidecar = new OrganizationFacilityHooks();
-		}
-		return await this.sidecar.beforeUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFacilityHooks();
+	  }
+	  return await this.sidecar.beforeUpdateHook(params);
 	}
-
+	
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHookParams<typeof OrganizationFacility, OrgContext>) {
-		if (!this.sidecar) {
-			this.sidecar = new OrganizationFacilityHooks();
-		}
-		return await this.sidecar.afterUpdateHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFacilityHooks();
+	  }
+	  return await this.sidecar.afterUpdateHook(params);
 	}
-
+	
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHookParams<typeof OrganizationFacility, OrgContext>) {
-		if (!this.sidecar) {
-			this.sidecar = new OrganizationFacilityHooks();
-		}
-		return await this.sidecar.beforeDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFacilityHooks();
+	  }
+	  return await this.sidecar.beforeDeleteHook(params);
 	}
-
+	
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHookParams<typeof OrganizationFacility, OrgContext>) {
-		if (!this.sidecar) {
-			this.sidecar = new OrganizationFacilityHooks();
-		}
-		return await this.sidecar.afterDeleteHook(params);
+	  if(!this.sidecar) {
+	    this.sidecar = new OrganizationFacilityHooks();
+	  }
+	  return await this.sidecar.afterDeleteHook(params);
 	}
 }

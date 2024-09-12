@@ -5,7 +5,6 @@ import { WorkerLogger } from '../src/backend/libs/logger';
 
 const directoryPath = path.join(__dirname, '../src/backend/entities/postgresql');
 const logger = new WorkerLogger('ACLGenerator');
-const orgContextImport = `import { OrgContext } from '../../acl_policies';`;
 
 function applyAclsToEntities() {
 	fs.readdir(directoryPath, (err, files) => {
@@ -60,7 +59,7 @@ function applyAclsToEntities() {
 
 					// Generate the aclDecoratorString and aclImportStatement
 					const aclDecoratorString = `@ApplyAccessControlList(${aclName})`;
-					const aclImportStatement = `\nimport { ApplyAccessControlList } from '@exogee/graphweaver-auth';\nimport { ${aclName} } from '../../acl_policies';\n${orgContextImport}\n`;
+					const aclImportStatement = `\nimport { ApplyAccessControlList } from '@exogee/graphweaver-auth';\nimport { ${aclName}, OrgContext } from '../../libs/acls/acl_policies';\n`;
 
 					// Find the last import statement
 					const lastImportIndex = data.lastIndexOf('import ');
