@@ -85,7 +85,7 @@ const SidebarStory = (props: {
 					setAddAssuranceFile(file);
 				}}
 			/>
-			<DocumentsAddAssuranceModal documentToAddAssurance={addAssuranceFile} setDocumentToAddAssurance={setAddAssuranceFile} />
+			{addAssuranceFile && <DocumentsAddAssuranceModal documentToAddAssurance={addAssuranceFile} setDocumentToAddAssurance={setAddAssuranceFile} />}
 		</>
 	);
 };
