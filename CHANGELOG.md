@@ -1,3 +1,10 @@
+# [1.371.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.370.0...v1.371.0) (2024-09-12)
+
+
+### Features
+
+* Add secrets service and update timestamp management ([172dd07](https://github.com/ColdPBC/cold-monorepo/commit/172dd07e6d8b552e60f9eb7985d5468e7805428c))
+
 # [1.370.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.369.0...v1.370.0) (2024-09-11)
 
 
