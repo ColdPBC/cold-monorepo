@@ -1,3 +1,10 @@
+## [1.371.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.5...v1.371.6) (2024-09-12)
+
+
+### Bug Fixes
+
+* **mqtt-service:** add null check for IoT endpoint in getResolvedSecrets ([76d6ef9](https://github.com/ColdPBC/cold-monorepo/commit/76d6ef90887920cdcbbad7d4fdf5a5a129cd2f63))
+
 ## [1.371.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.4...v1.371.5) (2024-09-12)
 
 
