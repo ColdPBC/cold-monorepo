@@ -1,3 +1,10 @@
+## [1.371.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.4...v1.371.5) (2024-09-12)
+
+
+### Bug Fixes
+
+* **acl_policies:** update cold:admin policy to use context ([a9d0365](https://github.com/ColdPBC/cold-monorepo/commit/a9d0365599516eec8ef36620626dd4b78186ff04))
+
 ## [1.371.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.3...v1.371.4) (2024-09-12)
 
 
