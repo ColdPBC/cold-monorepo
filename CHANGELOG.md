@@ -1,3 +1,10 @@
+## [1.371.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.1...v1.371.2) (2024-09-12)
+
+
+### Bug Fixes
+
+* update flightcontrol.json configuration ([5df8ef3](https://github.com/ColdPBC/cold-monorepo/commit/5df8ef3ad18ad09ec259757a750b841c6db4088b))
+
 ## [1.371.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.0...v1.371.1) (2024-09-12)
 
 
