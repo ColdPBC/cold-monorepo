@@ -41,7 +41,9 @@ export class MqttService {
 
 	async getResolvedSecrets() {
 		this.secrets = await secrets();
-		this.iotEndpoint = this.secrets.IOT_ENDPOINT;
+		if (this.secrets && this.secrets.IOT_ENDPOINT) {
+			this.iotEndpoint = this.secrets.IOT_ENDPOINT;
+		}
 		//await this.connect('MQTTService');
 	}
 
