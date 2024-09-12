@@ -1,3 +1,10 @@
+## [1.371.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.0...v1.371.1) (2024-09-12)
+
+
+### Bug Fixes
+
+* handle missing secret error with logging and return null ([88e831c](https://github.com/ColdPBC/cold-monorepo/commit/88e831c27502e61e7ec118dd335e7697d1787bea))
+
 # [1.371.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.370.0...v1.371.0) (2024-09-12)
 
 
