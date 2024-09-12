@@ -374,7 +374,9 @@ const _DocumentDetailsSidebar = (props: {
 								id: assurance.id,
 								effectiveStartDate: fileState.startDate,
 								effectiveEndDate: fileState.endDate,
-								sustainabilityAttributeId: sustainabilityAttribute?.id,
+								sustainabilityAttribute: {
+									id: sustainabilityAttribute?.id,
+								},
 								updatedAt: new Date().toISOString(),
 							},
 						}),
@@ -387,8 +389,12 @@ const _DocumentDetailsSidebar = (props: {
 						input: {
 							effectiveStartDate: fileState.startDate,
 							effectiveEndDate: fileState.endDate,
-							sustainabilityAttributeId: sustainabilityAttribute?.id,
-							organizationId: orgId,
+							sustainabilityAttribute: {
+								id: sustainabilityAttribute?.id,
+							},
+							organization: {
+								id: orgId,
+							},
 							createdAt: new Date().toISOString(),
 							updatedAt: new Date().toISOString(),
 						},
