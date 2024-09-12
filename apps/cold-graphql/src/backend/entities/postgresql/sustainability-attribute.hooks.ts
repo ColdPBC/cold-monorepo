@@ -60,6 +60,13 @@ export class SustainabilityAttributeHooks extends BaseSidecar {
 			await this.mqtt.connect();
 		}
 
+		for (const item of params.args.items) {
+			if (!params.context.user.isColdAdmin) {
+				set(item, 'organization.id', params.context.user.organization.id);
+			}
+			set(item, 'updatedAt', new Date());
+		}
+
 		this.logger.log('afterUpdateHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}

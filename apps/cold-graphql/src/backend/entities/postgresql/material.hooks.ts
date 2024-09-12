@@ -45,6 +45,14 @@ export class MaterialHooks extends BaseSidecar {
 
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof Material, OrgContext>) {
 		this.logger.log('beforeUpdateHook', { user: params.context.user, arguments: params.args });
+
+		for (const item of params.args.items) {
+			if (!params.context.user.isColdAdmin) {
+				set(item, 'organization.id', params.context.user.organization.id);
+			}
+			set(item, 'updatedAt', new Date());
+		}
+
 		return params;
 	}
 

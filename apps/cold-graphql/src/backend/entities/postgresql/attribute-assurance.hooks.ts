@@ -54,6 +54,14 @@ export class AttributeAssuranceHooks extends BaseSidecar {
 
 	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof AttributeAssurance, OrgContext>) {
 		this.logger.log('afterUpdateHook', { user: params.context.user, arguments: params.args });
+
+		for (const item of params.args.items) {
+			if (!params.context.user.isColdAdmin) {
+				set(item, 'organization.id', params.context.user.organization.id);
+			}
+			set(item, 'updatedAt', new Date());
+		}
+
 		if (this.mqtt) {
 			await this.mqtt.publishMQTT(
 				{
