@@ -1,3 +1,10 @@
+## [1.371.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.2...v1.371.3) (2024-09-12)
+
+
+### Bug Fixes
+
+* refactor entity hooks and improve secret handling ([8c196ab](https://github.com/ColdPBC/cold-monorepo/commit/8c196abdfc822ab9d0238a71c1e32ca51efd7772))
+
 ## [1.371.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.1...v1.371.2) (2024-09-12)
 
 
