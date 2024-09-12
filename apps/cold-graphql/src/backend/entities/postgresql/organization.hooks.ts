@@ -2,11 +2,6 @@
 import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
-import { WorkerLogger } from '../../libs/logger';
-import { getConnection } from '../../database.config';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { get, set } from 'lodash';
-import { MQTTPayloadType, MqttService } from '../../libs/mqtt/mqtt.service';
 import { Organization } from './organization';
 
 export class OrganizationHooks extends BaseSidecar {
@@ -15,7 +10,7 @@ export class OrganizationHooks extends BaseSidecar {
 	}
 
 	async beforeReadHook(params: ReadHookParams<typeof Organization, OrgContext>) {
-		this.logger.log('beforeReadHook', { user: params.context.user, arguments: params.args });
+		//this.logger.log('beforeReadHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
 
