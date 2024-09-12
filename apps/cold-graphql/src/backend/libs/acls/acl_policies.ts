@@ -35,7 +35,7 @@ export const organization_acl = {
 		write: (context: OrgContext) => ({ id: context.user.organization.id }),
 	},
 	'cold:admin': {
-		all: true,
+		all: (context: OrgContext) => true,
 	},
 };
 
