@@ -108,6 +108,6 @@ export const default_acl = {
 
 export const cold_admin_only = {
 	'cold:admin': {
-		all: true,
+		all: (context: OrgContext) => true,
 	},
 };

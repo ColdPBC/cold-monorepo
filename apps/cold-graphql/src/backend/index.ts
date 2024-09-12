@@ -7,7 +7,7 @@ import { WorkerLogger } from './libs/logger';
 export const authZero = new AuthZero();
 
 setAddUserToContext(addUserToContext);
-//setAdministratorRoleName('cold:admin');
+setAdministratorRoleName('cold:admin');
 export const graphweaver = new Graphweaver({
 	apolloServerOptions: {
 		introspection: process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging',

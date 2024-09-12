@@ -16,20 +16,20 @@ export interface ColdProfile<T> extends UserProfile<T> {
 export type ColdProfileData<T> = UserProfileData<T>;
 
 export const addUserToContext = async (userId: string, token: any) => {
-	try {
-		const profile: ColdProfile<ColdProfileData<any>> = {
-			id: userId,
-			isAdmin: token.coldclimate_claims.roles.includes('company:admin'),
-			isOwner: token.coldclimate_claims.roles.includes('company:owner'),
-			isMember: token.coldclimate_claims.roles.includes('company:member'),
-			isColdAdmin: token.coldclimate_claims.roles.includes('cold:admin'),
-			displayName: token.coldclimate_claims.email,
-			roles: token.coldclimate_claims.roles,
-			type: UserProfileType.USER,
-			email: token.coldclimate_claims.email,
-			organization: null,
-		};
+	const profile: ColdProfile<ColdProfileData<any>> = {
+		id: userId,
+		isAdmin: token.coldclimate_claims.roles.includes('company:admin'),
+		isOwner: token.coldclimate_claims.roles.includes('company:owner'),
+		isMember: token.coldclimate_claims.roles.includes('company:member'),
+		isColdAdmin: token.coldclimate_claims.roles.includes('cold:admin'),
+		displayName: token.coldclimate_claims.email,
+		roles: token.coldclimate_claims.roles,
+		type: UserProfileType.USER,
+		email: token.coldclimate_claims.email,
+		organization: null,
+	};
 
+	try {
 		let orgFilter: { id?: string; name?: string };
 
 		if (!token.coldclimate_claims.org_id && !token.coldclimate_claims.roles.includes('cold:admin')) {
@@ -62,5 +62,6 @@ export const addUserToContext = async (userId: string, token: any) => {
 		return profile;
 	} catch (err) {
 		logger.error(`Error adding user to context: ${err}`);
+		return profile;
 	}
 };
