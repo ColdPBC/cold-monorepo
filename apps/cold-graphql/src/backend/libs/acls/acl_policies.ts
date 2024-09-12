@@ -19,7 +19,7 @@ export type OrgContext = {
 };
 
 const organization_scoped = (context: OrgContext) => ({
-	$or: [{ organization_id: context.user.organization.id }, { organization: { id: context.user.organization.id } }, { organization_id: null }],
+	$or: [{ organization: { id: context.user.organization.id } }, { organization_id: null }],
 });
 
 export const organization_acl = {
@@ -91,15 +91,15 @@ export const attribute_assurances_acl = {
 
 export const default_acl = {
 	'company:member': {
-		read: organization_scoped,
+		read: (context: OrgContext) => ({ organization: { id: context.user.organization.id } }),
 	},
 	'company:admin': {
-		read: organization_scoped,
-		write: organization_scoped,
+		read: (context: OrgContext) => ({ organization: { id: context.user.organization.id } }),
+		write: (context: OrgContext) => ({ organization: { id: context.user.organization.id } }),
 	},
 	'company:owner': {
-		read: organization_scoped,
-		write: organization_scoped,
+		read: (context: OrgContext) => ({ organization: { id: context.user.organization.id } }),
+		write: (context: OrgContext) => ({ organization: { id: context.user.organization.id } }),
 	},
 	'cold:admin': {
 		all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),

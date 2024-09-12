@@ -6,7 +6,7 @@ import { SecretsService } from '../secrets/secrets.service';
 import * as z from 'zod';
 export type MqttStatus = 'complete' | 'failed';
 export type MqttAction = 'create' | 'update' | 'delete';
-
+import { ss, secrets } from '../secrets/secrets.service';
 export const MqttActionSchema = z.enum(['get', 'create', 'update', 'delete']);
 export const MqttStatusSchema = z.enum(['complete', 'failed', 'active', 'queued', 'delayed', 'stalled']);
 const payloadSchema = z
@@ -36,17 +36,12 @@ export class MqttService {
 		const cuid = init({
 			length: 24,
 		});
+		this.secrets = secrets.then(secrets => secrets);
 		this.clientId = cuid();
 		this.logger = new WorkerLogger(`mqtt-${entity}`);
-	}
-
-	async init() {
-		this.ssm = new SecretsService();
-		this.secrets = await this.ssm.getSecrets('core');
 		this.iotEndpoint = this.secrets.IOT_ENDPOINT;
-
-		await this.connect();
 	}
+
 	/**
 	 * "x-auth0-domain": "dev-6qt527e13qyo4ls6.us.auth0.com",
 	 *         "x-amz-customauthorizer-name": "mqtt_authorizer",
@@ -55,10 +50,10 @@ export class MqttService {
 	 * @param entity
 	 */
 	async connect(context?: any): Promise<mqtt.MqttClient> {
-		if (!this.ssm || !this.secrets) {
-			this.ssm = new SecretsService();
-			this.secrets = await this.ssm.getSecrets('core');
+		if (this.mqttClient && this.mqttClient.connected) {
+			return this.mqttClient;
 		}
+
 		const privateKey = this.secrets.MQTT_PRIVATE_KEY;
 		const caRoot1 = this.secrets.MQTT_CA_ROOT_1;
 		const caRoot3 = this.secrets.MQTT_CA_ROOT_3;
@@ -207,3 +202,7 @@ export class MqttService {
 		}
 	}
 }
+
+const mqttService = new MqttService('GraphQL');
+
+export { mqttService, secrets };

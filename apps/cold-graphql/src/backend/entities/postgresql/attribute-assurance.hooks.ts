@@ -6,7 +6,6 @@ import { WorkerLogger } from '../../libs/logger';
 import { getConnection } from '../../database.config';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { get, set } from 'lodash';
-import { MQTTPayloadType, MqttService } from '../../libs/mqtt/mqtt.service';
 import { AttributeAssurance } from './attribute-assurance';
 
 export class AttributeAssuranceHooks extends BaseSidecar {
@@ -26,6 +25,13 @@ export class AttributeAssuranceHooks extends BaseSidecar {
 
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof AttributeAssurance, OrgContext>) {
 		this.logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });
+		for (const item of params.args.items) {
+			if (!params.context.user.isColdAdmin) {
+				set(item, 'organization.id', params.context.user.organization.id);
+			}
+			set(item, 'updated_at', new Date());
+			set(item, 'created_at', new Date());
+		}
 		return params;
 	}
 
@@ -36,11 +42,31 @@ export class AttributeAssuranceHooks extends BaseSidecar {
 
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof AttributeAssurance, OrgContext>) {
 		this.logger.log('beforeUpdateHook', { user: params.context.user, arguments: params.args });
+		for (const item of params.args.items) {
+			set(item, 'updated_at', new Date());
+			if (!params.context.user.isColdAdmin) {
+				set(item, 'organization.id', params.context.user.organization.id);
+			}
+		}
+
 		return params;
 	}
 
 	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof AttributeAssurance, OrgContext>) {
 		this.logger.log('afterUpdateHook', { user: params.context.user, arguments: params.args });
+		if (this.mqtt) {
+			await this.mqtt.publishMQTT(
+				{
+					action: 'update',
+					swr_key: 'ATTRIBUTE_ASSURANCE_UPDATE',
+					status: 'complete',
+					user: params.context.user,
+					org_id: params.context.user.organization.id,
+					data: params.args.items,
+				},
+				params.context,
+			);
+		}
 		return params;
 	}
 

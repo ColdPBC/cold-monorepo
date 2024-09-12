@@ -11,6 +11,7 @@ export class SecretsService {
 
 	constructor() {
 		this.logger = new WorkerLogger(SecretsService.name);
+		this.init();
 	}
 
 	async init() {
@@ -95,6 +96,10 @@ export class SecretsService {
 				secret = JSON.parse(result.SecretString);
 			}
 
+			map(Object.keys(secret), key => {
+				process.env[key] = secret[key];
+			});
+
 			this.logger.log(`Secrets loaded for ${secretName}`);
 
 			return secret;
@@ -104,3 +109,10 @@ export class SecretsService {
 		}
 	}
 }
+
+const ss: SecretsService = new SecretsService();
+const secrets = ss.getSecrets('core').then(secrets => {
+	return secrets;
+});
+
+export { ss, secrets };

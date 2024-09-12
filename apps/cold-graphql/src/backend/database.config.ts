@@ -1,6 +1,7 @@
 import { entities } from './entities';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { MQTTSubscriber } from './subscribers/mqtt_subscriber';
+import { EventArgs } from '@mikro-orm/core';
 
 export const connectionValues = () => {
 	const url = process.env.DATABASE_URL;
@@ -31,3 +32,12 @@ export const getConnection = () => ({
 		pool: { min: 2, max: 50 },
 	},
 });
+
+const beforeUpdate = async (args: EventArgs<any>) => {
+	// @ts-expect-error - items is not defined
+	const items = args.items;
+	for (const item of items) {
+		item.updated_at = new Date();
+	}
+	return args;
+};

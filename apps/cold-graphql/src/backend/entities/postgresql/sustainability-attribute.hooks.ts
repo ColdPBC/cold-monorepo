@@ -16,6 +16,10 @@ export class SustainabilityAttributeHooks extends BaseSidecar {
 	}
 
 	async afterReadHook(params: ReadHookParams<typeof SustainabilityAttribute, OrgContext>) {
+		if (this.secrets) {
+			await this.mqtt.connect();
+		}
+
 		this.logger.log('afterReadHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
@@ -24,7 +28,9 @@ export class SustainabilityAttributeHooks extends BaseSidecar {
 		this.logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });
 		if (!params.context.user.isColdAdmin) {
 			for (const item of params.args.items) {
-				set(item, 'organization_id', params.context.user.organization.id);
+				set(item, 'organization.id', params.context.user.organization.id);
+				set(item, 'updated_at', new Date());
+				set(item, 'created_at', new Date());
 			}
 		}
 
@@ -32,16 +38,28 @@ export class SustainabilityAttributeHooks extends BaseSidecar {
 	}
 
 	async afterCreateHook(params: CreateOrUpdateHookParams<typeof SustainabilityAttribute, OrgContext>) {
+		if (this.secrets) {
+			await this.mqtt.connect();
+		}
+
 		this.logger.log('afterCreateHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
 
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof SustainabilityAttribute, OrgContext>) {
 		this.logger.log('beforeUpdateHook', { user: params.context.user, arguments: params.args });
+		for (const item of params.args.items) {
+			set(item, 'updatedAt', new Date());
+		}
+
 		return params;
 	}
 
 	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof SustainabilityAttribute, OrgContext>) {
+		if (this.secrets) {
+			await this.mqtt.connect();
+		}
+
 		this.logger.log('afterUpdateHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}
@@ -52,6 +70,10 @@ export class SustainabilityAttributeHooks extends BaseSidecar {
 	}
 
 	async afterDeleteHook(params: DeleteHookParams<typeof SustainabilityAttribute, OrgContext>) {
+		if (this.secrets) {
+			await this.mqtt.connect();
+		}
+
 		this.logger.log('afterDeleteHook', { user: params.context.user, arguments: params.args });
 		return params;
 	}

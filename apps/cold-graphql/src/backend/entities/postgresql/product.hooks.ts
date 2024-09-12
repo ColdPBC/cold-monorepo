@@ -29,6 +29,8 @@ export class ProductHooks extends BaseSidecar {
 		if (!params.context.user.isColdAdmin) {
 			for (const item of params.args.items) {
 				set(item, 'organization.id', params.context.user.organization.id);
+				set(item, 'created_at', new Date());
+				set(item, 'updated_at', new Date());
 			}
 		}
 		return params;
@@ -41,6 +43,12 @@ export class ProductHooks extends BaseSidecar {
 
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
 		this.logger.log('beforeUpdateHook', { user: params.context.user, arguments: params.args });
+		for (const item of params.args.items) {
+			if (!params.context.user.isColdAdmin) {
+				set(item, 'organization.id', params.context.user.organization.id);
+			}
+			set(item, 'updated_at', new Date());
+		}
 		return params;
 	}
 

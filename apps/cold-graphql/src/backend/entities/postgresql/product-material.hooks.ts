@@ -26,6 +26,12 @@ export class ProductMaterialHooks extends BaseSidecar {
 
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof ProductMaterial, OrgContext>) {
 		this.logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });
+
+		for (const item of params.args.items) {
+			set(item, 'updated_at', new Date());
+			set(item, 'created_at', new Date());
+		}
+
 		return params;
 	}
 
@@ -36,6 +42,11 @@ export class ProductMaterialHooks extends BaseSidecar {
 
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof ProductMaterial, OrgContext>) {
 		this.logger.log('beforeUpdateHook', { user: params.context.user, arguments: params.args });
+
+		for (const item of params.args.items) {
+			set(item, 'updated_at', new Date());
+		}
+
 		return params;
 	}
 
