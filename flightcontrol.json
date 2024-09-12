@@ -1,5 +1,4 @@
 {
-  "$schema": "https://app.flightcontrol.dev/schema.json",
   "environments": [
     {
       "id": "cold-production",
@@ -137,8 +136,8 @@
             {
               "name": "cold-datadog-api-production",
               "image": "datadog/agent",
-              "cpuAllotment": 1,
-              "memoryAllotment": 1,
+              "cpuAllotment": 0.5,
+              "memoryAllotment": 0.25,
               "enableNetworking": true,
               "logging": true,
               "ports": [
