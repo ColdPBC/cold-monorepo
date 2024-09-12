@@ -1,3 +1,10 @@
+## [1.371.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.3...v1.371.4) (2024-09-12)
+
+
+### Bug Fixes
+
+* restructure addUserToContext logic and enable admin role setting ([9c1cd0b](https://github.com/ColdPBC/cold-monorepo/commit/9c1cd0bd84514cc64d9da8f3e41d1c286d817c10))
+
 ## [1.371.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.2...v1.371.3) (2024-09-12)
 
 
