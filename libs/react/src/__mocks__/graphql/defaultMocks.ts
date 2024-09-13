@@ -271,10 +271,10 @@ export const defaultGraphqlMocks: {
 	},
 	{
 		query: GET_ALL_FILES,
-		handler: () =>
+		handler: variables =>
 			Promise.resolve({
 				data: {
-					organizationFiles: getFilesWithoutAssurances(),
+					organizationFiles: getFilesWithAssurances(),
 				},
 			}),
 	},
@@ -361,19 +361,25 @@ export const filesWithAssurancesMocks: {
 }[] = [
 	{
 		query: GET_ALL_FILES,
-		handler: (variables: any) =>
+		handler: variables =>
 			Promise.resolve({
 				data: {
 					organizationFiles: getFilesWithAssurances(),
 				},
 			}),
 	},
+];
+
+export const filesWithOutAssurancesMocks: {
+	query: DocumentNode;
+	handler: RequestHandler;
+}[] = [
 	{
-		query: GET_ALL_SUS_ATTRIBUTES,
-		handler: () =>
+		query: GET_ALL_FILES,
+		handler: variables =>
 			Promise.resolve({
 				data: {
-					sustainabilityAttributes: getClaimsMock(),
+					organizationFiles: getFilesWithoutAssurances(),
 				},
 			}),
 	},
