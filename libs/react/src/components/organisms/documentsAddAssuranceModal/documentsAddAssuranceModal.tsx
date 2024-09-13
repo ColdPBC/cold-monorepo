@@ -6,6 +6,8 @@ import { useSWRConfig } from 'swr';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
 import { get, has } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
+import { isApolloError } from '@apollo/client';
+import capitalize from 'lodash/capitalize';
 
 export const _DocumentsAddAssuranceModal = (props: {
 	documentToAddAssurance: FilesWithAssurances;
@@ -13,12 +15,14 @@ export const _DocumentsAddAssuranceModal = (props: {
 }) => {
 	const { documentToAddAssurance, setDocumentToAddAssurance } = props;
 	const [addingAssurance, setAddingAssurance] = React.useState(false);
-	const [selectedEntity, setSelectedEntity] = React.useState<string | undefined>(undefined);
+	const [selectedEntityId, setSelectedEntityId] = React.useState<string | undefined>(undefined);
 	const { addToastMessage } = useAddToastMessage();
 	const { mutate } = useSWRConfig();
 	const { logBrowser } = useColdContext();
 	const { orgId } = useAuth0Wrapper();
 	const sustainabilityAttribute = get(documentToAddAssurance, 'attributeAssurances[0].sustainabilityAttribute', undefined);
+	const effectiveStartDate = get(documentToAddAssurance, 'attributeAssurances[0].effectiveStartDate', new Date().toISOString());
+	const effectiveEndDate = get(documentToAddAssurance, 'attributeAssurances[0].effectiveEndDate', new Date().toISOString());
 
 	const getQueryString = () => {
 		if (documentToAddAssurance && sustainabilityAttribute) {
@@ -36,13 +40,19 @@ export const _DocumentsAddAssuranceModal = (props: {
 		}
 	};
 
-	const allEntities = useGraphQLSWR(getQueryString());
+	const allEntities = useGraphQLSWR(getQueryString(), {
+		filter: {
+			organization: {
+				id: orgId,
+			},
+		},
+	});
 	const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
 
 	useEffect(() => {
-		if (!get(allEntities.data, 'errors', undefined)) {
+		if (!allEntities.isLoading && !get(allEntities.data, 'errors', undefined)) {
 			const entities = getEntities();
-			setSelectedEntity(get(entities, '[0].name', undefined));
+			setSelectedEntityId(get(entities, '[0].id', undefined));
 		}
 	}, [allEntities.data]);
 
@@ -58,19 +68,23 @@ export const _DocumentsAddAssuranceModal = (props: {
 			organization: {
 				id: orgId,
 			},
+			effectiveStartDate: effectiveStartDate,
+			effectiveEndDate: effectiveEndDate,
+			createdAt: new Date().toISOString(),
+			updatedAt: new Date().toISOString(),
 		};
 		if (sustainabilityAttribute.level === 'SUPPLIER') {
 			variables = {
 				...variables,
-				supplier: {
-					id: selectedEntity,
+				organizationFacility: {
+					id: selectedEntityId,
 				},
 			};
 		} else if (sustainabilityAttribute.level === 'MATERIAL') {
 			variables = {
 				...variables,
 				material: {
-					id: selectedEntity,
+					id: selectedEntityId,
 				},
 			};
 		}
@@ -85,7 +99,7 @@ export const _DocumentsAddAssuranceModal = (props: {
 				return error;
 			});
 
-		if (has(response, 'errors')) {
+		if (has(response, 'errors') || isApolloError(response)) {
 			addToastMessage({
 				message: 'Error adding assurance',
 				type: ToastMessage.FAILURE,
@@ -105,11 +119,11 @@ export const _DocumentsAddAssuranceModal = (props: {
 
 	const getEntities = (): any[] => {
 		if (allEntities.data === undefined) return [];
-		let entities = get(allEntities.data, 'data.suppliers', []);
+		let entities = get(allEntities.data, 'data.organizationFacilities', []);
 		if (entities.length > 0) {
 			entities = entities.filter((entity: any) => {
 				return !documentToAddAssurance?.attributeAssurances.some((assurance: any) => {
-					return assurance.supplier?.id === entity.id;
+					return assurance.organizationFacility?.id === entity.id;
 				});
 			});
 		} else {
@@ -132,7 +146,7 @@ export const _DocumentsAddAssuranceModal = (props: {
 		if (allEntities.isLoading) {
 			return <Spinner />;
 		}
-		if (selectedEntity === undefined) {
+		if (selectedEntityId === undefined) {
 			return <div className={'text-body text-tc-primary'}>No entities found</div>;
 		}
 		// show them the sustainability attribute and ask them to select a supplier or material
@@ -140,6 +154,10 @@ export const _DocumentsAddAssuranceModal = (props: {
 		const name = get(sustainabilityAttribute, 'name', '');
 		const level = get(sustainabilityAttribute, 'level', '');
 		const entities = getEntities();
+		if (entities.length === 0) {
+			return <div className={'text-body text-tc-primary'}>{`No new ${capitalize(level)}s found to add.`}</div>;
+		}
+		const entityName = entities.find(entity => entity.id === selectedEntityId)?.name;
 		// use the level to ask them to choose a supplier or material
 		return (
 			<div className={'w-full flex-col flex gap-4'}>
@@ -148,15 +166,15 @@ export const _DocumentsAddAssuranceModal = (props: {
 					<Select
 						options={entities.map((entity, index) => {
 							return {
-								id: entity.id,
+								id: index,
 								name: entity.name,
 								value: entity.id,
 							};
 						})}
 						name={'entity'}
-						value={selectedEntity}
+						value={entityName}
 						onChange={(e: InputOption) => {
-							setSelectedEntity(e.name);
+							setSelectedEntityId(e.value);
 						}}
 						buttonClassName={'w-full border-[1.5px] border-gray-90 rounded-[8px]'}
 					/>
@@ -172,7 +190,7 @@ export const _DocumentsAddAssuranceModal = (props: {
 
 	logBrowser('DocumentsAddAssuranceModal rendered', 'info', {
 		documentToAddAssurance,
-		selectedEntity,
+		selectedEntity: selectedEntityId,
 		addingAssurance,
 	});
 

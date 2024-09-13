@@ -11,8 +11,8 @@ export const GET_ALL_ORGS = gql`
 `;
 
 export const GET_ALL_FILES = gql`
-	query GetAllFiles {
-		organizationFiles {
+	query GetAllFiles($filter: OrganizationFilesListFilter) {
+		organizationFiles(filter: $filter) {
 			id
 			originalName
 			createdAt
@@ -27,7 +27,7 @@ export const GET_ALL_FILES = gql`
 					name
 					level
 				}
-				supplier {
+				organizationFacility {
 					id
 					name
 					country
@@ -43,7 +43,7 @@ export const GET_ALL_FILES = gql`
 					id
 					name
 					materialSuppliers {
-						supplier {
+						organizationFacility {
 							id
 							name
 							supplierTier
@@ -67,8 +67,8 @@ export const GET_ALL_SUS_ATTRIBUTES = gql`
 `;
 
 export const GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
-	query Materials {
-		materials {
+	query Materials($filter: MaterialsListFilter) {
+		materials(filter: $filter) {
 			id
 			name
 		}
@@ -76,8 +76,8 @@ export const GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
 `;
 
 export const GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
-	query Suppliers {
-		suppliers {
+	query OrganizationFacilities($filter: OrganizationFacilitiesListFilter) {
+		organizationFacilities(filter: $filter) {
 			id
 			name
 		}
@@ -85,7 +85,7 @@ export const GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
 `;
 
 export const CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE = gql`
-	mutation CreateAttributeAssurance {
+	mutation CreateAttributeAssurance($input: AttributeAssuranceInsertInput!) {
 		createAttributeAssurance(input: $input) {
 			effectiveStartDate
 			effectiveEndDate
@@ -94,7 +94,7 @@ export const CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE = gql`
 `;
 
 export const UPDATE_DOCUMENT_FIELDS = gql`
-	mutation UpdateOrganizationFile {
+	mutation UpdateOrganizationFile($input: OrganizationFileUpdateInput!) {
 		updateOrganizationFile(input: $input) {
 			originalName
 			createdAt
@@ -104,11 +104,17 @@ export const UPDATE_DOCUMENT_FIELDS = gql`
 `;
 
 export const UPDATE_DOCUMENT_ASSURANCE = gql`
-	mutation UpdateAttributeAssurance {
+	mutation UpdateAttributeAssurance($input: AttributeAssuranceUpdateInput!) {
 		updateAttributeAssurance(input: $input) {
 			effectiveStartDate
 			effectiveEndDate
 		}
+	}
+`;
+
+export const DELETE_ATTRIBUTE_ASSURANCE = gql`
+	mutation DeleteAttributeAssurance($filter: DeleteOneFilterInput!) {
+		deleteAttributeAssurance(filter: $filter)
 	}
 `;
 
@@ -123,4 +129,5 @@ export const queries: {
 	CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE: CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
 	UPDATE_DOCUMENT_FIELDS: UPDATE_DOCUMENT_FIELDS,
 	UPDATE_DOCUMENT_ASSURANCE: UPDATE_DOCUMENT_ASSURANCE,
+	DELETE_ATTRIBUTE_ASSURANCE: DELETE_ATTRIBUTE_ASSURANCE,
 };

@@ -11,14 +11,8 @@ import { getDateActiveStatus, listFilterOperators, listSortComparator } from '@c
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext } from '@coldpbc/hooks';
 
-const _DocumentsTable = (props: {
-	files: FilesWithAssurances[];
-	sustainabilityAttributes: Claims[];
-	selectedDocument: FilesWithAssurances | undefined;
-	setSelectedDocument: (document: FilesWithAssurances | undefined) => void;
-	selectDocument: (id: string) => void;
-}) => {
-	const { files, sustainabilityAttributes, selectedDocument, setSelectedDocument, selectDocument } = props;
+const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAttributes: Claims[]; selectDocument: (id: string) => void }) => {
+	const { files, sustainabilityAttributes, selectDocument } = props;
 	const { logBrowser } = useColdContext();
 
 	const renderUploadDate = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
@@ -114,7 +108,7 @@ const _DocumentsTable = (props: {
 			.filter(name => name !== '');
 		const supplierNames = file.attributeAssurances
 			.map(assurance => {
-				return get(assurance, 'supplier.name', '');
+				return get(assurance, 'organizationFacility.name', '');
 			})
 			.filter(name => name !== '');
 		return [...materialNames, ...supplierNames];
@@ -229,7 +223,6 @@ const _DocumentsTable = (props: {
 	logBrowser('DocumentsTable', 'info', {
 		files,
 		sustainabilityAttributes,
-		selectedDocument,
 		selectDocument,
 	});
 

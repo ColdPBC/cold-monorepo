@@ -152,7 +152,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 						name: 'PFAS',
 						level: 'SUPPLIER',
 					},
-					supplier: {
+					organizationFacility: {
 						id: '1',
 						name: 'Supplier',
 						country: 'US',
@@ -193,7 +193,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 						name: 'Material 1',
 						materialSuppliers: [
 							{
-								supplier: {
+								organizationFacility: {
 									id: '1',
 									name: 'Supplier',
 									supplierTier: 2,
@@ -201,7 +201,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 							},
 						],
 					},
-					supplier: null,
+					organizationFacility: null,
 				},
 				{
 					id: '3',
@@ -217,7 +217,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 						name: 'Material 2',
 						materialSuppliers: [
 							{
-								supplier: {
+								organizationFacility: {
 									id: '1',
 									name: 'Supplier',
 									supplierTier: 1,
@@ -225,7 +225,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 							},
 						],
 					},
-					supplier: null,
+					organizationFacility: null,
 				},
 			],
 			metadata: {

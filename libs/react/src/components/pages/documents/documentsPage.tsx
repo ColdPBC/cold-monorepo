@@ -13,7 +13,7 @@ import { DocumentsAddAssuranceModal } from '../../organisms/documentsAddAssuranc
 // todo: when changing an sus attribute for a file and saving, then clear the assurances
 
 const _DocumentsPage = () => {
-	const [selectedDocument, setSelectedDocument] = React.useState<FilesWithAssurances | undefined>(undefined);
+	const [selectedDocument, setSelectedDocument] = React.useState<string | undefined>(undefined);
 	const [documentToDelete, setDocumentToDelete] = React.useState<FilesWithAssurances | undefined>(undefined);
 	const [documentToAddAssurance, setDocumentToAddAssurance] = React.useState<FilesWithAssurances | undefined>(undefined);
 	const [deleteButtonLoading, setDeleteButtonLoading] = React.useState(false);
@@ -22,7 +22,7 @@ const _DocumentsPage = () => {
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
 	const { addToastMessage } = useAddToastMessage();
-	const selectedFileURLSWR = useOrgSWR<string>(selectedDocument ? [`/files/${selectedDocument?.id}/url`, 'GET'] : null, axiosFetcher);
+	const selectedFileURLSWR = useOrgSWR<string>(selectedDocument ? [`/files/${selectedDocument}/url`, 'GET'] : null, axiosFetcher);
 	const ref = React.useRef<HTMLDivElement>(null);
 	const allFiles = useGraphQLSWR('GET_ALL_FILES', {
 		filter: {
@@ -108,11 +108,10 @@ const _DocumentsPage = () => {
 	};
 
 	const selectDocument = (id: string) => {
-		const document = files.find(file => file.id === id);
-		if (selectedDocument && selectedDocument.id === id) {
+		if (selectedDocument && selectedDocument === id) {
 			setSelectedDocument(undefined);
 		} else {
-			setSelectedDocument(document);
+			setSelectedDocument(id);
 		}
 	};
 
@@ -171,20 +170,19 @@ const _DocumentsPage = () => {
 		}
 	};
 
+	console.log({
+		allFiles,
+		allSustainabilityAttributes,
+	});
+
 	return (
 		<div className="relative overflow-y-auto h-full w-full">
 			<MainContent title="Documents" className={'gap-[40px]'} headerElement={getPageButtons()}>
 				<DocumentsHeaderTypes files={files} />
-				<DocumentsTable
-					files={files}
-					sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
-					selectedDocument={selectedDocument}
-					setSelectedDocument={setSelectedDocument}
-					selectDocument={selectDocument}
-				/>
+				<DocumentsTable files={files} sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])} selectDocument={selectDocument} />
 			</MainContent>
 			<DocumentDetailsSidebar
-				file={selectedDocument}
+				file={files.find(file => file.id === selectedDocument)}
 				sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
 				refreshFiles={updateFile}
 				closeSidebar={onSidebarClose}

@@ -1,13 +1,14 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { ErrorFallback, MuiDataGrid } from '@coldpbc/components';
-import { GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
+import { GridActionsCellItem, GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import capitalize from 'lodash/capitalize';
 import React, { ReactNode } from 'react';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
+import { TrashIcon } from '@heroicons/react/24/solid';
 
-const _DocumentSuppliersTable = (props: { assurances: FilesWithAssurances['attributeAssurances'] }) => {
-	const { assurances } = props;
+const _DocumentSuppliersTable = (props: { assurances: FilesWithAssurances['attributeAssurances']; deleteAttributeAssurance: (id: string) => void }) => {
+	const { assurances, deleteAttributeAssurance } = props;
 
 	const renderAssociatedMaterials = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
 		let element: ReactNode | null = null;
@@ -32,49 +33,73 @@ const _DocumentSuppliersTable = (props: { assurances: FilesWithAssurances['attri
 	};
 
 	// table with columns for each supplier: Name, country, tier, associated materials
-	const columns = [
+	const columns: GridColDef[] = [
 		{
 			field: 'name',
 			headerName: 'Name',
+			minWidth: 150,
 			flex: 1,
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 		},
 		{
 			field: 'country',
 			headerName: 'Country',
+			minWidth: 150,
 			flex: 1,
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 		},
 		{
 			field: 'tier',
 			headerName: 'Tier',
+			minWidth: 150,
 			flex: 1,
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 		},
 		{
 			field: 'associations',
 			headerName: 'Associated Materials/Products',
+			minWidth: 300,
 			flex: 1,
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 			renderCell: renderAssociatedMaterials,
 		},
+		{
+			field: 'actions',
+			type: 'actions',
+			width: 60,
+			headerClassName: 'bg-gray-30 text-body',
+			getActions: params => [
+				<GridActionsCellItem
+					label={'Delete'}
+					onClick={() => {
+						deleteAttributeAssurance(params.row.id);
+					}}
+					showInMenu={false}
+					icon={<TrashIcon width={24} height={24} color={'white'} />}
+				/>,
+			],
+		},
 	];
 
-	const rows = assurances.map((assurance, index) => {
-		const supplier = assurance?.supplier;
-		const supplierName = supplier?.name || '';
-		const supplierCountry = supplier?.country || '';
-		const supplierTier = supplier?.supplierTier || 0;
-		const associatedMaterials = supplier?.materialSuppliers.map(materialSupplier => materialSupplier.material.name) || [];
-		return {
-			id: assurance.id,
-			name: supplierName,
-			country: supplierCountry,
-			tier: supplierTier,
-			associations: associatedMaterials,
-			supplier: supplier,
-		};
-	});
+	const rows = assurances
+		.filter(assurance => {
+			return assurance?.organizationFacility !== null;
+		})
+		.map((assurance, index) => {
+			const supplier = assurance?.organizationFacility;
+			const supplierName = supplier?.name || '';
+			const supplierCountry = supplier?.country || '';
+			const supplierTier = supplier?.supplierTier || 0;
+			const associatedMaterials = supplier?.materialSuppliers.map(materialSupplier => materialSupplier.material.name) || [];
+			return {
+				id: assurance.id,
+				name: supplierName,
+				country: supplierCountry,
+				tier: supplierTier,
+				associations: associatedMaterials,
+				supplier: supplier,
+			};
+		});
 
 	return (
 		<MuiDataGrid

@@ -1,15 +1,16 @@
 import React, { ReactNode, useEffect } from 'react';
-import { Claims, FilesWithAssurances, InputOption } from '@coldpbc/interfaces';
+import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
 import { BaseButton, ColdIcon, DocumentDetailsMenu, DocumentMaterialsTable, DocumentSuppliersTable, ErrorFallback, Select, Spinner } from '@coldpbc/components';
 import { ButtonTypes, FileTypes, IconNames } from '@coldpbc/enums';
-import { forEach, get, toArray } from 'lodash';
+import { forEach, get, has, toArray } from 'lodash';
 import capitalize from 'lodash/capitalize';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { useAuth0Wrapper, useColdContext, useGraphQLMutation } from '@coldpbc/hooks';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation } from '@coldpbc/hooks';
 import { useSWRConfig } from 'swr';
 import { isSameDay } from 'date-fns';
+import { isApolloError } from '@apollo/client';
 
 const _DocumentDetailsSidebar = (props: {
 	file: FilesWithAssurances | undefined;
@@ -33,6 +34,33 @@ const _DocumentDetailsSidebar = (props: {
 	const { mutateGraphQL: updateAssurance } = useGraphQLMutation('UPDATE_DOCUMENT_ASSURANCE');
 	const { mutateGraphQL: updateDocument } = useGraphQLMutation('UPDATE_DOCUMENT_FIELDS');
 	const { mutateGraphQL: createAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
+	const { mutateGraphQL: deleteAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
+	const { addToastMessage } = useAddToastMessage();
+
+	const deleteAttributeAssurance = async (id: string) => {
+		const response = await deleteAssurance({
+			filter: {
+				id,
+			},
+		}).catch(error => {
+			return error;
+		});
+
+		if (has(response, 'errors') || isApolloError(response)) {
+			logBrowser('Error deleting assurance', 'error', { response });
+			addToastMessage({
+				message: 'Error deleting assurance',
+				type: ToastMessage.FAILURE,
+			});
+		} else {
+			logBrowser('Assurance deleted successfully', 'info', { response });
+			addToastMessage({
+				message: 'Assurance deleted successfully',
+				type: ToastMessage.SUCCESS,
+			});
+		}
+		await mutate('GET_ALL_FILES');
+	};
 
 	const getInitialFileState = (
 		file: FilesWithAssurances | undefined,
@@ -274,17 +302,17 @@ const _DocumentDetailsSidebar = (props: {
 			const claimLevel = attribute.level;
 			switch (claimLevel) {
 				case 'MATERIAL':
-					element = <DocumentMaterialsTable assurances={file?.attributeAssurances || []} />;
+					element = <DocumentMaterialsTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={file?.attributeAssurances || []} />;
 					break;
 				case 'SUPPLIER':
-					element = <DocumentSuppliersTable assurances={file?.attributeAssurances || []} />;
+					element = <DocumentSuppliersTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={file?.attributeAssurances || []} />;
 					break;
 				default:
-					element = <DocumentSuppliersTable assurances={[]} />;
+					element = <DocumentSuppliersTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={[]} />;
 					break;
 			}
 		} else {
-			element = <DocumentSuppliersTable assurances={[]} />;
+			element = <DocumentSuppliersTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={[]} />;
 		}
 		const addButtonDisabled = !hasAssurances || hasFileStateChanged(fileState);
 		return (
@@ -315,7 +343,13 @@ const _DocumentDetailsSidebar = (props: {
 		endDate: Date | null;
 		sustainabilityAttribute: string;
 	}) => {
-		const disabled = !isFileStateValid(fileState) || saveButtonLoading || !hasFileStateChanged(fileState);
+		const fileStateValid = isFileStateValid(fileState);
+		const hasFileChanged = hasFileStateChanged(fileState);
+		let disabled = !fileStateValid || saveButtonLoading || !hasFileChanged;
+		if (!hasAssurances) {
+			disabled = false;
+		}
+
 		return (
 			<div className={'w-auto'}>
 				<BaseButton label={'Save'} onClick={() => updateFileAndAssurances()} variant={ButtonTypes.primary} disabled={disabled} loading={saveButtonLoading} />
@@ -356,16 +390,30 @@ const _DocumentDetailsSidebar = (props: {
 						logBrowser('File updated successfully', 'info', {
 							responses,
 						});
+						addToastMessage({
+							message: 'File updated successfully',
+							type: ToastMessage.SUCCESS,
+						});
 					})
 					.catch(error => {
 						logBrowser('Error updating file', 'error', { error });
+						addToastMessage({
+							message: 'Error updating file',
+							type: ToastMessage.FAILURE,
+						});
 					});
 				setSaveButtonLoading(false);
 				return;
 			}
 
 			const sustainabilityAttribute = sustainabilityAttributes.find(attribute => attribute.name === fileState?.sustainabilityAttribute);
+			if (sustainabilityAttribute === undefined) {
+				return;
+			}
+
 			if (hasAssurances) {
+				const deleteCals = getDeleteAttributeAssuranceCalls(sustainabilityAttribute);
+				promises.push(...deleteCals);
 				// update each assurance
 				forEach(file.attributeAssurances, assurance => {
 					promises.push(
@@ -395,6 +443,9 @@ const _DocumentDetailsSidebar = (props: {
 							organization: {
 								id: orgId,
 							},
+							organizationFile: {
+								id: fileState.id,
+							},
 							createdAt: new Date().toISOString(),
 							updatedAt: new Date().toISOString(),
 						},
@@ -407,12 +458,48 @@ const _DocumentDetailsSidebar = (props: {
 					logBrowser('File and assurances updated successfully', 'info', {
 						responses,
 					});
+					addToastMessage({
+						message: 'File and assurances updated successfully',
+						type: ToastMessage.SUCCESS,
+					});
 				})
 				.catch(error => {
 					logBrowser('Error updating file and assurances', 'error', { error });
+					addToastMessage({
+						message: 'Error updating file and assurances',
+						type: ToastMessage.FAILURE,
+					});
 				});
 			setSaveButtonLoading(false);
 		}
+	};
+
+	const getDeleteAttributeAssuranceCalls = (newSustainabilityAttribute: Claims): Promise<any>[] => {
+		const deleteCalls: Promise<any>[] = [];
+		file?.attributeAssurances.forEach(assurance => {
+			if (newSustainabilityAttribute.level === 'MATERIAL') {
+				if (assurance.organizationFacility !== null) {
+					deleteCalls.push(
+						deleteAssurance({
+							filter: {
+								id: assurance.id,
+							},
+						}),
+					);
+				}
+			} else if (newSustainabilityAttribute.level === 'SUPPLIER') {
+				if (assurance.material !== null) {
+					deleteCalls.push(
+						deleteAssurance({
+							filter: {
+								id: assurance.id,
+							},
+						}),
+					);
+				}
+			}
+		});
+		return deleteCalls;
 	};
 
 	const hasFileStateChanged = (fileState: {
@@ -424,7 +511,7 @@ const _DocumentDetailsSidebar = (props: {
 		endDate: Date | null;
 		sustainabilityAttribute: string;
 	}) => {
-		if (file === undefined || !hasAssurances) return false;
+		if (file === undefined) return false;
 		const compareFileState = getInitialFileState(file);
 		if (fileState === undefined || compareFileState === undefined) return false;
 		const compareFileStateDatesAreNotNull = compareFileState.startDate !== null && compareFileState.endDate !== null;
@@ -445,20 +532,6 @@ const _DocumentDetailsSidebar = (props: {
 		sustainabilityAttribute: string;
 	}) => {
 		return !(fileState.startDate === null || fileState.endDate === null);
-	};
-
-	const addButtonDisabled = (fileState: {
-		id: string;
-		type: string;
-		metadata: any;
-		originalName: string;
-		startDate: Date | null;
-		endDate: Date | null;
-		sustainabilityAttribute: string;
-	}) => {
-		// if the file state changed then the add button should be disabled
-		// if there are no assurances then the add button should be disabled
-		return hasFileStateChanged(fileState) || !hasAssurances;
 	};
 
 	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
