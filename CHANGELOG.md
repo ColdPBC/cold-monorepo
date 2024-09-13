@@ -1,3 +1,20 @@
+# [1.372.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.6...v1.372.0) (2024-09-13)
+
+
+### Bug Fixes
+
+* change fileTypes to array and adjust ordering logic ([c0834dd](https://github.com/ColdPBC/cold-monorepo/commit/c0834ddccf98e0990023130016b52047ab7671b4))
+* conditionally render DocumentsAddAssuranceModal based on addAssuranceFile state ([d2aa369](https://github.com/ColdPBC/cold-monorepo/commit/d2aa369030db0669bd28e08bc09ad2eb22bce6ff))
+* improve handling of entity selection and assurance updates in documents modal and sidebar ([ea8d9f9](https://github.com/ColdPBC/cold-monorepo/commit/ea8d9f99b534ecedc425e873b81265bcab8af315))
+
+
+### Features
+
+* add ability to add assurance to documents ([cb01e4d](https://github.com/ColdPBC/cold-monorepo/commit/cb01e4dc168972a8eb48b0fb584068779475733a))
+* update ColdApolloProvider with default options for ApolloClient ([54bf927](https://github.com/ColdPBC/cold-monorepo/commit/54bf927ebfb7e7db0ed9cdaee25aa376157ecbf0))
+* update document handling and assurance associations ([faea982](https://github.com/ColdPBC/cold-monorepo/commit/faea98210d94607d8994777714467e12fbc089f9))
+* update logging in DocumentsPage ([5b7857d](https://github.com/ColdPBC/cold-monorepo/commit/5b7857d910d3fe8e298b1538f21973d23b1d246f))
+
 ## [1.371.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.5...v1.371.6) (2024-09-12)
 
 
