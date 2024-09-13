@@ -5,49 +5,59 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { resolveGraphQLUrl } from '@coldpbc/fetchers';
 
 export interface ColdApolloContextType {
-  client: ApolloClient<any> | null;
+	client: ApolloClient<any> | null;
 }
 
 export const ColdApolloContext = createContext<ColdApolloContextType>({
-  client: null,
+	client: null,
 });
 
 export const ColdApolloProvider = ({ children }: PropsWithChildren) => {
-  const { getAccessTokenSilently } = useAuth0();
-  const [client, setClient] = useState<ApolloClient<any> | null>(null);
+	const { getAccessTokenSilently } = useAuth0();
+	const [client, setClient] = useState<ApolloClient<any> | null>(null);
 
-  useEffect(() => {
-    const client = new ApolloClient({
-      link: setContext(async (_, { headers }) => {
-        const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
-        const token = await getAccessTokenSilently({
-          authorizationParams: {
-            audience: audience,
-            scope: 'offline_access email profile openid',
-          },
-        });
-        return {
-          headers: {
-            ...headers,
-            authorization: token ? `Bearer ${token}` : '',
-          },
-        };
-      }).concat(
-        createHttpLink({
-          uri: resolveGraphQLUrl(),
-        }),
-      ),
-      cache: new InMemoryCache(),
-    });
-    setClient(client);
-  }, []);
+	useEffect(() => {
+		const client = new ApolloClient({
+			link: setContext(async (_, { headers }) => {
+				const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
+				const token = await getAccessTokenSilently({
+					authorizationParams: {
+						audience: audience,
+						scope: 'offline_access email profile openid',
+					},
+				});
+				return {
+					headers: {
+						...headers,
+						authorization: token ? `Bearer ${token}` : '',
+					},
+				};
+			}).concat(
+				createHttpLink({
+					uri: resolveGraphQLUrl(),
+				}),
+			),
+			cache: new InMemoryCache(),
+			defaultOptions: {
+				watchQuery: {
+					fetchPolicy: 'no-cache',
+					errorPolicy: 'ignore',
+				},
+				query: {
+					fetchPolicy: 'no-cache',
+					errorPolicy: 'all',
+				},
+			},
+		});
+		setClient(client);
+	}, []);
 
-  return (
-    <ColdApolloContext.Provider
-      value={{
-        client: client,
-      }}>
-      {children}
-    </ColdApolloContext.Provider>
-  );
+	return (
+		<ColdApolloContext.Provider
+			value={{
+				client: client,
+			}}>
+			{children}
+		</ColdApolloContext.Provider>
+	);
 };
