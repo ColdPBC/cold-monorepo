@@ -4,10 +4,9 @@ import React, { useEffect } from 'react';
 import { FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
 import { useSWRConfig } from 'swr';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
-import { get, has } from 'lodash';
+import { get, has, lowerCase } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { isApolloError } from '@apollo/client';
-import capitalize from 'lodash/capitalize';
 
 export const _DocumentsAddAssuranceModal = (props: {
 	documentToAddAssurance: FilesWithAssurances;
@@ -146,16 +145,16 @@ export const _DocumentsAddAssuranceModal = (props: {
 		if (allEntities.isLoading) {
 			return <Spinner />;
 		}
-		if (selectedEntityId === undefined) {
-			return <div className={'text-body text-tc-primary'}>No entities found</div>;
-		}
-		// show them the sustainability attribute and ask them to select a supplier or material
-		// show a list of suppliers or materials to create an assurance
 		const name = get(sustainabilityAttribute, 'name', '');
 		const level = get(sustainabilityAttribute, 'level', '');
+		if (selectedEntityId === undefined) {
+			return <div className={'text-body text-tc-primary'}>{`No new ${lowerCase(level)}s found to add.`}</div>;
+		}
+
 		const entities = getEntities();
+
 		if (entities.length === 0) {
-			return <div className={'text-body text-tc-primary'}>{`No new ${capitalize(level)}s found to add.`}</div>;
+			return <div className={'text-body text-tc-primary'}>{`No new ${lowerCase(level)}s found to add.`}</div>;
 		}
 		const entityName = entities.find(entity => entity.id === selectedEntityId)?.name;
 		// use the level to ask them to choose a supplier or material

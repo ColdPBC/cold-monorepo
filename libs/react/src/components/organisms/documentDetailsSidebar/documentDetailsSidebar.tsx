@@ -374,7 +374,6 @@ const _DocumentDetailsSidebar = (props: {
 				);
 			}
 
-			// check if only the type has changed. if so, update only the file and return
 			if (
 				compareFileState.endDate !== null &&
 				compareFileState.startDate !== null &&
@@ -382,7 +381,9 @@ const _DocumentDetailsSidebar = (props: {
 				fileState.startDate !== null &&
 				isSameDay(compareFileState.startDate, fileState.startDate) &&
 				isSameDay(compareFileState.endDate, fileState.endDate) &&
-				compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute
+				compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute &&
+				compareFileState.type !== file.type &&
+				hasAssurances
 			) {
 				await Promise.all(promises)
 					.then(responses => {
@@ -416,6 +417,11 @@ const _DocumentDetailsSidebar = (props: {
 				promises.push(...deleteCals);
 				// update each assurance
 				forEach(file.attributeAssurances, assurance => {
+					if (assurance.organizationFacility !== null && sustainabilityAttribute.level === 'MATERIAL') {
+						return;
+					} else if (assurance.material !== null && sustainabilityAttribute.level === 'SUPPLIER') {
+						return;
+					}
 					promises.push(
 						updateAssurance({
 							input: {
