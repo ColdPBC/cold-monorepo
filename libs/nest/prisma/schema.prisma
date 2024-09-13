@@ -641,15 +641,19 @@ model attribute_assurances {
 }
 
 model products {
-  id                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name                 String                 @unique
-  created_at           DateTime               @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime               @updatedAt @db.Timestamptz(6)
-  deleted              Boolean                @default(false)
-  organization_id      String
-  materials            product_materials[]
-  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  attribute_assurances attribute_assurances[]
+  id                         String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name                       String
+  created_at                 DateTime               @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime               @updatedAt @db.Timestamptz(6)
+  deleted                    Boolean                @default(false)
+  organization_id            String
+  metadata                   Json?
+  season_code                String?
+	style_code								 String?
+  product_category_heirarchy Json?
+  materials                  product_materials[]
+  organization               organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  attribute_assurances       attribute_assurances[]
 
   @@index([organization_id], map: "products_organization_id_idx1")
 }
@@ -1125,6 +1129,8 @@ enum file_types {
   TEST_RESULTS
   STATEMENT
   ASSESSMENT
+  PURCHASE_ORDER
+  BILL_OF_MATERIALS
   POLICY
   OTHER
 }
