@@ -1,6 +1,6 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { Card, DocumentsHeaderType } from '@coldpbc/components';
-import { cloneDeep, forEach, keys, orderBy } from 'lodash';
+import { cloneDeep, forEach, orderBy } from 'lodash';
 import { FileTypes } from '@coldpbc/enums';
 
 export const DocumentsHeaderTypes = (props: { files: FilesWithAssurances[] }) => {
@@ -22,51 +22,55 @@ export const DocumentsHeaderTypes = (props: { files: FilesWithAssurances[] }) =>
 		}
 	};
 
-	const fileTypes: {
-		[key: string]: { title: string; amount: number; totalAmount: number };
-	} = {
-		[FileTypes.CERTIFICATE]: {
+	const fileTypes: { type: FileTypes; title: string; amount: number; totalAmount: number }[] = [
+		{
+			type: FileTypes.CERTIFICATE,
 			title: getFileTypeTitle(FileTypes.CERTIFICATE),
 			amount: 0,
 			totalAmount: files.length,
 		},
-		[FileTypes.STATEMENT]: {
+		{
+			type: FileTypes.STATEMENT,
 			title: getFileTypeTitle(FileTypes.STATEMENT),
 			amount: 0,
 			totalAmount: files.length,
 		},
-		[FileTypes.TEST_RESULTS]: {
+		{
+			type: FileTypes.TEST_RESULTS,
 			title: getFileTypeTitle(FileTypes.TEST_RESULTS),
 			amount: 0,
 			totalAmount: files.length,
 		},
-		[FileTypes.OTHER]: {
+		{
+			type: FileTypes.OTHER,
 			title: getFileTypeTitle(FileTypes.OTHER),
 			amount: 0,
 			totalAmount: files.length,
 		},
-	};
+	];
 
 	forEach(files, file => {
 		if ([FileTypes.OTHER, FileTypes.ASSESSMENT, FileTypes.POLICY].includes(file.type)) {
-			fileTypes[FileTypes.OTHER].amount += 1;
+			fileTypes[3].amount += 1;
 		} else {
-			fileTypes[file.type].amount += 1;
+			const index = fileTypes.findIndex(fileType => fileType.type === file.type);
+			if (index !== -1) {
+				fileTypes[index].amount += 1;
+			}
 		}
 	});
 
-	orderBy(fileTypes, ['amount'], ['desc']);
+	const otherType = cloneDeep(fileTypes[3]);
+	fileTypes.splice(3, 1);
 
-	const otherType = cloneDeep(fileTypes[FileTypes.OTHER]);
-	delete fileTypes[FileTypes.OTHER];
+	const ordered = orderBy(fileTypes, ['amount'], ['desc']);
 
 	return (
 		<Card className="bg-bgc-elevated w-full flex flex-row" glow={false}>
-			{keys(fileTypes).map(key => {
-				const fileType = fileTypes[key];
+			{ordered.map((type, index) => {
 				return (
-					<div key={key} className={'w-1/4'}>
-						<DocumentsHeaderType title={fileType.title} amount={fileType.amount} totalAmount={fileType.totalAmount} />
+					<div key={index} className={'w-1/4'}>
+						<DocumentsHeaderType title={type.title} amount={type.amount} totalAmount={type.totalAmount} />
 					</div>
 				);
 			})}
