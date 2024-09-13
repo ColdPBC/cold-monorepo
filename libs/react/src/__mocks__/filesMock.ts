@@ -148,9 +148,11 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 					effectiveStartDate: addDays(new Date(), 1).toISOString(),
 					effectiveEndDate: addDays(new Date(), 70).toISOString(),
 					sustainabilityAttribute: {
+						id: '6',
 						name: 'PFAS',
+						level: 'SUPPLIER',
 					},
-					supplier: {
+					organizationFacility: {
 						id: '1',
 						name: 'Supplier',
 						country: 'US',
@@ -182,14 +184,16 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 					effectiveStartDate: addDays(new Date(), 1).toISOString(),
 					effectiveEndDate: addDays(new Date(), 70).toISOString(),
 					sustainabilityAttribute: {
+						id: '4',
 						name: 'bluesign',
+						level: 'MATERIAL',
 					},
 					material: {
 						id: '1',
 						name: 'Material 1',
 						materialSuppliers: [
 							{
-								supplier: {
+								organizationFacility: {
 									id: '1',
 									name: 'Supplier',
 									supplierTier: 2,
@@ -197,21 +201,23 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 							},
 						],
 					},
-					supplier: null,
+					organizationFacility: null,
 				},
 				{
 					id: '3',
 					effectiveStartDate: addDays(new Date(), 1).toISOString(),
 					effectiveEndDate: addDays(new Date(), 70).toISOString(),
 					sustainabilityAttribute: {
+						id: '4',
 						name: 'bluesign',
+						level: 'MATERIAL',
 					},
 					material: {
 						id: '2',
 						name: 'Material 2',
 						materialSuppliers: [
 							{
-								supplier: {
+								organizationFacility: {
 									id: '1',
 									name: 'Supplier',
 									supplierTier: 1,
@@ -219,7 +225,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 							},
 						],
 					},
-					supplier: null,
+					organizationFacility: null,
 				},
 			],
 			metadata: {
@@ -228,3 +234,39 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 		},
 	];
 }
+
+export const materialsForAssurancesMock: {
+	id: string;
+	name: string;
+}[] = [
+	{
+		id: '1',
+		name: 'Material 1',
+	},
+	{
+		id: '2',
+		name: 'Material 2',
+	},
+	{
+		id: '3',
+		name: 'Material 3',
+	},
+];
+
+export const suppliersForAssurancesMock: {
+	id: string;
+	name: string;
+}[] = [
+	{
+		id: '1',
+		name: 'Supplier 1',
+	},
+	{
+		id: '2',
+		name: 'Supplier 2',
+	},
+	{
+		id: '3',
+		name: 'Supplier 3',
+	},
+];

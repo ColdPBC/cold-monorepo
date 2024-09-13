@@ -7,17 +7,22 @@ import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import { isAxiosError } from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
 import { get } from 'lodash';
+import { DocumentsAddAssuranceModal } from '../../organisms/documentsAddAssuranceModal/documentsAddAssuranceModal';
+
+// todo: set default start and end date of today. set the first sus attribute to be
+// todo: when changing an sus attribute for a file and saving, then clear the assurances
 
 const _DocumentsPage = () => {
-	const [selectedDocument, setSelectedDocument] = React.useState<FilesWithAssurances | undefined>(undefined);
+	const [selectedDocument, setSelectedDocument] = React.useState<string | undefined>(undefined);
 	const [documentToDelete, setDocumentToDelete] = React.useState<FilesWithAssurances | undefined>(undefined);
+	const [documentToAddAssurance, setDocumentToAddAssurance] = React.useState<FilesWithAssurances | undefined>(undefined);
 	const [deleteButtonLoading, setDeleteButtonLoading] = React.useState(false);
 	const [files, setFiles] = React.useState<FilesWithAssurances[]>([]);
 	const [selectedDocumentURL, setSelectedDocumentURL] = React.useState<string | undefined>(undefined);
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
 	const { addToastMessage } = useAddToastMessage();
-	const selectedFileURLSWR = useOrgSWR<string>(selectedDocument ? [`/files/${selectedDocument?.id}/url`, 'GET'] : null, axiosFetcher);
+	const selectedFileURLSWR = useOrgSWR<string>(selectedDocument ? [`/files/${selectedDocument}/url`, 'GET'] : null, axiosFetcher);
 	const ref = React.useRef<HTMLDivElement>(null);
 	const allFiles = useGraphQLSWR('GET_ALL_FILES', {
 		filter: {
@@ -103,11 +108,10 @@ const _DocumentsPage = () => {
 	};
 
 	const selectDocument = (id: string) => {
-		const document = files.find(file => file.id === id);
-		if (selectedDocument && selectedDocument.id === id) {
+		if (selectedDocument && selectedDocument === id) {
 			setSelectedDocument(undefined);
 		} else {
-			setSelectedDocument(document);
+			setSelectedDocument(id);
 		}
 	};
 
@@ -119,29 +123,8 @@ const _DocumentsPage = () => {
 		setSelectedDocument(undefined);
 	};
 
-	return (
-		<div className="relative overflow-y-auto h-full w-full">
-			<MainContent title="Documents" className={'gap-[40px]'} headerElement={getPageButtons()}>
-				<DocumentsHeaderTypes files={files} />
-				<DocumentsTable
-					files={files}
-					sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
-					selectedDocument={selectedDocument}
-					setSelectedDocument={setSelectedDocument}
-					selectDocument={selectDocument}
-				/>
-			</MainContent>
-			<DocumentDetailsSidebar
-				file={selectedDocument}
-				sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
-				refreshFiles={updateFile}
-				closeSidebar={onSidebarClose}
-				innerRef={ref}
-				deleteFile={onDeleteClick}
-				isLoading={selectedFileURLSWR.isLoading}
-				downloadFile={onDocumentDownload}
-				signedUrl={selectedDocumentURL}
-			/>
+	const getDeleteModal = () => {
+		return (
 			<Modal
 				show={documentToDelete !== undefined}
 				setShowModal={() => {
@@ -177,6 +160,38 @@ const _DocumentsPage = () => {
 					},
 				}}
 			/>
+		);
+	};
+
+	const onAddAssuranceClick = (id: string) => {
+		const file = files.find(file => file.id === id);
+		if (file) {
+			setDocumentToAddAssurance(file);
+		}
+	};
+
+	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, documentToDelete, documentToAddAssurance, files, allSustainabilityAttributes });
+
+	return (
+		<div className="relative overflow-y-auto h-full w-full">
+			<MainContent title="Documents" className={'gap-[40px]'} headerElement={getPageButtons()}>
+				<DocumentsHeaderTypes files={files} />
+				<DocumentsTable files={files} sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])} selectDocument={selectDocument} />
+			</MainContent>
+			<DocumentDetailsSidebar
+				file={files.find(file => file.id === selectedDocument)}
+				sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
+				refreshFiles={updateFile}
+				closeSidebar={onSidebarClose}
+				innerRef={ref}
+				deleteFile={onDeleteClick}
+				isLoading={selectedFileURLSWR.isLoading}
+				downloadFile={onDocumentDownload}
+				signedUrl={selectedDocumentURL}
+				addAssurance={onAddAssuranceClick}
+			/>
+			{getDeleteModal()}
+			{documentToAddAssurance && <DocumentsAddAssuranceModal documentToAddAssurance={documentToAddAssurance} setDocumentToAddAssurance={setDocumentToAddAssurance} />}
 		</div>
 	);
 };

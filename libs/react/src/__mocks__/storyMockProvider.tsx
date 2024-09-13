@@ -23,8 +23,8 @@ import { AIDetails, ComplianceManagerCountsPayload, ComplianceSidebarPayload } f
 import { defaultGraphqlMocks } from './graphql';
 import { ColdApolloContext } from '@coldpbc/providers';
 import { createMockClient, RequestHandler } from 'mock-apollo-client';
-import { forEach } from 'lodash';
-import { DocumentNode } from '@apollo/client';
+import { DocumentNode, InMemoryCache } from '@apollo/client';
+import { forEach, isEqual } from 'lodash';
 
 export interface StoryMockProviderProps {
 	handlers?: HttpHandler[];
@@ -146,9 +146,34 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
 		setFocusQuestion: props.complianceQuestionnaireContext?.setFocusQuestion ?? setComplianceQuestionnaireFocusQuestion,
 	};
 
-	const client = createMockClient();
+	const client = createMockClient({
+		cache: new InMemoryCache(),
+		defaultOptions: {
+			watchQuery: {
+				fetchPolicy: 'no-cache',
+				errorPolicy: 'ignore',
+			},
+			query: {
+				fetchPolicy: 'no-cache',
+				errorPolicy: 'all',
+			},
+		},
+	});
 
-	forEach(props.graphqlMocks ? props.graphqlMocks : defaultGraphqlMocks, mock => {
+	const mergedMocks = defaultGraphqlMocks;
+
+	// merge in any custom mocks. remove duplicate queries
+	if (props.graphqlMocks) {
+		forEach(props.graphqlMocks, mock => {
+			const existingMock = mergedMocks.find(existing => isEqual(existing.query, mock.query));
+			if (existingMock) {
+				mergedMocks.splice(mergedMocks.indexOf(existingMock), 1);
+			}
+			mergedMocks.push(mock);
+		});
+	}
+
+	mergedMocks.forEach(mock => {
 		client.setRequestHandler(mock.query, mock.handler);
 	});
 

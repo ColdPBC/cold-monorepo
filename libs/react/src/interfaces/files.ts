@@ -34,7 +34,7 @@ export interface AttributeAssurance {
 	id: string;
 	effectiveStartDate: string;
 	effectiveEndDate: string;
-	supplier: null | {
+	organizationFacility: null | {
 		id: string;
 		name: string;
 		country: string | null;
@@ -50,7 +50,7 @@ export interface AttributeAssurance {
 		id: string;
 		name: string;
 		materialSuppliers: {
-			supplier: {
+			organizationFacility: {
 				id: string;
 				name: string;
 				supplierTier: number | null;
@@ -58,6 +58,8 @@ export interface AttributeAssurance {
 		}[];
 	};
 	sustainabilityAttribute: {
+		id: string;
 		name: string;
+		level: string;
 	} | null;
 }
