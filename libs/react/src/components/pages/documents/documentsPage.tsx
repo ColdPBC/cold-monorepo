@@ -170,10 +170,7 @@ const _DocumentsPage = () => {
 		}
 	};
 
-	console.log({
-		allFiles,
-		allSustainabilityAttributes,
-	});
+	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, documentToDelete, documentToAddAssurance, files, allSustainabilityAttributes });
 
 	return (
 		<div className="relative overflow-y-auto h-full w-full">
