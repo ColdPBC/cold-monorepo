@@ -1,3 +1,17 @@
+# [1.373.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.372.0...v1.373.0) (2024-09-13)
+
+
+### Bug Fixes
+
+* update webpack config to add entry point and source maps ([3ee8f39](https://github.com/ColdPBC/cold-monorepo/commit/3ee8f39c212f0b87202c3d13e5dafb2308abcc32))
+
+
+### Features
+
+* add enum values and columns to products table ([a9b25cb](https://github.com/ColdPBC/cold-monorepo/commit/a9b25cb794ed5e6097241e3abc3fc776a7719041))
+* add seeding for sustainability attributes ([ad82c3a](https://github.com/ColdPBC/cold-monorepo/commit/ad82c3ad6fa67c928e39cd670ce79a248c537e6b))
+* add sustainability attributes seeding and refactor compliance dependency chains ([efe468f](https://github.com/ColdPBC/cold-monorepo/commit/efe468f1e28f240c44ea1a1a45565ff856531f74))
+
 # [1.372.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.371.6...v1.372.0) (2024-09-13)
 
 
