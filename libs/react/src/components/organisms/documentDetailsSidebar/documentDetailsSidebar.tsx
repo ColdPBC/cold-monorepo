@@ -68,8 +68,8 @@ const _DocumentDetailsSidebar = (props: {
 		| {
 				id: string;
 				type: string;
-				metadata: any;
 				originalName: string;
+				metadata: any;
 				startDate: Date | null;
 				endDate: Date | null;
 				sustainabilityAttribute: string;
@@ -89,9 +89,9 @@ const _DocumentDetailsSidebar = (props: {
 				type: file.type,
 				originalName: file.originalName,
 				metadata: file.metadata,
-				startDate: new Date(),
-				endDate: new Date(),
-				sustainabilityAttribute: sustainabilityAttributes[0].name,
+				startDate: null,
+				endDate: null,
+				sustainabilityAttribute: '',
 			};
 
 			if (hasAssurances) {
@@ -111,8 +111,8 @@ const _DocumentDetailsSidebar = (props: {
 		| {
 				id: string;
 				type: string;
-				metadata: any;
 				originalName: string;
+				metadata: any;
 				startDate: Date | null;
 				endDate: Date | null;
 				sustainabilityAttribute: string;
@@ -143,19 +143,29 @@ const _DocumentDetailsSidebar = (props: {
 		endDate: Date | null;
 		sustainabilityAttribute: string;
 	}) => {
+		// add option to dropdown that says "Select sustainability attribute"
+		const selectSustainabilityAttributeOption = {
+			id: -1,
+			name: 'No sustainability attribute',
+			value: '',
+		};
+
+		const susAttributes: InputOption[] = [selectSustainabilityAttributeOption];
+		sustainabilityAttributes.forEach((attribute, index) => {
+			susAttributes.push({
+				id: index,
+				name: attribute.name,
+				value: attribute.id,
+			});
+		});
+
 		return (
 			<div className={'w-full flex flex-col gap-[8px]'}>
 				<div className={'w-full text-tc-primary text-eyebrow'}>Sustainability Attribute</div>
 				<Select
-					options={sustainabilityAttributes.map((attribute, index) => {
-						return {
-							id: index,
-							name: attribute.name,
-							value: attribute.id,
-						};
-					})}
+					options={susAttributes}
 					name={'sustainabilityAttribute'}
-					value={fileState?.sustainabilityAttribute}
+					value={fileState.sustainabilityAttribute === '' ? 'No sustainability attribute' : fileState.sustainabilityAttribute}
 					onChange={(e: InputOption) => {
 						if (fileState === undefined) return;
 						setFileState({ ...fileState, sustainabilityAttribute: e.name });
@@ -181,7 +191,7 @@ const _DocumentDetailsSidebar = (props: {
 					<div className={'w-full text-tc-primary text-eyebrow'}>Start Date</div>
 					<DesktopDatePicker
 						// @ts-ignore
-						value={fileState.startDate ? new Date(fileState.startDate) : null}
+						value={fileState.startDate}
 						onChange={(date: Date | null) => {
 							setFileState({ ...fileState, startDate: date });
 						}}
@@ -232,7 +242,7 @@ const _DocumentDetailsSidebar = (props: {
 					<div className={'w-full text-tc-primary text-eyebrow'}>Expiration Date</div>
 					<DesktopDatePicker
 						// @ts-ignore
-						value={fileState?.endDate ? new Date(fileState.endDate) : null}
+						value={fileState.endDate}
 						onChange={(date: Date | null) => {
 							setFileState({ ...fileState, endDate: date });
 						}}
@@ -295,7 +305,7 @@ const _DocumentDetailsSidebar = (props: {
 		// get the claim level of the sustainability attribute
 		let element: ReactNode | null = null;
 		if (hasSustainabilityAttribute) {
-			const attribute = sustainabilityAttributes.find(attribute => attribute.name === fileState?.sustainabilityAttribute);
+			const attribute = sustainabilityAttributes.find(attribute => attribute.name === fileState.sustainabilityAttribute);
 			if (attribute === undefined) {
 				return null;
 			}
@@ -347,7 +357,7 @@ const _DocumentDetailsSidebar = (props: {
 		const hasFileChanged = hasFileStateChanged(fileState);
 		let disabled = !fileStateValid || saveButtonLoading || !hasFileChanged;
 		if (!hasAssurances) {
-			disabled = false;
+			disabled = !fileStateValid;
 		}
 
 		return (
@@ -537,7 +547,7 @@ const _DocumentDetailsSidebar = (props: {
 		endDate: Date | null;
 		sustainabilityAttribute: string;
 	}) => {
-		return !(fileState.startDate === null || fileState.endDate === null);
+		return !(fileState.startDate === null || fileState.endDate === null || fileState.sustainabilityAttribute === '');
 	};
 
 	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
