@@ -2,7 +2,7 @@ export const DocumentsHeaderType = (props: { title: string; amount: number; tota
 	const { title, amount, totalAmount } = props;
 
 	const getPercentage = () => {
-		const displayAmount = amount === 0 || totalAmount === 0 ? '0%' : `${(amount / totalAmount) * 100}%`;
+		const displayAmount = amount === 0 || totalAmount === 0 ? '0%' : `${((amount / totalAmount) * 100).toFixed(0)}%`;
 		return <div className={'rounded-[16px] bg-bgc-accent px-[8px] py-[4px] text-label'}>{displayAmount}</div>;
 	};
 
