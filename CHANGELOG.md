@@ -1,3 +1,10 @@
+## [1.374.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.374.0...v1.374.1) (2024-09-16)
+
+
+### Bug Fixes
+
+* **schema:** remove unique constraint from attribute assurances ([274a888](https://github.com/ColdPBC/cold-monorepo/commit/274a888b7ba56de09ae2eb53f261d1fd548277c7))
+
 # [1.374.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.373.1...v1.374.0) (2024-09-16)
 
 
