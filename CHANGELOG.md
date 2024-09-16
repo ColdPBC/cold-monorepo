@@ -1,3 +1,13 @@
+## [1.373.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.373.0...v1.373.1) (2024-09-16)
+
+
+### Bug Fixes
+
+* display percentage with no decimal places ([ea92139](https://github.com/ColdPBC/cold-monorepo/commit/ea92139c78de6703a249edc4100a58f7b575e42b))
+* improve sustainability attribute handling and validation ([d6f58a3](https://github.com/ColdPBC/cold-monorepo/commit/d6f58a383837946358686282de72027f93316599))
+* update default value for sustainabilityAttribute and related checks ([a64e029](https://github.com/ColdPBC/cold-monorepo/commit/a64e029f1b750b6189e0ec70dab0136a7180bf76))
+* update placeholder text for sustainability attribute selection ([0594578](https://github.com/ColdPBC/cold-monorepo/commit/059457862cd9a6aa2dff17d57a13e9bfff0ec210))
+
 # [1.373.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.372.0...v1.373.0) (2024-09-13)
 
 
