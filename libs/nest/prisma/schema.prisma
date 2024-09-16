@@ -617,12 +617,12 @@ model attribute_assurances {
   id                          String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   organization_facility_id    String?
   organization_id             String
-  sustainability_attribute_id String                    @db.Uuid
+  sustainability_attribute_id String?                   @db.Uuid
   material_id                 String?                   @db.Uuid
   product_id                  String?                   @db.Uuid
   organization_file_id        String?
-  effective_start_date        DateTime
-  effective_end_date          DateTime
+  effective_start_date        DateTime?
+  effective_end_date          DateTime?
   created_at                  DateTime                  @default(now()) @db.Timestamptz(6)
   updated_at                  DateTime                  @updatedAt @db.Timestamptz(6)
   organization                organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
@@ -630,7 +630,9 @@ model attribute_assurances {
   material                    materials?                @relation(fields: [material_id], references: [id])
   product                     products?                 @relation(fields: [product_id], references: [id])
   supplier                    organization_facilities?  @relation(fields: [organization_facility_id], references: [id])
-  sustainability_attribute    sustainability_attributes @relation(fields: [sustainability_attribute_id], references: [id], onDelete: Cascade)
+  sustainability_attribute    sustainability_attributes? @relation(fields: [sustainability_attribute_id], references: [id], onDelete: Cascade)
+
+	@@unique([sustainability_attribute_id, organization_id, organization_file_id], name: "orgIdFileIdAttributeIdKey")
 
   @@index([organization_id], map: "attribute_assurances_organization_id_idx1")
   @@index([organization_file_id], map: "attribute_assurances_organization_file_id_idx1")
