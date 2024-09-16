@@ -91,7 +91,7 @@ const _DocumentDetailsSidebar = (props: {
 				metadata: file.metadata,
 				startDate: null,
 				endDate: null,
-				sustainabilityAttribute: 'No sustainability attribute',
+				sustainabilityAttribute: 'select attribute',
 			};
 
 			if (hasAssurances) {
@@ -146,7 +146,7 @@ const _DocumentDetailsSidebar = (props: {
 		// add option to dropdown that says "Select sustainability attribute"
 		const selectSustainabilityAttributeOption = {
 			id: -1,
-			name: 'No sustainability attribute',
+			name: 'select attribute',
 			value: '',
 		};
 
@@ -547,7 +547,7 @@ const _DocumentDetailsSidebar = (props: {
 		endDate: Date | null;
 		sustainabilityAttribute: string;
 	}) => {
-		return !(fileState.startDate === null || fileState.endDate === null || fileState.sustainabilityAttribute === 'No sustainability attribute');
+		return !(fileState.startDate === null || fileState.endDate === null || fileState.sustainabilityAttribute === 'select attribute');
 	};
 
 	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
