@@ -1,3 +1,10 @@
+# [1.374.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.373.1...v1.374.0) (2024-09-16)
+
+
+### Features
+
+* add unique constraints and modify data extraction logic ([a368756](https://github.com/ColdPBC/cold-monorepo/commit/a3687562240be94396e85e758a26a3fb064651f9))
+
 ## [1.373.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.373.0...v1.373.1) (2024-09-16)
 
 
