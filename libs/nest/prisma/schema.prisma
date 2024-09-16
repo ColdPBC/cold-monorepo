@@ -632,9 +632,7 @@ model attribute_assurances {
   supplier                    organization_facilities?  @relation(fields: [organization_facility_id], references: [id])
   sustainability_attribute    sustainability_attributes? @relation(fields: [sustainability_attribute_id], references: [id], onDelete: Cascade)
 
-	@@unique([sustainability_attribute_id, organization_id, organization_file_id], name: "orgIdFileIdAttributeIdKey")
-
-  @@index([organization_id], map: "attribute_assurances_organization_id_idx1")
+	@@index([organization_id], map: "attribute_assurances_organization_id_idx1")
   @@index([organization_file_id], map: "attribute_assurances_organization_file_id_idx1")
   @@index([sustainability_attribute_id], map: "attribute_assurances_attribute_id_idx1")
   @@index([organization_facility_id])
