@@ -1,3 +1,10 @@
+## [1.376.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.376.0...v1.376.1) (2024-09-17)
+
+
+### Bug Fixes
+
+* update barrelsby command directory path ([d0ff848](https://github.com/ColdPBC/cold-monorepo/commit/d0ff8483481eb9a22abd7b083390c7f3000070fe))
+
 # [1.376.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.375.1...v1.376.0) (2024-09-17)
 
 
