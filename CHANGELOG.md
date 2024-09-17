@@ -1,3 +1,15 @@
+# [1.378.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.377.1...v1.378.0) (2024-09-17)
+
+
+### Bug Fixes
+
+* remove unused imports in seed file ([d0e4fb9](https://github.com/ColdPBC/cold-monorepo/commit/d0e4fb9079fd7aa196a28b349133e487c3707b3a))
+
+
+### Features
+
+* update seed script for sustainability attributes ([074386d](https://github.com/ColdPBC/cold-monorepo/commit/074386dcd2350fa8d2ba547f41d4a541af462062))
+
 ## [1.377.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.377.0...v1.377.1) (2024-09-17)
 
 
