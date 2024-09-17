@@ -31,7 +31,13 @@ const _DocumentsPage = () => {
 			},
 		},
 	});
-	const allSustainabilityAttributes = useGraphQLSWR('GET_ALL_SUS_ATTRIBUTES');
+	const allSustainabilityAttributes = useGraphQLSWR('GET_ALL_SUS_ATTRIBUTES', {
+		pagination: {
+			orderBy: {
+				name: 'ASC',
+			},
+		},
+	});
 
 	useEffect(() => {
 		const files = get(allFiles.data, 'data.organizationFiles', []);

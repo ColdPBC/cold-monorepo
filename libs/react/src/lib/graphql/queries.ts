@@ -56,8 +56,8 @@ export const GET_ALL_FILES = gql`
 `;
 
 export const GET_ALL_SUS_ATTRIBUTES = gql`
-	query SustainabilityAttributes {
-		sustainabilityAttributes {
+	query SustainabilityAttributes($pagination: SustainabilityAttributesPaginationInput, $filter: SustainabilityAttributesListFilter) {
+		sustainabilityAttributes(pagination: $pagination, filter: $filter) {
 			id
 			name
 			level
