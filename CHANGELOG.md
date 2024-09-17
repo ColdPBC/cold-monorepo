@@ -1,3 +1,32 @@
+## [1.377.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.377.0...v1.377.1) (2024-09-17)
+
+
+### Bug Fixes
+
+* update classification service to handle unmatched attributes scenario ([da5daf2](https://github.com/ColdPBC/cold-monorepo/commit/da5daf2055223809ba22e6bf2a76511c9b2c669e))
+
+# [1.377.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.376.1...v1.377.0) (2024-09-17)
+
+
+### Features
+
+* add handling for files without sustainability attributes ([665d55a](https://github.com/ColdPBC/cold-monorepo/commit/665d55a9d13d7cb57c3d0ca2e0e58a8d64711cea))
+
+## [1.376.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.376.0...v1.376.1) (2024-09-17)
+
+
+### Bug Fixes
+
+* update barrelsby command directory path ([d0ff848](https://github.com/ColdPBC/cold-monorepo/commit/d0ff8483481eb9a22abd7b083390c7f3000070fe))
+
+# [1.376.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.375.1...v1.376.0) (2024-09-17)
+
+
+### Features
+
+* remove classification schema ([0889d03](https://github.com/ColdPBC/cold-monorepo/commit/0889d035d90b3af32cf098d30efad69690a3e3c6))
+* update types with optional fields and new enums ([97e26e4](https://github.com/ColdPBC/cold-monorepo/commit/97e26e49b71a0e5e2e7a9f33c743e3eeae802e2a))
+
 ## [1.375.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.375.0...v1.375.1) (2024-09-17)
 
 

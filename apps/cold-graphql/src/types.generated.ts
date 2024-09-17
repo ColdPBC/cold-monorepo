@@ -387,8 +387,8 @@ export type ApiKeysListFilter = {
 export type AttributeAssurance = {
   __typename?: 'AttributeAssurance';
   createdAt: Scalars['ISOString']['output'];
-  effectiveEndDate: Scalars['ISOString']['output'];
-  effectiveStartDate: Scalars['ISOString']['output'];
+  effectiveEndDate?: Maybe<Scalars['ISOString']['output']>;
+  effectiveStartDate?: Maybe<Scalars['ISOString']['output']>;
   id: Scalars['ID']['output'];
   material?: Maybe<Material>;
   material_aggregate?: Maybe<AggregationResult>;
@@ -483,8 +483,8 @@ export type AttributeAssuranceCreateOrUpdateInput = {
 /** Data needed to create AttributeAssurances. */
 export type AttributeAssuranceInsertInput = {
   createdAt: Scalars['ISOString']['input'];
-  effectiveEndDate: Scalars['ISOString']['input'];
-  effectiveStartDate: Scalars['ISOString']['input'];
+  effectiveEndDate?: InputMaybe<Scalars['ISOString']['input']>;
+  effectiveStartDate?: InputMaybe<Scalars['ISOString']['input']>;
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   organizationFacility?: InputMaybe<OrganizationFacilityCreateOrUpdateInput>;
@@ -8645,9 +8645,11 @@ export type OrganizationFilesPaginationInput = {
 
 export enum OrganizationFilesType {
   Assessment = 'ASSESSMENT',
+  BillOfMaterials = 'BILL_OF_MATERIALS',
   Certificate = 'CERTIFICATE',
   Other = 'OTHER',
   Policy = 'POLICY',
+  PurchaseOrder = 'PURCHASE_ORDER',
   Statement = 'STATEMENT',
   TestResults = 'TEST_RESULTS'
 }
@@ -9289,11 +9291,15 @@ export type Product = {
   createdAt: Scalars['ISOString']['output'];
   deleted: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
   name: Scalars['String']['output'];
   organization: Organization;
   organization_aggregate?: Maybe<AggregationResult>;
+  productCategoryHeirarchy?: Maybe<Scalars['JSON']['output']>;
   productMaterials: Array<ProductMaterial>;
   productMaterials_aggregate?: Maybe<AggregationResult>;
+  seasonCode?: Maybe<Scalars['String']['output']>;
+  styleCode?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['ISOString']['output'];
 };
 
@@ -9333,9 +9339,13 @@ export type ProductCreateOrUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  productCategoryHeirarchy?: InputMaybe<Scalars['JSON']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
+  seasonCode?: InputMaybe<Scalars['String']['input']>;
+  styleCode?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
@@ -9344,9 +9354,13 @@ export type ProductInsertInput = {
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
   createdAt: Scalars['ISOString']['input'];
   deleted: Scalars['Boolean']['input'];
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  productCategoryHeirarchy?: InputMaybe<Scalars['JSON']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
+  seasonCode?: InputMaybe<Scalars['String']['input']>;
+  styleCode?: InputMaybe<Scalars['String']['input']>;
   updatedAt: Scalars['ISOString']['input'];
 };
 
@@ -9478,9 +9492,13 @@ export type ProductUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   id: Scalars['ID']['input'];
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  productCategoryHeirarchy?: InputMaybe<Scalars['JSON']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
+  seasonCode?: InputMaybe<Scalars['String']['input']>;
+  styleCode?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
@@ -9512,6 +9530,12 @@ export type ProductsListFilter = {
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  metadata_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  metadata_ne?: InputMaybe<Scalars['JSON']['input']>;
+  metadata_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  metadata_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  metadata_null?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_gt?: InputMaybe<Scalars['String']['input']>;
   name_gte?: InputMaybe<Scalars['String']['input']>;
@@ -9525,7 +9549,37 @@ export type ProductsListFilter = {
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
   organization?: InputMaybe<OrganizationsListFilter>;
+  productCategoryHeirarchy?: InputMaybe<Scalars['JSON']['input']>;
+  productCategoryHeirarchy_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  productCategoryHeirarchy_ne?: InputMaybe<Scalars['JSON']['input']>;
+  productCategoryHeirarchy_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  productCategoryHeirarchy_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  productCategoryHeirarchy_null?: InputMaybe<Scalars['Boolean']['input']>;
   productMaterials?: InputMaybe<ProductMaterialsListFilter>;
+  seasonCode?: InputMaybe<Scalars['String']['input']>;
+  seasonCode_gt?: InputMaybe<Scalars['String']['input']>;
+  seasonCode_gte?: InputMaybe<Scalars['String']['input']>;
+  seasonCode_ilike?: InputMaybe<Scalars['String']['input']>;
+  seasonCode_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  seasonCode_like?: InputMaybe<Scalars['String']['input']>;
+  seasonCode_lt?: InputMaybe<Scalars['String']['input']>;
+  seasonCode_lte?: InputMaybe<Scalars['String']['input']>;
+  seasonCode_ne?: InputMaybe<Scalars['String']['input']>;
+  seasonCode_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  seasonCode_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  seasonCode_null?: InputMaybe<Scalars['Boolean']['input']>;
+  styleCode?: InputMaybe<Scalars['String']['input']>;
+  styleCode_gt?: InputMaybe<Scalars['String']['input']>;
+  styleCode_gte?: InputMaybe<Scalars['String']['input']>;
+  styleCode_ilike?: InputMaybe<Scalars['String']['input']>;
+  styleCode_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  styleCode_like?: InputMaybe<Scalars['String']['input']>;
+  styleCode_lt?: InputMaybe<Scalars['String']['input']>;
+  styleCode_lte?: InputMaybe<Scalars['String']['input']>;
+  styleCode_ne?: InputMaybe<Scalars['String']['input']>;
+  styleCode_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  styleCode_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  styleCode_null?: InputMaybe<Scalars['Boolean']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -9542,7 +9596,11 @@ export type ProductsOrderByInput = {
   createdAt?: InputMaybe<Sort>;
   deleted?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
+  metadata?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
+  productCategoryHeirarchy?: InputMaybe<Sort>;
+  seasonCode?: InputMaybe<Sort>;
+  styleCode?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
 };
 
