@@ -1,5 +1,4 @@
 import { claim_levels, claim_types, PrismaClient } from '@prisma/client';
-import { Cuid2Generator, GuidPrefixes } from '../../src';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
