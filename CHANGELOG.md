@@ -1,3 +1,10 @@
+# [1.375.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.374.2...v1.375.0) (2024-09-17)
+
+
+### Features
+
+* add pagination support to fetch all sustainability attributes ([cbc9492](https://github.com/ColdPBC/cold-monorepo/commit/cbc94926f8fb782de22446b233df163bbc33cbdc))
+
 ## [1.374.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.374.1...v1.374.2) (2024-09-17)
 
 
