@@ -44,7 +44,6 @@ const _DocumentDetailsSidebar = (props: {
 	const hasSustainabilityAttribute = get(file, 'attributeAssurances[0].sustainabilityAttribute.name', '').length > 0;
 	const { mutateGraphQL: updateAssurance } = useGraphQLMutation('UPDATE_DOCUMENT_ASSURANCE');
 	const { mutateGraphQL: updateDocument } = useGraphQLMutation('UPDATE_DOCUMENT_FIELDS');
-	const { mutateGraphQL: createAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
 	const { mutateGraphQL: deleteAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
 	const { addToastMessage } = useAddToastMessage();
 

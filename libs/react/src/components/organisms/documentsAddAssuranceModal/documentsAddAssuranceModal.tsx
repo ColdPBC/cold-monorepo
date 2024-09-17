@@ -4,9 +4,8 @@ import React, { useEffect } from 'react';
 import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
 import { useSWRConfig } from 'swr';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
-import { get, has, lowerCase } from 'lodash';
+import { get, lowerCase } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
-import { isApolloError } from '@apollo/client';
 
 export const _DocumentsAddAssuranceModal = (props: {
 	files: FilesWithAssurances[];
@@ -79,7 +78,9 @@ export const _DocumentsAddAssuranceModal = (props: {
 			},
 		},
 	});
+
 	const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
+	const { mutateGraphQL: updateDocument } = useGraphQLMutation('UPDATE_DOCUMENT_FIELDS');
 
 	useEffect(() => {
 		if (!allEntities.isLoading && !get(allEntities.data, 'errors', undefined)) {
@@ -121,30 +122,43 @@ export const _DocumentsAddAssuranceModal = (props: {
 			};
 		}
 
-		const response = await createAttributeAssurance({
-			input: variables,
-		})
+		const promises: Promise<any>[] = [];
+		promises.push(createAttributeAssurance({ input: variables }));
+		if (!isAdding) {
+			const documentVariables: {
+				[key: string]: any;
+			} = {
+				id: fileState.id,
+				type: fileState.type,
+			};
+			if (document.metadata) {
+				documentVariables.metadata = {
+					...document.metadata,
+					effective_start_date: fileState.startDate,
+					effective_end_date: fileState.endDate,
+				};
+			}
+
+			promises.push(updateDocument({ input: documentVariables }));
+		}
+
+		await Promise.all(promises)
 			.then(response => {
-				return response;
+				addToastMessage({
+					message: 'Assurance added',
+					type: ToastMessage.SUCCESS,
+				});
+				logBrowser('Successfully updated file', 'info', { response });
+				close();
 			})
 			.catch(error => {
-				return error;
+				addToastMessage({
+					message: 'Error adding assurance',
+					type: ToastMessage.FAILURE,
+				});
+				logBrowser('Error adding assurance', 'error', { error });
 			});
 
-		if (has(response, 'errors') || isApolloError(response)) {
-			addToastMessage({
-				message: 'Error adding assurance',
-				type: ToastMessage.FAILURE,
-			});
-			logBrowser('Error adding assurance', 'error', { response });
-		} else {
-			addToastMessage({
-				message: 'Assurance added',
-				type: ToastMessage.SUCCESS,
-			});
-			logBrowser('Successfully updated file', 'info', { response });
-			close();
-		}
 		await mutate('GET_ALL_FILES');
 		await mutate('GET_ALL_SUS_ATTRIBUTES');
 	};
