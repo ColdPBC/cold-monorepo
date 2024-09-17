@@ -617,7 +617,7 @@ model attribute_assurances {
   id                          String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   organization_facility_id    String?
   organization_id             String
-  sustainability_attribute_id String?                   @db.Uuid
+  sustainability_attribute_id String                   	@db.Uuid
   material_id                 String?                   @db.Uuid
   product_id                  String?                   @db.Uuid
   organization_file_id        String?

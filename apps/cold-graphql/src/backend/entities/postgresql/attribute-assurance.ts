@@ -30,8 +30,8 @@ export class AttributeAssurance {
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'attribute_assurances_organization_id_idx1' })
 	organization!: Ref<Organization>;
 
-	@ManyToOne({ entity: () => SustainabilityAttribute, ref: true, nullable: true, index: 'attribute_assurances_attribute_id_idx1' })
-	sustainabilityAttribute?: Ref<SustainabilityAttribute>;
+	@ManyToOne({ entity: () => SustainabilityAttribute, ref: true, index: 'attribute_assurances_attribute_id_idx1' })
+	sustainabilityAttribute!: Ref<SustainabilityAttribute>;
 
 	@ManyToOne({ entity: () => Material, ref: true, nullable: true, index: 'attribute_assurancess_material_id_idx1' })
 	material?: Ref<Material>;

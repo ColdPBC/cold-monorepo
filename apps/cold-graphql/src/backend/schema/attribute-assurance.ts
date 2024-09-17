@@ -23,8 +23,8 @@ export class AttributeAssurance {
 	@RelationshipField<AttributeAssurance>(() => Organization, { id: (entity) => entity.organization?.id })
 	organization!: Organization;
 
-	@RelationshipField<AttributeAssurance>(() => SustainabilityAttribute, { id: (entity) => entity.sustainabilityAttribute?.id, nullable: true })
-	sustainabilityAttribute?: SustainabilityAttribute;
+	@RelationshipField<AttributeAssurance>(() => SustainabilityAttribute, { id: (entity) => entity.sustainabilityAttribute?.id })
+	sustainabilityAttribute!: SustainabilityAttribute;
 
 	@RelationshipField<AttributeAssurance>(() => Material, { id: (entity) => entity.material?.id, nullable: true })
 	material?: Material;
