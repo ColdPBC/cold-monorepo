@@ -365,7 +365,7 @@ const seeds: Array<{
 		level: 'SUPPLIER',
 	},
 	{
-		name: 'Worldwide Responsible Accredited Production',
+		name: 'Worldwide Responsible Accredited Production (WRAP)',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
 	},
@@ -602,7 +602,15 @@ export async function seedSustainabilityAttributes() {
 			});
 
 			if (existing?.id) {
-				console.log(`skipped seeding (${count} of ${seeds.length}) existing Sustainability Attribute: ${seed.name}`, existing);
+				await prisma.sustainability_attributes.update({
+					where: {
+						id: existing.id,
+					},
+					data: seed,
+				});
+
+				console.log(`updated existing Sustainability Attribute (${count} of ${seeds.length}): ${seed.name}`, existing);
+				count++;
 				return;
 			}
 
