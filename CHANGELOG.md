@@ -1,3 +1,10 @@
+## [1.374.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.374.1...v1.374.2) (2024-09-17)
+
+
+### Bug Fixes
+
+* add nullable metadata to Product and make fields optional in AttributeAssurance ([95434c1](https://github.com/ColdPBC/cold-monorepo/commit/95434c1134e5cc50e14b354cdfa1a88168fdafc7))
+
 ## [1.374.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.374.0...v1.374.1) (2024-09-16)
 
 
