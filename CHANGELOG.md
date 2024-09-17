@@ -1,3 +1,11 @@
+# [1.376.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.375.1...v1.376.0) (2024-09-17)
+
+
+### Features
+
+* remove classification schema ([0889d03](https://github.com/ColdPBC/cold-monorepo/commit/0889d035d90b3af32cf098d30efad69690a3e3c6))
+* update types with optional fields and new enums ([97e26e4](https://github.com/ColdPBC/cold-monorepo/commit/97e26e49b71a0e5e2e7a9f33c743e3eeae802e2a))
+
 ## [1.375.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.375.0...v1.375.1) (2024-09-17)
 
 
