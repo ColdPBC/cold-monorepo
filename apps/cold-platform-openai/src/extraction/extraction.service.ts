@@ -126,45 +126,7 @@ export class ExtractionService extends BaseWorker {
 				return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
 			}
 
-			const data = {
-				sustainability_attribute_id: classification.sustainability_attribute_id,
-				organization_id: organization.id,
-				organization_file_id: orgFile.id,
-				effective_start_date: updateData.effective_start_date,
-				effective_end_date: updateData.effective_end_date,
-			} as attribute_assurances;
-
-			if (updateData.effective_start_date) {
-				data.effective_start_date = updateData.effective_start_date;
-			}
-
-			if (updateData.effective_end_date) {
-				data.effective_end_date = updateData.effective_end_date;
-			}
-
-			const existingAssurance = await this.prisma.attribute_assurances.findFirst({
-				where: {
-					...data,
-				},
-			});
-
-			let assurance;
-
-			if (existingAssurance) {
-				data.id = existingAssurance.id;
-				assurance = await this.prisma.attribute_assurances.update({
-					where: {
-						id: existingAssurance.id,
-					},
-					data: data,
-				});
-			} else {
-				assurance = await this.prisma.attribute_assurances.create({
-					data,
-				});
-			}
-
-			this.logger.info('attribute assurance created', { assurance, file: updatedFile, organization, user });
+			await this.createAttributeAssurances(classification, organization, orgFile, updateData, updatedFile, user);
 
 			this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
 				start,
@@ -199,5 +161,47 @@ export class ExtractionService extends BaseWorker {
 			});
 			throw e;
 		}
+	}
+
+	private async createAttributeAssurances(classification, organization: organizations, orgFile: organization_files, updateData: any, updatedFile: any, user: IAuthenticatedUser) {
+		const data = {
+			sustainability_attribute_id: classification.sustainability_attribute_id,
+			organization_id: organization.id,
+			organization_file_id: orgFile.id,
+			effective_start_date: updateData.effective_start_date,
+			effective_end_date: updateData.effective_end_date,
+		} as attribute_assurances;
+
+		if (updateData.effective_start_date) {
+			data.effective_start_date = updateData.effective_start_date;
+		}
+
+		if (updateData.effective_end_date) {
+			data.effective_end_date = updateData.effective_end_date;
+		}
+
+		const existingAssurance = await this.prisma.attribute_assurances.findFirst({
+			where: {
+				...data,
+			},
+		});
+
+		let assurance;
+
+		if (existingAssurance) {
+			data.id = existingAssurance.id;
+			assurance = await this.prisma.attribute_assurances.update({
+				where: {
+					id: existingAssurance.id,
+				},
+				data: data,
+			});
+		} else {
+			assurance = await this.prisma.attribute_assurances.create({
+				data,
+			});
+		}
+
+		this.logger.info('attribute assurance created', { assurance, file: updatedFile, organization, user });
 	}
 }
