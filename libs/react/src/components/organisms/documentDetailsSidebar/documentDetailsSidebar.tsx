@@ -91,7 +91,7 @@ const _DocumentDetailsSidebar = (props: {
 				metadata: file.metadata,
 				startDate: null,
 				endDate: null,
-				sustainabilityAttribute: 'select attribute',
+				sustainabilityAttribute: 'None',
 			};
 
 			if (hasAssurances) {
@@ -146,7 +146,7 @@ const _DocumentDetailsSidebar = (props: {
 		// add option to dropdown that says "Select sustainability attribute"
 		const selectSustainabilityAttributeOption = {
 			id: -1,
-			name: 'select attribute',
+			name: 'None',
 			value: '',
 		};
 
@@ -322,7 +322,7 @@ const _DocumentDetailsSidebar = (props: {
 					break;
 			}
 		} else {
-			element = <DocumentSuppliersTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={[]} />;
+			return null;
 		}
 		const addButtonDisabled = !hasAssurances || hasFileStateChanged(fileState);
 		return (
@@ -547,7 +547,7 @@ const _DocumentDetailsSidebar = (props: {
 		endDate: Date | null;
 		sustainabilityAttribute: string;
 	}) => {
-		return !(fileState.startDate === null || fileState.endDate === null || fileState.sustainabilityAttribute === 'select attribute');
+		return !(fileState.startDate === null || fileState.endDate === null || fileState.sustainabilityAttribute === 'None');
 	};
 
 	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
