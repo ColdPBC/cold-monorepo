@@ -120,6 +120,25 @@ export class ExtractionService extends BaseWorker {
 
 			this.logger.info('file metadata updated', { file: updatedFile, organization, user });
 
+			// if the classification does not contain a sustainability attribute, return the parsed response
+			if (!classification.sustainability_attribute_id) {
+				this.sendMetrics('organization.files', 'cold-openai', 'no-sustainability-attribute', 'completed', {
+					start,
+					sendEvent: true,
+					tags: {
+						sustainability_attribute_name: classification.sustainability_attribute,
+						sustainability_attribute_id: classification.sustainability_attribute_id,
+						organization_name: organization?.name,
+						organization_id: organization?.id,
+						user_email: user?.coldclimate_claims?.email,
+						file_name: orgFile.original_name,
+						file_type: orgFile.type,
+						file_id: orgFile.id,
+					},
+				});
+				return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
+			}
+
 			const data = {
 				sustainability_attribute_id: classification.sustainability_attribute_id,
 				organization_id: organization.id,
