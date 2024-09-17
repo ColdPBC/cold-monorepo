@@ -1,7 +1,7 @@
 import { ErrorFallback, Modal, Select, Spinner } from '@coldpbc/components';
 import { ButtonTypes } from '@coldpbc/enums';
 import React, { useEffect } from 'react';
-import { FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
+import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
 import { useSWRConfig } from 'swr';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
 import { get, has, lowerCase } from 'lodash';
@@ -9,22 +9,55 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { isApolloError } from '@apollo/client';
 
 export const _DocumentsAddAssuranceModal = (props: {
-	documentToAddAssurance: FilesWithAssurances;
-	setDocumentToAddAssurance: (document: FilesWithAssurances | undefined) => void;
+	files: FilesWithAssurances[];
+	allSustainabilityAttributes: Claims[];
+	documentToAddAssurance: {
+		fileState: {
+			id: string;
+			type: string;
+			originalName: string;
+			metadata: any;
+			startDate: Date | null;
+			endDate: Date | null;
+			sustainabilityAttribute: string;
+		};
+		isAdding: boolean;
+	};
+	close: () => void;
 }) => {
-	const { documentToAddAssurance, setDocumentToAddAssurance } = props;
+	const { files, allSustainabilityAttributes, documentToAddAssurance, close } = props;
+	const { fileState, isAdding } = documentToAddAssurance;
 	const [addingAssurance, setAddingAssurance] = React.useState(false);
 	const [selectedEntityId, setSelectedEntityId] = React.useState<string | undefined>(undefined);
 	const { addToastMessage } = useAddToastMessage();
 	const { mutate } = useSWRConfig();
 	const { logBrowser } = useColdContext();
 	const { orgId } = useAuth0Wrapper();
-	const sustainabilityAttribute = get(documentToAddAssurance, 'attributeAssurances[0].sustainabilityAttribute', undefined);
-	const effectiveStartDate = get(documentToAddAssurance, 'attributeAssurances[0].effectiveStartDate', new Date().toISOString());
-	const effectiveEndDate = get(documentToAddAssurance, 'attributeAssurances[0].effectiveEndDate', new Date().toISOString());
+	// get the files using the documentToAddAssurance.id
+	const file = files.find(file => file.id === documentToAddAssurance.fileState.id);
+
+	let sustainabilityAttribute:
+		| {
+				id: string;
+				name: string;
+				level: string;
+		  }
+		| undefined = undefined;
+	let effectiveStartDate = '';
+	let effectiveEndDate = '';
+	if (isAdding) {
+		sustainabilityAttribute = get(file, 'attributeAssurances[0].sustainabilityAttribute', undefined);
+		effectiveStartDate = get(file, 'attributeAssurances[0].effectiveStartDate', new Date().toISOString());
+		effectiveEndDate = get(file, 'attributeAssurances[0].effectiveEndDate', new Date().toISOString());
+	} else {
+		// pull the values from the documentToAddAssurance
+		sustainabilityAttribute = allSustainabilityAttributes.find(attr => attr.name === fileState.sustainabilityAttribute);
+		effectiveStartDate = fileState.startDate ? fileState.startDate.toISOString() : new Date().toISOString();
+		effectiveEndDate = fileState.endDate ? fileState.endDate.toISOString() : new Date().toISOString();
+	}
 
 	const getQueryString = () => {
-		if (documentToAddAssurance && sustainabilityAttribute) {
+		if (sustainabilityAttribute) {
 			// get the sustainability attribute level
 			const level = sustainabilityAttribute.level;
 			if (level === 'SUPPLIER') {
@@ -55,8 +88,8 @@ export const _DocumentsAddAssuranceModal = (props: {
 		}
 	}, [allEntities.data]);
 
-	const addAssuranceToDocument = async (document: FilesWithAssurances) => {
-		if (sustainabilityAttribute === undefined) return;
+	const addAssuranceToDocument = async (document: FilesWithAssurances | undefined) => {
+		if (sustainabilityAttribute === undefined || document === undefined) return;
 		let variables: { [key: string]: any } = {
 			organizationFile: {
 				id: document.id,
@@ -110,7 +143,7 @@ export const _DocumentsAddAssuranceModal = (props: {
 				type: ToastMessage.SUCCESS,
 			});
 			logBrowser('Successfully updated file', 'info', { response });
-			setDocumentToAddAssurance(undefined);
+			close();
 		}
 		await mutate('GET_ALL_FILES');
 		await mutate('GET_ALL_SUS_ATTRIBUTES');
@@ -119,19 +152,19 @@ export const _DocumentsAddAssuranceModal = (props: {
 	const getEntities = (): any[] => {
 		if (allEntities.data === undefined) return [];
 		let entities = get(allEntities.data, 'data.organizationFacilities', []);
-		if (entities.length > 0) {
+		if (entities && entities.length > 0) {
 			entities = entities.filter((entity: any) => {
-				return !documentToAddAssurance?.attributeAssurances.some((assurance: any) => {
+				return !file?.attributeAssurances.some((assurance: any) => {
 					return assurance.organizationFacility?.id === entity.id;
 				});
 			});
 		} else {
 			// get the materials instead
-			entities = get(allEntities.data, 'data.materials', null);
+			entities = get(allEntities.data, 'data.materials', []);
 			// filter out the materials that are already in the document
-			if (entities.length > 0) {
+			if (entities && entities.length > 0) {
 				entities = entities.filter((entity: any) => {
-					return !documentToAddAssurance?.attributeAssurances.some((assurance: any) => {
+					return !file?.attributeAssurances.some((assurance: any) => {
 						return assurance.material?.id === entity.id;
 					});
 				});
@@ -197,10 +230,10 @@ export const _DocumentsAddAssuranceModal = (props: {
 		<Modal
 			show={documentToAddAssurance !== undefined}
 			setShowModal={() => {
-				setDocumentToAddAssurance(undefined);
+				close();
 			}}
 			header={{
-				title: `Add an assurance to to ${documentToAddAssurance?.originalName}`,
+				title: `Add an assurance to to ${documentToAddAssurance.fileState.originalName}`,
 				cardProps: {
 					glow: false,
 				},
@@ -209,7 +242,7 @@ export const _DocumentsAddAssuranceModal = (props: {
 			footer={{
 				rejectButton: {
 					label: 'Cancel',
-					onClick: () => setDocumentToAddAssurance(undefined),
+					onClick: () => close(),
 					variant: ButtonTypes.secondary,
 				},
 				resolveButton: {
@@ -217,7 +250,7 @@ export const _DocumentsAddAssuranceModal = (props: {
 					onClick: async () => {
 						setAddingAssurance(true);
 						if (documentToAddAssurance) {
-							await addAssuranceToDocument(documentToAddAssurance);
+							await addAssuranceToDocument(file);
 						}
 						setAddingAssurance(false);
 					},

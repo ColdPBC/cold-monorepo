@@ -116,7 +116,8 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 
 	const rows = files
 		.map(file => {
-			const effectiveEndDate = get(file.attributeAssurances, '[0].effectiveEndDate', null);
+			const metadataEffectiveEndDate = get(file, 'metadata.effective_end_date', null);
+			const effectiveEndDate = get(file.attributeAssurances, '[0].effectiveEndDate', metadataEffectiveEndDate === '' ? null : metadataEffectiveEndDate);
 			const sustainabilityAttribute = get(file.attributeAssurances, '[0].sustainabilityAttribute.name', '');
 			return {
 				id: file.id,
