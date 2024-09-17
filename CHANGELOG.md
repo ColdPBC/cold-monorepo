@@ -1,3 +1,10 @@
+## [1.377.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.377.0...v1.377.1) (2024-09-17)
+
+
+### Bug Fixes
+
+* update classification service to handle unmatched attributes scenario ([da5daf2](https://github.com/ColdPBC/cold-monorepo/commit/da5daf2055223809ba22e6bf2a76511c9b2c669e))
+
 # [1.377.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.376.1...v1.377.0) (2024-09-17)
 
 
