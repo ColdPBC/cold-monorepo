@@ -5,19 +5,6 @@ import { attribute_assurances, file_types, organization_files, organizations } f
 import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
-import {
-	defaultExtractionSchema,
-	defaultTestSchema,
-	defaultCertificateSchema,
-	defaultPolicySchema,
-	defaultStatementSchema,
-	sgs,
-	intertek,
-	wrap,
-	tuv_rhineland,
-	bluesign,
-} from './extraction_schemas';
-import { FileTypes } from '@coldpbc/enums';
 import { ClassificationService } from './classification.service';
 
 @Injectable()
