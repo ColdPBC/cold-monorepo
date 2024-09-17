@@ -1,3 +1,10 @@
+# [1.377.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.376.1...v1.377.0) (2024-09-17)
+
+
+### Features
+
+* add handling for files without sustainability attributes ([665d55a](https://github.com/ColdPBC/cold-monorepo/commit/665d55a9d13d7cb57c3d0ca2e0e58a8d64711cea))
+
 ## [1.376.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.376.0...v1.376.1) (2024-09-17)
 
 
