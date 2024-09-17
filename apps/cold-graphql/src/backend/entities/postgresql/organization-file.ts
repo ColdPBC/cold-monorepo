@@ -19,6 +19,8 @@ export enum OrganizationFilesType {
 	ASSESSMENT = 'ASSESSMENT',
 	POLICY = 'POLICY',
 	OTHER = 'OTHER',
+	PURCHASE_ORDER = 'PURCHASE_ORDER',
+	BILL_OF_MATERIALS = 'BILL_OF_MATERIALS',
 }
 
 @ApplyAccessControlList(default_acl)

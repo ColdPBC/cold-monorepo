@@ -1,7 +1,7 @@
 import { ProductHooks } from './product.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { AttributeAssurance } from './attribute-assurance';
 import { Organization } from './organization';
 import { ProductMaterial } from './product-material';
@@ -21,7 +21,6 @@ export class Product {
 	@PrimaryKey({ type: 'uuid' })
 	id!: string;
 
-	@Unique({ name: 'products_name_key' })
 	@Property({ type: 'text' })
 	name!: string;
 
@@ -36,6 +35,18 @@ export class Product {
 
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'products_organization_id_idx1' })
 	organization!: Ref<Organization>;
+
+	@Property({ type: 'json', nullable: true })
+	metadata?: Record<string, unknown>;
+
+	@Property({ type: 'json', nullable: true })
+	productCategoryHeirarchy?: Record<string, unknown>;
+
+	@Property({ type: 'text', nullable: true })
+	seasonCode?: string;
+
+	@Property({ type: 'text', nullable: true })
+	styleCode?: string;
 
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'product' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
