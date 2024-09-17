@@ -52,7 +52,7 @@ export class ClassificationService extends BaseWorker {
 				.describe(
 					`Select the sustainability attribute that best matches the document according to the following list: ${attributes.join(
 						', ',
-					)}.  It is important that you do not use any other sustainability attribute that is not listed here.`,
+					)}.  It is important that you do not use any other sustainability attribute that is not listed here, therefore if you are unable to find an appropriate match leave this field blank.`,
 				),
 			testing_company: z.enum(['intertek', 'tuvRheinland', 'SGS', 'other']).describe('The name of the testing company'),
 			prompt: z
