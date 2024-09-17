@@ -1,3 +1,10 @@
+## [1.375.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.375.0...v1.375.1) (2024-09-17)
+
+
+### Bug Fixes
+
+* make sustainabilityAttribute required in attributeAssurances ([ffa46e9](https://github.com/ColdPBC/cold-monorepo/commit/ffa46e9d10589b14f4072c23223162cf70c66be2))
+
 # [1.375.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.374.2...v1.375.0) (2024-09-17)
 
 
