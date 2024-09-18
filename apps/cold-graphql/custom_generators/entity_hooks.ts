@@ -30,56 +30,56 @@ export class ${entityClassName}Hooks extends BaseSidecar {
 // ENTITY HOOK FUNCTIONS
 export const BEFORE_CREATE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync beforeCreateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });
+	\tthis.logger.log('before ${entityClassName} create hook', { user: params.context.user, organization: params.context.organization, arguments: params.args });
 	\treturn params;
 \t}
 `;
 
 export const AFTER_CREATE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync afterCreateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('afterCreateHook', { user: params.context.user, arguments: params.args });
+	\tthis.logger.log('${entityClassName} created', { user: params.context.user, organization: params.context.organization, arguments: params.args });
 	\treturn params;
 \t}
 `;
 
 export const BEFORE_READ_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync beforeReadHook(params: ReadHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('beforeReadHook', { user: params.context.user, arguments: params.args });
+	\tthis.logger.log('before ${entityClassName} read hook', { user: params.context.user, organization: params.context.organization, arguments: params.args });
 	\treturn params;
 \t}
 `;
 
 export const AFTER_READ_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync afterReadHook(params: ReadHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('afterReadHook', { user: params.context.user, arguments: params.args });
+	\tthis.logger.log('${entityClassName} read', { user: params.context.user, organization: params.context.organization, arguments: params.args });
 	\treturn params;
 \t}
 `;
 
 export const BEFORE_UPDATE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync beforeUpdateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('beforeUpdateHook', { user: params.context.user, arguments: params.args });
+	\tthis.logger.log('before ${entityClassName} update hook', { user: params.context.user, organization: params.context.organization, arguments: params.args });
 	\treturn params;
 \t}
 `;
 
 export const AFTER_UPDATE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync afterUpdateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('afterUpdateHook', { user: params.context.user, arguments: params.args });
+	\tthis.logger.log('${entityClassName} updated', { user: params.context.user, organization: params.context.organization, arguments: params.args });
 	\treturn params;
 \t}
 `;
 
 export const BEFORE_DELETE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync beforeDeleteHook(params: DeleteHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('beforeDeleteHook', { user: params.context.user, arguments: params.args });
+	\tthis.logger.log('before ${entityClassName} delete hook', { user: params.context.user, organization: params.context.organization, arguments: params.args });
 	\treturn params;
 \t}
 `;
 
 export const AFTER_DELETE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync afterDeleteHook(params: DeleteHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('afterDeleteHook', { user: params.context.user, arguments: params.args });
+	\tthis.logger.log('${entityClassName} deleted', { user: params.context.user, organization: params.context.organization, arguments: params.args });
 	\treturn params;
 \t}
 `;
