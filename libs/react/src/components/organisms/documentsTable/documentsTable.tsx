@@ -49,9 +49,9 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 		const fileStatus = getFileProcessingStatus(file);
 		if (fileStatus === 'uploaded') {
 			return (
-				<div className={'w-full h-full p-[8px]'}>
+				<div className={'w-full h-full p-[0px]'}>
 					<div
-						className={'w-full h-full flex flex-row rounded-[8px]'}
+						className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
 						style={{
 							background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
 						}}></div>
@@ -105,9 +105,9 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 		const fileStatus = getFileProcessingStatus(file);
 		if (fileStatus === 'uploaded') {
 			return (
-				<div className={'w-full h-full p-[8px]'}>
+				<div className={'w-full h-full p-[0px]'}>
 					<div
-						className={'w-full h-full flex flex-row rounded-[8px]'}
+						className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
 						style={{
 							background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
 						}}></div>
@@ -131,9 +131,9 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 		const fileStatus = getFileProcessingStatus(file);
 		if (fileStatus === 'uploaded') {
 			return (
-				<div className={'w-full h-full p-[8px]'}>
+				<div className={'w-full h-full p-[0px]'}>
 					<div
-						className={'w-full h-full flex flex-row rounded-[8px]'}
+						className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
 						style={{
 							background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
 						}}></div>
@@ -148,9 +148,9 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 		const fileStatus = getFileProcessingStatus(file);
 		if (fileStatus === 'uploaded') {
 			return (
-				<div className={'w-full h-full p-[8px]'}>
+				<div className={'w-full h-full p-[0px]'}>
 					<div
-						className={'w-full h-full flex flex-row rounded-[8px]'}
+						className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
 						style={{
 							background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
 						}}></div>
