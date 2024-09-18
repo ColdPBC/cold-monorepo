@@ -1,3 +1,10 @@
+# [1.382.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.381.0...v1.382.0) (2024-09-18)
+
+
+### Features
+
+* enhance logging and update entity schema ([bc1c203](https://github.com/ColdPBC/cold-monorepo/commit/bc1c20387d4a15ed71c88bf58b853c14687a0249))
+
 # [1.381.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.380.1...v1.381.0) (2024-09-18)
 
 
