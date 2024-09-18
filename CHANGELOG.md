@@ -1,3 +1,10 @@
+## [1.380.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.380.0...v1.380.1) (2024-09-18)
+
+
+### Bug Fixes
+
+* streamline logic for extracting file dates ([d190181](https://github.com/ColdPBC/cold-monorepo/commit/d190181883632911f2a9f01f3b1bd3541c2bf889))
+
 # [1.380.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.379.0...v1.380.0) (2024-09-18)
 
 
