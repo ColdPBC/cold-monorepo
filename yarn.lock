@@ -26395,6 +26395,7 @@ __metadata:
     yarn: "npm:^1.22.22"
     zod: "npm:^3.22.4"
     zod-prisma-types: "npm:^2.7.9"
+    zodex: "npm:^0.18.2"
   languageName: unknown
   linkType: soft
 
@@ -54465,6 +54466,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"type-fest@npm:^4.26.0":
+  version: 4.26.1
+  resolution: "type-fest@npm:4.26.1"
+  checksum: 10/b82676194f80af228cb852e320d2ea8381c89d667d2e4d9f2bdfc8f254bccc039c7741a90c53617a4de0c9fdca8265ed18eb0888cd628f391c5c381c33a9f94b
+  languageName: node
+  linkType: hard
+
 "type-fest@npm:^4.9.0":
   version: 4.26.0
   resolution: "type-fest@npm:4.26.0"
@@ -57432,10 +57440,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:3.23.8, zod@npm:^3.21.1, zod@npm:^3.22.3, zod@npm:^3.22.4":
+"zod@npm:3.23.8, zod@npm:^3.21.1, zod@npm:^3.22.3, zod@npm:^3.22.4, zod@npm:^3.23.8":
   version: 3.23.8
   resolution: "zod@npm:3.23.8"
   checksum: 10/846fd73e1af0def79c19d510ea9e4a795544a67d5b34b7e1c4d0425bf6bfd1c719446d94cdfa1721c1987d891321d61f779e8236fde517dc0e524aa851a6eff1
+  languageName: node
+  linkType: hard
+
+"zodex@npm:^0.18.2":
+  version: 0.18.2
+  resolution: "zodex@npm:0.18.2"
+  dependencies:
+    type-fest: "npm:^4.26.0"
+    zod: "npm:^3.23.8"
+  peerDependencies:
+    zod: ^3.x
+  checksum: 10/6e891deee03b9f2f474849120b4e4b051bf7cfddae418a9ab2545932f43e0f9b6eba316e3ab0f447a72089db16d1195e6788a71728b4e4a2d9348e9173a33594
   languageName: node
   linkType: hard
 
