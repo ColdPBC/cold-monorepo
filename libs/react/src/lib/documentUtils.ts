@@ -1,16 +1,23 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
-import { get } from 'lodash';
+import { find, get } from 'lodash';
 
 export const getEffectiveEndDate = (file: FilesWithAssurances): string | null => {
 	// find the first assurance with an effective end date
-	const assurance = file.attributeAssurances.find(assurance => assurance.effectiveEndDate !== null);
+	const assurance = find(file.attributeAssurances, assurance => assurance.effectiveEndDate !== null);
 	if (assurance && assurance.effectiveEndDate) {
 		return assurance.effectiveEndDate;
 	}
 	// next check the metadata
-	const effectiveEndDate = get(file, 'metadata.effect_end_date', null);
+	const effectiveEndDate = get(file, 'metadata.effective_end_date', null);
 	if (effectiveEndDate !== null && effectiveEndDate !== '') {
 		return effectiveEndDate;
+	}
+	if (file.originalName.includes('WRAP')) {
+		console.log({
+			attributeAssurances: file.attributeAssurances,
+			metadata: file.metadata,
+			name: file.originalName,
+		});
 	}
 	return null;
 };
