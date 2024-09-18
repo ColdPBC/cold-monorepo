@@ -50,3 +50,8 @@ export const getEffectiveStartDateFromAssurances = (file: FilesWithAssurances | 
 		return null;
 	}
 };
+
+export const getFileProcessingStatus = (file: FilesWithAssurances | undefined): string | null => {
+	if (!file) return null;
+	return get(file, 'metadata.status', null);
+};
