@@ -568,13 +568,11 @@ const _DocumentDetailsSidebar = (props: {
 		if (file === undefined) return false;
 		const compareFileState = getInitialFileState(file);
 		if (fileState === undefined || compareFileState === undefined) return false;
-		const compareFileStateDatesAreNotNull = compareFileState.startDate !== null && compareFileState.endDate !== null;
-		const fileStateDatesAreNotNull = fileState.startDate !== null && fileState.endDate !== null;
 		const startDatesAreSame = isSameDay(compareFileState.startDate || 0, fileState.startDate || 0);
 		const endDatesAreSame = isSameDay(compareFileState.endDate || 0, fileState.endDate || 0);
 		const compareFileStateSustainabilityAttribute = compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute;
 		const isFileTypeSame = compareFileState.type === fileState.type;
-		return !(compareFileStateDatesAreNotNull && fileStateDatesAreNotNull && startDatesAreSame && endDatesAreSame && compareFileStateSustainabilityAttribute && isFileTypeSame);
+		return !(startDatesAreSame && endDatesAreSame && compareFileStateSustainabilityAttribute && isFileTypeSame);
 	};
 
 	const isFileStateValid = (fileState: {
@@ -586,7 +584,7 @@ const _DocumentDetailsSidebar = (props: {
 		endDate: Date | null;
 		sustainabilityAttribute: string;
 	}) => {
-		return !(fileState.startDate === null || fileState.endDate === null || fileState.sustainabilityAttribute === 'None');
+		return !(fileState.sustainabilityAttribute === 'None');
 	};
 
 	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
