@@ -236,7 +236,8 @@
     "xlsx": "^0.18.5",
     "yarn": "^1.22.22",
     "zod": "^3.22.4",
-    "zod-prisma-types": "^2.7.9"
+    "zod-prisma-types": "^2.7.9",
+    "zodex": "^0.18.2"
   },
   "devDependencies": {
     "@auth0/nextjs-auth0": "^2.5.0",
