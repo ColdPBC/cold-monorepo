@@ -12,13 +12,6 @@ export const getEffectiveEndDate = (file: FilesWithAssurances): string | null =>
 	if (effectiveEndDate !== null && effectiveEndDate !== '') {
 		return effectiveEndDate;
 	}
-	if (file.originalName.includes('WRAP')) {
-		console.log({
-			attributeAssurances: file.attributeAssurances,
-			metadata: file.metadata,
-			name: file.originalName,
-		});
-	}
 	return null;
 };
 
