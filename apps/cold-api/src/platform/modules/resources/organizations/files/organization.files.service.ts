@@ -139,6 +139,8 @@ export class OrganizationFilesService extends BaseWorker {
 						throw new ConflictException(`file ${file.originalname} already exists in db for org ${org.name}`);
 					}
 
+					existing.metadata = existing.metadata ? { status: 'uploaded', ...(existing.metadata as any) } : { status: 'uploaded' };
+
 					await this.prisma.organization_files.update({
 						where: {
 							id: existing.id,
@@ -159,6 +161,7 @@ export class OrganizationFilesService extends BaseWorker {
 							location: file.destination,
 							checksum: hash,
 							type: 'OTHER',
+							metadata: { ...(existing.metadata as any) },
 						},
 					});
 				} else {
@@ -179,6 +182,7 @@ export class OrganizationFilesService extends BaseWorker {
 							location: file.destination,
 							checksum: hash,
 							type: 'OTHER',
+							metadata: { status: 'uploaded' },
 						},
 					});
 				}

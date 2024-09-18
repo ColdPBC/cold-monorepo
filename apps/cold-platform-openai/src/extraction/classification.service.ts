@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
+import { BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import z, { ZodObject } from 'zod';
 import { file_types, organization_files, organizations, sustainability_attributes } from '@prisma/client';
 import OpenAI from 'openai';
@@ -26,7 +26,7 @@ export class ClassificationService extends BaseWorker {
 	sus_attributes: sustainability_attributes[];
 	private classificationSchema: ZodObject<any>;
 
-	constructor(readonly config: ConfigService, private readonly prisma: PrismaService, readonly s3: S3Service) {
+	constructor(readonly config: ConfigService, private readonly prisma: PrismaService, readonly s3: S3Service, readonly mqtt: MqttService) {
 		super(ClassificationService.name);
 		this.openAi = new OpenAI({
 			organization: this.config.getOrThrow('OPENAI_ORG_ID'),
@@ -195,6 +195,35 @@ export class ClassificationService extends BaseWorker {
 				parsed.sustainability_attribute_id = attribute.id;
 			}
 		}
+
+		orgFile = (await this.prisma.organization_files.findUnique({
+			where: {
+				id: orgFile.id,
+			},
+		})) as organization_files;
+
+		if (!orgFile) {
+			throw new Error('File not found');
+		}
+		// update the file metadata with the classification
+		const updateData: any = {
+			type: parsed.type,
+			metadata: {
+				status: 'ai_classified',
+				classification: parsed,
+				...(orgFile.metadata as object),
+			},
+		};
+
+		await this.prisma.organization_files.update({
+			where: {
+				id: orgFile.id,
+			},
+			data: updateData,
+		});
+
+		// publish message to MQTT whenever a file is classified
+		this.mqtt.publishToUI({ action: 'update', status: 'complete', data: orgFile, user, swr_key: `organization_files.${updateData.metadata.status}`, org_id: organization.id });
 
 		return parsed;
 	}
