@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "file_types" ADD VALUE 'SCOPE_CERTIFICATE';
