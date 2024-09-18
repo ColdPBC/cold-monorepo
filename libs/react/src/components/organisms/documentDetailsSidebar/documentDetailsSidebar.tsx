@@ -105,18 +105,10 @@ const _DocumentDetailsSidebar = (props: {
 				sustainabilityAttribute: 'None',
 			};
 
-			if (hasAssurances) {
-				const startDate = getEffectiveStartDate(file);
-				const endDate = getEffectiveEndDate(file);
-				fileState['startDate'] = startDate ? new Date(startDate) : null;
-				fileState['endDate'] = endDate ? new Date(endDate) : null;
-			} else {
-				// get the start date and end date from the metadata field
-				const effectiveStartDate: string | null = get(file, 'metadata.effective_start_date', null);
-				const effectiveEndDate: string | null = get(file, 'metadata.effective_end_date', null);
-				fileState['startDate'] = effectiveStartDate ? new Date(effectiveStartDate) : null;
-				fileState['endDate'] = effectiveEndDate ? new Date(effectiveEndDate) : null;
-			}
+			const startDate = getEffectiveStartDate(file);
+			const endDate = getEffectiveEndDate(file);
+			fileState['startDate'] = startDate ? new Date(startDate) : null;
+			fileState['endDate'] = endDate ? new Date(endDate) : null;
 
 			if (hasSustainabilityAttribute) {
 				fileState['sustainabilityAttribute'] = file.attributeAssurances[0]?.sustainabilityAttribute?.name || '';
