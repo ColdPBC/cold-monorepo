@@ -46,6 +46,7 @@ const _DocumentDetailsSidebar = (props: {
 	const { mutateGraphQL: updateAssurance } = useGraphQLMutation('UPDATE_DOCUMENT_ASSURANCE');
 	const { mutateGraphQL: updateDocument } = useGraphQLMutation('UPDATE_DOCUMENT_FIELDS');
 	const { mutateGraphQL: deleteAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
+	const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
 	const { addToastMessage } = useAddToastMessage();
 
 	const deleteAttributeAssurance = async (id: string) => {
@@ -377,11 +378,7 @@ const _DocumentDetailsSidebar = (props: {
 				<BaseButton
 					label={'Save'}
 					onClick={() => {
-						if (!hasAssurances) {
-							addAssurance(fileState, false);
-						} else {
-							updateFileAndAssurances(fileState);
-						}
+						updateFileAndAssurances(fileState);
 					}}
 					variant={ButtonTypes.primary}
 					disabled={disabled}
@@ -486,6 +483,27 @@ const _DocumentDetailsSidebar = (props: {
 						}),
 					);
 				});
+			} else {
+				// create a new assurance
+				promises.push(
+					createAttributeAssurance({
+						input: {
+							effectiveStartDate: fileState.startDate,
+							effectiveEndDate: fileState.endDate,
+							organizationFile: {
+								id: fileState.id,
+							},
+							sustainabilityAttribute: {
+								id: sustainabilityAttribute.id,
+							},
+							organization: {
+								id: orgId,
+							},
+							createdAt: new Date().toISOString(),
+							updatedAt: new Date().toISOString(),
+						},
+					}),
+				);
 			}
 
 			await Promise.all(promises)
