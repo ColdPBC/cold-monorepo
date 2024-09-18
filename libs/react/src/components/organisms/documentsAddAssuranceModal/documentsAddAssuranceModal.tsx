@@ -6,6 +6,7 @@ import { useSWRConfig } from 'swr';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
 import { get, lowerCase } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
+import { getEffectiveEndDateFromAssurances, getEffectiveStartDateFromAssurances } from '@coldpbc/lib';
 
 export const _DocumentsAddAssuranceModal = (props: {
 	files: FilesWithAssurances[];
@@ -46,10 +47,10 @@ export const _DocumentsAddAssuranceModal = (props: {
 	let effectiveEndDate = '';
 	if (isAdding) {
 		sustainabilityAttribute = get(file, 'attributeAssurances[0].sustainabilityAttribute', undefined);
-		effectiveStartDate = get(file, 'attributeAssurances[0].effectiveStartDate', new Date().toISOString());
-		effectiveEndDate = get(file, 'attributeAssurances[0].effectiveEndDate', new Date().toISOString());
+		effectiveStartDate = getEffectiveEndDateFromAssurances(file) || new Date().toISOString();
+		effectiveEndDate = getEffectiveStartDateFromAssurances(file) || new Date().toISOString();
 	} else {
-		// pull the values from the documentToAddAssurance
+		// pull the values from the file state
 		sustainabilityAttribute = allSustainabilityAttributes.find(attr => attr.name === fileState.sustainabilityAttribute);
 		effectiveStartDate = fileState.startDate ? fileState.startDate.toISOString() : new Date().toISOString();
 		effectiveEndDate = fileState.endDate ? fileState.endDate.toISOString() : new Date().toISOString();

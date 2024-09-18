@@ -11,6 +11,7 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation
 import { useSWRConfig } from 'swr';
 import { isSameDay } from 'date-fns';
 import { isApolloError } from '@apollo/client';
+import { getEffectiveEndDate, getEffectiveStartDate } from '@coldpbc/lib';
 
 const _DocumentDetailsSidebar = (props: {
 	file: FilesWithAssurances | undefined;
@@ -105,8 +106,10 @@ const _DocumentDetailsSidebar = (props: {
 			};
 
 			if (hasAssurances) {
-				fileState['startDate'] = new Date(file.attributeAssurances[0].effectiveStartDate);
-				fileState['endDate'] = new Date(file.attributeAssurances[0].effectiveEndDate);
+				const startDate = getEffectiveStartDate(file);
+				const endDate = getEffectiveEndDate(file);
+				fileState['startDate'] = startDate ? new Date(startDate) : null;
+				fileState['endDate'] = endDate ? new Date(endDate) : null;
 			} else {
 				// get the start date and end date from the metadata field
 				const effectiveStartDate: string | null = get(file, 'metadata.effective_start_date', null);
