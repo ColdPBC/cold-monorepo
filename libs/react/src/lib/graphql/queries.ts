@@ -118,6 +118,29 @@ export const DELETE_ATTRIBUTE_ASSURANCE = gql`
 	}
 `;
 
+export const GET_ALL_MATERIALS_FOR_ORG = gql`
+	query Materials($filter: MaterialsListFilter!) {
+		materials(filter: $filter) {
+			id
+			name
+			materialSuppliers {
+				organizationFacility {
+					id
+					name
+					supplierTier
+				}
+			}
+			attributeAssurances {
+				id
+				sustainabilityAttribute {
+					id
+					name
+				}
+			}
+		}
+	}
+`;
+
 export const queries: {
 	[key: string]: DocumentNode;
 } = {
@@ -130,4 +153,5 @@ export const queries: {
 	UPDATE_DOCUMENT_FIELDS: UPDATE_DOCUMENT_FIELDS,
 	UPDATE_DOCUMENT_ASSURANCE: UPDATE_DOCUMENT_ASSURANCE,
 	DELETE_ATTRIBUTE_ASSURANCE: DELETE_ATTRIBUTE_ASSURANCE,
+	GET_ALL_MATERIALS_FOR_ORG: GET_ALL_MATERIALS_FOR_ORG,
 };
