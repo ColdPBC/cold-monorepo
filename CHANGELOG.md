@@ -1,3 +1,17 @@
+# [1.379.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.378.0...v1.379.0) (2024-09-18)
+
+
+### Bug Fixes
+
+* enhance document update logic in modals and sidebars ([843f8a4](https://github.com/ColdPBC/cold-monorepo/commit/843f8a4255703017acc7489c39379b5b21f9333c))
+* update default sustainability attribute to 'None' ([2707ab4](https://github.com/ColdPBC/cold-monorepo/commit/2707ab411e0b19f4d9f67bef1c8746b3e37eb26b))
+
+
+### Features
+
+* centralize effective date retrieval logic in utility functions ([87c7585](https://github.com/ColdPBC/cold-monorepo/commit/87c7585dfd22fccdd6eff47faa5aa9859101126f))
+* simplify assurance workflow and streamline date handling in documentsTable ([571a6e4](https://github.com/ColdPBC/cold-monorepo/commit/571a6e4f758fd2e8de87bf9de2adb29160b8482f))
+
 # [1.378.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.377.1...v1.378.0) (2024-09-17)
 
 
