@@ -1,3 +1,10 @@
+# [1.380.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.379.0...v1.380.0) (2024-09-18)
+
+
+### Features
+
+* Add unique constraint on `organization_id` and `name` in `materials` table ([c6dbac8](https://github.com/ColdPBC/cold-monorepo/commit/c6dbac83cfec084f88e255981dd27fe26732dd24))
+
 # [1.379.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.378.0...v1.379.0) (2024-09-18)
 
 
