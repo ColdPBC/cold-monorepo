@@ -50,9 +50,9 @@ export class ClassificationService extends BaseWorker {
 			sustainability_attribute: z
 				.string()
 				.describe(
-					`Select the sustainability attribute that best matches the document according to the following list: ${attributes.join(
+					`Select the sustainability attribute that best matches the document according to the following list: Unknown, ${attributes.join(
 						', ',
-					)}.  It is important that you do not use any other sustainability attribute that is not listed here, therefore if you are unable to find an appropriate match leave this field blank.`,
+					)}.  It is important that you do not use any other sustainability attribute that is not listed here.`,
 				),
 			testing_company: z.enum(['intertek', 'tuvRheinland', 'SGS', 'other']).describe('The name of the testing company'),
 			prompt: z
@@ -83,11 +83,9 @@ export class ClassificationService extends BaseWorker {
 		const classifyPrompt = `You are a helpful assistant for ${
 			organization.display_name
 		} and you help users classify and extract data from documents that they upload.  Classify this content using the following rules:
-    - if the content is an RSL (Restricted Substance List), classify it as a policy
-    - if the content is a certificate, classify it as a certificate
-    - if the content is a test result, classify it as a test
-    - if the content is a statement, classify it as a statement
-    - if the content is an impact assessment from ${organization.display_name}, classify it as a statement
+    - if the content is an RSL (Restricted Substance List), classify it as a POLICY
+    - if the content is a statement, classify it as a STATEMENT
+    - if the content is an impact assessment from ${organization.display_name}, classify it as a STATEMENT
      ${this.contentIsUrl(content) ? 'from the following image' : `from the following context: ${Array.isArray(content) ? content.join(' ') : content}`}:`;
 
 		const messageContent: { type: string; text?: string; image_url?: { url: string } }[] = [
