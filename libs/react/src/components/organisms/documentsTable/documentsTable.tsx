@@ -7,7 +7,7 @@ import capitalize from 'lodash/capitalize';
 import React from 'react';
 import { get, toArray, uniqWith } from 'lodash';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
-import { getDateActiveStatus, listFilterOperators, listSortComparator } from '@coldpbc/lib';
+import { getDateActiveStatus, getEffectiveEndDate, listFilterOperators, listSortComparator } from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext } from '@coldpbc/hooks';
 
@@ -116,7 +116,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 
 	const rows = files
 		.map(file => {
-			const effectiveEndDate = get(file.attributeAssurances, '[0].effectiveEndDate', null);
+			const effectiveEndDate = getEffectiveEndDate(file);
 			const sustainabilityAttribute = get(file.attributeAssurances, '[0].sustainabilityAttribute.name', '');
 			return {
 				id: file.id,

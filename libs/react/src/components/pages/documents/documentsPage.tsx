@@ -9,13 +9,24 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { get } from 'lodash';
 import { DocumentsAddAssuranceModal } from '../../organisms/documentsAddAssuranceModal/documentsAddAssuranceModal';
 
-// todo: set default start and end date of today. set the first sus attribute to be
-// todo: when changing an sus attribute for a file and saving, then clear the assurances
-
 const _DocumentsPage = () => {
 	const [selectedDocument, setSelectedDocument] = React.useState<string | undefined>(undefined);
 	const [documentToDelete, setDocumentToDelete] = React.useState<FilesWithAssurances | undefined>(undefined);
-	const [documentToAddAssurance, setDocumentToAddAssurance] = React.useState<FilesWithAssurances | undefined>(undefined);
+	const [documentToAddAssurance, setDocumentToAddAssurance] = React.useState<
+		| {
+				fileState: {
+					id: string;
+					type: string;
+					originalName: string;
+					metadata: any;
+					startDate: Date | null;
+					endDate: Date | null;
+					sustainabilityAttribute: string;
+				};
+				isAdding: boolean;
+		  }
+		| undefined
+	>(undefined);
 	const [deleteButtonLoading, setDeleteButtonLoading] = React.useState(false);
 	const [files, setFiles] = React.useState<FilesWithAssurances[]>([]);
 	const [selectedDocumentURL, setSelectedDocumentURL] = React.useState<string | undefined>(undefined);
@@ -169,11 +180,22 @@ const _DocumentsPage = () => {
 		);
 	};
 
-	const onAddAssuranceClick = (id: string) => {
-		const file = files.find(file => file.id === id);
-		if (file) {
-			setDocumentToAddAssurance(file);
-		}
+	const onAddAssuranceClick = (
+		fileState: {
+			id: string;
+			type: string;
+			originalName: string;
+			metadata: any;
+			startDate: Date | null;
+			endDate: Date | null;
+			sustainabilityAttribute: string;
+		},
+		isAdding: boolean,
+	) => {
+		setDocumentToAddAssurance({
+			fileState,
+			isAdding,
+		});
 	};
 
 	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, documentToDelete, documentToAddAssurance, files, allSustainabilityAttributes });
@@ -197,7 +219,16 @@ const _DocumentsPage = () => {
 				addAssurance={onAddAssuranceClick}
 			/>
 			{getDeleteModal()}
-			{documentToAddAssurance && <DocumentsAddAssuranceModal documentToAddAssurance={documentToAddAssurance} setDocumentToAddAssurance={setDocumentToAddAssurance} />}
+			{documentToAddAssurance && (
+				<DocumentsAddAssuranceModal
+					files={files}
+					allSustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
+					documentToAddAssurance={documentToAddAssurance}
+					close={() => {
+						setDocumentToAddAssurance(undefined);
+					}}
+				/>
+			)}
 		</div>
 	);
 };

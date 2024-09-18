@@ -66,7 +66,22 @@ const SidebarStory = (props: {
 }) => {
 	const { file, innerRef, sustainabilityAttributes } = props;
 	const [selectedFile, setSelectedFile] = React.useState<FilesWithAssurances | undefined>(file);
-	const [addAssuranceFile, setAddAssuranceFile] = React.useState<FilesWithAssurances | undefined>(undefined);
+	const [addAssuranceFile, setAddAssuranceFile] = React.useState<
+		| {
+				fileState: {
+					id: string;
+					type: string;
+					originalName: string;
+					metadata: any;
+					startDate: Date | null;
+					endDate: Date | null;
+					sustainabilityAttribute: string;
+				};
+				isAdding: boolean;
+		  }
+		| undefined
+	>(undefined);
+
 	return (
 		<>
 			<DocumentDetailsSidebar
@@ -81,11 +96,31 @@ const SidebarStory = (props: {
 				downloadFile={() => {}}
 				signedUrl={''}
 				isLoading={false}
-				addAssurance={(id: string) => {
-					setAddAssuranceFile(file);
+				addAssurance={(
+					fileState: {
+						id: string;
+						type: string;
+						originalName: string;
+						metadata: any;
+						startDate: Date | null;
+						endDate: Date | null;
+						sustainabilityAttribute: string;
+					},
+					isAdding: boolean,
+				) => {
+					setAddAssuranceFile({ fileState, isAdding });
 				}}
 			/>
-			{addAssuranceFile && <DocumentsAddAssuranceModal documentToAddAssurance={addAssuranceFile} setDocumentToAddAssurance={setAddAssuranceFile} />}
+			{addAssuranceFile && (
+				<DocumentsAddAssuranceModal
+					documentToAddAssurance={addAssuranceFile}
+					close={() => {
+						setAddAssuranceFile(undefined);
+					}}
+					files={getFilesWithAssurances()}
+					allSustainabilityAttributes={sustainabilityAttributes}
+				/>
+			)}
 		</>
 	);
 };

@@ -11,6 +11,7 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation
 import { useSWRConfig } from 'swr';
 import { isSameDay } from 'date-fns';
 import { isApolloError } from '@apollo/client';
+import { getEffectiveEndDate, getEffectiveStartDate } from '@coldpbc/lib';
 
 const _DocumentDetailsSidebar = (props: {
 	file: FilesWithAssurances | undefined;
@@ -22,7 +23,18 @@ const _DocumentDetailsSidebar = (props: {
 	isLoading: boolean;
 	downloadFile: (url: string | undefined) => void;
 	signedUrl: string | undefined;
-	addAssurance: (fileId: string) => void;
+	addAssurance: (
+		fileState: {
+			id: string;
+			type: string;
+			originalName: string;
+			metadata: any;
+			startDate: Date | null;
+			endDate: Date | null;
+			sustainabilityAttribute: string;
+		},
+		isAdding: boolean,
+	) => void;
 }) => {
 	const { mutate } = useSWRConfig();
 	const { logBrowser } = useColdContext();
@@ -33,7 +45,6 @@ const _DocumentDetailsSidebar = (props: {
 	const hasSustainabilityAttribute = get(file, 'attributeAssurances[0].sustainabilityAttribute.name', '').length > 0;
 	const { mutateGraphQL: updateAssurance } = useGraphQLMutation('UPDATE_DOCUMENT_ASSURANCE');
 	const { mutateGraphQL: updateDocument } = useGraphQLMutation('UPDATE_DOCUMENT_FIELDS');
-	const { mutateGraphQL: createAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
 	const { mutateGraphQL: deleteAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
 	const { addToastMessage } = useAddToastMessage();
 
@@ -91,13 +102,22 @@ const _DocumentDetailsSidebar = (props: {
 				metadata: file.metadata,
 				startDate: null,
 				endDate: null,
-				sustainabilityAttribute: 'select attribute',
+				sustainabilityAttribute: 'None',
 			};
 
 			if (hasAssurances) {
-				fileState['startDate'] = new Date(file.attributeAssurances[0].effectiveStartDate);
-				fileState['endDate'] = new Date(file.attributeAssurances[0].effectiveEndDate);
+				const startDate = getEffectiveStartDate(file);
+				const endDate = getEffectiveEndDate(file);
+				fileState['startDate'] = startDate ? new Date(startDate) : null;
+				fileState['endDate'] = endDate ? new Date(endDate) : null;
+			} else {
+				// get the start date and end date from the metadata field
+				const effectiveStartDate: string | null = get(file, 'metadata.effective_start_date', null);
+				const effectiveEndDate: string | null = get(file, 'metadata.effective_end_date', null);
+				fileState['startDate'] = effectiveStartDate ? new Date(effectiveStartDate) : null;
+				fileState['endDate'] = effectiveEndDate ? new Date(effectiveEndDate) : null;
 			}
+
 			if (hasSustainabilityAttribute) {
 				fileState['sustainabilityAttribute'] = file.attributeAssurances[0]?.sustainabilityAttribute?.name || '';
 			}
@@ -146,7 +166,7 @@ const _DocumentDetailsSidebar = (props: {
 		// add option to dropdown that says "Select sustainability attribute"
 		const selectSustainabilityAttributeOption = {
 			id: -1,
-			name: 'select attribute',
+			name: 'None',
 			value: '',
 		};
 
@@ -322,7 +342,7 @@ const _DocumentDetailsSidebar = (props: {
 					break;
 			}
 		} else {
-			element = <DocumentSuppliersTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={[]} />;
+			return null;
 		}
 		const addButtonDisabled = !hasAssurances || hasFileStateChanged(fileState);
 		return (
@@ -332,7 +352,7 @@ const _DocumentDetailsSidebar = (props: {
 					<BaseButton
 						label={'Add'}
 						onClick={() => {
-							addAssurance(fileState?.id || '');
+							addAssurance(fileState, true);
 						}}
 						iconLeft={IconNames.PlusIcon}
 						variant={ButtonTypes.secondary}
@@ -362,26 +382,54 @@ const _DocumentDetailsSidebar = (props: {
 
 		return (
 			<div className={'w-auto'}>
-				<BaseButton label={'Save'} onClick={() => updateFileAndAssurances()} variant={ButtonTypes.primary} disabled={disabled} loading={saveButtonLoading} />
+				<BaseButton
+					label={'Save'}
+					onClick={() => {
+						if (!hasAssurances) {
+							addAssurance(fileState, false);
+						} else {
+							updateFileAndAssurances(fileState);
+						}
+					}}
+					variant={ButtonTypes.primary}
+					disabled={disabled}
+					loading={saveButtonLoading}
+				/>
 			</div>
 		);
 	};
 
-	const updateFileAndAssurances = async () => {
+	const updateFileAndAssurances = async (fileState: {
+		id: string;
+		type: string;
+		originalName: string;
+		metadata: any;
+		startDate: Date | null;
+		endDate: Date | null;
+		sustainabilityAttribute: string;
+	}) => {
 		// loop through the assurances and update each assurance
 		const compareFileState = getInitialFileState(file);
 		if (file !== undefined && fileState !== undefined && compareFileState !== undefined) {
 			setSaveButtonLoading(true);
 			const promises: Promise<any>[] = [];
-			if (file.type !== fileState.type) {
-				promises.push(
-					updateDocument({
-						input: {
-							id: fileState.id,
-							type: fileState.type,
-						},
-					}),
-				);
+			if (hasFileStateChanged(fileState)) {
+				const variables: {
+					[key: string]: any;
+				} = {
+					input: {
+						id: fileState.id,
+						type: fileState.type,
+					},
+				};
+				if (file.metadata) {
+					variables.input.metadata = {
+						...file.metadata,
+						effective_start_date: fileState.startDate,
+						effective_end_date: fileState.endDate,
+					};
+				}
+				promises.push(updateDocument(variables));
 			}
 
 			if (
@@ -392,7 +440,7 @@ const _DocumentDetailsSidebar = (props: {
 				isSameDay(compareFileState.startDate, fileState.startDate) &&
 				isSameDay(compareFileState.endDate, fileState.endDate) &&
 				compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute &&
-				compareFileState.type !== file.type &&
+				compareFileState.type !== fileState.type &&
 				hasAssurances
 			) {
 				await Promise.all(promises)
@@ -446,28 +494,8 @@ const _DocumentDetailsSidebar = (props: {
 						}),
 					);
 				});
-			} else {
-				// if there are no assurance create a new one with no material or supplier.
-				promises.push(
-					createAssurance({
-						input: {
-							effectiveStartDate: fileState.startDate,
-							effectiveEndDate: fileState.endDate,
-							sustainabilityAttribute: {
-								id: sustainabilityAttribute?.id,
-							},
-							organization: {
-								id: orgId,
-							},
-							organizationFile: {
-								id: fileState.id,
-							},
-							createdAt: new Date().toISOString(),
-							updatedAt: new Date().toISOString(),
-						},
-					}),
-				);
 			}
+
 			await Promise.all(promises)
 				.then(responses => {
 					mutate('GET_ALL_FILES');
@@ -535,7 +563,8 @@ const _DocumentDetailsSidebar = (props: {
 		const startDatesAreSame = isSameDay(compareFileState.startDate || 0, fileState.startDate || 0);
 		const endDatesAreSame = isSameDay(compareFileState.endDate || 0, fileState.endDate || 0);
 		const compareFileStateSustainabilityAttribute = compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute;
-		return !(compareFileStateDatesAreNotNull && fileStateDatesAreNotNull && startDatesAreSame && endDatesAreSame && compareFileStateSustainabilityAttribute);
+		const isFileTypeSame = compareFileState.type === fileState.type;
+		return !(compareFileStateDatesAreNotNull && fileStateDatesAreNotNull && startDatesAreSame && endDatesAreSame && compareFileStateSustainabilityAttribute && isFileTypeSame);
 	};
 
 	const isFileStateValid = (fileState: {
@@ -547,7 +576,7 @@ const _DocumentDetailsSidebar = (props: {
 		endDate: Date | null;
 		sustainabilityAttribute: string;
 	}) => {
-		return !(fileState.startDate === null || fileState.endDate === null || fileState.sustainabilityAttribute === 'select attribute');
+		return !(fileState.startDate === null || fileState.endDate === null || fileState.sustainabilityAttribute === 'None');
 	};
 
 	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
