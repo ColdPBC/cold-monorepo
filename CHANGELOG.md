@@ -1,3 +1,15 @@
+# [1.381.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.380.1...v1.381.0) (2024-09-18)
+
+
+### Bug Fixes
+
+* fix code indentation in job.consumer.ts ([d053d1d](https://github.com/ColdPBC/cold-monorepo/commit/d053d1d3b370e98d43b45249639cbef5d3e04dc9))
+
+
+### Features
+
+* integrate MQTT for file updates and classifications ([56d8f2c](https://github.com/ColdPBC/cold-monorepo/commit/56d8f2c509516f6226bab544d91ed33ccdb89782))
+
 ## [1.380.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.380.0...v1.380.1) (2024-09-18)
 
 
