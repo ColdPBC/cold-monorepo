@@ -87,6 +87,24 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
               payload: parsedPayload,
             });
             if (parsedPayload.swr_key) {
+              if (flags.throttleSwrMutateCalls) {
+                const storage = localStorage.getItem('api-calls');
+                const parsedStorage = storage ? JSON.parse(storage) : {};
+                const waitMS = 100 * 60; // 10 per minute
+                const lastCall = parsedStorage[parsedPayload.swr_key] ? new Date(parsedStorage[parsedPayload.swr_key]) : new Date(0);
+                const now = new Date();
+                if (now.getTime() - lastCall.getTime() < waitMS) {
+                  logBrowser('Skipping SWR call', 'info', {
+                    topic,
+                    swr_key: parsedPayload.swr_key,
+                    lastCall: lastCall.toISOString(),
+                    now: now.toISOString(),
+                  });
+                  return;
+                }
+                parsedStorage[parsedPayload.swr_key] = new Date().toISOString();
+                localStorage.setItem('api-calls', JSON.stringify(parsedStorage));
+              }
               const graphqlMappings = getQueryMappingsForKey(parsedPayload.swr_key);
               forEach(graphqlMappings, async query => {
                 await mutate(query);
