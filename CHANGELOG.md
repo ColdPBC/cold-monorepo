@@ -1,3 +1,11 @@
+# [1.389.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.388.1...v1.389.0) (2024-09-19)
+
+
+### Features
+
+* improve document type display formatting ([a7c5c53](https://github.com/ColdPBC/cold-monorepo/commit/a7c5c53dc7ae7777366e250e427a77826c1d122b))
+* replace enums with schema enum lookup for file types ([70a7150](https://github.com/ColdPBC/cold-monorepo/commit/70a7150a78de3b2a628f003a1cff690c84f8015f))
+
 ## [1.388.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.388.0...v1.388.1) (2024-09-19)
 
 
