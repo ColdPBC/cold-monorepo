@@ -31,3 +31,21 @@ export interface MaterialSuppliers {
     name: string;
   };
 }
+
+export interface MaterialsWithRelations extends Materials {
+  materialSuppliers: {
+    id: string;
+    organizationFacility: {
+      id: string;
+      name: string;
+      supplierTier: number | null;
+    };
+  }[];
+  attributeAssurances: {
+    id: string;
+    sustainabilityAttribute: {
+      id: string;
+      name: string;
+    };
+  }[];
+}
