@@ -5,7 +5,7 @@ import { HexColors } from '@coldpbc/themes';
 import { differenceInDays, format } from 'date-fns';
 import capitalize from 'lodash/capitalize';
 import React from 'react';
-import { get, toArray, uniqWith } from 'lodash';
+import {get, lowerCase, startCase, toArray, uniqWith} from 'lodash';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
 import { getDateActiveStatus, getEffectiveEndDate, listFilterOperators, listSortComparator } from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -135,7 +135,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 
 	const allAssociatedRecords = uniqWith(files.map(file => getAssociatedRecords(file)).flat(), (a, b) => a === b);
 
-  const uniqFileTypes = uniqWith(files.map(file => capitalize(file.type)), (a, b) => a === b);
+  const uniqFileTypes = uniqWith(files.map(file => startCase(lowerCase(file.type.replace(/_/g, ' ')))), (a, b) => a === b);
 
 	const tableRows: GridValidRowModel[] = rows;
 
@@ -178,11 +178,11 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 			width: 100,
 			type: 'singleSelect',
-			valueGetter: value => {
-					return capitalize(value);
+			valueGetter: (value: string) => {
+					return startCase(lowerCase(value.replace(/_/g, ' ')));
 			},
-			valueFormatter: value => {
-					return capitalize(value);
+			valueFormatter: (value: string) => {
+        return startCase(lowerCase(value.replace(/_/g, ' ')));
 			},
 			valueOptions: uniqFileTypes,
 		},

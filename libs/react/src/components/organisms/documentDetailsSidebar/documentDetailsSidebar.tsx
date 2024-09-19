@@ -2,8 +2,7 @@ import React, { ReactNode, useEffect } from 'react';
 import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
 import { BaseButton, ColdIcon, DocumentDetailsMenu, DocumentMaterialsTable, DocumentSuppliersTable, ErrorFallback, Select, Spinner } from '@coldpbc/components';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
-import { forEach, get, has, toArray } from 'lodash';
-import capitalize from 'lodash/capitalize';
+import {forEach, get, has, lowerCase, startCase} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
@@ -140,13 +139,13 @@ const _DocumentDetailsSidebar = (props: {
 	}, [file]);
 
 	const documentTypeOptions: InputOption[] = fileTypes.map((type, index) => {
-		const name = capitalize(type);
+		const name = startCase(lowerCase(type.replace(/_/g, ' ')));
 		return {
 			id: index,
 			name: name,
 			value: type,
 		};
-	});
+	}).sort((a, b) => a.name.localeCompare(b.name));
 
 	const getSustainabilityAttributeDropdown = (fileState: {
 		id: string;
@@ -634,7 +633,7 @@ const _DocumentDetailsSidebar = (props: {
 								<Select
 									options={documentTypeOptions}
 									name={'type'}
-									value={capitalize(fileState.type)}
+									value={startCase(lowerCase(fileState.type.replace(/_/g, ' ')))}
 									onChange={(e: InputOption) => {
 										setFileState({ ...fileState, type: e.value });
 									}}

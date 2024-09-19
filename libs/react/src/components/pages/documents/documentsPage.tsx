@@ -1,13 +1,12 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLSWR, useOrgSWR } from '@coldpbc/hooks';
-import { DocumentDetailsSidebar, DocumentsHeaderTypes, DocumentsTable, DocumentUploadButton, ErrorFallback, MainContent, Modal, Spinner } from '@coldpbc/components';
+import { DocumentDetailsSidebar, DocumentsHeaderTypes, DocumentsTable, DocumentUploadButton, ErrorFallback, MainContent, Modal, Spinner, DocumentsAddAssuranceModal } from '@coldpbc/components';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { FilesWithAssurances, SchemaEnum, ToastMessage } from '@coldpbc/interfaces';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import { isAxiosError } from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
-import {forEach, get} from 'lodash';
-import { DocumentsAddAssuranceModal } from '../../organisms/documentsAddAssuranceModal/documentsAddAssuranceModal';
+import {get} from 'lodash';
 
 const _DocumentsPage = () => {
 	const [selectedDocument, setSelectedDocument] = React.useState<string | undefined>(undefined);
