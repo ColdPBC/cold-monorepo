@@ -1,3 +1,16 @@
+# [1.390.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.389.0...v1.390.0) (2024-09-19)
+
+
+### Bug Fixes
+
+* improve error handling and messaging in classifyContent method ([b66546e](https://github.com/ColdPBC/cold-monorepo/commit/b66546ef607d3bfccd622bbc755ea9e27a323440))
+* improve metadata update and error handling for file extraction ([cf8d8dc](https://github.com/ColdPBC/cold-monorepo/commit/cf8d8dc1a49cfb1720c650f71cfba7aaefd101c3))
+
+
+### Features
+
+* extend MQTT validation schemas with new resource and event types ([04e64e1](https://github.com/ColdPBC/cold-monorepo/commit/04e64e1ae307c2b052d9d6a62ed478a11803a38c))
+
 # [1.389.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.388.1...v1.389.0) (2024-09-19)
 
 
