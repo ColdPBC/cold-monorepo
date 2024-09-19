@@ -2,8 +2,8 @@ import { Suppliers } from './suppliers';
 import { Claims } from './claims';
 
 export interface Materials {
-	id: string;
-	name: string;
+  id: string;
+  name: string;
 }
 
 export interface MaterialsWithCertifications extends Materials {
