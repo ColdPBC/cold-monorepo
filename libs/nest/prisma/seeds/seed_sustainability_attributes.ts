@@ -9,6 +9,11 @@ const seeds: Array<{
 	level: claim_levels;
 }> = [
 	{
+		name: 'Oeko-Tex Standard 100',
+		level: 'MATERIAL',
+		type: 'THIRD_PARTY',
+	},
+	{
 		name: 'BIFMA Level',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
