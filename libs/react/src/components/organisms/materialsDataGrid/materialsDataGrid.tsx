@@ -101,6 +101,7 @@ const _MaterialsDataGrid = () => {
 			valueOptions: uniqSusAttributes,
 			renderCell: renderSusAttributes,
 			filterOperators: listFilterOperators,
+			valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
 		},
 		{
 			field: 'tier2Supplier',
