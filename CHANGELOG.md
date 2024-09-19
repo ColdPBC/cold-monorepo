@@ -1,3 +1,11 @@
+# [1.384.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.383.0...v1.384.0) (2024-09-19)
+
+
+### Features
+
+* add Oeko-Tex Standard 100 sustainability attribute ([46b49e1](https://github.com/ColdPBC/cold-monorepo/commit/46b49e18bf1c48aacffca264c5de966e7284bbdf))
+* add Oeko-Tex Standard 100 to Sustainability Attributes ([#564](https://github.com/ColdPBC/cold-monorepo/issues/564)) ([22efd60](https://github.com/ColdPBC/cold-monorepo/commit/22efd60fbbe96174ede9deff5193f7e7def8294a))
+
 # [1.383.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.382.0...v1.383.0) (2024-09-19)
 
 
