@@ -3,6 +3,7 @@ import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import { ColdIcon, ErrorFallback, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays, format } from 'date-fns';
+import { capitalize } from 'lodash';
 import React from 'react';
 import {get, lowerCase, startCase, toArray, uniqWith} from 'lodash';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
@@ -156,6 +157,19 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
         </div>
       );
     }
+
+    return (
+      <div className={'h-full w-full flex flex-row items-center gap-[10px]'}>
+        {params.value.map((record: string, index: number) => {
+          return (
+            <div key={index} className={'text-tc-primary text-body p-[4px] rounded-[32px] border-[1px] border-purple-200'}>
+              {capitalize(record)}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
   const onRowClick = (params: GridRowParams, event: MuiEvent<React.MouseEvent>, details: GridCallbackDetails) => {
     const file = files.find(file => file.id === params.row.id);
