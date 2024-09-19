@@ -3,18 +3,18 @@ import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 
 const _MaterialsPage = () => {
-	const getPageButtons = () => {
-		// todo: add 'Add New' button
-		return <></>;
-	};
+  const getPageButtons = () => {
+    // todo: add 'Add New' button
+    return <></>;
+  };
 
-	return (
-		<MainContent title="Materials" headerElement={getPageButtons()}>
-			<MaterialsDataGrid />
-		</MainContent>
-	);
+  return (
+    <MainContent title="Materials" headerElement={getPageButtons()}>
+      <MaterialsDataGrid />
+    </MainContent>
+  );
 };
 
 export const MaterialsPage = withErrorBoundary(_MaterialsPage, {
-	FallbackComponent: props => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
 });
