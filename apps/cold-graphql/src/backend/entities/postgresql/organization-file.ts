@@ -14,13 +14,15 @@ import { default_acl, OrgContext } from '../../libs/acls/acl_policies';
 
 export enum OrganizationFilesType {
 	CERTIFICATE = 'CERTIFICATE',
-	TEST_RESULTS = 'TEST_RESULTS',
+	TEST_REPORT = 'TEST_REPORT',
 	STATEMENT = 'STATEMENT',
 	ASSESSMENT = 'ASSESSMENT',
-	POLICY = 'POLICY',
-	OTHER = 'OTHER',
 	PURCHASE_ORDER = 'PURCHASE_ORDER',
 	BILL_OF_MATERIALS = 'BILL_OF_MATERIALS',
+	POLICY = 'POLICY',
+	OTHER = 'OTHER',
+	AUDIT_REPORT = 'AUDIT_REPORT',
+	SCOPE_CERTIFICATE = 'SCOPE_CERTIFICATE',
 }
 
 @ApplyAccessControlList(default_acl)
