@@ -1,3 +1,15 @@
+# [1.383.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.382.0...v1.383.0) (2024-09-19)
+
+
+### Bug Fixes
+
+* simplify file state comparison logic ([4cd84ce](https://github.com/ColdPBC/cold-monorepo/commit/4cd84ce0853657f2895964c85b24d4c418768d1e))
+
+
+### Features
+
+* enhance document sidebar assurances handling ([8fcf104](https://github.com/ColdPBC/cold-monorepo/commit/8fcf104e596ae602a2c0dae7993e7c94f7724fc8))
+
 # [1.382.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.381.0...v1.382.0) (2024-09-18)
 
 
