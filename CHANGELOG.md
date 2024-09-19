@@ -1,3 +1,10 @@
+# [1.386.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.385.0...v1.386.0) (2024-09-19)
+
+
+### Features
+
+* Add new document types ([#565](https://github.com/ColdPBC/cold-monorepo/issues/565)) ([351a2c2](https://github.com/ColdPBC/cold-monorepo/commit/351a2c28a33e63f18419ff89e56e884afa485a57))
+
 # [1.385.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.384.0...v1.385.0) (2024-09-19)
 
 
