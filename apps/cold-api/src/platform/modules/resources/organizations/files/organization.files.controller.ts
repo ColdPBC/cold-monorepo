@@ -33,7 +33,6 @@ export class OrganizationFilesController implements OnModuleInit {
 				key: function (req, file, cb) {
 					const user = req['user'] as IAuthenticatedUser;
 					const orgId = req['orgId'];
-					file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf-8');
 					// Adjust this based on your actual user object structure
 					cb(null, `${process.env['NODE_ENV']}/${orgId}/${user.coldclimate_claims.email}/${file.originalname}`);
 				},
