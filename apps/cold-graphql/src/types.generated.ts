@@ -8645,13 +8645,15 @@ export type OrganizationFilesPaginationInput = {
 
 export enum OrganizationFilesType {
   Assessment = 'ASSESSMENT',
+  AuditReport = 'AUDIT_REPORT',
   BillOfMaterials = 'BILL_OF_MATERIALS',
   Certificate = 'CERTIFICATE',
   Other = 'OTHER',
   Policy = 'POLICY',
   PurchaseOrder = 'PURCHASE_ORDER',
+  ScopeCertificate = 'SCOPE_CERTIFICATE',
   Statement = 'STATEMENT',
-  TestResults = 'TEST_RESULTS'
+  TestReport = 'TEST_REPORT'
 }
 
 /** Data needed to create Organizations. */

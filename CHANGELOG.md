@@ -1,3 +1,10 @@
+# [1.388.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.387.0...v1.388.0) (2024-09-19)
+
+
+### Features
+
+* update OrganizationFilesType enum ([b57444c](https://github.com/ColdPBC/cold-monorepo/commit/b57444c4c6e940c44c92a8e097cb53c2d026afcd))
+
 # [1.387.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.386.0...v1.387.0) (2024-09-19)
 
 
