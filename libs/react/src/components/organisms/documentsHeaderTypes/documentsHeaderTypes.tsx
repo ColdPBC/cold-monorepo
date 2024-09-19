@@ -1,63 +1,51 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { Card, DocumentsHeaderType } from '@coldpbc/components';
 import { cloneDeep, forEach, orderBy } from 'lodash';
-import { FileTypes } from '@coldpbc/enums';
+import capitalize from "lodash/capitalize";
 
 export const DocumentsHeaderTypes = (props: { files: FilesWithAssurances[] }) => {
 	const { files } = props;
-	// seperate files into different types using FileTypes enum
+	// separate files into different types using FileTypes enum
 	// order by amount of files, but remove OTHER type from ordering
 	// then render DocumentsHeaderType for each type
 
-	const getFileTypeTitle = (type: string) => {
-		switch (type) {
-			case FileTypes.CERTIFICATE:
-				return 'Certificates';
-			case FileTypes.TEST_RESULTS:
-				return 'Test Documents';
-			case FileTypes.STATEMENT:
-				return 'Statements';
-			default:
-				return 'Other';
-		}
-	};
-
-	const fileTypes: { type: FileTypes; title: string; amount: number; totalAmount: number }[] = [
+	const fileTypes: { title: string; amount: number; totalAmount: number }[] = [
 		{
-			type: FileTypes.CERTIFICATE,
-			title: getFileTypeTitle(FileTypes.CERTIFICATE),
+			title: "Certificates",
 			amount: 0,
 			totalAmount: files.length,
 		},
 		{
-			type: FileTypes.STATEMENT,
-			title: getFileTypeTitle(FileTypes.STATEMENT),
+			title: "Statements",
 			amount: 0,
 			totalAmount: files.length,
 		},
 		{
-			type: FileTypes.TEST_RESULTS,
-			title: getFileTypeTitle(FileTypes.TEST_RESULTS),
+			title: "Test Reports",
 			amount: 0,
 			totalAmount: files.length,
 		},
 		{
-			type: FileTypes.OTHER,
-			title: getFileTypeTitle(FileTypes.OTHER),
+			title: "Other",
 			amount: 0,
 			totalAmount: files.length,
 		},
 	];
 
 	forEach(files, file => {
-		if ([FileTypes.OTHER, FileTypes.ASSESSMENT, FileTypes.POLICY].includes(file.type)) {
-			fileTypes[3].amount += 1;
-		} else {
-			const index = fileTypes.findIndex(fileType => fileType.type === file.type);
-			if (index !== -1) {
-				fileTypes[index].amount += 1;
-			}
-		}
+    switch(file.type) {
+      case "CERTIFICATE":
+        fileTypes[0].amount += 1;
+      break;
+      case "STATEMENT":
+        fileTypes[1].amount += 1;
+      break;
+      case "TEST_REPORT":
+        fileTypes[2].amount += 1;
+      break;
+      default:
+        fileTypes[3].amount += 1;
+    }
 	});
 
 	const otherType = cloneDeep(fileTypes[3]);
