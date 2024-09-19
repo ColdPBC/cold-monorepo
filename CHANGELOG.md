@@ -1,3 +1,11 @@
+## [1.388.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.388.0...v1.388.1) (2024-09-19)
+
+
+### Bug Fixes
+
+* **mqtt:** ensure MQTT client reconnects if not connected ([2094c91](https://github.com/ColdPBC/cold-monorepo/commit/2094c91b26185cf02bebde1613f1aa32fd0e0d67))
+* **organization.files:** correct filename encoding handling in S3 upload process ([c2de01f](https://github.com/ColdPBC/cold-monorepo/commit/c2de01f009976243a2082ccfbe9eceef29b1f90e))
+
 # [1.388.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.387.0...v1.388.0) (2024-09-19)
 
 
