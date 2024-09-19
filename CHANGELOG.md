@@ -1,3 +1,37 @@
+# [1.385.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.384.0...v1.385.0) (2024-09-19)
+
+
+### Features
+
+* enhance file classification and upload handling ([c21f42e](https://github.com/ColdPBC/cold-monorepo/commit/c21f42e5cb5bbc58fdec98a027985325e641f6b6))
+* enhance file classification and upload handling ([384b3a4](https://github.com/ColdPBC/cold-monorepo/commit/384b3a4a14121023163195795f82fe1007c21af3))
+
+
+### Reverts
+
+* Revert "chore: update dependencies in yarn.lock and package.json" ([f409c29](https://github.com/ColdPBC/cold-monorepo/commit/f409c2961245aeac66240fa8ea7e701f78435d33))
+* Revert "feat: enhance file classification and upload handling" ([aa67fd1](https://github.com/ColdPBC/cold-monorepo/commit/aa67fd10a023a2e20edb1fc029d798900b91ba69))
+
+# [1.384.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.383.0...v1.384.0) (2024-09-19)
+
+
+### Features
+
+* add Oeko-Tex Standard 100 sustainability attribute ([46b49e1](https://github.com/ColdPBC/cold-monorepo/commit/46b49e18bf1c48aacffca264c5de966e7284bbdf))
+* add Oeko-Tex Standard 100 to Sustainability Attributes ([#564](https://github.com/ColdPBC/cold-monorepo/issues/564)) ([22efd60](https://github.com/ColdPBC/cold-monorepo/commit/22efd60fbbe96174ede9deff5193f7e7def8294a))
+
+# [1.383.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.382.0...v1.383.0) (2024-09-19)
+
+
+### Bug Fixes
+
+* simplify file state comparison logic ([4cd84ce](https://github.com/ColdPBC/cold-monorepo/commit/4cd84ce0853657f2895964c85b24d4c418768d1e))
+
+
+### Features
+
+* enhance document sidebar assurances handling ([8fcf104](https://github.com/ColdPBC/cold-monorepo/commit/8fcf104e596ae602a2c0dae7993e7c94f7724fc8))
+
 # [1.382.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.381.0...v1.382.0) (2024-09-18)
 
 
