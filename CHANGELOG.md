@@ -1,3 +1,17 @@
+# [1.385.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.384.0...v1.385.0) (2024-09-19)
+
+
+### Features
+
+* enhance file classification and upload handling ([c21f42e](https://github.com/ColdPBC/cold-monorepo/commit/c21f42e5cb5bbc58fdec98a027985325e641f6b6))
+* enhance file classification and upload handling ([384b3a4](https://github.com/ColdPBC/cold-monorepo/commit/384b3a4a14121023163195795f82fe1007c21af3))
+
+
+### Reverts
+
+* Revert "chore: update dependencies in yarn.lock and package.json" ([f409c29](https://github.com/ColdPBC/cold-monorepo/commit/f409c2961245aeac66240fa8ea7e701f78435d33))
+* Revert "feat: enhance file classification and upload handling" ([aa67fd1](https://github.com/ColdPBC/cold-monorepo/commit/aa67fd10a023a2e20edb1fc029d798900b91ba69))
+
 # [1.384.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.383.0...v1.384.0) (2024-09-19)
 
 
