@@ -117,23 +117,26 @@ export class ExtractionService extends BaseWorker {
 				}
 			}
 
-			const updatedFile = await this.prisma.organization_files.update({
+			orgFile = await this.prisma.organization_files.update({
 				where: {
 					id: orgFile.id,
 				},
 				data: updateData,
 			});
 
-			this.logger.info('file metadata updated', { file: updatedFile, organization, user });
+			this.logger.info('file metadata updated', { file: orgFile, organization, user });
 
 			this.mqtt.publishToUI({
 				action: 'update',
 				status: 'complete',
-				data: updatedFile,
+				event: 'extract-file-data',
+				resource: 'organization_files',
+				data: orgFile,
 				user,
-				swr_key: `organization_files.${updateData.metadata.status}`,
+				swr_key: `organization_files.${(orgFile?.metadata as any).status}`,
 				org_id: organization.id,
 			});
+
 			// if the classification does not contain a sustainability attribute, return the parsed response
 			if (!classification.sustainability_attribute_id) {
 				this.sendMetrics('organization.files', 'cold-openai', 'no-sustainability-attribute', 'completed', {
@@ -150,10 +153,22 @@ export class ExtractionService extends BaseWorker {
 						file_id: orgFile.id,
 					},
 				});
+
+				this.mqtt.publishToUI({
+					action: 'update',
+					status: 'complete',
+					resource: 'organization_files',
+					event: 'extract-file-data',
+					data: { ...orgFile, notes: 'No sustainability attribute found in classification' },
+					user,
+					swr_key: `organization_files.${updateData.metadata.status}`,
+					org_id: organization.id,
+				});
+
 				return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
 			}
 
-			await this.createAttributeAssurances(classification, organization, orgFile, updateData, updatedFile, user);
+			await this.createAttributeAssurances(classification, organization, orgFile, updateData, orgFile, user);
 
 			this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
 				start,
@@ -173,6 +188,16 @@ export class ExtractionService extends BaseWorker {
 			return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
 		} catch (e) {
 			this.logger.info('Error extracting data from content', { error: e });
+			const metadata = orgFile.metadata as any;
+			const updateData: any = {
+				metadata: {
+					status: 'failed',
+					...metadata,
+					classification: get(orgFile, 'metadata.classification'),
+					error: e.message,
+				},
+			};
+
 			this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
 				start,
 				sendEvent: true,
@@ -185,6 +210,17 @@ export class ExtractionService extends BaseWorker {
 					file_id: orgFile.id,
 					error: e.message,
 				},
+			});
+
+			this.mqtt.publishToUI({
+				action: 'update',
+				status: 'failed',
+				resource: 'organization_files',
+				event: 'extract-file-data',
+				data: orgFile,
+				user,
+				swr_key: `organization_files.${updateData.metadata.status}`,
+				org_id: organization.id,
 			});
 			throw e;
 		}
@@ -229,7 +265,15 @@ export class ExtractionService extends BaseWorker {
 			});
 		}
 
-		this.mqtt.publishToUI({ action: 'create', status: 'complete', data: assurance, user, swr_key: 'attribute_assurances.created', org_id: organization.id });
+		this.mqtt.publishToUI({
+			action: 'create',
+			status: 'complete',
+			resource: 'attribute_assurances',
+			data: assurance,
+			user,
+			swr_key: 'attribute_assurances.created',
+			org_id: organization.id,
+		});
 
 		this.logger.info('attribute assurance created', { assurance, file: updatedFile, organization, user });
 	}
