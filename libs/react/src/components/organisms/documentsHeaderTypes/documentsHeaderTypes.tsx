@@ -1,7 +1,6 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { Card, DocumentsHeaderType } from '@coldpbc/components';
 import { cloneDeep, forEach, orderBy } from 'lodash';
-import capitalize from "lodash/capitalize";
 
 export const DocumentsHeaderTypes = (props: { files: FilesWithAssurances[] }) => {
 	const { files } = props;
