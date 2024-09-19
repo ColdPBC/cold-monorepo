@@ -1,3 +1,48 @@
+# [1.383.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.382.0...v1.383.0) (2024-09-19)
+
+
+### Bug Fixes
+
+* simplify file state comparison logic ([4cd84ce](https://github.com/ColdPBC/cold-monorepo/commit/4cd84ce0853657f2895964c85b24d4c418768d1e))
+
+
+### Features
+
+* enhance document sidebar assurances handling ([8fcf104](https://github.com/ColdPBC/cold-monorepo/commit/8fcf104e596ae602a2c0dae7993e7c94f7724fc8))
+
+# [1.382.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.381.0...v1.382.0) (2024-09-18)
+
+
+### Features
+
+* enhance logging and update entity schema ([bc1c203](https://github.com/ColdPBC/cold-monorepo/commit/bc1c20387d4a15ed71c88bf58b853c14687a0249))
+
+# [1.381.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.380.1...v1.381.0) (2024-09-18)
+
+
+### Bug Fixes
+
+* fix code indentation in job.consumer.ts ([d053d1d](https://github.com/ColdPBC/cold-monorepo/commit/d053d1d3b370e98d43b45249639cbef5d3e04dc9))
+
+
+### Features
+
+* integrate MQTT for file updates and classifications ([56d8f2c](https://github.com/ColdPBC/cold-monorepo/commit/56d8f2c509516f6226bab544d91ed33ccdb89782))
+
+## [1.380.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.380.0...v1.380.1) (2024-09-18)
+
+
+### Bug Fixes
+
+* streamline logic for extracting file dates ([d190181](https://github.com/ColdPBC/cold-monorepo/commit/d190181883632911f2a9f01f3b1bd3541c2bf889))
+
+# [1.380.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.379.0...v1.380.0) (2024-09-18)
+
+
+### Features
+
+* Add unique constraint on `organization_id` and `name` in `materials` table ([c6dbac8](https://github.com/ColdPBC/cold-monorepo/commit/c6dbac83cfec084f88e255981dd27fe26732dd24))
+
 # [1.379.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.378.0...v1.379.0) (2024-09-18)
 
 

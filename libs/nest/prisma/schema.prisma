@@ -660,7 +660,7 @@ model products {
 
 model materials {
   id                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name                 String                 @unique
+  name                 String
   created_at           DateTime               @default(now()) @db.Timestamptz(6)
   updated_at           DateTime               @updatedAt @db.Timestamptz(6)
   deleted              Boolean                @default(false)
@@ -671,6 +671,7 @@ model materials {
   product_materials    product_materials[]
 
   @@index([organization_id], map: "materials_organization_id_idx1")
+	@@unique([organization_id, name], name: "orgIdName")
 }
 
 model material_suppliers {

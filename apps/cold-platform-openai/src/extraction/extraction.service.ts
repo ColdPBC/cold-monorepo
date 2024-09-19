@@ -1,17 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
+import { BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import z from 'zod';
 import { attribute_assurances, file_types, organization_files, organizations } from '@prisma/client';
 import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { ClassificationService } from './classification.service';
+import { get } from 'lodash';
 
 @Injectable()
 export class ExtractionService extends BaseWorker {
 	private openAi;
 
-	constructor(readonly config: ConfigService, readonly classifyService: ClassificationService, private readonly prisma: PrismaService, readonly s3: S3Service) {
+	constructor(
+		readonly config: ConfigService,
+		readonly classifyService: ClassificationService,
+		private readonly prisma: PrismaService,
+		readonly s3: S3Service,
+		readonly mqtt: MqttService,
+	) {
 		super(ExtractionService.name);
 		this.openAi = new OpenAI({
 			organization: this.config.getOrThrow('OPENAI_ORG_ID'),
@@ -76,11 +83,23 @@ export class ExtractionService extends BaseWorker {
 
 			const parsedResponse = response.choices[0].message.parsed;
 
+			orgFile = (await this.prisma.organization_files.findUnique({
+				where: {
+					id: orgFile.id,
+				},
+			})) as organization_files;
+
+			if (!orgFile) {
+				throw new Error('File not found');
+			}
+
 			this.logger.info(`${classification.extraction_name} response`, { response, user, file: orgFile });
 
 			const updateData: any = {
 				type: classification.type,
 				metadata: {
+					status: 'ai_extracted',
+					classification: get(orgFile, 'metadata.classification'),
 					...response.choices[0].message.parsed,
 				},
 			};
@@ -107,6 +126,14 @@ export class ExtractionService extends BaseWorker {
 
 			this.logger.info('file metadata updated', { file: updatedFile, organization, user });
 
+			this.mqtt.publishToUI({
+				action: 'update',
+				status: 'complete',
+				data: updatedFile,
+				user,
+				swr_key: `organization_files.${updateData.metadata.status}`,
+				org_id: organization.id,
+			});
 			// if the classification does not contain a sustainability attribute, return the parsed response
 			if (!classification.sustainability_attribute_id) {
 				this.sendMetrics('organization.files', 'cold-openai', 'no-sustainability-attribute', 'completed', {
@@ -201,6 +228,8 @@ export class ExtractionService extends BaseWorker {
 				data,
 			});
 		}
+
+		this.mqtt.publishToUI({ action: 'create', status: 'complete', data: assurance, user, swr_key: 'attribute_assurances.created', org_id: organization.id });
 
 		this.logger.info('attribute assurance created', { assurance, file: updatedFile, organization, user });
 	}

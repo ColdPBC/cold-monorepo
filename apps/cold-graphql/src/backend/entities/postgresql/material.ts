@@ -1,7 +1,7 @@
 import { MaterialHooks } from './material.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { AttributeAssurance } from './attribute-assurance';
 import { MaterialSupplier } from './material-supplier';
 import { Organization } from './organization';
@@ -22,7 +22,6 @@ export class Material {
 	@PrimaryKey({ type: 'uuid' })
 	id!: string;
 
-	@Unique({ name: 'materials_name_key' })
 	@Property({ type: 'text' })
 	name!: string;
 
