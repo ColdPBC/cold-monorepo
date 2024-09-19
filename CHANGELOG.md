@@ -1,3 +1,16 @@
+# [1.387.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.386.0...v1.387.0) (2024-09-19)
+
+
+### Bug Fixes
+
+* update organization file types and ordering ([63422ec](https://github.com/ColdPBC/cold-monorepo/commit/63422ec05e40ce0bb922de329bf510d43b362449))
+
+
+### Features
+
+* integrate GraphQL for materials data and revamp UI for materials page ([61fa096](https://github.com/ColdPBC/cold-monorepo/commit/61fa09661a658c6818e09deed6ceaf0609f058bf))
+* update valueFormatter and remove unused button code ([1715847](https://github.com/ColdPBC/cold-monorepo/commit/1715847fa7373e9359ca69940beb60a3d1a54bd2))
+
 # [1.386.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.385.0...v1.386.0) (2024-09-19)
 
 
