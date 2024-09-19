@@ -1,101 +1,71 @@
 import React, { useEffect, useState } from 'react';
-import { MaterialsWithCertifications } from '@coldpbc/interfaces';
-import { useOrgSWR } from '@coldpbc/hooks';
-import { axiosFetcher } from '@coldpbc/fetchers';
-import { isAxiosError } from 'axios';
-import { ColdIcon, ErrorFallback, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
-import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
-import { ClaimStatus, IconNames } from '@coldpbc/enums';
-import { HexColors } from '@coldpbc/themes';
-import { differenceInDays } from 'date-fns';
-import { forEach, isEqual, toArray, uniq, uniqWith } from 'lodash';
-import { withErrorBoundary } from 'react-error-boundary';
-import { listFilterOperators, listSortComparator } from '@coldpbc/lib';
+import { MaterialsWithRelations } from '@coldpbc/interfaces';
+import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
+import { ErrorFallback, MuiDataGrid, Spinner } from '@coldpbc/components';
+import {
+  GridColDef,
+  GridRenderCellParams,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarExport,
+  GridToolbarQuickFilter,
+  GridTreeNodeWithRender,
+  GridValidRowModel,
+} from '@mui/x-data-grid';
+import { get, has, uniq } from 'lodash';
+import { listFilterOperators } from '@coldpbc/lib';
 import { useNavigate } from 'react-router-dom';
+import { withErrorBoundary } from 'react-error-boundary';
+import { HexColors } from '@coldpbc/themes';
 
 const _MaterialsDataGrid = () => {
+  const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
-  const [materials, setMaterials] = useState<MaterialsWithCertifications[]>([]);
-  const materialsSWR = useOrgSWR<MaterialsWithCertifications[], any>([`/materials`, 'GET'], axiosFetcher);
+  const [materials, setMaterials] = useState<MaterialsWithRelations[]>([]);
+  const materialsWithRelations = useGraphQLSWR(orgId ? 'GET_ALL_MATERIALS_FOR_ORG' : null, {
+    filter: {
+      organization: {
+        id: orgId,
+      },
+    },
+  });
 
   useEffect(() => {
-    if (materialsSWR.data) {
-      if (isAxiosError(materialsSWR.data)) {
-        // handle no suppliers 404, set state to empty array
-        if (isAxiosError(materialsSWR.data) && materialsSWR.data?.response?.status === 404) {
-          setMaterials([]);
-        }
+    if (materialsWithRelations.data) {
+      if (has(materialsWithRelations.data, 'errors')) {
+        setMaterials([]);
       } else {
-        setMaterials(materialsSWR.data.sort((a, b) => a.id.localeCompare(b.id)));
+        const materials = get(materialsWithRelations.data, 'data.materials', []);
+        setMaterials(materials);
       }
     }
-  }, [materialsSWR.data]);
-
-  const uniqSuppliers = uniq(materials.map(material => material.material_suppliers.map(supplier => supplier.supplier.name)).flat());
-  const uniqClaims = uniqWith(
+  }, [materialsWithRelations.data]);
+  const uniqSusAttributes = uniq(
     materials
       .map(material =>
-        material.organization_claims.map(claim => {
-          return {
-            claim_name: claim.claim?.name,
-            claim_id: claim.claim?.id,
-          };
+        material.attributeAssurances.map(assurance => {
+          return assurance.sustainabilityAttribute.name;
         }),
       )
       .flat(),
-    isEqual,
+  );
+  const uniqTier1Suppliers = uniq(
+    materials
+      .map(material => material.materialSuppliers.filter(supplier => supplier.organizationFacility.supplierTier === 1).map(supplier => supplier.organizationFacility.name))
+      .flat(),
   );
 
-  if (materialsSWR.isLoading) {
+  const uniqTier2Suppliers = uniq(
+    materials
+      .map(material => material.materialSuppliers.filter(supplier => supplier.organizationFacility.supplierTier === 2).map(supplier => supplier.organizationFacility.name))
+      .flat(),
+  );
+
+  if (materialsWithRelations.isLoading) {
     return <Spinner />;
   }
 
-  const renderCell = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    // get the expiration date using the params.row.id
-    const expirationDate: string | undefined | null = materials
-      .find(material => material.id === params.row.id)
-      ?.organization_claims.filter(certificateClaim => certificateClaim.organization_file.effective_end_date !== null)
-      .find(certificateClaim => certificateClaim.claim?.name === params.field)?.organization_file.effective_end_date;
-    let diff = 0;
-
-    switch (params.value) {
-      case ClaimStatus.Expired:
-        return (
-          <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px]'}>
-            <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.red['100']} />
-            <span className={'text-red-100'}>Expired</span>
-          </div>
-        );
-      case ClaimStatus.ExpiringSoon:
-        if (expirationDate) {
-          diff = differenceInDays(new Date(expirationDate), new Date());
-        }
-        return (
-          <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[4px] pl-[4px]'}>
-            <ColdIcon name={IconNames.ColdExpiringIcon} color={HexColors.yellow['200']} />
-            <span className={'text-yellow-200'}>{diff} days</span>
-          </div>
-        );
-      case ClaimStatus.Active:
-        return (
-          <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px]'}>
-            <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} />
-            <span className={'text-green-200'}>Active</span>
-          </div>
-        );
-      default:
-      case ClaimStatus.Inactive:
-        return (
-          <div className={'w-full h-full flex flex-row justify-start items-center'}>
-            <div className={'w-[24px] h-[24px] flex flex-row justify-center items-center'}>
-              <div className={'w-[13px] h-[13px] bg-gray-70 rounded-full'}></div>
-            </div>
-          </div>
-        );
-    }
-  };
-
-  const renderSupplierCell = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+  const renderSusAttributes = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
     // loop through the array of suppliers and return the suppliers
     return (
       <div className={'h-full flex items-center text-body text-tc-primary font-bold gap-[10px] truncate'}>
@@ -122,146 +92,128 @@ const _MaterialsDataGrid = () => {
       },
     },
     {
-      field: 'supplier',
-      headerName: 'Supplier',
+      field: 'sustainabilityAttributes',
+      headerName: 'Sustainability Attributes',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
-      minWidth: 300,
+      minWidth: 230,
       type: 'singleSelect',
-      valueOptions: uniqSuppliers,
-      renderCell: renderSupplierCell,
-      sortComparator: listSortComparator,
+      valueOptions: uniqSusAttributes,
+      renderCell: renderSusAttributes,
       filterOperators: listFilterOperators,
+      valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
+    },
+    {
+      field: 'tier2Supplier',
+      headerName: 'Tier 2 Supplier',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      flex: 1,
+      minWidth: 230,
+      type: 'singleSelect',
+      valueOptions: uniqTier2Suppliers,
+    },
+    {
+      field: 'usedBy',
+      headerName: 'Used By',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      flex: 1,
+      minWidth: 230,
+      type: 'singleSelect',
+      valueOptions: uniqTier1Suppliers,
     },
   ];
 
-  uniqClaims.forEach((claim, index) => {
-    columns.push({
-      field: claim.claim_name,
-      headerName: claim.claim_name,
-      headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      renderCell: params => {
-        return renderCell(params);
-      },
-      type: 'singleSelect',
-      valueOptions: toArray(ClaimStatus),
-    });
-  });
-
   const newRows: GridValidRowModel[] = [];
 
-  forEach(materials, material => {
+  materials.forEach(material => {
+    const tier1Supplier = material.materialSuppliers.find(supplier => supplier.organizationFacility.supplierTier === 1);
+    const tier2Supplier = material.materialSuppliers.find(supplier => supplier.organizationFacility.supplierTier === 2);
     const row = {
       id: material.id,
       name: material.name,
-      supplier: material.material_suppliers.map(supplier => supplier.supplier.name),
+      sustainabilityAttributes: material.attributeAssurances.map(assurance => assurance.sustainabilityAttribute.name),
+      tier2Supplier: tier2Supplier ? tier2Supplier.organizationFacility.name : '',
+      usedBy: tier1Supplier ? tier1Supplier.organizationFacility.name : '',
     };
-
-    columns.forEach(column => {
-      if (column.field !== 'name' && column.field !== 'supplier') {
-        row[column.field] = ClaimStatus.Inactive;
-      }
-    });
-
-    uniqClaims.forEach(claim => {
-      const certificateClaims = material.organization_claims
-        .filter(certificateClaim => certificateClaim.claim?.name === claim.claim_name)
-        .filter(
-          // filter out the null expiration dates
-          certificateClaim => certificateClaim.organization_file.effective_end_date !== null,
-        )
-        .sort((a, b) => {
-          // check if the expiration date is null
-          if (a.organization_file.effective_end_date === null || b.organization_file.effective_end_date === null) {
-            return 1;
-          } else {
-            // sort by descending order
-            return new Date(b.organization_file.effective_end_date).getTime() - new Date(a.organization_file.effective_end_date).getTime();
-          }
-        });
-
-      const expirationDate: string | undefined | null = certificateClaims[0]?.organization_file.effective_end_date;
-      // if the expiration date is null, set the value to InActive
-      if (expirationDate === null || expirationDate === undefined) {
-        row[claim.claim_name] = ClaimStatus.Inactive;
-      } else {
-        // get the difference between the current date and the date in the cell
-        const diff = differenceInDays(new Date(expirationDate), new Date());
-        if (diff < 0) {
-          row[claim.claim_name] = ClaimStatus.Expired;
-        } else if (diff < 60) {
-          row[claim.claim_name] = ClaimStatus.ExpiringSoon;
-        } else {
-          row[claim.claim_name] = ClaimStatus.Active;
-        }
-      }
-    });
-
     newRows.push(row);
   });
 
   const rows: GridValidRowModel[] = newRows;
 
-  return (
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      rowHeight={37}
-      getRowClassName={() => {
-        return 'text-tc-primary cursor-pointer';
-      }}
-      className={'text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto'}
-      sx={{
-        '--DataGrid-overlayHeight': '300px',
-        '--DataGrid-rowBorderColor': HexColors.gray[30],
-        '& .MuiTablePagination-root': {
-          color: HexColors.tc.primary,
-        },
-        '& .MuiDataGrid-withBorderColor': {
-          borderColor: HexColors.gray[30],
-        },
-        '& .MuiDataGrid-columnHeaderTitle': {
-          fontWeight: 'bold',
-        },
-        '& .MuiDataGrid-cell:focus': {
-          outline: 'none',
-        },
-        '& .MuiDataGrid-cell:focus-within': {
-          outline: 'none',
-        },
-        '& .MuiDataGrid-columnHeader:focus': {
-          outline: 'none',
-        },
-        '& .MuiDataGrid-columnHeader:focus-within': {
-          outline: 'none',
-        },
-      }}
-      slotProps={{
-        filterPanel: {
-          sx: {
-            '& .MuiInput-input': {
-              backgroundColor: 'transparent',
-              fontFamily: 'Inter',
-              fontSize: '14px',
-              padding: '4px 0px 5px',
-              height: '32px',
+  const getToolbar = () => {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarColumnsButton
+          slotProps={{
+            tooltip: {
+              sx: {
+                '& .MuiInput-input': {
+                  backgroundColor: 'transparent',
+                  fontFamily: 'Inter',
+                  fontSize: '14px',
+                  padding: '4px 0px 5px',
+                  height: '32px',
+                },
+                '& .MuiDataGrid-filterFormColumnInput': {
+                  backgroundColor: 'transparent',
+                },
+              },
             },
-            '& .MuiDataGrid-filterFormColumnInput': {
-              backgroundColor: 'transparent',
+          }}
+        />
+        <GridToolbarExport />
+        <GridToolbarQuickFilter />
+      </GridToolbarContainer>
+    );
+  };
+
+  return (
+    <div className={'w-full'}>
+      <MuiDataGrid
+        rows={rows}
+        columns={columns}
+        onRowClick={params => {
+          navigate(`/materials/${params.id}`);
+        }}
+        slots={{ toolbar: getToolbar }}
+        slotProps={{
+          baseTextField: {
+            sx: {
+              '& .MuiInputBase-input': {
+                backgroundColor: 'transparent',
+                fontFamily: 'Inter',
+                fontSize: '14px',
+                padding: '16px',
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: '8px',
+                borderColor: HexColors.gray['90'],
+                borderWidth: '1.5px',
+              },
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                '&:hover fieldset': {
+                  borderColor: HexColors.gray['90'],
+                  borderWidth: '1.5px',
+                },
+                '&:focus-within fieldset': {
+                  borderColor: HexColors.gray['90'],
+                  borderWidth: '1.5px',
+                },
+              },
+              '& .MuiOutlinedInput-input:focus': {
+                outline: 'none',
+                boxShadow: 'none',
+              },
+              '& .MuiInputBase-input:focus': {
+                outline: 'none',
+                boxShadow: 'none',
+              },
             },
           },
-        },
-      }}
-      columnHeaderHeight={40}
-      autoHeight={true}
-      slots={{
-        noRowsOverlay: MUIDataGridNoRowsOverlay,
-      }}
-      onRowClick={params => {
-        navigate(`/materials/${params.id}`);
-      }}
-    />
+        }}
+      />
+    </div>
   );
 };
 
