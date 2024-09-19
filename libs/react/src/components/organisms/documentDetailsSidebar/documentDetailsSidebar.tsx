@@ -1,9 +1,8 @@
 import React, { ReactNode, useEffect } from 'react';
 import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
 import { BaseButton, ColdIcon, DocumentDetailsMenu, DocumentMaterialsTable, DocumentSuppliersTable, ErrorFallback, Select, Spinner } from '@coldpbc/components';
-import { ButtonTypes, FileTypes, IconNames } from '@coldpbc/enums';
-import { forEach, get, has, toArray } from 'lodash';
-import capitalize from 'lodash/capitalize';
+import { ButtonTypes, IconNames } from '@coldpbc/enums';
+import {forEach, get, has, lowerCase, startCase} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
@@ -16,6 +15,7 @@ import { getEffectiveEndDate, getEffectiveStartDate } from '@coldpbc/lib';
 const _DocumentDetailsSidebar = (props: {
 	file: FilesWithAssurances | undefined;
 	sustainabilityAttributes: Claims[];
+  fileTypes: string[];
 	refreshFiles: () => void;
 	closeSidebar: () => void;
 	innerRef: React.RefObject<HTMLDivElement>;
@@ -38,7 +38,7 @@ const _DocumentDetailsSidebar = (props: {
 }) => {
 	const { mutate } = useSWRConfig();
 	const { logBrowser } = useColdContext();
-	const { file, sustainabilityAttributes, closeSidebar, innerRef, refreshFiles, deleteFile, isLoading, downloadFile, signedUrl, addAssurance } = props;
+	const { file, fileTypes, sustainabilityAttributes, closeSidebar, innerRef, deleteFile, isLoading, downloadFile, signedUrl, addAssurance } = props;
 	const { orgId } = useAuth0Wrapper();
 	const [saveButtonLoading, setSaveButtonLoading] = React.useState(false);
 	const hasAssurances = get(file, 'attributeAssurances', []).length > 0;
@@ -138,14 +138,14 @@ const _DocumentDetailsSidebar = (props: {
 		setFileState(getInitialFileState(file));
 	}, [file]);
 
-	const documentTypeOptions: InputOption[] = toArray(FileTypes).map((type, index) => {
-		const name = capitalize(type.replace(/_/g, ' '));
+	const documentTypeOptions: InputOption[] = fileTypes.map((type, index) => {
+		const name = startCase(lowerCase(type.replace(/_/g, ' ')));
 		return {
 			id: index,
 			name: name,
 			value: type,
 		};
-	});
+	}).sort((a, b) => a.name.localeCompare(b.name));
 
 	const getSustainabilityAttributeDropdown = (fileState: {
 		id: string;
@@ -633,9 +633,9 @@ const _DocumentDetailsSidebar = (props: {
 								<Select
 									options={documentTypeOptions}
 									name={'type'}
-									value={capitalize(fileState.type?.replace(/_/g, ' '))}
+									value={startCase(lowerCase(fileState.type.replace(/_/g, ' ')))}
 									onChange={(e: InputOption) => {
-										setFileState({ ...fileState, type: FileTypes[e.value] });
+										setFileState({ ...fileState, type: e.value });
 									}}
 									buttonClassName={'w-full border-[1.5px] border-gray-90 rounded-[8px]'}
 								/>

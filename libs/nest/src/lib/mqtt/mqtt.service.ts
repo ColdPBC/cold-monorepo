@@ -110,17 +110,17 @@ export class MqttService extends BaseWorker implements OnModuleInit {
 	 * @param payload
 	 */
 	publishToUI(payload: MqttUIPayload): void {
-		if (this.mqttClient) {
-			if (typeof payload.user !== 'string' && payload.user['coldclimate_claims']) {
-				payload.user = payload.user['coldclimate_claims']['email'];
-			}
-
-			const topic = `ui/${this.config.get('NODE_ENV', 'development')}/${payload.org_id}/${payload.user}`;
-
-			this.publishMQTT('ui', payload, topic);
-		} else {
-			this.logger.error('MQTT client is not connected');
+		if (!this.mqttClient?.connected) {
+			this.connect(MqttService.name);
 		}
+
+		if (typeof payload.user !== 'string' && payload.user['coldclimate_claims']) {
+			payload.user = payload.user['coldclimate_claims']['email'];
+		}
+
+		const topic = `ui/${this.config.get('NODE_ENV', 'development')}/${payload.org_id}/${payload.user}`;
+
+		this.publishMQTT('ui', payload, topic);
 	}
 
 	/**
@@ -130,12 +130,14 @@ export class MqttService extends BaseWorker implements OnModuleInit {
 	 */
 	replyTo(responseTopic: string, payload: any): void {
 		try {
-			if (this.mqttClient && responseTopic) {
-				this.mqttClient.publish(responseTopic, JSON.stringify(payload), { qos: 0, retain: false });
+			if (!this.mqttClient?.connected) {
+				this.connect(MqttService.name);
+			}
+
+			if (responseTopic) {
+				this.mqttClient?.publish(responseTopic, JSON.stringify(payload), { qos: 0, retain: false });
 
 				this.logger.log(`Published to topic: ${responseTopic}`, { ...payload });
-			} else {
-				this.logger.error('MQTT client is not connected');
 			}
 		} catch (e: any) {
 			this.logger.error(e.message, e);

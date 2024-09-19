@@ -1,7 +1,13 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { getClaimsMock, getFilesWithAssurances, getFilesWithoutAssurances } from '@coldpbc/mocks';
+import {
+  getClaimsMock,
+  getFilesWithAssurances,
+  getFilesWithoutAssurances,
+  getFileTypesMock,
+  StoryMockProvider
+} from '@coldpbc/mocks';
 import { DocumentDetailsSidebar, DocumentsAddAssuranceModal } from '@coldpbc/components';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
 
@@ -25,6 +31,7 @@ export const NoAssurances: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
+    fileTypes: getFileTypesMock(),
 	},
 };
 
@@ -38,6 +45,7 @@ export const WithAssurancesSupplierClaim: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
+    fileTypes: getFileTypesMock(),
 	},
 };
 
@@ -51,11 +59,13 @@ export const WithAssurancesMaterialClaim: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
+    fileTypes: getFileTypesMock(),
 	},
 };
 const SidebarStory = (props: {
 	file: FilesWithAssurances | undefined;
 	sustainabilityAttributes: Claims[];
+  fileTypes: string[];
 	refreshFiles: () => void;
 	closeSidebar: () => void;
 	innerRef: React.RefObject<HTMLDivElement>;
@@ -64,7 +74,7 @@ const SidebarStory = (props: {
 	downloadFile: (url: string | undefined) => void;
 	signedUrl: string | undefined;
 }) => {
-	const { file, innerRef, sustainabilityAttributes } = props;
+	const { file, fileTypes, innerRef, sustainabilityAttributes } = props;
 	const [selectedFile, setSelectedFile] = React.useState<FilesWithAssurances | undefined>(file);
 	const [addAssuranceFile, setAddAssuranceFile] = React.useState<
 		| {
@@ -83,10 +93,11 @@ const SidebarStory = (props: {
 	>(undefined);
 
 	return (
-		<>
+		<StoryMockProvider>
 			<DocumentDetailsSidebar
 				file={selectedFile}
 				sustainabilityAttributes={sustainabilityAttributes}
+        fileTypes={fileTypes}
 				refreshFiles={() => {}}
 				closeSidebar={() => setSelectedFile(undefined)}
 				innerRef={innerRef}
@@ -121,6 +132,6 @@ const SidebarStory = (props: {
 					allSustainabilityAttributes={sustainabilityAttributes}
 				/>
 			)}
-		</>
+		</StoryMockProvider>
 	);
 };

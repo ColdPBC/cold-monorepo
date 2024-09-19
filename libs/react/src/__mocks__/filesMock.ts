@@ -1,6 +1,5 @@
 import { Files, FilesWithAssurances } from '@coldpbc/interfaces';
 import { addDays } from 'date-fns';
-import { FileTypes } from '@coldpbc/enums';
 
 export function getAllFilesMock() {
 	return [
@@ -60,7 +59,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'PFAS-Test Certificate.pdf',
 			effective_start_date: addDays(new Date(), 5).toISOString(),
 			effective_end_date: addDays(new Date(), 5).toISOString(),
-			type: FileTypes.CERTIFICATE,
+			type: "CERTIFICATE",
 			organization_claims: [],
 		},
 		{
@@ -68,7 +67,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'Lead-Test Certificate.pdf',
 			effective_start_date: null,
 			effective_end_date: null,
-			type: FileTypes.CERTIFICATE,
+			type: "CERTIFICATE",
 			organization_claims: [],
 		},
 		{
@@ -76,7 +75,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'phthalate Certificate.pdf',
 			effective_start_date: null,
 			effective_end_date: null,
-			type: FileTypes.CERTIFICATE,
+			type: "CERTIFICATE",
 			organization_claims: [],
 		},
 		{
@@ -84,7 +83,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'bluesign Certificate without date.pdf',
 			effective_start_date: null,
 			effective_end_date: null,
-			type: FileTypes.CERTIFICATE,
+			type: "CERTIFICATE",
 			organization_claims: [],
 		},
 		{
@@ -92,7 +91,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'bluesign Certificate expiring soon.pdf',
 			effective_start_date: addDays(new Date(), 5).toISOString(),
 			effective_end_date: addDays(new Date(), 5).toISOString(),
-			type: FileTypes.CERTIFICATE,
+			type: "CERTIFICATE",
 			organization_claims: [],
 		},
 		{
@@ -100,7 +99,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'PFAS-Test Certificate Want, Inc.pdf',
 			effective_start_date: addDays(new Date(), 70).toISOString(),
 			effective_end_date: addDays(new Date(), 70).toISOString(),
-			type: FileTypes.CERTIFICATE,
+			type: "CERTIFICATE",
 			organization_claims: [],
 		},
 	];
@@ -112,7 +111,7 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			id: '1',
 			originalName: 'PFAS-Test Certificate.pdf',
 			createdAt: '2024-05-01T20:00:00.000Z',
-			type: FileTypes.OTHER,
+			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
 		},
@@ -120,7 +119,7 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			id: '2',
 			originalName: 'PFAS-Test Certificate.pdf',
 			createdAt: '2024-05-02T20:00:00.000Z',
-			type: FileTypes.OTHER,
+			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
 		},
@@ -128,7 +127,7 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			id: '3',
 			originalName: 'PFAS-Test Certificate.pdf',
 			createdAt: '2024-05-03T20:00:00.000Z',
-			type: FileTypes.OTHER,
+			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
 		},
@@ -141,7 +140,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 			id: '1',
 			originalName: 'PFAS-Test Certificate.pdf',
 			createdAt: '2024-05-01T20:00:00.000Z',
-			type: FileTypes.CERTIFICATE,
+			type: "CERTIFICATE",
 			attributeAssurances: [
 				{
 					id: '1',
@@ -180,7 +179,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 			id: '2',
 			originalName: 'Lead-Test Certificate.pdf',
 			createdAt: '2024-05-01T20:00:00.000Z',
-			type: FileTypes.CERTIFICATE,
+			type: "CERTIFICATE",
 			attributeAssurances: [
 				{
 					id: '2',
@@ -283,7 +282,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 			id: '1',
 			originalName: 'PFAS-Test Certificate.pdf',
 			createdAt: '2024-05-01T20:00:00.000Z',
-			type: FileTypes.CERTIFICATE,
+			type: "CERTIFICATE",
 			attributeAssurances: [
 				{
 					id: '1',
@@ -322,7 +321,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 			id: '2',
 			originalName: 'Lead-Test Certificate.pdf',
 			createdAt: '2024-05-01T20:00:00.000Z',
-			type: FileTypes.CERTIFICATE,
+			type: "CERTIFICATE",
 			attributeAssurances: [
 				{
 					id: '2',
@@ -381,4 +380,19 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 			},
 		},
 	];
+}
+
+export const getFileTypesMock = (): string[] => {
+  return [
+    "CERTIFICATE",
+    "TEST_REPORT",
+    "STATEMENT",
+    "ASSESSMENT",
+    "PURCHASE_ORDER",
+    "BILL_OF_MATERIALS",
+    "POLICY",
+    "OTHER",
+    "AUDIT_REPORT",
+    "SCOPE_CERTIFICATE",
+  ]
 }

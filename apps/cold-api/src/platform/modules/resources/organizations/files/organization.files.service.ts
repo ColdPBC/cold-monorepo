@@ -119,6 +119,10 @@ export class OrganizationFilesService extends BaseWorker {
 					throw new NotFoundException(`Organization ${orgId} not found`);
 				}
 
+				if (!req.headers['postman-token']) {
+					file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf-8');
+				}
+
 				const hash = await S3Service.calculateChecksum(file);
 
 				const response = await this.s3.uploadStreamToS3(user, org.name, file);
