@@ -18,7 +18,8 @@ import {
 	tuv_rhineland,
 	wrap,
 } from './extraction_schemas';
-import { snakeCase } from 'lodash';
+import { omit, snakeCase } from 'lodash';
+import { zerialize } from 'zodex';
 
 @Injectable()
 export class ClassificationService extends BaseWorker {
@@ -205,12 +206,17 @@ export class ClassificationService extends BaseWorker {
 		if (!orgFile) {
 			throw new Error('File not found');
 		}
+
 		// update the file metadata with the classification
 		const updateData: any = {
 			type: parsed.type,
 			metadata: {
 				status: 'ai_classified',
-				classification: parsed,
+				classification: omit(parsed, ['extraction_name', 'extraction_schema']),
+				extraction: {
+					name: extraction_name,
+					schema: zerialize(parsed.extraction_schema),
+				},
 				...(orgFile.metadata as object),
 			},
 		};
