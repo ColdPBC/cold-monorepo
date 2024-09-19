@@ -1,19 +1,19 @@
 import {
-	CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
-	GET_ALL_FILES,
-	GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-	GET_ALL_ORGS,
-	GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-	GET_ALL_SUS_ATTRIBUTES,
-	UPDATE_DOCUMENT_ASSURANCE,
-	UPDATE_DOCUMENT_FIELDS,
+  CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
+  GET_ALL_FILES,
+  GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+  GET_ALL_ORGS, GET_ALL_SCHEMA_ENUMS,
+  GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+  GET_ALL_SUS_ATTRIBUTES,
+  UPDATE_DOCUMENT_ASSURANCE,
+  UPDATE_DOCUMENT_FIELDS,
 } from '@coldpbc/lib';
 import { getFilesWithAssurances, getFilesWithoutAssurances, materialsForAssurancesMock, suppliersForAssurancesMock } from '../filesMock';
 import { getClaimsMock } from '../claimsMock';
 import { DocumentNode } from '@apollo/client';
 import { RequestHandler } from 'mock-apollo-client';
 import { get } from 'lodash';
-import { FileTypes } from '@coldpbc/enums';
+import {getSchemaMocks} from "../schemaMocks";
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
@@ -326,7 +326,7 @@ export const defaultGraphqlMocks: {
 		query: UPDATE_DOCUMENT_FIELDS,
 		handler: variables => {
 			const createdAt = new Date().toISOString();
-			const type = get(variables, 'input.type', FileTypes.OTHER);
+			const type = get(variables, 'input.type', "OTHER");
 			return Promise.resolve({
 				data: {
 					updateOrganizationFile: {
@@ -353,6 +353,17 @@ export const defaultGraphqlMocks: {
 			});
 		},
 	},
+  {
+    query: GET_ALL_SCHEMA_ENUMS,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          _graphweaver: {
+            enums: getSchemaMocks()
+          }
+        }
+      })
+  }
 ];
 
 export const filesWithAssurancesMocks: {

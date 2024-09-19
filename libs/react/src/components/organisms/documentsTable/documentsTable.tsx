@@ -1,11 +1,11 @@
 import { DataGrid, GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridValidRowModel, MuiEvent } from '@mui/x-data-grid';
-import { ClaimStatus, FileTypes, IconNames } from '@coldpbc/enums';
+import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import { ColdIcon, ErrorFallback, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays, format } from 'date-fns';
 import capitalize from 'lodash/capitalize';
 import React from 'react';
-import { get, toArray, uniqWith } from 'lodash';
+import {get, lowerCase, startCase, toArray, uniqWith} from 'lodash';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
 import { getDateActiveStatus, getEffectiveEndDate, listFilterOperators, listSortComparator } from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -135,6 +135,8 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 
 	const allAssociatedRecords = uniqWith(files.map(file => getAssociatedRecords(file)).flat(), (a, b) => a === b);
 
+  const uniqFileTypes = uniqWith(files.map(file => startCase(lowerCase(file.type.replace(/_/g, ' ')))), (a, b) => a === b);
+
 	const tableRows: GridValidRowModel[] = rows;
 
 	const columns: GridColDef[] = [
@@ -176,27 +178,13 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 			width: 100,
 			type: 'singleSelect',
-			valueGetter: value => {
-				if (value === FileTypes.TEST_RESULTS) {
-					return 'Test Result';
-				} else {
-					return capitalize(value);
-				}
+			valueGetter: (value: string) => {
+					return startCase(lowerCase(value.replace(/_/g, ' ')));
 			},
-			valueFormatter: (value: FileTypes) => {
-				if (value === FileTypes.TEST_RESULTS) {
-					return 'Test Result';
-				} else {
-					return capitalize(value);
-				}
+			valueFormatter: (value: string) => {
+        return startCase(lowerCase(value.replace(/_/g, ' ')));
 			},
-			valueOptions: toArray(FileTypes).map(type => {
-				if (type === FileTypes.TEST_RESULTS) {
-					return 'Test Result';
-				} else {
-					return capitalize(type);
-				}
-			}),
+			valueOptions: uniqFileTypes,
 		},
 		{
 			field: 'sustainability_attribute',

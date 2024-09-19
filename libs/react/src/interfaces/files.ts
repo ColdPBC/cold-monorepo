@@ -1,11 +1,11 @@
 import { Claims } from './claims';
-import { FileTypes } from '@coldpbc/enums';
 import { MaterialsWithCertifications } from './materials';
+import {file_types} from "@prisma/client";
 
 export interface Files {
 	id: string;
 	original_name: string;
-	type: FileTypes;
+	type: string;
 	effective_start_date: null | string;
 	effective_end_date: null | string;
 	organization_claims: {
@@ -23,7 +23,7 @@ export interface FilesWithAssurances {
 	id: string;
 	originalName: string;
 	createdAt: string;
-	type: FileTypes;
+	type: string;
 	attributeAssurances: AttributeAssurance[];
 	metadata: {
 		summary: string;

@@ -141,6 +141,20 @@ export const GET_ALL_MATERIALS_FOR_ORG = gql`
 	}
 `;
 
+export const GET_ALL_SCHEMA_ENUMS = gql`
+  query QueryTypes {
+      _graphweaver {
+          enums {
+              values {
+                  name
+                  value
+              }
+              name
+          }
+      }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -154,4 +168,5 @@ export const queries: {
   UPDATE_DOCUMENT_ASSURANCE: UPDATE_DOCUMENT_ASSURANCE,
   DELETE_ATTRIBUTE_ASSURANCE: DELETE_ATTRIBUTE_ASSURANCE,
   GET_ALL_MATERIALS_FOR_ORG: GET_ALL_MATERIALS_FOR_ORG,
+  GET_ALL_SCHEMA_ENUMS: GET_ALL_SCHEMA_ENUMS,
 };

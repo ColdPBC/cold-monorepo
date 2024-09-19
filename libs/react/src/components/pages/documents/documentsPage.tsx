@@ -1,13 +1,12 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLSWR, useOrgSWR } from '@coldpbc/hooks';
-import { DocumentDetailsSidebar, DocumentsHeaderTypes, DocumentsTable, DocumentUploadButton, ErrorFallback, MainContent, Modal, Spinner } from '@coldpbc/components';
+import { DocumentDetailsSidebar, DocumentsHeaderTypes, DocumentsTable, DocumentUploadButton, ErrorFallback, MainContent, Modal, Spinner, DocumentsAddAssuranceModal } from '@coldpbc/components';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { FilesWithAssurances, ToastMessage } from '@coldpbc/interfaces';
+import { FilesWithAssurances, SchemaEnum, ToastMessage } from '@coldpbc/interfaces';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import { isAxiosError } from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
-import { get } from 'lodash';
-import { DocumentsAddAssuranceModal } from '../../organisms/documentsAddAssuranceModal/documentsAddAssuranceModal';
+import {get} from 'lodash';
 
 const _DocumentsPage = () => {
 	const [selectedDocument, setSelectedDocument] = React.useState<string | undefined>(undefined);
@@ -29,6 +28,7 @@ const _DocumentsPage = () => {
 	>(undefined);
 	const [deleteButtonLoading, setDeleteButtonLoading] = React.useState(false);
 	const [files, setFiles] = React.useState<FilesWithAssurances[]>([]);
+  const [fileTypes, setFileTypes] = React.useState<string[]>([]);
 	const [selectedDocumentURL, setSelectedDocumentURL] = React.useState<string | undefined>(undefined);
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
@@ -49,6 +49,7 @@ const _DocumentsPage = () => {
 			},
 		},
 	});
+  const allFileTypes = useGraphQLSWR('GET_ALL_SCHEMA_ENUMS');
 
 	useEffect(() => {
 		const files = get(allFiles.data, 'data.organizationFiles', []);
@@ -62,6 +63,26 @@ const _DocumentsPage = () => {
 			setSelectedDocumentURL(selectedFileURLSWR.data);
 		}
 	}, [selectedFileURLSWR]);
+
+  useEffect(() => {
+    if(!allFileTypes.data) return;
+    const fileTypes = get(allFileTypes.data, 'data._graphweaver.enums', []);
+    const errors = get(allFileTypes.data, 'errors', []);
+    if(!errors || (errors && errors.length === 0)) {
+      // find the enum with the name 'OrganizationFilesType'
+      const fileEnum = fileTypes.find((fileType: SchemaEnum) => fileType.name === 'OrganizationFilesType');
+      // get all the value fields from the values array
+      const typeValues = fileEnum?.values.map((value: {
+        name: string;
+        value: string;
+      }) => value.value);
+      if(typeValues) {
+        setFileTypes(typeValues);
+      }
+    } else {
+      setFileTypes([]);
+    }
+  }, [allFileTypes.data]);
 
 	if (allFiles.error) {
 		logBrowser('Error fetching files', 'error', { ...allFiles.error }, allFiles.error);
@@ -198,7 +219,7 @@ const _DocumentsPage = () => {
 		});
 	};
 
-	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, documentToDelete, documentToAddAssurance, files, allSustainabilityAttributes });
+	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, documentToDelete, documentToAddAssurance, files, allSustainabilityAttributes, fileTypes });
 
 	return (
 		<div className="relative overflow-y-auto h-full w-full">
@@ -209,6 +230,7 @@ const _DocumentsPage = () => {
 			<DocumentDetailsSidebar
 				file={files.find(file => file.id === selectedDocument)}
 				sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
+        fileTypes={fileTypes}
 				refreshFiles={updateFile}
 				closeSidebar={onSidebarClose}
 				innerRef={ref}
