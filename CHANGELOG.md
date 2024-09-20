@@ -1,3 +1,10 @@
+## [1.391.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.3...v1.391.4) (2024-09-20)
+
+
+### Bug Fixes
+
+* correct syntax in GitHub Actions workflow ([d0e7356](https://github.com/ColdPBC/cold-monorepo/commit/d0e7356306ba6da24cae5a7f35dd293bb25c91d8))
+
 ## [1.391.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.2...v1.391.3) (2024-09-20)
 
 
