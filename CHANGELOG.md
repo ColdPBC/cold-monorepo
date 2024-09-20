@@ -1,3 +1,11 @@
+## [1.391.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.9...v1.391.10) (2024-09-20)
+
+
+### Bug Fixes
+
+* remove pnpm sync check for schema.prisma in pre-commit hook ([00ce4ca](https://github.com/ColdPBC/cold-monorepo/commit/00ce4ca0c792aafbac35ffb06c5e83b90915e9d3))
+* update database connection details for import script ([7522e0e](https://github.com/ColdPBC/cold-monorepo/commit/7522e0e154ea7ecc5b9c6518dfbbf7b1c8bf423e))
+
 ## [1.391.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.8...v1.391.9) (2024-09-20)
 
 
