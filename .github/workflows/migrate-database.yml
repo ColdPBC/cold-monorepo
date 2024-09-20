@@ -16,7 +16,6 @@ env:
   NPM_TOKEN: ${{ secrets.GH_TOKEN }}
   CACHE_NAME: cache-node-modules
   PR_NUMBER: ${{ github.event.number }}
-  DATABASE_URL: ${{ startsWith(env.BRANCH_NAME, 'main') && secrets.PRODUCTION_DATABASE_URL || secrets.STAGING_DATABASE_URL }}
 jobs:
   migrate-db:
     name: 🪿Migrate Database Changes 🪿
