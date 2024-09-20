@@ -1,3 +1,10 @@
+## [1.393.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.0...v1.393.1) (2024-09-20)
+
+
+### Bug Fixes
+
+* Update file metadata on failure ([f502f66](https://github.com/ColdPBC/cold-monorepo/commit/f502f66cbffdd9443a915358d81196b3b218bbb5))
+
 # [1.393.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.392.0...v1.393.0) (2024-09-20)
 
 
