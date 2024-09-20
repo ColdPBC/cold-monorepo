@@ -1,0 +1,81 @@
+name: 🌈 Sync Prisma & GraphQL
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'libs/nest/prisma/schema.prisma'
+permissions:
+  contents: write # to be able to publish a GitHub release
+  issues: write # to be able to comment on released issues
+  pull-requests: write # to be able to comment on released pull requests
+  id-token: write # to enable use of OIDC for npm provenance
+  actions: write
+env:
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  NPM_TOKEN: ${{ secrets.GH_TOKEN }}
+  CACHE_NAME: cache-node-modules
+  PR_NUMBER: ${{ github.event.number }}
+  DATABASE_URL: ${{ startsWith(env.BRANCH_NAME, 'main') && secrets.PRODUCTION_DATABASE_URL || secrets.STAGING_DATABASE_URL }}
+jobs:
+  migrate-db:
+    name: 🪿Migrate Database Changes 🪿
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.9.0'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Use Yarn
+        run: corepack prepare yarn@4.4.1 --activate
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run Prisma Migrations
+        run: yarn prisma migrate deploy
+  sync-graphql:
+    runs-on: ubuntu-latest
+    name: 🔄 Sync GraphQL Schema
+    needs:
+      - migrate-db
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.9.0'
+
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Use PNPM
+        run: corepack prepare pnpm@9.8.0 --activate
+
+      - name: Sync GraphQL Schema Changes
+        run: pnpm sync
+        working-directory: apps/cold-graphql
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m "ci: sync prisma schema changes"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
