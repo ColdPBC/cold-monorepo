@@ -361,6 +361,11 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 				slots={{
 					noRowsOverlay: MUIDataGridNoRowsOverlay,
 				}}
+        initialState={{
+          sorting: {
+            sortModel: [{ field: 'uploaded', sort: 'desc' }],
+          },
+        }}
 			/>
 		</div>
 	);

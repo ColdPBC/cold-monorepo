@@ -401,7 +401,7 @@ export function filesProcessedWithDatesMock(): FilesWithAssurances[] {
     {
       id: '2',
       originalName: 'Lead-Test Certificate.pdf',
-      createdAt: '2024-05-01T20:00:00.000Z',
+      createdAt: '2024-05-21T20:00:00.000Z',
       type: "CERTIFICATE",
       attributeAssurances: [],
       metadata: {
