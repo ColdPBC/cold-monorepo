@@ -1,3 +1,10 @@
+## [1.391.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.7...v1.391.8) (2024-09-20)
+
+
+### Bug Fixes
+
+* hardcode database username in migration workflow ([49196f2](https://github.com/ColdPBC/cold-monorepo/commit/49196f23ff795c1a1b3a7c4455e113ae6357a17f))
+
 ## [1.391.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.6...v1.391.7) (2024-09-20)
 
 
