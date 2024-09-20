@@ -7,7 +7,7 @@
         "build": "graphweaver build",
         "start": "graphweaver start",
         "watch": "graphweaver watch",
-	      "import": "graphweaver import postgresql -o --host $DATABASE_HOST --password $DATABASE_PASSWORD --user $DATABASE_USERNAME --database flightcontrol --port 5432 && ts-node ./custom_generators/update_database_connection.ts",
+	      "import": "graphweaver import postgresql -o --host localhost --password postgres --user postgres --database colddb --port 5432 && ts-node ./custom_generators/update_database_connection.ts",
 	      "apply:acl": "ts-node ./custom_generators/apply_acls.ts",
 	      "apply:hooks": "ts-node ./custom_generators/apply_hooks.ts",
 	      "create:sidecar": "ts-node ./custom_generators/create_sidecar.ts",
