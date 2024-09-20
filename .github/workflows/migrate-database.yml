@@ -36,6 +36,14 @@ jobs:
       - name: Use Yarn
         run: corepack prepare yarn@4.4.1 --activate
 
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
       - name: Set DATABASE_URL
         run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
 
@@ -44,6 +52,7 @@ jobs:
 
       - name: Run Prisma Migrations
         run: yarn prisma migrate deploy
+
   sync-graphql:
     runs-on: ubuntu-latest
     name: 🔄 Sync GraphQL Schema
@@ -64,9 +73,18 @@ jobs:
       - name: Use PNPM
         run: corepack prepare pnpm@9.8.0 --activate
 
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: 'apps/cold-graphql/node_modules'
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
       - name: Set DATABASE_URL
         run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
-
+      - name: Set NODE_ENV
+        run: echo "NODE_ENV=$([[ $BRANCH_NAME == main* ]] && echo production || echo staging)" >> $GITHUB_ENV
       - name: Install dependencies
         run: pnpm install
         working-directory: apps/cold-graphql
