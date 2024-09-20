@@ -16,6 +16,7 @@ env:
   NPM_TOKEN: ${{ secrets.GH_TOKEN }}
   CACHE_NAME: cache-node-modules
   PR_NUMBER: ${{ github.event.number }}
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 jobs:
   migrate-db:
     name: 🪿Migrate Database Changes 🪿
@@ -36,7 +37,7 @@ jobs:
         run: corepack prepare yarn@4.4.1 --activate
 
       - name: Set DATABASE_URL
-        run: echo "DATABASE_URL=$([[ ${{ env.BRANCH_NAME }} == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
+        run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: yarn install
@@ -64,7 +65,7 @@ jobs:
         run: corepack prepare pnpm@9.8.0 --activate
 
       - name: Set DATABASE_URL
-        run: echo "DATABASE_URL=$([[ ${{ env.BRANCH_NAME }} == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
+        run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
 
       - name: Sync GraphQL Schema Changes
         run: pnpm sync
