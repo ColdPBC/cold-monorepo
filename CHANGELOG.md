@@ -1,3 +1,11 @@
+## [1.390.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.390.0...v1.390.1) (2024-09-20)
+
+
+### Bug Fixes
+
+* update workflow to set DATABASE_URL for different environments ([dbdcc1f](https://github.com/ColdPBC/cold-monorepo/commit/dbdcc1f08876cb4b3bac082c08b3c5b392cda12a))
+* **workflow:** remove DATABASE_URL declaration from migrate-database.yml ([2acf128](https://github.com/ColdPBC/cold-monorepo/commit/2acf1287ab570ca1bcfb3705e486c6d10c6ef206))
+
 # [1.390.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.389.0...v1.390.0) (2024-09-19)
 
 
