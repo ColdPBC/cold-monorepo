@@ -1156,9 +1156,3 @@ enum emissions_categories {
   TEST
   NATURAL_GAS
 }
-
-enum test_changes {
-	ADD
-	REMOVE
-	UPDATE
-}
