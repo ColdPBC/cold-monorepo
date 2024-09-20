@@ -1,3 +1,10 @@
+## [1.393.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.2...v1.393.3) (2024-09-20)
+
+
+### Bug Fixes
+
+* update test results classification case in extraction service ([1104dcc](https://github.com/ColdPBC/cold-monorepo/commit/1104dccdfa7a7a7b875ceaf062c4d3ed1148c039))
+
 ## [1.393.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.1...v1.393.2) (2024-09-20)
 
 
