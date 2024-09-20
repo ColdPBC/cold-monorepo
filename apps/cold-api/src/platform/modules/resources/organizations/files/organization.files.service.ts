@@ -198,23 +198,42 @@ export class OrganizationFilesService extends BaseWorker {
 
 				existingFiles.push(existing);
 
-				if (!organization.isTest) {
-					this.metrics.increment('cold.file.uploaded', 1, { organization_id: organization.id, organization_name: organization.name, user_email: user.coldclimate_claims.email });
-					this.metrics.event(
-						'File Uploaded',
-						`A file was uploaded by ${user.coldclimate_claims.email} for ${organization.name}`,
-						{
-							alert_type: 'success',
-							date_happened: new Date(),
-							priority: 'normal',
-						},
-						{ status: 'complete', organization_id: organization.id, organization_name: organization.name, email: user.coldclimate_claims.email },
-					);
-				}
+				this.metrics.increment('cold.file.uploaded', 1, {
+					status: 'complete',
+					organization_id: organization.id,
+					organization_name: organization.name,
+					user_email: user.coldclimate_claims.email,
+					isTestOrg: organization.isTest.toString(),
+				});
+				this.metrics.event(
+					'File Uploaded',
+					`A file was uploaded by ${user.coldclimate_claims.email} for ${organization.name}`,
+					{
+						alert_type: 'success',
+						date_happened: new Date(),
+						priority: 'normal',
+					},
+					{
+						isTest: organization.isTest.toString(),
+						status: 'complete',
+						organization_id: organization.id,
+						organization_name: organization.name,
+						email: user.coldclimate_claims.email,
+					},
+				);
 			} catch (e) {
 				this.logger.error(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
 
+				this.metrics.increment('cold.file.uploaded', 1, {
+					status: 'failed',
+					organization_id: organization.id,
+					organization_name: organization.name,
+					user_email: user.coldclimate_claims.email,
+					isTestOrg: organization.isTest.toString(),
+				});
+
 				this.mqtt.publishMQTT('ui', {
+					resource: 'organization_files',
 					org_id: orgId,
 					user: user,
 					swr_key: url,
@@ -226,22 +245,21 @@ export class OrganizationFilesService extends BaseWorker {
 					},
 				});
 
-				if (!organization.isTest) {
-					this.metrics.event(
-						'File Upload Failed',
-						`A file upload attempt by ${user.coldclimate_claims.email} for ${organization.name} failed`,
-						{
-							alert_type: 'error',
-							date_happened: new Date(),
-							priority: 'normal',
-						},
-						{
-							organization_id: organization.id,
-							organization_name: organization.name,
-							email: user.coldclimate_claims.email,
-						},
-					);
-				}
+				this.metrics.event(
+					'File Upload Failed',
+					`A file upload attempt by ${user.coldclimate_claims.email} for ${organization.name} failed`,
+					{
+						alert_type: 'error',
+						date_happened: new Date(),
+						priority: 'normal',
+					},
+					{
+						isTest: organization.isTest.toString(),
+						organization_id: organization.id,
+						organization_name: organization.name,
+						email: user.coldclimate_claims.email,
+					},
+				);
 				throw e;
 			}
 		}
