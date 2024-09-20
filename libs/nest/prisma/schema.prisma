@@ -22,6 +22,7 @@ generator zod {
   useMultipleFiles                 = "true"
   writeNullishInModelTypes         = "false"
 }
+///
 
 datasource db {
   provider          = "postgresql"
