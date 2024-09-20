@@ -84,6 +84,9 @@ jobs:
       - name: Set DATABASE_URL
         run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
 
+      - name: Set PGSSLMODE
+        run: echo "PGSSLMODE=require" >> $GITHUB_ENV
+
       - name: Set DATABASE_NAME
         run: echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> $GITHUB_ENV
 
