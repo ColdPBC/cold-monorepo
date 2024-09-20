@@ -1,3 +1,20 @@
+# [1.392.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.11...v1.392.0) (2024-09-20)
+
+
+### Bug Fixes
+
+* adjust padding and add animation to uploaded file status display ([4154187](https://github.com/ColdPBC/cold-monorepo/commit/4154187a042315375980032d382509c05468c500))
+* remove throttling logic from SWR mutation calls ([31fe415](https://github.com/ColdPBC/cold-monorepo/commit/31fe415349f4724f0816bce212251a9abfe86391))
+
+
+### Features
+
+* enhance ColdMQTTProvider with graphql query mappings for SWR key ([f9f1a1b](https://github.com/ColdPBC/cold-monorepo/commit/f9f1a1b600d8683ec35b72990829eb8d6d7ab727))
+* enhance documentsTable item display with capitalization and styling ([2156e6a](https://github.com/ColdPBC/cold-monorepo/commit/2156e6aca59b2c703c7db572beab09aa44aff38e))
+* enhance toast messages to support customizable content and positioning ([e605aa9](https://github.com/ColdPBC/cold-monorepo/commit/e605aa9dc55d9f4336c7adeef770f67f829dc658))
+* highlight processing status in documents table ([3b96925](https://github.com/ColdPBC/cold-monorepo/commit/3b9692547a1d01ef59491393981ce6801a79dfa3))
+* throttle SWR mutate calls in coldMQTTProvider ([a8801bc](https://github.com/ColdPBC/cold-monorepo/commit/a8801bcee51a2f93a78e192ba360b6bef13c1026))
+
 ## [1.391.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.10...v1.391.11) (2024-09-20)
 
 
