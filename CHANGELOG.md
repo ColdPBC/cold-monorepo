@@ -1,3 +1,10 @@
+## [1.391.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.4...v1.391.5) (2024-09-20)
+
+
+### Bug Fixes
+
+* correct database environment variable handling ([73d1c0d](https://github.com/ColdPBC/cold-monorepo/commit/73d1c0d19abfa443d9e091a017ff6136fe1acf5b))
+
 ## [1.391.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.3...v1.391.4) (2024-09-20)
 
 
