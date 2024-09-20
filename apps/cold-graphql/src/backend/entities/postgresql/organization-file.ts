@@ -23,6 +23,7 @@ export enum OrganizationFilesType {
 	OTHER = 'OTHER',
 	AUDIT_REPORT = 'AUDIT_REPORT',
 	SCOPE_CERTIFICATE = 'SCOPE_CERTIFICATE',
+	TRANSACTION_CERTIFICATE = 'TRANSACTION_CERTIFICATE',
 }
 
 @ApplyAccessControlList(default_acl)
