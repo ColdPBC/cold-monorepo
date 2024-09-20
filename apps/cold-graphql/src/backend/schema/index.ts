@@ -41,5 +41,6 @@ import './survey-datum';
 import './survey-definition';
 import './survey-status';
 import './sustainability-attribute';
+import './test-model';
 import './utility-bill';
 import './vector-record';

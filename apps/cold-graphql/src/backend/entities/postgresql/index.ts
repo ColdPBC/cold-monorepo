@@ -41,6 +41,7 @@ import { SurveyDatum } from './survey-datum';
 import { SurveyDefinition } from './survey-definition';
 import { SurveyStatus } from './survey-status';
 import { SustainabilityAttribute } from './sustainability-attribute';
+import { TestModel } from './test-model';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
 
@@ -87,6 +88,7 @@ export * from './survey-datum';
 export * from './survey-definition';
 export * from './survey-status';
 export * from './sustainability-attribute';
+export * from './test-model';
 export * from './utility-bill';
 export * from './vector-record';
 
@@ -134,6 +136,7 @@ export const entities = [
 	SurveyDefinition,
 	SurveyStatus,
 	SustainabilityAttribute,
+	TestModel,
 	UtilityBill,
 	VectorRecord,
 ];
