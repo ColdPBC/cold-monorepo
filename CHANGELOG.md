@@ -1,3 +1,10 @@
+## [1.391.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.6...v1.391.7) (2024-09-20)
+
+
+### Bug Fixes
+
+* update database migration workflow ([8314e89](https://github.com/ColdPBC/cold-monorepo/commit/8314e89e9f101147ca55cfcb6341b57815333483))
+
 ## [1.391.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.5...v1.391.6) (2024-09-20)
 
 
