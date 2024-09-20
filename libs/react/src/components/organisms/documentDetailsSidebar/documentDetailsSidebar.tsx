@@ -591,7 +591,7 @@ const _DocumentDetailsSidebar = (props: {
 
 	return (
 		<div
-			className={'flex flex-col h-screen fixed top-0 right-0 bottom-0 overflow-y-scroll text-tc-primary bg-gray-30'}
+			className={'flex flex-col h-screen fixed top-0 right-0 bottom-0 overflow-y-scroll text-tc-primary bg-gray-30 z-20'}
 			style={{
 				width: fileState ? '588px' : '0px',
 				minWidth: fileState ? '588px' : '0px',
