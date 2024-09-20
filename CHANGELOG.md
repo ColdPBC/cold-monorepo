@@ -1,3 +1,10 @@
+# [1.393.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.392.0...v1.393.0) (2024-09-20)
+
+
+### Features
+
+* add pnpm lockfile to cold-graphql app ([d28a1ca](https://github.com/ColdPBC/cold-monorepo/commit/d28a1ca13a6808b410d543228359f52220bef584))
+
 # [1.392.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.11...v1.392.0) (2024-09-20)
 
 
