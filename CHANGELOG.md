@@ -1,3 +1,10 @@
+## [1.391.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.5...v1.391.6) (2024-09-20)
+
+
+### Bug Fixes
+
+* set PGSSLMODE in GitHub Actions workflow for database migrations ([48d05a0](https://github.com/ColdPBC/cold-monorepo/commit/48d05a0d64b10cccaec601fd5df33c1e0f0f7ff9))
+
 ## [1.391.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.4...v1.391.5) (2024-09-20)
 
 
