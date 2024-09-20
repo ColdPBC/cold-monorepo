@@ -1,3 +1,11 @@
+## [1.391.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.2...v1.391.3) (2024-09-20)
+
+
+### Bug Fixes
+
+* **pnpm-lock:** update dependency versions and remove redundant entries ([fdfc23a](https://github.com/ColdPBC/cold-monorepo/commit/fdfc23aa85f0283a02418ed70db57513b2508d68))
+* **workflow:** remove redundant DATABASE_URL parsing step ([09944f3](https://github.com/ColdPBC/cold-monorepo/commit/09944f366db51f8870d0165ffe4bd4b718b48d85))
+
 ## [1.391.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.1...v1.391.2) (2024-09-20)
 
 
