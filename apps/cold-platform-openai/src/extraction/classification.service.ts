@@ -144,7 +144,7 @@ export class ClassificationService extends BaseWorker {
 
 			// determine the extraction schema and extraction name to use based on the classification
 			switch (parsed.type) {
-				case file_types.TEST_RESULTS:
+				case file_types.TEST_REPORT:
 					extraction_name = snakeCase(`test_${parsed.testing_company}`);
 					switch (parsed.testing_company) {
 						case 'tuvRheinland':
