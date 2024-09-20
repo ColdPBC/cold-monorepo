@@ -1,3 +1,10 @@
+## [1.393.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.3...v1.393.4) (2024-09-20)
+
+
+### Bug Fixes
+
+* update instance storage in flightcontrol platform json ([86117a4](https://github.com/ColdPBC/cold-monorepo/commit/86117a46d8ef30205e7b490cc131152697334051))
+
 ## [1.393.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.2...v1.393.3) (2024-09-20)
 
 
