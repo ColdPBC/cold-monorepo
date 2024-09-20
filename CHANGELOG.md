@@ -1,3 +1,10 @@
+## [1.391.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.10...v1.391.11) (2024-09-20)
+
+
+### Bug Fixes
+
+* remove unused enum test_changes from Prisma schema ([ccad4fc](https://github.com/ColdPBC/cold-monorepo/commit/ccad4fcb0e698fab84f1b9346d39502f57748717))
+
 ## [1.391.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.9...v1.391.10) (2024-09-20)
 
 
