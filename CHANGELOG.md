@@ -1,3 +1,10 @@
+## [1.391.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.8...v1.391.9) (2024-09-20)
+
+
+### Bug Fixes
+
+* update import command and add pre-commit hooks ([fb35086](https://github.com/ColdPBC/cold-monorepo/commit/fb3508619b5d541fac5f3a0c81f9a12494b3b011))
+
 ## [1.391.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.7...v1.391.8) (2024-09-20)
 
 
