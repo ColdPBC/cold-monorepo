@@ -94,6 +94,12 @@ fs.readdir(entityPath, (err, files) => {
 				return logger.error('Unable to read file: ' + err);
 			}
 
+			// Check if the @Hook decorator already exists
+			if (data.includes('@Hook')) {
+				logger.info(`Skipping ${file} as it already contains @Hook decorator.`);
+				return;
+			}
+
 			const classNameMatch = data.match(/export class (\w+)/);
 			if (classNameMatch) {
 				const className = classNameMatch[1];

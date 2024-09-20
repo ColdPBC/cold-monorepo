@@ -19,6 +19,12 @@ function applyAclsToEntities() {
 					return console.error('Unable to read file: ' + err);
 				}
 
+				// Check if the @ApplyAccessControlList decorator already exists
+				if (data.includes('@ApplyAccessControlList')) {
+					logger.info(`Skipping ${file} as it already contains @ApplyAccessControlList decorator.`);
+					return;
+				}
+
 				// Find the tableName from the @Entity decorator line
 				const entityDecoratorMatch = data.match(/@Entity\(\{ tableName: '(\w+)' \}\)/);
 				if (entityDecoratorMatch) {

@@ -10,19 +10,9 @@ import { OrganizationComplianceAiResponseFile } from './organization-compliance-
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { read_only_acl, OrgContext } from '../../libs/acls/acl_policies';
 
-import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { read_only_acl, OrgContext } from '../../libs/acls/acl_policies';
-
-@ApplyAccessControlList(read_only_acl)
 @ApplyAccessControlList(read_only_acl)
 @Entity({ tableName: 'organization_compliance_ai_responses' })
 export class OrganizationComplianceAiResponse {
-	sidecar: OrganizationComplianceAiResponseHooks;
-
-	constructor() {
-		this.sidecar = new OrganizationComplianceAiResponseHooks();
-	}
-
 	sidecar: OrganizationComplianceAiResponseHooks;
 
 	constructor() {
@@ -67,70 +57,6 @@ export class OrganizationComplianceAiResponse {
 
 	@OneToMany({ entity: () => OrganizationComplianceAiResponseFile, mappedBy: 'organizationComplianceAiResponse' })
 	organizationComplianceAiResponseFiles = new Collection<OrganizationComplianceAiResponseFile>(this);
-
-	@Hook(HookRegister.BEFORE_CREATE)
-	async beforeCreate(params: CreateOrUpdateHookParams<typeof OrganizationComplianceAiResponse, OrgContext>) {
-		if(!this.sidecar) {
-	    this.sidecar = new OrganizationComplianceAiResponseHooks();
-	  }
-    return await this.sidecar.beforeCreateHook(params);
-	}
-
-	@Hook(HookRegister.AFTER_CREATE)
-	async afterCreate(params: CreateOrUpdateHookParams<typeof OrganizationComplianceAiResponse, OrgContext>) {
-	  if(!this.sidecar) {
-	    this.sidecar = new OrganizationComplianceAiResponseHooks();
-	  }
-    return await this.sidecar.afterCreateHook(params);
-	}
-
-	@Hook(HookRegister.BEFORE_READ)
-	async beforeRead(params: ReadHookParams<typeof OrganizationComplianceAiResponse, OrgContext>) {
-	  if(!this.sidecar) {
-	    this.sidecar = new OrganizationComplianceAiResponseHooks();
-	  }
-	  return await this.sidecar.beforeReadHook(params);
-	}
-	
-	@Hook(HookRegister.AFTER_READ)
-	async afterRead(params: ReadHookParams<typeof OrganizationComplianceAiResponse, OrgContext>) {
-	  if(!this.sidecar) {
-	    this.sidecar = new OrganizationComplianceAiResponseHooks();
-	  }
-	  return await this.sidecar.afterReadHook(params);
-	}
-	
-	@Hook(HookRegister.BEFORE_UPDATE)
-	async beforeUpdate(params: CreateOrUpdateHookParams<typeof OrganizationComplianceAiResponse, OrgContext>) {
-	  if(!this.sidecar) {
-	    this.sidecar = new OrganizationComplianceAiResponseHooks();
-	  }
-	  return await this.sidecar.beforeUpdateHook(params);
-	}
-	
-	@Hook(HookRegister.AFTER_UPDATE)
-	async afterUpdate(params: CreateOrUpdateHookParams<typeof OrganizationComplianceAiResponse, OrgContext>) {
-	  if(!this.sidecar) {
-	    this.sidecar = new OrganizationComplianceAiResponseHooks();
-	  }
-	  return await this.sidecar.afterUpdateHook(params);
-	}
-	
-	@Hook(HookRegister.BEFORE_DELETE)
-	async beforeDelete(params: DeleteHookParams<typeof OrganizationComplianceAiResponse, OrgContext>) {
-	  if(!this.sidecar) {
-	    this.sidecar = new OrganizationComplianceAiResponseHooks();
-	  }
-	  return await this.sidecar.beforeDeleteHook(params);
-	}
-	
-	@Hook(HookRegister.AFTER_DELETE)
-	async afterDelete(params: DeleteHookParams<typeof OrganizationComplianceAiResponse, OrgContext>) {
-	  if(!this.sidecar) {
-	    this.sidecar = new OrganizationComplianceAiResponseHooks();
-	  }
-	  return await this.sidecar.afterDeleteHook(params);
-	}
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof OrganizationComplianceAiResponse, OrgContext>) {

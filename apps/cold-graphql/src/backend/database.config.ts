@@ -3,7 +3,6 @@ import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
 export const connectionValues = () => {
 	const url = process.env.DATABASE_URL;
-	console.log('DATABASE_URL_STRING', url?.slice(8, 20));
 	if (!url) {
 		throw new Error('DATABASE_URL is not set');
 	}

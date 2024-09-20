@@ -163,8 +163,6 @@
     "freeplay": "^0.2.44",
     "global": "^4.4.0",
     "got": "^14.0.0",
-    "graphql": "16.9.0",
-    "graphweaver": "^2.3.0",
     "hex-color-opacity": "^0.4.2",
     "hot-shots": "^10.0.0",
     "html-to-image": "^1.11.11",
@@ -239,6 +237,9 @@
     "zod-prisma-types": "^2.7.9",
     "zodex": "^0.18.2"
   },
+	"resolutions": {
+		"graphql": "^16.9.0"
+	},
   "devDependencies": {
     "@auth0/nextjs-auth0": "^2.5.0",
     "@babel/core": "^7.21.3",
@@ -367,7 +368,7 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-unused-imports": "^3.0.0",
     "fakerator": "^0.3.6",
-    "graphql-cli": "4.1.0",
+    "graphql-cli": "^4.1.0",
     "husky": "^8.0.3",
     "jest": "^29.6.4",
     "jest-canvas-mock": "^2.5.0",

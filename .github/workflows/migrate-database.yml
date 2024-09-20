@@ -83,6 +83,22 @@ jobs:
 
       - name: Set DATABASE_URL
         run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
+      - name: Parse DATABASE_URL
+        run: |
+          regex="postgresql:\/\/([^:]+):([^@]+)@([^:]+):\d+\/(.+)"
+          if [[ ${{ env.DATABASE_URL }} =~ $regex ]]; then
+            username="${BASH_REMATCH[1]}"
+            password="${BASH_REMATCH[2]}"
+            host="${BASH_REMATCH[3]}"
+            dbName="${BASH_REMATCH[4]}"
+            echo "USERNAME=$username" >> $GITHUB_ENV
+            echo "PASSWORD=$password" >> $GITHUB_ENV
+            echo "HOST=$host" >> $GITHUB_ENV
+            echo "DB_NAME=$dbName" >> $GITHUB_ENV
+          else
+            echo "Invalid DATABASE_URL format"
+            exit 1
+          fi
       - name: Set NODE_ENV
         run: echo "NODE_ENV=$([[ $BRANCH_NAME == main* ]] && echo production || echo staging)" >> $GITHUB_ENV
       - name: Install dependencies
