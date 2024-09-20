@@ -1,3 +1,10 @@
+## [1.391.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.1...v1.391.2) (2024-09-20)
+
+
+### Bug Fixes
+
+* remove duplicate hooks and constructor definitions ([0f71004](https://github.com/ColdPBC/cold-monorepo/commit/0f71004395320e378e181e7e152d8db28004493b))
+
 ## [1.391.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.0...v1.391.1) (2024-09-20)
 
 
