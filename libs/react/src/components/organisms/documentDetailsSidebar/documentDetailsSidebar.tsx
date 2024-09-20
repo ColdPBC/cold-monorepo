@@ -10,7 +10,7 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation
 import { useSWRConfig } from 'swr';
 import { isSameDay } from 'date-fns';
 import { isApolloError } from '@apollo/client';
-import { getEffectiveEndDate, getEffectiveStartDate } from '@coldpbc/lib';
+import {getDateIrrespectiveOfTimeZone, getEffectiveEndDate, getEffectiveStartDate} from '@coldpbc/lib';
 
 const _DocumentDetailsSidebar = (props: {
 	file: FilesWithAssurances | undefined;
@@ -108,8 +108,8 @@ const _DocumentDetailsSidebar = (props: {
 
 			const startDate = getEffectiveStartDate(file);
 			const endDate = getEffectiveEndDate(file);
-			fileState['startDate'] = startDate ? new Date(startDate) : null;
-			fileState['endDate'] = endDate ? new Date(endDate) : null;
+			fileState['startDate'] = startDate ? getDateIrrespectiveOfTimeZone(startDate) : null;
+			fileState['endDate'] = endDate ? getDateIrrespectiveOfTimeZone(endDate) : null;
 
 			if (hasSustainabilityAttribute) {
 				fileState['sustainabilityAttribute'] = file.attributeAssurances[0]?.sustainabilityAttribute?.name || '';

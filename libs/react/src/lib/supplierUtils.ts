@@ -1,5 +1,6 @@
 import { differenceInDays } from 'date-fns';
 import { ClaimStatus } from '@coldpbc/enums';
+import {getDateIrrespectiveOfTimeZone} from "./dateUtils";
 
 export const getDateActiveStatus = (expirationDate: string | null) => {
   let text = ClaimStatus.Inactive;
@@ -7,7 +8,7 @@ export const getDateActiveStatus = (expirationDate: string | null) => {
     text = ClaimStatus.Inactive;
   } else {
     // get the difference between the current date and the date in the cell
-    const diff = differenceInDays(new Date(expirationDate), new Date());
+    const diff = differenceInDays(getDateIrrespectiveOfTimeZone(expirationDate), new Date());
     if (diff < 0) {
       text = ClaimStatus.Expired;
     } else if (diff < 60) {

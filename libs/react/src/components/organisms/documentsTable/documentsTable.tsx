@@ -7,7 +7,14 @@ import { capitalize } from 'lodash';
 import React from 'react';
 import {get, lowerCase, startCase, toArray, uniqWith} from 'lodash';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
-import { getDateActiveStatus, getEffectiveEndDate, getFileProcessingStatus, listFilterOperators, listSortComparator } from '@coldpbc/lib';
+import {
+  getDateActiveStatus,
+  getDateIrrespectiveOfTimeZone,
+  getEffectiveEndDate,
+  getFileProcessingStatus,
+  listFilterOperators,
+  listSortComparator
+} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext } from '@coldpbc/hooks';
 import { twMerge } from 'tailwind-merge';
@@ -204,7 +211,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 				name: file.originalName,
 				uploaded: new Date(file.createdAt),
 				status: getDateActiveStatus(effectiveEndDate),
-				expiration: effectiveEndDate ? new Date(effectiveEndDate) : new Date(0),
+				expiration: effectiveEndDate ? getDateIrrespectiveOfTimeZone(effectiveEndDate) : new Date(0),
 				type: file.type,
 				sustainability_attribute: sustainabilityAttribute,
 				associated_records: getAssociatedRecords(file),

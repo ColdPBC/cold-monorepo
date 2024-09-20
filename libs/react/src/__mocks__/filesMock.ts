@@ -1,5 +1,6 @@
 import { Files, FilesWithAssurances } from '@coldpbc/interfaces';
 import { addDays } from 'date-fns';
+import {filesProcessedWithDatesMocks} from "./graphql";
 
 export function getAllFilesMock() {
 	return [
@@ -380,6 +381,37 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 			},
 		},
 	];
+}
+
+export function filesProcessedWithDatesMock(): FilesWithAssurances[] {
+  return [
+    {
+      id: '1',
+      originalName: 'PFAS-Test Certificate.pdf',
+      createdAt: '2024-05-01T20:00:00.000Z',
+      type: "CERTIFICATE",
+      attributeAssurances: [],
+      metadata: {
+        summary: 'This is a summary',
+        effective_end_date: '2024-05-01',
+        effective_start_date: '2024-05-01',
+        status: 'ai_extracted',
+      },
+    },
+    {
+      id: '2',
+      originalName: 'Lead-Test Certificate.pdf',
+      createdAt: '2024-05-01T20:00:00.000Z',
+      type: "CERTIFICATE",
+      attributeAssurances: [],
+      metadata: {
+        summary: 'This is a summary',
+        effective_end_date: '2024-04-20',
+        effective_start_date: '2024-04-20',
+        status: 'ai_extracted',
+      },
+    },
+  ];
 }
 
 export const getFileTypesMock = (): string[] => {
