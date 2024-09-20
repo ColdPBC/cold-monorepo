@@ -94,7 +94,8 @@ jobs:
         run: echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> $GITHUB_ENV
 
       - name: Set DATABASE_USERNAME
-        run: echo "DATABASE_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+        run: echo "DATABASE_USERNAME=flightcontrol" >> $GITHUB_ENV
+        # run: echo "DATABASE_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
 
       - name: Set DATABASE_PASSWORD
         run: echo "DATABASE_PASSWORD=$([[ $BRANCH_NAME == main* ]] && echo '${{ secrets.PRODUCTION_DB_PASSWORD }}' || echo '${{ secrets.STAGING_DB_PASSWORD }}')" >> $GITHUB_ENV
