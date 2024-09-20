@@ -1,3 +1,10 @@
+## [1.393.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.1...v1.393.2) (2024-09-20)
+
+
+### Bug Fixes
+
+* **organization.files.service:** always send metrics and event data regardless of organization type ([720a3b5](https://github.com/ColdPBC/cold-monorepo/commit/720a3b561132b27fea4a230ab5e4fcd61be456fa))
+
 ## [1.393.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.0...v1.393.1) (2024-09-20)
 
 
