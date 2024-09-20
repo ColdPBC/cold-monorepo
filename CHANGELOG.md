@@ -1,3 +1,10 @@
+## [1.391.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.391.0...v1.391.1) (2024-09-20)
+
+
+### Bug Fixes
+
+* enhance database config output and add caching to GitHub workflow ([ef764b8](https://github.com/ColdPBC/cold-monorepo/commit/ef764b8874ad2bea2a63f4eb1dc59d1599148237))
+
 # [1.391.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.390.1...v1.391.0) (2024-09-20)
 
 
