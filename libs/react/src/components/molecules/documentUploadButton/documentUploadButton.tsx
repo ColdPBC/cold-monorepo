@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { forEach } from 'lodash';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { AxiosRequestConfig, isAxiosError } from 'axios';
-import { IButtonProps, ToastMessage } from '@coldpbc/interfaces';
+import { IButtonProps, ToastMessage, ToastMessageType } from '@coldpbc/interfaces';
 import { ErrorType } from '@coldpbc/enums';
 import { BaseButton } from '@coldpbc/components';
 import { KeyedMutator, useSWRConfig } from 'swr';
@@ -11,10 +11,12 @@ import { KeyedMutator, useSWRConfig } from 'swr';
 export interface DocumentUploadButtonProps {
   buttonProps: IButtonProps;
   mutateFunction?: KeyedMutator<any>;
+  successfulToastMessage?: Partial<ToastMessageType>;
+  failureToastMessage?: Partial<ToastMessageType>;
 }
 
 export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
-  const { buttonProps, mutateFunction } = props;
+  const { buttonProps, mutateFunction, successfulToastMessage, failureToastMessage } = props;
   const [sending, setSending] = React.useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId } = useAuth0Wrapper();
@@ -41,12 +43,14 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
       await addToastMessage({
         message: 'Upload failed',
         type: ToastMessage.FAILURE,
+        ...failureToastMessage,
       });
       logError(response.message, ErrorType.AxiosError);
     } else {
       await addToastMessage({
         message: 'Upload successful',
         type: ToastMessage.SUCCESS,
+        ...successfulToastMessage,
       });
       logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData } });
       if (mutateFunction) {

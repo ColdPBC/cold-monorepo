@@ -88,23 +88,36 @@ const _DocumentsPage = () => {
 		logBrowser('Error fetching files', 'error', { ...allFiles.error }, allFiles.error);
 	}
 
-	if (allFiles.isLoading || allSustainabilityAttributes.isLoading) {
+	if (allFiles.isLoading || allSustainabilityAttributes.isLoading || allFileTypes.isLoading) {
 		return <Spinner />;
 	}
 
-	const getPageButtons = () => {
-		return (
-			<div className={'h-auto'}>
-				<DocumentUploadButton
-					buttonProps={{
-						label: 'Add New',
-						iconLeft: IconNames.PlusIcon,
-					}}
-					mutateFunction={allFiles.mutate}
-				/>
-			</div>
-		);
-	};
+  const getPageButtons = () => {
+    return (
+      <div className={'h-auto'}>
+        <DocumentUploadButton
+          buttonProps={{
+            label: 'Add New',
+            iconLeft: IconNames.PlusIcon,
+          }}
+          mutateFunction={allFiles.mutate}
+          successfulToastMessage={{
+            message: (
+              <div className={'flex flex-col gap-[10px]'}>
+                <div className={'font-bold'}>Upload Complete</div>
+                <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
+              </div>
+            ),
+            position: 'bottomRight',
+          }}
+          failureToastMessage={{
+            message: 'Upload failed',
+            position: 'bottomRight',
+          }}
+        />
+      </div>
+    );
+  };
 
 	const deleteDocument = async (documentToDelete: FilesWithAssurances) => {
 		setDeleteButtonLoading(true);

@@ -170,6 +170,9 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 			],
 			metadata: {
 				summary: 'This is a summary',
+				effective_end_date: null,
+				effective_start_date: null,
+				status: 'ai_extracted',
 			},
 		},
 		{
@@ -229,6 +232,9 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 			],
 			metadata: {
 				summary: 'This is a summary',
+				effective_end_date: null,
+				effective_start_date: null,
+				status: 'ai_extracted',
 			},
 		},
 	];
@@ -269,6 +275,112 @@ export const suppliersForAssurancesMock: {
 		name: 'Supplier 3',
 	},
 ];
+
+export function getFilesProcessingMock(): FilesWithAssurances[] {
+	return [
+		{
+			id: '1',
+			originalName: 'PFAS-Test Certificate.pdf',
+			createdAt: '2024-05-01T20:00:00.000Z',
+			type: "CERTIFICATE",
+			attributeAssurances: [
+				{
+					id: '1',
+					effectiveStartDate: addDays(new Date(), 1).toISOString(),
+					effectiveEndDate: addDays(new Date(), 70).toISOString(),
+					sustainabilityAttribute: {
+						id: '6',
+						name: 'PFAS',
+						level: 'SUPPLIER',
+					},
+					organizationFacility: {
+						id: '1',
+						name: 'Supplier',
+						country: 'US',
+						supplierTier: 2,
+						materialSuppliers: [
+							{
+								material: {
+									id: '1',
+									name: 'Material',
+								},
+							},
+						],
+					},
+					material: null,
+				},
+			],
+			metadata: {
+				summary: 'This is a summary',
+				effective_end_date: null,
+				effective_start_date: null,
+				status: 'uploaded',
+			},
+		},
+		{
+			id: '2',
+			originalName: 'Lead-Test Certificate.pdf',
+			createdAt: '2024-05-01T20:00:00.000Z',
+			type: "CERTIFICATE",
+			attributeAssurances: [
+				{
+					id: '2',
+					effectiveStartDate: addDays(new Date(), 1).toISOString(),
+					effectiveEndDate: addDays(new Date(), 70).toISOString(),
+					sustainabilityAttribute: {
+						id: '4',
+						name: 'bluesign',
+						level: 'MATERIAL',
+					},
+					material: {
+						id: '1',
+						name: 'Material 1',
+						materialSuppliers: [
+							{
+								organizationFacility: {
+									id: '1',
+									name: 'Supplier',
+									supplierTier: 2,
+								},
+							},
+						],
+					},
+					organizationFacility: null,
+				},
+				{
+					id: '3',
+					effectiveStartDate: addDays(new Date(), 1).toISOString(),
+					effectiveEndDate: addDays(new Date(), 70).toISOString(),
+					sustainabilityAttribute: {
+						id: '4',
+						name: 'bluesign',
+						level: 'MATERIAL',
+					},
+					material: {
+						id: '2',
+						name: 'Material 2',
+						materialSuppliers: [
+							{
+								organizationFacility: {
+									id: '1',
+									name: 'Supplier',
+									supplierTier: 1,
+								},
+							},
+						],
+					},
+					organizationFacility: null,
+				},
+			],
+			metadata: {
+				summary: 'This is a summary',
+				effective_end_date: null,
+				effective_start_date: null,
+				status: 'uploaded',
+			},
+		},
+	];
+}
 
 export const getFileTypesMock = (): string[] => {
   return [

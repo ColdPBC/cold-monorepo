@@ -7,36 +7,38 @@ export interface ToasterProps {
 
 export const Toaster = (props: ToasterProps) => {
   const { toastMessage } = props;
-  const { message, type } = toastMessage;
+  const { message, type, position = 'top' } = toastMessage;
 
   const getHighlightClassName = () => {
     let className = '';
     switch (type) {
       case ToastMessage.FAILURE:
-        className = 'border-[1px] border-red-500';
+        className = 'border-[2px] border-red-500';
         break;
       case ToastMessage.INFO:
-        className = 'border-[1px] border-blue-500';
-        break;
-      case ToastMessage.FAILURE:
-        className = 'border-[1px] border-red-500';
-        break;
-      case ToastMessage.INFO:
-        className = 'border-[1px] border-blue-500';
+        className = 'border-[2px] border-blue-500';
         break;
       default:
-        className = 'border-[1px] border-tc-success';
+        className = 'border-[2px] border-tc-success';
         break;
     }
 
     return className;
   };
 
-  return (
-    <div className={'fixed w-full top-[40px] flex justify-center pb-6 z-30'}>
-      <div className={'w-auto rounded-[16px] p-[24px] bg-bgc-accent text-tc-primary ' + getHighlightClassName()}>
-        <div className="ml-3 text-sm font-normal">{message}</div>
-      </div>
-    </div>
-  );
+  const getToastPositionClassName = () => {
+    let className = '';
+    switch (position) {
+      case 'bottomRight':
+        className = ' fixed bottom-[40px] right-[40px]';
+        break;
+      default:
+        className = ' fixed top-[40px] left-[50%]';
+        break;
+    }
+
+    return className;
+  };
+
+  return <div className={'w-auto rounded-[16px] p-[24px] z-30 bg-bgc-accent text-tc-primary ' + getHighlightClassName() + getToastPositionClassName()}>{message}</div>;
 };

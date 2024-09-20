@@ -1,6 +1,5 @@
 import { Claims } from './claims';
 import { MaterialsWithCertifications } from './materials';
-import {file_types} from "@prisma/client";
 
 export interface Files {
 	id: string;
@@ -25,41 +24,44 @@ export interface FilesWithAssurances {
 	createdAt: string;
 	type: string;
 	attributeAssurances: AttributeAssurance[];
-	metadata: {
-		summary: string;
-	} | null;
+  metadata: {
+    effective_start_date: string | null;
+    effective_end_date: string | null;
+    status: string;
+    summary: string;
+  } | null;
 }
 
 export interface AttributeAssurance {
-	id: string;
-	effectiveStartDate: string | null;
-	effectiveEndDate: string | null;
-	organizationFacility: null | {
-		id: string;
-		name: string;
-		country: string | null;
-		supplierTier: number | null;
-		materialSuppliers: {
-			material: {
-				id: string;
-				name: string;
-			};
-		}[];
-	};
-	material: null | {
-		id: string;
-		name: string;
-		materialSuppliers: {
-			organizationFacility: {
-				id: string;
-				name: string;
-				supplierTier: number | null;
-			};
-		}[];
-	};
-	sustainabilityAttribute: {
-		id: string;
-		name: string;
-		level: string;
-	} | null;
+  id: string;
+  effectiveStartDate: string | null;
+  effectiveEndDate: string | null;
+  organizationFacility: null | {
+    id: string;
+    name: string;
+    country: string | null;
+    supplierTier: number | null;
+    materialSuppliers: {
+      material: {
+        id: string;
+        name: string;
+      };
+    }[];
+  };
+  material: null | {
+    id: string;
+    name: string;
+    materialSuppliers: {
+      organizationFacility: {
+        id: string;
+        name: string;
+        supplierTier: number | null;
+      };
+    }[];
+  };
+  sustainabilityAttribute: {
+    id: string;
+    name: string;
+    level: string;
+  } | null;
 }

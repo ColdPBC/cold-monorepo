@@ -1,7 +1,10 @@
+import { ReactNode } from 'react';
+
 export interface ToastMessageType {
-  message: string;
+  message: string | ReactNode;
   type?: ToastMessage;
   timeout?: number;
+  position?: 'top' | 'bottomRight';
 }
 
 export enum ToastMessage {

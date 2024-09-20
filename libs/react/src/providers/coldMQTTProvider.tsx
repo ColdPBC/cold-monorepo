@@ -7,6 +7,7 @@ import { SWRSubscription } from 'swr/subscription';
 import ColdMQTTContext from '../context/coldMQTTContext';
 import { resolveNodeEnv } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { getQueryMappingsForKey } from '@coldpbc/lib';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { logBrowser } = useColdContext();
@@ -104,6 +105,10 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
                 parsedStorage[parsedPayload.swr_key] = new Date().toISOString();
                 localStorage.setItem('api-calls', JSON.stringify(parsedStorage));
               }
+              const graphqlMappings = getQueryMappingsForKey(parsedPayload.swr_key);
+              forEach(graphqlMappings, async query => {
+                await mutate(query);
+              });
               await mutate([parsedPayload.swr_key, 'GET']);
             }
           } catch (e) {
