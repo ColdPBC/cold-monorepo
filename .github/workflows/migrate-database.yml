@@ -83,6 +83,15 @@ jobs:
 
       - name: Set DATABASE_URL
         run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
+      - name: Set DATABASE_NAME
+        run: echo "DATABASE_NAME=${{secrets.DATABASE_NAME}} >> $GITHUB_ENV
+      - name: Set DATABASE_USERNAME
+        run: echo "DATABASE_NAME=${{secrets.DB_USERNAME}} >> $GITHUB_ENV
+      - name: Set DATABASE_PASSWORD
+        run: echo "DATABASE_PASSWORD=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_PASSWORD }} || echo ${{ secrets.STAGING_DATABASE_PASSWORD }})" >> $GITHUB_ENV
+      - name: Set DATABASE_HOST
+        run: echo "DATABASE_PASSWORD=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DB_HOST }} || echo ${{ secrets.STAGING_DB_HOST }})" >> $GITHUB_ENV
+
       - name: Parse DATABASE_URL
         run: |
           regex="postgresql:\/\/([^:]+):([^@]+)@([^:]+):\d+\/(.+)"
