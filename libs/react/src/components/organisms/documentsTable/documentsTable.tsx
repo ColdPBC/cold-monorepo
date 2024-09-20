@@ -56,7 +56,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
     const fileStatus = getFileProcessingStatus(file);
     if (fileStatus === 'uploaded') {
       return (
-        <div className={'w-full h-full p-[0px]'}>
+        <div className={'w-full h-full py-[16px] px-[0px]'}>
           <div
             className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
             style={{
@@ -112,7 +112,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
     const fileStatus = getFileProcessingStatus(file);
     if (fileStatus === 'uploaded') {
       return (
-        <div className={'w-full h-full p-[0px]'}>
+        <div className={'w-full h-full py-[16px] px-[0px]'}>
           <div
             className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
             style={{
@@ -138,7 +138,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
     const fileStatus = getFileProcessingStatus(file);
     if (fileStatus === 'uploaded') {
       return (
-        <div className={'w-full h-full p-[0px]'}>
+        <div className={'w-full h-full py-[16px] px-[0px]'}>
           <div
             className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
             style={{
@@ -155,7 +155,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
     const fileStatus = getFileProcessingStatus(file);
     if (fileStatus === 'uploaded') {
       return (
-        <div className={'w-full h-full p-[0px]'}>
+        <div className={'w-full h-full py-[16px] px-[0px]'}>
           <div
             className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
             style={{
@@ -309,7 +309,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			<DataGrid
 				rows={tableRows}
 				columns={columns}
-				rowHeight={37}
+				rowHeight={55}
 				getRowClassName={() => {
 					return 'text-tc-primary cursor-pointer';
 				}}
@@ -355,7 +355,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 						},
 					},
 				}}
-				columnHeaderHeight={40}
+				columnHeaderHeight={55}
 				onRowClick={onRowClick}
 				autoHeight={true}
 				slots={{
