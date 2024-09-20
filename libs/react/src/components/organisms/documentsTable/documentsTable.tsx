@@ -42,7 +42,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
     }
     let dateString = '--';
     if (params.value.getTime() !== new Date(0).getTime()) {
-      dateString = format(new Date(params.value), 'MM/d/yy h:mm a');
+      dateString = format(new Date(params.value), 'M/d/yy h:mm a');
     }
     return (
       <div data-chromatic="ignore" className={twMerge('w-full h-full flex flex-row justify-start items-center', className)}>
@@ -124,7 +124,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 
     let dateString = '--';
     if (params.value.getTime() !== new Date(0).getTime()) {
-      dateString = format(new Date(params.value), 'MM/d/yy');
+      dateString = format(new Date(params.value), 'M/d/yy');
     }
     return (
       <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
