@@ -8,6 +8,9 @@ import { SurveyStatus } from './survey-status';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { read_only_acl, OrgContext } from '../../libs/acls/acl_policies';
 
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { read_only_acl, OrgContext } from '../../libs/acls/acl_policies';
+
 export enum SurveyDefinitionsType {
 	JOURNEY = 'JOURNEY',
 	FOOTPRINT = 'FOOTPRINT',
@@ -18,8 +21,15 @@ export enum SurveyDefinitionsType {
 }
 
 @ApplyAccessControlList(read_only_acl)
+@ApplyAccessControlList(read_only_acl)
 @Entity({ tableName: 'survey_definitions' })
 export class SurveyDefinition {
+	sidecar: SurveyDefinitionHooks;
+
+	constructor() {
+		this.sidecar = new SurveyDefinitionHooks();
+	}
+
 	sidecar: SurveyDefinitionHooks;
 
 	constructor() {
@@ -53,6 +63,70 @@ export class SurveyDefinition {
 
 	@OneToMany({ entity: () => SurveyStatus, mappedBy: 'surveyDefinition' })
 	surveyStatuses = new Collection<SurveyStatus>(this);
+
+	@Hook(HookRegister.BEFORE_CREATE)
+	async beforeCreate(params: CreateOrUpdateHookParams<typeof SurveyDefinition, OrgContext>) {
+		if(!this.sidecar) {
+	    this.sidecar = new SurveyDefinitionHooks();
+	  }
+    return await this.sidecar.beforeCreateHook(params);
+	}
+
+	@Hook(HookRegister.AFTER_CREATE)
+	async afterCreate(params: CreateOrUpdateHookParams<typeof SurveyDefinition, OrgContext>) {
+	  if(!this.sidecar) {
+	    this.sidecar = new SurveyDefinitionHooks();
+	  }
+    return await this.sidecar.afterCreateHook(params);
+	}
+
+	@Hook(HookRegister.BEFORE_READ)
+	async beforeRead(params: ReadHookParams<typeof SurveyDefinition, OrgContext>) {
+	  if(!this.sidecar) {
+	    this.sidecar = new SurveyDefinitionHooks();
+	  }
+	  return await this.sidecar.beforeReadHook(params);
+	}
+	
+	@Hook(HookRegister.AFTER_READ)
+	async afterRead(params: ReadHookParams<typeof SurveyDefinition, OrgContext>) {
+	  if(!this.sidecar) {
+	    this.sidecar = new SurveyDefinitionHooks();
+	  }
+	  return await this.sidecar.afterReadHook(params);
+	}
+	
+	@Hook(HookRegister.BEFORE_UPDATE)
+	async beforeUpdate(params: CreateOrUpdateHookParams<typeof SurveyDefinition, OrgContext>) {
+	  if(!this.sidecar) {
+	    this.sidecar = new SurveyDefinitionHooks();
+	  }
+	  return await this.sidecar.beforeUpdateHook(params);
+	}
+	
+	@Hook(HookRegister.AFTER_UPDATE)
+	async afterUpdate(params: CreateOrUpdateHookParams<typeof SurveyDefinition, OrgContext>) {
+	  if(!this.sidecar) {
+	    this.sidecar = new SurveyDefinitionHooks();
+	  }
+	  return await this.sidecar.afterUpdateHook(params);
+	}
+	
+	@Hook(HookRegister.BEFORE_DELETE)
+	async beforeDelete(params: DeleteHookParams<typeof SurveyDefinition, OrgContext>) {
+	  if(!this.sidecar) {
+	    this.sidecar = new SurveyDefinitionHooks();
+	  }
+	  return await this.sidecar.beforeDeleteHook(params);
+	}
+	
+	@Hook(HookRegister.AFTER_DELETE)
+	async afterDelete(params: DeleteHookParams<typeof SurveyDefinition, OrgContext>) {
+	  if(!this.sidecar) {
+	    this.sidecar = new SurveyDefinitionHooks();
+	  }
+	  return await this.sidecar.afterDeleteHook(params);
+	}
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof SurveyDefinition, OrgContext>) {
