@@ -1,3 +1,10 @@
+# [1.391.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.390.1...v1.391.0) (2024-09-20)
+
+
+### Features
+
+* add BRANCH_NAME environment variable to workflow ([79a497f](https://github.com/ColdPBC/cold-monorepo/commit/79a497f8c751b7a3d335722a8d81b14bc73a5256))
+
 ## [1.390.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.390.0...v1.390.1) (2024-09-20)
 
 
