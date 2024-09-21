@@ -1,3 +1,31 @@
+## [1.393.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.3...v1.393.4) (2024-09-20)
+
+
+### Bug Fixes
+
+* update instance storage in flightcontrol platform json ([86117a4](https://github.com/ColdPBC/cold-monorepo/commit/86117a46d8ef30205e7b490cc131152697334051))
+
+## [1.393.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.2...v1.393.3) (2024-09-20)
+
+
+### Bug Fixes
+
+* update test results classification case in extraction service ([1104dcc](https://github.com/ColdPBC/cold-monorepo/commit/1104dccdfa7a7a7b875ceaf062c4d3ed1148c039))
+
+## [1.393.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.1...v1.393.2) (2024-09-20)
+
+
+### Bug Fixes
+
+* **organization.files.service:** always send metrics and event data regardless of organization type ([720a3b5](https://github.com/ColdPBC/cold-monorepo/commit/720a3b561132b27fea4a230ab5e4fcd61be456fa))
+
+## [1.393.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.0...v1.393.1) (2024-09-20)
+
+
+### Bug Fixes
+
+* Update file metadata on failure ([f502f66](https://github.com/ColdPBC/cold-monorepo/commit/f502f66cbffdd9443a915358d81196b3b218bbb5))
+
 # [1.393.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.392.0...v1.393.0) (2024-09-20)
 
 

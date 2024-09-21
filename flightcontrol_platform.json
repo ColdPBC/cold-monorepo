@@ -125,7 +125,7 @@
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceStorage": 60
+            "instanceStorage": 100
           },
           "target": {
             "type": "ecs-ec2",
@@ -348,7 +348,7 @@
           "type": "web",
           "ci": {
             "type": "ec2",
-            "instanceStorage": 60
+            "instanceStorage": 100
           },
           "target": {
             "type": "ecs-ec2",

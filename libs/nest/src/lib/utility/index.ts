@@ -1,5 +1,6 @@
 export * from "./compliance.enums"
 export * from "./cuid2-generator.service"
+export * from "./date.functions"
 export * from "./object.util"
 export * from "./redis.queue.config"
 export * from "./generators/index"

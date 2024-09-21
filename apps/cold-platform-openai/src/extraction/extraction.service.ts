@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
+import { toUTCDate, BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import z from 'zod';
 import { attribute_assurances, file_types, organization_files, organizations } from '@prisma/client';
 import OpenAI from 'openai';
@@ -106,12 +106,13 @@ export class ExtractionService extends BaseWorker {
 
 			if (parsedResponse.effective_start_date || parsedResponse.effective_end_date) {
 				try {
-					updateData.effective_start_date = parsedResponse.effective_start_date ? new Date(parsedResponse.effective_start_date).toISOString() : undefined;
+					updateData.effective_start_date = parsedResponse.effective_start_date ? toUTCDate(parsedResponse.effective_start_date).toISOString() : undefined;
 				} catch (e) {
 					this.logger.error('Error parsing effective_start_date', { error: e, organization, user });
 				}
+
 				try {
-					updateData.effective_end_date = parsedResponse.effective_end_date ? new Date(parsedResponse.effective_end_date).toISOString() : undefined;
+					updateData.effective_end_date = parsedResponse.effective_end_date ? toUTCDate(parsedResponse.effective_end_date).toISOString() : undefined;
 				} catch (e) {
 					this.logger.error('Error parsing effective_start_date', { error: e, organization, user });
 				}
@@ -198,6 +199,13 @@ export class ExtractionService extends BaseWorker {
 				},
 			};
 
+			orgFile = await this.prisma.organization_files.update({
+				where: {
+					id: orgFile.id,
+				},
+				data: updateData,
+			});
+
 			this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
 				start,
 				sendEvent: true,
@@ -222,6 +230,7 @@ export class ExtractionService extends BaseWorker {
 				swr_key: `organization_files.${updateData.metadata.status}`,
 				org_id: organization.id,
 			});
+
 			throw e;
 		}
 	}
