@@ -8,8 +8,8 @@ import React from 'react';
 import {get, lowerCase, startCase, toArray, uniqWith} from 'lodash';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
 import {
+  addTZOffset,
   getDateActiveStatus,
-  getDateIrrespectiveOfTimeZone,
   getEffectiveEndDate,
   getFileProcessingStatus,
   listFilterOperators,
@@ -211,7 +211,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 				name: file.originalName,
 				uploaded: new Date(file.createdAt),
 				status: getDateActiveStatus(effectiveEndDate),
-				expiration: effectiveEndDate ? getDateIrrespectiveOfTimeZone(effectiveEndDate) : new Date(0),
+				expiration: effectiveEndDate ? addTZOffset(effectiveEndDate) : new Date(0),
 				type: file.type,
 				sustainability_attribute: sustainabilityAttribute,
 				associated_records: getAssociatedRecords(file),

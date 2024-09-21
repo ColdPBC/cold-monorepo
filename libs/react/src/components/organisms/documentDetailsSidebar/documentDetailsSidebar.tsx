@@ -10,7 +10,12 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation
 import { useSWRConfig } from 'swr';
 import { isSameDay } from 'date-fns';
 import { isApolloError } from '@apollo/client';
-import {getDateIrrespectiveOfTimeZone, getEffectiveEndDate, getEffectiveStartDate} from '@coldpbc/lib';
+import {
+  addTZOffset,
+  getEffectiveEndDate,
+  getEffectiveStartDate,
+  removeTZOffset
+} from '@coldpbc/lib';
 
 const _DocumentDetailsSidebar = (props: {
 	file: FilesWithAssurances | undefined;
@@ -108,8 +113,9 @@ const _DocumentDetailsSidebar = (props: {
 
 			const startDate = getEffectiveStartDate(file);
 			const endDate = getEffectiveEndDate(file);
-			fileState['startDate'] = startDate ? getDateIrrespectiveOfTimeZone(startDate) : null;
-			fileState['endDate'] = endDate ? getDateIrrespectiveOfTimeZone(endDate) : null;
+
+			fileState['startDate'] = startDate ? addTZOffset(startDate) : null;
+			fileState['endDate'] = endDate ? addTZOffset(endDate) : null;
 
 			if (hasSustainabilityAttribute) {
 				fileState['sustainabilityAttribute'] = file.attributeAssurances[0]?.sustainabilityAttribute?.name || '';
@@ -206,7 +212,11 @@ const _DocumentDetailsSidebar = (props: {
 						// @ts-ignore
 						value={fileState.startDate}
 						onChange={(date: Date | null) => {
-							setFileState({ ...fileState, startDate: date });
+              if(date) {
+                setFileState({...fileState, startDate: date});
+              } else {
+                setFileState({...fileState, startDate: date});
+              }
 						}}
 						slotProps={{
 							field: {
@@ -257,7 +267,11 @@ const _DocumentDetailsSidebar = (props: {
 						// @ts-ignore
 						value={fileState.endDate}
 						onChange={(date: Date | null) => {
-							setFileState({ ...fileState, endDate: date });
+              if(date) {
+                setFileState({...fileState, endDate: date});
+              } else {
+                setFileState({...fileState, endDate: date});
+              }
 						}}
 						slotProps={{
 							field: {
@@ -414,8 +428,8 @@ const _DocumentDetailsSidebar = (props: {
 				if (file.metadata) {
 					variables.input.metadata = {
 						...file.metadata,
-						effective_start_date: fileState.startDate,
-						effective_end_date: fileState.endDate,
+						effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+						effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
 					};
 				}
 				promises.push(updateDocument(variables));
@@ -473,8 +487,8 @@ const _DocumentDetailsSidebar = (props: {
 						updateAssurance({
 							input: {
 								id: assurance.id,
-								effectiveStartDate: fileState.startDate,
-								effectiveEndDate: fileState.endDate,
+								effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+								effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
 								sustainabilityAttribute: {
 									id: sustainabilityAttribute?.id,
 								},
@@ -488,8 +502,8 @@ const _DocumentDetailsSidebar = (props: {
 				promises.push(
 					createAttributeAssurance({
 						input: {
-							effectiveStartDate: fileState.startDate,
-							effectiveEndDate: fileState.endDate,
+							effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+							effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
 							organizationFile: {
 								id: fileState.id,
 							},
