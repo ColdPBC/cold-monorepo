@@ -1,3 +1,21 @@
+# [1.394.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.4...v1.394.0) (2024-09-21)
+
+
+### Bug Fixes
+
+* adjust date calculation and include expiration date in file records ([660b940](https://github.com/ColdPBC/cold-monorepo/commit/660b940333f4ad890d271382f78d7859690afe2c))
+* adjust day count calculation in document status display ([89ff433](https://github.com/ColdPBC/cold-monorepo/commit/89ff433ec5f1d8e373a9e2718dd2c3fbbba12db7))
+* ensure document sidebar is properly layered in the UI ([dfac365](https://github.com/ColdPBC/cold-monorepo/commit/dfac3659e040441fabdaa154006d86b623e3b197))
+* replace getDateIrrespectiveOfTimeZone with addTZOffset and removeTZOffset ([919a67a](https://github.com/ColdPBC/cold-monorepo/commit/919a67a18df9e7d52583468305001434bf2fed4a))
+
+
+### Features
+
+* correct date formatting in DocumentsTable component ([00c63b4](https://github.com/ColdPBC/cold-monorepo/commit/00c63b491e98846247893d381fcc353a5d301023))
+* handle non-ISO date strings with local timezone in documents ([46af39e](https://github.com/ColdPBC/cold-monorepo/commit/46af39e3b328e008b8ad2ef7b03312c0dd96edf5))
+* set default sorting to documentsTable and update filesMock date ([ed8a410](https://github.com/ColdPBC/cold-monorepo/commit/ed8a410476a0c2b958a8e76d1fa12e3585499b99))
+* update spacing and dimensions in DocumentsTable ([c1124d7](https://github.com/ColdPBC/cold-monorepo/commit/c1124d789338f7079c4ce0bc4fb18ad0d11a8f3c))
+
 ## [1.393.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.3...v1.393.4) (2024-09-20)
 
 
