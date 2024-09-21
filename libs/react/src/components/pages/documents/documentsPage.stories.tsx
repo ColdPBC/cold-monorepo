@@ -1,7 +1,13 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { DocumentsPage } from '@coldpbc/components';
-import { filesProcessingMocks, filesWithAssurancesMocks, filesWithOutAssurancesMocks, StoryMockProvider } from '@coldpbc/mocks';
+import {
+  filesProcessedWithDatesMocks,
+  filesProcessingMocks,
+  filesWithAssurancesMocks,
+  filesWithOutAssurancesMocks,
+  StoryMockProvider
+} from '@coldpbc/mocks';
 
 const meta: Meta<typeof DocumentsPage> = {
   title: 'Pages/DocumentsPage',
@@ -13,7 +19,7 @@ const meta: Meta<typeof DocumentsPage> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const FilesWithNoAssurances: Story = {
+export const FilesWithNoAssurancesNoDates: Story = {
   render: () => {
     return (
       <StoryMockProvider graphqlMocks={filesWithOutAssurancesMocks}>
@@ -37,6 +43,16 @@ export const FilesProcessing: Story = {
   render: () => {
     return (
       <StoryMockProvider graphqlMocks={filesProcessingMocks}>
+        <DocumentsPage />
+      </StoryMockProvider>
+    );
+  },
+};
+
+export const FilesProcessedWithDates: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider graphqlMocks={filesProcessedWithDatesMocks}>
         <DocumentsPage />
       </StoryMockProvider>
     );

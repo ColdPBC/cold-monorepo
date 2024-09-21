@@ -8,7 +8,14 @@ import {
   UPDATE_DOCUMENT_ASSURANCE,
   UPDATE_DOCUMENT_FIELDS,
 } from '@coldpbc/lib';
-import { getFilesProcessingMock, getFilesWithAssurances, getFilesWithoutAssurances, materialsForAssurancesMock, suppliersForAssurancesMock } from '../filesMock';
+import {
+  filesProcessedWithDatesMock,
+  getFilesProcessingMock,
+  getFilesWithAssurances,
+  getFilesWithoutAssurances,
+  materialsForAssurancesMock,
+  suppliersForAssurancesMock
+} from '../filesMock';
 import { getClaimsMock } from '../claimsMock';
 import { DocumentNode } from '@apollo/client';
 import { RequestHandler } from 'mock-apollo-client';
@@ -409,4 +416,19 @@ export const filesProcessingMocks: {
 				},
 			}),
 	},
+];
+
+export const filesProcessedWithDatesMocks: {
+  query: DocumentNode;
+  handler: RequestHandler;
+}[] = [
+  {
+    query: GET_ALL_FILES,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          organizationFiles: filesProcessedWithDatesMock(),
+        },
+      }),
+  },
 ];

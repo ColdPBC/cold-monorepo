@@ -7,7 +7,14 @@ import { capitalize } from 'lodash';
 import React from 'react';
 import {get, lowerCase, startCase, toArray, uniqWith} from 'lodash';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
-import { getDateActiveStatus, getEffectiveEndDate, getFileProcessingStatus, listFilterOperators, listSortComparator } from '@coldpbc/lib';
+import {
+  addTZOffset,
+  getDateActiveStatus,
+  getEffectiveEndDate,
+  getFileProcessingStatus,
+  listFilterOperators,
+  listSortComparator
+} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext } from '@coldpbc/hooks';
 import { twMerge } from 'tailwind-merge';
@@ -35,7 +42,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
     }
     let dateString = '--';
     if (params.value.getTime() !== new Date(0).getTime()) {
-      dateString = format(new Date(params.value), 'MM/d/yy h:mm a');
+      dateString = format(new Date(params.value), 'M/d/yy h:mm a');
     }
     return (
       <div data-chromatic="ignore" className={twMerge('w-full h-full flex flex-row justify-start items-center', className)}>
@@ -49,7 +56,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
     const fileStatus = getFileProcessingStatus(file);
     if (fileStatus === 'uploaded') {
       return (
-        <div className={'w-full h-full p-[0px]'}>
+        <div className={'w-full h-full py-[16px] px-[0px]'}>
           <div
             className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
             style={{
@@ -72,12 +79,12 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
           );
         case ClaimStatus.ExpiringSoon:
           if (expirationDate) {
-            diff = differenceInDays(new Date(expirationDate), new Date());
+            diff = differenceInDays(addTZOffset(expirationDate), new Date());
           }
           return (
             <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[4px] pl-[4px] text-tc-secondary'}>
               <ColdIcon name={IconNames.ColdExpiringIcon} color={HexColors.yellow['200']} />
-              <span className={'text-yellow-200'}>{diff} days</span>
+              <span className={'text-yellow-200'}>{diff + 1} days</span>
             </div>
           );
         case ClaimStatus.Active:
@@ -105,7 +112,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
     const fileStatus = getFileProcessingStatus(file);
     if (fileStatus === 'uploaded') {
       return (
-        <div className={'w-full h-full p-[0px]'}>
+        <div className={'w-full h-full py-[16px] px-[0px]'}>
           <div
             className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
             style={{
@@ -117,7 +124,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 
     let dateString = '--';
     if (params.value.getTime() !== new Date(0).getTime()) {
-      dateString = format(new Date(params.value), 'MM/d/yy');
+      dateString = format(new Date(params.value), 'M/d/yy');
     }
     return (
       <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
@@ -131,7 +138,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
     const fileStatus = getFileProcessingStatus(file);
     if (fileStatus === 'uploaded') {
       return (
-        <div className={'w-full h-full p-[0px]'}>
+        <div className={'w-full h-full py-[16px] px-[0px]'}>
           <div
             className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
             style={{
@@ -148,7 +155,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
     const fileStatus = getFileProcessingStatus(file);
     if (fileStatus === 'uploaded') {
       return (
-        <div className={'w-full h-full p-[0px]'}>
+        <div className={'w-full h-full py-[16px] px-[0px]'}>
           <div
             className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
             style={{
@@ -204,10 +211,11 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 				name: file.originalName,
 				uploaded: new Date(file.createdAt),
 				status: getDateActiveStatus(effectiveEndDate),
-				expiration: effectiveEndDate ? new Date(effectiveEndDate) : new Date(0),
+				expiration: effectiveEndDate ? addTZOffset(effectiveEndDate) : new Date(0),
 				type: file.type,
 				sustainability_attribute: sustainabilityAttribute,
 				associated_records: getAssociatedRecords(file),
+        expiration_date: effectiveEndDate,
 			};
 		})
 		.sort((a, b) => {
@@ -302,7 +310,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			<DataGrid
 				rows={tableRows}
 				columns={columns}
-				rowHeight={37}
+				rowHeight={55}
 				getRowClassName={() => {
 					return 'text-tc-primary cursor-pointer';
 				}}
@@ -348,12 +356,17 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 						},
 					},
 				}}
-				columnHeaderHeight={40}
+				columnHeaderHeight={55}
 				onRowClick={onRowClick}
 				autoHeight={true}
 				slots={{
 					noRowsOverlay: MUIDataGridNoRowsOverlay,
 				}}
+        initialState={{
+          sorting: {
+            sortModel: [{ field: 'uploaded', sort: 'desc' }],
+          },
+        }}
 			/>
 		</div>
 	);
