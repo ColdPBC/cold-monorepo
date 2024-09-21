@@ -79,7 +79,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
           );
         case ClaimStatus.ExpiringSoon:
           if (expirationDate) {
-            diff = differenceInDays(new Date(expirationDate), new Date());
+            diff = differenceInDays(addTZOffset(expirationDate), new Date());
           }
           return (
             <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[4px] pl-[4px] text-tc-secondary'}>
@@ -215,6 +215,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 				type: file.type,
 				sustainability_attribute: sustainabilityAttribute,
 				associated_records: getAssociatedRecords(file),
+        expiration_date: effectiveEndDate,
 			};
 		})
 		.sort((a, b) => {
