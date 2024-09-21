@@ -1,12 +1,3 @@
-import {parseISO} from "date-fns";
-
-
-export const getDateIrrespectiveOfTimeZone = (dateString: string) => {
-  const date = new Date(dateString);
-  const localDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-  return localDate;
-}
-
 export const addTZOffset = (dateString: string) => {
   const date = new Date(dateString);
   const localDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
