@@ -84,7 +84,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
           return (
             <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[4px] pl-[4px] text-tc-secondary'}>
               <ColdIcon name={IconNames.ColdExpiringIcon} color={HexColors.yellow['200']} />
-              <span className={'text-yellow-200'}>{diff} days</span>
+              <span className={'text-yellow-200'}>{diff + 1} days</span>
             </div>
           );
         case ClaimStatus.Active:
