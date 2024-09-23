@@ -1,3 +1,12 @@
+# [1.395.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.394.0...v1.395.0) (2024-09-23)
+
+
+### Features
+
+* add certificate number handling in document details ([a11f3fe](https://github.com/ColdPBC/cold-monorepo/commit/a11f3fe119a6cc9e09ff41cdd7501a4164c4a083))
+* simplify document state type in DocumentsAddAssuranceModal ([cb20e8b](https://github.com/ColdPBC/cold-monorepo/commit/cb20e8b3e42098462c7f058b2d4c9932f67c758e))
+* update document table and page layout for better UI ([472f811](https://github.com/ColdPBC/cold-monorepo/commit/472f811966650789778ee1673dd6cb41c900502b))
+
 # [1.394.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.393.4...v1.394.0) (2024-09-21)
 
 
