@@ -23,59 +23,63 @@ import { EventsModule } from '../../cold-api/src/platform/modules/utilities/even
 import { ExtractionModule } from './extraction/extraction.module';
 
 @Module({
-  imports: [FreeplayModule, CrawlerModule, ExtractionModule],
-  providers: [],
+	imports: [FreeplayModule, CrawlerModule, ExtractionModule],
+	providers: [],
 })
 export class AppModule {
-  static async forRootAsync() {
-    //const config = new ConfigService();
+	static async forRootAsync() {
+		//const config = new ConfigService();
 
-    return {
-      module: AppModule,
-      imports: [
-        await NestModule.forRootAsync(),
-        await EventsModule.forRootAsync(),
-        BullModule.registerQueue({
-          name: 'openai',
-        }),
-        MulterModule.register({
-          dest: './uploads',
-        }),
-        BullModule.registerQueue({
-          name: 'openai_crawler',
-        }),
-        ServeStaticModule.forRoot({
-          serveStaticOptions: {
-            index: false,
-            fallthrough: true,
-          },
-          serveRoot: '../../../assets',
-        }),
-        PrismaModule,
-        await ColdRabbitModule.forRootAsync(),
-        AssistantModule,
-        PineconeModule,
-        LangchainModule,
-        LoadersModule,
-        ExtractionModule,
-        await CrawlerModule.forRootAsync(),
-        ChatModule,
-      ],
-      controllers: [OpenAIController],
-      providers: [
-        FileService,
-        JobConsumer,
-        RabbitService,
-        AppService,
-        {
-          provide: APP_INTERCEPTOR,
-          useClass: OrgUserInterceptor,
-        },
-        AssistantService,
-        ChatService,
-        Tools,
-      ],
-      exports: [],
-    };
-  }
+		return {
+			module: AppModule,
+			imports: [
+				await NestModule.forRootAsync(),
+				await EventsModule.forRootAsync(),
+				BullModule.registerQueue({
+					name: 'openai',
+					settings: {
+						stalledInterval: 3600000,
+						maxStalledCount: 3,
+					},
+				}),
+				MulterModule.register({
+					dest: './uploads',
+				}),
+				BullModule.registerQueue({
+					name: 'openai_crawler',
+				}),
+				ServeStaticModule.forRoot({
+					serveStaticOptions: {
+						index: false,
+						fallthrough: true,
+					},
+					serveRoot: '../../../assets',
+				}),
+				PrismaModule,
+				await ColdRabbitModule.forRootAsync(),
+				AssistantModule,
+				PineconeModule,
+				LangchainModule,
+				LoadersModule,
+				ExtractionModule,
+				await CrawlerModule.forRootAsync(),
+				ChatModule,
+			],
+			controllers: [OpenAIController],
+			providers: [
+				FileService,
+				JobConsumer,
+				RabbitService,
+				AppService,
+				{
+					provide: APP_INTERCEPTOR,
+					useClass: OrgUserInterceptor,
+				},
+				AssistantService,
+				ChatService,
+				Tools,
+			],
+			exports: [],
+		};
+	}
 }
