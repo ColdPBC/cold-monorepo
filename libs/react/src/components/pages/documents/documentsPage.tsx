@@ -236,7 +236,7 @@ const _DocumentsPage = () => {
 
 	return (
 		<div className="relative overflow-y-auto h-full w-full">
-			<MainContent title="Documents" className={'gap-[40px]'} headerElement={getPageButtons()}>
+			<MainContent title="Documents" className={'gap-[40px] w-[calc(100%-100px)] min-w-[1129px]'} headerElement={getPageButtons()}>
 				<DocumentsHeaderTypes files={files} />
 				<DocumentsTable files={files} sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])} selectDocument={selectDocument} />
 			</MainContent>
