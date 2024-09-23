@@ -30,7 +30,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
     if (fileStatus === 'uploaded') {
       className = 'text-tc-disabled font-bold';
     }
-    return <div className={twMerge('w-full h-full flex flex-row justify-start items-center', className)}>{params.value}</div>;
+    return <div className={twMerge('overflow-hidden text-ellipsis ', className)}>{params.value}</div>;
   };
 
   const renderUploadDate = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
@@ -147,7 +147,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
         </div>
       );
     }
-    return <div className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>{params.value}</div>;
+    return <div className={'text-tc-secondary overflow-hidden text-ellipsis'}>{params.value}</div>;
   };
 
   const renderAssociatedRecords = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
@@ -233,7 +233,8 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			field: 'name',
 			headerName: 'Name',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
-			width: 200,
+      flex: 1,
+			minWidth: 200,
       renderCell: renderName,
 		},
 		{
@@ -281,7 +282,8 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			headerName: 'Sustainability Attribute',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 			type: 'singleSelect',
-			width: 200,
+      flex: 1,
+			minWidth: 200,
 			valueOptions: sustainabilityAttributes.map(attribute => attribute.name),
       renderCell: renderType,
 		},

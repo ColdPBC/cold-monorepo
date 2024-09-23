@@ -29,6 +29,7 @@ export interface FilesWithAssurances {
     effective_end_date: string | null;
     status: string;
     summary: string;
+    certificate_number?: string | null;
   } | null;
 }
 

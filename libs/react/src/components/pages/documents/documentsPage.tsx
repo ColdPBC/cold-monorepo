@@ -1,5 +1,16 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLSWR, useOrgSWR } from '@coldpbc/hooks';
-import { DocumentDetailsSidebar, DocumentsHeaderTypes, DocumentsTable, DocumentUploadButton, ErrorFallback, MainContent, Modal, Spinner, DocumentsAddAssuranceModal } from '@coldpbc/components';
+import {
+  DocumentDetailsSidebar,
+  DocumentsHeaderTypes,
+  DocumentsTable,
+  DocumentUploadButton,
+  ErrorFallback,
+  MainContent,
+  Modal,
+  Spinner,
+  DocumentsAddAssuranceModal,
+  DocumentDetailsSidebarFileState
+} from '@coldpbc/components';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { FilesWithAssurances, SchemaEnum, ToastMessage } from '@coldpbc/interfaces';
@@ -12,18 +23,10 @@ const _DocumentsPage = () => {
 	const [selectedDocument, setSelectedDocument] = React.useState<string | undefined>(undefined);
 	const [documentToDelete, setDocumentToDelete] = React.useState<FilesWithAssurances | undefined>(undefined);
 	const [documentToAddAssurance, setDocumentToAddAssurance] = React.useState<
-		| {
-				fileState: {
-					id: string;
-					type: string;
-					originalName: string;
-					metadata: any;
-					startDate: Date | null;
-					endDate: Date | null;
-					sustainabilityAttribute: string;
-				};
-				isAdding: boolean;
-		  }
+		{
+        fileState: DocumentDetailsSidebarFileState;
+        isAdding: boolean;
+    }
 		| undefined
 	>(undefined);
 	const [deleteButtonLoading, setDeleteButtonLoading] = React.useState(false);
@@ -215,15 +218,7 @@ const _DocumentsPage = () => {
 	};
 
 	const onAddAssuranceClick = (
-		fileState: {
-			id: string;
-			type: string;
-			originalName: string;
-			metadata: any;
-			startDate: Date | null;
-			endDate: Date | null;
-			sustainabilityAttribute: string;
-		},
+		fileState: DocumentDetailsSidebarFileState,
 		isAdding: boolean,
 	) => {
 		setDocumentToAddAssurance({
@@ -236,7 +231,7 @@ const _DocumentsPage = () => {
 
 	return (
 		<div className="relative overflow-y-auto h-full w-full">
-			<MainContent title="Documents" className={'gap-[40px]'} headerElement={getPageButtons()}>
+			<MainContent title="Documents" className={'gap-[40px] w-[calc(100%-100px)] min-w-[1129px]'} headerElement={getPageButtons()}>
 				<DocumentsHeaderTypes files={files} />
 				<DocumentsTable files={files} sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])} selectDocument={selectDocument} />
 			</MainContent>

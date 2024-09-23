@@ -1,4 +1,4 @@
-import { ErrorFallback, Modal, Select, Spinner } from '@coldpbc/components';
+import {DocumentDetailsSidebarFileState, ErrorFallback, Modal, Select, Spinner} from '@coldpbc/components';
 import { ButtonTypes } from '@coldpbc/enums';
 import React, { useEffect } from 'react';
 import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
@@ -12,15 +12,7 @@ export const _DocumentsAddAssuranceModal = (props: {
 	files: FilesWithAssurances[];
 	allSustainabilityAttributes: Claims[];
 	documentToAddAssurance: {
-		fileState: {
-			id: string;
-			type: string;
-			originalName: string;
-			metadata: any;
-			startDate: Date | null;
-			endDate: Date | null;
-			sustainabilityAttribute: string;
-		};
+		fileState: DocumentDetailsSidebarFileState;
 		isAdding: boolean;
 	};
 	close: () => void;

@@ -62,6 +62,21 @@ export const WithAssurancesMaterialClaim: Story = {
     fileTypes: getFileTypesMock(),
 	},
 };
+
+export const NonCertificateDocument: Story = {
+  render: args => {
+    return <SidebarStory {...args} />;
+  },
+  args: {
+    file: getFilesWithAssurances()[1],
+    innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
+    sustainabilityAttributes: getClaimsMock(),
+    fileTypes: getFileTypesMock(),
+  },
+};
+
 const SidebarStory = (props: {
 	file: FilesWithAssurances | undefined;
 	sustainabilityAttributes: Claims[];
