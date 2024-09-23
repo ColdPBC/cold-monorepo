@@ -11,15 +11,31 @@ export const email = z.string().describe('If the content contains an applicant e
 export const phone = z.string().describe('If the content contains an applicant phone number, place it here');
 export const website = z.string().describe('If the content contains an applicant website, place it here');
 
+export const contact = z.object({
+	email,
+	phone,
+	website,
+});
+
+// location
+export const location = z.object({
+	address_line_1,
+	address_line_2,
+	city,
+	state_province,
+	postal_code,
+	country,
+});
+
 // dates
 export const effective_start_date = z
-  .string()
-  .describe('Look for effective start date or date the document was signed and place it here as an ISO 8601 formatted dated.  If not found, leave blank');
+	.string()
+	.describe('Look for effective start date or date the document was signed and place it here as an ISO 8601 formatted dated.  If not found, leave blank');
 export const effective_end_date = z.string().describe('Look for effective end date or expiration date and place it here as an ISO 8601 formatted date.  If not found, leave blank');
 
 // content summary
 export const summary = z
-  .string()
-  .describe('Summarize the content here, be sure to include any relevant information that may be useful for the user in identifying the purpose of the document');
+	.string()
+	.describe('Summarize the content here, be sure to include any relevant information that may be useful for the user in identifying the purpose of the document');
 
 export const version = z.string().describe('If the content has a version, place it here.  If not found, leave blank');
