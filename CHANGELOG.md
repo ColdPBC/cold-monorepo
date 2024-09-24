@@ -1,3 +1,10 @@
+## [1.398.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.398.0...v1.398.1) (2024-09-24)
+
+
+### Bug Fixes
+
+* correct async handling for file upload mutations ([1d8abd0](https://github.com/ColdPBC/cold-monorepo/commit/1d8abd030f56d692c5a502ec86c7de55c9f73da3))
+
 # [1.398.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.397.0...v1.398.0) (2024-09-24)
 
 
