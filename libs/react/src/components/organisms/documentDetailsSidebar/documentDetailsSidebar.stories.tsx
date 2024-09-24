@@ -8,7 +8,7 @@ import {
   getFileTypesMock,
   StoryMockProvider
 } from '@coldpbc/mocks';
-import { DocumentDetailsSidebar, DocumentsAddAssuranceModal } from '@coldpbc/components';
+import {DocumentDetailsSidebar, DocumentDetailsSidebarFileState, DocumentsAddAssuranceModal} from '@coldpbc/components';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
 
 const meta = {
@@ -93,15 +93,7 @@ const SidebarStory = (props: {
 	const [selectedFile, setSelectedFile] = React.useState<FilesWithAssurances | undefined>(file);
 	const [addAssuranceFile, setAddAssuranceFile] = React.useState<
 		| {
-				fileState: {
-					id: string;
-					type: string;
-					originalName: string;
-					metadata: any;
-					startDate: Date | null;
-					endDate: Date | null;
-					sustainabilityAttribute: string;
-				};
+				fileState: DocumentDetailsSidebarFileState;
 				isAdding: boolean;
 		  }
 		| undefined
@@ -123,15 +115,7 @@ const SidebarStory = (props: {
 				signedUrl={''}
 				isLoading={false}
 				addAssurance={(
-					fileState: {
-						id: string;
-						type: string;
-						originalName: string;
-						metadata: any;
-						startDate: Date | null;
-						endDate: Date | null;
-						sustainabilityAttribute: string;
-					},
+					fileState: DocumentDetailsSidebarFileState,
 					isAdding: boolean,
 				) => {
 					setAddAssuranceFile({ fileState, isAdding });
