@@ -1,3 +1,17 @@
+# [1.398.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.397.0...v1.398.0) (2024-09-24)
+
+
+### Bug Fixes
+
+* update icon import path and wrap ComboBox in a div for width constraint ([cd8348f](https://github.com/ColdPBC/cold-monorepo/commit/cd8348f0b409eb27f9509dc44601fea4e1fd9a43))
+
+
+### Features
+
+* add logging to useGraphQLSWR for query success and error ([fa26cdf](https://github.com/ColdPBC/cold-monorepo/commit/fa26cdf8229b94656244979a1f432c9dd48ab5a2))
+* add return type in SWRResponse ([a2eb395](https://github.com/ColdPBC/cold-monorepo/commit/a2eb395138ddf0f3553e93e67c71e49643a75577))
+* add visibility flag to documents query ([00b6198](https://github.com/ColdPBC/cold-monorepo/commit/00b6198edbc739b58af93d29dadfd619bd2b589d))
+
 # [1.397.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.396.0...v1.397.0) (2024-09-24)
 
 
