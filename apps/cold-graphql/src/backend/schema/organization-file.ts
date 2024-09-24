@@ -97,6 +97,9 @@ export class OrganizationFile {
 	@Field(() => GraphQLJSON, { nullable: true })
 	metadata?: Record<string, unknown>;
 
+	@Field(() => Boolean)
+	visible = true;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'organizationFile' })
 	attributeAssurances!: AttributeAssurance[];
 

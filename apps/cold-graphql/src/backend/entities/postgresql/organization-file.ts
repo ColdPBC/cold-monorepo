@@ -117,6 +117,9 @@ export class OrganizationFile {
 	@Property({ type: 'json', nullable: true })
 	metadata?: Record<string, unknown>;
 
+	@Property({ type: 'boolean', default: true })
+	visible = true;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'organizationFile' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 
