@@ -43,6 +43,7 @@ const _DocumentsPage = () => {
 			organization: {
 				id: orgId,
 			},
+      visible: true,
 		},
 	});
 	const allSustainabilityAttributes = useGraphQLSWR('GET_ALL_SUS_ATTRIBUTES', {
