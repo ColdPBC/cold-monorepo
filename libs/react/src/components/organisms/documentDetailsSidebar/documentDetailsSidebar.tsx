@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect } from 'react';
 import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
 import {
   BaseButton,
-  ColdIcon,
+  ColdIcon, ComboBox,
   DocumentDetailsMenu,
   DocumentMaterialsTable,
   DocumentSuppliersTable,
@@ -105,7 +105,7 @@ const _DocumentDetailsSidebar = (props: {
 				metadata: file.metadata,
 				startDate: null,
 				endDate: null,
-				sustainabilityAttribute: 'None',
+				sustainabilityAttribute: '-1',
         certificate_number: null
 			};
 
@@ -116,7 +116,7 @@ const _DocumentDetailsSidebar = (props: {
 			fileState['endDate'] = endDate ? addTZOffset(endDate) : null;
 
 			if (hasSustainabilityAttribute) {
-				fileState['sustainabilityAttribute'] = file.attributeAssurances[0]?.sustainabilityAttribute?.name || '';
+				fileState['sustainabilityAttribute'] = file.attributeAssurances[0]?.sustainabilityAttribute?.id || '-1';
 			}
 
       if(file.type === 'CERTIFICATE') {
@@ -153,7 +153,7 @@ const _DocumentDetailsSidebar = (props: {
 		const selectSustainabilityAttributeOption = {
 			id: -1,
 			name: 'None',
-			value: '',
+			value: '-1',
 		};
 
 		const susAttributes: InputOption[] = [selectSustainabilityAttributeOption];
@@ -168,13 +168,13 @@ const _DocumentDetailsSidebar = (props: {
 		return (
 			<div className={'w-full flex flex-col gap-[8px]'}>
 				<div className={'w-full text-tc-primary text-eyebrow'}>Sustainability Attribute</div>
-				<Select
+				<ComboBox
 					options={susAttributes}
 					name={'sustainabilityAttribute'}
 					value={fileState.sustainabilityAttribute}
 					onChange={(e: InputOption) => {
 						if (fileState === undefined) return;
-						setFileState({ ...fileState, sustainabilityAttribute: e.name });
+						setFileState({ ...fileState, sustainabilityAttribute: e.value });
 					}}
 					buttonClassName={'w-full border-[1.5px] border-gray-90 rounded-[8px]'}
 				/>
@@ -337,7 +337,7 @@ const _DocumentDetailsSidebar = (props: {
 		// get the claim level of the sustainability attribute
 		let element: ReactNode | null = null;
 		if (hasSustainabilityAttribute) {
-			const attribute = sustainabilityAttributes.find(attribute => attribute.name === fileState.sustainabilityAttribute);
+			const attribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttribute);
 			if (attribute === undefined) {
 				return null;
 			}
@@ -460,7 +460,7 @@ const _DocumentDetailsSidebar = (props: {
 				return;
 			}
 
-			const sustainabilityAttribute = sustainabilityAttributes.find(attribute => attribute.name === fileState?.sustainabilityAttribute);
+			const sustainabilityAttribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttribute);
 			if (sustainabilityAttribute === undefined) {
 				return;
 			}
@@ -482,7 +482,7 @@ const _DocumentDetailsSidebar = (props: {
 								effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
 								effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
 								sustainabilityAttribute: {
-									id: sustainabilityAttribute?.id,
+									id: fileState.sustainabilityAttribute,
 								},
 								updatedAt: new Date().toISOString(),
 							},
@@ -500,7 +500,7 @@ const _DocumentDetailsSidebar = (props: {
 								id: fileState.id,
 							},
 							sustainabilityAttribute: {
-								id: sustainabilityAttribute.id,
+								id: fileState.sustainabilityAttribute
 							},
 							organization: {
 								id: orgId,
@@ -578,7 +578,7 @@ const _DocumentDetailsSidebar = (props: {
 	};
 
 	const isFileStateValid = (fileState: DocumentDetailsSidebarFileState) => {
-		return !(fileState.sustainabilityAttribute === 'None');
+		return !(fileState.sustainabilityAttribute === '-1');
 	};
 
 	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
@@ -593,7 +593,6 @@ const _DocumentDetailsSidebar = (props: {
 				boxShadow: fileState ? '0px 8px 32px 8px rgba(0, 0, 0, 0.70)' : 'none',
 				padding: fileState ? '40px' : '0px',
 			}}
-			data-chromatic={'ignore'}
 			ref={innerRef}>
 			{fileState !== undefined && (
 				<div className={'w-full h-full flex flex-col gap-[24px] pb-[40px]'}>

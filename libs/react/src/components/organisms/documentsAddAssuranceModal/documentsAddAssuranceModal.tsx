@@ -43,7 +43,7 @@ export const _DocumentsAddAssuranceModal = (props: {
 		effectiveEndDate = getEffectiveStartDateFromAssurances(file) || new Date().toISOString();
 	} else {
 		// pull the values from the file state
-		sustainabilityAttribute = allSustainabilityAttributes.find(attr => attr.name === fileState.sustainabilityAttribute);
+		sustainabilityAttribute = allSustainabilityAttributes.find(attr => attr.id === fileState.sustainabilityAttribute);
 		effectiveStartDate = fileState.startDate ? fileState.startDate.toISOString() : new Date().toISOString();
 		effectiveEndDate = fileState.endDate ? fileState.endDate.toISOString() : new Date().toISOString();
 	}
