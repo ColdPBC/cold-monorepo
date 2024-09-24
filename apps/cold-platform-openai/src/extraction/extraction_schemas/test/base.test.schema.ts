@@ -1,30 +1,15 @@
 import z from 'zod';
-import {
-	address_line_1,
-	address_line_2,
-	city,
-	contact,
-	country,
-	effective_start_date,
-	email,
-	phone,
-	postal_code,
-	state_province,
-	summary,
-	website,
-	location,
-} from '../global.schema';
+import { effective_start_date, summary, location, contact } from '../global.schema';
 
-export const tuv_rhineland = z.object({
+export const baseTestSchema = z.object({
 	effective_start_date: effective_start_date,
-	testing_company: z
-		.object({
-			name: z.enum(['TÜVRheinland']),
-			location: location.describe('If the document is a test document, attempt to extract data for testing company address information'),
-			contact: contact.describe('If the document is a test document, attempt to extract data for testing company contact information'),
-		})
-		.describe('If the document is a test document, attempt to extract data for testing company information'),
-	report_number: z.string().describe('If the document contains a test number, place it here'),
+	applicant: z.object({
+		name: z.string().describe('If the document contains an applicant, place it here'),
+		location: location.describe('If the document is a test document, attempt to extract data for applicant address information'),
+		contact: contact.describe('If the document is a test document, attempt to extract data for applicant contact information'),
+	}),
+	test_date: z.string().describe('If the document contains a test date, place it here'),
+	test_number: z.string().describe('If the document contains a test number, place it here'),
 	sample: z.object({
 		description: z.string().describe('If the document contains a test sample description, place it here'),
 		color: z.string().describe('If the document contains a test sample color, place it here'),
@@ -78,4 +63,5 @@ export const tuv_rhineland = z.object({
 			}),
 		)
 		.describe('If the document type is "test", attempt to extract data from each of the tests.  If the document is not a test, leave blank'),
+	summary: summary,
 });

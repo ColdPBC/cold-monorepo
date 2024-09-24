@@ -1,37 +1,8 @@
 import z from 'zod';
-import {
-	address_line_1,
-	address_line_2,
-	city,
-	country,
-	effective_end_date,
-	effective_start_date,
-	email,
-	phone,
-	postal_code,
-	state_province,
-	summary,
-	website,
-} from '../global.schema';
+import { baseCertificateSchema } from './base.certificate.schema';
 
-export const wrap = z.object({
+export const wrap = baseCertificateSchema.extend({
 	name: z.enum(['WRAP', 'Worldwide Responsible Accredited Production']),
-	awarded_to: z.object({
-		name: z
-			.string()
-			.describe('If the document type is a certificate then look for the name of the company the certificate is awarded to and place it here if found.  If not found, leave blank'),
-		address_line_1: address_line_1,
-		address_line_2: address_line_2,
-		city: city,
-		state_province: state_province,
-		postal_code: postal_code,
-		country: country,
-		metadata: z.object({
-			email: email,
-			phone: phone,
-			website: website,
-		}),
-	}),
 	article_covered: z
 		.string()
 		.describe(
@@ -49,8 +20,4 @@ export const wrap = z.object({
 			hours: z.string().describe('If the document type is a certificate then look for hours reviewed and place it here if found.  If not found, leave blank'),
 		}),
 	),
-	certificate_number: z.string().describe('If the document type is a certificate then look for certificate number and place it here if found.  If not found, leave blank'),
-	effective_start_date: effective_start_date,
-	effective_end_date: effective_end_date,
-	summary: summary,
 });

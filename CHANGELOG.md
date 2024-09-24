@@ -1,3 +1,28 @@
+# [1.397.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.396.0...v1.397.0) (2024-09-24)
+
+
+### Bug Fixes
+
+* hide generated image files by default ([6566add](https://github.com/ColdPBC/cold-monorepo/commit/6566add8bbc3951de0ada5ed44f606c62da09c9d))
+
+
+### Features
+
+* integrate PrismaService and handle upload failures ([7d7443a](https://github.com/ColdPBC/cold-monorepo/commit/7d7443a483cd5cc37f434e221b3cf04d0ae43300))
+
+# [1.396.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.395.0...v1.396.0) (2024-09-23)
+
+
+### Bug Fixes
+
+* correct variable assignment for extraction name and schema ([8643c42](https://github.com/ColdPBC/cold-monorepo/commit/8643c423246667cb68bd85fd5229be809ce84a4e))
+* refactor schemas to use modular schema patterns ([a473c28](https://github.com/ColdPBC/cold-monorepo/commit/a473c28c9927cc5570d57a84e18ee248198e132f))
+
+
+### Features
+
+* **app:** extend stall timeout (temporarily till we can implement a more robust solution) ([2b692f1](https://github.com/ColdPBC/cold-monorepo/commit/2b692f119009fb3a4301d1133672f2c4f4ad4510))
+
 # [1.395.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.394.0...v1.395.0) (2024-09-23)
 
 

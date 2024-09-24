@@ -6,7 +6,8 @@ import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import {
-	bluesign,
+	bluesignSchema,
+	bluesignProductSchema,
 	defaultCertificateSchema,
 	defaultExtractionSchema,
 	defaultPolicySchema,
@@ -140,12 +141,12 @@ export class ClassificationService extends BaseWorker {
 
 			const { parsed } = classifyResponse.choices[0].message;
 
-			let extraction_name = 'default_extraction';
+			parsed.extraction_name = 'default_extraction';
 
 			// determine the extraction schema and extraction name to use based on the classification
 			switch (parsed.type) {
 				case file_types.TEST_REPORT:
-					extraction_name = snakeCase(`test_${parsed.testing_company}`);
+					parsed.extraction_name = snakeCase(`test_${parsed.testing_company}`);
 					switch (parsed.testing_company) {
 						case 'tuvRheinland':
 							parsed.extraction_schema = tuv_rhineland;
@@ -165,8 +166,10 @@ export class ClassificationService extends BaseWorker {
 					parsed.extraction_name = snakeCase(`certificate ${parsed.sustainability_attribute}`);
 					switch (parsed.sustainability_attribute) {
 						case 'Bluesign Product':
+							parsed.extraction_schema = bluesignProductSchema;
+							break;
 						case 'Bluesign':
-							parsed.extraction_schema = bluesign;
+							parsed.extraction_schema = bluesignSchema;
 							break;
 						case 'WRAP':
 						case 'Worldwide Responsible Accredited Production':
@@ -186,7 +189,7 @@ export class ClassificationService extends BaseWorker {
 					parsed.extraction_schema = defaultStatementSchema;
 					break;
 				default:
-					extraction_name = snakeCase(`default_extraction`);
+					parsed.extraction_name = snakeCase(`default_extraction`);
 					parsed.extraction_schema = defaultExtractionSchema;
 					break;
 			}
@@ -215,7 +218,7 @@ export class ClassificationService extends BaseWorker {
 					status: 'ai_classified',
 					classification: omit(parsed, ['extraction_name', 'extraction_schema']),
 					extraction: {
-						name: extraction_name,
+						name: parsed.extraction_name,
 						schema: zerialize(parsed.extraction_schema),
 					},
 					...(orgFile.metadata as object),

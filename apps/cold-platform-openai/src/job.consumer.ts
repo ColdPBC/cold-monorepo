@@ -4,7 +4,7 @@ import { Job } from 'bull';
 import OpenAI, { UnprocessableEntityError } from 'openai';
 import { AppService } from './app.service';
 import { AssistantService } from './assistant/assistant.service';
-import { BaseWorker, CacheService, ComplianceSectionsCacheRepository, DarklyService, MqttService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, ComplianceSectionsCacheRepository, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
 import { ChatService } from './chat/chat.service';
@@ -26,6 +26,7 @@ export class JobConsumer extends BaseWorker {
 		readonly darkly: DarklyService,
 		readonly chat: ChatService,
 		readonly mqtt: MqttService,
+		readonly prisma: PrismaService,
 		readonly complianceSectionsCacheRepository: ComplianceSectionsCacheRepository,
 	) {
 		super(JobConsumer.name);
@@ -64,8 +65,9 @@ export class JobConsumer extends BaseWorker {
 
 	@Process('file.uploaded')
 	async processFileJob(job: Job) {
-		await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
-		return this.fileService.uploadOrgFilesToOpenAI(job);
+		const injested = await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
+		//this.fileService.uploadOrgFilesToOpenAI(job);
+		return injested;
 	}
 
 	@Process('file.deleted')
@@ -116,9 +118,28 @@ export class JobConsumer extends BaseWorker {
 	@OnQueueFailed()
 	async onFailed(job: Job) {
 		const jobs = (await this.cache.get(`organizations:${job.data.organization.id}:jobs:${job.name}:${job.data.payload?.compliance?.compliance_id}`)) as number[];
+		const { organization, user, payload } = job.data;
+
 		if (Array.isArray(jobs) && jobs.length > 0) {
 			jobs.splice(jobs.indexOf(typeof job.id === 'number' ? job.id : parseInt(job.id)), 1);
 		}
+
+		if (job.name === 'file.uploaded') {
+			if (job.failedReason === 'job stalled more than allowable limit') {
+				this.prisma.organization_files.update({
+					where: {
+						id: job.data.payload.id,
+					},
+					data: {
+						metadata: {
+							status: 'failed',
+							reason: job.failedReason,
+						},
+					},
+				});
+			}
+		}
+
 		const message = `Job FAILED | id: ${job.id} reason: ${job.failedReason} | ${this.getTimerString(job)}`;
 		this.logger.error(message, { ...job.data });
 		await job.log(message);
