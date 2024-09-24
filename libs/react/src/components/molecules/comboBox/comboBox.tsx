@@ -3,7 +3,7 @@ import {InputOption} from "@coldpbc/interfaces";
 import {SelectProps} from "@coldpbc/components";
 import React, {Fragment, useState} from "react";
 import {clsx} from "clsx";
-import {ChevronUpDownIcon} from "@heroicons/react/24/solid";
+import {ChevronUpDownIcon} from '@heroicons/react/20/solid';
 
 export interface ComboBoxProps extends SelectProps {
   options: Array<InputOption>;

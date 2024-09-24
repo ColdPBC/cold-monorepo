@@ -34,12 +34,16 @@ const ComboBoxStory = (props: ComboBoxProps) => {
   const [stateValue, setStateValue] = useState<string>(value);
 
   return (
-    <ComboBox
-      {...props}
-      value={stateValue}
-      onChange={(e) => {
-        setStateValue(e.value);
-      }}
-    />
+    <div
+      className={'w-[72px]'}
+    >
+      <ComboBox
+        {...props}
+        value={stateValue}
+        onChange={(e) => {
+          setStateValue(e.value);
+        }}
+      />
+    </div>
   );
 };
