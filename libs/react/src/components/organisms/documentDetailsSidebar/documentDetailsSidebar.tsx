@@ -593,7 +593,6 @@ const _DocumentDetailsSidebar = (props: {
 				boxShadow: fileState ? '0px 8px 32px 8px rgba(0, 0, 0, 0.70)' : 'none',
 				padding: fileState ? '40px' : '0px',
 			}}
-			data-chromatic={'ignore'}
 			ref={innerRef}>
 			{fileState !== undefined && (
 				<div className={'w-full h-full flex flex-col gap-[24px] pb-[40px]'}>
