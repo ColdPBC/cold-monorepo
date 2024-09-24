@@ -41,5 +41,5 @@ export const useGraphQLSWR = <Data = any, Error = any>(key: string | null, varia
       }
     },
     config,
-  ) as SWRResponse<ApolloQueryResult<any>, Error, any>;
+  ) as SWRResponse<ApolloQueryResult<Data>, Error, any>;
 };
