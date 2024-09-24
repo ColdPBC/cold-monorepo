@@ -622,6 +622,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 					contentType: 'image/png',
 					checksum: await S3Service.calculateBufferChecksum(image.buffer),
 					size: image.buffer.length,
+					visible: false,
 				},
 				update: {
 					key: s3Image.key,
@@ -631,6 +632,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 					contentType: 'image/png',
 					checksum: await S3Service.calculateBufferChecksum(image.buffer),
 					size: image.buffer.length,
+					visible: false,
 				},
 			});
 
