@@ -1,3 +1,10 @@
+## [1.398.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.398.1...v1.398.2) (2024-09-26)
+
+
+### Bug Fixes
+
+* use lodash set for organization compliance properties ([99f412d](https://github.com/ColdPBC/cold-monorepo/commit/99f412d356691b6032f875896fdb164cc86cdad5))
+
 ## [1.398.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.398.0...v1.398.1) (2024-09-24)
 
 
