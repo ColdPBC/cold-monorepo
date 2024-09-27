@@ -204,6 +204,8 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
 					navigate(`/suppliers/${params.row.id}`);
 				}}
 				slots={{ toolbar: getToolbar }}
+				columnHeaderHeight={55}
+				rowHeight={55}
 			/>
 		</div>
 	);
