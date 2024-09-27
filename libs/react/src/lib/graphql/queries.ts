@@ -67,7 +67,7 @@ export const GET_ALL_SUS_ATTRIBUTES = gql`
 `;
 
 export const GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
-	query Materials($filter: MaterialsListFilter) {
+  query Materials($filter: MaterialsListFilter) {
 		materials(filter: $filter) {
 			id
 			name
@@ -76,7 +76,7 @@ export const GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
 `;
 
 export const GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
-	query OrganizationFacilities($filter: OrganizationFacilitiesListFilter) {
+  query OrganizationFacilities($filter: OrganizationFacilitiesListFilter) {
 		organizationFacilities(filter: $filter) {
 			id
 			name
@@ -143,15 +143,15 @@ export const GET_ALL_MATERIALS_FOR_ORG = gql`
 
 export const GET_ALL_SCHEMA_ENUMS = gql`
   query QueryTypes {
-      _graphweaver {
-          enums {
-              values {
-                  name
-                  value
-              }
-              name
-          }
+    _graphweaver {
+      enums {
+        values {
+          name
+          value
+        }
+        name
       }
+    }
   }
 `;
 
