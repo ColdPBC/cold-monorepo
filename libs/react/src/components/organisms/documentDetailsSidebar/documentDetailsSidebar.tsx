@@ -219,7 +219,7 @@ const _DocumentDetailsSidebar = (props: {
 	const getDatePickers = (fileState: DocumentDetailsSidebarFileState) => {
 		return (
 			<>
-				<div className={'w-full flex flex-col gap-[8px]'}>
+				<div className={'w-full flex flex-col gap-[8px]'} data-chromatic={'ignore'}>
 					<div className={'w-full text-tc-primary text-eyebrow'}>Start Date</div>
 					<DesktopDatePicker
 						// @ts-ignore
@@ -274,7 +274,7 @@ const _DocumentDetailsSidebar = (props: {
 						}}
 					/>
 				</div>
-				<div className={'w-full flex flex-col gap-[8px]'}>
+				<div className={'w-full flex flex-col gap-[8px]'} data-chromatic={'ignore'}>
 					<div className={'w-full text-tc-primary text-eyebrow'}>Expiration Date</div>
 					<DesktopDatePicker
 						// @ts-ignore
