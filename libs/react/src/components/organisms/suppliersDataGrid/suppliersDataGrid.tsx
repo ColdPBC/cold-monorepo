@@ -95,9 +95,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
       minWidth: 230,
-      renderCell: params => {
-        return <div className={'text-body text-tc-primary font-bold truncate'}>{params.value}</div>;
-      },
+      cellClassName: 'text-body text-tc-primary font-bold truncate'
     },
     {
       field: 'country',

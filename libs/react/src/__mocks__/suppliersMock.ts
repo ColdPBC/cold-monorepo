@@ -467,7 +467,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       id: '3',
       name: 'Smotherman, Inc.',
       country: 'Vietnam',
-      supplierTier: 1,
+      supplierTier: 2,
       materialSuppliers: [
         {
           material: {
@@ -501,7 +501,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       id: '4',
       name: 'Menzie, Inc.',
       country: 'Vietnam',
-      supplierTier: 1,
+      supplierTier: 2,
       attributeAssurances: [
         {
           id: '6',
@@ -535,7 +535,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       id: '5',
       name: 'Want, Inc.',
       country: 'Vietnam',
-      supplierTier: 1,
+      supplierTier: 2,
       attributeAssurances: [
         {
           id: '8',
@@ -569,7 +569,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       id: '6',
       name: 'Tattershall, Inc.',
       country: 'Vietnam',
-      supplierTier: 1,
+      supplierTier: 2,
       attributeAssurances: [
         {
           id: '10',
@@ -668,7 +668,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       id: '10',
       name: 'Supplier Alpha',
       country: 'US',
-      supplierTier: 1,
+      supplierTier: 2,
       attributeAssurances: [],
       materialSuppliers: [],
     },

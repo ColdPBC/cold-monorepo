@@ -18,9 +18,7 @@ export const Tier1: Story = {
   render: args => {
     return (
       <StoryMockProvider>
-        <Routes>
-          <Route index element={<SuppliersDataGrid tier={1} />} />
-        </Routes>
+        <SuppliersDataGrid tier={1} />
       </StoryMockProvider>
     );
   },
@@ -30,9 +28,7 @@ export const Tier2: Story = {
   render: args => {
     return (
       <StoryMockProvider>
-        <Routes>
-          <Route index element={<SuppliersDataGrid tier={2} />} />
-        </Routes>
+        <SuppliersDataGrid tier={2} />
       </StoryMockProvider>
     );
   },
