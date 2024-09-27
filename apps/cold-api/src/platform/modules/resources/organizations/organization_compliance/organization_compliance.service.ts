@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseWorker, DarklyService, IRequest, MqttService, OrganizationComplianceRepository, PrismaService } from '@coldpbc/nest';
 import { organization_compliance } from '@prisma/client';
 import { EventService } from '../../../utilities/events/event.service';
+import { set } from 'lodash';
 
 @Injectable()
 export class OrganizationComplianceService extends BaseWorker {
@@ -85,8 +86,8 @@ export class OrganizationComplianceService extends BaseWorker {
 	}
 	create(name: string, organizationCompliance: organization_compliance, req: IRequest) {
 		try {
-			organizationCompliance.organization_id = req.organization.id;
-			organizationCompliance.compliance_definition_name = name;
+			set(organizationCompliance, 'organization_id', req.organization.id);
+			set(organizationCompliance, 'compliance_definition_name', name);
 
 			return this.repository.createOrgCompliance(name, organizationCompliance, req.user, req.organization);
 		} catch (error) {
