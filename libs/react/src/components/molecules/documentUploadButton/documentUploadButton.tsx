@@ -53,24 +53,23 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
         ...successfulToastMessage,
       });
       logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData } });
-      if (mutateFunction) {
-        await mutateFunction();
-      } else {
-        await mutate([`/organizations/${orgId}/files`, 'GET'], (cachedData: any) => {
-          const newFiles: Array<any> = [];
-          if (cachedData !== undefined) newFiles.push(...cachedData);
-          forEach(files, file => {
-            newFiles.push({
-              original_name: file.name,
-            });
-          });
-          return newFiles;
-        });
-      }
-
-      props.buttonProps?.onClick && props.buttonProps?.onClick();
-      setSending(false);
     }
+
+    if (mutateFunction) {
+      await mutateFunction();
+    } else {
+      await mutate([`/organizations/${orgId}/files`, 'GET'], (cachedData: any) => {
+        const newFiles: Array<any> = [];
+        if (cachedData !== undefined) newFiles.push(...cachedData);
+        forEach(files, file => {
+          newFiles.push({
+            original_name: file.name,
+          });
+        });
+        return newFiles;
+      });
+    }
+    setSending(false);
   };
 
   const uploadButton = async () => {
