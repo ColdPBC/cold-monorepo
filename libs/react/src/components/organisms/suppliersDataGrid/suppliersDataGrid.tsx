@@ -9,16 +9,13 @@ import {
   GridTreeNodeWithRender,
   GridValidRowModel,
 } from '@mui/x-data-grid';
-import { HexColors } from '@coldpbc/themes';
 import { IconNames } from '@coldpbc/enums';
 import { ColdIcon, MuiDataGrid, Spinner } from '@coldpbc/components';
-import useSWR from 'swr';
-import { axiosFetcher } from '@coldpbc/fetchers';
 import React, { useEffect, useState } from 'react';
-import { SuppliersWithAssurances, SuppliersWithCertifications } from '@coldpbc/interfaces';
+import { SuppliersWithAssurances } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
-import { get, has, isEqual, lowerCase, uniqWith, upperCase } from 'lodash';
+import { get, has, isEqual, uniqWith } from 'lodash';
 
 export const SuppliersDataGrid = (props: { tier: number }) => {
   const { tier } = props;
@@ -58,7 +55,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
         {params.value.map((object: string, index: number) => {
           return (
             <div key={index} className={'text-tc-primary text-body p-[4px] rounded-[32px] border-[1px] border-primary'}>
-              {lowerCase(upperCase(object))}
+              {object}
             </div>
           );
         })}
