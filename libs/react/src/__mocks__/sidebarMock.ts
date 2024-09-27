@@ -1,5 +1,3 @@
-import { ColdMaterialsIcon } from '@coldpbc/components';
-
 export function getSidebarMock() {
   return {
     id: 'cc0267d8-f49c-493e-8ea0-2aaa58bb61f3',
@@ -19,7 +17,7 @@ export function getSidebarMock() {
         {
           key: 'materials_key',
           icon: {
-            name: 'ColdMaterialsIcon',
+            name: 'ColdMaterialsNavIcon',
           },
           label: 'Materials',
           route: '/materials',

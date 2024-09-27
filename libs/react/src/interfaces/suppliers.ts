@@ -21,3 +21,22 @@ export interface SuppliersWithCertifications extends Suppliers {
     };
   }[];
 }
+
+export interface SuppliersWithAssurances {
+  id: string;
+  name: string;
+  country: string;
+  supplierTier: number | null;
+  attributeAssurances: {
+    id: string;
+    sustainabilityAttribute: {
+      id: string;
+      name: string;
+    };
+  }[];
+  materialSuppliers: {
+    material: {
+      name: string;
+    };
+  }[];
+}

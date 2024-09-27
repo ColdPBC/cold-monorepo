@@ -2,7 +2,7 @@ import {
   CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
   GET_ALL_FILES,
   GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-  GET_ALL_ORGS, GET_ALL_SCHEMA_ENUMS,
+  GET_ALL_ORGS, GET_ALL_SCHEMA_ENUMS, GET_ALL_SUPPLIERS_FOR_ORG,
   GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
   GET_ALL_SUS_ATTRIBUTES,
   UPDATE_DOCUMENT_ASSURANCE,
@@ -21,6 +21,7 @@ import { DocumentNode } from '@apollo/client';
 import { RequestHandler } from 'mock-apollo-client';
 import { get } from 'lodash';
 import {getSchemaMocks} from "../schemaMocks";
+import {getSupplierMocks} from "../suppliersMock";
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
@@ -370,7 +371,18 @@ export const defaultGraphqlMocks: {
           }
         }
       })
-  }
+  }, {
+    query: GET_ALL_SUPPLIERS_FOR_ORG,
+    handler: (variables) => {
+      const suppliers = getSupplierMocks();
+      const tier = get(variables, 'filter.supplierTier', 0);
+      return Promise.resolve({
+        data: {
+          organizationFacilities: suppliers.filter(supplier => supplier.supplierTier === tier),
+        },
+      });
+    }
+  },
 ];
 
 export const filesWithAssurancesMocks: {

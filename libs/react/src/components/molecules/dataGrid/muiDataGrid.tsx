@@ -63,6 +63,40 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
             },
           },
         },
+        baseTextField: {
+          sx: {
+            '& .MuiInputBase-input': {
+              backgroundColor: 'transparent',
+              fontFamily: 'Inter',
+              fontSize: '14px',
+              padding: '16px',
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderRadius: '8px',
+              borderColor: HexColors.gray['90'],
+              borderWidth: '1.5px',
+            },
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '8px',
+              '&:hover fieldset': {
+                borderColor: HexColors.gray['90'],
+                borderWidth: '1.5px',
+              },
+              '&:focus-within fieldset': {
+                borderColor: HexColors.gray['90'],
+                borderWidth: '1.5px',
+              },
+            },
+            '& .MuiOutlinedInput-input:focus': {
+              outline: 'none',
+              boxShadow: 'none',
+            },
+            '& .MuiInputBase-input:focus': {
+              outline: 'none',
+              boxShadow: 'none',
+            },
+          },
+        },
         ...props.slotProps,
       }}
       className={twMerge('text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto', props.className)}

@@ -14,13 +14,21 @@ const meta: Meta<typeof SuppliersDataGrid> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Tier1: Story = {
   render: args => {
     return (
       <StoryMockProvider>
-        <Routes>
-          <Route index element={<SuppliersDataGrid />} />
-        </Routes>
+        <SuppliersDataGrid tier={1} />
+      </StoryMockProvider>
+    );
+  },
+};
+
+export const Tier2: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <SuppliersDataGrid tier={2} />
       </StoryMockProvider>
     );
   },

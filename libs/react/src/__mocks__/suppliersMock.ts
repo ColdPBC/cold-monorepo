@@ -1,6 +1,6 @@
 import { addDays, subDays } from 'date-fns';
 import { getClaimsMock, getClaimsMockByName } from './claimsMock';
-import { SuppliersWithCertifications } from '@coldpbc/interfaces';
+import { SuppliersWithAssurances, SuppliersWithCertifications } from '@coldpbc/interfaces';
 
 export const getSupplierWithCertificationClaimsMock = (): SuppliersWithCertifications[] => {
   const certifications = getClaimsMock();
@@ -403,4 +403,274 @@ export const getSupplierMockByName = (name: string) => {
 
 export const getSupplierMockById = (id: string) => {
   return getSupplierWithCertificationClaimsMock().find(supplier => supplier.id === id) || getSupplierWithCertificationClaimsMock()[0];
+};
+
+export const getSupplierMocks = (): SuppliersWithAssurances[] => {
+  return [
+    {
+      id: '1',
+      name: 'VietWear Garments Co., Ltd.',
+      supplierTier: 1,
+      country: 'Vietnam',
+      attributeAssurances: [
+        {
+          id: '1',
+          sustainabilityAttribute: {
+            id: '1',
+            name: 'PFAS-Test',
+          },
+        },
+      ],
+      materialSuppliers: [
+        {
+          material: {
+            name: 'Cotton',
+          },
+        },
+      ],
+    },
+    {
+      id: '2',
+      name: 'Pritt, Inc.',
+      country: 'China',
+      supplierTier: 1,
+      attributeAssurances: [
+        {
+          id: '2',
+          sustainabilityAttribute: {
+            id: '2',
+            name: 'Lead-Test',
+          },
+        },
+        {
+          id: '3',
+          sustainabilityAttribute: {
+            id: '3',
+            name: 'phthalate',
+          },
+        },
+      ],
+      materialSuppliers: [
+        {
+          material: {
+            name: 'Cotton',
+          },
+        },
+        {
+          material: {
+            name: 'Polyester',
+          },
+        },
+      ],
+    },
+    {
+      id: '3',
+      name: 'Smotherman, Inc.',
+      country: 'Vietnam',
+      supplierTier: 2,
+      materialSuppliers: [
+        {
+          material: {
+            name: 'Cotton',
+          },
+        },
+        {
+          material: {
+            name: 'Polyester',
+          },
+        },
+      ],
+      attributeAssurances: [
+        {
+          id: '4',
+          sustainabilityAttribute: {
+            id: '4',
+            name: 'bluesign',
+          },
+        },
+        {
+          id: '5',
+          sustainabilityAttribute: {
+            id: '5',
+            name: 'Lead-Test',
+          },
+        },
+      ],
+    },
+    {
+      id: '4',
+      name: 'Menzie, Inc.',
+      country: 'Vietnam',
+      supplierTier: 2,
+      attributeAssurances: [
+        {
+          id: '6',
+          sustainabilityAttribute: {
+            id: '6',
+            name: 'PFAS-Test',
+          },
+        },
+        {
+          id: '7',
+          sustainabilityAttribute: {
+            id: '7',
+            name: 'bluesign',
+          },
+        },
+      ],
+      materialSuppliers: [
+        {
+          material: {
+            name: 'Cotton',
+          },
+        },
+        {
+          material: {
+            name: 'Polyester',
+          },
+        },
+      ],
+    },
+    {
+      id: '5',
+      name: 'Want, Inc.',
+      country: 'Vietnam',
+      supplierTier: 2,
+      attributeAssurances: [
+        {
+          id: '8',
+          sustainabilityAttribute: {
+            id: '8',
+            name: 'PFAS-Test',
+          },
+        },
+        {
+          id: '9',
+          sustainabilityAttribute: {
+            id: '9',
+            name: 'bluesign',
+          },
+        },
+      ],
+      materialSuppliers: [
+        {
+          material: {
+            name: 'Cotton',
+          },
+        },
+        {
+          material: {
+            name: 'Polyester',
+          },
+        },
+      ],
+    },
+    {
+      id: '6',
+      name: 'Tattershall, Inc.',
+      country: 'Vietnam',
+      supplierTier: 2,
+      attributeAssurances: [
+        {
+          id: '10',
+          sustainabilityAttribute: {
+            id: '10',
+            name: 'Lead-Test',
+          },
+        },
+        {
+          id: '11',
+          sustainabilityAttribute: {
+            id: '11',
+            name: 'phthalate',
+          },
+        },
+      ],
+      materialSuppliers: [
+        {
+          material: {
+            name: 'Cotton',
+          },
+        },
+        {
+          material: {
+            name: 'Polyester',
+          },
+        },
+      ],
+    },
+    {
+      id: '7',
+      name: 'Panek, Inc.',
+      country: 'Vietnam',
+      supplierTier: 1,
+      attributeAssurances: [
+        {
+          id: '12',
+          sustainabilityAttribute: {
+            id: '12',
+            name: 'PFAS-Test',
+          },
+        },
+        {
+          id: '13',
+          sustainabilityAttribute: {
+            id: '13',
+            name: 'Lead-Test',
+          },
+        },
+      ],
+      materialSuppliers: [],
+    },
+    {
+      id: '8',
+      name: 'Faul, Inc.',
+      country: 'Vietnam',
+      supplierTier: 1,
+      attributeAssurances: [
+        {
+          id: '14',
+          sustainabilityAttribute: {
+            id: '14',
+            name: 'PFAS-Test',
+          },
+        },
+        {
+          id: '15',
+          sustainabilityAttribute: {
+            id: '15',
+            name: 'Lead-Test',
+          },
+        },
+      ],
+      materialSuppliers: [
+        {
+          material: {
+            name: 'Cotton',
+          },
+        },
+        {
+          material: {
+            name: 'Polyester',
+          },
+        },
+      ],
+    },
+    {
+      id: '9',
+      name: 'Hushon, Inc.',
+      country: 'Vietnam',
+      supplierTier: 1,
+      attributeAssurances: [],
+      materialSuppliers: [],
+    },
+    {
+      id: '10',
+      name: 'Supplier Alpha',
+      country: 'US',
+      supplierTier: 2,
+      attributeAssurances: [],
+      materialSuppliers: [],
+    },
+  ];
 };

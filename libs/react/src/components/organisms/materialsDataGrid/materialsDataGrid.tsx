@@ -176,42 +176,8 @@ const _MaterialsDataGrid = () => {
           navigate(`/materials/${params.id}`);
         }}
         slots={{ toolbar: getToolbar }}
-        slotProps={{
-          baseTextField: {
-            sx: {
-              '& .MuiInputBase-input': {
-                backgroundColor: 'transparent',
-                fontFamily: 'Inter',
-                fontSize: '14px',
-                padding: '16px',
-              },
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: '8px',
-                borderColor: HexColors.gray['90'],
-                borderWidth: '1.5px',
-              },
-              '& .MuiOutlinedInput-root': {
-                borderRadius: '8px',
-                '&:hover fieldset': {
-                  borderColor: HexColors.gray['90'],
-                  borderWidth: '1.5px',
-                },
-                '&:focus-within fieldset': {
-                  borderColor: HexColors.gray['90'],
-                  borderWidth: '1.5px',
-                },
-              },
-              '& .MuiOutlinedInput-input:focus': {
-                outline: 'none',
-                boxShadow: 'none',
-              },
-              '& .MuiInputBase-input:focus': {
-                outline: 'none',
-                boxShadow: 'none',
-              },
-            },
-          },
-        }}
+        columnHeaderHeight={55}
+        rowHeight={55}
       />
     </div>
   );

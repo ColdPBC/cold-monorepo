@@ -9,7 +9,7 @@ const _MaterialsPage = () => {
   };
 
   return (
-    <MainContent title="Materials" headerElement={getPageButtons()}>
+    <MainContent title="Materials" headerElement={getPageButtons()} className={'w-[calc(100%-100px)]'}>
       <MaterialsDataGrid />
     </MainContent>
   );

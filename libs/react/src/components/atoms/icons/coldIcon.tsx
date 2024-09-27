@@ -27,7 +27,8 @@ import {
   ColdInfoIcon,
   ColdJourneyIcon,
   ColdLeftArrowIcon,
-  ColdMaterialsIcon,
+  ColdMaterialsNavIcon,
+  ColdProductsNavIcon,
   ColdReportIcon,
   ColdRightArrowIcon,
   ColdScoreIcon,
@@ -121,8 +122,10 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdExpiringIcon {...props} />;
     case IconNames.ColdDangerIcon:
       return <ColdDangerIcon {...props} />;
-    case IconNames.ColdMaterialsIcon:
-      return <ColdMaterialsIcon {...props} />;
+    case IconNames.ColdMaterialsNavIcon:
+      return <ColdMaterialsNavIcon {...props} />;
+    case IconNames.ColdProductsNavIcon:
+      return <ColdProductsNavIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;
