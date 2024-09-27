@@ -156,26 +156,26 @@ export const GET_ALL_SCHEMA_ENUMS = gql`
 `;
 
 export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
-	query OrganizationFacilities($filter: OrganizationFacilitiesListFilter) {
-		organizationFacilities(filter: $filter) {
-			id
-			name
-			supplierTier
-			country
-			attributeAssurances {
-				id
-				sustainabilityAttribute {
-					id
-					name
-				}
-			}
+  query OrganizationFacilities($filter: OrganizationFacilitiesListFilter) {
+    organizationFacilities(filter: $filter) {
+      id
+      name
+      supplierTier
+      country
+      attributeAssurances {
+        id
+        sustainabilityAttribute {
+          id
+          name
+        }
+      }
       materialSuppliers {
         material {
           name
         }
       }
     }
-	}
+  }
 `;
 
 export const queries: {
