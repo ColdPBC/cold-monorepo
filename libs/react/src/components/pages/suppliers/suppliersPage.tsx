@@ -7,7 +7,7 @@ const _SuppliersPage = () => {
   const tabs = ['Tier 1 Suppliers', 'Tier 2 Suppliers'];
 
   const getActiveTabElement = (tab: string) => {
-    if (tab === 'Tier 1 Suppliers') {
+    if (tab === tabs[0]) {
       return <SuppliersDataGrid tier={1} />;
     } else {
       return <SuppliersDataGrid tier={2} />;
