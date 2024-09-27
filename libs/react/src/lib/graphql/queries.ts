@@ -155,6 +155,29 @@ export const GET_ALL_SCHEMA_ENUMS = gql`
   }
 `;
 
+export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
+	query OrganizationFacilities($filter: OrganizationFacilitiesListFilter) {
+		organizationFacilities(filter: $filter) {
+			id
+			name
+			supplierTier
+			country
+			attributeAssurances {
+				id
+				sustainabilityAttribute {
+					id
+					name
+				}
+			}
+      materialSuppliers {
+        material {
+          name
+        }
+      }
+    }
+	}
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -169,4 +192,5 @@ export const queries: {
   DELETE_ATTRIBUTE_ASSURANCE: DELETE_ATTRIBUTE_ASSURANCE,
   GET_ALL_MATERIALS_FOR_ORG: GET_ALL_MATERIALS_FOR_ORG,
   GET_ALL_SCHEMA_ENUMS: GET_ALL_SCHEMA_ENUMS,
+  GET_ALL_SUPPLIERS_FOR_ORG: GET_ALL_SUPPLIERS_FOR_ORG,
 };

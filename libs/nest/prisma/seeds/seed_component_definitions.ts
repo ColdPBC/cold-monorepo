@@ -121,7 +121,7 @@ const seeds: Array<{
         {
           key: 'materials_key',
           icon: {
-            name: 'ColdMaterialsIcon',
+            name: 'ColdMaterialsNavIcon',
           },
           label: 'Materials',
           route: '/materials',
