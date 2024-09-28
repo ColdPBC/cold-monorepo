@@ -1,3 +1,18 @@
+# [1.399.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.398.2...v1.399.0) (2024-09-28)
+
+
+### Bug Fixes
+
+* display object value as is without conversion to lower case and upper case ([3c257c5](https://github.com/ColdPBC/cold-monorepo/commit/3c257c5f8e9d1f05cd6c94fcde34c24821c92b7e))
+* refactor getActiveTabElement to use tabs array element ([d8c8049](https://github.com/ColdPBC/cold-monorepo/commit/d8c80497987f9183aefcb57da35505473c9320d5))
+
+
+### Features
+
+* add custom width class to MainContent in MaterialsPage ([36a4e7f](https://github.com/ColdPBC/cold-monorepo/commit/36a4e7f8943584c064e521350ef1576499b0e743))
+* **icons:** Update ColdSuppliersNavIcon and ColdMaterialsNavIcon ([d6be0cf](https://github.com/ColdPBC/cold-monorepo/commit/d6be0cfa0f9a9fef12ecf98c618a166a3685af7a))
+* update DataGrid components with unified row and column header height ([5302348](https://github.com/ColdPBC/cold-monorepo/commit/53023486eaeb137b92128244bfb88736c48400cb))
+
 ## [1.398.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.398.1...v1.398.2) (2024-09-26)
 
 
