@@ -1,3 +1,14 @@
+## [1.399.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.0...v1.399.1) (2024-09-30)
+
+
+### Bug Fixes
+
+* correct argument passed to logError function ([6301f87](https://github.com/ColdPBC/cold-monorepo/commit/6301f87550b4a639aefaaff94d84a4dac051e653))
+* handle Axios error correctly in error property ([4a5247f](https://github.com/ColdPBC/cold-monorepo/commit/4a5247ff5008007975e6628bedb96364e693aa4e))
+* improve error handling and UI/UX feedback ([65929d2](https://github.com/ColdPBC/cold-monorepo/commit/65929d2934b46756bdde11de5d68e554f54e324f))
+* update auth0AddOn parameters and remove NewSideBar story ([96d18ef](https://github.com/ColdPBC/cold-monorepo/commit/96d18ef5c812ccd6031b2d67e1da605a4b7df258))
+* update logout function to include returnTo parameter ([9f8e87e](https://github.com/ColdPBC/cold-monorepo/commit/9f8e87eb36b6f69d7490dd1a562b5d956012b806))
+
 # [1.399.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.398.2...v1.399.0) (2024-09-28)
 
 
