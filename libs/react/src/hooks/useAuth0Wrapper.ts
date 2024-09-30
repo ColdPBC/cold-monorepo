@@ -38,7 +38,7 @@ export const useAuth0Wrapper = () => {
   return {
     ...auth0Context,
     isLoading: auth0Context.isLoading || userData.isLoading,
-    error: auth0Context.error || userData.data,
+    error: auth0Context.error || (isAxiosError(userData.data) ? userData.data : undefined),
     getOrgSpecificUrl,
     orgId,
   };
