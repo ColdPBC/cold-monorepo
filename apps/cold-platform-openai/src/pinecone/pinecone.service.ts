@@ -11,6 +11,8 @@ import { fromBuffer } from 'pdf2pic';
 import { Queue } from 'bull';
 import { ExtractionService } from '../extraction/extraction.service';
 import { ExtractionXlsxService } from '../extraction/extraction.xlsx.service';
+import { PDFDocument } from 'pdf-lib';
+import { pdfByteArrayToScreenshots } from '../extraction/screenShotPDFPages';
 
 export type PineconeMetadata = {
 	url: string;
@@ -18,6 +20,11 @@ export type PineconeMetadata = {
 	chunk: string;
 	hash: string;
 };
+
+export interface OpenAiBase64ImageUrl {
+	type: 'image_url';
+	image_url: { url: string };
+}
 
 @Injectable()
 export class PineconeService extends BaseWorker implements OnModuleInit {
@@ -525,6 +532,10 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 				throw new Error(`No bytes found in ${filePayload?.original_name}`);
 			}
 
+			//const images: OpenAiBase64ImageUrl[] = await this.processPdfPages(bytes, filePayload, user, organization);
+
+			//await this.extraction.extractDataFromImages(images, user, filePayload, organization);
+
 			// Load the document content from the file and split it into chunks
 			const content = await this.lc.getDocContent(extension, bytes, user);
 
@@ -532,36 +543,25 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 				// Store the vector embeddings for the document
 				await this.persistEmbeddings(index, content, filePayload, organization);
 
-				await this.extraction.extractDataFromContent(content, user, filePayload, organization);
+				//await this.extraction.extractDataFromContent(content, user, filePayload, organization);
 			} else {
 				// Attempt to convert PDF to Image since no text content found
 				this.logger.warn(`No text content found in ${filePayload?.original_name}; converting to image`);
 
 				bytes = content['bytes'];
 
-				const url = await this.converPdfToImage(bytes, filePayload, user, organization);
-
-				if (!url) {
-					throw new Error(`No image url found in ${filePayload?.original_name}`);
-				}
-
-				const extracted = await this.extraction.extractDataFromContent(url, user, filePayload, organization);
-
-				if (extracted) {
-					// Encode the JSON string to a byte array
-					const encoder = new TextEncoder();
-					bytes = encoder.encode(JSON.stringify(extracted));
-				}
-
 				// Create embedding for content
 				const embedding = (await this.lc.getDocContent('txt', bytes, user)) as Document<Record<string, any>>[];
 
 				await this.persistEmbeddings(index, embedding, filePayload, organization);
 			}
+
+			return { bytes, organization, user, filePayload };
 		} catch (e) {
 			this.logger.error(e.message, { error: e, namespace: organization.name, file: filePayload });
 
 			this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'failed' });
+			throw e;
 		}
 	}
 
@@ -584,67 +584,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 			return fileData.bytes;
 		} catch (e) {
 			this.logger.error('Error converting xlsx to image', { error: e, namespace: organization.name });
-			return undefined;
-		}
-	}
-
-	async converPdfToImage(content: Uint8Array, filePayload: { original_name: any[] }, user: IAuthenticatedUser, organization: organizations) {
-		const convert = fromBuffer(Buffer.from(content), { format: 'png', quality: 100, density: 100 });
-
-		try {
-			const image = await convert(1, { responseType: 'buffer' });
-
-			if (!image.buffer) {
-				throw new Error(`No image found in ${filePayload.original_name}`);
-			}
-
-			const s3Image = await this.s3.uploadStreamToS3(user, organization.id, {
-				originalname: `${filePayload.original_name.toString().replace(`${filePayload.original_name.toString().split('.').pop()}`, 'png')}`,
-				buffer: image.buffer,
-			});
-
-			const orgFile = await this.prisma.organization_files.upsert({
-				where: {
-					s3Key: {
-						bucket: s3Image.bucket,
-						key: s3Image.key,
-						organization_id: organization.id,
-					},
-				},
-				create: {
-					id: new Cuid2Generator(GuidPrefixes.OrganizationFile).scopedId,
-					organization_id: organization.id,
-					bucket: s3Image.bucket,
-					key: s3Image.key,
-					original_name: `${filePayload.original_name.toString().replace(`${filePayload.original_name.toString().split('.').pop()}`, 'png')}`,
-					mimetype: 'image/png',
-					encoding: 'base64',
-					contentType: 'image/png',
-					checksum: await S3Service.calculateBufferChecksum(image.buffer),
-					size: image.buffer.length,
-					visible: false,
-				},
-				update: {
-					key: s3Image.key,
-					original_name: `${filePayload.original_name.toString().replace(`${filePayload.original_name.toString().split('.').pop()}`, 'png')}`,
-					mimetype: 'image/png',
-					encoding: 'base64',
-					contentType: 'image/png',
-					checksum: await S3Service.calculateBufferChecksum(image.buffer),
-					size: image.buffer.length,
-					visible: false,
-				},
-			});
-
-			this.logger.info(`converted ${filePayload.original_name} to image ${orgFile.original_name}`, { file: orgFile });
-
-			const url = await this.s3.getSignedURL(user, s3Image.bucket, s3Image.key, 3600);
-
-			return url;
-		} catch (e) {
-			this.logger.error('Error converting pdf to image', { error: e, namespace: organization.name });
-
-			return null;
+			throw e;
 		}
 	}
 
@@ -696,7 +636,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 				throw new Error(`File not found: ${filePayload.id}`);
 			}
 
-			await this.uploadData(organization, user, org_file, index);
+			return await this.uploadData(organization, user, org_file, index);
 		} catch (error) {
 			if (error instanceof ConflictException) {
 				this.logger.warn(error.message);
@@ -713,7 +653,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 				},
 			});
 
-			throw new Error('Failed to ingest data');
+			throw error;
 		}
 	}
 

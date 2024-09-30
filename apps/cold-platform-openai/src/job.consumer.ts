@@ -9,6 +9,8 @@ import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
 import { ChatService } from './chat/chat.service';
 import { PineconeService } from './pinecone/pinecone.service';
+import { ClassificationService } from './extraction/classification.service';
+import { ExtractionService } from './extraction/extraction.service';
 
 @Injectable()
 @Processor('openai')
@@ -23,6 +25,7 @@ export class JobConsumer extends BaseWorker {
 		readonly fileService: FileService,
 		readonly cache: CacheService,
 		readonly loader: PineconeService,
+		readonly extraction: ExtractionService,
 		readonly darkly: DarklyService,
 		readonly chat: ChatService,
 		readonly mqtt: MqttService,
@@ -65,9 +68,26 @@ export class JobConsumer extends BaseWorker {
 
 	@Process('file.uploaded')
 	async processFileJob(job: Job) {
-		const injested = await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
+		const processed = await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
+
+		await job.progress(50);
 		//this.fileService.uploadOrgFilesToOpenAI(job);
-		return injested;
+		if (!processed?.bytes || !processed?.filePayload || !processed?.user || !processed?.organization) {
+			throw new Error('Failed to process file, missing required data');
+		}
+		const text = await this.extraction.extractTextFromPDF(processed.bytes, processed?.filePayload, processed?.user, processed?.organization);
+
+		if (!text) {
+			const base64Images = await this.extraction.processPdfPages(processed.bytes, processed.filePayload, processed.user, processed.organization);
+
+			const extracted = await this.extraction.extractDataFromImages(base64Images, processed.user, processed.filePayload, processed.organization);
+
+			if (extracted) {
+				// Encode the JSON string to a byte array
+				const encoder = new TextEncoder();
+				processed.bytes = encoder.encode(JSON.stringify(extracted));
+			}
+		}
 	}
 
 	@Process('file.deleted')
@@ -125,24 +145,26 @@ export class JobConsumer extends BaseWorker {
 		}
 
 		if (job.name === 'file.uploaded') {
-			if (job.failedReason === 'job stalled more than allowable limit') {
-				this.prisma.organization_files.update({
-					where: {
-						id: job.data.payload.id,
+			await this.prisma.organization_files.update({
+				where: {
+					id: job.data.payload.id,
+				},
+				data: {
+					metadata: {
+						status: 'failed',
+						reason: job.failedReason,
 					},
-					data: {
-						metadata: {
-							status: 'failed',
-							reason: job.failedReason,
-						},
-					},
-				});
-			}
+				},
+			});
 		}
 
-		const message = `Job FAILED | id: ${job.id} reason: ${job.failedReason} | ${this.getTimerString(job)}`;
-		this.logger.error(message, { ...job.data });
-		await job.log(message);
+		if (job?.failedReason?.startsWith('FATAL:')) {
+			await job.discard();
+		} else {
+			const message = `Job FAILED | id: ${job.id} reason: ${job.failedReason} | ${this.getTimerString(job)}`;
+			this.logger.error(message, { ...job.data });
+			await job.log(message);
+		}
 	}
 
 	@OnQueueCompleted()
@@ -173,6 +195,8 @@ export class JobConsumer extends BaseWorker {
 	}
 
 	getDuration(job: Job) {
-		return (job.finishedOn || 0) - (job.processedOn || 0) / 1000;
+		const finishedOn = new Date(job.finishedOn || 0).getTime();
+		const processedOn = new Date(job.processedOn || 0).getTime();
+		return (finishedOn - processedOn) / 1000;
 	}
 }

@@ -5,6 +5,7 @@ import { file_types, organization_files, organizations, sustainability_attribute
 import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
+import { DetectDocumentTextCommand, TextractClient } from '@aws-sdk/client-textract';
 import {
 	bluesignSchema,
 	bluesignProductSchema,
@@ -21,6 +22,7 @@ import {
 } from './extraction_schemas';
 import { omit, snakeCase } from 'lodash';
 import { zerialize } from 'zodex';
+import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
 
 @Injectable()
 export class ClassificationService extends BaseWorker {
@@ -68,6 +70,37 @@ export class ClassificationService extends BaseWorker {
 		return typeof content === 'string' && z.string().url().safeParse(content).success;
 	}
 
+	async classifyImageUrls(images: OpenAiBase64ImageUrl[], user: IAuthenticatedUser, orgFile: organization_files, organization: organizations) {
+		const classifyPrompt = `You are a helpful assistant for ${organization.display_name} and you help users classify and extract data from documents that they upload.  Classify this content using the following rules:
+    - if the content is an RSL (Restricted Substance List), classify it as a POLICY
+    - if the content is a statement, classify it as a STATEMENT
+    - if the content is an impact assessment from ${organization.display_name}, classify it as a STATEMENT
+     from the following images`;
+
+		const imageContent: { type: string; text?: string; image_url?: { url: string } }[] = [
+			{
+				type: 'text',
+				text: classifyPrompt,
+			},
+		];
+
+		images.forEach(image => {
+			imageContent.push(image);
+		});
+
+		const classifyResponse = await this.openAi.beta.chat.completions.parse({
+			model: 'gpt-4o-2024-08-06',
+			messages: [
+				{
+					role: 'user',
+					content: imageContent,
+				},
+			],
+			response_format: zodResponseFormat(this.classificationSchema, 'content_classification'),
+		});
+
+		return this.resolveExtractionSchema(classifyResponse.choices[0].message);
+	}
 	/**
 	 * Use Ai to classify content
 	 * @param content
@@ -83,6 +116,28 @@ export class ClassificationService extends BaseWorker {
 
 			const start = new Date();
 
+			/*
+			const textractClient = new TextractClient();
+
+			const detectDocumentTextCommand = new DetectDocumentTextCommand({
+				Document: {
+					S3Object: {
+						Bucket: eventBridgeS3Event.bucket,
+						Name: eventBridgeS3Event.object,
+					},
+				},
+			});
+
+			// Textract returns a list of blocks. A block can be a line, a page, word, etc.
+			// Each block also contains geometry of the detected text.
+			// For more information on the Block type, see https://docs.aws.amazon.com/textract/latest/dg/API_Block.html.
+			const { Blocks } = await textractClient.send(detectDocumentTextCommand);
+
+			// For the purpose of this example, we are only interested in words.
+			const extractedWords = Blocks.filter(b => b.BlockType === 'WORD').map(b => b.Text);
+
+			this.logger.info(extractedWords.join(' '));
+*/
 			const classifyPrompt = `You are a helpful assistant for ${
 				organization.display_name
 			} and you help users classify and extract data from documents that they upload.  Classify this content using the following rules:
@@ -139,98 +194,9 @@ export class ClassificationService extends BaseWorker {
 				throw new Error('No choices found in classify response');
 			}
 
-			const { parsed } = classifyResponse.choices[0].message;
+			const parsed = this.resolveExtractionSchema(classifyResponse.choices[0].message);
 
-			parsed.extraction_name = 'default_extraction';
-
-			// determine the extraction schema and extraction name to use based on the classification
-			switch (parsed.type) {
-				case file_types.TEST_REPORT:
-					parsed.extraction_name = snakeCase(`test_${parsed.testing_company}`);
-					switch (parsed.testing_company) {
-						case 'tuvRheinland':
-							parsed.extraction_schema = tuv_rhineland;
-							break;
-						case 'intertek':
-							parsed.extraction_schema = intertek;
-							break;
-						case 'SGS':
-							parsed.extraction_schema = sgs;
-							break;
-						default:
-							parsed.extraction_schema = defaultTestSchema;
-							break;
-					}
-					break;
-				case file_types.CERTIFICATE:
-					parsed.extraction_name = snakeCase(`certificate ${parsed.sustainability_attribute}`);
-					switch (parsed.sustainability_attribute) {
-						case 'Bluesign Product':
-							parsed.extraction_schema = bluesignProductSchema;
-							break;
-						case 'Bluesign':
-							parsed.extraction_schema = bluesignSchema;
-							break;
-						case 'WRAP':
-						case 'Worldwide Responsible Accredited Production':
-							parsed.extraction_schema = wrap;
-							break;
-						default:
-							parsed.extraction_schema = defaultCertificateSchema;
-							break;
-					}
-					break;
-				case file_types.POLICY:
-					parsed.extraction_name = snakeCase(`policy extraction`);
-					parsed.extraction_schema = defaultPolicySchema;
-					break;
-				case file_types.STATEMENT:
-					parsed.extraction_name = snakeCase('statement_extraction');
-					parsed.extraction_schema = defaultStatementSchema;
-					break;
-				default:
-					parsed.extraction_name = snakeCase(`default_extraction`);
-					parsed.extraction_schema = defaultExtractionSchema;
-					break;
-			}
-
-			if (parsed.sustainability_attribute) {
-				const attribute = this.sus_attributes.find(k => k.name === parsed.sustainability_attribute);
-				if (attribute) {
-					parsed.sustainability_attribute_id = attribute.id;
-				}
-			}
-
-			orgFile = (await this.prisma.organization_files.findUnique({
-				where: {
-					id: orgFile.id,
-				},
-			})) as organization_files;
-
-			if (!orgFile) {
-				throw new Error('File not found');
-			}
-
-			// update the file metadata with the classification
-			const updateData: any = {
-				type: parsed.type,
-				metadata: {
-					status: 'ai_classified',
-					classification: omit(parsed, ['extraction_name', 'extraction_schema']),
-					extraction: {
-						name: parsed.extraction_name,
-						schema: zerialize(parsed.extraction_schema),
-					},
-					...(orgFile.metadata as object),
-				},
-			};
-
-			await this.prisma.organization_files.update({
-				where: {
-					id: orgFile.id,
-				},
-				data: updateData,
-			});
+			const updateData = await this.updateOrgFile(orgFile, parsed);
 
 			// publish message to MQTT whenever a file is classified
 			this.mqtt.publishToUI({
@@ -246,6 +212,8 @@ export class ClassificationService extends BaseWorker {
 		} catch (e) {
 			this.logger.error(e.message, { ...e, content, user, file: orgFile, organization });
 
+			const metadata = orgFile.metadata as any;
+
 			orgFile = await this.prisma.organization_files.update({
 				where: {
 					id: orgFile.id,
@@ -254,12 +222,10 @@ export class ClassificationService extends BaseWorker {
 					metadata: {
 						status: 'failed',
 						error: e,
-						...(orgFile.metadata as any),
+						...metadata,
 					},
 				},
 			});
-
-			const metadata = orgFile.metadata as any;
 
 			this.mqtt.publishToUI({
 				action: 'update',
@@ -271,6 +237,102 @@ export class ClassificationService extends BaseWorker {
 				swr_key: `organization_files.${metadata.status}`,
 				org_id: organization.id,
 			});
+
+			throw e;
 		}
+	}
+
+	private async updateOrgFile(orgFile: any, parsed: any) {
+		orgFile = (await this.prisma.organization_files.findUnique({
+			where: {
+				id: orgFile.id,
+			},
+		})) as organization_files;
+
+		// update the file metadata with the classification
+		const updateData: any = {
+			type: parsed.type,
+			metadata: {
+				status: 'ai_classified',
+				classification: omit(parsed, ['extraction_name', 'extraction_schema']),
+				extraction: {
+					name: parsed.extraction_name,
+					schema: zerialize(parsed.extraction_schema),
+				},
+				...(orgFile.metadata as object),
+			},
+		};
+
+		await this.prisma.organization_files.update({
+			where: {
+				id: orgFile.id,
+			},
+			data: updateData,
+		});
+		return updateData;
+	}
+
+	private resolveExtractionSchema(content: any) {
+		content.parsed.extraction_name = 'default_extraction';
+
+		// determine the extraction schema and extraction name to use based on the classification
+		switch (content.parsed.type) {
+			case file_types.TEST_REPORT:
+				content.parsed.extraction_name = snakeCase(`test_${content.parsed.testing_company}`);
+				switch (content.parsed.testing_company) {
+					case 'tuvRheinland':
+						content.parsed.extraction_schema = tuv_rhineland;
+						break;
+					case 'intertek':
+						content.parsed.extraction_schema = intertek;
+						break;
+					case 'SGS':
+						content.parsed.extraction_schema = sgs;
+						break;
+					default:
+						content.parsed.extraction_schema = defaultTestSchema;
+						break;
+				}
+				break;
+			case file_types.CERTIFICATE:
+				content.parsed.extraction_name = snakeCase(`certificate ${content.parsed.sustainability_attribute}`);
+				switch (content.parsed.sustainability_attribute) {
+					case 'Bluesign Product':
+						content.parsed.extraction_schema = bluesignProductSchema;
+						break;
+					case 'Bluesign':
+						content.parsed.extraction_schema = bluesignSchema;
+						break;
+					case 'WRAP':
+					case 'Worldwide Responsible Accredited Production':
+						content.parsed.extraction_schema = wrap;
+						break;
+					default:
+						content.parsed.extraction_schema = defaultCertificateSchema;
+						break;
+				}
+				break;
+			case file_types.POLICY:
+				content.parsed.extraction_name = snakeCase(`policy extraction`);
+				content.parsed.extraction_schema = defaultPolicySchema;
+				break;
+			case file_types.STATEMENT:
+				content.parsed.extraction_name = snakeCase('statement_extraction');
+				content.parsed.extraction_schema = defaultStatementSchema;
+				break;
+			default:
+				content.parsed.extraction_name = snakeCase(`default_extraction`);
+				content.parsed.extraction_schema = defaultExtractionSchema;
+				break;
+		}
+
+		if (content.parsed.sustainability_attribute) {
+			const attribute = this.sus_attributes.find(k => k.name === content.parsed.sustainability_attribute);
+			if (attribute) {
+				content.parsed.sustainability_attribute_id = attribute.id;
+			}
+		}
+
+		return content.parsed;
 	}
 }
