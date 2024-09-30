@@ -12,7 +12,11 @@ export const ErrorPage = ({ error, showLogout=true }: ErrorPageProps) => {
   const { logout } = useAuth0Wrapper();
 
   const handleLogout = async () => {
-    await logout();
+    await logout(
+      {
+        logoutParams: { returnTo: window.location.origin },
+      }
+    );
   };
 
   return (
