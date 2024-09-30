@@ -1,3 +1,10 @@
+## [1.399.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.1...v1.399.2) (2024-09-30)
+
+
+### Bug Fixes
+
+* issue related to encrypted PDFs ([c16b6ca](https://github.com/ColdPBC/cold-monorepo/commit/c16b6ca1de2ea85e7b010e575fba71a1a3929950))
+
 ## [1.399.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.0...v1.399.1) (2024-09-30)
 
 
