@@ -33,7 +33,9 @@ export const Loading: Story = {
 		);
 	},
 	parameters: {
-		auth0AddOn: null,
+		auth0AddOn: {
+      isLoading: true,
+    },
 	},
 };
 
@@ -89,23 +91,6 @@ export const ColdAdmin: Story = {
 				coldclimate_claims: {
 					roles: ['company:admin', 'cold:admin'],
 				},
-			},
-		},
-	},
-};
-
-export const NewSideBar: Story = {
-	render: () => {
-		return (
-			<StoryMockProvider>
-				<Application />
-			</StoryMockProvider>
-		);
-	},
-	parameters: {
-		launchdarkly: {
-			flags: {
-				showNewNavigationCold698: true,
 			},
 		},
 	},
