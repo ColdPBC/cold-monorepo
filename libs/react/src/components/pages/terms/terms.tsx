@@ -25,7 +25,7 @@ function _Terms(props: PropsWithChildren<TermsProps>) {
   }
 
   if (isAxiosError(data)) {
-    logError(error, ErrorType.SWRError);
+    logError(data, ErrorType.SWRError);
     return <ErrorPage
       error={'An error occurred while fetching the terms. Try refreshing the page.'}
       showLogout={false}
