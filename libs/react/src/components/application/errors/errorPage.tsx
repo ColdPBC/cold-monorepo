@@ -5,23 +5,33 @@ import { BaseButton } from '@coldpbc/components';
 
 export type ErrorPageProps = {
   error?: string;
+  showLogout?: boolean;
 };
 
-export const ErrorPage = ({ error }: ErrorPageProps) => {
+export const ErrorPage = ({ error, showLogout=true }: ErrorPageProps) => {
   const { logout } = useAuth0Wrapper();
 
   const handleLogout = async () => {
-    await logout();
+    await logout(
+      {
+        logoutParams: { returnTo: window.location.origin },
+      }
+    );
   };
 
   return (
     <div className={'fixed inset-0 h-screen w-screen bg-bgc-main flex flex-col items-center justify-center'}>
       <div className={'text-tc-primary w-1/2 max-w-96 flex flex-col items-center justify-center space-y-10'}>
         <div className={'text-h2'}>
-          Authentication failed
+          An Error Occurred
         </div>
         {error ? <div>{error}</div> : ''}
-        <BaseButton onClick={handleLogout} label={'Login Again '} variant={ButtonTypes.secondary} className={'w-auto'}/>
+        {
+          showLogout && (
+            <BaseButton onClick={handleLogout} label={'Login Again '} variant={ButtonTypes.secondary}
+                        className={'w-auto'}/>
+          )
+        }
         <div>If you're still having issues, please contact us at <a
           href="mailto: support@coldclimate.com">support@coldclimate.com</a>.
         </div>

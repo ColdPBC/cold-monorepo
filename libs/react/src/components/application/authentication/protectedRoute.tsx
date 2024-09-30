@@ -14,6 +14,7 @@ import { ErrorPage } from '../errors/errorPage';
 import { datadogRum } from '@datadog/browser-rum';
 import { LDContext } from 'launchdarkly-js-sdk-common';
 import { datadogLogs } from '@datadog/browser-logs';
+import {isAxiosError} from "axios";
 
 const _ProtectedRoute = () => {
   const { user, error, loginWithRedirect, isAuthenticated, isLoading, getAccessTokenSilently, orgId, logout } = useAuth0Wrapper();
@@ -25,14 +26,10 @@ const _ProtectedRoute = () => {
 
   const location = useLocation();
 
-  const navigate = useNavigate();
-
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const signedPolicySWR = useSWR<PolicySignedDataType[], any, any>(user && isAuthenticated ? ['/policies/signed/user', 'GET'] : null, axiosFetcher);
 
   const needsSignup = () => {
-    if (signedPolicySWR.data) {
+    if (signedPolicySWR.data && !isAxiosError(signedPolicySWR.data)) {
       // check if user has signed both policies
       const tos = signedPolicySWR.data?.some(policy => policy.name === 'tos' && !isEmpty(policy.policy_data));
       const privacy = signedPolicySWR.data?.some(policy => policy.name === 'privacy' && !isEmpty(policy.policy_data));
@@ -146,7 +143,7 @@ const _ProtectedRoute = () => {
     );
   }
 
-  if (error || signedPolicySWR.error) {
+  if (error || isAxiosError(signedPolicySWR.data)) {
     let errorMessage;
 
     if (error) {
@@ -154,12 +151,15 @@ const _ProtectedRoute = () => {
       logError(error, ErrorType.Auth0Error);
       if (error.message === 'invitation not found or already used') {
         errorMessage = 'This invitation has either expired or already been used. If you have already accepted the invite, try logging in again with the button below.';
+      } else {
+        errorMessage = 'A connection error occurred. Please refresh the page or re-login.';
       }
     }
 
-    if (signedPolicySWR.error) {
+    if (isAxiosError(signedPolicySWR.data)) {
       logBrowser('Error occurred in ProtectedRoute', 'error', { error: signedPolicySWR.error }, signedPolicySWR.error);
-      logError(signedPolicySWR.error, ErrorType.SWRError);
+      logError(signedPolicySWR.data, ErrorType.SWRError);
+      errorMessage = 'A connection error occurred. Please refresh the page or re-login.';
     }
 
     return <ErrorPage error={errorMessage} />;
@@ -174,13 +174,7 @@ const _ProtectedRoute = () => {
     return <Outlet />;
   } else {
     logBrowser('User is not authenticated', 'info', { user, isAuthenticated, orgId, isLoading, error });
-    return (
-      <Takeover show={true} setShow={() => {}}>
-        <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-          <Spinner size={GlobalSizes.xLarge} />
-        </div>
-      </Takeover>
-    );
+    return <ErrorPage error={'An authentication error occurred. Contact your admin for access.'} showLogout={false} />;
   }
 };
 

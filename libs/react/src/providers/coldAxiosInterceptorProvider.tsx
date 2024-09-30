@@ -20,8 +20,7 @@ const setAxiosTokenInterceptor = async (getAccessTokenSilently: (options?: GetTo
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     logBrowser(`Axios request sent to ${config.url}`, 'info', {
-      url: config.url,
-      headers: config.headers,
+      config: config
     });
     return config;
   });
@@ -32,22 +31,21 @@ const setAxiosResponseInterceptor = (coldContext: ColdContextType) => {
   axios.interceptors.response.use(
     response => {
       logBrowser(`Axios response received from ${response.config.url}`, 'info', {
-        url: response.config.url,
-        status: response.status,
+        response: {
+          ...response,
+          data: undefined
+        }
       });
       return response;
     },
     error => {
-      // filter out 404 errors when fetching data from /categories
       if (!(error.response && error.response.status === 404 && error.config.url?.includes('/categories'))) {
         logError(error, ErrorType.AxiosError, {
-          url: error.config.url,
-          status: error.response?.status,
+          error: error
         });
       }
       logBrowser(`Axios error connecting to ${error.config.url}`, 'error', {
-        url: error.config.url,
-        status: error.response?.status,
+        error: error
       });
       return Promise.reject(error);
     },

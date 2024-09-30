@@ -2,6 +2,7 @@ import { useAuth0, User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
 import { useColdContext } from './useColdContext';
+import {isAxiosError} from "axios";
 
 export const useAuth0Wrapper = () => {
   const { impersonatingOrg } = useColdContext();
@@ -15,7 +16,7 @@ export const useAuth0Wrapper = () => {
     axiosFetcher,
   );
 
-  if (userData.data && auth0Context.user) {
+  if (userData.data && auth0Context.user && !isAxiosError(userData.data)) {
     if (!auth0Context.user.family_name) {
       auth0Context.user.family_name = userData.data.family_name;
     }
@@ -37,7 +38,7 @@ export const useAuth0Wrapper = () => {
   return {
     ...auth0Context,
     isLoading: auth0Context.isLoading || userData.isLoading,
-    error: auth0Context.error || userData.error,
+    error: auth0Context.error || (isAxiosError(userData.data) ? userData.data : undefined),
     getOrgSpecificUrl,
     orgId,
   };

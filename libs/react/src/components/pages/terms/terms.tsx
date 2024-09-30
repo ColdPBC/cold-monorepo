@@ -1,11 +1,12 @@
 import React, { PropsWithChildren } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
-import { ErrorFallback, Spinner } from '@coldpbc/components';
+import {ErrorFallback, ErrorPage, Spinner} from '@coldpbc/components';
 import ReactMarkdown from 'react-markdown';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorType } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
+import {isAxiosError} from "axios";
 
 export interface TermsProps {
   type: string;
@@ -23,9 +24,12 @@ function _Terms(props: PropsWithChildren<TermsProps>) {
     );
   }
 
-  if (error) {
-    logError(error, ErrorType.SWRError);
-    return <div></div>;
+  if (isAxiosError(data)) {
+    logError(data, ErrorType.SWRError);
+    return <ErrorPage
+      error={'An error occurred while fetching the terms. Try refreshing the page.'}
+      showLogout={false}
+    />;
   }
 
   return (
