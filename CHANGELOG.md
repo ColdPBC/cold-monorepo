@@ -1,3 +1,10 @@
+## [1.399.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.2...v1.399.3) (2024-10-01)
+
+
+### Bug Fixes
+
+* enhance error logging with file context ([211d358](https://github.com/ColdPBC/cold-monorepo/commit/211d3582b559dbc463117b46807ee541ab06ba43))
+
 ## [1.399.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.1...v1.399.2) (2024-09-30)
 
 
