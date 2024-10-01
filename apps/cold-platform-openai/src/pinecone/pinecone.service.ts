@@ -517,7 +517,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 				// set extension to PDF since it's now been converted
 				extension = 'pdf';
 			} else {
-				// Process All Others
+				// Process PDF
 				const bucket = `cold-api-uploaded-files`;
 				const s3File = await this.s3.getObject(user, bucket, filePayload?.key);
 
@@ -525,7 +525,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 					throw new Error(`File not found: ${filePayload?.key}`);
 				}
 
-				bytes = await s3File?.Body?.transformToByteArray();
+				bytes = await s3File.Body.transformToByteArray();
 			}
 
 			if (!bytes || bytes.length < 1) {
@@ -546,17 +546,17 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 				//await this.extraction.extractDataFromContent(content, user, filePayload, organization);
 			} else {
 				// Attempt to convert PDF to Image since no text content found
-				this.logger.warn(`No text content found in ${filePayload?.original_name}; converting to image`);
+				//this.logger.warn(`No text content found in ${filePayload?.original_name}; converting to image`);
 
-				bytes = content['bytes'];
+				extension = 'pdf';
 
 				// Create embedding for content
-				const embedding = (await this.lc.getDocContent('txt', bytes, user)) as Document<Record<string, any>>[];
+				//const embedding = (await this.lc.getDocContent('txt', bytes, user)) as Document<Record<string, any>>[];
 
-				await this.persistEmbeddings(index, embedding, filePayload, organization);
+				//await this.persistEmbeddings(index, embedding, filePayload, organization);
 			}
 
-			return { bytes, organization, user, filePayload };
+			return { bytes, extension, organization, user, filePayload };
 		} catch (e) {
 			this.logger.error(e.message, { error: e, namespace: organization.name, file: filePayload });
 

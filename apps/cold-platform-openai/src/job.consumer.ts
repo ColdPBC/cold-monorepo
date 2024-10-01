@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueueProgress, Process, Processor } from '@nestjs/bull';
-import { Job } from 'bull';
+import { InjectQueue, OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueueProgress, Process, Processor } from '@nestjs/bull';
+import { Job, Queue } from 'bull';
 import OpenAI, { UnprocessableEntityError } from 'openai';
 import { AppService } from './app.service';
 import { AssistantService } from './assistant/assistant.service';
@@ -19,6 +19,7 @@ export class JobConsumer extends BaseWorker {
 	started: Date;
 
 	constructor(
+		@InjectQueue('openai:extraction') readonly extractionQueue: Queue,
 		readonly config: ConfigService,
 		readonly appService: AppService,
 		readonly assistant: AssistantService,
@@ -69,25 +70,12 @@ export class JobConsumer extends BaseWorker {
 	@Process('file.uploaded')
 	async processFileJob(job: Job) {
 		const processed = await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
-
-		await job.progress(50);
 		//this.fileService.uploadOrgFilesToOpenAI(job);
 		if (!processed?.bytes || !processed?.filePayload || !processed?.user || !processed?.organization) {
 			throw new Error('Failed to process file, missing required data');
 		}
-		const text = await this.extraction.extractTextFromPDF(processed.bytes, processed?.filePayload, processed?.user, processed?.organization);
 
-		if (!text) {
-			const base64Images = await this.extraction.processPdfPages(processed.bytes, processed.filePayload, processed.user, processed.organization);
-
-			const extracted = await this.extraction.extractDataFromImages(base64Images, processed.user, processed.filePayload, processed.organization);
-
-			if (extracted) {
-				// Encode the JSON string to a byte array
-				const encoder = new TextEncoder();
-				processed.bytes = encoder.encode(JSON.stringify(extracted));
-			}
-		}
+		await this.extractionQueue.add('extract', processed);
 	}
 
 	@Process('file.deleted')

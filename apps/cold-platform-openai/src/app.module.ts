@@ -39,7 +39,14 @@ export class AppModule {
 					name: 'openai',
 					settings: {
 						stalledInterval: 3600000,
-						maxStalledCount: 3,
+						maxStalledCount: 120,
+					},
+				}),
+				BullModule.registerQueue({
+					name: 'openai:extraction',
+					settings: {
+						stalledInterval: 3600000,
+						maxStalledCount: 120,
 					},
 				}),
 				MulterModule.register({

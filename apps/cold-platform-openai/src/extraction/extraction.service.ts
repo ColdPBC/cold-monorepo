@@ -12,6 +12,7 @@ import { PDFDocument } from 'pdf-lib';
 import { pdfByteArrayToScreenshots } from './screenShotPDFPages';
 import { fromBuffer } from 'pdf2pic';
 import { pdfToText } from './extractTextFromPDF';
+import { Process, Processor } from '@nestjs/bull';
 
 @Injectable()
 export class ExtractionService extends BaseWorker {
@@ -36,13 +37,19 @@ export class ExtractionService extends BaseWorker {
 	}
 
 	async extractTextFromPDF(pdf: Uint8Array, filePayload: any, user: any, organization: any) {
-		const extracted = await pdfToText(pdf);
-		if (!extracted) {
-			throw new Error('No text extracted from PDF');
-		}
+		try {
+			const extracted = await pdfToText(pdf);
 
-		const processed = await this.extractDataFromContent(extracted, user, filePayload, organization);
-		return processed;
+			if (!extracted) {
+				return null;
+			}
+
+			const processed = await this.extractDataFromContent(extracted, user, filePayload, organization);
+			return processed;
+		} catch (error) {
+			this.logger.error('Error extracting text from pdf', { error, namespace: organization.name });
+			return null;
+		}
 	}
 
 	async convertPdfPageToImage(pageNumber: number, content: Uint8Array, filePayload: { original_name: any[] }, user: IAuthenticatedUser, organization: organizations) {
@@ -65,17 +72,19 @@ export class ExtractionService extends BaseWorker {
 
 	async processPdfPages(fileBuffer: Uint8Array, filePayload: any, user: IAuthenticatedUser, organization: organizations) {
 		try {
-			const pdfLoadDoc = await PDFDocument.load(Buffer.from(fileBuffer), { ignoreEncryption: true });
+			/*	const file = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
+			const fileBytes = await file.Body?.transformToByteArray();
+			if (!fileBytes) {
+				throw new Error(`No content found in ${filePayload.original_name}`);
+			}*/
 
-			if (pdfLoadDoc.isEncrypted) {
-				const pages = await pdfByteArrayToScreenshots(fileBuffer);
-				return pages;
-			}
+			const base64String = Buffer.from(fileBuffer).toString('base64');
+
+			const pdfLoadDoc = await PDFDocument.load(base64String, { ignoreEncryption: true });
 
 			const pageCount = pdfLoadDoc.getPageCount();
 
 			if (pdfLoadDoc.isEncrypted) {
-				const pages = pdfByteArrayToScreenshots(fileBuffer);
 				throw new Error(`FATAL: Unable to process encrypted PDF ${filePayload.original_name}.  Either upload decrypted PDF or create a new PDF with screenshots of the pages`);
 			}
 
