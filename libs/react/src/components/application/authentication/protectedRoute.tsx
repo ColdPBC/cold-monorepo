@@ -106,6 +106,7 @@ const _ProtectedRoute = () => {
                 authorizationParams: {
                   audience: auth0Options.authorizationParams?.audience,
                   scope: 'offline_access email profile openid',
+                  prompt: 'login',
                 },
               });
             }
@@ -174,7 +175,13 @@ const _ProtectedRoute = () => {
     return <Outlet />;
   } else {
     logBrowser('User is not authenticated', 'info', { user, isAuthenticated, orgId, isLoading, error });
-    return <ErrorPage error={'An authentication error occurred. Contact your admin for access.'} showLogout={false} />;
+    return (
+      <Takeover show={true} setShow={() => {}}>
+        <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+          <Spinner size={GlobalSizes.xLarge} />
+        </div>
+      </Takeover>
+    );
   }
 };
 
