@@ -40,6 +40,9 @@ export class SustainabilityAttribute {
 	@Field(() => GraphQLJSON, { nullable: true })
 	metadata?: Record<string, unknown>;
 
+	@Field(() => String, { nullable: true })
+	logoUrl?: string;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'sustainabilityAttribute' })
 	attributeAssurances!: AttributeAssurance[];
 }
