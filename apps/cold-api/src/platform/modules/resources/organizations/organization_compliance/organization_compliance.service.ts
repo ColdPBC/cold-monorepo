@@ -86,6 +86,7 @@ export class OrganizationComplianceService extends BaseWorker {
 	}
 	create(name: string, organizationCompliance: organization_compliance, req: IRequest) {
 		try {
+			organizationCompliance = {} as organization_compliance;
 			set(organizationCompliance, 'organization_id', req.organization.id);
 			set(organizationCompliance, 'compliance_definition_name', name);
 
