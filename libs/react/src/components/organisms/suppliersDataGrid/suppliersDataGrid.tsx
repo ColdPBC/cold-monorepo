@@ -30,7 +30,6 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
         id: orgId,
       },
       supplier: true,
-      supplierTier: tier,
     },
   });
 
@@ -39,11 +38,13 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       if (has(suppliersQuery.data, 'errors')) {
         setSuppliers([]);
       } else {
-        const suppliers = get(suppliersQuery.data, 'data.organizationFacilities', []);
+        const suppliers = get(suppliersQuery.data, 'data.organizationFacilities', []).filter(
+          (supplier: SuppliersWithAssurances) => supplier.supplierTier === tier,
+        )
         setSuppliers(suppliers);
       }
     }
-  }, [suppliersQuery.data]);
+  }, [suppliersQuery.data, tier]);
 
   if (suppliersQuery.isLoading) {
     return <Spinner />;
