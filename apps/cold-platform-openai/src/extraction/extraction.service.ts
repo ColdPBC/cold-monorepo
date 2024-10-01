@@ -47,7 +47,7 @@ export class ExtractionService extends BaseWorker {
 			const processed = await this.extractDataFromContent(extracted, user, filePayload, organization);
 			return processed;
 		} catch (error) {
-			this.logger.error('Error extracting text from pdf', { error, namespace: organization.name });
+			this.logger.error('Error extracting text from pdf', { error, namespace: organization.name, file: filePayload });
 			return null;
 		}
 	}
@@ -64,7 +64,7 @@ export class ExtractionService extends BaseWorker {
 
 			return image.buffer.toString('base64');
 		} catch (e) {
-			this.logger.error('Error converting pdf to image', { error: e, namespace: organization.name });
+			this.logger.error('Error converting pdf to image', { error: e, namespace: organization.name, file: filePayload });
 
 			throw e;
 		}
@@ -101,7 +101,7 @@ export class ExtractionService extends BaseWorker {
 
 			return pages;
 		} catch (e) {
-			this.logger.error('Error converting pdf to image', { error: e, namespace: organization.name });
+			this.logger.error('Error converting pdf to image', { error: e, namespace: organization.name, file: filePayload });
 			throw e;
 		}
 	}
@@ -241,7 +241,7 @@ export class ExtractionService extends BaseWorker {
 
 			return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
 		} catch (e) {
-			this.logger.info('Error extracting data from content', { error: e });
+			this.logger.info('Error extracting data from content', { error: e, file: orgFile, user, organization });
 			const metadata = orgFile.metadata as any;
 			const updateData: any = {
 				metadata: {
