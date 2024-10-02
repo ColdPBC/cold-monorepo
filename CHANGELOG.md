@@ -1,3 +1,10 @@
+# [1.402.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.401.1...v1.402.0) (2024-10-02)
+
+
+### Features
+
+* add supplier relation to products model ([f6288b7](https://github.com/ColdPBC/cold-monorepo/commit/f6288b788c32d4cde3859c50809eb54ee9936e73))
+
 ## [1.401.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.401.0...v1.401.1) (2024-10-02)
 
 
