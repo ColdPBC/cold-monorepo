@@ -352,6 +352,7 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-unused-imports": "^3.0.0",
     "fakerator": "^0.3.6",
+    "graphql": "^16.9.0",
     "husky": "^8.0.3",
     "jest": "^29.6.4",
     "jest-canvas-mock": "^2.5.0",
