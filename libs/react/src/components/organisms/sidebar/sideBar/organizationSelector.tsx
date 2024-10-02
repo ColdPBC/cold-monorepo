@@ -71,11 +71,13 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
   logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOption });
 
   if (sidebarExpanded || !ldFlags.showNewNavigationCold698) {
-    const organizationOptions: InputOption[] = data.map((org: Organization, index: number) => ({
-      id: index,
-      name: org.display_name,
-      value: org.id,
-    }));
+    const organizationOptions: InputOption[] = data
+      .sort((a: Organization, b: Organization) => a.display_name.localeCompare(b.display_name))
+      .map((org: Organization, index: number) => ({
+        id: index,
+        name: org.display_name,
+        value: org.id,
+      }));
 
     return (
       <ComboBox
