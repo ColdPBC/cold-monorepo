@@ -22,6 +22,7 @@ generator zod {
   useMultipleFiles                 = "true"
   writeNullishInModelTypes         = "false"
 }
+
 /// this is a test line this is
 
 datasource db {
@@ -346,11 +347,11 @@ model organization_facilities {
   name                 String
   city                 String?
   country              String?
-  created_at           DateTime?               @default(now())
-  updated_at           DateTime?               @updatedAt
+  created_at           DateTime?              @default(now())
+  updated_at           DateTime?              @updatedAt
   address_line_2       String?
   postal_code          String?
-  deleted              Boolean?                @default(false)
+  deleted              Boolean?               @default(false)
   metadata             Json?
   state_province       String?
   address_line_1       String?
@@ -363,6 +364,7 @@ model organization_facilities {
   product_suppliers    suppliers_view[]
   attribute_assurances attribute_assurances[]
   material_suppliers   material_suppliers[]
+  products             products[]
 
   @@index([organization_id], map: "organization_facilities_organization_id_idx1")
 }
@@ -514,7 +516,7 @@ model organization_files {
   openai_vector_store_id                    String?
   openai_vector_file_status                 String?
   type                                      file_types                                  @default(OTHER)
-	visible																	 	Boolean                                     @default(true)
+  visible                                   Boolean                                     @default(true)
   expires_at                                DateTime?
   effective_end_date                        DateTime?
   effective_start_date                      DateTime?
@@ -600,12 +602,12 @@ model sustainability_attributes {
   id                   String                 @id @default(dbgenerated("uuid_generate_v4()"))
   organization_id      String?
   name                 String
-  created_at           DateTime?               @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime?               @updatedAt @db.Timestamptz(6)
-  deleted              Boolean                 @default(false)
+  created_at           DateTime?              @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime?              @updatedAt @db.Timestamptz(6)
+  deleted              Boolean                @default(false)
   level                claim_levels
   type                 claim_types
-	logo_url						 String?
+  logo_url             String?
   organization         organizations?         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   metadata             Json?
   attribute_assurances attribute_assurances[]
@@ -617,7 +619,7 @@ model sustainability_attributes {
 }
 
 model attribute_assurances {
-  id                          String                    @id @default(dbgenerated("uuid_generate_v4()"))
+  id                          String                     @id @default(dbgenerated("uuid_generate_v4()"))
   organization_facility_id    String?
   organization_id             String
   sustainability_attribute_id String
@@ -626,16 +628,16 @@ model attribute_assurances {
   organization_file_id        String?
   effective_start_date        DateTime?
   effective_end_date          DateTime?
-  created_at                  DateTime                  @default(now()) @db.Timestamptz(6)
-  updated_at                  DateTime                  @updatedAt @db.Timestamptz(6)
-  organization                organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  organization_files          organization_files?       @relation(fields: [organization_file_id], references: [id])
-  material                    materials?                @relation(fields: [material_id], references: [id])
-  product                     products?                 @relation(fields: [product_id], references: [id])
-  supplier                    organization_facilities?  @relation(fields: [organization_facility_id], references: [id])
+  created_at                  DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at                  DateTime                   @updatedAt @db.Timestamptz(6)
+  organization                organizations              @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  organization_files          organization_files?        @relation(fields: [organization_file_id], references: [id])
+  material                    materials?                 @relation(fields: [material_id], references: [id])
+  product                     products?                  @relation(fields: [product_id], references: [id])
+  supplier                    organization_facilities?   @relation(fields: [organization_facility_id], references: [id])
   sustainability_attribute    sustainability_attributes? @relation(fields: [sustainability_attribute_id], references: [id], onDelete: Cascade)
 
-	@@index([organization_id], map: "attribute_assurances_organization_id_idx1")
+  @@index([organization_id], map: "attribute_assurances_organization_id_idx1")
   @@index([organization_file_id], map: "attribute_assurances_organization_file_id_idx1")
   @@index([sustainability_attribute_id], map: "attribute_assurances_attribute_id_idx1")
   @@index([organization_facility_id])
@@ -644,18 +646,20 @@ model attribute_assurances {
 }
 
 model products {
-  id                         String                 @id @default(cuid())
+  id                         String                   @id @default(cuid())
   name                       String
-  created_at                 DateTime?               @default(now()) @db.Timestamptz(6)
-  updated_at                 DateTime?               @updatedAt @db.Timestamptz(6)
-  deleted                    Boolean?                @default(false)
+  created_at                 DateTime?                @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime?                @updatedAt @db.Timestamptz(6)
+  deleted                    Boolean?                 @default(false)
   organization_id            String
   metadata                   Json?
   season_code                String?
-	style_code								 String?
+  supplier_id                String?
+  style_code                 String?
   product_category_heirarchy Json?
   materials                  product_materials[]
-  organization               organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  organization               organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  supplier                   organization_facilities? @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
   attribute_assurances       attribute_assurances[]
 
   @@index([organization_id], map: "products_organization_id_idx1")
@@ -664,25 +668,25 @@ model products {
 model materials {
   id                   String                 @id @default(cuid())
   name                 String
-  created_at           DateTime?               @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime?               @updatedAt @db.Timestamptz(6)
-  deleted              Boolean?                @default(false)
+  created_at           DateTime?              @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime?              @updatedAt @db.Timestamptz(6)
+  deleted              Boolean?               @default(false)
   organization_id      String
   material_suppliers   material_suppliers[]
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   attribute_assurances attribute_assurances[]
   product_materials    product_materials[]
 
+  @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "materials_organization_id_idx1")
-	@@unique([organization_id, name], name: "orgIdName")
 }
 
 model material_suppliers {
   id          String                  @id @default(cuid())
   material_id String
   supplier_id String
-  created_at  DateTime?                @default(now()) @db.Timestamptz(6)
-  updated_at  DateTime?                @updatedAt @db.Timestamptz(6)
+  created_at  DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime?               @updatedAt @db.Timestamptz(6)
   material    materials               @relation(fields: [material_id], references: [id], onDelete: Cascade)
   supplier    organization_facilities @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
 
@@ -692,14 +696,14 @@ model material_suppliers {
 }
 
 model product_materials {
-  id                   String    @id @default(cuid())
+  id                   String     @id @default(cuid())
   product_id           String
   material_id          String?
   material_supplier_id String?
   created_at           DateTime?  @default(now()) @db.Timestamptz(6)
   updated_at           DateTime?  @updatedAt @db.Timestamptz(6)
   material             materials? @relation(fields: [material_id], references: [id], onDelete: Cascade)
-  product              products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product              products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
   @@index([material_id], map: "product_materials_material_id_idx1")
   @@index([product_id], map: "product_materials_product_id_idx1")
@@ -1129,16 +1133,16 @@ enum claim_levels {
 }
 
 enum file_types {
-	AUDIT_REPORT
+  AUDIT_REPORT
   CERTIFICATE
-	TEST_REPORT
+  TEST_REPORT
   STATEMENT
   ASSESSMENT
   PURCHASE_ORDER
   BILL_OF_MATERIALS
   POLICY
-	SCOPE_CERTIFICATE
-	TRANSACTION_CERTIFICATE
+  SCOPE_CERTIFICATE
+  TRANSACTION_CERTIFICATE
   OTHER
 }
 

@@ -7,6 +7,7 @@ import { Emission } from './emission';
 import { Integration } from './integration';
 import { MaterialSupplier } from './material-supplier';
 import { Organization } from './organization';
+import { Product } from './product';
 import { UtilityBill } from './utility-bill';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -77,6 +78,9 @@ export class OrganizationFacility {
 
 	@OneToMany({ entity: () => MaterialSupplier, mappedBy: 'organizationFacility' })
 	materialSuppliers = new Collection<MaterialSupplier>(this);
+
+	@OneToMany({ entity: () => Product, mappedBy: 'organizationFacility' })
+	products = new Collection<Product>(this);
 
 	@OneToMany({ entity: () => UtilityBill, mappedBy: 'organizationFacility' })
 	utilityBills = new Collection<UtilityBill>(this);
