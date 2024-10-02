@@ -8,7 +8,7 @@ import {ChevronUpDownIcon} from '@heroicons/react/20/solid';
 export interface ComboBoxProps extends SelectProps {
   options: Array<InputOption>;
   value: InputOption;
-  dropdownDirection: 'down' | 'up';
+  dropdownDirection?: 'down' | 'up'; // undefined will implicitly default to down
 }
 
 export const ComboBox = (props: ComboBoxProps) => {
