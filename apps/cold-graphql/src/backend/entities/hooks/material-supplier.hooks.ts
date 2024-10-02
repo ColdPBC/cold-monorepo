@@ -8,6 +8,8 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { get, set } from 'lodash';
 import { MQTTPayloadType, MqttService } from '../../libs/mqtt/mqtt.service';
 import { MaterialSupplier } from '../postgresql';
+import { setEntityDefaults } from '../../libs/utilities/entity_utils';
+import { GuidPrefixes } from '../../libs/cuid/compliance.enums';
 
 export class MaterialSupplierHooks extends BaseSidecar {
 	constructor() {
@@ -25,18 +27,20 @@ export class MaterialSupplierHooks extends BaseSidecar {
 	}
 
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof MaterialSupplier, OrgContext>) {
-		this.logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });
+		this.logger.log(`before create material supplier hook`, { user: params.context.user, arguments: params.args });
 
-		for (const item of params.args.items) {
-			set(item, 'updatedAt', new Date());
-			set(item, 'createdAt', new Date());
-		}
+		const { context, args } = params;
+
+		setEntityDefaults(args, GuidPrefixes.OrganizationFacility);
+
+		console.log(args);
 
 		return params;
 	}
 
 	async afterCreateHook(params: CreateOrUpdateHookParams<typeof MaterialSupplier, OrgContext>) {
-		this.logger.log('afterCreateHook', { user: params.context.user, arguments: params.args });
+		this.logger.log(`before create material supplier hook`, { user: params.context.user, arguments: params.args });
+
 		return params;
 	}
 

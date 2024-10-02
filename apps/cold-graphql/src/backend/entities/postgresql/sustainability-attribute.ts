@@ -39,11 +39,11 @@ export class SustainabilityAttribute {
 	@Property({ type: 'text' })
 	name!: string;
 
-	@Property({ type: 'datetime', length: 6 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 6 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	updatedAt?: Date;
 
 	@Property({ type: 'boolean', default: false })
 	deleted = false;

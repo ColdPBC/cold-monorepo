@@ -600,9 +600,9 @@ model sustainability_attributes {
   id                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   organization_id      String?
   name                 String
-  created_at           DateTime               @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime               @updatedAt @db.Timestamptz(6)
-  deleted              Boolean                @default(false)
+  created_at           DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime?               @updatedAt @db.Timestamptz(6)
+  deleted              Boolean                 @default(false)
   level                claim_levels
   type                 claim_types
 	logo_url						 String?
@@ -646,9 +646,9 @@ model attribute_assurances {
 model products {
   id                         String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name                       String
-  created_at                 DateTime               @default(now()) @db.Timestamptz(6)
-  updated_at                 DateTime               @updatedAt @db.Timestamptz(6)
-  deleted                    Boolean                @default(false)
+  created_at                 DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime?               @updatedAt @db.Timestamptz(6)
+  deleted                    Boolean?                @default(false)
   organization_id            String
   metadata                   Json?
   season_code                String?
@@ -664,9 +664,9 @@ model products {
 model materials {
   id                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name                 String
-  created_at           DateTime               @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime               @updatedAt @db.Timestamptz(6)
-  deleted              Boolean                @default(false)
+  created_at           DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime?               @updatedAt @db.Timestamptz(6)
+  deleted              Boolean?                @default(false)
   organization_id      String
   material_suppliers   material_suppliers[]
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
@@ -681,8 +681,8 @@ model material_suppliers {
   id          String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   material_id String                  @db.Uuid
   supplier_id String
-  created_at  DateTime                @default(now()) @db.Timestamptz(6)
-  updated_at  DateTime                @updatedAt @db.Timestamptz(6)
+  created_at  DateTime?                @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime?                @updatedAt @db.Timestamptz(6)
   material    materials               @relation(fields: [material_id], references: [id], onDelete: Cascade)
   supplier    organization_facilities @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
 
@@ -694,11 +694,11 @@ model material_suppliers {
 model product_materials {
   id                   String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   product_id           String    @db.Uuid
-  material_id          String    @db.Uuid
-  material_supplier_id String
-  created_at           DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime  @updatedAt @db.Timestamptz(6)
-  material             materials @relation(fields: [material_id], references: [id], onDelete: Cascade)
+  material_id          String?    @db.Uuid
+  material_supplier_id String?
+  created_at           DateTime?  @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime?  @updatedAt @db.Timestamptz(6)
+  material             materials? @relation(fields: [material_id], references: [id], onDelete: Cascade)
   product              products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
   @@index([material_id], map: "product_materials_material_id_idx1")

@@ -8,6 +8,8 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { get, set } from 'lodash';
 import { MQTTPayloadType, MqttService } from '../../libs/mqtt/mqtt.service';
 import { Product } from '../postgresql';
+import { setEntityDefaults } from '../../libs/utilities/entity_utils';
+import { GuidPrefixes } from '../../libs/cuid/compliance.enums';
 
 export class ProductHooks extends BaseSidecar {
 	constructor() {
@@ -25,14 +27,14 @@ export class ProductHooks extends BaseSidecar {
 	}
 
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
-		this.logger.log('beforeCreateHook', { user: params.context.user, arguments: params.args });
-		if (!params.context.user.isColdAdmin) {
-			for (const item of params.args.items) {
-				set(item, 'organization.id', params.context.user.organization.id);
-				set(item, 'createdAt', new Date());
-				set(item, 'updatedAt', new Date());
-			}
-		}
+		this.logger.log(`before create product hook`, { user: params.context.user, arguments: params.args });
+
+		const { context, args } = params;
+
+		setEntityDefaults(args, GuidPrefixes.OrganizationFacility);
+
+		console.log(args);
+
 		return params;
 	}
 

@@ -22,11 +22,11 @@ export class SustainabilityAttribute {
 	@Field(() => String, { adminUIOptions: {summaryField:true} })
 	name!: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@Field(() => Boolean)
 	deleted = false;

@@ -36,7 +36,7 @@ export class OrganizationFacilityHooks extends BaseSidecar {
 	}
 
 	async afterCreateHook(params: CreateOrUpdateHookParams<typeof OrganizationFacility, OrgContext>) {
-		this.logger.log('afterCreateHook', { user: params.context.user, arguments: params.args });
+		this.logger.log(`before create facility hook`, { user: params.context.user, arguments: params.args });
 		return params;
 	}
 

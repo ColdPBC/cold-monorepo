@@ -26,11 +26,11 @@ export class MaterialSupplier {
 	@ManyToOne({ entity: () => OrganizationFacility, ref: true, fieldName: 'supplier_id', index: 'material_suppliers_supplier_id_idx1' })
 	organizationFacility!: Ref<OrganizationFacility>;
 
-	@Property({ type: 'datetime', length: 6 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 6 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	updatedAt?: Date;
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof MaterialSupplier, OrgContext>) {
