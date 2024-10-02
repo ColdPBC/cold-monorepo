@@ -1,4 +1,4 @@
-import { VectorRecordHooks } from './vector-record.hooks';
+import { VectorRecordHooks } from '../hooks/vector-record.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';

@@ -1,4 +1,4 @@
-import { PrismaMigrationHooks } from './prisma-migration.hooks';
+import { PrismaMigrationHooks } from '../hooks/prisma-migration.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';

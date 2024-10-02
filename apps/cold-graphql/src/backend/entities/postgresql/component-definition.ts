@@ -1,4 +1,4 @@
-import { ComponentDefinitionHooks } from './component-definition.hooks';
+import { ComponentDefinitionHooks } from '../hooks/component-definition.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, Enum, PrimaryKey, Property, Unique } from '@mikro-orm/core';

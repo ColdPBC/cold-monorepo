@@ -1,4 +1,4 @@
-import { OrganizationComplianceQuestionBookmarkHooks } from './organization-compliance-question-bookmark.hooks';
+import { OrganizationComplianceQuestionBookmarkHooks } from '../hooks/organization-compliance-question-bookmark.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';

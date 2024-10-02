@@ -1,4 +1,4 @@
-import { OrganizationComplianceNoteLinkHooks } from './organization-compliance-note-link.hooks';
+import { OrganizationComplianceNoteLinkHooks } from '../hooks/organization-compliance-note-link.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';

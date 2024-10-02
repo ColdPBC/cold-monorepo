@@ -1,4 +1,4 @@
-import { SustainabilityAttributeHooks } from './sustainability-attribute.hooks';
+import { SustainabilityAttributeHooks } from '../hooks/sustainability-attribute.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, Enum, Index, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';

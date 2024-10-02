@@ -1,4 +1,4 @@
-import { SupportedUtilityHooks } from './supported-utility.hooks';
+import { SupportedUtilityHooks } from '../hooks/supported-utility.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';

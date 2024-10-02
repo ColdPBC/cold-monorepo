@@ -3,18 +3,29 @@ import * as path from 'path';
 import { WorkerLogger } from '../src/backend/libs/logger';
 import { GenerateSideCarClass, importGraphWeaverHookClasses } from './entity_hooks';
 
-const directoryPath = path.join(__dirname, '../src/backend/entities/postgresql');
+const entityPath = path.join(__dirname, '../src/backend/entities/postgresql');
+const hookPath = path.join(__dirname, '../src/backend/entities/hooks');
 const logger = new WorkerLogger('EntitySidecarGenerator');
 const overwriteSidecars = process.env.OVERWRITE_SIDECARS === 'true';
 
-fs.readdir(directoryPath, (err, files) => {
+fs.readdir(hookPath, (err, files) => {
+	if (err) {
+		fs.mkdir(hookPath, err => {
+			if (err) {
+				return logger.error('Unable to create directory: ' + err);
+			}
+		});
+	}
+});
+
+fs.readdir(entityPath, (err, files) => {
 	if (err) {
 		return logger.error('Unable to scan directory: ' + err);
 	}
 
 	files.forEach(file => {
-		if (file.endsWith('.ts') && !file.endsWith('.hooks.ts')) {
-			const filePath = path.join(directoryPath, file);
+		if (!file.endsWith('.hooks.ts')) {
+			const filePath = path.join(entityPath, file);
 			fs.readFile(filePath, 'utf8', (err, data) => {
 				if (err) {
 					return logger.error('Unable to read file: ' + err);
@@ -24,7 +35,7 @@ fs.readdir(directoryPath, (err, files) => {
 				if (classNameMatch) {
 					const entityClassName = classNameMatch[1];
 					const entityFileName = path.basename(file, '.ts');
-					const sidecarFilePath = path.join(directoryPath, `${entityFileName}.hooks.ts`);
+					const sidecarFilePath = path.join(hookPath, `${entityFileName}.hooks.ts`);
 					const sidecarContent = GenerateSideCarClass(entityClassName, entityFileName);
 
 					fs.access(sidecarFilePath, fs.constants.F_OK, err => {

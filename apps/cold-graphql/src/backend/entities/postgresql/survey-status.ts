@@ -1,4 +1,4 @@
-import { SurveyStatusHooks } from './survey-status.hooks';
+import { SurveyStatusHooks } from '../hooks/survey-status.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, Enum, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';

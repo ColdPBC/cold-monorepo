@@ -85,7 +85,7 @@ fs.readdir(entityPath, (err, files) => {
 	}
 
 	files.forEach(file => {
-		if (file.endsWith('.ts') && file.endsWith('.hooks.ts')) {
+		if (file.endsWith('.hooks.ts')) {
 			return;
 		}
 		const filePath = path.join(entityPath, file);
@@ -107,7 +107,7 @@ fs.readdir(entityPath, (err, files) => {
 				let updatedData = data.slice(0, classEndIndex) + hookDecorators(className) + data.slice(classEndIndex);
 
 				if (!updatedData.includes(importGraphWeaverHookClasses)) {
-					updatedData = `import { ${className}Hooks } from './${file.split('.')[0]}.hooks';\n${importGraphWeaverHookClasses}\n` + updatedData;
+					updatedData = `import { ${className}Hooks } from '../hooks/${file.split('.')[0]}.hooks';\n${importGraphWeaverHookClasses}\n` + updatedData;
 				}
 
 				const sidecarProperty = `\n\tsidecar: ${className}Hooks;\n`;

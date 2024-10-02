@@ -1,4 +1,4 @@
-import { OrganizationComplianceResponseHooks } from './organization-compliance-response.hooks';
+import { OrganizationComplianceResponseHooks } from '../hooks/organization-compliance-response.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';

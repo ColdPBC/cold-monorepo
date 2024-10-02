@@ -1,4 +1,4 @@
-import { ProductMaterialHooks } from './product-material.hooks';
+import { ProductMaterialHooks } from '../hooks/product-material.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';

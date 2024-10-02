@@ -1,4 +1,4 @@
-import { EmissionScopeHooks } from './emission-scope.hooks';
+import { EmissionScopeHooks } from '../hooks/emission-scope.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';

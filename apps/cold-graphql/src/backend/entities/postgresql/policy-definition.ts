@@ -1,4 +1,4 @@
-import { PolicyDefinitionHooks } from './policy-definition.hooks';
+import { PolicyDefinitionHooks } from '../hooks/policy-definition.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
