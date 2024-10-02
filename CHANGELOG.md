@@ -1,3 +1,10 @@
+# [1.401.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.6...v1.401.0) (2024-10-02)
+
+
+### Features
+
+* update entity defaults and migrate to CUIDs ([8a701d2](https://github.com/ColdPBC/cold-monorepo/commit/8a701d20e752e4d18050e2be9111a3ec1e62104c))
+
 ## [1.400.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.5...v1.400.6) (2024-10-02)
 
 
