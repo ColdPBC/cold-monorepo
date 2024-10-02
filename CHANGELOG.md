@@ -1,3 +1,10 @@
+## [1.400.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.3...v1.400.4) (2024-10-02)
+
+
+### Bug Fixes
+
+* streamline entity default settings via utility functions ([42e359a](https://github.com/ColdPBC/cold-monorepo/commit/42e359abea4a9ba71717fa95688cbe2e6efaa6a4))
+
 ## [1.400.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.2...v1.400.3) (2024-10-02)
 
 
