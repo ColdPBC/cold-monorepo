@@ -1,3 +1,16 @@
+# [1.403.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.402.0...v1.403.0) (2024-10-02)
+
+
+### Bug Fixes
+
+* add back sorting by display name ([481ae00](https://github.com/ColdPBC/cold-monorepo/commit/481ae001e5eb343a9cec510416ba505cb1e7a3a8))
+* default to Cold Climate from the get-go ([4b47dc5](https://github.com/ColdPBC/cold-monorepo/commit/4b47dc55ab7d980b341645901d82236e310cb245))
+
+
+### Features
+
+* new parameter on combobox component to define dropdown direction (up or down) ([bc48987](https://github.com/ColdPBC/cold-monorepo/commit/bc48987f0ddd362c85c4992ab2c845b605665991))
+
 # [1.402.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.401.1...v1.402.0) (2024-10-02)
 
 
