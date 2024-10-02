@@ -149,21 +149,20 @@ const _DocumentDetailsSidebar = (props: {
 	}).sort((a, b) => a.name.localeCompare(b.name));
 
 	const getSustainabilityAttributeDropdown = (fileState: DocumentDetailsSidebarFileState) => {
-		// add option to dropdown that says "Select sustainability attribute"
-		const selectSustainabilityAttributeOption = {
+		const defaultSustainabilityAttributeOption = {
 			id: -1,
 			name: 'None',
 			value: '-1',
 		};
 
-		const susAttributes: InputOption[] = [selectSustainabilityAttributeOption];
-		sustainabilityAttributes.forEach((attribute, index) => {
-			susAttributes.push({
-				id: index,
-				name: attribute.name,
-				value: attribute.id,
-			});
-		});
+		const susAttributes: InputOption[] = [
+      defaultSustainabilityAttributeOption,
+      ...sustainabilityAttributes.map((attribute, index) => ({
+        id: index,
+        name: attribute.name,
+        value: attribute.id,
+      })),
+    ];
 
 		return (
 			<div className={'w-full flex flex-col gap-[8px]'}>
@@ -171,7 +170,7 @@ const _DocumentDetailsSidebar = (props: {
 				<ComboBox
 					options={susAttributes}
 					name={'sustainabilityAttribute'}
-					value={fileState.sustainabilityAttribute}
+					value={susAttributes.find(attr => attr.value === fileState.sustainabilityAttribute) || defaultSustainabilityAttributeOption}
 					onChange={(e: InputOption) => {
 						if (fileState === undefined) return;
 						setFileState({ ...fileState, sustainabilityAttribute: e.value });
