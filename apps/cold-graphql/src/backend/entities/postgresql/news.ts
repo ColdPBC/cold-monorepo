@@ -1,4 +1,4 @@
-import { NewsHooks } from './news.hooks';
+import { NewsHooks } from '../hooks/news.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';

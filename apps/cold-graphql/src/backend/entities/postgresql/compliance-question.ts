@@ -1,4 +1,4 @@
-import { ComplianceQuestionHooks } from './compliance-question.hooks';
+import { ComplianceQuestionHooks } from '../hooks/compliance-question.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';

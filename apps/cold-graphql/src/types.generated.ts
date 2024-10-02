@@ -240,6 +240,7 @@ export type ActionsPaginationInput = {
 
 export type AdminUiEntityAttributeMetadata = {
   __typename?: 'AdminUiEntityAttributeMetadata';
+  clientGeneratedPrimaryKeys?: Maybe<Scalars['Boolean']['output']>;
   exportPageSize?: Maybe<Scalars['Float']['output']>;
   isReadOnly?: Maybe<Scalars['Boolean']['output']>;
 };
@@ -8171,6 +8172,7 @@ export type OrganizationFile = {
   vectorRecords: Array<VectorRecord>;
   vectorRecords_aggregate?: Maybe<AggregationResult>;
   versionId?: Maybe<Scalars['String']['output']>;
+  visible: Scalars['Boolean']['output'];
 };
 
 
@@ -8266,6 +8268,7 @@ export type OrganizationFileCreateOrUpdateInput = {
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   vectorRecords?: InputMaybe<Array<VectorRecordCreateOrUpdateInput>>;
   versionId?: InputMaybe<Scalars['String']['input']>;
+  visible?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Data needed to create OrganizationFiles. */
@@ -8300,6 +8303,7 @@ export type OrganizationFileInsertInput = {
   updatedAt: Scalars['ISOString']['input'];
   vectorRecords?: InputMaybe<Array<VectorRecordCreateOrUpdateInput>>;
   versionId?: InputMaybe<Scalars['String']['input']>;
+  visible: Scalars['Boolean']['input'];
 };
 
 /** Data needed to update OrganizationFiles. An ID must be passed. */
@@ -8335,6 +8339,7 @@ export type OrganizationFileUpdateInput = {
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   vectorRecords?: InputMaybe<Array<VectorRecordCreateOrUpdateInput>>;
   versionId?: InputMaybe<Scalars['String']['input']>;
+  visible?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type OrganizationFilesListFilter = {
@@ -8605,6 +8610,12 @@ export type OrganizationFilesListFilter = {
   versionId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   versionId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   versionId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  visible?: InputMaybe<Scalars['Boolean']['input']>;
+  visible_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  visible_ne?: InputMaybe<Scalars['Boolean']['input']>;
+  visible_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  visible_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  visible_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type OrganizationFilesOrderByInput = {
@@ -8633,6 +8644,7 @@ export type OrganizationFilesOrderByInput = {
   type?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
   versionId?: InputMaybe<Sort>;
+  visible?: InputMaybe<Sort>;
 };
 
 /** Pagination options for OrganizationFiles. */
@@ -11388,6 +11400,7 @@ export type SustainabilityAttribute = {
   deleted: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   level: SustainabilityAttributesLevel;
+  logoUrl?: Maybe<Scalars['String']['output']>;
   metadata?: Maybe<Scalars['JSON']['output']>;
   name: Scalars['String']['output'];
   organization?: Maybe<Organization>;
@@ -11423,6 +11436,7 @@ export type SustainabilityAttributeCreateOrUpdateInput = {
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   level?: InputMaybe<SustainabilityAttributesLevel>;
+  logoUrl?: InputMaybe<Scalars['String']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
@@ -11436,6 +11450,7 @@ export type SustainabilityAttributeInsertInput = {
   createdAt: Scalars['ISOString']['input'];
   deleted: Scalars['Boolean']['input'];
   level: SustainabilityAttributesLevel;
+  logoUrl?: InputMaybe<Scalars['String']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
@@ -11450,6 +11465,7 @@ export type SustainabilityAttributeUpdateInput = {
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   id: Scalars['ID']['input'];
   level?: InputMaybe<SustainabilityAttributesLevel>;
+  logoUrl?: InputMaybe<Scalars['String']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
@@ -11495,6 +11511,18 @@ export type SustainabilityAttributesListFilter = {
   level?: InputMaybe<SustainabilityAttributesLevel>;
   level_in?: InputMaybe<Array<SustainabilityAttributesLevel>>;
   level_nin?: InputMaybe<Array<SustainabilityAttributesLevel>>;
+  logoUrl?: InputMaybe<Scalars['String']['input']>;
+  logoUrl_gt?: InputMaybe<Scalars['String']['input']>;
+  logoUrl_gte?: InputMaybe<Scalars['String']['input']>;
+  logoUrl_ilike?: InputMaybe<Scalars['String']['input']>;
+  logoUrl_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  logoUrl_like?: InputMaybe<Scalars['String']['input']>;
+  logoUrl_lt?: InputMaybe<Scalars['String']['input']>;
+  logoUrl_lte?: InputMaybe<Scalars['String']['input']>;
+  logoUrl_ne?: InputMaybe<Scalars['String']['input']>;
+  logoUrl_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  logoUrl_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  logoUrl_null?: InputMaybe<Scalars['Boolean']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   metadata_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   metadata_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -11534,6 +11562,7 @@ export type SustainabilityAttributesOrderByInput = {
   deleted?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   level?: InputMaybe<Sort>;
+  logoUrl?: InputMaybe<Sort>;
   metadata?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
   type?: InputMaybe<Sort>;

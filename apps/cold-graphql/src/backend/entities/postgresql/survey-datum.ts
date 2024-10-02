@@ -1,4 +1,4 @@
-import { SurveyDatumHooks } from './survey-datum.hooks';
+import { SurveyDatumHooks } from '../hooks/survey-datum.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';

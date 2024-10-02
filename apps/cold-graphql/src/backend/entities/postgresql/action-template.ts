@@ -1,4 +1,4 @@
-import { ActionTemplateHooks } from './action-template.hooks';
+import { ActionTemplateHooks } from '../hooks/action-template.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';

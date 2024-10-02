@@ -1,4 +1,4 @@
-import { FacilityFootprintHooks } from './facility-footprint.hooks';
+import { FacilityFootprintHooks } from '../hooks/facility-footprint.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
