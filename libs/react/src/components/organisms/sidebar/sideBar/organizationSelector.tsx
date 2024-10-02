@@ -8,10 +8,7 @@ import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { find, parseInt } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { Dropdown } from 'flowbite-react';
 import { ComboBox } from '@coldpbc/components';
-import { flowbiteThemeOverride } from '@coldpbc/themes';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useNavigate } from 'react-router-dom';
 import { InputOption } from '@coldpbc/interfaces';
 
