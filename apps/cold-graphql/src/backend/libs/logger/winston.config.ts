@@ -5,7 +5,7 @@ import { utilities as nestWinstonModuleUtilities } from 'nest-winston/dist/winst
 const winstonConfig = (context: string, meta?: any) => {
 	const config = {
 		service: 'cold-graphql',
-		version: '1.1.0',
+		version: '1.1.1',
 		environment: process.env['NODE_ENV'] || meta?.environment,
 		...omit(meta, ['service', 'version', 'environment']),
 		context: context,
