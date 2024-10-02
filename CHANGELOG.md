@@ -1,3 +1,17 @@
+## [1.399.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.4...v1.399.5) (2024-10-01)
+
+
+### Bug Fixes
+
+* update ProtectedRoute authentication handling to show spinner on logging out ([bbd6baf](https://github.com/ColdPBC/cold-monorepo/commit/bbd6baf3fb48d5fdae3cb23a7481a88bd08188e1))
+
+## [1.399.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.3...v1.399.4) (2024-10-01)
+
+
+### Bug Fixes
+
+* undefined organization compliance during create ([4cdcec7](https://github.com/ColdPBC/cold-monorepo/commit/4cdcec792514a41b86fd238a51735cc4e3308ce1))
+
 ## [1.399.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.2...v1.399.3) (2024-10-01)
 
 
