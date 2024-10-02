@@ -1,3 +1,11 @@
+# [1.400.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.5...v1.400.0) (2024-10-02)
+
+
+### Features
+
+* add logo url to sustainability attributes ([#580](https://github.com/ColdPBC/cold-monorepo/issues/580)) ([a670332](https://github.com/ColdPBC/cold-monorepo/commit/a670332b172c7b19661dcf99e79dd6b36644577f))
+* add logo_url to sustainability_attributes table ([0a69291](https://github.com/ColdPBC/cold-monorepo/commit/0a6929146e0f0fceecb121ee4c28b6461ca86545))
+
 ## [1.399.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.4...v1.399.5) (2024-10-01)
 
 
