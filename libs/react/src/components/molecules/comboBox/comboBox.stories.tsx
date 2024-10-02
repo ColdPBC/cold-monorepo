@@ -36,7 +36,7 @@ const ComboBoxStory = (props: ComboBoxProps) => {
 
   return (
     <div
-      className={'w-[72px]'}
+      className={'w-[150px]'}
     >
       <ComboBox
         {...props}
