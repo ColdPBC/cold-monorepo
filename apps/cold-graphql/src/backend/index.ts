@@ -10,9 +10,9 @@ setAddUserToContext(addUserToContext);
 setAdministratorRoleName('cold:admin');
 export const graphweaver = new Graphweaver({
 	apolloServerOptions: {
-		introspection: true, //process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging',
-		hideSchemaDetailsFromClientErrors: false, //process.env.NODE_ENV !== 'development',
-		includeStacktraceInErrorResponses: true, //process.env.NODE_ENV === 'development',
+		introspection: process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging',
+		hideSchemaDetailsFromClientErrors: process.env.NODE_ENV !== 'development',
+		includeStacktraceInErrorResponses: process.env.NODE_ENV === 'development',
 		logger: new WorkerLogger('GraphWeaver'),
 		formatError: (error, context) => {
 			return {
