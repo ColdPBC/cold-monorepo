@@ -17,6 +17,7 @@ export enum GuidPrefixes {
 	'OrganizationComplianceQuestionBookmark' = 'ocqb',
 	'OrganizationComplianceNote' = 'ocn',
 	'Product' = 'op',
+	'ProductMaterial' = 'opm',
 	'Certifications' = 'cert',
 	'OrganizationComplianceNoteLink' = 'ocnl',
 	'OrganizationComplianceNoteFile' = 'ocnf',

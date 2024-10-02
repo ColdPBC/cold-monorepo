@@ -18,7 +18,7 @@ export class Product {
 		this.sidecar = new ProductHooks();
 	}
 
-	@PrimaryKey({ type: 'uuid' })
+	@PrimaryKey({ type: 'text' })
 	id!: string;
 
 	@Property({ type: 'text' })

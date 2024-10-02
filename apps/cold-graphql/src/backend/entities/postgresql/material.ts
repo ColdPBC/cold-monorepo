@@ -19,7 +19,7 @@ export class Material {
 		this.sidecar = new MaterialHooks();
 	}
 
-	@PrimaryKey({ type: 'uuid' })
+	@PrimaryKey({ type: 'text' })
 	id!: string;
 
 	@Property({ type: 'text' })

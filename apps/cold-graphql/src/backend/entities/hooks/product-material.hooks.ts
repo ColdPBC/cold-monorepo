@@ -31,7 +31,7 @@ export class ProductMaterialHooks extends BaseSidecar {
 
 		const { context, args } = params;
 
-		setEntityDefaults(args, GuidPrefixes.OrganizationFacility);
+		setEntityDefaults(args, GuidPrefixes.ProductMaterial);
 
 		console.log(args);
 

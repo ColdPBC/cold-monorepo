@@ -30,7 +30,7 @@ export class SustainabilityAttribute {
 		this.sidecar = new SustainabilityAttributeHooks();
 	}
 
-	@PrimaryKey({ type: 'uuid' })
+	@PrimaryKey({ type: 'text' })
 	id!: string;
 
 	@ManyToOne({ entity: () => Organization, ref: true, nullable: true, index: 'sustainability_attributes_organization_id_idx1' })
