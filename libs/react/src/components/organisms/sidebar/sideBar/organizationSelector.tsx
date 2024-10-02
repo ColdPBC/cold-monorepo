@@ -1,38 +1,52 @@
 import { withErrorBoundary } from 'react-error-boundary';
 import { ColdIcon, ErrorFallback, Spinner } from '@coldpbc/components';
 import { useColdContext } from '@coldpbc/hooks';
+import type { Organization } from '@coldpbc/context';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ErrorType, IconNames } from '@coldpbc/enums';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { find } from 'lodash';
+import { find, parseInt } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Dropdown } from 'flowbite-react';
+import { ComboBox } from '@coldpbc/components';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useNavigate } from 'react-router-dom';
+import { InputOption } from '@coldpbc/interfaces';
+
+const orgToInputOption = (org: Organization) => {
+  return {
+    id: parseInt(org.id),
+    name: org.display_name,
+    value: org.id
+  };
+}
 
 const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
   const ldFlags = useFlags();
   const navigate = useNavigate();
   const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
   const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
-  const unselectedOrg = {
-    id: '0',
+  const unselectedOrg: Organization = {
+    id: '-1',
     name: 'unselected',
     display_name: 'Select Org',
   };
-  const initialValue = impersonatingOrg ? impersonatingOrg : unselectedOrg;
-  const [selectedOrg, setSelectedOrg] = useState<any>(initialValue);
 
-  const onOrgSelect = (org: any) => {
-    logBrowser(`New impersonating organization selected: ${org.display_name}`, 'info', { org: org });
-    navigate('/');
-    setSelectedOrg(org);
-    if (org.name === 'unselected') {
-      setImpersonatingOrg(undefined);
-    } else {
+  const initialOrg: Organization = impersonatingOrg || unselectedOrg;
+  const [selectedOrg, setSelectedOrg] = useState<InputOption>(orgToInputOption(initialOrg));
+
+  const onOrgSelect = (selectedOption: InputOption) => {
+    const org: Organization | undefined = find(data, org => org.id === selectedOption.value);
+    if(org) {
+      logBrowser(`New impersonating organization selected: ${org.display_name}`, 'info', { org: org });
+      navigate('/');
+      setSelectedOrg(selectedOption);
       setImpersonatingOrg(org);
+    } else {
+      setSelectedOrg(orgToInputOption(unselectedOrg));
+      setImpersonatingOrg(undefined);
     }
   };
 
@@ -59,32 +73,20 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
   logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOrg });
 
   if (sidebarExpanded || !ldFlags.showNewNavigationCold698) {
+    const organizationOptions: InputOption[] = data.map((org: Organization, index: number) => ({
+      id: index,
+      name: org.display_name,
+      value: org.id,
+    }));
+
     return (
-      <Dropdown
-        inline={true}
-        label={
-          <span className={'w-full p-4 flex flex-row justify-between items-center border border-bgc-accent rounded-lg'}>
-            <div className={'w-auto text-tc-primary text-start text-xs truncate'}>{selectedOrg.display_name}</div>
-            <ChevronDownIcon className="w-[18px] ml-2 text-tc-primary" />
-          </span>
-        }
-        arrowIcon={false}
-        theme={flowbiteThemeOverride.dropdown}
-        className={'h-fit max-h-[200px] overflow-y-auto scrollbar-hide overflow-x-visible text-ellipsis transition-none duration-0'}>
-        {data
-          .sort((a: any, b: any) => a.display_name.localeCompare(b.display_name))
-          .map((org: any) => (
-            <Dropdown.Item
-              key={org.id}
-              onClick={() => {
-                onOrgSelect(org);
-              }}
-              theme={flowbiteThemeOverride.dropdown.floating.item}
-              className={'text-start text-xs text-ellipsis'}>
-              {org.display_name}
-            </Dropdown.Item>
-          ))}
-      </Dropdown>
+      <ComboBox
+        options={organizationOptions}
+        name={'selectOrg'}
+        value={selectedOrg}
+        onChange={onOrgSelect}
+        dropdownDirection='up'
+      />
     );
   } else {
     return <ColdIcon name={IconNames.ColdSwitchIcon} color={'white'} />;
