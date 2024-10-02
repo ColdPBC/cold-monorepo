@@ -15,12 +15,16 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useNavigate } from 'react-router-dom';
 import { InputOption } from '@coldpbc/interfaces';
 
-const orgToInputOption = (org: Organization) => {
-  return {
-    id: parseInt(org.id),
-    name: org.display_name,
-    value: org.id
-  };
+const orgToInputOption = (org: Organization | undefined) => {
+  if (org) {
+    return {
+      id: parseInt(org.id),
+      name: org.display_name,
+      value: org.id
+    };
+  } else {
+    return null;
+  }
 }
 
 const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
@@ -28,33 +32,30 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
   const navigate = useNavigate();
   const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
   const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
-  const unselectedOrg: Organization = {
-    id: '-1',
-    name: 'unselected',
-    display_name: 'Select Org',
-  };
 
-  const initialOrg: Organization = impersonatingOrg || unselectedOrg;
-  const [selectedOrg, setSelectedOrg] = useState<InputOption>(orgToInputOption(initialOrg));
+  // Default to the impersonating org if already set
+  const [selectedOption, setSelectedOption] = useState<InputOption | null>(orgToInputOption(impersonatingOrg));
 
   const onOrgSelect = (selectedOption: InputOption) => {
     const org: Organization | undefined = find(data, org => org.id === selectedOption.value);
     if(org) {
       logBrowser(`New impersonating organization selected: ${org.display_name}`, 'info', { org: org });
       navigate('/');
-      setSelectedOrg(selectedOption);
+      setSelectedOption(selectedOption);
       setImpersonatingOrg(org);
     } else {
-      setSelectedOrg(orgToInputOption(unselectedOrg));
+      setSelectedOption(null);
       setImpersonatingOrg(undefined);
     }
   };
 
+  // Set the org to Cold Climate if there's no impersonating org
   useEffect(() => {
-    if (data && !find(data, org => org.name === unselectedOrg.name)) {
-      data.unshift(unselectedOrg);
+    if (data && !impersonatingOrg) {
+      const coldClimateOrg = find(data, org => org.display_name === 'Cold Climate')
+      setSelectedOption(orgToInputOption(coldClimateOrg));
     }
-  }, [data]);
+  }, [data, impersonatingOrg]);
 
   if (isLoading) {
     return (
@@ -70,7 +71,7 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
     return null;
   }
 
-  logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOrg });
+  logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOption });
 
   if (sidebarExpanded || !ldFlags.showNewNavigationCold698) {
     const organizationOptions: InputOption[] = data.map((org: Organization, index: number) => ({
@@ -83,7 +84,7 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
       <ComboBox
         options={organizationOptions}
         name={'selectOrg'}
-        value={selectedOrg}
+        value={selectedOption || { id: -1, name: 'Cold Climate', value: '-1'}} // selectedOrg can technically be null but shouldn't be once data is available
         onChange={onOrgSelect}
         dropdownDirection='up'
       />
