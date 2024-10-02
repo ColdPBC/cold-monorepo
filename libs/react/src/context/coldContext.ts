@@ -8,9 +8,15 @@ export type ColdContextType = {
   launchDarklyClientSideId: string;
   logError: (error: any, type: ErrorType, context?: object) => void;
   logBrowser: (message: string, type: StatusType, context?: any, error?: any) => void;
-  impersonatingOrg: any | undefined;
-  setImpersonatingOrg: (org: any | undefined) => void;
+  impersonatingOrg: Organization | undefined;
+  setImpersonatingOrg: (org: Organization | undefined) => void;
 };
+
+export type Organization = {
+  id: string;
+  name: string;
+  display_name: string;
+}
 
 const ColdContext = createContext({
   auth0Options: {} as Auth0ProviderOptions,
@@ -18,9 +24,9 @@ const ColdContext = createContext({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   logError: (error: any, type: ErrorType, context?: object) => {},
   logBrowser: (message: string, type: StatusType, context?: any, error?: any) => {},
-  impersonatingOrg: undefined as any | undefined,
+  impersonatingOrg: undefined as Organization | undefined,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setImpersonatingOrg: (org: any | undefined) => {},
+  setImpersonatingOrg: (org: Organization | undefined) => {},
 } as ColdContextType);
 
 export default ColdContext;
