@@ -374,11 +374,9 @@ export const defaultGraphqlMocks: {
   }, {
     query: GET_ALL_SUPPLIERS_FOR_ORG,
     handler: (variables) => {
-      const suppliers = getSupplierMocks();
-      const tier = get(variables, 'filter.supplierTier', 0);
       return Promise.resolve({
         data: {
-          organizationFacilities: suppliers.filter(supplier => supplier.supplierTier === tier),
+          organizationFacilities: getSupplierMocks(),
         },
       });
     }
