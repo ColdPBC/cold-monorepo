@@ -7980,8 +7980,8 @@ export type OrganizationFacility = {
   attributeAssurances_aggregate?: Maybe<AggregationResult>;
   city?: Maybe<Scalars['String']['output']>;
   country?: Maybe<Scalars['String']['output']>;
-  createdAt: Scalars['ISOString']['output'];
-  deleted: Scalars['Boolean']['output'];
+  createdAt?: Maybe<Scalars['ISOString']['output']>;
+  deleted?: Maybe<Scalars['Boolean']['output']>;
   emissions: Array<Emission>;
   emissions_aggregate?: Maybe<AggregationResult>;
   id: Scalars['ID']['output'];
@@ -7997,7 +7997,7 @@ export type OrganizationFacility = {
   stateProvince?: Maybe<Scalars['String']['output']>;
   supplier?: Maybe<Scalars['Boolean']['output']>;
   supplierTier?: Maybe<Scalars['Float']['output']>;
-  updatedAt: Scalars['ISOString']['output'];
+  updatedAt?: Maybe<Scalars['ISOString']['output']>;
   utilityBills: Array<UtilityBill>;
   utilityBills_aggregate?: Maybe<AggregationResult>;
 };
@@ -8093,8 +8093,8 @@ export type OrganizationFacilityInsertInput = {
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
   city?: InputMaybe<Scalars['String']['input']>;
   country?: InputMaybe<Scalars['String']['input']>;
-  createdAt: Scalars['ISOString']['input'];
-  deleted: Scalars['Boolean']['input'];
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
   emissions?: InputMaybe<Array<EmissionCreateOrUpdateInput>>;
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
@@ -8105,7 +8105,7 @@ export type OrganizationFacilityInsertInput = {
   stateProvince?: InputMaybe<Scalars['String']['input']>;
   supplier?: InputMaybe<Scalars['Boolean']['input']>;
   supplierTier?: InputMaybe<Scalars['Float']['input']>;
-  updatedAt: Scalars['ISOString']['input'];
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   utilityBills?: InputMaybe<Array<UtilityBillCreateOrUpdateInput>>;
 };
 
