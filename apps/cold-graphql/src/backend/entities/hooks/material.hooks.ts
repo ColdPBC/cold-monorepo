@@ -31,7 +31,7 @@ export class MaterialHooks extends BaseSidecar {
 
 		const { context, args } = params;
 
-		setEntityDefaults(args, GuidPrefixes.OrganizationFacility);
+		setEntityDefaults(args, GuidPrefixes.Material);
 
 		console.log(args);
 

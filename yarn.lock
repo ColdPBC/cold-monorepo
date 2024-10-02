@@ -21679,6 +21679,7 @@ __metadata:
     freeplay: "npm:^0.2.44"
     global: "npm:^4.4.0"
     got: "npm:^14.0.0"
+    graphql: "npm:^16.9.0"
     hex-color-opacity: "npm:^0.4.2"
     hot-shots: "npm:^10.0.0"
     html-to-image: "npm:^1.11.11"
@@ -28310,6 +28311,13 @@ __metadata:
   peerDependencies:
     graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: 10/23a2bc1d3fbeae86444204e0ac08522e09dc369559ba75768e47421a7321b59f352fb5b2c9a5c37d3cf6de890dca4e5ac47e740c7cc622e728572ecaa649089e
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^16.9.0":
+  version: 16.9.0
+  resolution: "graphql@npm:16.9.0"
+  checksum: 10/5833f82bb6c31bec120bbf9cd400eda873e1bb7ef5c17974fa262cd82dc68728fda5d4cb859dc8aaa4c4fe4f6fe1103a9c47efc01a12c02ae5cb581d8e4029e2
   languageName: node
   linkType: hard
 

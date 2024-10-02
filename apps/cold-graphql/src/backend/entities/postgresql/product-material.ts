@@ -17,7 +17,7 @@ export class ProductMaterial {
 		this.sidecar = new ProductMaterialHooks();
 	}
 
-	@PrimaryKey({ type: 'uuid' })
+	@PrimaryKey({ type: 'text' })
 	id!: string;
 
 	@ManyToOne({ entity: () => Product, ref: true, index: 'product_materials_product_id_idx1' })

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import {ComboBox, ComboBoxProps} from "./comboBox";
+import {InputOption} from "@coldpbc/interfaces";
 
 const meta: Meta<typeof ComboBox> = {
   title: 'Atoms/ComboBox',
@@ -25,23 +26,23 @@ export const Default: Story = {
     ],
     name: 'name',
     label: 'Label',
-    value: 'value_1',
+    value: { id: 1, name: 'Option 1', value: 'value_1' },
   },
 };
 
 const ComboBoxStory = (props: ComboBoxProps) => {
   const { options, name, label, value, onChange, className, buttonClassName = '' } = props;
-  const [stateValue, setStateValue] = useState<string>(value);
+  const [stateValue, setStateValue] = useState<InputOption>(value);
 
   return (
     <div
-      className={'w-[72px]'}
+      className={'w-[150px]'}
     >
       <ComboBox
         {...props}
         value={stateValue}
-        onChange={(e) => {
-          setStateValue(e.value);
+        onChange={(selectedOption) => {
+          setStateValue(selectedOption);
         }}
       />
     </div>

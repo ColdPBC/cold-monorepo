@@ -21,7 +21,7 @@ export class AttributeAssurance {
 		this.sidecar = new AttributeAssuranceHooks();
 	}
 
-	@PrimaryKey({ type: 'uuid' })
+	@PrimaryKey({ type: 'text' })
 	id!: string;
 
 	@ManyToOne({ entity: () => OrganizationFacility, ref: true, nullable: true, index: 'attribute_assurances_organization_facility_id_idx' })
