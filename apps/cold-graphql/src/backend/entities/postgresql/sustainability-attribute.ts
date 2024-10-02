@@ -59,6 +59,9 @@ export class SustainabilityAttribute {
 	@Property({ type: 'json', nullable: true })
 	metadata?: Record<string, unknown>;
 
+	@Property({ type: 'text', nullable: true })
+	logoUrl?: string;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'sustainabilityAttribute' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 
