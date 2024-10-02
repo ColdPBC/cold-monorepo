@@ -1,3 +1,10 @@
+## [1.401.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.401.0...v1.401.1) (2024-10-02)
+
+
+### Bug Fixes
+
+* filter suppliers by tier in suppliersDataGrid ([f564cd4](https://github.com/ColdPBC/cold-monorepo/commit/f564cd46f37773f5323997a7f79514b37df270af))
+
 # [1.401.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.6...v1.401.0) (2024-10-02)
 
 
