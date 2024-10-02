@@ -1,3 +1,10 @@
+## [1.400.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.4...v1.400.5) (2024-10-02)
+
+
+### Bug Fixes
+
+* make created_at, updated_at, and deleted fields optional ([5668a72](https://github.com/ColdPBC/cold-monorepo/commit/5668a724e0dae74984a45b1a636034a05b7d9b9c))
+
 ## [1.400.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.3...v1.400.4) (2024-10-02)
 
 
