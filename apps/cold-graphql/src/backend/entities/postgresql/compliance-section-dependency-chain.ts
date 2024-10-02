@@ -1,4 +1,4 @@
-import { ComplianceSectionDependencyChainHooks } from './compliance-section-dependency-chain.hooks';
+import { ComplianceSectionDependencyChainHooks } from '../hooks/compliance-section-dependency-chain.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';

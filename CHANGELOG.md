@@ -1,3 +1,53 @@
+## [1.400.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.5...v1.400.6) (2024-10-02)
+
+
+### Bug Fixes
+
+* make certain GraphQL fields optional ([b10235e](https://github.com/ColdPBC/cold-monorepo/commit/b10235efb34af2e2ef46c047fc650d89d9b894e3))
+
+## [1.400.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.4...v1.400.5) (2024-10-02)
+
+
+### Bug Fixes
+
+* make created_at, updated_at, and deleted fields optional ([5668a72](https://github.com/ColdPBC/cold-monorepo/commit/5668a724e0dae74984a45b1a636034a05b7d9b9c))
+
+## [1.400.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.3...v1.400.4) (2024-10-02)
+
+
+### Bug Fixes
+
+* streamline entity default settings via utility functions ([42e359a](https://github.com/ColdPBC/cold-monorepo/commit/42e359abea4a9ba71717fa95688cbe2e6efaa6a4))
+
+## [1.400.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.2...v1.400.3) (2024-10-02)
+
+
+### Bug Fixes
+
+* set administrator role name in backend initialization ([01bb5b8](https://github.com/ColdPBC/cold-monorepo/commit/01bb5b8c8face81eca57651cde9f774cd50b92d3))
+
+## [1.400.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.1...v1.400.2) (2024-10-02)
+
+
+### Bug Fixes
+
+* **logger:** update winston config version to 1.1.1 ([0523e7c](https://github.com/ColdPBC/cold-monorepo/commit/0523e7c48d68d09e140c2c94f5a064dc7a714913))
+
+## [1.400.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.0...v1.400.1) (2024-10-02)
+
+
+### Bug Fixes
+
+* bug creating facilities ([55b94a7](https://github.com/ColdPBC/cold-monorepo/commit/55b94a7a4fbcd932652bf58bdada5192c7b84118))
+
+# [1.400.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.5...v1.400.0) (2024-10-02)
+
+
+### Features
+
+* add logo url to sustainability attributes ([#580](https://github.com/ColdPBC/cold-monorepo/issues/580)) ([a670332](https://github.com/ColdPBC/cold-monorepo/commit/a670332b172c7b19661dcf99e79dd6b36644577f))
+* add logo_url to sustainability_attributes table ([0a69291](https://github.com/ColdPBC/cold-monorepo/commit/0a6929146e0f0fceecb121ee4c28b6461ca86545))
+
 ## [1.399.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.4...v1.399.5) (2024-10-01)
 
 

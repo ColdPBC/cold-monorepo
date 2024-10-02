@@ -19,9 +19,9 @@ export class MaterialSupplier {
 	@RelationshipField<MaterialSupplier>(() => OrganizationFacility, { id: (entity) => entity.organizationFacility?.id })
 	organizationFacility!: OrganizationFacility;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 }

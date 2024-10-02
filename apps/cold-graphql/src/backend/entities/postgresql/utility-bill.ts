@@ -1,4 +1,4 @@
-import { UtilityBillHooks } from './utility-bill.hooks';
+import { UtilityBillHooks } from '../hooks/utility-bill.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';

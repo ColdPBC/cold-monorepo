@@ -1,4 +1,4 @@
-import { SustainabilityAttributeHooks } from './sustainability-attribute.hooks';
+import { SustainabilityAttributeHooks } from '../hooks/sustainability-attribute.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, Enum, Index, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
@@ -39,11 +39,11 @@ export class SustainabilityAttribute {
 	@Property({ type: 'text' })
 	name!: string;
 
-	@Property({ type: 'datetime', length: 6 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 6 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	updatedAt?: Date;
 
 	@Property({ type: 'boolean', default: false })
 	deleted = false;
@@ -58,6 +58,9 @@ export class SustainabilityAttribute {
 
 	@Property({ type: 'json', nullable: true })
 	metadata?: Record<string, unknown>;
+
+	@Property({ type: 'text', nullable: true })
+	logoUrl?: string;
 
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'sustainabilityAttribute' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);

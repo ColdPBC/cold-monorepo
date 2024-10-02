@@ -1,4 +1,4 @@
-import { ServiceDefinitionHooks } from './service-definition.hooks';
+import { ServiceDefinitionHooks } from '../hooks/service-definition.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, Enum, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';

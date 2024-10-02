@@ -16,15 +16,15 @@ export class ProductMaterial {
 	@RelationshipField<ProductMaterial>(() => Product, { id: (entity) => entity.product?.id })
 	product!: Product;
 
-	@RelationshipField<ProductMaterial>(() => Material, { id: (entity) => entity.material?.id })
-	material!: Material;
+	@RelationshipField<ProductMaterial>(() => Material, { id: (entity) => entity.material?.id, nullable: true })
+	material?: Material;
 
-	@Field(() => String)
-	materialSupplierId!: string;
+	@Field(() => String, { nullable: true })
+	materialSupplierId?: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 }

@@ -29,11 +29,11 @@ export class OrganizationFacility {
 	@Field(() => String, { nullable: true })
 	country?: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@Field(() => String, { nullable: true })
 	addressLine2?: string;
@@ -41,7 +41,7 @@ export class OrganizationFacility {
 	@Field(() => String, { nullable: true })
 	postalCode?: string;
 
-	@Field(() => Boolean)
+	@Field(() => Boolean, { nullable: true })
 	deleted = false;
 
 	@Field(() => GraphQLJSON, { nullable: true })

@@ -1,4 +1,4 @@
-import { OrganizationFileHooks } from './organization-file.hooks';
+import { OrganizationFileHooks } from '../hooks/organization-file.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, Enum, ManyToOne, OneToMany, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';

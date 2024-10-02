@@ -1,4 +1,4 @@
-import { ProductMaterialHooks } from './product-material.hooks';
+import { ProductMaterialHooks } from '../hooks/product-material.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
@@ -23,17 +23,17 @@ export class ProductMaterial {
 	@ManyToOne({ entity: () => Product, ref: true, index: 'product_materials_product_id_idx1' })
 	product!: Ref<Product>;
 
-	@ManyToOne({ entity: () => Material, ref: true, index: 'product_materials_material_id_idx1' })
-	material!: Ref<Material>;
+	@ManyToOne({ entity: () => Material, ref: true, nullable: true, index: 'product_materials_material_id_idx1' })
+	material?: Ref<Material>;
 
-	@Property({ type: 'text' })
-	materialSupplierId!: string;
+	@Property({ type: 'text', nullable: true })
+	materialSupplierId?: string;
 
-	@Property({ type: 'datetime', length: 6 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 6 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	updatedAt?: Date;
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof ProductMaterial, OrgContext>) {

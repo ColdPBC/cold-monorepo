@@ -18,13 +18,13 @@ export class Material {
 	@Field(() => String, { adminUIOptions: {summaryField:true} })
 	name!: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
-	@Field(() => Boolean)
+	@Field(() => Boolean, { nullable: true })
 	deleted = false;
 
 	@RelationshipField<Material>(() => Organization, { id: (entity) => entity.organization?.id })

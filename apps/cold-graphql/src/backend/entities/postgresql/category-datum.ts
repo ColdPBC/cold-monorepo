@@ -1,4 +1,4 @@
-import { CategoryDatumHooks } from './category-datum.hooks';
+import { CategoryDatumHooks } from '../hooks/category-datum.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref, Unique } from '@mikro-orm/core';

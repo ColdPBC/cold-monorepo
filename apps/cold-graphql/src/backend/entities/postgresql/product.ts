@@ -1,4 +1,4 @@
-import { ProductHooks } from './product.hooks';
+import { ProductHooks } from '../hooks/product.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
@@ -24,13 +24,13 @@ export class Product {
 	@Property({ type: 'text' })
 	name!: string;
 
-	@Property({ type: 'datetime', length: 6 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 6 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	updatedAt?: Date;
 
-	@Property({ type: 'boolean', default: false })
+	@Property({ type: 'boolean', nullable: true, default: false })
 	deleted = false;
 
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'products_organization_id_idx1' })

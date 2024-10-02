@@ -1,4 +1,4 @@
-import { MaterialSupplierHooks } from './material-supplier.hooks';
+import { MaterialSupplierHooks } from '../hooks/material-supplier.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
@@ -26,11 +26,11 @@ export class MaterialSupplier {
 	@ManyToOne({ entity: () => OrganizationFacility, ref: true, fieldName: 'supplier_id', index: 'material_suppliers_supplier_id_idx1' })
 	organizationFacility!: Ref<OrganizationFacility>;
 
-	@Property({ type: 'datetime', length: 6 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 6 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 6, nullable: true })
+	updatedAt?: Date;
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof MaterialSupplier, OrgContext>) {

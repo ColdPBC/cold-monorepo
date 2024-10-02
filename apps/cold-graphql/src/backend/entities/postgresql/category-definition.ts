@@ -1,4 +1,4 @@
-import { CategoryDefinitionHooks } from './category-definition.hooks';
+import { CategoryDefinitionHooks } from '../hooks/category-definition.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
