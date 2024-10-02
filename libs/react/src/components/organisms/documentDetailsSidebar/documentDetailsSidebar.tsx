@@ -175,6 +175,7 @@ const _DocumentDetailsSidebar = (props: {
 						if (fileState === undefined) return;
 						setFileState({ ...fileState, sustainabilityAttribute: e.value });
 					}}
+          dropdownDirection={'down'}
 					buttonClassName={'w-full border-[1.5px] border-gray-90 rounded-[8px]'}
 				/>
 			</div>
