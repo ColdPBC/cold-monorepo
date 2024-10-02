@@ -1,3 +1,10 @@
+## [1.400.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.2...v1.400.3) (2024-10-02)
+
+
+### Bug Fixes
+
+* set administrator role name in backend initialization ([01bb5b8](https://github.com/ColdPBC/cold-monorepo/commit/01bb5b8c8face81eca57651cde9f774cd50b92d3))
+
 ## [1.400.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.1...v1.400.2) (2024-10-02)
 
 
