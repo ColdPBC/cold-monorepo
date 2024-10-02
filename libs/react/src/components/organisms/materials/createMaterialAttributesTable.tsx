@@ -1,5 +1,5 @@
 import {MuiDataGrid} from "@coldpbc/components";
-import {GridActionsCellItem, GridColDef} from "@mui/x-data-grid";
+import {GridActionsCellItem, GridColDef, GridToolbarContainer, GridToolbarQuickFilter} from "@mui/x-data-grid";
 import {Claims} from "@coldpbc/interfaces";
 import {TrashIcon} from "@heroicons/react/24/solid";
 import React from "react";
@@ -41,6 +41,14 @@ export const CreateMaterialAttributesTable = (props: {
     return attribute
   })
 
+  const getToolbar = () => {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarQuickFilter />
+      </GridToolbarContainer>
+    );
+  };
+
   return (
     <MuiDataGrid
       rows={rows}
@@ -50,6 +58,9 @@ export const CreateMaterialAttributesTable = (props: {
       }}
       autoHeight={false}
       className={'h-full'}
+      slots={{
+        toolbar: getToolbar,
+      }}
     />
   )
 }

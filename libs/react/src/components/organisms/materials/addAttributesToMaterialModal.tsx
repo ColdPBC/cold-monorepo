@@ -3,9 +3,14 @@ import {useAuth0Wrapper} from "@coldpbc/hooks";
 import {Claims} from "@coldpbc/interfaces";
 import { Modal as FBModal } from 'flowbite-react';
 import {flowbiteThemeOverride} from "@coldpbc/themes";
-import {GRID_CHECKBOX_SELECTION_COL_DEF, GridColDef, GridRowSelectionModel} from "@mui/x-data-grid";
+import {
+  GRID_CHECKBOX_SELECTION_COL_DEF,
+  GridColDef,
+  GridRowSelectionModel,
+  GridToolbarContainer, GridToolbarQuickFilter
+} from "@mui/x-data-grid";
 import {ButtonTypes} from "@coldpbc/enums";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import capitalize from "lodash/capitalize";
 
 
@@ -54,6 +59,14 @@ export const AddAttributesToMaterialModal = (props: {
     setAddButtonDisabled(rowsSelected.length === 0);
   }, [rowsSelected]);
 
+  const getToolbar = () => {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarQuickFilter />
+      </GridToolbarContainer>
+    );
+  };
+
   return (
     <FBModal
       dismissible
@@ -82,6 +95,9 @@ export const AddAttributesToMaterialModal = (props: {
                 setRowsSelected(newSelection);
               }}
               rowSelectionModel={rowsSelected}
+              slots={{
+                toolbar: getToolbar,
+              }}
             />
           </div>
         </div>

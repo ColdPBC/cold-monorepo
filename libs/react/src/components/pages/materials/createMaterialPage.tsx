@@ -5,7 +5,6 @@ import { Claims, InputOption, SuppliersWithAssurances, ToastMessage } from '@col
 import { get, has } from 'lodash';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
-import {attributes} from "js-cookie";
 
 // todo: Add required styling to name field
 // todo: Look into how to add the checkbox to the mui datagrid
@@ -22,13 +21,18 @@ export const CreateMaterialPage = () => {
     name: 'Tier 2 Supplier',
     value: '-1',
   };
-	const [name, setName] = useState('');
+
+  const isFormValid = (name: string) => {
+    return name !== '';
+  }
+
+  const [name, setName] = useState('');
 	const [supplier, setSupplier] = useState<InputOption>(placeHolderOption);
 	const [suppliers, setSuppliers] = useState<SuppliersWithAssurances[]>([]);
 	const [attributes, setAttributes] = useState<Claims[]>([]);
 	const [attributesToAdd, setAttributesToAdd] = useState<Claims[]>([]);
   const [showAddAttributesModal, setShowAddAttributesModal] = useState(false);
-  const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const {mutateGraphQL: createMaterial} = useGraphQLMutation('CREATE_MATERIAL');
@@ -51,6 +55,10 @@ export const CreateMaterialPage = () => {
     sustainabilityAttributes: Claims[];
   }>('GET_ALL_SUS_ATTRIBUTES');
 
+  useEffect(() => {
+    setSaveButtonDisabled(!isFormValid(name));
+  }, [name]);
+
 	useEffect(() => {
 		if (suppliersQuery.data) {
 			if (has(suppliersQuery.data, 'errors')) {
@@ -72,6 +80,7 @@ export const CreateMaterialPage = () => {
 			}
 		}
 	}, [allSustainabilityAttributes.data]);
+
 
 	if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading) {
 		return <Spinner />;
@@ -98,58 +107,46 @@ export const CreateMaterialPage = () => {
       })
       const materialId = get(createMaterialResponse, 'data.createMaterial.id');
       if (materialId) {
-        const promises: Promise<any>[] = [];
         if(supplier.id !== -1) {
-          promises.push(
-            createMaterialSupplier({
-              input: {
-                material: {
-                  id: materialId,
-                },
-                organizationFacility: {
-                  id: supplier.value,
-                },
+          await createMaterialSupplier({
+            input: {
+              material: {
+                id: materialId,
               },
-            })
-          );
+              organizationFacility: {
+                id: supplier.value,
+              },
+            },
+          })
         }
         if(attributesToAdd.length !== 0) {
-          const attributeAssurances = attributesToAdd.map((attribute) => {
-            return createAttributeAssurance({
+          for (const attribute of attributesToAdd) {
+            await createAttributeAssurance({
               input: {
+                organization: {
+                  id: orgId,
+                },
                 material: {
                   id: materialId,
                 },
                 sustainabilityAttribute: {
                   id: attribute.id,
                 },
+                updatedAt: new Date().toISOString(),
+                createdAt: new Date().toISOString(),
               },
             });
-          })
-          promises.push(...attributeAssurances);
+          }
         }
-        await Promise.all(promises).then((response) => {
-          logBrowser('Material created with assurances successfully', 'error', {
-            orgId,
-            response,
-            materialId,
-          });
-          addToastMessage({
-            message: 'Material created successfully',
-            type: ToastMessage.SUCCESS,
-          })
-          navigate('/materials');
-        }).catch((e) => {
-          logBrowser('Error creating material assurances for new material', 'error', {
-            orgId,
-            error: e,
-            materialId,
-          });
-          addToastMessage({
-            message: 'Error creating material',
-            type: ToastMessage.FAILURE,
-          })
+        logBrowser('Material created with assurances successfully', 'error', {
+          orgId,
+          materialId,
         });
+        addToastMessage({
+          message: 'Material created successfully',
+          type: ToastMessage.SUCCESS,
+        })
+        navigate('/materials');
       } else {
         logBrowser('Error creating material', 'error', {
           orgId,
@@ -188,7 +185,7 @@ export const CreateMaterialPage = () => {
           label={'Save'}
           variant={ButtonTypes.primary}
           onClick={onSaveButtonClick}
-          disabled={saveButtonDisabled}
+          disabled={saveButtonDisabled || saveButtonLoading}
           loading={saveButtonLoading}
           className={'h-[40px]'}
         />

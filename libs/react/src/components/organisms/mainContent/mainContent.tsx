@@ -26,18 +26,18 @@ export function MainContent(props: PropsWithChildren<MainContentProps>) {
 
     const breadcrumbs =
       props.breadcrumbs.map(
-        (breadcrumb, index) =>
-        {
-      let classname = '';
-      if (breadcrumb.href) {
-        classname = 'cursor-pointer hover:underline';
-      }
-      return (
-        <div key={index} className={classname} onClick={() => {
-          if(breadcrumb.href){
-            navigate(breadcrumb.href);
+        (breadcrumb, index) => {
+          let classname = '';
+          if (breadcrumb.href) {
+            classname = 'cursor-pointer hover:underline';
           }
-        }}>
+          return (
+            <div key={`breadcrumb_${index}`} className={classname} onClick={() => {
+              if(breadcrumb.href){
+                navigate(breadcrumb.href);
+              }
+            }
+          }>
           {breadcrumb.label}
         </div>
       )
@@ -48,7 +48,7 @@ export function MainContent(props: PropsWithChildren<MainContentProps>) {
       interleavedBreadcrumbs.push(breadcrumb);
       if (index < breadcrumbs.length - 1) {
         interleavedBreadcrumbs.push(
-          <span key={index} className={'w-[24px] h-[24px] flex items-center justify-center'}>{'>'}</span>
+          <span key={`interleaved_${index}`} className={'w-[24px] h-[24px] flex items-center justify-center'}>{'>'}</span>
         );
       }
     });

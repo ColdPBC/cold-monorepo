@@ -156,7 +156,7 @@ export const GET_ALL_SCHEMA_ENUMS = gql`
 `;
 
 export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
-  query OrganizationFacilities($filter: OrganizationFacilitiesListFilter) {
+  query OrganizationFacilities($filter: OrganizationFacilitiesListFilter!) {
     organizationFacilities(filter: $filter) {
       id
       name
@@ -179,7 +179,7 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
 `;
 
 export const CREATE_MATERIAL = gql`
-  mutation CreateMaterial($input: MaterialInsertInput) {
+  mutation CreateMaterial($input: MaterialInsertInput!) {
     createMaterial(input: $input) {
       id
     }
