@@ -46,7 +46,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 			return ldFlags.showActions261 && hasActions;
 		} else if (item.key === 'documents_key') {
 			return ldFlags.showDocumentsUploadModuleCold492;
-		} else if (item.key === 'compliance_key') {
+		} else if (item.key === 'compliance_key' || item.key === 'questionnaires_key') {
 			return ldFlags.showComplianceModule;
 		} else if (item.key === 'journey_key') {
 			// TODO: Delete this once we replace the journey page completely
