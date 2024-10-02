@@ -346,11 +346,11 @@ model organization_facilities {
   name                 String
   city                 String?
   country              String?
-  created_at           DateTime               @default(now())
-  updated_at           DateTime               @updatedAt
+  created_at           DateTime?               @default(now())
+  updated_at           DateTime?               @updatedAt
   address_line_2       String?
   postal_code          String?
-  deleted              Boolean                @default(false)
+  deleted              Boolean?                @default(false)
   metadata             Json?
   state_province       String?
   address_line_1       String?

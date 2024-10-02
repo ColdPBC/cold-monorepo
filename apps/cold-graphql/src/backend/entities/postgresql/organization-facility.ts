@@ -36,11 +36,11 @@ export class OrganizationFacility {
 	@Property({ type: 'text', nullable: true })
 	country?: string;
 
-	@Property({ type: 'datetime', length: 3 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 3 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
 
 	@Property({ fieldName: 'address_line_2', type: 'text', nullable: true })
 	addressLine2?: string;
@@ -48,7 +48,7 @@ export class OrganizationFacility {
 	@Property({ type: 'text', nullable: true })
 	postalCode?: string;
 
-	@Property({ type: 'boolean', default: false })
+	@Property({ type: 'boolean', nullable: true, default: false })
 	deleted = false;
 
 	@Property({ type: 'json', nullable: true })
