@@ -1,3 +1,10 @@
+## [1.400.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.5...v1.400.6) (2024-10-02)
+
+
+### Bug Fixes
+
+* make certain GraphQL fields optional ([b10235e](https://github.com/ColdPBC/cold-monorepo/commit/b10235efb34af2e2ef46c047fc650d89d9b894e3))
+
 ## [1.400.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.4...v1.400.5) (2024-10-02)
 
 
