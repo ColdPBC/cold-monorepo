@@ -1,17 +1,15 @@
 import { Navigate, Route } from 'react-router-dom';
-import { MaterialsPage } from '@coldpbc/components';
+import {CreateMaterialPage, MaterialDetail, MaterialsPage} from '@coldpbc/components';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export const MaterialRoutes = () => {
   const ldFlags = useFlags();
 
-  if (ldFlags.showMaterialsPageCold912) {
-    return (
-      <Route path={'/materials'}>
-        <Route index element={<MaterialsPage />} />
-      </Route>
-    );
-  } else {
-    return null;
-  }
+  return (
+    <Route path={'/materials'}>
+      <Route index element={ldFlags.showMaterialsPageCold912 ? <MaterialsPage /> : <Navigate to={'/compliance'} replace={true} />} />
+      <Route path={':id'} element={ldFlags.showMaterialsPageCold912 ? <MaterialDetail /> : <Navigate to={'/compliance'} replace={true} />} />
+      <Route path={'new'} element={<CreateMaterialPage />} />
+    </Route>
+  );
 };

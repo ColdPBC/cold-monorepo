@@ -178,6 +178,22 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
   }
 `;
 
+export const CREATE_MATERIAL = gql`
+  mutation CreateMaterial($input: MaterialInsertInput) {
+    createMaterial(input: $input) {
+      id
+    }
+  }
+`;
+
+export const CREATE_MATERIAL_SUPPLIER = gql`
+  mutation CreateMaterialSupplier($input: MaterialSupplierInsertInput!) {
+    createMaterialSupplier(input: $input) {
+      id
+    }
+  }
+`
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -193,4 +209,6 @@ export const queries: {
   GET_ALL_MATERIALS_FOR_ORG: GET_ALL_MATERIALS_FOR_ORG,
   GET_ALL_SCHEMA_ENUMS: GET_ALL_SCHEMA_ENUMS,
   GET_ALL_SUPPLIERS_FOR_ORG: GET_ALL_SUPPLIERS_FOR_ORG,
+  CREATE_MATERIAL: CREATE_MATERIAL,
+  CREATE_MATERIAL_SUPPLIER: CREATE_MATERIAL_SUPPLIER,
 };
