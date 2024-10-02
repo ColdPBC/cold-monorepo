@@ -1,3 +1,10 @@
+## [1.400.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.1...v1.400.2) (2024-10-02)
+
+
+### Bug Fixes
+
+* **logger:** update winston config version to 1.1.1 ([0523e7c](https://github.com/ColdPBC/cold-monorepo/commit/0523e7c48d68d09e140c2c94f5a064dc7a714913))
+
 ## [1.400.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.0...v1.400.1) (2024-10-02)
 
 
