@@ -1,3 +1,10 @@
+## [1.400.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.400.0...v1.400.1) (2024-10-02)
+
+
+### Bug Fixes
+
+* bug creating facilities ([55b94a7](https://github.com/ColdPBC/cold-monorepo/commit/55b94a7a4fbcd932652bf58bdada5192c7b84118))
+
 # [1.400.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.399.5...v1.400.0) (2024-10-02)
 
 
