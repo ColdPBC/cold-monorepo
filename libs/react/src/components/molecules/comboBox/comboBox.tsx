@@ -7,7 +7,7 @@ import {ChevronUpDownIcon} from '@heroicons/react/20/solid';
 
 export interface ComboBoxProps extends SelectProps {
   options: Array<InputOption>;
-  value: string;
+  value: InputOption;
 }
 
 export const ComboBox = (props: ComboBoxProps) => {
@@ -22,18 +22,8 @@ export const ComboBox = (props: ComboBoxProps) => {
         return option.name.toLowerCase().includes(query.toLowerCase())
       })
 
-  const onListBoxChange = (value: InputOption) => {
-    console.log(value)
-    onChange(value);
-  };
-
-  const findOption = (value: string, options: InputOption[]) => {
-    const option = options.find((option: InputOption) => option.value === value);
-    return option || options[0];
-  };
-
   return (
-      <Combobox value={findOption(value, options)} onChange={onListBoxChange}>
+      <Combobox value={value} onChange={onChange}>
         <div className="relative mt-1">
           <div className="relative w-full border-[1.5px] border-gray-90 rounded-[8px] cursor-pointer p-4 pr-8">
             <Combobox.Input
