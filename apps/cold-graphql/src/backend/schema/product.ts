@@ -3,6 +3,7 @@ import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AttributeAssurance } from './attribute-assurance';
 import { Organization } from './organization';
+import { OrganizationFacility } from './organization-facility';
 import { ProductMaterial } from './product-material';
 import { Product as OrmProduct } from '../entities';
 import { connection } from '../database';
@@ -40,6 +41,9 @@ export class Product {
 
 	@Field(() => String, { nullable: true })
 	styleCode?: string;
+
+	@RelationshipField<Product>(() => OrganizationFacility, { id: (entity) => entity.organizationFacility?.id, nullable: true })
+	organizationFacility?: OrganizationFacility;
 
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'product' })
 	attributeAssurances!: AttributeAssurance[];

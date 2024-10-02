@@ -4,6 +4,7 @@ import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHoo
 import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { AttributeAssurance } from './attribute-assurance';
 import { Organization } from './organization';
+import { OrganizationFacility } from './organization-facility';
 import { ProductMaterial } from './product-material';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -47,6 +48,9 @@ export class Product {
 
 	@Property({ type: 'text', nullable: true })
 	styleCode?: string;
+
+	@ManyToOne({ entity: () => OrganizationFacility, ref: true, fieldName: 'supplier_id', nullable: true })
+	organizationFacility?: Ref<OrganizationFacility>;
 
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'product' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
