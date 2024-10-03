@@ -1,8 +1,8 @@
 import {
-  CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
+  CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE, CREATE_MATERIAL, CREATE_MATERIAL_SUPPLIER, CREATE_PRODUCT_MATERIAL,
   GET_ALL_FILES,
   GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-  GET_ALL_ORGS, GET_ALL_SCHEMA_ENUMS, GET_ALL_SUPPLIERS_FOR_ORG,
+  GET_ALL_ORGS, GET_ALL_PRODUCTS, GET_ALL_SCHEMA_ENUMS, GET_ALL_SUPPLIERS_FOR_ORG,
   GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
   GET_ALL_SUS_ATTRIBUTES,
   UPDATE_DOCUMENT_ASSURANCE,
@@ -22,6 +22,7 @@ import { RequestHandler } from 'mock-apollo-client';
 import { get } from 'lodash';
 import {getSchemaMocks} from "../schemaMocks";
 import {getSupplierMocks} from "../suppliersMock";
+import {getProductsMock} from "../productsMock";
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
@@ -380,7 +381,48 @@ export const defaultGraphqlMocks: {
         },
       });
     }
+  }, {
+    query: CREATE_MATERIAL,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          createMaterial: {
+            id: 'material_1',
+          },
+        },
+      }),
   },
+  {
+    query: CREATE_MATERIAL_SUPPLIER,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          createMaterialSupplier: {
+            id: 'material_supplier_1',
+          },
+        },
+      }),
+  },
+  {
+    query: GET_ALL_PRODUCTS,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          products: getProductsMock(),
+        },
+      }),
+  },
+  {
+    query: CREATE_PRODUCT_MATERIAL,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          createProductMaterial: {
+            id: 'product_material_1',
+          },
+        },
+      }),
+  }
 ];
 
 export const filesWithAssurancesMocks: {
