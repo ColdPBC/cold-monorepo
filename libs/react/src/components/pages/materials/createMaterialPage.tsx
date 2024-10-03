@@ -16,11 +16,6 @@ import {get, has, some} from 'lodash';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 
-// todo: Add required styling to name field
-// todo: Look into how to add the checkbox to the mui datagrid
-// todo: Storybook support
-// todo: add feature flag
-
 export const CreateMaterialPage = () => {
   const {addToastMessage} = useAddToastMessage();
   const {logBrowser} = useColdContext();
