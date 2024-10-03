@@ -24,7 +24,7 @@ import {
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { QuestionnaireRoutes } from './questionnaireRoutes';
 
-const DEFAULT_PAGE = '/questionnaires';
+export const DEFAULT_PAGE = '/questionnaires';
 
 export const ColdRoutes = () => {
   const ldFlags = useFlags();
