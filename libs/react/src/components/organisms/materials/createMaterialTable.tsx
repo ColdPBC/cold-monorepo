@@ -1,10 +1,10 @@
 import {GridActionsCellItem, GridColDef} from "@mui/x-data-grid";
 import React from "react";
-import {MuiDataGrid} from "@coldpbc/components";
+import {ErrorFallback, MuiDataGrid} from "@coldpbc/components";
 import {lowerCase, startCase} from "lodash";
+import {withErrorBoundary} from "react-error-boundary";
 
-
-export const CreateMaterialTable = (props: {
+const _CreateMaterialTable = (props: {
   type: 'products' | 'attributes',
   remove: (id: string) => void
   entities: any[]
@@ -74,3 +74,8 @@ export const CreateMaterialTable = (props: {
     </div>
   )
 }
+
+// create error boundary withErrorBoundary HOC to wrap the component
+export const CreateMaterialTable = withErrorBoundary(_CreateMaterialTable, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});

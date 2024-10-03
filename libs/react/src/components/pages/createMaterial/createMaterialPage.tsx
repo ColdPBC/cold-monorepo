@@ -3,7 +3,7 @@ import {
   BaseButton,
   Card,
   ComboBox,
-  CreateMaterialTable,
+  CreateMaterialTable, ErrorFallback,
   Input,
   MainContent,
   Modal,
@@ -15,8 +15,9 @@ import { Claims, InputOption, SuppliersWithAssurances, ToastMessage } from '@col
 import {get, has, some} from 'lodash';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
+import {withErrorBoundary} from "react-error-boundary";
 
-export const CreateMaterialPage = () => {
+const _CreateMaterialPage = () => {
   const {addToastMessage} = useAddToastMessage();
   const {logBrowser} = useColdContext();
 	const { orgId } = useAuth0Wrapper();
@@ -381,3 +382,7 @@ export const CreateMaterialPage = () => {
 		</MainContent>
 	);
 };
+
+export const CreateMaterialPage = withErrorBoundary(_CreateMaterialPage, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});

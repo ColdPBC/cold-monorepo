@@ -1,8 +1,8 @@
-import {BaseButton, Card, Modal, MuiDataGrid} from '@coldpbc/components';
+import {BaseButton, Card, ErrorFallback, Modal, MuiDataGrid} from '@coldpbc/components';
 import { Modal as FBModal } from 'flowbite-react';
 import {flowbiteThemeOverride} from "@coldpbc/themes";
 import {
-  GRID_CHECKBOX_SELECTION_COL_DEF, GridCellParams,
+  GridCellParams,
   GridColDef,
   GridRowSelectionModel,
   GridToolbarContainer, GridToolbarQuickFilter
@@ -10,11 +10,11 @@ import {
 import {ButtonTypes} from "@coldpbc/enums";
 import React, {useEffect, useState} from "react";
 import {Claims} from "@coldpbc/interfaces";
-import capitalize from "lodash/capitalize";
 import {Checkbox} from "@mui/material";
 import {lowerCase, startCase} from "lodash";
+import {withErrorBoundary} from "react-error-boundary";
 
-export const AddToCreateMaterialModal = (props: {
+const _AddToCreateMaterialModal = (props: {
   show: boolean;
   onClose: () => void;
   onAdd: (ids: string[]) => void;
@@ -184,3 +184,7 @@ export const AddToCreateMaterialModal = (props: {
     </FBModal>
   );
 }
+
+export const AddToCreateMaterialModal = withErrorBoundary(_AddToCreateMaterialModal, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});
