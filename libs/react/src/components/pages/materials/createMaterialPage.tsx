@@ -43,7 +43,6 @@ export const CreateMaterialPage = () => {
 	const [attributesToAdd, setAttributesToAdd] = useState<Claims[]>([]);
   const [products, setProducts] = useState<{id: string, name: string}[]>([]);
   const [productsToAdd, setProductsToAdd] = useState<{id: string, name: string}[]>([]);
-  const [showAddAttributesModal, setShowAddAttributesModal] = useState(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
@@ -229,6 +228,7 @@ export const CreateMaterialPage = () => {
             setShowCancelModal(true);
           }}
           className={'h-[40px]'}
+          disabled={saveButtonLoading}
           />
         <BaseButton
           label={'Save'}
