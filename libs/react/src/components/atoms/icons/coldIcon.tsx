@@ -39,6 +39,7 @@ import {
   ColdSparkleIcon,
   ColdSuppliersNavIcon,
   ColdSupportNotFilledInIcon,
+  ColdSustainabilityIcon,
   ColdSwitchIcon,
   ColdTeamMembersIcon,
   PlusIcon,
@@ -132,6 +133,8 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdQuestionnaireIcon {...props} />;
     case IconNames.ColdChartIcon:
       return <ColdChartIcon {...props} />;
+    case IconNames.ColdSustainabilityIcon:
+      return <ColdSustainabilityIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;
