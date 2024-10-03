@@ -58,10 +58,9 @@ const _AddToCreateMaterialModal = (props: {
       ),
       renderHeader: (params) => (
         <Checkbox
-          checked={rowsSelected.length === rows.length}
+          checked={rowsSelected.length === rows.length && rowsSelected.length > 0}
           indeterminate={rowsSelected.length > 0 && rowsSelected.length < rows.length}
           onClick={(e) => {
-
             if(rowsSelected.length === rows.length) {
               setRowsSelected([]);
             } else if(rowsSelected.length > 0) {
