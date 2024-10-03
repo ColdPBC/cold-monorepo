@@ -12,6 +12,7 @@ import React, {useEffect, useState} from "react";
 import {Claims} from "@coldpbc/interfaces";
 import capitalize from "lodash/capitalize";
 import {Checkbox} from "@mui/material";
+import {lowerCase, startCase} from "lodash";
 
 export const AddToCreateMaterialModal = (props: {
   show: boolean;
@@ -106,8 +107,8 @@ export const AddToCreateMaterialModal = (props: {
         flex: 1,
         headerClassName: 'bg-gray-30',
         cellClassName: 'bg-gray-10',
-        valueGetter: (value) => {
-          return capitalize((value as string).replace('_', ' '));
+        valueGetter: (value: string) => {
+          return startCase(lowerCase(value.replace(/_/g, ' ')))
         }
       },
     ])
@@ -137,11 +138,8 @@ export const AddToCreateMaterialModal = (props: {
       dismissible
       show={show}
       onClose={onClose}
-      theme={flowbiteThemeOverride.modal}
-      style={{
-        boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
-      }}>
-      <Card className="relative p-4 overflow-visible w-[962px]">
+      theme={flowbiteThemeOverride.modal}>
+      <Card className="relative p-4 w-[962px] bg-gray-20">
         <div className={'flex flex-col gap-[24px] w-full'}>
           <div className={'flex flex-row text-h3'}>
             {title}
@@ -159,6 +157,7 @@ export const AddToCreateMaterialModal = (props: {
                 toolbar: getToolbar,
               }}
               disableColumnMenu={true}
+              rowSelection={false}
             />
           </div>
         </div>

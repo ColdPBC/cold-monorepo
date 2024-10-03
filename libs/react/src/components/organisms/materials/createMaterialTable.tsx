@@ -1,6 +1,7 @@
 import {GridActionsCellItem, GridColDef} from "@mui/x-data-grid";
 import React from "react";
 import {MuiDataGrid} from "@coldpbc/components";
+import {lowerCase, startCase} from "lodash";
 
 
 export const CreateMaterialTable = (props: {
@@ -26,7 +27,11 @@ export const CreateMaterialTable = (props: {
   } else {
     columns = [
       {field: 'name', headerName: 'Name', minWidth: 130, flex: 1, headerClassName: 'bg-gray-30', cellClassName: 'bg-gray-10'},
-      {field: 'type', headerName: 'Type', minWidth: 130, flex: 1, headerClassName: 'bg-gray-30', cellClassName: 'bg-gray-10'},
+      {field: 'type', headerName: 'Type', minWidth: 130, flex: 1, headerClassName: 'bg-gray-30', cellClassName: 'bg-gray-10',
+        valueGetter: (value: string) => {
+          return startCase(lowerCase(value.replace(/_/g, ' ')))
+        }
+      },
     ]
   }
   columns.push({
@@ -64,6 +69,7 @@ export const CreateMaterialTable = (props: {
         }}
         autoHeight={false}
         className={'h-full'}
+        rowSelection={false}
       />
     </div>
   )
