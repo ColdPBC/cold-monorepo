@@ -8,10 +8,11 @@ import {ChevronUpDownIcon} from '@heroicons/react/20/solid';
 export interface ComboBoxProps extends SelectProps {
   options: Array<InputOption>;
   value: InputOption;
+  dropdownDirection?: 'down' | 'up'; // undefined will implicitly default to down
 }
 
 export const ComboBox = (props: ComboBoxProps) => {
-  const { options, name, label, value, onChange, className, buttonClassName = '' } = props;
+  const { options, name, label, value, onChange, className, buttonClassName = '', dropdownDirection } = props;
 
   const [query, setQuery] = useState('')
 
@@ -45,7 +46,10 @@ export const ComboBox = (props: ComboBoxProps) => {
             leaveTo="opacity-0"
             afterLeave={() => setQuery('')}
           >
-            <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-bgc-elevated py-1 text-tc-primary text-body shadow-lg focus:outline-none">
+            <Combobox.Options className={`
+              ${dropdownDirection === 'up' ? "bottom-full" : ""}
+              absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-bgc-elevated py-1 text-tc-primary text-body shadow-lg focus:outline-none
+            `}>
               {filteredOptions.length === 0 && query !== '' ? (
                 <div className="relative cursor-default select-none p-4 text-white">
                   Nothing found.

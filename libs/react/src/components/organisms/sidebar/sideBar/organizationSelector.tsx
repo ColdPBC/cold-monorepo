@@ -1,46 +1,58 @@
 import { withErrorBoundary } from 'react-error-boundary';
 import { ColdIcon, ErrorFallback, Spinner } from '@coldpbc/components';
 import { useColdContext } from '@coldpbc/hooks';
+import type { Organization } from '@coldpbc/context';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ErrorType, IconNames } from '@coldpbc/enums';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { find } from 'lodash';
+import { find, parseInt } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { Dropdown } from 'flowbite-react';
-import { flowbiteThemeOverride } from '@coldpbc/themes';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { ComboBox } from '@coldpbc/components';
 import { useNavigate } from 'react-router-dom';
+import { InputOption } from '@coldpbc/interfaces';
+
+const orgToInputOption = (org: Organization | undefined) => {
+  if (org) {
+    return {
+      id: parseInt(org.id),
+      name: org.display_name,
+      value: org.id
+    };
+  } else {
+    return null;
+  }
+}
 
 const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
   const ldFlags = useFlags();
   const navigate = useNavigate();
   const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
   const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
-  const unselectedOrg = {
-    id: '0',
-    name: 'unselected',
-    display_name: 'Select Org',
-  };
-  const initialValue = impersonatingOrg ? impersonatingOrg : unselectedOrg;
-  const [selectedOrg, setSelectedOrg] = useState<any>(initialValue);
 
-  const onOrgSelect = (org: any) => {
-    logBrowser(`New impersonating organization selected: ${org.display_name}`, 'info', { org: org });
-    navigate('/');
-    setSelectedOrg(org);
-    if (org.name === 'unselected') {
-      setImpersonatingOrg(undefined);
-    } else {
+  // Default to the impersonating org if already set
+  const [selectedOption, setSelectedOption] = useState<InputOption | null>(orgToInputOption(impersonatingOrg));
+
+  const onOrgSelect = (selectedOption: InputOption) => {
+    const org: Organization | undefined = find(data, org => org.id === selectedOption.value);
+    if(org) {
+      logBrowser(`New impersonating organization selected: ${org.display_name}`, 'info', { org: org });
+      navigate('/');
+      setSelectedOption(selectedOption);
       setImpersonatingOrg(org);
+    } else {
+      setSelectedOption(null);
+      setImpersonatingOrg(undefined);
     }
   };
 
+  // Set the org to Cold Climate if there's no impersonating org
   useEffect(() => {
-    if (data && !find(data, org => org.name === unselectedOrg.name)) {
-      data.unshift(unselectedOrg);
+    if (data && !impersonatingOrg) {
+      const coldClimateOrg = find(data, org => org.display_name === 'Cold Climate')
+      setSelectedOption(orgToInputOption(coldClimateOrg));
     }
-  }, [data]);
+  }, [data, impersonatingOrg]);
 
   if (isLoading) {
     return (
@@ -56,35 +68,25 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
     return null;
   }
 
-  logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOrg });
+  logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOption });
 
   if (sidebarExpanded || !ldFlags.showNewNavigationCold698) {
+    const organizationOptions: InputOption[] = data
+      .sort((a: Organization, b: Organization) => a.display_name.localeCompare(b.display_name))
+      .map((org: Organization, index: number) => ({
+        id: index,
+        name: org.display_name,
+        value: org.id,
+      }));
+
     return (
-      <Dropdown
-        inline={true}
-        label={
-          <span className={'w-full p-4 flex flex-row justify-between items-center border border-bgc-accent rounded-lg'}>
-            <div className={'w-auto text-tc-primary text-start text-xs truncate'}>{selectedOrg.display_name}</div>
-            <ChevronDownIcon className="w-[18px] ml-2 text-tc-primary" />
-          </span>
-        }
-        arrowIcon={false}
-        theme={flowbiteThemeOverride.dropdown}
-        className={'h-fit max-h-[200px] overflow-y-auto scrollbar-hide overflow-x-visible text-ellipsis transition-none duration-0'}>
-        {data
-          .sort((a: any, b: any) => a.display_name.localeCompare(b.display_name))
-          .map((org: any) => (
-            <Dropdown.Item
-              key={org.id}
-              onClick={() => {
-                onOrgSelect(org);
-              }}
-              theme={flowbiteThemeOverride.dropdown.floating.item}
-              className={'text-start text-xs text-ellipsis'}>
-              {org.display_name}
-            </Dropdown.Item>
-          ))}
-      </Dropdown>
+      <ComboBox
+        options={organizationOptions}
+        name={'selectOrg'}
+        value={selectedOption || { id: -1, name: 'Cold Climate', value: '-1'}} // selectedOrg can technically be null but shouldn't be once data is available
+        onChange={onOrgSelect}
+        dropdownDirection='up'
+      />
     );
   } else {
     return <ColdIcon name={IconNames.ColdSwitchIcon} color={'white'} />;
