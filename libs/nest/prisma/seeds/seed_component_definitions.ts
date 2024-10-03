@@ -111,6 +111,14 @@ const seeds: Array<{
     definition: {
       items: [
         {
+          key: 'sustainability_key',
+          icon: {
+            name: 'ColdSustainabilityIcon',
+          },
+          label: 'Sustainability',
+          route: '/sustainability',
+        },
+        {
           key: 'questionnaires_key',
           icon: {
             name: 'ColdQuestionnaireIcon',

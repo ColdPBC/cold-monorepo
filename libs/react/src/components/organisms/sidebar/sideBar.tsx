@@ -59,7 +59,9 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 		} else if (item.key === 'materials_key') {
 			return ldFlags.showMaterialsPageCold912;
 		} else if (item.key === 'settings_billing_key') {
-			return ldFlags.showBillingPageCold957;
+      return ldFlags.showBillingPageCold957;
+    } else if (item.key === 'sustainability_key') {
+      return ldFlags.showSustainabilityPageCold999;
 		} else {
 			return true;
 		}

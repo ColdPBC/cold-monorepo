@@ -16,6 +16,7 @@ import {
   Signup,
   SupplierDetail,
   SuppliersPage,
+  SustainabilityPage,
   Terms,
   UserSettingsPage,
   WizardRoutes,
@@ -36,6 +37,7 @@ export const ColdRoutes = () => {
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
         {ldFlags.showActions261 && <Route path={'/actions'} element={<ActionsOverview />} />}
+        <Route path={'/sustainability'} element={ldFlags.showSustainabilityPageCold999 ? <SustainabilityPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
         <Route path={'/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
         <Route path={'/documents'} element={ldFlags.showNewDocumentsPage ? <DocumentsPage /> : <DocumentUpload />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />
