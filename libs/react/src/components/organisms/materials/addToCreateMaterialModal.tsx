@@ -100,17 +100,6 @@ const _AddToCreateMaterialModal = (props: {
         headerClassName: 'bg-gray-30',
         cellClassName: 'bg-gray-10',
       },
-      {
-        field: 'type',
-        headerName: 'Type',
-        minWidth: 130,
-        flex: 1,
-        headerClassName: 'bg-gray-30',
-        cellClassName: 'bg-gray-10',
-        valueGetter: (value: string) => {
-          return startCase(lowerCase(value.replace(/_/g, ' ')))
-        }
-      },
     ])
     rows = attributes.map((attribute) => {
       return attribute
