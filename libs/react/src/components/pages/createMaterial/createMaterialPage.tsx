@@ -339,7 +339,10 @@ const _CreateMaterialPage = () => {
                     newProducts.push(foundProduct);
                   }
                 });
-                setProductsToAdd(newProducts);
+                setProductsToAdd([
+                  ...productsToAdd,
+                  ...newProducts,
+                ]);
               } else {
                 const newAttributes: Claims[] = [];
                 ids.forEach((id) => {
@@ -348,7 +351,10 @@ const _CreateMaterialPage = () => {
                     newAttributes.push(foundAttribute);
                   }
                 });
-                setAttributesToAdd(newAttributes);
+                setAttributesToAdd([
+                  ...attributesToAdd,
+                  ...newAttributes,
+                ]);
               }
               setCreateModalType(undefined);
             }}
@@ -361,6 +367,9 @@ const _CreateMaterialPage = () => {
         setShowModal={setShowCancelModal}
         header={{
           title: 'Cancel without saving?',
+          cardProps: {
+            className: 'relative p-6'
+          }
         }}
         body={<div>All progress made on creating this material will be lost.</div>}
         footer={{
@@ -378,6 +387,9 @@ const _CreateMaterialPage = () => {
             variant: ButtonTypes.warning,
           }
       }}
+        modalProps={{
+          style: {}
+        }}
       />
 		</MainContent>
 	);

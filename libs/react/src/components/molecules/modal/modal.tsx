@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Modal as FBModal } from 'flowbite-react';
+import {Modal as FBModal, ModalProps} from 'flowbite-react';
 import { BaseButton } from '../../atoms/button/button';
 import { IButtonProps } from '../../../interfaces/buttons/baseButton';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
@@ -23,10 +23,11 @@ export interface IModalProps {
   header: ModalHeader;
   body: ReactElement;
   footer?: ModalFooter;
+  modalProps?: ModalProps
 }
 
 export const Modal = (props: IModalProps) => {
-  const { show, setShowModal, header, body, footer } = props;
+  const { show, setShowModal, header, body, footer, modalProps } = props;
 
   const getModelBody = () => {
     return body ? body : <></>;
@@ -53,7 +54,9 @@ export const Modal = (props: IModalProps) => {
       theme={flowbiteThemeOverride.modal}
       style={{
         boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
-      }}>
+      }}
+      {...modalProps}
+    >
       <Card title={header.title} className="relative p-6 overflow-visible" {...header.cardProps}>
         <div className="flex flex-col w-full">
           <div className="">{getModelBody()}</div>
