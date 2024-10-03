@@ -1,3 +1,16 @@
+# [1.404.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.403.0...v1.404.0) (2024-10-03)
+
+
+### Bug Fixes
+
+* remove padding since icon is already 24p x 24p ([c36e4cd](https://github.com/ColdPBC/cold-monorepo/commit/c36e4cd1a34f3c4c446f1594c2082dedfb84a13e))
+
+
+### Features
+
+* add 2 new icons - questionnaire and chart ([03a7503](https://github.com/ColdPBC/cold-monorepo/commit/03a750333c94a7e772ea7eca2bb6c7c0f0e78449))
+* update sidebar and routes ([cde4d33](https://github.com/ColdPBC/cold-monorepo/commit/cde4d3333d1675f5103246786e8f61bdc0ccfd77))
+
 # [1.403.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.402.0...v1.403.0) (2024-10-02)
 
 

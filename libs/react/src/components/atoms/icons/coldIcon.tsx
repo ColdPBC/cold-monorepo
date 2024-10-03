@@ -10,6 +10,7 @@ import {
   ColdBookmarkIcon,
   ColdCalendarDaysIcon,
   ColdCalendarEventIcon,
+  ColdChartIcon,
   ColdCheckIcon,
   ColdChevronDownIcon,
   ColdChevronUpIcon,
@@ -29,6 +30,7 @@ import {
   ColdLeftArrowIcon,
   ColdMaterialsNavIcon,
   ColdProductsNavIcon,
+  ColdQuestionnaireIcon,
   ColdReportIcon,
   ColdRightArrowIcon,
   ColdScoreIcon,
@@ -126,6 +128,10 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdMaterialsNavIcon {...props} />;
     case IconNames.ColdProductsNavIcon:
       return <ColdProductsNavIcon {...props} />;
+    case IconNames.ColdQuestionnaireIcon:
+      return <ColdQuestionnaireIcon {...props} />;
+    case IconNames.ColdChartIcon:
+      return <ColdChartIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

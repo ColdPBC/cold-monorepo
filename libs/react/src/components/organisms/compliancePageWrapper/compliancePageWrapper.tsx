@@ -30,7 +30,7 @@ export const CompliancePageWrapper = () => {
   };
 
   return (
-    <MainContent title="Compliance" headerElement={getFilter()}>
+    <MainContent title="Questionnaires" headerElement={getFilter()}>
       <div className={'w-full space-y-[24px]'}>
         {allComplianceSets
           ?.sort((a, b) => {
