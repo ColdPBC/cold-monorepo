@@ -8,8 +8,7 @@ export const MaterialRoutes = () => {
   return (
     <Route path={'/materials'}>
       <Route index element={ldFlags.showMaterialsPageCold912 ? <MaterialsPage /> : <Navigate to={'/compliance'} replace={true} />} />
-      <Route path={':id'} element={ldFlags.showMaterialsPageCold912 ? <MaterialDetail /> : <Navigate to={'/compliance'} replace={true} />} />
-      <Route path={'new'} element={<CreateMaterialPage />} />
+      <Route path={'new'} element={ldFlags.showCreateMaterialPageCold1015 ? <CreateMaterialPage /> : <Navigate to={'/compliance'} replace={true} />} />
     </Route>
   );
 };
