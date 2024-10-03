@@ -2,7 +2,7 @@ import {BaseButton, Card, Modal, MuiDataGrid} from '@coldpbc/components';
 import { Modal as FBModal } from 'flowbite-react';
 import {flowbiteThemeOverride} from "@coldpbc/themes";
 import {
-  GRID_CHECKBOX_SELECTION_COL_DEF,
+  GRID_CHECKBOX_SELECTION_COL_DEF, GridCellParams,
   GridColDef,
   GridRowSelectionModel,
   GridToolbarContainer, GridToolbarQuickFilter
@@ -11,6 +11,7 @@ import {ButtonTypes} from "@coldpbc/enums";
 import React, {useEffect, useState} from "react";
 import {Claims} from "@coldpbc/interfaces";
 import capitalize from "lodash/capitalize";
+import {Checkbox} from "@mui/material";
 
 export const AddToCreateMaterialModal = (props: {
   show: boolean;
@@ -30,18 +31,52 @@ export const AddToCreateMaterialModal = (props: {
     products,
     attributes,
   } = props;
+  const [rowsSelected, setRowsSelected] = useState<GridRowSelectionModel>([]);
+  const [addButtonDisabled, setAddButtonDisabled] = useState(true);
 
-  let columns: GridColDef[] = [];
+  const columns: GridColDef[] = [
+    {
+      field: 'checkbox',
+      editable: false,
+      sortable: false,
+      hideSortIcons: true,
+      width: 100,
+      headerClassName: 'bg-gray-30',
+      cellClassName: 'bg-gray-10',
+      renderCell: (params: GridCellParams) => (
+        <Checkbox
+          checked={rowsSelected.includes(params.row.id) || false}
+          onClick={() => setRowsSelected((prev) => {
+            if (prev.includes(params.row.id)) {
+              return prev.filter((id) => id !== params.row.id);
+            } else {
+              return [...prev, params.row.id];
+            }
+          })}
+        />
+      ),
+      renderHeader: (params) => (
+        <Checkbox
+          checked={rowsSelected.length === rows.length}
+          indeterminate={rowsSelected.length > 0 && rowsSelected.length < rows.length}
+          onClick={(e) => {
+
+            if(rowsSelected.length === rows.length) {
+              setRowsSelected([]);
+            } else if(rowsSelected.length > 0) {
+              setRowsSelected([]);
+            } else {
+              setRowsSelected(rows.map(r => r.id));
+            }
+          }}
+        />
+      ),
+    },
+  ];
   let rows: any[] = [];
 
   if(type === "products") {
-    columns = [
-      {
-        ...GRID_CHECKBOX_SELECTION_COL_DEF,
-        width: 100,
-        headerClassName: 'bg-gray-30',
-        cellClassName: 'bg-gray-10',
-      },
+    columns.push(
       {
         field: 'name',
         headerName: 'Name',
@@ -50,18 +85,12 @@ export const AddToCreateMaterialModal = (props: {
         headerClassName: 'bg-gray-30',
         cellClassName: 'bg-gray-10',
       },
-    ]
+    )
     rows = products.map((attribute) => {
       return attribute
     })
   } else {
-    columns = [
-      {
-        ...GRID_CHECKBOX_SELECTION_COL_DEF,
-        width: 100,
-        headerClassName: 'bg-gray-30',
-        cellClassName: 'bg-gray-10',
-      },
+    columns.push(...[
       {
         field: 'name',
         headerName: 'Name',
@@ -81,14 +110,11 @@ export const AddToCreateMaterialModal = (props: {
           return capitalize((value as string).replace('_', ' '));
         }
       },
-    ]
+    ])
     rows = attributes.map((attribute) => {
       return attribute
     })
   }
-
-  const [rowsSelected, setRowsSelected] = useState<GridRowSelectionModel>([]);
-  const [addButtonDisabled, setAddButtonDisabled] = useState(true);
 
   useEffect(() => {
     setAddButtonDisabled(rowsSelected.length === 0);
@@ -128,15 +154,11 @@ export const AddToCreateMaterialModal = (props: {
                 '--DataGrid-overlayHeight': '300px',
               }}
               className={'h-full'}
-              checkboxSelection={true}
               autoHeight={false}
-              onRowSelectionModelChange={(newSelection) => {
-                setRowsSelected(newSelection);
-              }}
-              rowSelectionModel={rowsSelected}
               slots={{
                 toolbar: getToolbar,
               }}
+              disableColumnMenu={true}
             />
           </div>
         </div>
