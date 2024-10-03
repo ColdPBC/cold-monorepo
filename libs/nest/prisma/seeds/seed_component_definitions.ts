@@ -111,12 +111,12 @@ const seeds: Array<{
     definition: {
       items: [
         {
-          key: 'compliance_key',
+          key: 'questionnaires_key',
           icon: {
-            name: 'ColdComplianceIcon',
+            name: 'ColdQuestionnaireIcon',
           },
-          label: 'Compliance',
-          route: '/compliance',
+          label: 'Questionnaires',
+          route: '/questionnaires',
         },
         {
           key: 'materials_key',
@@ -151,18 +151,12 @@ const seeds: Array<{
           route: '/actions',
         },
         {
-          key: 'reports_key',
+          key: 'carbon_footprint_key',
           icon: {
-            name: 'ColdReportIcon',
+            name: 'ColdChartIcon',
           },
-          items: [
-            {
-              key: 'reports_carbon_footprint_key',
-              label: 'Carbon Footprint',
-              route: '/reports/carbon_footprint',
-            },
-          ],
-          label: 'Reports',
+          label: 'Carbon Footprint',
+          route: '/carbon_footprint',
         },
         {
           key: 'documents_key',
