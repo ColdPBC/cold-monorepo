@@ -1,6 +1,4 @@
 import {BaseButton, Card, Modal, MuiDataGrid} from '@coldpbc/components';
-import {useAuth0Wrapper} from "@coldpbc/hooks";
-import {Claims} from "@coldpbc/interfaces";
 import { Modal as FBModal } from 'flowbite-react';
 import {flowbiteThemeOverride} from "@coldpbc/themes";
 import {
@@ -11,49 +9,86 @@ import {
 } from "@mui/x-data-grid";
 import {ButtonTypes} from "@coldpbc/enums";
 import React, {useEffect, useState} from "react";
+import {Claims} from "@coldpbc/interfaces";
 import capitalize from "lodash/capitalize";
 
-
-export const AddAttributesToMaterialModal = (props: {
+export const AddToCreateMaterialModal = (props: {
   show: boolean;
   onClose: () => void;
-  attributes: Claims[];
-  addAttributes: (attributes: string[]) => void;
+  onAdd: (ids: string[]) => void;
+  type: "products" | "attributes";
+  products: {
+    name: string;
+  }[];
+  attributes: Claims[]
 }) => {
-  const {show, onClose, attributes, addAttributes} = props;
+  const {
+    type,
+    show,
+    onClose,
+    onAdd,
+    products,
+    attributes,
+  } = props;
+
+  let columns: GridColDef[] = [];
+  let rows: any[] = [];
+
+  if(type === "products") {
+    columns = [
+      {
+        ...GRID_CHECKBOX_SELECTION_COL_DEF,
+        width: 100,
+        headerClassName: 'bg-gray-30',
+        cellClassName: 'bg-gray-10',
+      },
+      {
+        field: 'name',
+        headerName: 'Name',
+        minWidth: 130,
+        flex: 1,
+        headerClassName: 'bg-gray-30',
+        cellClassName: 'bg-gray-10',
+      },
+    ]
+    rows = products.map((attribute) => {
+      return attribute
+    })
+  } else {
+    columns = [
+      {
+        ...GRID_CHECKBOX_SELECTION_COL_DEF,
+        width: 100,
+        headerClassName: 'bg-gray-30',
+        cellClassName: 'bg-gray-10',
+      },
+      {
+        field: 'name',
+        headerName: 'Name',
+        minWidth: 130,
+        flex: 1,
+        headerClassName: 'bg-gray-30',
+        cellClassName: 'bg-gray-10',
+      },
+      {
+        field: 'type',
+        headerName: 'Type',
+        minWidth: 130,
+        flex: 1,
+        headerClassName: 'bg-gray-30',
+        cellClassName: 'bg-gray-10',
+        valueGetter: (value) => {
+          return capitalize((value as string).replace('_', ' '));
+        }
+      },
+    ]
+    rows = attributes.map((attribute) => {
+      return attribute
+    })
+  }
+
   const [rowsSelected, setRowsSelected] = useState<GridRowSelectionModel>([]);
   const [addButtonDisabled, setAddButtonDisabled] = useState(true);
-  const columns: GridColDef[] = [
-    {
-      ...GRID_CHECKBOX_SELECTION_COL_DEF,
-      width: 100,
-      headerClassName: 'bg-gray-30',
-      cellClassName: 'bg-gray-10',
-    },
-    {
-      field: 'name',
-      headerName: 'Name',
-      minWidth: 130,
-      flex: 1,
-      headerClassName: 'bg-gray-30',
-      cellClassName: 'bg-gray-10',
-    },
-    {
-      field: 'type',
-      headerName: 'Type',
-      minWidth: 130,
-      flex: 1,
-      headerClassName: 'bg-gray-30',
-      cellClassName: 'bg-gray-10',
-      valueGetter: (value) => {
-        return capitalize((value as string).replace('_', ' '));
-      }
-    },
-  ]
-
-  const rows = attributes.map((attribute) => {
-    return attribute
-  })
 
   useEffect(() => {
     setAddButtonDisabled(rowsSelected.length === 0);
@@ -67,6 +102,10 @@ export const AddAttributesToMaterialModal = (props: {
     );
   };
 
+  const title = type === "products" ? 'Add Products' : 'Add Sustainability Attribute to Track';
+
+  const buttonText = type === "products" ? 'Add Products' : 'Add Attributes';
+
   return (
     <FBModal
       dismissible
@@ -79,7 +118,7 @@ export const AddAttributesToMaterialModal = (props: {
       <Card className="relative p-4 overflow-visible w-[962px]">
         <div className={'flex flex-col gap-[24px] w-full'}>
           <div className={'flex flex-row text-h3'}>
-            Add Sustainability Attributes To Track
+            {title}
           </div>
           <div className={'w-full h-[400px]'}>
             <MuiDataGrid
@@ -109,12 +148,12 @@ export const AddAttributesToMaterialModal = (props: {
           />
           <div className={'flex flex-row gap-[16px] items-center'}>
             <div className={'text-body font-bold text-tc-secondary'}>
-              {rowsSelected.length}/{attributes.length} Selected
+              {rowsSelected.length}/{rows.length} Selected
             </div>
             <BaseButton
-              label={'Add'}
+              label={buttonText}
               onClick={() => {
-                addAttributes(rowsSelected as string[]);
+                onAdd(rowsSelected as string[]);
               }}
               disabled={addButtonDisabled}
             />

@@ -1,8 +1,18 @@
-import { AddAttributesToMaterialModal, BaseButton, Card, ComboBox, CreateMaterialAttributesTable, Input, MainContent, Modal, Spinner } from '@coldpbc/components';
+import {
+  AddToCreateMaterialModal,
+  BaseButton,
+  Card,
+  ComboBox,
+  CreateMaterialTable,
+  Input,
+  MainContent,
+  Modal,
+  Spinner
+} from '@coldpbc/components';
 import React, { useEffect, useState } from 'react';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
 import { Claims, InputOption, SuppliersWithAssurances, ToastMessage } from '@coldpbc/interfaces';
-import { get, has } from 'lodash';
+import {get, has, some} from 'lodash';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,13 +41,17 @@ export const CreateMaterialPage = () => {
 	const [suppliers, setSuppliers] = useState<SuppliersWithAssurances[]>([]);
 	const [attributes, setAttributes] = useState<Claims[]>([]);
 	const [attributesToAdd, setAttributesToAdd] = useState<Claims[]>([]);
+  const [products, setProducts] = useState<{id: string, name: string}[]>([]);
+  const [productsToAdd, setProductsToAdd] = useState<{id: string, name: string}[]>([]);
   const [showAddAttributesModal, setShowAddAttributesModal] = useState(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [createModalType, setCreateModalType] = useState<'products' | 'attributes' | undefined>(undefined);
   const {mutateGraphQL: createMaterial} = useGraphQLMutation('CREATE_MATERIAL');
   const {mutateGraphQL: createAttributeAssurance} = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
   const {mutateGraphQL: createMaterialSupplier} = useGraphQLMutation('CREATE_MATERIAL_SUPPLIER');
+  const {mutateGraphQL: createProductMaterial} = useGraphQLMutation('CREATE_PRODUCT_MATERIAL');
 
 	const suppliersQuery = useGraphQLSWR<{
 		organizationFacilities: SuppliersWithAssurances[];
@@ -54,6 +68,16 @@ export const CreateMaterialPage = () => {
 	const allSustainabilityAttributes = useGraphQLSWR<{
     sustainabilityAttributes: Claims[];
   }>('GET_ALL_SUS_ATTRIBUTES');
+
+  const productsQuery = useGraphQLSWR<{
+    products: {id: string, name: string}[];
+  }>(orgId ? 'GET_ALL_PRODUCTS' : null, {
+    filter: {
+      organization: {
+        id: orgId,
+      },
+    },
+  });
 
   useEffect(() => {
     setSaveButtonDisabled(!isFormValid(name));
@@ -81,6 +105,16 @@ export const CreateMaterialPage = () => {
 		}
 	}, [allSustainabilityAttributes.data]);
 
+  useEffect(() => {
+    if (productsQuery.data) {
+      if (has(productsQuery.data, 'errors')) {
+        setProducts([]);
+      } else {
+        const products = get(productsQuery.data, 'data.products', []);
+        setProducts(products);
+      }
+    }
+  }, [productsQuery.data]);
 
 	if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading) {
 		return <Spinner />;
@@ -134,6 +168,21 @@ export const CreateMaterialPage = () => {
                 },
                 updatedAt: new Date().toISOString(),
                 createdAt: new Date().toISOString(),
+              },
+            });
+          }
+        }
+
+        if(productsToAdd.length !== 0) {
+          for (const product of productsToAdd) {
+            await createProductMaterial({
+              input: {
+                product: {
+                  id: product.id,
+                },
+                material: {
+                  id: materialId,
+                },
               },
             });
           }
@@ -226,6 +275,22 @@ export const CreateMaterialPage = () => {
             container_classname={'w-full'}
 					/>
           </div>
+          <Card title={'Products'} glow={true}>
+            <BaseButton
+              label={'Add'}
+              iconLeft={IconNames.PlusIcon}
+              variant={ButtonTypes.secondary}
+              onClick={() => setCreateModalType('products')}
+            />
+            <CreateMaterialTable
+              type={'products'}
+              remove={(id) => {
+                const newProducts = productsToAdd.filter((product) => product.id !== id);
+                setProductsToAdd(newProducts);
+              }}
+              entities={productsToAdd}
+            />
+          </Card>
 				</div>
 				<div className={'flex flex-col w-1/2 gap-[40px]'}>
           <div className={'flex flex-col gap-[8px] w-full'}>
@@ -239,38 +304,62 @@ export const CreateMaterialPage = () => {
               label={'Add'}
               iconLeft={IconNames.PlusIcon}
               variant={ButtonTypes.secondary}
-              onClick={() => setShowAddAttributesModal(true)}
+              onClick={() => setCreateModalType('attributes')}
             />
-            <div className={'w-full h-[400px]'}>
-              <CreateMaterialAttributesTable
-                attributes={attributesToAdd}
-                removeAttribute={(id) => {
-                  const newAttributes = attributesToAdd.filter((attr) => attr.id !== id);
-                  setAttributesToAdd(newAttributes);
-                }}
-              />
-            </div>
+            <CreateMaterialTable
+              type={'attributes'}
+              remove={(id) => {
+                const newAttributes = attributesToAdd.filter((attr) => attr.id !== id);
+                setAttributesToAdd(newAttributes);
+              }}
+              entities={attributesToAdd}
+            />
 					</Card>
 				</div>
 			</div>
-      <AddAttributesToMaterialModal
-        show={showAddAttributesModal}
-        onClose={() => {
-          setShowAddAttributesModal(false);
-        }}
-        attributes={attributes}
-        addAttributes={(attributeIds) => {
-          const newAttributes: Claims[] = [];
-          attributeIds.forEach((id) => {
-            const foundAttribute = attributes.find((attr) => attr.id === id);
-            if(foundAttribute) {
-              newAttributes.push(foundAttribute);
-            }
-          });
-          setAttributesToAdd(newAttributes);
-          setShowAddAttributesModal(false);
-        }}
-      />
+      {
+        createModalType !== undefined && (
+          <AddToCreateMaterialModal
+            show={true}
+            onClose={() => {
+              setCreateModalType(undefined);
+            }}
+            products={products.filter(
+              (product) => {
+                return !some(productsToAdd, {id: product.id, name: product.name});
+              }
+            )}
+            attributes={attributes.filter(
+              (attribute) => {
+                return !some(attributesToAdd, {id: attribute.id, name: attribute.name});
+              }
+            )}
+            onAdd={(ids: string[]) => {
+              if(createModalType === 'products') {
+                const newProducts: {id: string, name: string}[] = [];
+                ids.forEach((id) => {
+                  const foundProduct = products.find((product) => product.id === id);
+                  if(foundProduct) {
+                    newProducts.push(foundProduct);
+                  }
+                });
+                setProductsToAdd(newProducts);
+              } else {
+                const newAttributes: Claims[] = [];
+                ids.forEach((id) => {
+                  const foundAttribute = attributes.find((attr) => attr.id === id);
+                  if(foundAttribute) {
+                    newAttributes.push(foundAttribute);
+                  }
+                });
+                setAttributesToAdd(newAttributes);
+              }
+              setCreateModalType(undefined);
+            }}
+            type={createModalType}
+          />
+        )
+      }
       <Modal
         show={showCancelModal}
         setShowModal={setShowCancelModal}

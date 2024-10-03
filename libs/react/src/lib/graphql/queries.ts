@@ -194,6 +194,23 @@ export const CREATE_MATERIAL_SUPPLIER = gql`
   }
 `
 
+export const GET_ALL_PRODUCTS= gql`
+query Products($filter: ProductsListFilter){
+  products(filter: $filter){
+    id
+    name
+  }
+}
+`
+
+export const CREATE_PRODUCT_MATERIAL = gql`
+mutation CreateProductMaterial($input: ProductMaterialInsertInput!){
+  createProductMaterial(input: $input){
+    id
+  }
+}
+`
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -211,4 +228,6 @@ export const queries: {
   GET_ALL_SUPPLIERS_FOR_ORG: GET_ALL_SUPPLIERS_FOR_ORG,
   CREATE_MATERIAL: CREATE_MATERIAL,
   CREATE_MATERIAL_SUPPLIER: CREATE_MATERIAL_SUPPLIER,
+  GET_ALL_PRODUCTS: GET_ALL_PRODUCTS,
+  CREATE_PRODUCT_MATERIAL: CREATE_PRODUCT_MATERIAL,
 };
