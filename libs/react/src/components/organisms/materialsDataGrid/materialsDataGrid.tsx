@@ -172,9 +172,6 @@ const _MaterialsDataGrid = () => {
       <MuiDataGrid
         rows={rows}
         columns={columns}
-        onRowClick={params => {
-          navigate(`/materials/${params.id}`);
-        }}
         slots={{ toolbar: getToolbar }}
         columnHeaderHeight={55}
         rowHeight={55}
