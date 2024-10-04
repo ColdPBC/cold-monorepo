@@ -1,3 +1,10 @@
+# [1.407.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.406.0...v1.407.0) (2024-10-04)
+
+
+### Features
+
+* add GraphQL service to Docker setup ([e8f1239](https://github.com/ColdPBC/cold-monorepo/commit/e8f12393020fb65a1f87731891505ba5f7d2ca34))
+
 # [1.406.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.405.0...v1.406.0) (2024-10-04)
 
 
