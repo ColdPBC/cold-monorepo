@@ -2,7 +2,7 @@ import { Navigate, Route } from 'react-router-dom';
 import {CreateMaterialPage, MaterialsPage} from '@coldpbc/components';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
-export const MaterialRoutes = (defaultPage: string) => {
+export const MaterialRoutes = () => {
   const ldFlags = useFlags();
 
   return (

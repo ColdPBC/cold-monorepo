@@ -46,7 +46,7 @@ export const ColdRoutes = () => {
         {WizardRoutes()}
         <Route path={'/suppliers'} element={ldFlags.showSuppliersPageCold890 ? <SuppliersPage /> : <Navigate to={defaultPage} replace={true} />} />
         <Route path={'/suppliers/:id'} element={ldFlags.showSuppliersPageCold890 ? <SupplierDetail /> : <Navigate to={defaultPage} replace={true} />} />
-        {MaterialRoutes(defaultPage)}
+        {MaterialRoutes()}
         <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={defaultPage} replace={true} />} />
 
         // Temporary redirects from old route until we're certain that the seeds are updated to the new sidebar.
