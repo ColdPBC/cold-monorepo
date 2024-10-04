@@ -1,3 +1,37 @@
+# [1.409.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.408.1...v1.409.0) (2024-10-04)
+
+
+### Bug Fixes
+
+* adjust Input label styles for better alignment ([6bd4eb0](https://github.com/ColdPBC/cold-monorepo/commit/6bd4eb0f9d9e02556f118fb25e0fd153a40155a1))
+* improve header checkbox selection logic in AddToCreateMaterialModal ([73393de](https://github.com/ColdPBC/cold-monorepo/commit/73393deec23c47d4d967b0dbd0bef6094da369d1))
+* update default sort order for material tables ([0749dd6](https://github.com/ColdPBC/cold-monorepo/commit/0749dd62637b0975ecc726aa07667e45e62f74b5))
+
+
+### Features
+
+* add default sorting to material tables ([f0c5162](https://github.com/ColdPBC/cold-monorepo/commit/f0c5162e548fe7a4fe438ace430805b694a01305))
+* add error boundaries to material components ([1de4303](https://github.com/ColdPBC/cold-monorepo/commit/1de430373d78e1da918af5ccf4da0cd4fde3fcc0))
+* add material creation functionality ([cb0402f](https://github.com/ColdPBC/cold-monorepo/commit/cb0402f06825428a66d4b89ba2b1915a5eceeff8))
+* add missing product ID and correct variable naming ([744a3a4](https://github.com/ColdPBC/cold-monorepo/commit/744a3a4981b66b24f0f2ce7b7b582405d96b3a60))
+* add toolbar quick filter to various material components ([2d71067](https://github.com/ColdPBC/cold-monorepo/commit/2d71067e01ef0df2b64a6dcd893436622349e4e6))
+* adjust padding in comboBox component ([138fc0e](https://github.com/ColdPBC/cold-monorepo/commit/138fc0e3fc49d26a065c2d26306e35e2f7392492))
+* conditionally render 'Add New' button on materials page ([1cd3c82](https://github.com/ColdPBC/cold-monorepo/commit/1cd3c8225acd2482bf4e02c48bfe4874d41fe227))
+* consolidate add and create material modals, integrate add products feature ([828bef5](https://github.com/ColdPBC/cold-monorepo/commit/828bef5dbe3adc42f95baa52f8adae7224c50fa2))
+* disable cancel button when save button is loading ([035f0a1](https://github.com/ColdPBC/cold-monorepo/commit/035f0a126c21a240fc7e78f25e71c9ea29d499c5))
+* enhance Modal component and improve product/attribute addition logic ([e9bbee3](https://github.com/ColdPBC/cold-monorepo/commit/e9bbee311a072a4a9acf072a21f3d4047c8151c8))
+* export DEFAULT_PAGE constant and update navigation routes ([02d77e1](https://github.com/ColdPBC/cold-monorepo/commit/02d77e13f4e739d74cf3efbed5c46b5ff634e1e7))
+* extract Breadcrumbs component to separate file ([a5f41a4](https://github.com/ColdPBC/cold-monorepo/commit/a5f41a46986b719cc483d4ec6d2ac81aa0dd8c7d))
+* improve material modal and table value formatting ([8546867](https://github.com/ColdPBC/cold-monorepo/commit/8546867b047b627ee14b8e55bd0c26e746ee492a))
+* remove 'type' column from material modals and tables ([4ae7f16](https://github.com/ColdPBC/cold-monorepo/commit/4ae7f16ba4b2ecfd496cbea7414385d94a6072a5))
+* remove defaultPage parameter from MaterialRoutes ([8cb7872](https://github.com/ColdPBC/cold-monorepo/commit/8cb7872ba1cf52030ccf8b7df54d7a7303eb1d03))
+* remove row click navigation in MaterialsDataGrid component ([097a8fe](https://github.com/ColdPBC/cold-monorepo/commit/097a8fe2dd1740744bd75a8df04a54c4727cc5b3))
+* reorganize createMaterialPage component directory ([b815ebe](https://github.com/ColdPBC/cold-monorepo/commit/b815ebeb74b6e7bc4a7e5d436db403033d7aa2b4))
+* update AddToCreateMaterialModal for checkbox functionality and cleanup ([1377bb6](https://github.com/ColdPBC/cold-monorepo/commit/1377bb62f4b6b487271702ae789b42e5307d200b))
+* update material routes to conditionally render based on feature flags ([81a2438](https://github.com/ColdPBC/cold-monorepo/commit/81a24385b65e6ca37e654cfff16696b3b2470dd4))
+* update route conditions for material pages ([cfa0315](https://github.com/ColdPBC/cold-monorepo/commit/cfa0315122e41af0626895b356a6055ca62a91cb))
+* update text styles for input component ([5b8fb9a](https://github.com/ColdPBC/cold-monorepo/commit/5b8fb9ae736d13bafa7c9bbc13549db713f84d26))
+
 ## [1.408.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.408.0...v1.408.1) (2024-10-04)
 
 
