@@ -15,7 +15,7 @@ import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { FilesWithAssurances, SchemaEnum, ToastMessage } from '@coldpbc/interfaces';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
-import { isAxiosError } from 'axios';
+import {AxiosError, isAxiosError} from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
 import {get} from 'lodash';
 
@@ -96,6 +96,38 @@ const _DocumentsPage = () => {
 		return <Spinner />;
 	}
 
+  const handleFileUpload = async (response: any, context: any) => {
+    if (isAxiosError(response)) {
+      logBrowser('Upload failed', 'error', {...context, response});
+      const error: AxiosError = response;
+      if(error.response?.status === 409) {
+        await addToastMessage({
+          type: ToastMessage.FAILURE,
+          message: 'File already exists. Error Uploading',
+          position: 'bottomRight',
+        });
+      } else {
+        await addToastMessage({
+          type: ToastMessage.FAILURE,
+          message: 'Upload failed',
+          position: 'bottomRight',
+        });
+      }
+    } else {
+      await addToastMessage({
+        type: ToastMessage.SUCCESS,
+        message: (
+          <div className={'flex flex-col gap-[10px]'}>
+            <div className={'font-bold'}>Upload Complete</div>
+            <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
+          </div>
+        ),
+        position: 'bottomRight',
+      });
+      logBrowser('File Upload successful', 'info', {...context, response});
+    }
+  }
+
   const getPageButtons = () => {
     return (
       <div className={'h-auto'}>
@@ -115,7 +147,6 @@ const _DocumentsPage = () => {
             position: 'bottomRight',
           }}
           failureToastMessage={{
-            message: 'Upload failed',
             position: 'bottomRight',
           }}
         />

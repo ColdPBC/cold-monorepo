@@ -1,3 +1,33 @@
+## [1.408.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.408.0...v1.408.1) (2024-10-04)
+
+
+### Bug Fixes
+
+* fix more spots ([d2faebc](https://github.com/ColdPBC/cold-monorepo/commit/d2faebc217a2a2f893347357bf6e1fc73dcb8d26))
+* navigate to /questionnaires/... instead of /compliance/... ([3778bd3](https://github.com/ColdPBC/cold-monorepo/commit/3778bd3607e3bb160623358de984367e9210ba5a))
+
+# [1.408.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.407.0...v1.408.0) (2024-10-04)
+
+
+### Features
+
+* add unique constraints and indexes to various tables ([d4f5a24](https://github.com/ColdPBC/cold-monorepo/commit/d4f5a24c351fc87e38bb7a95a1b53dac9ce2023e))
+
+# [1.407.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.406.0...v1.407.0) (2024-10-04)
+
+
+### Features
+
+* add GraphQL service to Docker setup ([e8f1239](https://github.com/ColdPBC/cold-monorepo/commit/e8f12393020fb65a1f87731891505ba5f7d2ca34))
+
+# [1.406.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.405.0...v1.406.0) (2024-10-04)
+
+
+### Features
+
+* add custom response handler for document upload ([1f74ea5](https://github.com/ColdPBC/cold-monorepo/commit/1f74ea58045a3551c28e65dffdffe8523192a397))
+* enhance document upload notifications ([eee298e](https://github.com/ColdPBC/cold-monorepo/commit/eee298eee59ef6cb0b7f08b37d19e3be246ce3fe))
+
 # [1.405.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.404.0...v1.405.0) (2024-10-04)
 
 

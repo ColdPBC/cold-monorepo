@@ -111,6 +111,38 @@ services:
       LOG_FORMAT: pretty
     volumes:
       - /usr/src/app/node_modules
+  graphql:
+    build:
+      context: .
+      dockerfile: _graphql.dockerfile
+    container_name: cold-graphql
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`graphql.coldclimate.local`)"
+      - "traefik.http.routers.api.entrypoints=web"
+    restart: always
+    networks:
+      - cold
+    external_links:
+      - postgres
+      - cache
+    depends_on:
+      - proxy
+      - postgres
+    ports:
+      - '9001:9001'
+    environment:
+      AUTH_BASE_URI: http://localhost:9001
+      AUTH_JWKS_URI: https://dev-6qt527e13qyo4ls6.us.auth0.com/.well-known/jwks.json
+      AUTH_JWT_ALGORITHM: RS256
+      AUTH_WHITELIST_DOMAINS: localhost
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/colddb
+      NODE_ENV: development
+      VITE_AUTH_CLIENT_ID: 7AtWz1WzXMty9QN38zrkfUj2JqxqpiFI
+      VITE_AUTH_ZERO_DOMAIN: dev-6qt527e13qyo4ls6us.auth0.com
+      AWS_REGION: us-east-1
+    volumes:
+      - ~/.aws:/root/.aws
   openai:
     labels:
       - "traefik.enable=true"
