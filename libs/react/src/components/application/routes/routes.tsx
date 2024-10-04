@@ -25,8 +25,6 @@ import {
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { QuestionnaireRoutes } from './questionnaireRoutes';
 
-export const DEFAULT_PAGE = '/questionnaires';
-
 export const ColdRoutes = () => {
   const ldFlags = useFlags();
   const defaultPage = ldFlags.showSustainabilityPageCold999 ? '/sustainability' : '/questionnaires';
@@ -48,7 +46,7 @@ export const ColdRoutes = () => {
         {WizardRoutes()}
         <Route path={'/suppliers'} element={ldFlags.showSuppliersPageCold890 ? <SuppliersPage /> : <Navigate to={defaultPage} replace={true} />} />
         <Route path={'/suppliers/:id'} element={ldFlags.showSuppliersPageCold890 ? <SupplierDetail /> : <Navigate to={defaultPage} replace={true} />} />
-        {MaterialRoutes()}
+        {MaterialRoutes(defaultPage)}
         <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={defaultPage} replace={true} />} />
 
         // Temporary redirects from old route until we're certain that the seeds are updated to the new sidebar.
