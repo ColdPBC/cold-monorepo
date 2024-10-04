@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect } from 'react';
-import ColdContext, { ColdContextType } from '../context/coldContext';
+import ColdContext, {ColdContextType, Organization} from '../context/coldContext';
 import { worker } from './browser';
 import { HttpHandler } from 'msw';
 import { SWRConfig, SWRResponse } from 'swr';
@@ -47,7 +47,7 @@ export interface StoryMockProviderProps {
 }
 
 export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProps>) => {
-	const [impersonatingOrg, setImpersonatingOrg] = React.useState<string | undefined>(undefined);
+	const [impersonatingOrg, setImpersonatingOrg] = React.useState<Organization | undefined>(undefined);
 	useEffect(() => {
 		worker && worker.use(...(props.handlers ?? []));
 		return () => {
