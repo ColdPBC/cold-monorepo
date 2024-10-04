@@ -137,7 +137,18 @@ const _DocumentsPage = () => {
             iconLeft: IconNames.PlusIcon,
           }}
           mutateFunction={allFiles.mutate}
-          customResponseHandler={handleFileUpload}
+          successfulToastMessage={{
+            message: (
+              <div className={'flex flex-col gap-[10px]'}>
+                <div className={'font-bold'}>Upload Complete</div>
+                <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
+              </div>
+            ),
+            position: 'bottomRight',
+          }}
+          failureToastMessage={{
+            position: 'bottomRight',
+          }}
         />
       </div>
     );

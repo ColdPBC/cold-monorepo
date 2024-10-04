@@ -2,9 +2,8 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/ho
 import React, { useRef } from 'react';
 import { forEach } from 'lodash';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { AxiosRequestConfig, isAxiosError } from 'axios';
+import {AxiosError, AxiosRequestConfig, isAxiosError} from 'axios';
 import { IButtonProps, ToastMessage, ToastMessageType } from '@coldpbc/interfaces';
-import { ErrorType } from '@coldpbc/enums';
 import { BaseButton } from '@coldpbc/components';
 import { KeyedMutator, useSWRConfig } from 'swr';
 
@@ -13,16 +12,15 @@ export interface DocumentUploadButtonProps {
   mutateFunction?: KeyedMutator<any>;
   successfulToastMessage?: Partial<ToastMessageType>;
   failureToastMessage?: Partial<ToastMessageType>;
-  customResponseHandler?: (response: any, context: any) => Promise<void>;
 }
 
 export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
-  const { buttonProps, mutateFunction, successfulToastMessage, failureToastMessage, customResponseHandler } = props;
+  const { buttonProps, mutateFunction, successfulToastMessage, failureToastMessage} = props;
   const [sending, setSending] = React.useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
-  const { logError, logBrowser } = useColdContext();
+  const { logBrowser } = useColdContext();
   const { mutate } = useSWRConfig();
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,26 +37,32 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
       timeout: 60000,
     } as AxiosRequestConfig);
     const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, config]);
-    if(customResponseHandler){
-      await customResponseHandler(response, { orgId, formData: { ...formData } });
-    } else {
-      if (isAxiosError(response)) {
-        logBrowser('Upload failed', 'error', { orgId, formData: { ...formData } });
+    if (isAxiosError(response)) {
+      const error: AxiosError = response;
+      if(error.response?.status === 409) {
         await addToastMessage({
-          message: 'Upload failed',
+          message: 'File already exists. Error Uploading',
           type: ToastMessage.FAILURE,
           ...failureToastMessage,
         });
-        logError(response.message, ErrorType.AxiosError);
+        logBrowser('Duplicate file uploaded', 'error', {orgId, formData: { ...formData }, response});
       } else {
         await addToastMessage({
-          message: 'Upload successful',
-          type: ToastMessage.SUCCESS,
-          ...successfulToastMessage,
+          type: ToastMessage.FAILURE,
+          message: 'Upload failed',
+          ...failureToastMessage,
         });
-        logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData } });
+        logBrowser('Upload failed', 'error', {orgId, formData: { ...formData }, response});
       }
+    } else {
+      await addToastMessage({
+        message: 'Upload successful',
+        type: ToastMessage.SUCCESS,
+        ...successfulToastMessage,
+      });
+      logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData } });
     }
+
 
     if (mutateFunction) {
       await mutateFunction();
