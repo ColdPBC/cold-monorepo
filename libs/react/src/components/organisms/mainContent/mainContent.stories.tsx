@@ -17,7 +17,6 @@ type Story = StoryObj<typeof meta>;
 
 export const WithPageButtons: Story = {
 	args: {
-		isLoading: true,
 		title: 'Main Content',
 		headerElement: (
 			<div className={'flex flex-row gap-[16px] h-full items-center'}>
