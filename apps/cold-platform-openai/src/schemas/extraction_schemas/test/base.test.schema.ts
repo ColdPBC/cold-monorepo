@@ -1,5 +1,5 @@
 import z from 'zod';
-import { effective_start_date, summary, location, contact } from '../global.schema';
+import { effective_start_date, summary, location, contact } from '../../global.schema';
 
 export const baseTestSchema = z.object({
 	effective_start_date: effective_start_date,

@@ -13,7 +13,7 @@ import {
 	state_province,
 	summary,
 	website,
-} from '../global.schema';
+} from '../../global.schema';
 
 export const sgs = z.object({
 	effective_start_date: effective_start_date,

@@ -1,5 +1,5 @@
 import z from 'zod';
-import { summary } from './global.schema';
+import { summary } from '../global.schema';
 import { defaultPolicySchema } from './policy';
 import { defaultCertificateSchema } from './certificate';
 import { defaultTestSchema } from './test';

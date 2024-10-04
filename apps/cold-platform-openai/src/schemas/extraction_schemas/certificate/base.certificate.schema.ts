@@ -1,5 +1,5 @@
 import z from 'zod';
-import { effective_end_date, effective_start_date, summary, location, contact } from '../global.schema';
+import { effective_end_date, effective_start_date, summary, location, contact } from '../../global.schema';
 
 export const baseCertificateSchema = z.object({
 	awarded_to: z.object({

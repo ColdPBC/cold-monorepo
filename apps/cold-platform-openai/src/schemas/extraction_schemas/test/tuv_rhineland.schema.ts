@@ -13,7 +13,7 @@ import {
 	summary,
 	website,
 	location,
-} from '../global.schema';
+} from '../../global.schema';
 
 export const tuv_rhineland = z.object({
 	effective_start_date: effective_start_date,
