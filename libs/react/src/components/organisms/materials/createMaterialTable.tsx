@@ -43,13 +43,15 @@ const _CreateMaterialTable = (props: {
         }}
         showInMenu={true}
       />,
-      <GridActionsCellItem
-        label={'View'}
-        onClick={() => {
-
-        }}
-        showInMenu={true}
-      />,
+      // todo: add back in with functionality once attribute pages are implemented
+      //
+      // <GridActionsCellItem
+      //   label={'View'}
+      //   onClick={() => {
+      //
+      //   }}
+      //   showInMenu={true}
+      // />,
     ],
   })
 
@@ -65,6 +67,11 @@ const _CreateMaterialTable = (props: {
         autoHeight={false}
         className={'h-full'}
         rowSelection={false}
+        initialState={{
+          sorting: {
+            sortModel: [{ field: 'name', sort: 'desc' }],
+          },
+        }}
       />
     </div>
   )

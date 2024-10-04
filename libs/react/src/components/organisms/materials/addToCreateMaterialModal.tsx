@@ -146,6 +146,11 @@ const _AddToCreateMaterialModal = (props: {
               }}
               disableColumnMenu={true}
               rowSelection={false}
+              initialState={{
+                sorting: {
+                  sortModel: [{ field: 'name', sort: 'desc' }],
+                },
+              }}
             />
           </div>
         </div>
