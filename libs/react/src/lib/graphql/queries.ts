@@ -156,7 +156,7 @@ export const GET_ALL_SCHEMA_ENUMS = gql`
 `;
 
 export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
-  query OrganizationFacilities($filter: OrganizationFacilitiesListFilter) {
+  query OrganizationFacilities($filter: OrganizationFacilitiesListFilter!) {
     organizationFacilities(filter: $filter) {
       id
       name
@@ -178,6 +178,39 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
   }
 `;
 
+export const CREATE_MATERIAL = gql`
+  mutation CreateMaterial($input: MaterialInsertInput!) {
+    createMaterial(input: $input) {
+      id
+    }
+  }
+`;
+
+export const CREATE_MATERIAL_SUPPLIER = gql`
+  mutation CreateMaterialSupplier($input: MaterialSupplierInsertInput!) {
+    createMaterialSupplier(input: $input) {
+      id
+    }
+  }
+`
+
+export const GET_ALL_PRODUCTS= gql`
+query Products($filter: ProductsListFilter){
+  products(filter: $filter){
+    id
+    name
+  }
+}
+`
+
+export const CREATE_PRODUCT_MATERIAL = gql`
+mutation CreateProductMaterial($input: ProductMaterialInsertInput!){
+  createProductMaterial(input: $input){
+    id
+  }
+}
+`
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -193,4 +226,8 @@ export const queries: {
   GET_ALL_MATERIALS_FOR_ORG: GET_ALL_MATERIALS_FOR_ORG,
   GET_ALL_SCHEMA_ENUMS: GET_ALL_SCHEMA_ENUMS,
   GET_ALL_SUPPLIERS_FOR_ORG: GET_ALL_SUPPLIERS_FOR_ORG,
+  CREATE_MATERIAL: CREATE_MATERIAL,
+  CREATE_MATERIAL_SUPPLIER: CREATE_MATERIAL_SUPPLIER,
+  GET_ALL_PRODUCTS: GET_ALL_PRODUCTS,
+  CREATE_PRODUCT_MATERIAL: CREATE_PRODUCT_MATERIAL,
 };

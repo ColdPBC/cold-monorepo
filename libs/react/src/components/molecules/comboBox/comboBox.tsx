@@ -25,10 +25,10 @@ export const ComboBox = (props: ComboBoxProps) => {
 
   return (
       <Combobox value={value} onChange={onChange}>
-        <div className="relative mt-1">
-          <div className="relative w-full border-[1.5px] border-gray-90 rounded-[8px] cursor-pointer p-4 pr-8">
+        <div className="relative">
+          <div className="relative w-full border-[1.5px] border-gray-90 rounded-[8px] cursor-pointer p-0 pr-8">
             <Combobox.Input
-              className="w-full bg-transparent border-transparent text-tc-primary p-0 text-left text-body focus:border focus:border-transparent focus:ring-0"
+              className="w-full bg-transparent border-none text-tc-primary p-4 text-left text-body focus:border-none focus:ring-0"
               displayValue={(option: InputOption) => option.name}
               onChange={(event) => setQuery(event.target.value)}
             />

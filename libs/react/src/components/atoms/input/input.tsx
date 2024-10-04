@@ -16,14 +16,14 @@ export const Input = (props: IInputProps) => {
           <label
             {...input_label_props}
             htmlFor={numeric_input_props?.name}
-            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
             {input_label}
           </label>
         )}
         <NumericFormat
           {...numeric_input_props}
           className={twMerge(
-            'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
+            'text-body not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
             numeric_input_props?.className,
           )}
           id={numeric_input_props?.name}
@@ -45,14 +45,14 @@ export const Input = (props: IInputProps) => {
           <label
             {...input_label_props}
             htmlFor={numeric_input_props?.name}
-            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
             {input_label}
           </label>
         )}
         <NumericFormat
           {...numeric_input_props}
           className={twMerge(
-            'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
+            'text-body not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
             numeric_input_props?.className,
           )}
           id={numeric_input_props?.name}
@@ -75,7 +75,7 @@ export const Input = (props: IInputProps) => {
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
             {input_label}
           </label>
         )}
@@ -85,8 +85,8 @@ export const Input = (props: IInputProps) => {
           key={`input_${key}`}
           autoComplete={input_props.autoComplete || input_props.name}
           className={twMerge(
-            'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
-            input_props?.className,
+            'text-body not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
+            input_props?.className
           )}
           id={input_props.name}
         />
@@ -117,7 +117,7 @@ export const Input = (props: IInputProps) => {
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
             {input_label}
           </label>
         )}
@@ -136,7 +136,7 @@ export const Input = (props: IInputProps) => {
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
             {input_label}
           </label>
         )}
