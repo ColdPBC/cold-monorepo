@@ -1,3 +1,11 @@
+## [1.408.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.408.0...v1.408.1) (2024-10-04)
+
+
+### Bug Fixes
+
+* fix more spots ([d2faebc](https://github.com/ColdPBC/cold-monorepo/commit/d2faebc217a2a2f893347357bf6e1fc73dcb8d26))
+* navigate to /questionnaires/... instead of /compliance/... ([3778bd3](https://github.com/ColdPBC/cold-monorepo/commit/3778bd3607e3bb160623358de984367e9210ba5a))
+
 # [1.408.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.407.0...v1.408.0) (2024-10-04)
 
 
