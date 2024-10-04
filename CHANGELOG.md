@@ -1,3 +1,10 @@
+# [1.408.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.407.0...v1.408.0) (2024-10-04)
+
+
+### Features
+
+* add unique constraints and indexes to various tables ([d4f5a24](https://github.com/ColdPBC/cold-monorepo/commit/d4f5a24c351fc87e38bb7a95a1b53dac9ce2023e))
+
 # [1.407.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.406.0...v1.407.0) (2024-10-04)
 
 
