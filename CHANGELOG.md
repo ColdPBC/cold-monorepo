@@ -1,3 +1,11 @@
+# [1.406.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.405.0...v1.406.0) (2024-10-04)
+
+
+### Features
+
+* add custom response handler for document upload ([1f74ea5](https://github.com/ColdPBC/cold-monorepo/commit/1f74ea58045a3551c28e65dffdffe8523192a397))
+* enhance document upload notifications ([eee298e](https://github.com/ColdPBC/cold-monorepo/commit/eee298eee59ef6cb0b7f08b37d19e3be246ce3fe))
+
 # [1.405.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.404.0...v1.405.0) (2024-10-04)
 
 
