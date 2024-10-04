@@ -13,10 +13,11 @@ export interface DocumentUploadButtonProps {
   mutateFunction?: KeyedMutator<any>;
   successfulToastMessage?: Partial<ToastMessageType>;
   failureToastMessage?: Partial<ToastMessageType>;
+  customResponseHandler?: (response: any, context: any) => Promise<void>;
 }
 
 export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
-  const { buttonProps, mutateFunction, successfulToastMessage, failureToastMessage } = props;
+  const { buttonProps, mutateFunction, successfulToastMessage, failureToastMessage, customResponseHandler } = props;
   const [sending, setSending] = React.useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId } = useAuth0Wrapper();
@@ -38,21 +39,25 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
       timeout: 60000,
     } as AxiosRequestConfig);
     const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, config]);
-    if (isAxiosError(response)) {
-      logBrowser('Upload failed', 'error', { orgId, formData: { ...formData } });
-      await addToastMessage({
-        message: 'Upload failed',
-        type: ToastMessage.FAILURE,
-        ...failureToastMessage,
-      });
-      logError(response.message, ErrorType.AxiosError);
+    if(customResponseHandler){
+      await customResponseHandler(response, { orgId, formData: { ...formData } });
     } else {
-      await addToastMessage({
-        message: 'Upload successful',
-        type: ToastMessage.SUCCESS,
-        ...successfulToastMessage,
-      });
-      logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData } });
+      if (isAxiosError(response)) {
+        logBrowser('Upload failed', 'error', { orgId, formData: { ...formData } });
+        await addToastMessage({
+          message: 'Upload failed',
+          type: ToastMessage.FAILURE,
+          ...failureToastMessage,
+        });
+        logError(response.message, ErrorType.AxiosError);
+      } else {
+        await addToastMessage({
+          message: 'Upload successful',
+          type: ToastMessage.SUCCESS,
+          ...successfulToastMessage,
+        });
+        logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData } });
+      }
     }
 
     if (mutateFunction) {
