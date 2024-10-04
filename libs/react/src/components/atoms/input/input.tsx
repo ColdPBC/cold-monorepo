@@ -16,7 +16,7 @@ export const Input = (props: IInputProps) => {
           <label
             {...input_label_props}
             htmlFor={numeric_input_props?.name}
-            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
             {input_label}
           </label>
         )}
@@ -45,7 +45,7 @@ export const Input = (props: IInputProps) => {
           <label
             {...input_label_props}
             htmlFor={numeric_input_props?.name}
-            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
             {input_label}
           </label>
         )}
@@ -75,7 +75,7 @@ export const Input = (props: IInputProps) => {
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
             {input_label}
           </label>
         )}
@@ -117,7 +117,7 @@ export const Input = (props: IInputProps) => {
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
             {input_label}
           </label>
         )}
@@ -136,7 +136,7 @@ export const Input = (props: IInputProps) => {
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
             {input_label}
           </label>
         )}

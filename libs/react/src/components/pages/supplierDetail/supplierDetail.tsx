@@ -240,7 +240,7 @@ export const _SupplierDetail = () => {
               onValueChange: e => setSupplier({ ...supplier, name: e.value }),
               className: 'py-2 rounded-[8px]',
             }}
-            input_label_props={{ className: 'w-[77px] flex items-center' }}
+            input_label_props={{ className: 'w-[85px] flex items-center' }}
             container_classname={'gap-[10px] flex flex-row w-full justify-between'}
           />
           <Input
@@ -252,7 +252,7 @@ export const _SupplierDetail = () => {
               onValueChange: e => setSupplier({ ...supplier, address_line_1: e.value }),
               className: 'py-2 rounded-[8px]',
             }}
-            input_label_props={{ className: 'w-[77px] flex items-center' }}
+            input_label_props={{ className: 'w-[85px] flex items-center' }}
             container_classname={'gap-[10px] flex flex-row w-full justify-between'}
           />
           <Input
@@ -264,7 +264,7 @@ export const _SupplierDetail = () => {
               onValueChange: e => setSupplier({ ...supplier, address_line_2: e.value }),
               className: 'py-2 rounded-[8px]',
             }}
-            input_label_props={{ className: 'w-[77px] flex items-center' }}
+            input_label_props={{ className: 'w-[85px] flex items-center' }}
             container_classname={'gap-[10px] flex flex-row w-full justify-between'}
           />
           <Input
@@ -276,7 +276,7 @@ export const _SupplierDetail = () => {
               onValueChange: e => setSupplier({ ...supplier, city: e.value }),
               className: 'py-2 rounded-[8px]',
             }}
-            input_label_props={{ className: 'w-[77px] flex items-center' }}
+            input_label_props={{ className: 'w-[85px] flex items-center' }}
             container_classname={'gap-[10px] flex flex-row w-full justify-between'}
           />
           <Input
@@ -288,7 +288,7 @@ export const _SupplierDetail = () => {
               onValueChange: e => setSupplier({ ...supplier, country: e.value }),
               className: 'py-2 rounded-[8px]',
             }}
-            input_label_props={{ className: 'w-[77px] flex items-center' }}
+            input_label_props={{ className: 'w-[85px] flex items-center' }}
             container_classname={'gap-[10px] flex flex-row w-full justify-between'}
           />
         </div>
