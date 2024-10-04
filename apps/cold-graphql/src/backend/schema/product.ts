@@ -45,6 +45,9 @@ export class Product {
 	@RelationshipField<Product>(() => OrganizationFacility, { id: (entity) => entity.organizationFacility?.id, nullable: true })
 	organizationFacility?: OrganizationFacility;
 
+	@Field(() => String, { nullable: true })
+	upcCode?: string;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'product' })
 	attributeAssurances!: AttributeAssurance[];
 

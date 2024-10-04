@@ -52,6 +52,9 @@ export class Product {
 	@ManyToOne({ entity: () => OrganizationFacility, ref: true, fieldName: 'supplier_id', nullable: true })
 	organizationFacility?: Ref<OrganizationFacility>;
 
+	@Property({ type: 'text', nullable: true })
+	upcCode?: string;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'product' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 
