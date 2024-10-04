@@ -7,6 +7,14 @@ export function getSidebarMock() {
     definition: {
       items: [
         {
+          key: 'sustainability_key',
+          icon: {
+            name: 'ColdSustainabilityIcon',
+          },
+          label: 'Sustainability',
+          route: '/sustainability',
+        },
+        {
           key: 'compliance_key',
           icon: {
             name: 'ColdQuestionnaireIcon',
