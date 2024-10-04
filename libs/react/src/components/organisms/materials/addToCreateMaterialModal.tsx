@@ -20,6 +20,7 @@ const _AddToCreateMaterialModal = (props: {
   onAdd: (ids: string[]) => void;
   type: "products" | "attributes";
   products: {
+    id: string;
     name: string;
   }[];
   attributes: Claims[]
@@ -86,8 +87,8 @@ const _AddToCreateMaterialModal = (props: {
         cellClassName: 'bg-gray-10',
       },
     )
-    rows = products.map((attribute) => {
-      return attribute
+    rows = products.map((product) => {
+      return product
     })
   } else {
     columns.push(...[
