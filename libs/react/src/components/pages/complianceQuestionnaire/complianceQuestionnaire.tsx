@@ -77,7 +77,7 @@ const _ComplianceQuestionnaire = () => {
         <div className={'h-[72px] w-full p-[16px] flex justify-between bg-gray-30'} data-testid={'questionnaire-header'}>
           <div
             className={'w-full gap-[16px] py-[8px] text-button text-tc-primary flex flex-row items-center cursor-pointer justify-start'}
-            onClick={() => navigate(`/compliance/${complianceName}`)}>
+            onClick={() => navigate(`/questionnaires/${complianceName}`)}>
             <ColdLeftArrowIcon className={'w-[40px] h-[40px]'} />
             <div>Back to {selectedCompliance?.title}</div>
           </div>

@@ -64,7 +64,7 @@ const _NextSteps = () => {
                 <NextStepCard
                   nextStep={nextStep}
                   onNextStepClick={() => {
-                    navigate(`/compliance/${nextStep.compliance.name}`);
+                    navigate(`/questionnaires/${nextStep.compliance.name}`);
                   }}
                 />
               </div>
