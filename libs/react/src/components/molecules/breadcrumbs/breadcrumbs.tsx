@@ -42,7 +42,7 @@ export const Breadcrumbs = (props: {
 
   return (
     <div
-      className={'w-full px-[16px] flex flex-row py-[8px] gap-[6px]'}
+      className={'w-full px-[16px] flex flex-row py-[8px] gap-[6px] text-tc-primary'}
       style={{
         backgroundColor: opacity(HexColors.gray['30'], 0.5),
       }}>
