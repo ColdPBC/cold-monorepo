@@ -149,7 +149,7 @@ const _AddToCreateMaterialModal = (props: {
               rowSelection={false}
               initialState={{
                 sorting: {
-                  sortModel: [{ field: 'name', sort: 'desc' }],
+                  sortModel: [{ field: 'name', sort: 'asc' }],
                 },
               }}
             />
