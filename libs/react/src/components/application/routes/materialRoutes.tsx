@@ -6,9 +6,9 @@ export const MaterialRoutes = (defaultPage: string) => {
   const ldFlags = useFlags();
 
   return (
-    <Route path={'/materials'}>
-      <Route index element={ldFlags.showMaterialsPageCold912 ? <MaterialsPage /> : <Navigate to={defaultPage} replace={true} />} />
-      <Route path={'new'} element={ldFlags.showCreateMaterialPageCold1015 ? <CreateMaterialPage /> : <Navigate to={defaultPage} replace={true} />} />
-    </Route>
+    <>
+      {ldFlags.showMaterialsPageCold912 && <Route path={'/materials'} element={<MaterialsPage /> } />}
+      {ldFlags.showCreateMaterialPageCold1015 && <Route path={'/materials/new'} element={<CreateMaterialPage />} />}
+    </>
   );
 };
