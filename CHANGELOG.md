@@ -1,3 +1,17 @@
+# [1.405.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.404.0...v1.405.0) (2024-10-04)
+
+
+### Features
+
+* add new (extremely basic) Sustainability page ([7df260a](https://github.com/ColdPBC/cold-monorepo/commit/7df260a75869a096491fa1dd8907995240e418b1))
+* add new ColdSustainabilityIcon ([84ac0a4](https://github.com/ColdPBC/cold-monorepo/commit/84ac0a4a3c12db62a5d20640939585c5ef45e564))
+* add new Sustainability sidebar item that navigates to sustainability page ([b50819a](https://github.com/ColdPBC/cold-monorepo/commit/b50819a7011e8eb421482fb611dd1bfb37e21ace))
+
+
+### Reverts
+
+* roll back sustainabilityAttributeCard (was intended for a future PR) ([b26bc3b](https://github.com/ColdPBC/cold-monorepo/commit/b26bc3b0e623296cbf51265e29cadfd37dbc1168))
+
 # [1.404.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.403.0...v1.404.0) (2024-10-03)
 
 
