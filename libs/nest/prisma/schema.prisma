@@ -666,7 +666,6 @@ model products {
 
 	@@unique([organization_id, upc_code, name], name: "orgIdNameUpc")
 	@@unique([organization_id, name], name: "orgIdName")
-	@@unique([organization_id, style_code], name: "orgIdStyle")
 
   @@index([organization_id], map: "products_organization_id_idx1")
 }
