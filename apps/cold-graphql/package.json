@@ -5,7 +5,8 @@
     "packageManager": "pnpm@9.8.0",
     "scripts": {
         "build": "graphweaver build",
-        "start": "graphweaver start",
+        "start": "graphweaver start backend",
+	      "start:ui": "graphweaver start frontend",
         "watch": "graphweaver watch",
 	      "import": "graphweaver import postgresql -o --host localhost --password postgres --user postgres --database colddb --port 5432 && ts-node ./custom_generators/update_database_connection.ts",
 	      "apply:acl": "ts-node ./custom_generators/apply_acls.ts",
