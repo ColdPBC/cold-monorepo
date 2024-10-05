@@ -21,9 +21,10 @@ import { FreeplayModule } from './freeplay/freeplay.module';
 import { CrawlerModule } from './crawler/crawler.module';
 import { EventsModule } from '../../cold-api/src/platform/modules/utilities/events/events.module';
 import { ExtractionModule } from './extraction/extraction.module';
+import { EntitiesModule } from './entities/entities.module';
 
 @Module({
-	imports: [FreeplayModule, CrawlerModule, ExtractionModule],
+	imports: [FreeplayModule, CrawlerModule, ExtractionModule, EntitiesModule],
 	providers: [],
 })
 export class AppModule {
@@ -55,6 +56,27 @@ export class AppModule {
 				BullModule.registerQueue({
 					name: 'openai_crawler',
 				}),
+				BullModule.registerQueue({
+					name: 'openai:materials',
+					settings: {
+						stalledInterval: 3600000,
+						maxStalledCount: 120,
+					},
+				}),
+				BullModule.registerQueue({
+					name: 'openai:products',
+					settings: {
+						stalledInterval: 3600000,
+						maxStalledCount: 120,
+					},
+				}),
+				BullModule.registerQueue({
+					name: 'openai:suppliers',
+					settings: {
+						stalledInterval: 3600000,
+						maxStalledCount: 120,
+					},
+				}),
 				ServeStaticModule.forRoot({
 					serveStaticOptions: {
 						index: false,
@@ -62,6 +84,7 @@ export class AppModule {
 					},
 					serveRoot: '../../../assets',
 				}),
+				EntitiesModule,
 				PrismaModule,
 				await ColdRabbitModule.forRootAsync(),
 				AssistantModule,

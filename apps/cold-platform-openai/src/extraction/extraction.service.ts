@@ -53,7 +53,7 @@ export class ExtractionService extends BaseWorker {
 	}
 
 	async convertPdfPageToImage(pageNumber: number, content: Uint8Array, filePayload: { original_name: any[] }, user: IAuthenticatedUser, organization: organizations) {
-		const convert = fromBuffer(Buffer.from(content), { format: 'png', quality: 100, density: 100 });
+		const convert = fromBuffer(Buffer.from(content), { format: 'png', quality: 100, density: 100, width: 1080 });
 
 		try {
 			const image = await convert(pageNumber, { responseType: 'buffer' });
@@ -239,7 +239,7 @@ export class ExtractionService extends BaseWorker {
 				},
 			});
 
-			return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
+			return parsedResponse;
 		} catch (e) {
 			this.logger.info('Error extracting data from content', { error: e, file: orgFile, user, organization });
 			const metadata = orgFile.metadata as any;
@@ -445,7 +445,7 @@ export class ExtractionService extends BaseWorker {
 				},
 			});
 
-			return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
+			return parsedResponse;
 		} catch (e) {
 			this.logger.info('Error extracting data from content', { error: e });
 			const metadata = orgFile.metadata as any;

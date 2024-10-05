@@ -19,10 +19,12 @@ import {
 	summary,
 	tuv_rhineland,
 	wrap,
-} from './extraction_schemas';
+} from '../schemas';
 import { omit, snakeCase } from 'lodash';
 import { zerialize } from 'zodex';
 import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
+import BillOfMaterialsSchema from '../schemas/extraction_schemas/bill_of_materials/backbone.bom.schema';
+import PurchaseOrderSchema, { PoProductsSchema } from '../schemas/extraction_schemas/purchase_orders/purchase_order.schema';
 
 @Injectable()
 export class ClassificationService extends BaseWorker {
@@ -74,6 +76,8 @@ export class ClassificationService extends BaseWorker {
 		const classifyPrompt = `You are a helpful assistant for ${organization.display_name} and you help users classify and extract data from documents that they upload.  Classify this content using the following rules:
     - if the content is an RSL (Restricted Substance List), classify it as a POLICY
     - if the content is a statement, classify it as a STATEMENT
+    - if the content appears to be a bill of materials or BOM, classify it as a BILL_OF_MATERIALS
+    - if the document appears to be a purchase order or list of purchase orders, classify it as a PURCHASE_ORDER
     - if the content is an impact assessment from ${organization.display_name}, classify it as a STATEMENT
      from the following images`;
 
@@ -319,6 +323,14 @@ export class ClassificationService extends BaseWorker {
 			case file_types.STATEMENT:
 				content.parsed.extraction_name = snakeCase('statement_extraction');
 				content.parsed.extraction_schema = defaultStatementSchema;
+				break;
+			case file_types.BILL_OF_MATERIALS:
+				content.parsed.extraction_name = snakeCase('bill_of_materials_extraction');
+				content.parsed.extraction_schema = BillOfMaterialsSchema;
+				break;
+			case file_types.PURCHASE_ORDER:
+				content.parsed.extraction_name = snakeCase('purchase_order_extraction');
+				content.parsed.extraction_schema = PoProductsSchema;
 				break;
 			default:
 				content.parsed.extraction_name = snakeCase(`default_extraction`);

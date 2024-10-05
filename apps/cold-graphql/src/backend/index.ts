@@ -25,6 +25,8 @@ export const graphweaver = new Graphweaver({
 		},
 	},
 	graphQLArmorOptions: {
+		maxDepth: { n: 10 },
+		maxDirectives: { n: 20 },
 		maxAliases: { n: 70 },
 	},
 });
