@@ -1,3 +1,20 @@
+# [1.410.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.409.0...v1.410.0) (2024-10-05)
+
+
+### Bug Fixes
+
+* remove unique constraint on organization_id and style_code ([bbaf7f8](https://github.com/ColdPBC/cold-monorepo/commit/bbaf7f813fae16f4bda47a51604f38ce6bf9d164))
+
+
+### Features
+
+* add MaterialsService for processing materials via OpenAI API ([fd6690e](https://github.com/ColdPBC/cold-monorepo/commit/fd6690e19b9c4d0edc061474f89a3a5a0c9bd58b))
+* add new dependencies and update scripts for GraphQL and package manager ([ca44e3a](https://github.com/ColdPBC/cold-monorepo/commit/ca44e3ad7475b61f7efc201624060b1b0af9a95d))
+* add new schemas for Bill of Materials and Purchase Orders ([5bb2a98](https://github.com/ColdPBC/cold-monorepo/commit/5bb2a98fa0b0f68c10d3301c30010c9cfc5734ae))
+* add products schema, module, and service with OpenAI integration for processing product data ([dbca6e3](https://github.com/ColdPBC/cold-monorepo/commit/dbca6e351103f31ffbfc71cb49d1346ca980cfe4))
+* add supplier extraction and processing module ([2fb67db](https://github.com/ColdPBC/cold-monorepo/commit/2fb67db5fe2593eaabc586dae6027471f9c88fb6))
+* create EntitiesModule with queues for materials, products, and suppliers ([b81b6f9](https://github.com/ColdPBC/cold-monorepo/commit/b81b6f90473438ee8dbf6486504058e3cf47c146))
+
 # [1.409.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.408.1...v1.409.0) (2024-10-04)
 
 
