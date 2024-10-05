@@ -19,7 +19,9 @@ export const baseProductSchema = z.object({
 	upc_code: z
 		.string()
 		.optional()
-		.describe('The UPC of the product.  It is important that you do extract this number exactly as it is shown in the document.  If you cannot find a UPC code leave it blank.  '),
+		.describe(
+			'The UPC (universal product code) of the product.  This must be a 12 to 14 digit number.   It is important that you do extract this number exactly as it is shown in the document.  If you cannot find a UPC code leave it blank.  ',
+		),
 });
 
 export const baseProductsSchema = z.object({

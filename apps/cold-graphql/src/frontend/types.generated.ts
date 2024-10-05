@@ -3325,8 +3325,8 @@ export type Material = {
   __typename?: 'Material';
   attributeAssurances: Array<AttributeAssurance>;
   attributeAssurances_aggregate?: Maybe<AggregationResult>;
-  createdAt: Scalars['ISOString']['output'];
-  deleted: Scalars['Boolean']['output'];
+  createdAt?: Maybe<Scalars['ISOString']['output']>;
+  deleted?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   materialSuppliers: Array<MaterialSupplier>;
   materialSuppliers_aggregate?: Maybe<AggregationResult>;
@@ -3335,7 +3335,7 @@ export type Material = {
   organization_aggregate?: Maybe<AggregationResult>;
   productMaterials: Array<ProductMaterial>;
   productMaterials_aggregate?: Maybe<AggregationResult>;
-  updatedAt: Scalars['ISOString']['output'];
+  updatedAt?: Maybe<Scalars['ISOString']['output']>;
 };
 
 
@@ -3394,24 +3394,24 @@ export type MaterialCreateOrUpdateInput = {
 /** Data needed to create Materials. */
 export type MaterialInsertInput = {
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
-  createdAt: Scalars['ISOString']['input'];
-  deleted: Scalars['Boolean']['input'];
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
-  updatedAt: Scalars['ISOString']['input'];
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
 export type MaterialSupplier = {
   __typename?: 'MaterialSupplier';
-  createdAt: Scalars['ISOString']['output'];
+  createdAt?: Maybe<Scalars['ISOString']['output']>;
   id: Scalars['ID']['output'];
   material: Material;
   material_aggregate?: Maybe<AggregationResult>;
   organizationFacility: OrganizationFacility;
   organizationFacility_aggregate?: Maybe<AggregationResult>;
-  updatedAt: Scalars['ISOString']['output'];
+  updatedAt?: Maybe<Scalars['ISOString']['output']>;
 };
 
 
@@ -3445,10 +3445,10 @@ export type MaterialSupplierCreateOrUpdateInput = {
 
 /** Data needed to create MaterialSuppliers. */
 export type MaterialSupplierInsertInput = {
-  createdAt: Scalars['ISOString']['input'];
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
   organizationFacility?: InputMaybe<OrganizationFacilityCreateOrUpdateInput>;
-  updatedAt: Scalars['ISOString']['input'];
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
 /** Data needed to update MaterialSuppliers. An ID must be passed. */
@@ -7911,6 +7911,7 @@ export type OrganizationFacilitiesListFilter = {
   postalCode_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   postalCode_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   postalCode_null?: InputMaybe<Scalars['Boolean']['input']>;
+  products?: InputMaybe<ProductsListFilter>;
   stateProvince?: InputMaybe<Scalars['String']['input']>;
   stateProvince_gt?: InputMaybe<Scalars['String']['input']>;
   stateProvince_gte?: InputMaybe<Scalars['String']['input']>;
@@ -7994,6 +7995,8 @@ export type OrganizationFacility = {
   organization: Organization;
   organization_aggregate?: Maybe<AggregationResult>;
   postalCode?: Maybe<Scalars['String']['output']>;
+  products: Array<Product>;
+  products_aggregate?: Maybe<AggregationResult>;
   stateProvince?: Maybe<Scalars['String']['output']>;
   supplier?: Maybe<Scalars['Boolean']['output']>;
   supplierTier?: Maybe<Scalars['Float']['output']>;
@@ -8053,6 +8056,16 @@ export type OrganizationFacilityOrganization_AggregateArgs = {
 };
 
 
+export type OrganizationFacilityProductsArgs = {
+  filter?: InputMaybe<ProductsListFilter>;
+};
+
+
+export type OrganizationFacilityProducts_AggregateArgs = {
+  filter?: InputMaybe<ProductsListFilter>;
+};
+
+
 export type OrganizationFacilityUtilityBillsArgs = {
   filter?: InputMaybe<UtilityBillsListFilter>;
 };
@@ -8079,6 +8092,7 @@ export type OrganizationFacilityCreateOrUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   postalCode?: InputMaybe<Scalars['String']['input']>;
+  products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
   stateProvince?: InputMaybe<Scalars['String']['input']>;
   supplier?: InputMaybe<Scalars['Boolean']['input']>;
   supplierTier?: InputMaybe<Scalars['Float']['input']>;
@@ -8102,6 +8116,7 @@ export type OrganizationFacilityInsertInput = {
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   postalCode?: InputMaybe<Scalars['String']['input']>;
+  products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
   stateProvince?: InputMaybe<Scalars['String']['input']>;
   supplier?: InputMaybe<Scalars['Boolean']['input']>;
   supplierTier?: InputMaybe<Scalars['Float']['input']>;
@@ -8126,6 +8141,7 @@ export type OrganizationFacilityUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   postalCode?: InputMaybe<Scalars['String']['input']>;
+  products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
   stateProvince?: InputMaybe<Scalars['String']['input']>;
   supplier?: InputMaybe<Scalars['Boolean']['input']>;
   supplierTier?: InputMaybe<Scalars['Float']['input']>;
@@ -9302,19 +9318,21 @@ export type Product = {
   __typename?: 'Product';
   attributeAssurances: Array<AttributeAssurance>;
   attributeAssurances_aggregate?: Maybe<AggregationResult>;
-  createdAt: Scalars['ISOString']['output'];
-  deleted: Scalars['Boolean']['output'];
+  createdAt?: Maybe<Scalars['ISOString']['output']>;
+  deleted?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   metadata?: Maybe<Scalars['JSON']['output']>;
   name: Scalars['String']['output'];
   organization: Organization;
+  organizationFacility?: Maybe<OrganizationFacility>;
+  organizationFacility_aggregate?: Maybe<AggregationResult>;
   organization_aggregate?: Maybe<AggregationResult>;
   productCategoryHeirarchy?: Maybe<Scalars['JSON']['output']>;
   productMaterials: Array<ProductMaterial>;
   productMaterials_aggregate?: Maybe<AggregationResult>;
   seasonCode?: Maybe<Scalars['String']['output']>;
   styleCode?: Maybe<Scalars['String']['output']>;
-  updatedAt: Scalars['ISOString']['output'];
+  updatedAt?: Maybe<Scalars['ISOString']['output']>;
 };
 
 
@@ -9330,6 +9348,16 @@ export type ProductAttributeAssurances_AggregateArgs = {
 
 export type ProductOrganizationArgs = {
   filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+
+export type ProductOrganizationFacilityArgs = {
+  filter?: InputMaybe<OrganizationFacilitiesListFilter>;
+};
+
+
+export type ProductOrganizationFacility_AggregateArgs = {
+  filter?: InputMaybe<OrganizationFacilitiesListFilter>;
 };
 
 
@@ -9356,6 +9384,7 @@ export type ProductCreateOrUpdateInput = {
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  organizationFacility?: InputMaybe<OrganizationFacilityCreateOrUpdateInput>;
   productCategoryHeirarchy?: InputMaybe<Scalars['JSON']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   seasonCode?: InputMaybe<Scalars['String']['input']>;
@@ -9366,28 +9395,29 @@ export type ProductCreateOrUpdateInput = {
 /** Data needed to create Products. */
 export type ProductInsertInput = {
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
-  createdAt: Scalars['ISOString']['input'];
-  deleted: Scalars['Boolean']['input'];
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  organizationFacility?: InputMaybe<OrganizationFacilityCreateOrUpdateInput>;
   productCategoryHeirarchy?: InputMaybe<Scalars['JSON']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   seasonCode?: InputMaybe<Scalars['String']['input']>;
   styleCode?: InputMaybe<Scalars['String']['input']>;
-  updatedAt: Scalars['ISOString']['input'];
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
 export type ProductMaterial = {
   __typename?: 'ProductMaterial';
-  createdAt: Scalars['ISOString']['output'];
+  createdAt?: Maybe<Scalars['ISOString']['output']>;
   id: Scalars['ID']['output'];
-  material: Material;
-  materialSupplierId: Scalars['String']['output'];
+  material?: Maybe<Material>;
+  materialSupplierId?: Maybe<Scalars['String']['output']>;
   material_aggregate?: Maybe<AggregationResult>;
   product: Product;
   product_aggregate?: Maybe<AggregationResult>;
-  updatedAt: Scalars['ISOString']['output'];
+  updatedAt?: Maybe<Scalars['ISOString']['output']>;
 };
 
 
@@ -9422,11 +9452,11 @@ export type ProductMaterialCreateOrUpdateInput = {
 
 /** Data needed to create ProductMaterials. */
 export type ProductMaterialInsertInput = {
-  createdAt: Scalars['ISOString']['input'];
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
-  materialSupplierId: Scalars['String']['input'];
+  materialSupplierId?: InputMaybe<Scalars['String']['input']>;
   product?: InputMaybe<ProductCreateOrUpdateInput>;
-  updatedAt: Scalars['ISOString']['input'];
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
 /** Data needed to update ProductMaterials. An ID must be passed. */
@@ -9509,6 +9539,7 @@ export type ProductUpdateInput = {
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  organizationFacility?: InputMaybe<OrganizationFacilityCreateOrUpdateInput>;
   productCategoryHeirarchy?: InputMaybe<Scalars['JSON']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   seasonCode?: InputMaybe<Scalars['String']['input']>;
@@ -9563,6 +9594,7 @@ export type ProductsListFilter = {
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
   organization?: InputMaybe<OrganizationsListFilter>;
+  organizationFacility?: InputMaybe<OrganizationFacilitiesListFilter>;
   productCategoryHeirarchy?: InputMaybe<Scalars['JSON']['input']>;
   productCategoryHeirarchy_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   productCategoryHeirarchy_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -11396,7 +11428,7 @@ export type SustainabilityAttribute = {
   __typename?: 'SustainabilityAttribute';
   attributeAssurances: Array<AttributeAssurance>;
   attributeAssurances_aggregate?: Maybe<AggregationResult>;
-  createdAt: Scalars['ISOString']['output'];
+  createdAt?: Maybe<Scalars['ISOString']['output']>;
   deleted: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   level: SustainabilityAttributesLevel;
@@ -11406,7 +11438,7 @@ export type SustainabilityAttribute = {
   organization?: Maybe<Organization>;
   organization_aggregate?: Maybe<AggregationResult>;
   type: SustainabilityAttributesType;
-  updatedAt: Scalars['ISOString']['output'];
+  updatedAt?: Maybe<Scalars['ISOString']['output']>;
 };
 
 
@@ -11447,7 +11479,7 @@ export type SustainabilityAttributeCreateOrUpdateInput = {
 /** Data needed to create SustainabilityAttributes. */
 export type SustainabilityAttributeInsertInput = {
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
-  createdAt: Scalars['ISOString']['input'];
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   deleted: Scalars['Boolean']['input'];
   level: SustainabilityAttributesLevel;
   logoUrl?: InputMaybe<Scalars['String']['input']>;
@@ -11455,7 +11487,7 @@ export type SustainabilityAttributeInsertInput = {
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   type: SustainabilityAttributesType;
-  updatedAt: Scalars['ISOString']['input'];
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
 /** Data needed to update SustainabilityAttributes. An ID must be passed. */
