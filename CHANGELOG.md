@@ -1,3 +1,10 @@
+# [1.412.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.411.0...v1.412.0) (2024-10-07)
+
+
+### Features
+
+* enhance suppliers data grid with products info ([60199cf](https://github.com/ColdPBC/cold-monorepo/commit/60199cfbcbfce9580f7d8aa8e9f19e1f6ecd0e92))
+
 # [1.411.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.410.1...v1.411.0) (2024-10-07)
 
 
