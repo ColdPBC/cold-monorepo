@@ -1,3 +1,10 @@
+## [1.410.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.410.0...v1.410.1) (2024-10-07)
+
+
+### Bug Fixes
+
+* reorganize schema fields and correct supplier data handling ([7e32913](https://github.com/ColdPBC/cold-monorepo/commit/7e329135a8d933f5624bae497540a86752bbfa6d))
+
 # [1.410.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.409.0...v1.410.0) (2024-10-05)
 
 
