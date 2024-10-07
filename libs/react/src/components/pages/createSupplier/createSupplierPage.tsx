@@ -139,10 +139,6 @@ export const CreateSupplierPage = () => {
     }
   }, [tier]);
 
-  if (allSustainabilityAttributes.isLoading || productsQuery.isLoading || materialsQuery.isLoading) {
-    return <Spinner />;
-  }
-
   const tierOptions: InputOption[] = [
     {
       id: 1,
@@ -319,7 +315,9 @@ export const CreateSupplierPage = () => {
 				},
 			]}
 			className={'w-full'}
-			headerElement={pageButtons()}>
+			headerElement={pageButtons()}
+      isLoading={allSustainabilityAttributes.isLoading || productsQuery.isLoading || materialsQuery.isLoading}
+    >
 			<div className={'flex flex-row gap-[40px] w-full'}>
 				<div className={'flex flex-col w-1/2 gap-[40px]'}>
 					<div className={'flex flex-col gap-[8px] w-full'}>
