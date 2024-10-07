@@ -106,7 +106,7 @@ export class ProductsService extends BaseWorker {
 
 			this.logger.info('modified product', { product, organization });
 			try {
-				const materials = item.metadata?.materials || [];
+				const materials = item.materials || [];
 
 				for (const material of materials) {
 					if (!material.name) {
@@ -115,7 +115,7 @@ export class ProductsService extends BaseWorker {
 					await this.processMaterials(material, product, organization);
 				}
 
-				const components = item.metadata?.components || [];
+				const components = item.components || [];
 
 				for (const material of components) {
 					if (!material.name) {

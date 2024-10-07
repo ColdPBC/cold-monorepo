@@ -241,7 +241,7 @@ export class ExtractionService extends BaseWorker {
 
 			return parsedResponse;
 		} catch (e) {
-			this.logger.info('Error extracting data from content', { error: e, file: orgFile, user, organization });
+			this.logger.error('Error extracting data from content', { error: e, file: orgFile, user, organization });
 			const metadata = orgFile.metadata as any;
 			const updateData: any = {
 				metadata: {

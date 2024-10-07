@@ -3,6 +3,7 @@ import { baseCertificateSchema } from './base.certificate.schema';
 
 export const wrap = baseCertificateSchema.extend({
 	name: z.enum(['WRAP', 'Worldwide Responsible Accredited Production']),
+
 	article_covered: z
 		.string()
 		.describe(

@@ -24,49 +24,36 @@ export class SuppliersService extends BaseWorker {
 		console.log('Processing job', job.id);
 		const { content, user, organization } = job.data;
 
-		const messages = [
-			{
-				type: 'text',
-				text: `You are a helpful assistant tasked with extracting the supplier details from the JSON provided.  If more than one supllier is present, please extract all the details and include each one in the response.:
-				JSON: ${content}`,
-			},
-		];
+		const parsed = typeof content === 'string' ? JSON.parse(content) : content;
 
-		const response = await this.openAi.beta.chat.completions.parse({
-			model: 'gpt-4o-2024-08-06',
-			messages: [
-				{
-					role: 'user',
-					content: messages,
-				},
-			],
-			response_format: zodResponseFormat(baseSupplierSchema, 'material_processing'),
-		});
-
-		const parsed = response.choices[0].message.parsed;
 		if (parsed.name) {
 			const supplier = await this.prisma.organization_facilities.upsert({
 				where: {
 					orgFacilityName: {
 						organization_id: job.data.organization.id,
-						name: parsed.name,
+						name: parsed.supplier.name,
 					},
 				},
 				create: {
 					id: new Cuid2Generator(GuidPrefixes.OrganizationFacility).scopedId,
 					organization_id: job.data.organization.id,
-					...parsed,
+					name: parsed.supplier.name,
+					city: parsed.supplier.city,
+					state_province: parsed.supplier.state_province,
+					address_line_1: parsed.supplier.address_line_1,
+					address_line_2: parsed.supplier.address_line_2,
+					postal_code: parsed.supplier.postal_code,
 					supplier: true,
-					supplier_tier: parsed.supplier_tier || 2,
+					supplier_tier: parsed.supplier.supplier_tier || 2,
 				},
 				update: {
-					supplier_tier: parsed.supplier_tier || 2,
+					supplier_tier: parsed.supplier.supplier_tier || 2,
 				},
 			});
 
-			this.logger.info('Created supplier', { supplier });
+			this.logger.info('Created supplier', { supplier, organization, user });
 		}
 
-		return response;
+		return parsed;
 	}
 }

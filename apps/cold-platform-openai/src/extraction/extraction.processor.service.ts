@@ -69,7 +69,7 @@ export class ExtractionProcessorService {
 		extracted = await this.extraction.extractDataFromImages(base64Images, user, filePayload, organization);
 
 		if (extracted) {
-			const parsed: any = JSON.parse(extracted);
+			const parsed: any = typeof extracted === 'string' ? JSON.parse(extracted) : extracted;
 
 			if (parsed.products && parsed.products.length > 0) {
 				await this.productQueue.add('products', { content: extracted, user, organization });
