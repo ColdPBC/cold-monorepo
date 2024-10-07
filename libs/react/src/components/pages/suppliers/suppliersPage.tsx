@@ -2,8 +2,10 @@ import { withErrorBoundary } from 'react-error-boundary';
 import {BaseButton, ErrorFallback, MainContent, SuppliersDataGrid} from '@coldpbc/components';
 import React from 'react';
 import {useNavigate} from "react-router-dom";
+import {useFlags} from "launchdarkly-react-client-sdk";
 
 const _SuppliersPage = () => {
+  const ldFlags = useFlags();
   const navigate = useNavigate();
   const [managementView, setManagementView] = React.useState('Tier 1 Suppliers');
   const tabs = ['Tier 1 Suppliers', 'Tier 2 Suppliers'];
@@ -18,10 +20,13 @@ const _SuppliersPage = () => {
 
   const getPageButtons = () => {
     return <div>
-      <BaseButton
+      {
+        ldFlags.showCreateSupplierPageCold1014 &&
+        <BaseButton
           onClick={() => navigate('/suppliers/new')}
           label={'Add New'}
           className={'h-[40px]'}/>
+      }
     </div>
   };
 

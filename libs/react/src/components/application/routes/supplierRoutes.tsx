@@ -1,5 +1,5 @@
 import {useFlags} from "launchdarkly-react-client-sdk";
-import {Navigate, Route} from "react-router-dom";
+import {Route} from "react-router-dom";
 import {CreateSupplierPage, SuppliersPage} from "@coldpbc/components";
 
 export const SupplierRoutes = () => {
@@ -8,8 +8,7 @@ export const SupplierRoutes = () => {
   return (
 		<>
 			{ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<SuppliersPage />} />}
-      <Route path={'/suppliers/new'} element={<CreateSupplierPage />} />
+			{ldFlags.showCreateSupplierPageCold1014 && <Route path={'/suppliers/new'} element={<CreateSupplierPage />} />}
 		</>
 	);
-
 }
