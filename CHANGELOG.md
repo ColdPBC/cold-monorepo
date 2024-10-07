@@ -1,3 +1,11 @@
+# [1.413.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.412.1...v1.413.0) (2024-10-07)
+
+
+### Features
+
+* add tabs and an empty state for each to sustainability page ([00e465c](https://github.com/ColdPBC/cold-monorepo/commit/00e465c964201d5da942ee522d76e08adc5ba7d9))
+* create new empty state component with header and body ([1633b71](https://github.com/ColdPBC/cold-monorepo/commit/1633b718a1efb54a202b9d86ab56b0a29642ebdd))
+
 ## [1.412.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.412.0...v1.412.1) (2024-10-07)
 
 
