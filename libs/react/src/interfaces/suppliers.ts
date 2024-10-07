@@ -39,4 +39,8 @@ export interface SuppliersWithAssurances {
       name: string;
     };
   }[];
+  products: {
+    id: string;
+    name: string;
+  }[]
 }

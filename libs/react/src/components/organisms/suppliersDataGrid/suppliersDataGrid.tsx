@@ -126,8 +126,6 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       renderHeader: renderHeader,
     });
   } else {
-    // add a materials column
-
     columns.push({
       field: 'materials',
       headerName: 'Materials',
@@ -151,13 +149,9 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
     };
 
     if (tier === 1) {
-      row['products'] = [];
+      row['products'] = supplier.products.map(product => product.name);
     } else {
-      const uniqueMaterials = uniqWith(
-        supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.name),
-        isEqual,
-      );
-      row['materials'] = uniqueMaterials;
+      row['materials'] = supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.name);
     }
     newRows.push(row);
   });
