@@ -1,3 +1,10 @@
+## [1.412.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.412.0...v1.412.1) (2024-10-07)
+
+
+### Bug Fixes
+
+* return additional data in pinecone service and handle image extensions case-insensitively ([5108a9f](https://github.com/ColdPBC/cold-monorepo/commit/5108a9f6a24d7b2ed4181f2d60360d154c585fdc))
+
 # [1.412.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.411.0...v1.412.0) (2024-10-07)
 
 
