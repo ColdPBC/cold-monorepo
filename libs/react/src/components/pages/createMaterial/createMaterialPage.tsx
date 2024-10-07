@@ -238,6 +238,18 @@ const _CreateMaterialPage = () => {
     )
   }
 
+  const getEntities = (createModalType: string) => {
+    if (createModalType === 'products') {
+      return products.filter(product => {
+        return !some(productsToAdd, { id: product.id, name: product.name });
+      });
+    } else {
+      return attributes.filter(attribute => {
+        return !some(attributesToAdd, { id: attribute.id, name: attribute.name });
+      });
+    }
+  }
+
 	return (
 		<MainContent
 			title={'Create New Material'}
@@ -320,16 +332,6 @@ const _CreateMaterialPage = () => {
             onClose={() => {
               setCreateModalType(undefined);
             }}
-            products={products.filter(
-              (product) => {
-                return !some(productsToAdd, {id: product.id, name: product.name});
-              }
-            )}
-            attributes={attributes.filter(
-              (attribute) => {
-                return !some(attributesToAdd, {id: attribute.id, name: attribute.name});
-              }
-            )}
             onAdd={(ids: string[]) => {
               if(createModalType === 'products') {
                 const newProducts: {id: string, name: string}[] = [];
@@ -359,6 +361,7 @@ const _CreateMaterialPage = () => {
               setCreateModalType(undefined);
             }}
             type={createModalType}
+            entities={getEntities(createModalType)}
           />
         )
       }

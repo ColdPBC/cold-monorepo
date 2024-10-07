@@ -5,7 +5,7 @@ import {lowerCase, startCase} from "lodash";
 import {withErrorBoundary} from "react-error-boundary";
 
 const _CreateMaterialTable = (props: {
-  type: 'products' | 'attributes',
+  type: 'products' | 'attributes' | 'materials',
   remove: (id: string) => void
   entities: any[]
 }) => {
@@ -13,22 +13,10 @@ const _CreateMaterialTable = (props: {
   let columns: GridColDef[] = [];
   const rows: any[] = entities
 
-  if(type === "products") {
-    columns = [
-      {
-        field: 'name',
-        headerName: 'Name',
-        minWidth: 130,
-        flex: 1,
-        headerClassName: 'bg-gray-30',
-        cellClassName: 'bg-gray-10',
-      },
-    ]
-  } else {
-    columns = [
-      {field: 'name', headerName: 'Name', minWidth: 130, flex: 1, headerClassName: 'bg-gray-30', cellClassName: 'bg-gray-10'},
-    ]
-  }
+  columns = [
+    {field: 'name', headerName: 'Name', minWidth: 130, flex: 1, headerClassName: 'bg-gray-30', cellClassName: 'bg-gray-10'},
+  ]
+
   columns.push({
     field: 'actions',
     type: 'actions',
