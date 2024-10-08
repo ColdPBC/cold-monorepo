@@ -1,3 +1,23 @@
+# [1.414.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.413.1...v1.414.0) (2024-10-08)
+
+
+### Bug Fixes
+
+* comment out navigation on row click until supplier detail page is ready ([f1999e1](https://github.com/ColdPBC/cold-monorepo/commit/f1999e16444165ca877ac469c4adfa251a1eef9a))
+* update placeholder text and label for tier input ([5fcfc89](https://github.com/ColdPBC/cold-monorepo/commit/5fcfc89e935424f262adc956a09c811450f2072e))
+
+
+### Features
+
+* add feature flag checks for supplier page routes and buttons ([0eedd3f](https://github.com/ColdPBC/cold-monorepo/commit/0eedd3ff4cb022afda59ed123002f75f704139ea))
+* add id prop and test attributes to ComboBox component ([c03ad00](https://github.com/ColdPBC/cold-monorepo/commit/c03ad00afa9c687aaec3c993a48408e17ef6e5de))
+* add new GraphQL queries and update mocks ([a27e3ac](https://github.com/ColdPBC/cold-monorepo/commit/a27e3acc13c42192b983e8bfd4aff36eae169250))
+* add SupplierRoutes and CreateSupplierPage ([e2b0627](https://github.com/ColdPBC/cold-monorepo/commit/e2b0627b1a2c0a6b6846538d9d9ca030faf9e3cb))
+* add support for 'attributes' in setCreateModalType ([0df9cc7](https://github.com/ColdPBC/cold-monorepo/commit/0df9cc7efa6827279363a8b5b6a0b7127b6eebeb))
+* ensure supplier list updates on creation ([4fd831a](https://github.com/ColdPBC/cold-monorepo/commit/4fd831a8c6653c62c99d4cd1c4da0155770773d0))
+* move loading spinner to header component ([551fb98](https://github.com/ColdPBC/cold-monorepo/commit/551fb9814e6fe4cfde83a77fff2584808ae7b91f))
+* rename Material components to Entity components and update interfaces ([93d903c](https://github.com/ColdPBC/cold-monorepo/commit/93d903c33e59e61e26b0d1989d7cf5cb84bce0f2))
+
 ## [1.413.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.413.0...v1.413.1) (2024-10-08)
 
 
