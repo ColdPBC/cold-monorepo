@@ -31,7 +31,7 @@ const _CreateSupplierPage = () => {
   const navigate = useNavigate();
   const placeHolderOption: InputOption = {
     id: -1,
-    name: 'Tier',
+    name: '',
     value: '0',
   };
 
@@ -349,7 +349,7 @@ const _CreateSupplierPage = () => {
 						/>
 					</div>
 					<div className={'flex flex-col gap-[8px] w-full'}>
-						<div className={'text-eyebrow'}>Tier 2 Supplier</div>
+						<div className={'text-eyebrow'}>Tier</div>
 						<ComboBox options={[placeHolderOption, ...tierOptions]} value={tier} name={'tier 2 supplier'} onChange={option => setTier(option)} />
 					</div>
           <div className={'w-full mt-[345px]'}>
