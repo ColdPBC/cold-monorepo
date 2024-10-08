@@ -1,3 +1,10 @@
+## [1.414.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.3...v1.414.4) (2024-10-08)
+
+
+### Bug Fixes
+
+* omit 'extraction_schema' from classification in metadata and refine queue conditionals ([3161f70](https://github.com/ColdPBC/cold-monorepo/commit/3161f709986c5a08dc7cf1394813ae2d4221dda4))
+
 ## [1.414.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.2...v1.414.3) (2024-10-08)
 
 
