@@ -350,7 +350,7 @@ const _CreateSupplierPage = () => {
 					</div>
 					<div className={'flex flex-col gap-[8px] w-full'}>
 						<div className={'text-eyebrow'}>Tier</div>
-						<ComboBox options={[placeHolderOption, ...tierOptions]} value={tier} name={'tier 2 supplier'} onChange={option => setTier(option)} />
+						<ComboBox options={[placeHolderOption, ...tierOptions]} value={tier} name={'tier select'} onChange={option => setTier(option)} />
 					</div>
           <div className={'w-full mt-[345px]'}>
             <AddProductOrMaterialsToCreateSupplierCard

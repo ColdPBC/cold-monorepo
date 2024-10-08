@@ -34,9 +34,34 @@ export const Tier1Selected: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const spinner = canvas.queryByRole('status');
-
     await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
+    const comboBox = await canvas.findByTestId('tier select');
+    //  find the button and click it
+    const button = within(comboBox).getByRole('button');
+    button.click();
+    // find Tier 1 and click it
+    const tier1Option = await within(comboBox).findByTestId('option_1');
+    tier1Option.click();
+  }
+};
 
+export const Tier2Selected: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider>
+        <CreateSupplierPage />
+      </StoryMockProvider>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
+    const comboBox = await canvas.findByTestId('tier select');
+    //  find the button and click it
+    const button = within(comboBox).getByRole('button');
+    button.click();
+    // find Tier 1 and click it
+    const tier1Option = await within(comboBox).findByTestId('option_2');
+    tier1Option.click();
   }
 };
