@@ -1,3 +1,32 @@
+# [1.413.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.412.1...v1.413.0) (2024-10-07)
+
+
+### Features
+
+* add tabs and an empty state for each to sustainability page ([00e465c](https://github.com/ColdPBC/cold-monorepo/commit/00e465c964201d5da942ee522d76e08adc5ba7d9))
+* create new empty state component with header and body ([1633b71](https://github.com/ColdPBC/cold-monorepo/commit/1633b718a1efb54a202b9d86ab56b0a29642ebdd))
+
+## [1.412.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.412.0...v1.412.1) (2024-10-07)
+
+
+### Bug Fixes
+
+* return additional data in pinecone service and handle image extensions case-insensitively ([5108a9f](https://github.com/ColdPBC/cold-monorepo/commit/5108a9f6a24d7b2ed4181f2d60360d154c585fdc))
+
+# [1.412.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.411.0...v1.412.0) (2024-10-07)
+
+
+### Features
+
+* enhance suppliers data grid with products info ([60199cf](https://github.com/ColdPBC/cold-monorepo/commit/60199cfbcbfce9580f7d8aa8e9f19e1f6ecd0e92))
+
+# [1.411.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.410.1...v1.411.0) (2024-10-07)
+
+
+### Features
+
+* update classification rules for document extraction ([9605762](https://github.com/ColdPBC/cold-monorepo/commit/96057623409e342cdf48b5f8e306f424fa8ce6e2))
+
 ## [1.410.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.410.0...v1.410.1) (2024-10-07)
 
 

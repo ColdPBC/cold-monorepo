@@ -506,6 +506,8 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 					const encoder = new TextEncoder();
 					bytes = encoder.encode(JSON.stringify(response));
 				}
+
+				return { bytes, extension, organization, user, filePayload };
 			} else if (extension === 'xlsx') {
 				const pdfBytes = await this.convertXlsToPdf(user, filePayload, organization);
 

@@ -54,7 +54,7 @@ export class ExtractionProcessorService {
 			}
 		}
 
-		if (extension === 'jpg' || extension === 'jpeg' || extension === 'png') {
+		if (extension.toLowerCase() === 'jpg' || extension.toLowerCase() === 'jpeg' || extension.toLowerCase() === 'png') {
 			const binaryString = String.fromCharCode(...fileBytes);
 
 			// Convert binary string to base64
@@ -64,7 +64,7 @@ export class ExtractionProcessorService {
 			});
 		}
 
-		base64Images = await this.extraction.processPdfPages(fileBytes, filePayload, user, organization);
+		//base64Images = await this.extraction.processPdfPages(fileBytes, filePayload, user, organization);
 
 		extracted = await this.extraction.extractDataFromImages(base64Images, user, filePayload, organization);
 

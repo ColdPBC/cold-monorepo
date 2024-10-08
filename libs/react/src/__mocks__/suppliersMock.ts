@@ -421,13 +421,13 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         },
       ],
-      materialSuppliers: [
+      materialSuppliers: [],
+      products: [
         {
-          material: {
-            name: 'Cotton',
-          },
-        },
-      ],
+            id: '1',
+            name: 'T-shirt',
+        }
+      ]
     },
     {
       id: '2',
@@ -462,24 +462,18 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         },
       ],
+      products: [
+        {
+            id: '2',
+            name: 'Pants',
+        }
+      ]
     },
     {
       id: '3',
       name: 'Smotherman, Inc.',
       country: 'Vietnam',
       supplierTier: 2,
-      materialSuppliers: [
-        {
-          material: {
-            name: 'Cotton',
-          },
-        },
-        {
-          material: {
-            name: 'Polyester',
-          },
-        },
-      ],
       attributeAssurances: [
         {
           id: '4',
@@ -496,6 +490,19 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         },
       ],
+      materialSuppliers: [
+        {
+          material: {
+            name: 'Cotton',
+          },
+        },
+        {
+          material: {
+            name: 'Polyester',
+          },
+        },
+      ],
+      products: [],
     },
     {
       id: '4',
@@ -530,6 +537,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         },
       ],
+      products: []
     },
     {
       id: '5',
@@ -564,6 +572,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         },
       ],
+      products: []
     },
     {
       id: '6',
@@ -598,6 +607,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         },
       ],
+      products: []
     },
     {
       id: '7',
@@ -621,6 +631,12 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
         },
       ],
       materialSuppliers: [],
+      products: [
+        {
+            id: '7',
+            name: 'Dress',
+        }
+      ]
     },
     {
       id: '8',
@@ -655,6 +671,12 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         },
       ],
+      products: [
+        {
+          id: '8',
+          name: 'Skirt',
+        }
+      ]
     },
     {
       id: '9',
@@ -663,6 +685,12 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       supplierTier: 1,
       attributeAssurances: [],
       materialSuppliers: [],
+      products: [
+        {
+          id: '9',
+          name: 'Hat',
+        }
+      ]
     },
     {
       id: '10',
@@ -671,6 +699,12 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       supplierTier: 2,
       attributeAssurances: [],
       materialSuppliers: [],
+      products: [
+        {
+          id: '10',
+          name: 'Shoes',
+        }
+      ]
     },
   ];
 };
