@@ -179,11 +179,6 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
   };
 
   const onRowClick = (params: GridRowParams, event: MuiEvent<React.MouseEvent>, details: GridCallbackDetails) => {
-    const file = files.find(file => file.id === params.row.id);
-    const fileStatus = getFileProcessingStatus(file);
-    if (fileStatus === 'uploaded') {
-      return;
-    }
     selectDocument(params.row.id);
   };
 
