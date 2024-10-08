@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ExtractionService } from './extraction.service';
 import { ExtractionXlsxService } from './extraction.xlsx.service';
 import { XlsLoader } from '../langchain/custom_loaders/xls.loader';
-import { ClassificationService } from './classification.service';
+import { ClassificationService } from '../classification/classification.service';
 import { ExtractionProcessorService } from './extraction.processor.service';
 import { EntitiesModule } from '../entities/entities.module';
 import { BullModule } from '@nestjs/bull';

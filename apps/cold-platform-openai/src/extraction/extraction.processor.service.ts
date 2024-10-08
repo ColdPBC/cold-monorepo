@@ -1,85 +1,66 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import { ExtractionService } from './extraction.service';
 import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
-import { S3Service } from '@coldpbc/nest';
+import { BaseWorker, IAuthenticatedUser, S3Service } from '@coldpbc/nest';
 import { Queue } from 'bull';
+import { organization_files, organizations } from '@prisma/client';
+
+export interface ExtractionJobPayload {
+	extension: string;
+	isImage?: boolean;
+	classification: any;
+	filePayload: organization_files;
+	user: IAuthenticatedUser;
+	organization: organizations;
+	content?: string;
+	openAiImageUrlContent?: OpenAiBase64ImageUrl[];
+}
 
 @Injectable()
-@Processor('openai:extraction')
-export class ExtractionProcessorService {
+@Processor({ name: 'openai:extraction', scope: Scope.REQUEST })
+export class ExtractionProcessorService extends BaseWorker {
 	constructor(
 		@InjectQueue('openai:products') readonly productQueue: Queue,
 		@InjectQueue('openai:materials') readonly materialQueue: Queue,
 		@InjectQueue('openai:suppliers') readonly supplierQueue: Queue,
 		readonly extraction: ExtractionService,
 		readonly s3: S3Service,
-	) {}
+	) {
+		super(ExtractionProcessorService.name);
+	}
 
 	@Process('extract')
 	async processExtractionJob(job: any) {
-		const { extension, bytes, filePayload, user, organization } = job.data;
-		let base64Images: OpenAiBase64ImageUrl[] = [];
+		const { extension, classification, content, isImage, filePayload, user, organization } = job.data;
 
-		let extracted: string | null;
+		this.logger.info(`Extracting data from ${filePayload.original_name}`, { extension, classification, filePayload, user, organization });
 
-		const file = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
-		const fileBytes = await file.Body?.transformToByteArray();
-		if (!fileBytes) {
-			throw new Error('Failed to read file from S3');
-		}
+		try {
+			let extracted: any;
 
-		if (extension === 'pdf') {
-			const file = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
-			const fileBytes = await file.Body?.transformToByteArray();
-
-			if (!fileBytes) {
-				throw new Error('Failed to read file from S3');
+			if (content) {
+				extracted = await this.extraction.extractDataFromContent(content, classification, user, filePayload, organization);
+			} else {
+				extracted = await this.extraction.extractDataFromImages(classification, extension, isImage, user, filePayload, organization);
 			}
 
-			const text = await this.extraction.extractTextFromPDF(fileBytes, filePayload, user, organization);
+			if (extracted) {
+				const parsed: any = typeof extracted === 'string' ? JSON.parse(extracted) : extracted;
 
-			if (text) {
-				extracted = await this.extraction.extractDataFromContent(text, user, filePayload, organization);
-			} else {
-				const file = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
-				const fileBytes = await file.Body?.transformToByteArray();
-
-				if (!fileBytes) {
-					throw new Error('Failed to read file from S3');
+				if (parsed.products && parsed.products.length > 0) {
+					await this.productQueue.add('products', { content: extracted, user, organization }, { removeOnComplete: true, removeOnFail: true });
+				} else if (parsed.materials) {
+					await this.materialQueue.add('materials', { content: extracted, user, organization }, { removeOnComplete: true, removeOnFail: true });
+				} else {
+					await this.supplierQueue.add('suppliers', { content: extracted, user, organization }, { removeOnComplete: true, removeOnFail: true });
 				}
-
-				base64Images = await this.extraction.processPdfPages(fileBytes, filePayload, user, organization);
-				extracted = await this.extraction.extractDataFromImages(base64Images, user, filePayload, organization);
 			}
+			return {};
+		} catch (e) {
+			this.logger.error(e.message, { error: e, filePayload, user, organization, classification });
+			throw e;
 		}
-
-		if (extension.toLowerCase() === 'jpg' || extension.toLowerCase() === 'jpeg' || extension.toLowerCase() === 'png') {
-			const binaryString = String.fromCharCode(...fileBytes);
-
-			// Convert binary string to base64
-			base64Images.push({
-				type: 'image_url',
-				image_url: { url: `data:image/${extension};base64,${btoa(binaryString)}` },
-			});
-		}
-
-		//base64Images = await this.extraction.processPdfPages(fileBytes, filePayload, user, organization);
-
-		extracted = await this.extraction.extractDataFromImages(base64Images, user, filePayload, organization);
-
-		if (extracted) {
-			const parsed: any = typeof extracted === 'string' ? JSON.parse(extracted) : extracted;
-
-			if (parsed.products && parsed.products.length > 0) {
-				await this.productQueue.add('products', { content: extracted, user, organization });
-			} else if (parsed.materials) {
-				await this.materialQueue.add('materials', { content: extracted, user, organization });
-			} else {
-				await this.supplierQueue.add('suppliers', { content: extracted, user, organization });
-			}
-		}
-		return extracted;
 
 		/*if (extracted) {
 			// Encode the JSON string to a byte array

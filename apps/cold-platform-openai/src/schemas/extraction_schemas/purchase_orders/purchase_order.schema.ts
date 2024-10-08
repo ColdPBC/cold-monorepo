@@ -46,5 +46,3 @@ export const PoProductsSchema = z.object({
 	products: z.array(baseProductSchema),
 	metadata: PurchaseOrderMetadataSchema,
 });
-
-export default PoProductsSchema;

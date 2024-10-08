@@ -5,26 +5,33 @@ import { attribute_assurances, file_types, organization_files, organizations } f
 import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
-import { ClassificationService } from './classification.service';
-import { get } from 'lodash';
+import { ClassificationService } from '../classification/classification.service';
+import { get, snakeCase } from 'lodash';
 import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
 import { PDFDocument } from 'pdf-lib';
-import { pdfByteArrayToScreenshots } from './screenShotPDFPages';
 import { fromBuffer } from 'pdf2pic';
 import { pdfToText } from './extractTextFromPDF';
-import { Process, Processor } from '@nestjs/bull';
+import {
+	BillOfMaterialsSchema,
+	bluesignProductSchema,
+	bluesignSchema,
+	defaultCertificateSchema,
+	defaultExtractionSchema,
+	defaultPolicySchema,
+	defaultStatementSchema,
+	defaultTestSchema,
+	intertek,
+	PoProductsSchema,
+	sgs,
+	tuv_rhineland,
+	wrap,
+} from '../schemas';
 
 @Injectable()
 export class ExtractionService extends BaseWorker {
 	private openAi;
 
-	constructor(
-		readonly config: ConfigService,
-		readonly classifyService: ClassificationService,
-		private readonly prisma: PrismaService,
-		readonly s3: S3Service,
-		readonly mqtt: MqttService,
-	) {
+	constructor(readonly config: ConfigService, private readonly prisma: PrismaService, readonly s3: S3Service, readonly mqtt: MqttService) {
 		super(ExtractionService.name);
 		this.openAi = new OpenAI({
 			organization: this.config.getOrThrow('OPENAI_ORG_ID'),
@@ -44,8 +51,9 @@ export class ExtractionService extends BaseWorker {
 				return null;
 			}
 
-			const processed = await this.extractDataFromContent(extracted, user, filePayload, organization);
-			return processed;
+			return extracted;
+			//const processed = await this.extractDataFromContent(extracted, user, filePayload, organization);
+			//return processed;
 		} catch (error) {
 			this.logger.error('Error extracting text from pdf', { error, namespace: organization.name, file: filePayload });
 			return null;
@@ -70,7 +78,7 @@ export class ExtractionService extends BaseWorker {
 		}
 	}
 
-	async processPdfPages(fileBuffer: Uint8Array, filePayload: any, user: IAuthenticatedUser, organization: organizations) {
+	async convertPDFPagesToImages(fileBuffer: Uint8Array, filePayload: any, user: IAuthenticatedUser, organization: organizations) {
 		try {
 			/*	const file = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
 			const fileBytes = await file.Body?.transformToByteArray();
@@ -106,29 +114,62 @@ export class ExtractionService extends BaseWorker {
 		}
 	}
 
-	async extractDataFromImages(images: OpenAiBase64ImageUrl[], user: IAuthenticatedUser, orgFile: organization_files, organization: organizations) {
+	async extractDataFromImages(classification: any, extension: string, isImage: boolean, user: IAuthenticatedUser, filePayload: organization_files, organization: organizations) {
 		const start = new Date();
 		try {
 			// classify content and generate a prompt for the extraction
-			const classification = await this.classifyService.classifyImageUrls(images, user, orgFile, organization);
 
-			const imageContent: { type: string; text?: string; image_url?: { url: string } }[] = [
+			const orgfile = await this.prisma.organization_files.findUnique({
+				where: {
+					id: filePayload.id,
+				},
+			});
+
+			if (!orgfile) {
+				throw new Error('File no longer found in DB');
+			}
+
+			if (!classification || !classification.extraction_prompt) {
+				throw new Error('Classification not found');
+			}
+
+			const images: OpenAiBase64ImageUrl[] = [
 				{
 					type: 'text',
-					text: classification.prompt,
+					text: classification.extraction_prompt,
 				},
 			];
 
-			images.forEach(image => {
-				imageContent.push(image);
-			});
+			if (!filePayload?.key || !filePayload?.bucket) {
+				throw new Error('File key, or bucket not found in file payload');
+			}
+
+			const file = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
+			const fileBytes = await file.Body?.transformToByteArray();
+
+			if (!fileBytes) {
+				throw new Error('Failed to read file from S3');
+			}
+
+			// If original file was an image, convert it to base64
+			if (isImage) {
+				const binaryString = String.fromCharCode(...fileBytes);
+
+				// Convert binary string to base64
+				images.push({
+					type: 'image_url',
+					image_url: { url: `data:image/${extension};base64,${btoa(binaryString)}` },
+				});
+			}
+
+			classification = await this.resolveExtractionSchema(classification);
 
 			const response = await this.openAi.beta.chat.completions.parse({
 				model: 'gpt-4o-2024-08-06',
 				messages: [
 					{
 						role: 'user',
-						content: imageContent,
+						content: images,
 					},
 				],
 				response_format: zodResponseFormat(classification.extraction_schema, classification.extraction_name),
@@ -136,24 +177,17 @@ export class ExtractionService extends BaseWorker {
 
 			const parsedResponse = response.choices[0].message.parsed;
 
-			orgFile = (await this.prisma.organization_files.findUnique({
+			filePayload = (await this.prisma.organization_files.findUnique({
 				where: {
-					id: orgFile.id,
+					id: filePayload.id,
 				},
 			})) as organization_files;
-
-			if (!orgFile) {
-				throw new Error('File not found');
-			}
-
-			this.logger.info(`${classification.extraction_name} response`, { response, user, file: orgFile });
 
 			const updateData: any = {
 				type: classification.type,
 				metadata: {
 					status: 'ai_extracted',
-					classification: get(orgFile, 'metadata.classification'),
-					...response.choices[0].message.parsed,
+					classification: get(filePayload, 'metadata.classification'),
 				},
 			};
 
@@ -171,23 +205,23 @@ export class ExtractionService extends BaseWorker {
 				}
 			}
 
-			orgFile = await this.prisma.organization_files.update({
+			filePayload = await this.prisma.organization_files.update({
 				where: {
-					id: orgFile.id,
+					id: filePayload.id,
 				},
 				data: updateData,
 			});
 
-			this.logger.info('file metadata updated', { file: orgFile, organization, user });
+			this.logger.info('file metadata updated', { file: filePayload, organization, user });
 
 			this.mqtt.publishToUI({
 				action: 'update',
 				status: 'complete',
 				event: 'extract-file-data',
 				resource: 'organization_files',
-				data: orgFile,
+				data: filePayload,
 				user,
-				swr_key: `organization_files.${(orgFile?.metadata as any).status}`,
+				swr_key: `organization_files.${(filePayload?.metadata as any).status}`,
 				org_id: organization.id,
 			});
 
@@ -202,9 +236,9 @@ export class ExtractionService extends BaseWorker {
 						organization_name: organization?.name,
 						organization_id: organization?.id,
 						user_email: user?.coldclimate_claims?.email,
-						file_name: orgFile.original_name,
-						file_type: orgFile.type,
-						file_id: orgFile.id,
+						file_name: filePayload.original_name,
+						file_type: filePayload.type,
+						file_id: filePayload.id,
 					},
 				});
 
@@ -213,7 +247,7 @@ export class ExtractionService extends BaseWorker {
 					status: 'complete',
 					resource: 'organization_files',
 					event: 'extract-file-data',
-					data: { ...orgFile, notes: 'No sustainability attribute found in classification' },
+					data: { ...filePayload, notes: 'No sustainability attribute found in classification' },
 					user,
 					swr_key: `organization_files.${updateData.metadata.status}`,
 					org_id: organization.id,
@@ -222,7 +256,7 @@ export class ExtractionService extends BaseWorker {
 				return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
 			}
 
-			await this.createAttributeAssurances(classification, organization, orgFile, updateData, orgFile, user);
+			await this.createAttributeAssurances(classification, organization, filePayload, updateData, filePayload, user);
 
 			this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
 				start,
@@ -233,32 +267,15 @@ export class ExtractionService extends BaseWorker {
 					organization_name: organization?.name,
 					organization_id: organization?.id,
 					user_email: user?.coldclimate_claims?.email,
-					file_name: orgFile.original_name,
-					file_type: orgFile.type,
-					file_id: orgFile.id,
+					file_name: filePayload.original_name,
+					file_type: filePayload.type,
+					file_id: filePayload.id,
 				},
 			});
 
 			return parsedResponse;
 		} catch (e) {
-			this.logger.error('Error extracting data from content', { error: e, file: orgFile, user, organization });
-			const metadata = orgFile.metadata as any;
-			const updateData: any = {
-				metadata: {
-					...metadata,
-					status: 'failed',
-
-					classification: get(orgFile, 'metadata.classification'),
-					error: e.message,
-				},
-			};
-
-			orgFile = await this.prisma.organization_files.update({
-				where: {
-					id: orgFile.id,
-				},
-				data: updateData,
-			});
+			this.logger.error(`Error extracting data from content: ${e.message}`, { error: { ...e }, classification, file: filePayload, user, organization });
 
 			this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
 				start,
@@ -267,23 +284,42 @@ export class ExtractionService extends BaseWorker {
 					organization_name: organization?.name,
 					organization_id: organization?.id,
 					user_email: user?.coldclimate_claims?.email,
-					file_name: orgFile.original_name,
-					file_type: orgFile.type,
-					file_id: orgFile.id,
+					file_name: filePayload.original_name,
+					file_type: filePayload.type,
+					file_id: filePayload.id,
 					error: e.message,
 				},
 			});
+			const metadata = filePayload.metadata as any;
+			const updateData: any = {
+				metadata: {
+					...metadata,
+					status: 'failed',
+
+					classification: get(filePayload, 'metadata.classification'),
+					error: e.message,
+				},
+			};
 
 			this.mqtt.publishToUI({
 				action: 'update',
 				status: 'failed',
 				resource: 'organization_files',
 				event: 'extract-file-data',
-				data: orgFile,
+				data: filePayload,
 				user,
 				swr_key: `organization_files.${updateData.metadata.status}`,
 				org_id: organization.id,
 			});
+
+			if (e.message !== 'File Not Found') {
+				await this.prisma.organization_files.update({
+					where: {
+						id: filePayload.id,
+					},
+					data: updateData,
+				});
+			}
 
 			throw e;
 		}
@@ -292,20 +328,24 @@ export class ExtractionService extends BaseWorker {
 	/**
 	 * Use Ai to extract text from an image
 	 * @param content
+	 * @param classification
 	 * @param user
 	 * @param orgFile
 	 * @param organization
 	 */
-	async extractDataFromContent(content: any[] | string, user: IAuthenticatedUser, orgFile: organization_files, organization: organizations) {
+	async extractDataFromContent(content: any[] | string, classification: any, user: IAuthenticatedUser, orgFile: organization_files, organization: organizations) {
 		const start = new Date();
 		try {
+			if (!classification || !classification.extraction_prompt) {
+				throw new Error('Classification not found');
+			}
+
+			classification = await this.resolveExtractionSchema(classification);
+
 			// map over content to extract pageContent if content is an array of langchain documents
 			content = Array.isArray(content) ? content.map(c => c.pageContent) : content;
 
-			// classify content and generate a prompt for the extraction
-			const classification = await this.classifyService.classifyContent(content, user, orgFile, organization);
-
-			const prompt = `${classification?.prompt} Please use the response_format to properly extract the content ${Array.isArray(content) ? content.join(' ') : content}`;
+			const prompt = `${classification?.extraction_prompt} Please use the response_format to properly extract the content ${Array.isArray(content) ? content.join(' ') : content}`;
 
 			/*const prompt = `You are a helpful assistant and you help users extract unstructured data from documents that they upload.  Please use the response_format to properly extract the content ${
         this.contentIsUrl(content) ? 'from the following image' : `from the following context: ${Array.isArray(content) ? content.join(' ') : content}`
@@ -447,7 +487,8 @@ export class ExtractionService extends BaseWorker {
 
 			return parsedResponse;
 		} catch (e) {
-			this.logger.info('Error extracting data from content', { error: e });
+			this.logger.info(`Error extracting data from content: ${e.message}`, { error: { ...e }, classification, file: orgFile, user, organization });
+
 			const metadata = orgFile.metadata as any;
 			metadata.status = 'failed';
 			const updateData: any = {
@@ -492,6 +533,114 @@ export class ExtractionService extends BaseWorker {
 
 			throw e;
 		}
+	}
+
+	private async resolveExtractionSchema(classification: any) {
+		if (typeof classification === 'string') {
+			classification = JSON.parse(classification);
+		}
+
+		classification.extraction_name = 'default_extraction';
+
+		// determine the extraction schema and extraction name to use based on the classification
+		switch (classification.type) {
+			case file_types.TEST_REPORT:
+				classification.extraction_name = snakeCase(`test_${classification.testing_company}`);
+				switch (classification.testing_company) {
+					case 'tuvRheinland':
+						classification.extraction_schema = tuv_rhineland;
+						break;
+					case 'intertek':
+						classification.extraction_schema = intertek;
+						break;
+					case 'SGS':
+						classification.extraction_schema = sgs;
+						break;
+					default:
+						classification.extraction_schema = defaultTestSchema;
+						break;
+				}
+				break;
+			case file_types.SCOPE_CERTIFICATE:
+			case file_types.TRANSACTION_CERTIFICATE:
+			case file_types.CERTIFICATE: {
+				if (!classification.sustainability_attribute) {
+					//content.sustainability_attribute = 'certificate_AttributeUnknown';
+					classification.extraction_schema = defaultCertificateSchema;
+				} else {
+					classification.extraction_name = snakeCase(`certificate ${classification.sustainability_attribute}`);
+					switch (classification.sustainability_attribute) {
+						case 'Bluesign Product':
+							classification.extraction_schema = bluesignProductSchema;
+							break;
+						case 'Bluesign':
+							classification.extraction_schema = bluesignSchema;
+							break;
+						case 'WRAP':
+						case 'Worldwide Responsible Accredited Production':
+							classification.extraction_schema = wrap;
+							break;
+						default:
+							classification.extraction_schema = defaultCertificateSchema;
+							break;
+					}
+				}
+				break;
+			}
+			case file_types.POLICY:
+				classification.extraction_name = snakeCase(`policy extraction`);
+				classification.extraction_schema = defaultPolicySchema;
+				break;
+			case file_types.STATEMENT:
+				classification.extraction_name = snakeCase('statement_extraction');
+				classification.extraction_schema = defaultStatementSchema;
+				break;
+			case file_types.BILL_OF_MATERIALS:
+				classification.extraction_name = snakeCase('bill_of_materials_extraction');
+				classification.extraction_schema = BillOfMaterialsSchema;
+				break;
+			case file_types.PURCHASE_ORDER:
+				classification.extraction_name = snakeCase('purchase_order_extraction');
+				classification.extraction_schema = PoProductsSchema;
+				break;
+			default:
+				// if it failed to correctly identify type of document, but did identify a sustainability attribute switch on attribute name
+				if (classification.sustainability_attribute) {
+					switch (classification.sustainability_attribute) {
+						case 'Worldwide Responsible Accredited Production (WRAP)':
+							classification.extraction_schema = wrap;
+							classification.type = file_types.CERTIFICATE;
+							classification.extraction_name = snakeCase(`wrap extraction`);
+							break;
+						case 'Bluesign':
+							classification.extraction_schema = bluesignSchema;
+							classification.type = file_types.CERTIFICATE;
+							classification.extraction_name = snakeCase(`bluesign extraction`);
+							break;
+						case 'Bluesign Product':
+							classification.extraction_schema = bluesignProductSchema;
+							classification.type = file_types.CERTIFICATE;
+							classification.extraction_name = snakeCase(`bluesign product extraction`);
+							break;
+					}
+
+					const attribute = await this.prisma.sustainability_attributes.findFirst({
+						where: {
+							name: classification.sustainability_attribute,
+						},
+					});
+
+					if (attribute) {
+						classification.sustainability_attribute_id = attribute.id;
+					}
+				} else {
+					classification.extraction_name = snakeCase(`default extraction`);
+					classification.extraction_schema = defaultExtractionSchema;
+				}
+				break;
+		}
+
+		return classification;
 	}
 
 	private async createAttributeAssurances(classification, organization: organizations, orgFile: organization_files, updateData: any, updatedFile: any, user: IAuthenticatedUser) {
