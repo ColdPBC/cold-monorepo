@@ -39,7 +39,7 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
 				<div className="self-stretch justify-start items-end gap-2 inline-flex">
 					<div
 						className={`
-              text-sm font-bold leading-[21px]
+              text-sm leading-[21px]
               ${(sustainabilityAttribute.attributeAssurances?.length || 0) > 0 ? 'text-tc-primary' : 'text-tc-disabled'}
             `}
           >
