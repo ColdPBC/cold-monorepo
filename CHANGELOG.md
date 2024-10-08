@@ -1,3 +1,10 @@
+## [1.414.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.4...v1.414.5) (2024-10-08)
+
+
+### Bug Fixes
+
+* move `isImage` function to utility module ([2d35030](https://github.com/ColdPBC/cold-monorepo/commit/2d35030cd1287193ff20ad7d23a1a34312b7ede1))
+
 ## [1.414.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.3...v1.414.4) (2024-10-08)
 
 
