@@ -11,7 +11,7 @@ const _AddProductOrMaterialsCreateSupplierCard = (props : {
   setProductsToAdd: (products: Products[]) => void;
   materialsToAdd: Materials[];
   setMaterialsToAdd: (materials: Materials[]) => void;
-  setCreateModalType: (type: 'products' | 'materials') => void;
+  setCreateModalType: (type: 'products' | 'materials' | 'attributes') => void;
 }) => {
   const {tier, productsToAdd, setProductsToAdd, materialsToAdd, setMaterialsToAdd, setCreateModalType} = props;
 
@@ -23,10 +23,23 @@ const _AddProductOrMaterialsCreateSupplierCard = (props : {
       </Card>
     )
   }
+  let title = '';
+  let createModalType: "products" | "materials" | "attributes" = "products";
+  let entityToAdd: any[] = [];
+  switch (tier.value) {
+    case '1':
+      title = 'Products';
+      createModalType = 'products';
+      entityToAdd = productsToAdd;
+      break;
+    default:
+    case '2':
+      title = 'Materials';
+      createModalType = 'materials';
+      entityToAdd = materialsToAdd;
+      break;
+  }
 
-  const title = tier.value === '1' ? 'Products' : 'Materials';
-  const createModalType = tier.value === '1' ? 'products' : 'materials';
-  const entityToAdd = tier.value === '1' ? productsToAdd : materialsToAdd;
   return (
     <Card title={title} glow={true}>
       <BaseButton label={'Add'} iconLeft={IconNames.PlusIcon} variant={ButtonTypes.secondary} onClick={() => setCreateModalType(createModalType)} />
