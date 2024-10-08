@@ -4,7 +4,7 @@ import {
   GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
   GET_ALL_ORGS, GET_ALL_PRODUCTS, GET_ALL_SCHEMA_ENUMS, GET_ALL_SUPPLIERS_FOR_ORG,
   GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-  GET_ALL_SUS_ATTRIBUTES,
+  GET_ALL_SUS_ATTRIBUTES, GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
   UPDATE_DOCUMENT_ASSURANCE,
   UPDATE_DOCUMENT_FIELDS,
 } from '@coldpbc/lib';
@@ -297,6 +297,15 @@ export const defaultGraphqlMocks: {
 				},
 			}),
 	},
+  {
+    query: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          sustainabilityAttributes: [],
+        },
+      }),
+  },
 	{
 		query: GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
 		handler: () =>
@@ -493,4 +502,33 @@ export const filesProcessedWithDatesMocks: {
         },
       }),
   },
+];
+
+export const sustainabilityAttributesMocks = [
+  {
+    query: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          sustainabilityAttributes: [
+            // For 'My Attributes'
+            {
+              id: 'a',
+              name: 'Global Recycled Standard',
+              logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
+              attributeAssurances: [{id: 'a'}],
+              level: 'MATERIAL',
+            },
+            // For 'Other Attributes'
+            {
+              id: 'a',
+              name: 'Fair Wear',
+              logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
+              attributeAssurances: [],
+              level: 'SUPPLIER',
+            }
+          ],
+        },
+      }),
+  }
 ];

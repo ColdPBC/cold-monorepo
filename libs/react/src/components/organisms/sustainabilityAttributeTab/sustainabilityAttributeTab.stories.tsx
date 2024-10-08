@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import {SustainabilityAttributeTab} from './sustainabilityAttributeTab';
+import {SustainabilityAttributeTab} from '@coldpbc/components';
 
 const meta: Meta<typeof SustainabilityAttributeTab> = {
   title: "Molecules/SustainabilityAttributeCard",
@@ -40,6 +40,13 @@ export const Default: Story = {
   }
 };
 
+export const MyAttributesEmpty: Story = {
+  args: {
+    tab: 'My Attributes',
+    sustainabilityAttributes: []
+  }
+};
+
 export const OtherAttributes: Story = {
   args: {
     tab: 'Other Attributes',
@@ -68,3 +75,9 @@ export const OtherAttributes: Story = {
   }
 };
 
+export const OtherAttributesEmpty: Story = {
+  args: {
+    tab: 'Other Attributes',
+    sustainabilityAttributes: []
+  }
+};
