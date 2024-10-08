@@ -5,7 +5,7 @@ import {InputOption, Materials} from "@coldpbc/interfaces";
 import {withErrorBoundary} from "react-error-boundary";
 import {Products} from "../../../interfaces/products";
 
-const _AddProductOrMaterialsCreateSupplierCard = (props : {
+const _AddProductOrMaterialsToCreateSupplierCard = (props : {
   tier: InputOption;
   productsToAdd: Products[];
   setProductsToAdd: (products: Products[]) => void;
@@ -58,9 +58,9 @@ const _AddProductOrMaterialsCreateSupplierCard = (props : {
   )
 }
 
-export const AddProductOrMaterialsCreateSupplierCard = withErrorBoundary(_AddProductOrMaterialsCreateSupplierCard, {
+export const AddProductOrMaterialsToCreateSupplierCard = withErrorBoundary(_AddProductOrMaterialsToCreateSupplierCard, {
   FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
-    console.error('Error occurred in AddProductOrMaterialsCreateSupplierCard: ', error);
+    console.error('Error occurred in AddProductOrMaterialsToCreateSupplierCard: ', error);
   },
 });

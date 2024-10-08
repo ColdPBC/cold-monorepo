@@ -9,7 +9,7 @@ import {
 import React, {useEffect, useState} from "react";
 import {get, has, some} from "lodash";
 import {
-  AddProductOrMaterialsCreateSupplierCard,
+  AddProductOrMaterialsToCreateSupplierCard,
   AddToCreateEntityModal,
   BaseButton,
   Card,
@@ -353,7 +353,7 @@ const _CreateSupplierPage = () => {
 						<ComboBox options={[placeHolderOption, ...tierOptions]} value={tier} name={'tier 2 supplier'} onChange={option => setTier(option)} />
 					</div>
           <div className={'w-full mt-[345px]'}>
-            <AddProductOrMaterialsCreateSupplierCard
+            <AddProductOrMaterialsToCreateSupplierCard
               tier={tier}
               productsToAdd={productsToAdd}
               setProductsToAdd={setProductsToAdd}
