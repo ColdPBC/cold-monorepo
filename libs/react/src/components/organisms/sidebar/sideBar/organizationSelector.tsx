@@ -24,11 +24,15 @@ const orgToInputOption = (org: Organization | undefined) => {
   }
 }
 
-const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
+const _OrganizationSelector = ({ sidebarExpanded, resetSidebar }: { sidebarExpanded?: boolean, resetSidebar: () => void }) => {
   const ldFlags = useFlags();
   const navigate = useNavigate();
   const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
   const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
+  const refreshPage = () => {
+    navigate('/');
+    resetSidebar();
+  };
 
   // Default to the impersonating org if already set
   const [selectedOption, setSelectedOption] = useState<InputOption | null>(orgToInputOption(impersonatingOrg));
@@ -37,7 +41,7 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
     const org: Organization | undefined = find(data, org => org.id === selectedOption.value);
     if(org) {
       logBrowser(`New impersonating organization selected: ${org.display_name}`, 'info', { org: org });
-      navigate('/');
+      refreshPage();
       setSelectedOption(selectedOption);
       setImpersonatingOrg(org);
     } else {

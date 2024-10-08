@@ -73,7 +73,12 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 
 	const getOrgSelector = () => {
 		if (auth0.user && auth0.user.coldclimate_claims.roles.includes('cold:admin')) {
-			return <OrganizationSelector sidebarExpanded={expanded || !ldFlags.showNewNavigationCold698} />;
+			return (
+        <OrganizationSelector
+          sidebarExpanded={expanded || !ldFlags.showNewNavigationCold698}
+          resetSidebar={() => setActiveItem(null)}
+        />
+      );
 		} else {
 			return null;
 		}
