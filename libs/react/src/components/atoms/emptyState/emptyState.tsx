@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface EmptyStateProps {
+export interface EmptyStateProps {
   header: string | React.ReactNode;
   body?: string | React.ReactNode;
 }

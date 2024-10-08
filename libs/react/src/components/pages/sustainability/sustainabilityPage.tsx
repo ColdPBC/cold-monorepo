@@ -1,4 +1,4 @@
-import { ErrorFallback, MainContent, EmptyState } from '@coldpbc/components';
+import { ErrorFallback, MainContent, SustainabilityAttributeTab } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 
@@ -30,7 +30,7 @@ const _SustainabilityPage = () => {
   const tabs = ['My Attributes', 'Other Attributes'];
 
   return (
-		<MainContent title="Sustainability Attributes" className={'w-[calc(100%-100px)]'}>
+    <MainContent title="Sustainability Attributes" className={'w-[calc(100%-100px)]'}>
 			<div className={'flex flex-col w-full h-full'}>
 				<div className={'flex flex-row w-full justify-start relative'} data-testid={'sustainability-tabs'}>
 					{tabs.map(tab => (
@@ -44,9 +44,15 @@ const _SustainabilityPage = () => {
 					))}
 				</div>
 				<div className={'flex-grow flex items-center justify-center'}>
-          <EmptyState
-            { ...tabView === 'My Attributes' ? MY_ATTRIBUTES_EMPTY_STATE_PROPS : OTHER_ATTRIBUTES_EMPTY_STATE_PROPS}
-          />
+          {tabView === 'My Attributes' ? (
+            <SustainabilityAttributeTab
+              emptyStateProps={MY_ATTRIBUTES_EMPTY_STATE_PROPS}
+            />
+          ) : (
+            <SustainabilityAttributeTab
+              emptyStateProps={OTHER_ATTRIBUTES_EMPTY_STATE_PROPS}
+            />
+          )}
 				</div>
 			</div>
 		</MainContent>
