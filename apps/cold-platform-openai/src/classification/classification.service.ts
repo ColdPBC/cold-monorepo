@@ -21,8 +21,7 @@ import {
 	BillOfMaterialsSchema,
 	PoProductsSchema,
 } from '../schemas';
-import { omit, snakeCase } from 'lodash';
-import { zerialize } from 'zodex';
+import { omit } from 'lodash';
 import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
 
 @Injectable()
