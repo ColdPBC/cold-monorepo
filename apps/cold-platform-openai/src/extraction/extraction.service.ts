@@ -187,7 +187,8 @@ export class ExtractionService extends BaseWorker {
 				type: classification.type,
 				metadata: {
 					status: 'ai_extracted',
-					classification: get(filePayload, 'metadata.classification'),
+					classification: classification,
+					extraction: parsedResponse,
 				},
 			};
 
@@ -295,8 +296,7 @@ export class ExtractionService extends BaseWorker {
 				metadata: {
 					...metadata,
 					status: 'failed',
-
-					classification: get(filePayload, 'metadata.classification'),
+					classification: classification,
 					error: e.message,
 				},
 			};
