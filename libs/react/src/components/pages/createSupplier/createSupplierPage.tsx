@@ -14,14 +14,14 @@ import {
   BaseButton,
   Card,
   ComboBox,
-  CreateMaterialTable,
+  CreateMaterialTable, ErrorFallback,
   Input,
   MainContent, Modal,
-  Spinner
 } from "@coldpbc/components";
 import {ButtonTypes, IconNames} from "@coldpbc/enums";
+import {withErrorBoundary} from "react-error-boundary";
 
-export const CreateSupplierPage = () => {
+const _CreateSupplierPage = () => {
   const {addToastMessage} = useAddToastMessage();
   const {logBrowser} = useColdContext();
   const { orgId } = useAuth0Wrapper();
@@ -574,3 +574,10 @@ export const CreateSupplierPage = () => {
 		</MainContent>
 	);
 }
+
+export const CreateSupplierPage = withErrorBoundary(_CreateSupplierPage, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in CreateSupplierPage: ', error);
+  },
+});

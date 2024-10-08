@@ -1,10 +1,10 @@
-import {BaseButton, Card, CreateMaterialTable} from "@coldpbc/components";
+import {BaseButton, Card, CreateMaterialTable, ErrorFallback} from "@coldpbc/components";
 import {ButtonTypes, IconNames} from "@coldpbc/enums";
 import React from "react";
 import {InputOption, Materials} from "@coldpbc/interfaces";
+import {withErrorBoundary} from "react-error-boundary";
 
-
-export const AddProductOrMaterialsCreateSupplierCard = (props : {
+const _AddProductOrMaterialsCreateSupplierCard = (props : {
   tier: InputOption;
   productsToAdd: {
     id: string;
@@ -46,3 +46,10 @@ export const AddProductOrMaterialsCreateSupplierCard = (props : {
     </Card>
   )
 }
+
+export const AddProductOrMaterialsCreateSupplierCard = withErrorBoundary(_AddProductOrMaterialsCreateSupplierCard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in AddProductOrMaterialsCreateSupplierCard: ', error);
+  },
+});
