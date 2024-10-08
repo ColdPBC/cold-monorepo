@@ -6,7 +6,7 @@ import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { ClassificationService } from '../classification/classification.service';
-import { get, snakeCase } from 'lodash';
+import { get, omit, snakeCase } from 'lodash';
 import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
 import { PDFDocument } from 'pdf-lib';
 import { fromBuffer } from 'pdf2pic';
@@ -187,7 +187,7 @@ export class ExtractionService extends BaseWorker {
 				type: classification.type,
 				metadata: {
 					status: 'ai_extracted',
-					classification: classification,
+					classification: omit(classification, ['extraction_schema']),
 					extraction: parsedResponse,
 				},
 			};
@@ -398,7 +398,7 @@ export class ExtractionService extends BaseWorker {
 				type: classification.type,
 				metadata: {
 					status: 'ai_extracted',
-					classification: get(orgFile, 'metadata.classification'),
+					classification: omit(classification, ['extraction_schema']),
 					...response.choices[0].message.parsed,
 				},
 			};

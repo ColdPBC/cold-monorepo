@@ -52,7 +52,7 @@ export class ExtractionProcessorService extends BaseWorker {
 					await this.productQueue.add('products', { content: extracted, user, organization }, { removeOnComplete: true, removeOnFail: true });
 				} else if (parsed.materials) {
 					await this.materialQueue.add('materials', { content: extracted, user, organization }, { removeOnComplete: true, removeOnFail: true });
-				} else {
+				} else if (parsed.supplier && parsed.supplier.name) {
 					await this.supplierQueue.add('suppliers', { content: extracted, user, organization }, { removeOnComplete: true, removeOnFail: true });
 				}
 			}
