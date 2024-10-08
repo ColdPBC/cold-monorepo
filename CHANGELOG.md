@@ -1,3 +1,10 @@
+## [1.414.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.2...v1.414.3) (2024-10-08)
+
+
+### Bug Fixes
+
+* enhance content classification rules ([b3e723c](https://github.com/ColdPBC/cold-monorepo/commit/b3e723c18f576c1ae3b232e4f56a94604e93f555))
+
 ## [1.414.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.1...v1.414.2) (2024-10-08)
 
 
