@@ -50,10 +50,6 @@ export class ClassificationService extends BaseWorker {
 		this.init();
 	}
 
-	isImage(extension: string) {
-		return ['png', 'jpg', 'gif', 'bmp', 'tiff', 'jpeg', 'heic'].includes(extension.toLowerCase());
-	}
-
 	async init() {
 		this.sus_attributes = (await this.prisma.sustainability_attributes.findMany({
 			select: {

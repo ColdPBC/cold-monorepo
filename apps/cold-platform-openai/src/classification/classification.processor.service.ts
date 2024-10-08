@@ -6,6 +6,7 @@ import { BaseWorker, S3Service } from '@coldpbc/nest';
 import { Queue } from 'bull';
 import { ExtractionService } from '../extraction/extraction.service';
 import { ExtractionJobPayload } from '../extraction/extraction.processor.service';
+import { isImage } from '../utility';
 
 @Injectable()
 @Processor({ name: 'openai:classification', scope: Scope.REQUEST })
@@ -42,7 +43,7 @@ export class ClassificationProcessorService extends BaseWorker {
 			}
 
 			// If original file was an image, convert it to base64
-			if (this.classification.isImage(extension)) {
+			if (isImage(extension)) {
 				const binaryString = String.fromCharCode(...fileBytes);
 
 				// Convert binary string to base64
@@ -78,7 +79,7 @@ export class ClassificationProcessorService extends BaseWorker {
 			} else if (openAiImageUrlContent.length > 0) {
 				// classify image pages and add to extraction queue
 				classification = await this.classification.classifyImageUrls(openAiImageUrlContent, user, filePayload, organization);
-				extractionJobData = { extension, isImage: this.classification.isImage(extension), classification, filePayload, user, organization };
+				extractionJobData = { extension, isImage: isImage(extension), classification, filePayload, user, organization };
 			}
 
 			await this.extractionQueue.add('extract', extractionJobData, { removeOnComplete: true, removeOnFail: true });

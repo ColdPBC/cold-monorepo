@@ -11,6 +11,7 @@ import { ChatService } from './chat/chat.service';
 import { PineconeService } from './pinecone/pinecone.service';
 import { ClassificationService } from './classification/classification.service';
 import { ExtractionService } from './extraction/extraction.service';
+import { isImage } from './utility';
 
 @Injectable()
 @Processor('openai')
@@ -74,10 +75,13 @@ export class JobConsumer extends BaseWorker {
 			{ filePayload: job.data.payload, user: job.data.user, organization: job.data.organization },
 			{ removeOnFail: true, removeOnComplete: true },
 		);
-		const processed = await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
 
-		if (!processed?.filePayload || !processed?.user || !processed?.organization) {
-			throw new Error('Failed to process file, missing required data');
+		if (!isImage(job.data.payload.key.split('.').pop().toLowerCase())) {
+			const processed = await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
+
+			if (!processed?.filePayload || !processed?.user || !processed?.organization) {
+				throw new Error('Failed to process file, missing required data');
+			}
 		}
 	}
 
