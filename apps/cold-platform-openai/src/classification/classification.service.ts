@@ -107,6 +107,10 @@ export class ClassificationService extends BaseWorker {
 	getClassifyPrompt(organization: organizations) {
 		return `You are a helpful assistant for ${organization.display_name} and you help users classify and extract data from documents that they upload.  Classify this content using the following rules:
     - if the content is an RSL (Restricted Substance List), classify it as a POLICY
+    - if the content is a wrap certificate, classify it as a CERTIFICATE
+    - if the content is a bluesign certificate, classify it as a CERTIFICATE
+    - if the content is a bluesign product certificate, classify it as a CERTIFICATE
+    - if the content is a certificate, classify it as a CERTIFICATE
     - if the content is a scope certificate, then classify it as a SCOPE_CERTIFICATE.  Only classify it this way if 'Scope Certificate' is found in the content.
     - if the content is a transaction certificate, then classify it as a TRANSACTION_CERTIFICATE. Only classify it this way if 'Transaction Certificate' is found in the content.
     - if the content is a statement, classify it as a STATEMENT
