@@ -1,9 +1,9 @@
 import {
-  AddToCreateMaterialModal,
+  AddToCreateEntityModal,
   BaseButton,
   Card,
   ComboBox,
-  CreateMaterialTable, ErrorFallback,
+  CreateEntityTable, ErrorFallback,
   Input,
   MainContent,
   Modal,
@@ -290,7 +290,7 @@ const _CreateMaterialPage = () => {
               variant={ButtonTypes.secondary}
               onClick={() => setCreateModalType('products')}
             />
-            <CreateMaterialTable
+            <CreateEntityTable
               type={'products'}
               remove={(id) => {
                 const newProducts = productsToAdd.filter((product) => product.id !== id);
@@ -314,7 +314,7 @@ const _CreateMaterialPage = () => {
               variant={ButtonTypes.secondary}
               onClick={() => setCreateModalType('attributes')}
             />
-            <CreateMaterialTable
+            <CreateEntityTable
               type={'attributes'}
               remove={(id) => {
                 const newAttributes = attributesToAdd.filter((attr) => attr.id !== id);
@@ -327,7 +327,7 @@ const _CreateMaterialPage = () => {
 			</div>
       {
         createModalType !== undefined && (
-          <AddToCreateMaterialModal
+          <AddToCreateEntityModal
             show={true}
             onClose={() => {
               setCreateModalType(undefined);

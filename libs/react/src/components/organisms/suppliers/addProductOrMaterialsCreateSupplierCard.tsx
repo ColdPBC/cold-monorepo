@@ -1,16 +1,14 @@
-import {BaseButton, Card, CreateMaterialTable, ErrorFallback} from "@coldpbc/components";
+import {BaseButton, Card, CreateEntityTable, ErrorFallback} from "@coldpbc/components";
 import {ButtonTypes, IconNames} from "@coldpbc/enums";
 import React from "react";
 import {InputOption, Materials} from "@coldpbc/interfaces";
 import {withErrorBoundary} from "react-error-boundary";
+import {Products} from "../../../interfaces/products";
 
 const _AddProductOrMaterialsCreateSupplierCard = (props : {
   tier: InputOption;
-  productsToAdd: {
-    id: string;
-    name: string;
-  }[];
-  setProductsToAdd: (products: { id: string; name: string; }[]) => void;
+  productsToAdd: Products[];
+  setProductsToAdd: (products: Products[]) => void;
   materialsToAdd: Materials[];
   setMaterialsToAdd: (materials: Materials[]) => void;
   setCreateModalType: (type: 'products' | 'materials') => void;
@@ -32,7 +30,7 @@ const _AddProductOrMaterialsCreateSupplierCard = (props : {
   return (
     <Card title={title} glow={true}>
       <BaseButton label={'Add'} iconLeft={IconNames.PlusIcon} variant={ButtonTypes.secondary} onClick={() => setCreateModalType(createModalType)} />
-      <CreateMaterialTable
+      <CreateEntityTable
         type={createModalType}
         remove={id => {
           if (createModalType === 'materials') {

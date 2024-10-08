@@ -66,6 +66,6 @@ const _CreateMaterialTable = (props: {
 }
 
 // create error boundary withErrorBoundary HOC to wrap the component
-export const CreateMaterialTable = withErrorBoundary(_CreateMaterialTable, {
+export const CreateEntityTable = withErrorBoundary(_CreateMaterialTable, {
   FallbackComponent: props => <ErrorFallback {...props} />,
 });

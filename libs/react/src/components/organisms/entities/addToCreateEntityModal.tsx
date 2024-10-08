@@ -169,6 +169,6 @@ const _AddToCreateMaterialModal = (props: {
   );
 }
 
-export const AddToCreateMaterialModal = withErrorBoundary(_AddToCreateMaterialModal, {
+export const AddToCreateEntityModal = withErrorBoundary(_AddToCreateMaterialModal, {
   FallbackComponent: props => <ErrorFallback {...props} />,
 });

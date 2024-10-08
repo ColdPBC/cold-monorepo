@@ -10,17 +10,18 @@ import React, {useEffect, useState} from "react";
 import {get, has, some} from "lodash";
 import {
   AddProductOrMaterialsCreateSupplierCard,
-  AddToCreateMaterialModal,
+  AddToCreateEntityModal,
   BaseButton,
   Card,
   ComboBox,
-  CreateMaterialTable, ErrorFallback,
+  CreateEntityTable, ErrorFallback,
   Input,
   MainContent, Modal,
 } from "@coldpbc/components";
 import {ButtonTypes, IconNames} from "@coldpbc/enums";
 import {withErrorBoundary} from "react-error-boundary";
 import {useSWRConfig} from "swr";
+import {Products} from "../../../interfaces/products";
 
 const _CreateSupplierPage = () => {
   const {addToastMessage} = useAddToastMessage();
@@ -59,8 +60,8 @@ const _CreateSupplierPage = () => {
   const [tier, setTier] = useState<InputOption>(placeHolderOption);
   const [attributes, setAttributes] = useState<Claims[]>([]);
   const [attributesToAdd, setAttributesToAdd] = useState<Claims[]>([]);
-  const [products, setProducts] = useState<{id: string, name: string}[]>([]);
-  const [productsToAdd, setProductsToAdd] = useState<{id: string, name: string}[]>([]);
+  const [products, setProducts] = useState<Products[]>([]);
+  const [productsToAdd, setProductsToAdd] = useState<Products[]>([]);
   const [materials, setMaterials] = useState<Materials[]>([]);
   const [materialsToAdd, setMaterialsToAdd] = useState<Materials[]>([]);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
@@ -77,7 +78,7 @@ const _CreateSupplierPage = () => {
   }>('GET_ALL_SUS_ATTRIBUTES');
 
   const productsQuery = useGraphQLSWR<{
-    products: {id: string, name: string}[];
+    products: Products[];
   }>(orgId ? 'GET_ALL_PRODUCTS' : null, {
     filter: {
       organization: {
@@ -493,7 +494,7 @@ const _CreateSupplierPage = () => {
           />
           <Card title={'Sustainability Attributes'} glow={true}>
 						<BaseButton label={'Add'} iconLeft={IconNames.PlusIcon} variant={ButtonTypes.secondary} onClick={() => setCreateModalType('attributes')} />
-						<CreateMaterialTable
+						<CreateEntityTable
 							type={'attributes'}
 							remove={id => {
 								const newAttributes = attributesToAdd.filter(attr => attr.id !== id);
@@ -505,14 +506,14 @@ const _CreateSupplierPage = () => {
 				</div>
 			</div>
 			{createModalType !== undefined && (
-				<AddToCreateMaterialModal
+				<AddToCreateEntityModal
 					show={true}
 					onClose={() => {
 						setCreateModalType(undefined);
 					}}
 					onAdd={(ids: string[]) => {
 						if (createModalType === 'products') {
-							const newProducts: { id: string; name: string }[] = [];
+							const newProducts: Products[] = [];
 							ids.forEach(id => {
 								const foundProduct = products.find(product => product.id === id);
 								if (foundProduct) {
