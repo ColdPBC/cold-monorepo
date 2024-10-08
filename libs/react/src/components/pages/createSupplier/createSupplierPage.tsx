@@ -20,9 +20,11 @@ import {
 } from "@coldpbc/components";
 import {ButtonTypes, IconNames} from "@coldpbc/enums";
 import {withErrorBoundary} from "react-error-boundary";
+import {useSWRConfig} from "swr";
 
 const _CreateSupplierPage = () => {
   const {addToastMessage} = useAddToastMessage();
+  const {mutate} = useSWRConfig();
   const {logBrowser} = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
@@ -232,6 +234,7 @@ const _CreateSupplierPage = () => {
           message: 'Supplier created successfully',
           type: ToastMessage.SUCCESS,
         })
+        await mutate('GET_ALL_SUPPLIERS_FOR_ORG');
         navigate('/suppliers');
       } else {
         logBrowser(
