@@ -15,7 +15,7 @@ import {
   MaterialsPage,
   ProtectedRoute,
   Signup,
-  SupplierDetail,
+  SupplierDetail, SupplierRoutes,
   SuppliersPage,
   SustainabilityPage,
   Terms,
@@ -44,9 +44,8 @@ export const ColdRoutes = () => {
         <Route path={'/settings/users'} element={<UserSettingsPage />} />
         <Route path="*" element={<Navigate to={defaultPage} replace={true} />} />
         {WizardRoutes()}
-        <Route path={'/suppliers'} element={ldFlags.showSuppliersPageCold890 ? <SuppliersPage /> : <Navigate to={defaultPage} replace={true} />} />
-        <Route path={'/suppliers/:id'} element={ldFlags.showSuppliersPageCold890 ? <SupplierDetail /> : <Navigate to={defaultPage} replace={true} />} />
         {MaterialRoutes()}
+        {SupplierRoutes()}
         <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={defaultPage} replace={true} />} />
 
         // Temporary redirects from old route until we're certain that the seeds are updated to the new sidebar.

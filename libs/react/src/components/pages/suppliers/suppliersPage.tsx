@@ -1,8 +1,12 @@
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback, MainContent, SuppliersDataGrid } from '@coldpbc/components';
+import {BaseButton, ErrorFallback, MainContent, SuppliersDataGrid} from '@coldpbc/components';
 import React from 'react';
+import {useNavigate} from "react-router-dom";
+import {useFlags} from "launchdarkly-react-client-sdk";
 
 const _SuppliersPage = () => {
+  const ldFlags = useFlags();
+  const navigate = useNavigate();
   const [managementView, setManagementView] = React.useState('Tier 1 Suppliers');
   const tabs = ['Tier 1 Suppliers', 'Tier 2 Suppliers'];
 
@@ -14,8 +18,20 @@ const _SuppliersPage = () => {
     }
   };
 
+  const getPageButtons = () => {
+    return <div>
+      {
+        ldFlags.showCreateSupplierPageCold1014 &&
+        <BaseButton
+          onClick={() => navigate('/suppliers/new')}
+          label={'Add New'}
+          className={'h-[40px]'}/>
+      }
+    </div>
+  };
+
   return (
-    <MainContent title="Suppliers" className={'w-[calc(100%-100px)]'}>
+    <MainContent title="Suppliers" className={'w-[calc(100%-100px)]'} headerElement={getPageButtons()}>
       <div className={'flex flex-row w-full justify-start relative'} data-testid={'suppliers-tabs'}>
         <div className={'absolute bottom-0 left-0 h-[2px] bg-gray-90 w-full'}></div>
         {tabs.map(tab => (

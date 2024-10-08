@@ -9,29 +9,22 @@ import {
 } from "@mui/x-data-grid";
 import {ButtonTypes} from "@coldpbc/enums";
 import React, {useEffect, useState} from "react";
-import {Claims} from "@coldpbc/interfaces";
 import {Checkbox} from "@mui/material";
-import {lowerCase, startCase} from "lodash";
 import {withErrorBoundary} from "react-error-boundary";
 
 const _AddToCreateMaterialModal = (props: {
   show: boolean;
   onClose: () => void;
   onAdd: (ids: string[]) => void;
-  type: "products" | "attributes";
-  products: {
-    id: string;
-    name: string;
-  }[];
-  attributes: Claims[]
+  type: "products" | "attributes" | "materials";
+  entities: any[]
 }) => {
   const {
     type,
     show,
     onClose,
     onAdd,
-    products,
-    attributes,
+    entities
   } = props;
   const [rowsSelected, setRowsSelected] = useState<GridRowSelectionModel>([]);
   const [addButtonDisabled, setAddButtonDisabled] = useState(true);
@@ -76,35 +69,17 @@ const _AddToCreateMaterialModal = (props: {
   ];
   let rows: any[] = [];
 
-  if(type === "products") {
-    columns.push(
-      {
-        field: 'name',
-        headerName: 'Name',
-        minWidth: 130,
-        flex: 1,
-        headerClassName: 'bg-gray-30',
-        cellClassName: 'bg-gray-10',
-      },
-    )
-    rows = products.map((product) => {
-      return product
-    })
-  } else {
-    columns.push(...[
-      {
-        field: 'name',
-        headerName: 'Name',
-        minWidth: 130,
-        flex: 1,
-        headerClassName: 'bg-gray-30',
-        cellClassName: 'bg-gray-10',
-      },
-    ])
-    rows = attributes.map((attribute) => {
-      return attribute
-    })
-  }
+  columns.push(
+    {
+      field: 'name',
+      headerName: 'Name',
+      minWidth: 130,
+      flex: 1,
+      headerClassName: 'bg-gray-30',
+      cellClassName: 'bg-gray-10',
+    },
+  )
+  rows = entities
 
   useEffect(() => {
     setAddButtonDisabled(rowsSelected.length === 0);
@@ -118,9 +93,24 @@ const _AddToCreateMaterialModal = (props: {
     );
   };
 
-  const title = type === "products" ? 'Add Products' : 'Add Sustainability Attribute to Track';
+  let title = "";
+  let buttonText = "";
 
-  const buttonText = type === "products" ? 'Add Products' : 'Add Attributes';
+  switch (type) {
+    case 'products':
+      title = 'Add Products';
+      buttonText = 'Add Products';
+      break;
+    case 'attributes':
+      title = 'Add Sustainability Attribute to Track';
+      buttonText = 'Add Attributes';
+      break;
+    default:
+    case 'materials':
+      title = 'Add Materials';
+      buttonText = 'Add Materials';
+      break;
+  }
 
   return (
     <FBModal
@@ -179,6 +169,6 @@ const _AddToCreateMaterialModal = (props: {
   );
 }
 
-export const AddToCreateMaterialModal = withErrorBoundary(_AddToCreateMaterialModal, {
+export const AddToCreateEntityModal = withErrorBoundary(_AddToCreateMaterialModal, {
   FallbackComponent: props => <ErrorFallback {...props} />,
 });

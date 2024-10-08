@@ -199,20 +199,36 @@ export const CREATE_MATERIAL_SUPPLIER = gql`
 `
 
 export const GET_ALL_PRODUCTS= gql`
-query Products($filter: ProductsListFilter){
-  products(filter: $filter){
-    id
-    name
+  query Products($filter: ProductsListFilter){
+    products(filter: $filter){
+      id
+      name
+    }
   }
-}
 `
 
 export const CREATE_PRODUCT_MATERIAL = gql`
-mutation CreateProductMaterial($input: ProductMaterialInsertInput!){
-  createProductMaterial(input: $input){
-    id
+  mutation CreateProductMaterial($input: ProductMaterialInsertInput!){
+    createProductMaterial(input: $input){
+      id
+    }
   }
-}
+`
+
+export const CREATE_SUPPLIER = gql`
+  mutation CreateOrganizationFacility($input: OrganizationFacilityInsertInput!) {
+    createOrganizationFacility(input: $input) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($input: ProductUpdateInput!){
+    updateProduct(input: $input){
+      id
+    }
+  }
 `
 
 export const queries: {
@@ -234,4 +250,6 @@ export const queries: {
   CREATE_MATERIAL_SUPPLIER: CREATE_MATERIAL_SUPPLIER,
   GET_ALL_PRODUCTS: GET_ALL_PRODUCTS,
   CREATE_PRODUCT_MATERIAL: CREATE_PRODUCT_MATERIAL,
+  CREATE_SUPPLIER: CREATE_SUPPLIER,
+  UPDATE_PRODUCT: UPDATE_PRODUCT,
 };
