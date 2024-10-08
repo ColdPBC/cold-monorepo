@@ -174,6 +174,10 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
           name
         }
       }
+      products {
+        id
+        name
+      }
     }
   }
 `;
