@@ -1,3 +1,10 @@
+## [1.413.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.413.0...v1.413.1) (2024-10-08)
+
+
+### Bug Fixes
+
+* remove redundant file status check in onRowClick ([64524eb](https://github.com/ColdPBC/cold-monorepo/commit/64524eb053793bf433074c8f6857ebfc7004e2f7))
+
 # [1.413.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.412.1...v1.413.0) (2024-10-07)
 
 
