@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 
 import {SustainabilityAttributeCard} from './sustainabilityAttributeCard';
-import { SustainabilityAttributesLevel, SustainabilityAttributesType } from '../../../../../../apps/cold-graphql/src/types.generated';
 
 const meta: Meta<typeof SustainabilityAttributeCard> = {
   title: "Molecules/SustainabilityAttributeCard",
@@ -19,10 +18,7 @@ export const Default: Story = {
       id: 'a',
       name: 'Default Product Attribute',
       attributeAssurances: [],
-      attributeAssurances_aggregate: { count: 0 },
-      deleted: false,
-      level: SustainabilityAttributesLevel.Product,
-      type: SustainabilityAttributesType.ThirdParty
+      level: 'PRODUCT',
     }
   }
 };
@@ -33,11 +29,8 @@ export const MaterialAttributeWithLogoAndOneAssurance: Story = {
       id: 'a',
       name: 'Global Recycled Standard',
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
-      attributeAssurances: [],
-      attributeAssurances_aggregate: { count: 1 },
-      deleted: false,
-      level: SustainabilityAttributesLevel.Material,
-      type: SustainabilityAttributesType.ThirdParty
+      attributeAssurances: [{ id: 'a'}],
+      level: 'MATERIAL',
     }
   }
 };
@@ -48,11 +41,8 @@ export const SupplierAttributeWithLogoAndManyAssurances: Story = {
       id: 'a',
       name: 'Fair Wear',
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
-      attributeAssurances: [],
-      attributeAssurances_aggregate: { count: 3 },
-      deleted: false,
-      level: SustainabilityAttributesLevel.Supplier,
-      type: SustainabilityAttributesType.ThirdParty
+      attributeAssurances: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
+      level: 'SUPPLIER',
     }
   }
 };
