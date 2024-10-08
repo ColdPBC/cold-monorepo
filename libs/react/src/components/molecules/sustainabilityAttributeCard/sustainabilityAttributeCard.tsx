@@ -30,16 +30,16 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
 	const [imgSrc, setImgSrc] = useState<string>(sustainabilityAttribute.logoUrl || DEFAULT_ICON_URL);
 
 	return (
-		<div className="w-full h-auto p-4 rounded-2xl border border-[#656b99] justify-start items-start gap-4 inline-flex">
+		<div className="w-full h-auto p-4 rounded-2xl border border-gray-90 justify-start items-start gap-4 inline-flex">
 			<div className="w-24 h-24 flex-shrink-0 rounded-lg justify-start items-center gap-2.5 flex">
 				<img className="w-full h-full object-cover rounded-lg" src={imgSrc} alt={`Logo for ${sustainabilityAttribute.name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
 			</div>
 			<div className="grow shrink basis-0 self-stretch flex-col justify-between items-start inline-flex">
-				<div className="self-stretch text-white text-l font-bold font-['Inter']">{sustainabilityAttribute.name}</div>
+				<div className="self-stretch text-tc-primary text-l font-bold">{sustainabilityAttribute.name}</div>
 				<div className="self-stretch justify-start items-end gap-2 inline-flex">
 					<div
 						className={`
-              text-sm font-bold font-['Inter'] leading-[21px]
+              text-sm font-bold leading-[21px]
               ${(sustainabilityAttribute.attributeAssurances?.length || 0) > 0 ? 'text-tc-primary' : 'text-tc-disabled'}
             `}
           >
