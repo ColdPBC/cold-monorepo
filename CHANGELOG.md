@@ -1,3 +1,10 @@
+## [1.414.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.1...v1.414.2) (2024-10-08)
+
+
+### Bug Fixes
+
+* correct metadata classification and add extraction details ([fe6908b](https://github.com/ColdPBC/cold-monorepo/commit/fe6908bc3ec61f2ffa65b0cdb0576e0bad2bc7c7))
+
 ## [1.414.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.0...v1.414.1) (2024-10-08)
 
 
