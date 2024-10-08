@@ -1,3 +1,10 @@
+## [1.414.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.0...v1.414.1) (2024-10-08)
+
+
+### Bug Fixes
+
+* rework classification and extraction services to address REDIS OOM error ([a5591c5](https://github.com/ColdPBC/cold-monorepo/commit/a5591c5e964ced3707c787e283a7e6bcbb8718b5))
+
 # [1.414.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.413.1...v1.414.0) (2024-10-08)
 
 
