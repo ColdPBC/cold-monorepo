@@ -56,7 +56,7 @@ const _SustainabilityPage = () => {
             </div>
           ))}
 				</div>
-				<div className={'flex-grow flex items-center justify-center'}>
+				<div>
 					{tabView === 'My Attributes' ? (
 						<SustainabilityAttributeTab sustainabilityAttributes={myAttributes} tab={'My Attributes'} />
 					) : (

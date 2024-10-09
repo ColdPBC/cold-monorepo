@@ -42,7 +42,7 @@ export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProp
     );
   } else {
     return (
-      <div className={'flex flex-col'}>
+      <div className={'justify-items-stretch'}>
         <div className='py-6 grid single:grid-cols-1 double:grid-cols-2 triple:grid-cols-3 gap-4'>
           {
             sustainabilityAttributes.map(sustainabilityAttribute => (
