@@ -181,6 +181,18 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
           },
         },
       ],
+      productMaterials: [
+        {
+          id: 'opm_abc',
+          product: {
+            id: 'op_abc',
+            organizationFacility: {
+              id: 'ofac_abc',
+              name: 'Assembly Factory',
+            },
+          },
+        },
+      ]
     },
     {
       id: 'mat_ly6o0o0dfqqpz8vy1dcpefyl',
@@ -212,6 +224,28 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
           },
         },
       ],
+      productMaterials: [
+        {
+          id: 'opm_abc',
+          product: {
+            id: 'op_abc',
+            organizationFacility: {
+              id: 'ofac_abc',
+              name: 'Assembly Factory',
+            },
+          },
+        },
+        {
+          id: 'opm_def',
+          product: {
+            id: 'op_def',
+            organizationFacility: {
+              id: 'ofac_def',
+              name: 'Another Assembly Factory',
+            },
+          },
+        },
+      ]
     },
     {
       id: 'mat_cdvjpbctliv2b0afo9inys2y',
@@ -235,6 +269,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
         },
       ],
       attributeAssurances: [],
+      productMaterials: [],
     },
     {
       id: 'mat_j7xtvksv2jrlxdzrd2m6bvbt',
@@ -258,6 +293,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
           },
         },
       ],
+      productMaterials: [],
     },
     {
       id: 'mat_ibakmtajuny03w5m7s82r10y',
@@ -273,6 +309,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
         },
       ],
       attributeAssurances: [],
+      productMaterials: [],
     },
     {
       id: 'mat_inry3efikrihb7yh2nr2zj9e',
@@ -288,6 +325,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
         },
       ],
       attributeAssurances: [],
+      productMaterials: [],
     },
   ];
 }
