@@ -410,13 +410,8 @@ const _DocumentDetailsSidebar = (props: {
 					},
 				};
         // update the file metadata
-				if (file.metadata) {
-					variables.input.metadata = file.metadata;
-				} else {
-          variables.input.metadata = {};
-        }
-
         variables.input.metadata = {
+          ...(file.metadata || {}),
           effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
           effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
         };
@@ -454,6 +449,7 @@ const _DocumentDetailsSidebar = (props: {
       // update assurances if sustainability attribute is not undefined
 			if (sustainabilityAttribute !== undefined) {
         if (hasAssurances) {
+          // delete existing assurances
           const deleteCals = getDeleteAttributeAssuranceCalls(sustainabilityAttribute);
           promises.push(...deleteCals);
           // update each assurance
@@ -478,7 +474,7 @@ const _DocumentDetailsSidebar = (props: {
             );
           });
         } else {
-          // check
+          // create new assurance
           promises.push(
             createAttributeAssurance({
               input: {
