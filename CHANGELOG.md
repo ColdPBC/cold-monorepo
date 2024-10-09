@@ -1,3 +1,10 @@
+## [1.415.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.0...v1.415.1) (2024-10-09)
+
+
+### Bug Fixes
+
+* update file type check and optimize save button logic ([ad539cb](https://github.com/ColdPBC/cold-monorepo/commit/ad539cb3871aea0476289630b1918c02c5af1531))
+
 # [1.415.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.5...v1.415.0) (2024-10-09)
 
 
