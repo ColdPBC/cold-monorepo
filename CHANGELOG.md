@@ -1,3 +1,10 @@
+## [1.415.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.2...v1.415.3) (2024-10-09)
+
+
+### Bug Fixes
+
+* issue preventing attribute assurance from being created ([12c1987](https://github.com/ColdPBC/cold-monorepo/commit/12c1987ae071b6a1782b5749dad9401984811044))
+
 ## [1.415.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.1...v1.415.2) (2024-10-09)
 
 
