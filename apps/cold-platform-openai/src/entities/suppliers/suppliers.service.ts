@@ -52,8 +52,10 @@ export class SuppliersService extends BaseWorker {
 			});
 
 			this.logger.info('Created supplier', { supplier, organization, user });
+
+			return {};
 		}
 
-		return parsed;
+		throw new Error('No supplier name found');
 	}
 }

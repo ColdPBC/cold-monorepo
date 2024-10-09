@@ -22,8 +22,9 @@ export type PineconeMetadata = {
 };
 
 export interface OpenAiBase64ImageUrl {
-	type: 'image_url';
-	image_url: { url: string };
+	type: string;
+	text?: string;
+	image_url?: { url: string };
 }
 
 @Injectable()
@@ -497,18 +498,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
 			let bytes: Uint8Array = new Uint8Array();
 
-			if (['png', 'jpg', 'gif', 'bmp', 'tiff', 'jpeg', 'heic'].includes(extension.toLowerCase())) {
-				const url = await this.s3.getSignedURL(user, filePayload?.bucket, filePayload?.key, 3600);
-				const response = await this.extraction.extractDataFromContent(url, user, filePayload, organization);
-
-				if (response) {
-					// Encode the JSON string to a byte array
-					const encoder = new TextEncoder();
-					bytes = encoder.encode(JSON.stringify(response));
-				}
-
-				return { bytes, extension, organization, user, filePayload };
-			} else if (extension === 'xlsx') {
+			if (extension === 'xlsx') {
 				const pdfBytes = await this.convertXlsToPdf(user, filePayload, organization);
 
 				if (!pdfBytes) {

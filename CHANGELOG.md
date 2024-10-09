@@ -1,3 +1,81 @@
+# [1.416.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.3...v1.416.0) (2024-10-09)
+
+
+### Bug Fixes
+
+* **design feedback:** don't bold the entity count (e.g. '2 Materials') ([8015fdc](https://github.com/ColdPBC/cold-monorepo/commit/8015fdc24b70ad125e962cadfe8b785ea81587c1))
+* **styling:** make sure that items fill the available space and are left justified when they are few and/or narrow ([a1ac114](https://github.com/ColdPBC/cold-monorepo/commit/a1ac114c7305161d2c39cc37ec83c3d5229bd11a))
+
+
+### Features
+
+* add cards, move Empty state strings back to the tab, etc. (sorry it's not more organized) ([978ab8e](https://github.com/ColdPBC/cold-monorepo/commit/978ab8e50bada4b3517cca6ed58750240f4f52c5))
+* create new sustainabilityAttributeCard component ([8018ef1](https://github.com/ColdPBC/cold-monorepo/commit/8018ef1116e989c922067e6e76e0e1c4d618e3d2))
+
+## [1.415.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.2...v1.415.3) (2024-10-09)
+
+
+### Bug Fixes
+
+* issue preventing attribute assurance from being created ([12c1987](https://github.com/ColdPBC/cold-monorepo/commit/12c1987ae071b6a1782b5749dad9401984811044))
+
+## [1.415.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.1...v1.415.2) (2024-10-09)
+
+
+### Bug Fixes
+
+* simplify metadata assignment in DocumentDetailsSidebar ([0febfd6](https://github.com/ColdPBC/cold-monorepo/commit/0febfd65a714222c916769b9a02a567f6e4cf5b8))
+* update and delete metadata and assurances conditionally ([5dbd6c1](https://github.com/ColdPBC/cold-monorepo/commit/5dbd6c1ae81b986b1836ab85ac7f48f13806190f))
+
+## [1.415.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.0...v1.415.1) (2024-10-09)
+
+
+### Bug Fixes
+
+* update file type check and optimize save button logic ([ad539cb](https://github.com/ColdPBC/cold-monorepo/commit/ad539cb3871aea0476289630b1918c02c5af1531))
+
+# [1.415.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.5...v1.415.0) (2024-10-09)
+
+
+### Features
+
+* register new queue for file classification in chat module ([0658df5](https://github.com/ColdPBC/cold-monorepo/commit/0658df501e497ce2bcbefd425c8d6b4b36583c05))
+
+## [1.414.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.4...v1.414.5) (2024-10-08)
+
+
+### Bug Fixes
+
+* move `isImage` function to utility module ([2d35030](https://github.com/ColdPBC/cold-monorepo/commit/2d35030cd1287193ff20ad7d23a1a34312b7ede1))
+
+## [1.414.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.3...v1.414.4) (2024-10-08)
+
+
+### Bug Fixes
+
+* omit 'extraction_schema' from classification in metadata and refine queue conditionals ([3161f70](https://github.com/ColdPBC/cold-monorepo/commit/3161f709986c5a08dc7cf1394813ae2d4221dda4))
+
+## [1.414.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.2...v1.414.3) (2024-10-08)
+
+
+### Bug Fixes
+
+* enhance content classification rules ([b3e723c](https://github.com/ColdPBC/cold-monorepo/commit/b3e723c18f576c1ae3b232e4f56a94604e93f555))
+
+## [1.414.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.1...v1.414.2) (2024-10-08)
+
+
+### Bug Fixes
+
+* correct metadata classification and add extraction details ([fe6908b](https://github.com/ColdPBC/cold-monorepo/commit/fe6908bc3ec61f2ffa65b0cdb0576e0bad2bc7c7))
+
+## [1.414.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.0...v1.414.1) (2024-10-08)
+
+
+### Bug Fixes
+
+* rework classification and extraction services to address REDIS OOM error ([a5591c5](https://github.com/ColdPBC/cold-monorepo/commit/a5591c5e964ced3707c787e283a7e6bcbb8718b5))
+
 # [1.414.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.413.1...v1.414.0) (2024-10-08)
 
 

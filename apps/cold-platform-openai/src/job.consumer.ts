@@ -9,8 +9,9 @@ import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
 import { ChatService } from './chat/chat.service';
 import { PineconeService } from './pinecone/pinecone.service';
-import { ClassificationService } from './extraction/classification.service';
+import { ClassificationService } from './classification/classification.service';
 import { ExtractionService } from './extraction/extraction.service';
+import { isImage } from './utility';
 
 @Injectable()
 @Processor('openai')
@@ -19,7 +20,7 @@ export class JobConsumer extends BaseWorker {
 	started: Date;
 
 	constructor(
-		@InjectQueue('openai:extraction') readonly extractionQueue: Queue,
+		@InjectQueue('openai:classification') readonly classification: Queue,
 		readonly config: ConfigService,
 		readonly appService: AppService,
 		readonly assistant: AssistantService,
@@ -69,13 +70,19 @@ export class JobConsumer extends BaseWorker {
 
 	@Process('file.uploaded')
 	async processFileJob(job: Job) {
-		const processed = await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
-		//this.fileService.uploadOrgFilesToOpenAI(job);
-		if (!processed?.bytes || !processed?.filePayload || !processed?.user || !processed?.organization) {
-			throw new Error('Failed to process file, missing required data');
-		}
+		await this.classification.add(
+			'classify',
+			{ filePayload: job.data.payload, user: job.data.user, organization: job.data.organization },
+			{ removeOnFail: true, removeOnComplete: true },
+		);
 
-		await this.extractionQueue.add('extract', processed);
+		if (!isImage(job.data.payload.key.split('.').pop().toLowerCase())) {
+			const processed = await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
+
+			if (!processed?.filePayload || !processed?.user || !processed?.organization) {
+				throw new Error('Failed to process file, missing required data');
+			}
+		}
 	}
 
 	@Process('file.deleted')

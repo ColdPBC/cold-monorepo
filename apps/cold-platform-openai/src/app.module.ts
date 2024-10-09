@@ -22,6 +22,7 @@ import { CrawlerModule } from './crawler/crawler.module';
 import { EventsModule } from '../../cold-api/src/platform/modules/utilities/events/events.module';
 import { ExtractionModule } from './extraction/extraction.module';
 import { EntitiesModule } from './entities/entities.module';
+import { ClassificationModule } from './classification/classification.module';
 
 @Module({
 	imports: [FreeplayModule, CrawlerModule, ExtractionModule, EntitiesModule],
@@ -77,6 +78,9 @@ export class AppModule {
 						maxStalledCount: 120,
 					},
 				}),
+				BullModule.registerQueue({
+					name: 'openai:classification',
+				}),
 				ServeStaticModule.forRoot({
 					serveStaticOptions: {
 						index: false,
@@ -84,6 +88,7 @@ export class AppModule {
 					},
 					serveRoot: '../../../assets',
 				}),
+				ClassificationModule,
 				EntitiesModule,
 				PrismaModule,
 				await ColdRabbitModule.forRootAsync(),
