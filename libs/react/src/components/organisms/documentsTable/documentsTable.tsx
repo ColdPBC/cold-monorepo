@@ -1,6 +1,6 @@
 import { DataGrid, GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridValidRowModel, MuiEvent } from '@mui/x-data-grid';
 import { ClaimStatus, IconNames } from '@coldpbc/enums';
-import { ColdIcon, ErrorFallback, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
+import {ColdIcon, DataGridCellHoverPopover, ErrorFallback, MUIDataGridNoRowsOverlay} from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays, format } from 'date-fns';
 import { capitalize } from 'lodash';
@@ -286,11 +286,12 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			field: 'associated_records',
 			headerName: 'Associated Records',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
-			flex: 1,
-			minWidth: 300,
+      width: 350,
 			type: 'singleSelect',
 			valueOptions: toArray(allAssociatedRecords),
-			renderCell: renderAssociatedRecords,
+      renderCell: (params) => {
+        return <DataGridCellHoverPopover params={params} color={HexColors.purple["200"]} />;
+      },
 			sortComparator: listSortComparator,
 			filterOperators: listFilterOperators,
 		},

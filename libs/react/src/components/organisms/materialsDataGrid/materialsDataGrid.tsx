@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MaterialsWithRelations } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
-import { ErrorFallback, MuiDataGrid, Spinner } from '@coldpbc/components';
+import {DataGridCellHoverPopover, ErrorFallback, MuiDataGrid, Spinner} from '@coldpbc/components';
 import {
   GridColDef,
   GridRenderCellParams,
@@ -13,10 +13,9 @@ import {
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import { get, has, uniq } from 'lodash';
-import { listFilterOperators } from '@coldpbc/lib';
+import {listFilterOperators, listSortComparator} from '@coldpbc/lib';
 import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
-import { HexColors } from '@coldpbc/themes';
 
 const _MaterialsDataGrid = () => {
   const { orgId } = useAuth0Wrapper();
@@ -65,63 +64,51 @@ const _MaterialsDataGrid = () => {
     return <Spinner />;
   }
 
-  const renderSusAttributes = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    // loop through the array of suppliers and return the suppliers
-    return (
-      <div className={'h-full flex items-center text-body text-tc-primary font-bold gap-[10px] truncate'}>
-        {params.value.map((supplier: string, index: number) => {
-          return (
-            <div key={index} className={'rounded-[32px] border-[1px] border-primary px-[12px] w-auto whitespace-nowrap'}>
-              <span className={'text-body'}>{supplier}</span>
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  const columns: GridColDef[] = [
-    {
-      field: 'name',
-      headerName: 'Name',
-      headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      minWidth: 230,
-      renderCell: params => {
-        return <div className={'h-full flex items-center text-body text-tc-primary font-bold truncate'}>{params.value}</div>;
+	const columns: GridColDef[] = [
+		{
+			field: 'name',
+			headerName: 'Name',
+			headerClassName: 'bg-gray-30 h-[37px] text-body',
+			flex: 1,
+			minWidth: 230,
+			renderCell: params => {
+				return <div className={'h-full flex items-center text-body text-tc-primary font-bold truncate'}>{params.value}</div>;
+			},
+		},
+		{
+			field: 'sustainabilityAttributes',
+			headerName: 'Sustainability Attributes',
+			headerClassName: 'bg-gray-30 h-[37px] text-body',
+			width: 350,
+			type: 'singleSelect',
+			valueOptions: uniqSusAttributes,
+			renderCell: (params) => {
+        return <DataGridCellHoverPopover params={params} />;
       },
-    },
-    {
-      field: 'sustainabilityAttributes',
-      headerName: 'Sustainability Attributes',
-      headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      minWidth: 230,
-      type: 'singleSelect',
-      valueOptions: uniqSusAttributes,
-      renderCell: renderSusAttributes,
+      sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
-      valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
-    },
-    {
-      field: 'tier2Supplier',
-      headerName: 'Tier 2 Supplier',
-      headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      minWidth: 230,
-      type: 'singleSelect',
-      valueOptions: uniqTier2Suppliers,
-    },
-    {
-      field: 'usedBy',
-      headerName: 'Used By',
-      headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      minWidth: 230,
-      type: 'singleSelect',
-      valueOptions: uniqTier1Suppliers,
-    },
-  ];
+			valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
+      resizable: false,
+		},
+		{
+			field: 'tier2Supplier',
+			headerName: 'Tier 2 Supplier',
+			headerClassName: 'bg-gray-30 h-[37px] text-body',
+			flex: 1,
+			minWidth: 230,
+			type: 'singleSelect',
+			valueOptions: uniqTier2Suppliers,
+		},
+		{
+			field: 'usedBy',
+			headerName: 'Used By',
+			headerClassName: 'bg-gray-30 h-[37px] text-body',
+			flex: 1,
+			minWidth: 230,
+			type: 'singleSelect',
+			valueOptions: uniqTier1Suppliers,
+		},
+	];
 
   const newRows: GridValidRowModel[] = [];
 
