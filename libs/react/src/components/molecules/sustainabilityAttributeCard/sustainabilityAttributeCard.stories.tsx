@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import {SustainabilityAttributeCard} from './sustainabilityAttributeCard';
+import {SustainabilityAttributeCard} from '@coldpbc/components';
 
 const meta: Meta<typeof SustainabilityAttributeCard> = {
   title: "Molecules/SustainabilityAttributeCard",

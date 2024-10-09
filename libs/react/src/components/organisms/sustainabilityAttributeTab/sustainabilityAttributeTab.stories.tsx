@@ -3,7 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import {SustainabilityAttributeTab} from '@coldpbc/components';
 
 const meta: Meta<typeof SustainabilityAttributeTab> = {
-  title: "Molecules/SustainabilityAttributeCard",
+  title: "Molecules/SustainabilityAttributeTab",
   component: SustainabilityAttributeTab,
   tags: ["autodocs"],
   decorators: [],
