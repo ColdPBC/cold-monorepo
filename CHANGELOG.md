@@ -1,3 +1,10 @@
+# [1.415.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.5...v1.415.0) (2024-10-09)
+
+
+### Features
+
+* register new queue for file classification in chat module ([0658df5](https://github.com/ColdPBC/cold-monorepo/commit/0658df501e497ce2bcbefd425c8d6b4b36583c05))
+
 ## [1.414.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.414.4...v1.414.5) (2024-10-08)
 
 
