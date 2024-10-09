@@ -75,11 +75,11 @@ export class ClassificationProcessorService extends BaseWorker {
 			if (content) {
 				// classify text content and add to extraction queue
 				classification = await this.classification.classifyContent(content, user, filePayload, organization);
-				extractionJobData = { content, extension, classification, filePayload, user, organization };
+				extractionJobData = { content, extension, classification, filePayload, user, organization, attributes: this.classification.sus_attributes };
 			} else if (openAiImageUrlContent.length > 0) {
 				// classify image pages and add to extraction queue
 				classification = await this.classification.classifyImageUrls(openAiImageUrlContent, user, filePayload, organization);
-				extractionJobData = { extension, isImage: isImage(extension), classification, filePayload, user, organization };
+				extractionJobData = { extension, isImage: isImage(extension), classification, filePayload, user, organization, attributes: this.classification.sus_attributes };
 			}
 
 			await this.extractionQueue.add('extract', extractionJobData, { removeOnComplete: true, removeOnFail: true });

@@ -215,7 +215,7 @@ export const GET_ALL_PRODUCTS= gql`
       name
     }
   }
-`
+`;
 
 export const CREATE_PRODUCT_MATERIAL = gql`
   mutation CreateProductMaterial($input: ProductMaterialInsertInput!){
@@ -223,7 +223,7 @@ export const CREATE_PRODUCT_MATERIAL = gql`
       id
     }
   }
-`
+`;
 
 export const CREATE_SUPPLIER = gql`
   mutation CreateOrganizationFacility($input: OrganizationFacilityInsertInput!) {
@@ -239,7 +239,21 @@ export const UPDATE_PRODUCT = gql`
       id
     }
   }
-`
+`;
+
+export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG = gql`
+  query SustainabilityAttributes($organizationId: ID!, $filter: SustainabilityAttributesListFilter) {
+    sustainabilityAttributes(filter: $filter) {
+      id
+      attributeAssurances(filter: { organization: { id: $organizationId } }) {
+        id
+      }
+      level
+      logoUrl
+      name
+    }
+  }
+`;
 
 export const queries: {
   [key: string]: DocumentNode;
@@ -256,6 +270,7 @@ export const queries: {
   GET_ALL_MATERIALS_FOR_ORG: GET_ALL_MATERIALS_FOR_ORG,
   GET_ALL_SCHEMA_ENUMS: GET_ALL_SCHEMA_ENUMS,
   GET_ALL_SUPPLIERS_FOR_ORG: GET_ALL_SUPPLIERS_FOR_ORG,
+  GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
   CREATE_MATERIAL: CREATE_MATERIAL,
   CREATE_MATERIAL_SUPPLIER: CREATE_MATERIAL_SUPPLIER,
   GET_ALL_PRODUCTS: GET_ALL_PRODUCTS,

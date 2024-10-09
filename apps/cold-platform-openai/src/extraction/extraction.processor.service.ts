@@ -4,7 +4,7 @@ import { ExtractionService } from './extraction.service';
 import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
 import { BaseWorker, IAuthenticatedUser, S3Service } from '@coldpbc/nest';
 import { Queue } from 'bull';
-import { organization_files, organizations } from '@prisma/client';
+import { organization_files, organizations, sustainability_attributes } from '@prisma/client';
 
 export interface ExtractionJobPayload {
 	extension: string;
@@ -15,6 +15,7 @@ export interface ExtractionJobPayload {
 	organization: organizations;
 	content?: string;
 	openAiImageUrlContent?: OpenAiBase64ImageUrl[];
+	attributes: sustainability_attributes[];
 }
 
 @Injectable()
@@ -32,7 +33,7 @@ export class ExtractionProcessorService extends BaseWorker {
 
 	@Process('extract')
 	async processExtractionJob(job: any) {
-		const { extension, classification, content, isImage, filePayload, user, organization } = job.data;
+		const { extension, classification, content, isImage, filePayload, user, organization, attributes } = job.data;
 
 		this.logger.info(`Extracting data from ${filePayload.original_name}`, { extension, classification, filePayload, user, organization });
 
@@ -40,9 +41,9 @@ export class ExtractionProcessorService extends BaseWorker {
 			let extracted: any;
 
 			if (content) {
-				extracted = await this.extraction.extractDataFromContent(content, classification, user, filePayload, organization);
+				extracted = await this.extraction.extractDataFromContent(content, classification, user, filePayload, organization, attributes);
 			} else {
-				extracted = await this.extraction.extractDataFromImages(classification, extension, isImage, user, filePayload, organization);
+				extracted = await this.extraction.extractDataFromImages(classification, extension, isImage, user, filePayload, organization, attributes);
 			}
 
 			if (extracted) {
