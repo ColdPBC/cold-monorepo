@@ -5,22 +5,7 @@ import { file_types, organization_files, organizations, sustainability_attribute
 import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
-import {
-	bluesignSchema,
-	bluesignProductSchema,
-	defaultCertificateSchema,
-	defaultExtractionSchema,
-	defaultPolicySchema,
-	defaultStatementSchema,
-	defaultTestSchema,
-	intertek,
-	sgs,
-	summary,
-	tuv_rhineland,
-	wrap,
-	BillOfMaterialsSchema,
-	PoProductsSchema,
-} from '../schemas';
+import { summary } from '../schemas';
 import { omit } from 'lodash';
 import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
 
@@ -32,6 +17,7 @@ export class ClassificationService extends BaseWorker {
 	classificationSchema = z.object({
 		type: z.nativeEnum(file_types).describe('The type of document'),
 		testing_company: z.enum(['intertek', 'tuvRheinland', 'SGS', 'other']).describe('The name of the testing company'), // move this to the extraction service
+		// sustainability_attribute is added in the init method
 		extraction_prompt: z
 			.string()
 			.describe(

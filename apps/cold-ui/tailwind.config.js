@@ -31,6 +31,9 @@ module.exports = {
         shortWideScreen: {
           raw: '(max-height: 1200px) and (min-width: 1800px)',
         },
+        'single': '475px',    // Minimum width for 1 column
+        'double': '950px',    // Minimum width for 2 columns
+        'triple': '1425px',   // Minimum width for 3 columns
       },
       typography: {
         DEFAULT: {

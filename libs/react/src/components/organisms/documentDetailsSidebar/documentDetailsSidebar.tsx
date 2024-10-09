@@ -409,16 +409,15 @@ const _DocumentDetailsSidebar = (props: {
 						type: fileState.type,
 					},
 				};
-				if (file.metadata) {
-					variables.input.metadata = {
-						...file.metadata,
-						effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-						effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
-					};
-          if(fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
-            variables.input.metadata.certificate_number = fileState.certificate_number;
-          }
-				}
+        // update the file metadata
+        variables.input.metadata = {
+          ...(file.metadata || {}),
+          effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+          effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+        };
+        if(fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
+          variables.input.metadata.certificate_number = fileState.certificate_number;
+        }
 				promises.push(updateDocument(variables));
 			}
 
@@ -450,6 +449,7 @@ const _DocumentDetailsSidebar = (props: {
       // update assurances if sustainability attribute is not undefined
 			if (sustainabilityAttribute !== undefined) {
         if (hasAssurances) {
+          // delete existing assurances
           const deleteCals = getDeleteAttributeAssuranceCalls(sustainabilityAttribute);
           promises.push(...deleteCals);
           // update each assurance
@@ -474,7 +474,7 @@ const _DocumentDetailsSidebar = (props: {
             );
           });
         } else {
-          // check
+          // create new assurance
           promises.push(
             createAttributeAssurance({
               input: {
@@ -494,6 +494,12 @@ const _DocumentDetailsSidebar = (props: {
               },
             }),
           );
+        }
+      } else {
+        // if the sustainability attribute is not defined, delete all assurances
+        if(fileState.sustainabilityAttribute === '-1') {
+          const deleteCals = deleteAllAssurances();
+          promises.push(...deleteCals);
         }
       }
 
@@ -546,6 +552,20 @@ const _DocumentDetailsSidebar = (props: {
 		});
 		return deleteCalls;
 	};
+
+  const deleteAllAssurances = (): Promise<any>[] => {
+    const deleteCalls: Promise<any>[] = [];
+    file?.attributeAssurances.forEach(assurance => {
+      deleteCalls.push(
+        deleteAssurance({
+          filter: {
+            id: assurance.id,
+          },
+        }),
+      );
+    })
+    return deleteCalls;
+  }
 
 	const hasFileStateChanged = (fileState: DocumentDetailsSidebarFileState) => {
 		if (file === undefined) return false;
