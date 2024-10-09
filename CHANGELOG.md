@@ -1,3 +1,17 @@
+# [1.416.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.3...v1.416.0) (2024-10-09)
+
+
+### Bug Fixes
+
+* **design feedback:** don't bold the entity count (e.g. '2 Materials') ([8015fdc](https://github.com/ColdPBC/cold-monorepo/commit/8015fdc24b70ad125e962cadfe8b785ea81587c1))
+* **styling:** make sure that items fill the available space and are left justified when they are few and/or narrow ([a1ac114](https://github.com/ColdPBC/cold-monorepo/commit/a1ac114c7305161d2c39cc37ec83c3d5229bd11a))
+
+
+### Features
+
+* add cards, move Empty state strings back to the tab, etc. (sorry it's not more organized) ([978ab8e](https://github.com/ColdPBC/cold-monorepo/commit/978ab8e50bada4b3517cca6ed58750240f4f52c5))
+* create new sustainabilityAttributeCard component ([8018ef1](https://github.com/ColdPBC/cold-monorepo/commit/8018ef1116e989c922067e6e76e0e1c4d618e3d2))
+
 ## [1.415.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.2...v1.415.3) (2024-10-09)
 
 
