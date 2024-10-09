@@ -1,3 +1,11 @@
+## [1.415.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.1...v1.415.2) (2024-10-09)
+
+
+### Bug Fixes
+
+* simplify metadata assignment in DocumentDetailsSidebar ([0febfd6](https://github.com/ColdPBC/cold-monorepo/commit/0febfd65a714222c916769b9a02a567f6e4cf5b8))
+* update and delete metadata and assurances conditionally ([5dbd6c1](https://github.com/ColdPBC/cold-monorepo/commit/5dbd6c1ae81b986b1836ab85ac7f48f13806190f))
+
 ## [1.415.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.0...v1.415.1) (2024-10-09)
 
 
