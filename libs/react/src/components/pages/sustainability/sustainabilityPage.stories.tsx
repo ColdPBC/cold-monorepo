@@ -34,7 +34,7 @@ export const OtherAttributesTab: Story = {
     );
   },
   play: async ({ canvasElement }) => {
-    const otherAttributesTabLabel = await within(canvasElement).findByText('Other Attributes');
+    const otherAttributesTabLabel = await within(canvasElement).findByText('Other Attributes (0)');
     fireEvent.click(otherAttributesTabLabel);
   },
 };
@@ -58,7 +58,7 @@ export const OtherAttributesWithMockData: Story = {
     );
   },
   play: async ({ canvasElement }) => {
-    const otherAttributesTabLabel = await within(canvasElement).findByText('Other Attributes');
+    const otherAttributesTabLabel = await within(canvasElement).findByText('Other Attributes (1)');
     fireEvent.click(otherAttributesTabLabel);
   },
 };
