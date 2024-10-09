@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { toUTCDate, BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import z from 'zod';
-import { attribute_assurances, file_types, organization_files, organizations } from '@prisma/client';
+import { attribute_assurances, file_types, organization_files, organizations, sustainability_attributes } from '@prisma/client';
 import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
@@ -114,7 +114,15 @@ export class ExtractionService extends BaseWorker {
 		}
 	}
 
-	async extractDataFromImages(classification: any, extension: string, isImage: boolean, user: IAuthenticatedUser, filePayload: organization_files, organization: organizations) {
+	async extractDataFromImages(
+		classification: any,
+		extension: string,
+		isImage: boolean,
+		user: IAuthenticatedUser,
+		filePayload: organization_files,
+		organization: organizations,
+		attributes: sustainability_attributes[],
+	) {
 		const start = new Date();
 		try {
 			// classify content and generate a prompt for the extraction
@@ -227,7 +235,7 @@ export class ExtractionService extends BaseWorker {
 			});
 
 			// if the classification does not contain a sustainability attribute, return the parsed response
-			if (!classification.sustainability_attribute_id) {
+			if (!classification.sustainability_attribute) {
 				this.sendMetrics('organization.files', 'cold-openai', 'no-sustainability-attribute', 'completed', {
 					start,
 					sendEvent: true,
@@ -257,7 +265,7 @@ export class ExtractionService extends BaseWorker {
 				return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
 			}
 
-			await this.createAttributeAssurances(classification, organization, filePayload, updateData, filePayload, user);
+			await this.createAttributeAssurances(classification, organization, filePayload, updateData, filePayload, user, attributes);
 
 			this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
 				start,
@@ -333,7 +341,14 @@ export class ExtractionService extends BaseWorker {
 	 * @param orgFile
 	 * @param organization
 	 */
-	async extractDataFromContent(content: any[] | string, classification: any, user: IAuthenticatedUser, orgFile: organization_files, organization: organizations) {
+	async extractDataFromContent(
+		content: any[] | string,
+		classification: any,
+		user: IAuthenticatedUser,
+		orgFile: organization_files,
+		organization: organizations,
+		attributes: sustainability_attributes[],
+	) {
 		const start = new Date();
 		try {
 			if (!classification || !classification.extraction_prompt) {
@@ -438,7 +453,7 @@ export class ExtractionService extends BaseWorker {
 			});
 
 			// if the classification does not contain a sustainability attribute, return the parsed response
-			if (!classification.sustainability_attribute_id) {
+			if (!classification.sustainability_attribute) {
 				this.sendMetrics('organization.files', 'cold-openai', 'no-sustainability-attribute', 'completed', {
 					start,
 					sendEvent: true,
@@ -468,7 +483,7 @@ export class ExtractionService extends BaseWorker {
 				return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
 			}
 
-			await this.createAttributeAssurances(classification, organization, orgFile, updateData, orgFile, user);
+			await this.createAttributeAssurances(classification, organization, orgFile, updateData, orgFile, user, attributes);
 
 			this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
 				start,
@@ -643,9 +658,19 @@ export class ExtractionService extends BaseWorker {
 		return classification;
 	}
 
-	private async createAttributeAssurances(classification, organization: organizations, orgFile: organization_files, updateData: any, updatedFile: any, user: IAuthenticatedUser) {
+	private async createAttributeAssurances(
+		classification,
+		organization: organizations,
+		orgFile: organization_files,
+		updateData: any,
+		updatedFile: any,
+		user: IAuthenticatedUser,
+		attributes: sustainability_attributes[],
+	) {
+		const attribute_id = attributes.find(a => a.name === classification.sustainability_attribute)?.id;
+
 		const data = {
-			sustainability_attribute_id: classification.sustainability_attribute_id,
+			sustainability_attribute_id: attribute_id,
 			organization_id: organization.id,
 			organization_file_id: orgFile.id,
 			effective_start_date: updateData.effective_start_date,
