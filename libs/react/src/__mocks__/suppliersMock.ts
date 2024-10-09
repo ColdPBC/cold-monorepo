@@ -449,6 +449,27 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
             name: 'phthalate',
           },
         },
+        {
+          id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          sustainabilityAttribute: {
+            id: "c8396184-16c5-46fb-a772-44b097473a3d",
+            name: "ISO 26000 - Social Responsibility"
+          }
+        },
+        {
+          id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          sustainabilityAttribute: {
+            id: 'mat_qg9aabgn9a81mb90bijv9dtf',
+            name: 'Certified Organic',
+          },
+        },
+        {
+          id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          sustainabilityAttribute: {
+            id: "a99e4eff-72ee-40f4-a476-0385ac6f52d3",
+            name: "Worldwide Responsible Accredited Production (WRAP)"
+          },
+        }
       ],
       materialSuppliers: [
         {
@@ -464,9 +485,25 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       ],
       products: [
         {
-            id: '2',
-            name: 'Pants',
-        }
+          id: '2',
+          name: 'Pants',
+        },
+        {
+          id: '2',
+          name: 'Product 1',
+        },
+        {
+          id: '2',
+          name: 'Product 2',
+        },
+        {
+          id: '2',
+          name: 'Product 3',
+        },
+        {
+          id: '2',
+          name: 'Product 4',
+        },
       ]
     },
     {
@@ -499,6 +536,16 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
         {
           material: {
             name: 'Polyester',
+          },
+        },
+        {
+          material: {
+            name: 'Material 1',
+          },
+        },
+        {
+          material: {
+            name: 'Material 2',
           },
         },
       ],

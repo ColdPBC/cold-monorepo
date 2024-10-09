@@ -2,7 +2,6 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { SuppliersDataGrid } from '@coldpbc/components';
 import { StoryMockProvider } from '@coldpbc/mocks';
-import { Route, Routes } from 'react-router-dom';
 
 const meta: Meta<typeof SuppliersDataGrid> = {
   title: 'Organisms/SuppliersDataGrid',
