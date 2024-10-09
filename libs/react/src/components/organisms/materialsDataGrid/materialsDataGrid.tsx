@@ -51,8 +51,7 @@ const _MaterialsDataGrid = () => {
   );
   const uniqTier1Suppliers = uniq(
     materials
-      .map(material => material.materialSuppliers.filter(supplier => supplier.organizationFacility.supplierTier === 1).map(supplier => supplier.organizationFacility.name))
-      .flat(),
+      .map(material => material.productMaterials.map(productMaterial => productMaterial.product.organizationFacility.name)),
   );
 
   const uniqTier2Suppliers = uniq(
@@ -65,14 +64,14 @@ const _MaterialsDataGrid = () => {
     return <Spinner />;
   }
 
-  const renderSusAttributes = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    // loop through the array of suppliers and return the suppliers
+  const renderBubbles = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+    // loop through the array and return bubbles
     return (
       <div className={'h-full flex items-center text-body text-tc-primary font-bold gap-[10px] truncate'}>
-        {params.value.map((supplier: string, index: number) => {
+        {params.value.map((label: string, index: number) => {
           return (
             <div key={index} className={'rounded-[32px] border-[1px] border-primary px-[12px] w-auto whitespace-nowrap'}>
-              <span className={'text-body'}>{supplier}</span>
+              <span className={'text-body'}>{label}</span>
             </div>
           );
         })}
@@ -99,7 +98,7 @@ const _MaterialsDataGrid = () => {
       minWidth: 230,
       type: 'singleSelect',
       valueOptions: uniqSusAttributes,
-      renderCell: renderSusAttributes,
+      renderCell: renderBubbles,
       filterOperators: listFilterOperators,
       valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
     },
@@ -118,22 +117,26 @@ const _MaterialsDataGrid = () => {
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
       minWidth: 230,
+      renderCell: renderBubbles,
       type: 'singleSelect',
       valueOptions: uniqTier1Suppliers,
+      valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
     },
   ];
 
   const newRows: GridValidRowModel[] = [];
 
   materials.forEach(material => {
-    const tier1Supplier = material.materialSuppliers.find(supplier => supplier.organizationFacility.supplierTier === 1);
-    const tier2Supplier = material.materialSuppliers.find(supplier => supplier.organizationFacility.supplierTier === 2);
+    // For now, we just grab the tier 1 supplier of the first product that uses the material
+    const tier1Suppliers = material.productMaterials.map(pm => pm.product.organizationFacility);
+    // While the database schema allows for multiple MaterialSuppliers, we insist on 1 per Material
+    const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
     const row = {
       id: material.id,
       name: material.name,
       sustainabilityAttributes: material.attributeAssurances.map(assurance => assurance.sustainabilityAttribute.name),
-      tier2Supplier: tier2Supplier ? tier2Supplier.organizationFacility.name : '',
-      usedBy: tier1Supplier ? tier1Supplier.organizationFacility.name : '',
+      tier2Supplier: tier2Supplier ? tier2Supplier.name : '',
+      usedBy: uniq(tier1Suppliers.map(supplier => supplier.name).sort((a,b) => a.localeCompare(b))),
     };
     newRows.push(row);
   });
