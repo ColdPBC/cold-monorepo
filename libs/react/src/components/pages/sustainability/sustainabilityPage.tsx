@@ -3,7 +3,7 @@ import type { SustainabilityAttribute } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
-import { get } from 'lodash';
+import { get, has } from 'lodash';
 
 const _SustainabilityPage = () => {
   const tabs = ['My Attributes', 'Other Attributes'];
@@ -26,10 +26,10 @@ const _SustainabilityPage = () => {
     );
   };
 
-  if (sustainabilityAttributesQuery.error) {
+  if (sustainabilityAttributesQuery.error || has(sustainabilityAttributesQuery.data, 'errors')) {
     return (
       <ErrorPage
-        error={sustainabilityAttributesQuery.error}
+        error={sustainabilityAttributesQuery.error || get(sustainabilityAttributesQuery.data, 'errors')}
         showLogout={false}
       />
     )
