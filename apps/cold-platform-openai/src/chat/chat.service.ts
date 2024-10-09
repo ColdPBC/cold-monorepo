@@ -36,6 +36,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 	prompts: PromptsService;
 
 	constructor(
+		@InjectQueue('openai:classification') readonly classification: Queue,
 		@InjectQueue('openai') readonly queue: Queue,
 		readonly config: ConfigService,
 		readonly pc: PineconeService,
@@ -1385,6 +1386,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 		});
 
 		for (const file of files) {
+			await this.classification.add('classify', { filePayload: file, user, organization: org }, { removeOnFail: true, removeOnComplete: true });
 			await this.processFiles(org, user, file);
 		}
 	}
