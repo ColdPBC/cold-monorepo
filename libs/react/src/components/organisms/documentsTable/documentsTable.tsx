@@ -286,7 +286,6 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			field: 'associated_records',
 			headerName: 'Associated Records',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
-      width: 350,
 			type: 'singleSelect',
 			valueOptions: toArray(allAssociatedRecords),
       renderCell: (params) => {
@@ -294,6 +293,8 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
       },
 			sortComparator: listSortComparator,
 			filterOperators: listFilterOperators,
+      width: 350,
+      resizable: false,
 		},
 	];
 

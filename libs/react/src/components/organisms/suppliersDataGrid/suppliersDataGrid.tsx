@@ -94,7 +94,6 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       field: 'sustainabilityAttributes',
       headerName: 'Sustainability Attributes',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
-      width: 350,
       valueOptions: uniqSusAttributes,
       renderCell: (params) => {
         return <DataGridCellHoverPopover params={params} />;
@@ -102,6 +101,8 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       type: 'singleSelect',
       sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
+      width: 350,
+      resizable: false,
     },
   ];
 
@@ -117,7 +118,6 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       field: 'products',
       headerName: 'Products',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
-      width: 350,
       renderCell: (params) => {
         return <DataGridCellHoverPopover params={params} />;
       },
@@ -126,6 +126,8 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
       valueOptions: uniqProducts,
+      width: 350,
+      resizable: false,
     });
   } else {
     const uniqMaterials = uniqWith(
@@ -138,7 +140,6 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       field: 'materials',
       headerName: 'Materials',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
-      width: 350,
       renderCell: (params) => {
         return <DataGridCellHoverPopover params={params} />;
       },
@@ -147,6 +148,8 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
       valueOptions: uniqMaterials,
+      width: 350,
+      resizable: false,
     });
   }
 
