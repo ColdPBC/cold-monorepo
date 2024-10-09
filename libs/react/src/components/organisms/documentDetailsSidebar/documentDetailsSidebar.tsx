@@ -119,7 +119,7 @@ const _DocumentDetailsSidebar = (props: {
 				fileState['sustainabilityAttribute'] = file.attributeAssurances[0]?.sustainabilityAttribute?.id || '-1';
 			}
 
-      if(file.type === 'CERTIFICATE') {
+      if(file.type === 'CERTIFICATE' || file.type === 'SCOPE_CERTIFICATE') {
         fileState['certificate_number'] = get(file.metadata, 'certificate_number', null);
       }
 
@@ -376,12 +376,8 @@ const _DocumentDetailsSidebar = (props: {
 	};
 
 	const getSaveButton = (fileState: DocumentDetailsSidebarFileState) => {
-		const fileStateValid = isFileStateValid(fileState);
 		const hasFileChanged = hasFileStateChanged(fileState);
-		let disabled = !fileStateValid || saveButtonLoading || !hasFileChanged;
-		if (!hasAssurances) {
-			disabled = !fileStateValid;
-		}
+		const disabled = saveButtonLoading || !hasFileChanged;
 
 		return (
 			<div className={'w-auto'}>
@@ -426,17 +422,7 @@ const _DocumentDetailsSidebar = (props: {
 				promises.push(updateDocument(variables));
 			}
 
-			if (
-				compareFileState.endDate !== null &&
-				compareFileState.startDate !== null &&
-				fileState.endDate !== null &&
-				fileState.startDate !== null &&
-				isSameDay(compareFileState.startDate, fileState.startDate) &&
-				isSameDay(compareFileState.endDate, fileState.endDate) &&
-				compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute &&
-				compareFileState.type !== fileState.type &&
-				hasAssurances
-			) {
+			if (ifOnlyTypeOrCertIdChanged(fileState, compareFileState)) {
 				await Promise.all(promises)
 					.then(responses => {
 						mutate('GET_ALL_FILES');
@@ -460,56 +446,56 @@ const _DocumentDetailsSidebar = (props: {
 			}
 
 			const sustainabilityAttribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttribute);
-			if (sustainabilityAttribute === undefined) {
-				return;
-			}
 
-			if (hasAssurances) {
-				const deleteCals = getDeleteAttributeAssuranceCalls(sustainabilityAttribute);
-				promises.push(...deleteCals);
-				// update each assurance
-				forEach(file.attributeAssurances, assurance => {
-					if (assurance.organizationFacility !== null && sustainabilityAttribute.level === 'MATERIAL') {
-						return;
-					} else if (assurance.material !== null && sustainabilityAttribute.level === 'SUPPLIER') {
-						return;
-					}
-					promises.push(
-						updateAssurance({
-							input: {
-								id: assurance.id,
-								effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-								effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
-								sustainabilityAttribute: {
-									id: fileState.sustainabilityAttribute,
-								},
-								updatedAt: new Date().toISOString(),
-							},
-						}),
-					);
-				});
-			} else {
-				// create a new assurance
-				promises.push(
-					createAttributeAssurance({
-						input: {
-							effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-							effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
-							organizationFile: {
-								id: fileState.id,
-							},
-							sustainabilityAttribute: {
-								id: fileState.sustainabilityAttribute
-							},
-							organization: {
-								id: orgId,
-							},
-							createdAt: new Date().toISOString(),
-							updatedAt: new Date().toISOString(),
-						},
-					}),
-				);
-			}
+      // update assurances if sustainability attribute is not undefined
+			if (sustainabilityAttribute !== undefined) {
+        if (hasAssurances) {
+          const deleteCals = getDeleteAttributeAssuranceCalls(sustainabilityAttribute);
+          promises.push(...deleteCals);
+          // update each assurance
+          forEach(file.attributeAssurances, assurance => {
+            if (assurance.organizationFacility !== null && sustainabilityAttribute.level === 'MATERIAL') {
+              return;
+            } else if (assurance.material !== null && sustainabilityAttribute.level === 'SUPPLIER') {
+              return;
+            }
+            promises.push(
+              updateAssurance({
+                input: {
+                  id: assurance.id,
+                  effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+                  effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+                  sustainabilityAttribute: {
+                    id: fileState.sustainabilityAttribute,
+                  },
+                  updatedAt: new Date().toISOString(),
+                },
+              }),
+            );
+          });
+        } else {
+          // check
+          promises.push(
+            createAttributeAssurance({
+              input: {
+                effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+                effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+                organizationFile: {
+                  id: fileState.id,
+                },
+                sustainabilityAttribute: {
+                  id: fileState.sustainabilityAttribute
+                },
+                organization: {
+                  id: orgId,
+                },
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+              },
+            }),
+          );
+        }
+      }
 
 			await Promise.all(promises)
 				.then(responses => {
@@ -576,9 +562,23 @@ const _DocumentDetailsSidebar = (props: {
 		return !(startDatesAreSame && endDatesAreSame && compareFileStateSustainabilityAttribute && isFileTypeSame && certificateNumberSame);
 	};
 
-	const isFileStateValid = (fileState: DocumentDetailsSidebarFileState) => {
-		return !(fileState.sustainabilityAttribute === '-1');
-	};
+  const ifOnlyTypeOrCertIdChanged = (
+    fileState: DocumentDetailsSidebarFileState,
+    compareFileState: DocumentDetailsSidebarFileState
+  ) => {
+    return (
+      compareFileState.endDate !== null &&
+      compareFileState.startDate !== null &&
+      fileState.endDate !== null &&
+      fileState.startDate !== null &&
+      isSameDay(compareFileState.startDate, fileState.startDate) &&
+      isSameDay(compareFileState.endDate, fileState.endDate) &&
+      compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute &&
+      (compareFileState.type !== fileState.type || compareFileState.certificate_number !== fileState.certificate_number) &&
+      hasAssurances
+    )
+
+  }
 
 	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
 
