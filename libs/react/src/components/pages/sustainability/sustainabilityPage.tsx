@@ -2,12 +2,13 @@ import { ErrorFallback, ErrorPage, MainContent, Spinner, SustainabilityAttribute
 import type { SustainabilityAttribute } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
-import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { get, has } from 'lodash';
 
 const _SustainabilityPage = () => {
   const tabs = ['My Attributes', 'Other Attributes'];
   const [tabView, setTabView] = React.useState(tabs[0]);
+  const { logBrowser } = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const sustainabilityAttributesQuery = useGraphQLSWR<{
     sustainabilityAttributes: SustainabilityAttribute[]
@@ -26,10 +27,12 @@ const _SustainabilityPage = () => {
     );
   };
 
-  if (sustainabilityAttributesQuery.error || has(sustainabilityAttributesQuery.data, 'errors')) {
+  const error = sustainabilityAttributesQuery.error || get(sustainabilityAttributesQuery.data, 'errors');
+  if (error) {
+    logBrowser('Error fetching sustainability attribute data', 'error', {}, error);
     return (
       <ErrorPage
-        error={sustainabilityAttributesQuery.error || get(sustainabilityAttributesQuery.data, 'errors')}
+        error={error}
         showLogout={false}
       />
     )
