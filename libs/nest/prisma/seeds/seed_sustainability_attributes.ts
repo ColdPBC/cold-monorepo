@@ -3,185 +3,216 @@ import { claim_levels, claim_types, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
 // Add new form_definition row data to the seeds array
+const baseUrl = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes'
 const seeds: Array<{
 	name: string;
 	type: claim_types;
 	level: claim_levels;
+  logo_url?: string;
 }> = [
 	{
 		name: 'Oeko-Tex Standard 100',
+    type: 'THIRD_PARTY',
 		level: 'MATERIAL',
-		type: 'THIRD_PARTY',
+    logo_url: `${baseUrl}/Okeo+Tex+Standard+100.png`,
 	},
 	{
 		name: 'BIFMA Level',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/BIFMA.png`,
 	},
 	{
 		name: 'Blue Angel',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Blue+Angel.png`,
 	},
 	{
 		name: 'FSC',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/FSC.png`,
 	},
 	{
 		name: 'MadeSafe',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Made+Safe.png`,
 	},
 	{
 		name: 'Leaping Bunny',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Leaping+Bunny.png`,
 	},
 	{
 		name: 'Responsible Wool Standard',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Responsible+Wool+Standard.png`,
 	},
 	{
 		name: 'Responsible Down Standard',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Responsible+Down+Standard.png`,
 	},
 	{
 		name: 'Organic Content Standard',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Organic+Content+Standard.png`,
 	},
 	{
 		name: 'Recycled Claim Standard',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Recycled+Claim+Standard.png`,
 	},
 	{
 		name: 'Leather Working Group Manufacturer Standard',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Leather+Working+Group.png`,
 	},
 	{
 		name: 'Wood-based Material',
 		type: 'INTERNAL',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Wood-based+Material.png`,
 	},
 	{
 		name: 'Global Recycled Standard',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
-	},
-	{
-		name: 'FSC Certificate',
-		type: 'THIRD_PARTY',
-		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Global+Recycled+Standard.png`,
 	},
 	{
 		name: 'PEFC Programme for the Endorsement of Forest Certification (PEFC)',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/PEFC.png`,
 	},
 	{
 		name: 'GOTS - Organic',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/GOTS.png`,
 	},
 	{
 		name: 'GOTS - Made with X% Organic',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/GOTS.png`,
 	},
-	{
-		name: 'Better Cotton Initative',
-		type: 'THIRD_PARTY',
-		level: 'MATERIAL',
-	},
+  {
+    name: 'Better Cotton Initative',
+    type: 'THIRD_PARTY',
+    level: 'MATERIAL',
+    logo_url: `${baseUrl}/Better+Cotton+Iniative.png`,
+  },
 	{
 		name: 'bioRE Sustainable Cotton',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/bioRE+Sustainable+Cotton.png`,
 	},
 	{
 		name: 'Fairtrade Cotton',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Fairtrade+Cotton.png`,
 	},
 	{
 		name: 'Oeko-Tex Organic Cotton',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Okeo+Tex+Organic+Cotton.png`,
 	},
 	{
 		name: 'Responsible Alpaca Standard',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Responsible+Alpaca+Standard.png`,
 	},
 	{
 		name: 'Responsible Mohair Standard',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Responsible+Mohair+Standard.png`,
 	},
 	{
 		name: 'Nativa',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Nativa.png`,
 	},
 	{
 		name: 'ZQ and ZQRX',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/ZQ.png`,
 	},
 	{
 		name: 'Bio-based Content Certification (EU)',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Biobased.png`,
 	},
 	{
 		name: 'Down Codex',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Down+Codex.png`,
 	},
 	{
 		name: 'DownPass',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Down+Pass.png`,
 	},
 	{
 		name: 'Global Traceable Down Standard',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Global+Traceable+Down.png`,
 	},
 	{
 		name: 'Leather Working Group - Bronze',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/LWG+Bronze.png`,
 	},
 	{
 		name: 'Leather Working Group - Silver',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/LWG+Silver.png`,
 	},
 	{
 		name: 'Leather Working Group - Gold',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/LWG+Gold.png`,
 	},
 	{
 		name: 'Oeko-Tex Leather Standard',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Okeo+Tex+Leather+Standard.png`,
 	},
 	{
 		name: 'TerraCare Leather',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/TerraCare+Leather.png`,
 	},
 	{
 		name: 'Higg BRM (Brand & Retail Module)',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Higg+Index.png`,
 	},
 	{
 		name: 'Carbon Trust - Carbon Neutral Certification',
@@ -257,21 +288,25 @@ const seeds: Array<{
 		name: 'Fair Trade Quaterly Reporting',
 		type: 'THIRD_PARTY',
 		level: 'PRODUCT',
+    logo_url: `${baseUrl}/Fairtrade.png`,
 	},
 	{
 		name: 'Cradle to Cradle',
 		type: 'THIRD_PARTY',
 		level: 'PRODUCT',
+    logo_url: `${baseUrl}/Cradle+to+Cradle.png`,
 	},
 	{
 		name: 'EU Ecolabel Textile Standard',
 		type: 'THIRD_PARTY',
 		level: 'PRODUCT',
+    logo_url: `${baseUrl}/EU+Eco+Label.png`,
 	},
 	{
 		name: 'Green Shape',
 		type: 'THIRD_PARTY',
 		level: 'PRODUCT',
+    logo_url: `${baseUrl}/Green+Shape.png`,
 	},
 	{
 		name: 'Yonderland',
@@ -292,86 +327,103 @@ const seeds: Array<{
 		name: 'Bluesign Product',
 		type: 'THIRD_PARTY',
 		level: 'PRODUCT',
+    logo_url: `${baseUrl}/Bluesign+Product.png`,
 	},
 	{
 		name: 'Fair Trade Annual Reporting',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/Fairtrade.png`,
 	},
 	{
 		name: 'Bluesign',
 		type: 'THIRD_PARTY',
 		level: 'MATERIAL',
+    logo_url: `${baseUrl}/Bluesign.png`,
 	},
 	{
 		name: 'Fair Wear',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/Fair+Wear.png`,
 	},
 	{
 		name: 'ISO 14000 - Environmental Management Systems',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
-	},
+    logo_url: `${baseUrl}/ISO+14000.png`,
+  },
 	{
 		name: 'ISO 26000 - Social Responsibility',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/ISO+26000.png`,
 	},
 	{
 		name: 'ZDHC Chemical Management System',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/ZDHC.png`,
 	},
 	{
 		name: 'Adherence to ZDHC MRSL',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/ZDHC.png`,
 	},
 	{
 		name: 'Detox to Zero',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/Detox+to+Zero.png`,
 	},
 	{
 		name: 'Fair Trade Textile Standard',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/Fairtrade+Textile+Standard.png`,
 	},
 	{
 		name: 'Oeko-Tex Made in Green',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/Okeo+Tex+Made+in+Green.png`,
 	},
 	{
 		name: 'Oeko-Tex STeP',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/Okeo+Tex+STeP.png`,
 	},
 	{
 		name: 'BEPI',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/BEPI.png`,
 	},
 	{
 		name: 'Fair Labour Standard',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/Fair+Labor.png`,
 	},
 	{
 		name: 'SMETA Audit',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/SMETA+Audit.png`,
 	},
 	{
 		name: 'WFTO Fair Trade Standard',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/WFTO+Fair+Trade+Standard.png`,
 	},
 	{
 		name: 'Worldwide Responsible Accredited Production (WRAP)',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
+    logo_url: `${baseUrl}/Worldwide+Responsible+Accredited+Production.png`,
 	},
 	{
 		name: 'Supplier Code of Conduct',
