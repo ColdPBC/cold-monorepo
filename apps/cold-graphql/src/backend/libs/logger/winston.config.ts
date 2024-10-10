@@ -20,8 +20,6 @@ const winstonConfig = (context: string, meta?: any) => {
 		],
 	};
 
-	//console.log('winstonConfig', config);
-
 	return config;
 };
 
