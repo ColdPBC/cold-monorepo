@@ -2,7 +2,7 @@
 export const coldAdminEntities: string[] = ['service_definitions'];
 
 // cold:admin has full control; company:owner & company:admin has read & write, company:member as read only all roles can return records where organization is also null
-export const includeNullOrgs: string[] = ['compliance_responses'];
+export const includeNullOrgs: string[] = ['sustainability_attributes'];
 
 // cold:admin has full control; all others can only read
 export const readOnlyEntities: string[] = [

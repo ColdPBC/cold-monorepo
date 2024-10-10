@@ -1,7 +1,4 @@
-import { Organization } from '../../entities/postgresql';
-import { WorkerLogger } from '../logger';
-
-const logger = new WorkerLogger('ApplyAclToEntities');
+import { Organization } from '../../entities';
 
 export type OrgContext = {
 	organization: null | Organization;
@@ -54,26 +51,23 @@ export const read_only_acl = {
 	},
 };
 
-export const new_null_orgs_acl = {
-	'company:admin': { read: (context: any) => ({ $or: [{ organization: { id: context.organization.id } }, { organization: { id: null } }] }) },
-};
-
 export const allow_null_orgs_acl = {
 	'company:admin': {
 		read: (context: any) => {
 			return { $or: [{ organization: { id: null } }, { organization: { id: context.user.organization.id } }] };
 		},
 	},
-	'company:member': { read: (context: any) => ({ $or: [{ organization: { id: context.organization.id } }, { organization: { id: null } }] }) },
-	'company:owner': { read: (context: any) => ({ $or: [{ organization: { id: context.organization.id } }, { organization: { id: null } }] }) },
+	'company:member': {
+		read: (context: any) => {
+			return { $or: [{ organization: { id: null } }, { organization: { id: context.user.organization.id } }] };
+		},
+	},
+	'company:owner': {
+		read: (context: any) => {
+			return { $or: [{ organization: { id: null } }, { organization: { id: context.user.organization.id } }] };
+		},
+	},
 };
-
-type aclResponse =
-	| { organization: { id: string } }
-	| {
-			$or: [{ organization: unknown }, { organization: unknown }];
-	  }
-	| boolean;
 
 export const attribute_assurances_acl = {
 	'company:member': {
