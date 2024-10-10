@@ -165,17 +165,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
       );
     }
 
-    return (
-      <div className={'h-full w-full flex flex-row items-center gap-[10px]'}>
-        {params.value.map((record: string, index: number) => {
-          return (
-            <div key={index} className={'text-tc-primary text-body p-[4px] rounded-[32px] border-[1px] border-purple-200'}>
-              {capitalize(record)}
-            </div>
-          );
-        })}
-      </div>
-    );
+    return <DataGridCellHoverPopover params={params} color={HexColors.purple["200"]} />
   };
 
   const onRowClick = (params: GridRowParams, event: MuiEvent<React.MouseEvent>, details: GridCallbackDetails) => {
@@ -288,9 +278,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
 			type: 'singleSelect',
 			valueOptions: toArray(allAssociatedRecords),
-      renderCell: (params) => {
-        return <DataGridCellHoverPopover params={params} color={HexColors.purple["200"]} />;
-      },
+      renderCell: renderAssociatedRecords,
 			sortComparator: listSortComparator,
 			filterOperators: listFilterOperators,
       width: 350,
