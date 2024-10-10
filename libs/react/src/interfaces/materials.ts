@@ -48,4 +48,14 @@ export interface MaterialsWithRelations extends Materials {
       name: string;
     };
   }[];
+  productMaterials: {
+    id: string,
+    product: {
+      id: string;
+      organizationFacility: {
+        id: string;
+        name: string;
+      };
+    };
+  }[];
 }

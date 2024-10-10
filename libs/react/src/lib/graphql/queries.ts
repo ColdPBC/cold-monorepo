@@ -137,6 +137,16 @@ export const GET_ALL_MATERIALS_FOR_ORG = gql`
           name
         }
       }
+      productMaterials {
+        id
+        product {
+          id
+          organizationFacility {
+            id
+            name
+          }
+        }
+      }
     }
   }
 `;

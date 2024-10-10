@@ -1,3 +1,10 @@
+## [1.416.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.416.0...v1.416.1) (2024-10-09)
+
+
+### Bug Fixes
+
+* update logic for finding Tier 2 and Used By suppliers, and let Used By be plural, structured in bubbles ([4e04e27](https://github.com/ColdPBC/cold-monorepo/commit/4e04e2743a5a9c7a169d728c08a52077060e79cb))
+
 # [1.416.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.415.3...v1.416.0) (2024-10-09)
 
 
