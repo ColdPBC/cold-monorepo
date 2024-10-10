@@ -57,17 +57,17 @@ export const read_only_acl = {
 export const allow_null_orgs_acl = {
 	'company:member': {
 		read: (context: OrgContext) => ({
-			$or: [organization_scoped(context), { organization: null }],
+			$or: [{ organization: { id: context.user.organization.id } }, { organization: null }],
 		}),
 	},
 	'company:admin': {
 		read: (context: OrgContext) => ({
-			$or: [organization_scoped(context), { organization: null }],
+			$or: [{ organization: { id: context.user.organization.id } }, { organization: null }],
 		}),
 		write: (context: OrgContext) => ({ organization: context.user.org_id }),
 		'company:owner': {
 			read: (context: OrgContext) => ({
-				$or: [organization_scoped, { organization: null }],
+				$or: [{ organization: { id: context.user.organization.id } }, { organization: null }],
 			}),
 		},
 		'cold:admin': {
