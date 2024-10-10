@@ -1,7 +1,14 @@
 import { Organization } from '../../entities';
 
+type AccessControlEntry<T, C> = {
+	read?: (context: C) => T;
+	update?: (context: C) => T;
+	write?: (context: C) => T;
+	delete?: (context: C) => T;
+	all?: (context: C) => boolean;
+};
+
 export type OrgContext = {
-	organization: null | Organization;
 	user: {
 		organization?: any;
 		org_id: string;
@@ -50,7 +57,7 @@ export const read_only_acl = {
 	},
 };
 
-export const allow_null_orgs_acl = {
+export const allow_null_orgs_acl: any = {
 	'company:admin': {
 		read: (context: any) => {
 			return { $or: [{ organization: { id: null } }, { organization: { id: context.user.organization.id } }] };
