@@ -1,3 +1,10 @@
+# [1.420.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.419.2...v1.420.0) (2024-10-10)
+
+
+### Features
+
+* add before read hook documentation to base sidecar entity ([18c9a58](https://github.com/ColdPBC/cold-monorepo/commit/18c9a5868127473415356f2d0007ed70bdabf3f9))
+
 ## [1.419.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.419.1...v1.419.2) (2024-10-10)
 
 
