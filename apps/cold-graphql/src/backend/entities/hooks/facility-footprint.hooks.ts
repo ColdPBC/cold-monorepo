@@ -7,7 +7,7 @@ import { FacilityFootprint } from '../postgresql';
 
 export class FacilityFootprintHooks extends BaseSidecar {
 	constructor() {
-		super(FacilityFootprintHooks.name, FacilityFootprint);
+		super(FacilityFootprint);
 	}
 	// Overrride BeforeReadHook here:
 

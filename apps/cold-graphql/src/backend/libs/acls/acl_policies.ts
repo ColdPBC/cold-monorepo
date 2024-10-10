@@ -15,9 +15,7 @@ export type OrgContext = {
 	token: { coldclimate_claims: { org_id: string; email: string; roles: string[]; sub: string; permissions: string[] } };
 };
 
-const organization_scoped = (context: OrgContext) => ({
-	$or: [{ organization: { id: context.organization?.id } }, { organization_id: null }],
-});
+const organization_scoped = (context: OrgContext) => ({ organization: { id: context.user?.organization?.id } });
 
 export const organization_acl = {
 	'company:member': {
@@ -30,6 +28,7 @@ export const organization_acl = {
 	'company:owner': {
 		read: (context: OrgContext) => ({ id: context.user.organization.id }),
 		write: (context: OrgContext) => ({ id: context.user.organization.id }),
+		update: (context: OrgContext) => ({ id: context.user.organization.id }),
 	},
 	'cold:admin': {
 		all: (context: OrgContext) => true,
@@ -56,39 +55,44 @@ export const allow_null_orgs_acl = {
 		read: (context: any) => {
 			return { $or: [{ organization: { id: null } }, { organization: { id: context.user.organization.id } }] };
 		},
+		update: organization_scoped,
+		write: organization_scoped,
+		delete: organization_scoped,
 	},
 	'company:member': {
 		read: (context: any) => {
 			return { $or: [{ organization: { id: null } }, { organization: { id: context.user.organization.id } }] };
 		},
+		update: organization_scoped,
+		write: organization_scoped,
 	},
 	'company:owner': {
 		read: (context: any) => {
 			return { $or: [{ organization: { id: null } }, { organization: { id: context.user.organization.id } }] };
 		},
-	},
-};
-
-export const attribute_assurances_acl = {
-	'company:member': {
-		read: organization_scoped,
+		update: organization_scoped,
+		write: organization_scoped,
+		delete: organization_scoped,
 	},
 };
 
 export const default_acl = {
 	'company:member': {
-		read: (context: OrgContext) => ({ organization: { id: context.user.organization.id } }),
+		read: organization_scoped,
+		write: organization_scoped,
+		update: organization_scoped,
 	},
 	'company:admin': {
-		read: (context: OrgContext) => ({ organization: { id: context.user.organization.id } }),
-		write: (context: OrgContext) => ({ organization: { id: context.user.organization.id } }),
+		read: organization_scoped,
+		write: organization_scoped,
+		update: organization_scoped,
+		delete: organization_scoped,
 	},
 	'company:owner': {
-		read: (context: OrgContext) => ({ organization: { id: context.user.organization.id } }),
-		write: (context: OrgContext) => ({ organization: { id: context.user.organization.id } }),
-	},
-	'cold:admin': {
-		all: (context: OrgContext) => true,
+		read: organization_scoped,
+		write: organization_scoped,
+		update: organization_scoped,
+		delete: organization_scoped,
 	},
 };
 

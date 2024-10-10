@@ -32,6 +32,6 @@ export enum GuidPrefixes {
 	'SurveyStatus' = 'sstatus',
 	'SurveyData' = 'sdata',
 	'Integrations' = 'int',
-	'SustatainabilityAttribute' = 'susatr',
+	'SustainabilityAttribute' = 'susatr',
 	'AttributeAssurance' = 'attrass',
 }

@@ -7,7 +7,7 @@ import { AttributeAssurance } from '../postgresql';
 
 export class AttributeAssuranceHooks extends BaseSidecar {
 	constructor() {
-		super(AttributeAssuranceHooks.name, AttributeAssurance);
+		super(AttributeAssurance);
 	}
 	// Overrride BeforeReadHook here:
 

@@ -9,7 +9,7 @@ import { ${entityClassName} } from '../postgresql';
 
 export class ${entityClassName}Hooks extends BaseSidecar {
 \tconstructor() {
-\t\tsuper(${entityClassName}Hooks.name, ${entityClassName});
+\t\tsuper(${entityClassName});
 \t}
 \t${useBaseCarHooks ? '// Overrride BeforeReadHook here:\n' : BEFORE_READ_HOOK_FUNCTION(entityClassName)}
 \t${useBaseCarHooks ? '// Overrride AfterReadHook here:\n' : AFTER_READ_HOOK_FUNCTION(entityClassName)}

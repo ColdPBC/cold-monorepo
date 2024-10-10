@@ -7,7 +7,7 @@ import { SustainabilityAttribute } from '../postgresql';
 
 export class SustainabilityAttributeHooks extends BaseSidecar {
 	constructor() {
-		super(SustainabilityAttributeHooks.name, SustainabilityAttribute);
+		super(SustainabilityAttribute);
 	}
 	// Overrride BeforeReadHook here:
 

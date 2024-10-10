@@ -7,7 +7,7 @@ import { News } from '../postgresql';
 
 export class NewsHooks extends BaseSidecar {
 	constructor() {
-		super(NewsHooks.name, News);
+		super(News);
 	}
 	// Overrride BeforeReadHook here:
 

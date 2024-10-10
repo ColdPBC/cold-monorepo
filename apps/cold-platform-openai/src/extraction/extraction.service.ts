@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { toUTCDate, BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import z from 'zod';
 import { attribute_assurances, file_types, organization_files, organizations, sustainability_attributes } from '@prisma/client';
@@ -27,7 +27,7 @@ import {
 	wrap,
 } from '../schemas';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class ExtractionService extends BaseWorker {
 	private openAi;
 
@@ -235,7 +235,7 @@ export class ExtractionService extends BaseWorker {
 			});
 
 			// if the classification does not contain a sustainability attribute, return the parsed response
-			if (!classification.sustainability_attribute) {
+			if (!classification.attriutes.find(item => item.name === classification.sustainability_attribute)) {
 				this.sendMetrics('organization.files', 'cold-openai', 'no-sustainability-attribute', 'completed', {
 					start,
 					sendEvent: true,
@@ -453,7 +453,7 @@ export class ExtractionService extends BaseWorker {
 			});
 
 			// if the classification does not contain a sustainability attribute, return the parsed response
-			if (!classification.sustainability_attribute) {
+			if (!classification.attriutes.find(item => item.name === classification.sustainability_attribute)) {
 				this.sendMetrics('organization.files', 'cold-openai', 'no-sustainability-attribute', 'completed', {
 					start,
 					sendEvent: true,

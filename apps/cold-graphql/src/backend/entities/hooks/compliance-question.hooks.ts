@@ -7,7 +7,7 @@ import { ComplianceQuestion } from '../postgresql';
 
 export class ComplianceQuestionHooks extends BaseSidecar {
 	constructor() {
-		super(ComplianceQuestionHooks.name, ComplianceQuestion);
+		super(ComplianceQuestion);
 	}
 	// Overrride BeforeReadHook here:
 

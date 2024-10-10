@@ -7,7 +7,7 @@ import { PrismaMigration } from '../postgresql';
 
 export class PrismaMigrationHooks extends BaseSidecar {
 	constructor() {
-		super(PrismaMigrationHooks.name, PrismaMigration);
+		super(PrismaMigration);
 	}
 	// Overrride BeforeReadHook here:
 

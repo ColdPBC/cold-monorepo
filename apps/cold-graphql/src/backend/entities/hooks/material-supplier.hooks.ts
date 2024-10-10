@@ -7,7 +7,7 @@ import { MaterialSupplier } from '../postgresql';
 
 export class MaterialSupplierHooks extends BaseSidecar {
 	constructor() {
-		super(MaterialSupplierHooks.name, MaterialSupplier);
+		super(MaterialSupplier);
 	}
 	// Overrride BeforeReadHook here:
 

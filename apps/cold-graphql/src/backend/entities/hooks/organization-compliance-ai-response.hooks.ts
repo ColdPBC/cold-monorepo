@@ -7,7 +7,7 @@ import { OrganizationComplianceAiResponse } from '../postgresql';
 
 export class OrganizationComplianceAiResponseHooks extends BaseSidecar {
 	constructor() {
-		super(OrganizationComplianceAiResponseHooks.name, OrganizationComplianceAiResponse);
+		super(OrganizationComplianceAiResponse);
 	}
 	// Overrride BeforeReadHook here:
 

@@ -7,8 +7,26 @@ import * as z from 'zod';
 export type MqttStatus = 'complete' | 'failed';
 export type MqttAction = 'create' | 'update' | 'delete';
 import { ss, secrets } from '../secrets/secrets.service';
-export const MqttActionSchema = z.enum(['get', 'create', 'update', 'delete']);
-export const MqttStatusSchema = z.enum(['complete', 'failed', 'active', 'queued', 'delayed', 'stalled']);
+
+export enum MqttActionEnum {
+	GET = 'get',
+	CREATE = 'create',
+	UPDATE = 'update',
+	DELETE = 'delete',
+}
+
+export enum MqttStatusEnum {
+	COMPLETE = 'complete',
+	FAILED = 'failed',
+	ACTIVE = 'active',
+	QUEUED = 'queued',
+	DELAYED = 'delayed',
+	STALLED = 'stalled',
+}
+
+export const MqttActionSchema = z.nativeEnum(MqttActionEnum);
+export const MqttStatusSchema = z.nativeEnum(MqttStatusEnum);
+
 const payloadSchema = z
 	.object({
 		action: MqttActionSchema,
@@ -194,7 +212,7 @@ export class MqttService {
 
 			this.mqttClient.publish(topic, JSON.stringify(inputs));
 
-			this.logger.log(`Published to topic: ${topic}`);
+			this.logger.log(`Published to topic: ${topic}`, { payload, ...context });
 		} catch (e: any) {
 			this.logger.error(e.message, e);
 		}

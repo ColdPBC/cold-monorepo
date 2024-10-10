@@ -7,7 +7,7 @@ import { CategoryDatum } from '../postgresql';
 
 export class CategoryDatumHooks extends BaseSidecar {
 	constructor() {
-		super(CategoryDatumHooks.name, CategoryDatum);
+		super(CategoryDatum);
 	}
 	// Overrride BeforeReadHook here:
 
