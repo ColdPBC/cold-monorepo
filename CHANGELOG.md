@@ -1,3 +1,10 @@
+## [1.416.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.416.1...v1.416.2) (2024-10-10)
+
+
+### Bug Fixes
+
+* update ACL policies to correctly scope organization IDs ([c888b8d](https://github.com/ColdPBC/cold-monorepo/commit/c888b8d7c2f4e20c3375bda32ddf5cf660721e74))
+
 ## [1.416.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.416.0...v1.416.1) (2024-10-09)
 
 
