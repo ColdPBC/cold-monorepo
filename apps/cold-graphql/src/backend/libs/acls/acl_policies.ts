@@ -19,7 +19,7 @@ export type OrgContext = {
 };
 
 const organization_scoped = (context: OrgContext) => ({
-	$or: [{ organization: { id: context.user.organization.id } }, { organization_id: null }],
+	$or: [{ organization: { id: context.organization?.id } }, { organization_id: null }],
 });
 
 export const organization_acl = {
@@ -54,26 +54,18 @@ export const read_only_acl = {
 	},
 };
 
+export const new_null_orgs_acl = {
+	'company:admin': { read: (context: any) => ({ $or: [{ organization: { id: context.organization.id } }, { organization: { id: null } }] }) },
+};
+
 export const allow_null_orgs_acl = {
-	'company:member': {
-		read: (context: OrgContext) => ({
-			$or: [{ organization: { id: context.user.organization.id } }, { organization: null }],
-		}),
-	},
 	'company:admin': {
-		read: (context: OrgContext) => ({
-			$or: [{ organization: { id: context.user.organization.id } }, { organization: null }],
-		}),
-		write: (context: OrgContext) => ({ organization: context.user.org_id }),
-		'company:owner': {
-			read: (context: OrgContext) => ({
-				$or: [{ organization: { id: context.user.organization.id } }, { organization: null }],
-			}),
-		},
-		'cold:admin': {
-			all: (context: OrgContext) => context?.user?.roles?.includes('cold:admin'),
+		read: (context: any) => {
+			return { $or: [{ organization: { id: null } }, { organization: { id: context.user.organization.id } }] };
 		},
 	},
+	'company:member': { read: (context: any) => ({ $or: [{ organization: { id: context.organization.id } }, { organization: { id: null } }] }) },
+	'company:owner': { read: (context: any) => ({ $or: [{ organization: { id: context.organization.id } }, { organization: { id: null } }] }) },
 };
 
 type aclResponse =

@@ -9332,6 +9332,7 @@ export type Product = {
   productMaterials_aggregate?: Maybe<AggregationResult>;
   seasonCode?: Maybe<Scalars['String']['output']>;
   styleCode?: Maybe<Scalars['String']['output']>;
+  upcCode?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['ISOString']['output']>;
 };
 
@@ -9389,6 +9390,7 @@ export type ProductCreateOrUpdateInput = {
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   seasonCode?: InputMaybe<Scalars['String']['input']>;
   styleCode?: InputMaybe<Scalars['String']['input']>;
+  upcCode?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
@@ -9405,6 +9407,7 @@ export type ProductInsertInput = {
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   seasonCode?: InputMaybe<Scalars['String']['input']>;
   styleCode?: InputMaybe<Scalars['String']['input']>;
+  upcCode?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
@@ -9544,6 +9547,7 @@ export type ProductUpdateInput = {
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   seasonCode?: InputMaybe<Scalars['String']['input']>;
   styleCode?: InputMaybe<Scalars['String']['input']>;
+  upcCode?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
@@ -9626,6 +9630,18 @@ export type ProductsListFilter = {
   styleCode_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   styleCode_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   styleCode_null?: InputMaybe<Scalars['Boolean']['input']>;
+  upcCode?: InputMaybe<Scalars['String']['input']>;
+  upcCode_gt?: InputMaybe<Scalars['String']['input']>;
+  upcCode_gte?: InputMaybe<Scalars['String']['input']>;
+  upcCode_ilike?: InputMaybe<Scalars['String']['input']>;
+  upcCode_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  upcCode_like?: InputMaybe<Scalars['String']['input']>;
+  upcCode_lt?: InputMaybe<Scalars['String']['input']>;
+  upcCode_lte?: InputMaybe<Scalars['String']['input']>;
+  upcCode_ne?: InputMaybe<Scalars['String']['input']>;
+  upcCode_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  upcCode_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  upcCode_null?: InputMaybe<Scalars['Boolean']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -9647,6 +9663,7 @@ export type ProductsOrderByInput = {
   productCategoryHeirarchy?: InputMaybe<Sort>;
   seasonCode?: InputMaybe<Sort>;
   styleCode?: InputMaybe<Sort>;
+  upcCode?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
 };
 
