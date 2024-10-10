@@ -36,7 +36,7 @@ fs.readdir(entityPath, (err, files) => {
 					const entityClassName = classNameMatch[1];
 					const entityFileName = path.basename(file, '.ts');
 					const sidecarFilePath = path.join(hookPath, `${entityFileName}.hooks.ts`);
-					const sidecarContent = GenerateSideCarClass(entityClassName, entityFileName);
+					const sidecarContent = GenerateSideCarClass(entityClassName, entityFileName, true);
 
 					fs.access(sidecarFilePath, fs.constants.F_OK, err => {
 						if (err || overwriteSidecars) {
