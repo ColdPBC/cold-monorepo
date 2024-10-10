@@ -1,6 +1,6 @@
 export const importGraphWeaverHookClasses = `import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';\n`;
 
-export const GenerateSideCarClass = (entityClassName: string, entityFileName: string) => `
+export const GenerateSideCarClass = (entityClassName: string, entityFileName: string, useBaseCarHooks: boolean) => `
 // ${entityClassName} Hooks
 import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 import { BaseSidecar } from '../base.sidecar';
@@ -11,23 +11,30 @@ export class ${entityClassName}Hooks extends BaseSidecar {
 \tconstructor() {
 \t\tsuper(${entityClassName}Hooks.name, ${entityClassName});
 \t}
-\t${BEFORE_READ_HOOK_FUNCTION(entityClassName)}
-\t${AFTER_READ_HOOK_FUNCTION(entityClassName)}
-\t${BEFORE_CREATE_HOOK_FUNCTION(entityClassName)}
-\t${AFTER_CREATE_HOOK_FUNCTION(entityClassName)}
-\t${BEFORE_UPDATE_HOOK_FUNCTION(entityClassName)}
-\t${AFTER_UPDATE_HOOK_FUNCTION(entityClassName)}
-\t${BEFORE_DELETE_HOOK_FUNCTION(entityClassName)}
-\t${AFTER_DELETE_HOOK_FUNCTION(entityClassName)}
+\t${useBaseCarHooks ? '// Overrride BeforeReadHook here:\n' : BEFORE_READ_HOOK_FUNCTION(entityClassName)}
+\t${useBaseCarHooks ? '// Overrride AfterReadHook here:\n' : AFTER_READ_HOOK_FUNCTION(entityClassName)}
+\t${useBaseCarHooks ? '// Overrride BeforeCreateHook here:\n' : BEFORE_CREATE_HOOK_FUNCTION(entityClassName)}
+\t${useBaseCarHooks ? '// Overrride AfterCreateHook here:\n' : AFTER_CREATE_HOOK_FUNCTION(entityClassName)}
+\t${useBaseCarHooks ? '// Overrride BeforeUpdateHook here:\n' : BEFORE_UPDATE_HOOK_FUNCTION(entityClassName)}
+\t${useBaseCarHooks ? '// Overrride AfterUpdateHook here:\n' : AFTER_UPDATE_HOOK_FUNCTION(entityClassName)}
+\t${useBaseCarHooks ? '// Overrride BeforeDeleteHook here:\n' : BEFORE_DELETE_HOOK_FUNCTION(entityClassName)}
+\t${useBaseCarHooks ? '// Overrride AfterDeleteHook here:\n' : AFTER_DELETE_HOOK_FUNCTION(entityClassName)}
 }
 `;
 
 // ENTITY HOOK FUNCTIONS
 export const BEFORE_CREATE_HOOK_FUNCTION = (entityClassName: string) => `
-\tasync beforeCreateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('before ${entityClassName} create hook', { user: params.context.user, organization: params.context.organization, arguments: params.args });
-	\treturn params;
-\t}
+async beforeCreateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
+	this.logger.log(\`before create ${entityClassName}\`, { user: params.context.user, arguments: params.args });
+	for (const item of params.args.items) {
+		set(item, 'id', new Cuid2Generator(GuidPrefixes["${entityClassName}").generate().scopedId);
+		set(item, 'organization.id', params.context.user.organization.id);
+		set(item, 'updatedAt', new Date());
+		set(item, 'createdAt', new Date());
+	}
+
+  return params;    
+}
 `;
 
 export const AFTER_CREATE_HOOK_FUNCTION = (entityClassName: string) => `
