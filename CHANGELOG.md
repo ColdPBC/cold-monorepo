@@ -1,3 +1,19 @@
+# [1.418.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.417.0...v1.418.0) (2024-10-10)
+
+
+### Bug Fixes
+
+* add includeNullOrgs to sustainability_attributes entity ([fbf17b2](https://github.com/ColdPBC/cold-monorepo/commit/fbf17b2982be2cd5f5e03014d468dad0a8570b3f))
+* add new hook classes for various entities ([e3b531f](https://github.com/ColdPBC/cold-monorepo/commit/e3b531f5482021f096e51bdd80affbdff38aa101))
+* **create_sidecar.ts:** update GenerateSideCarClass to include additional parameter ([8eeeeed](https://github.com/ColdPBC/cold-monorepo/commit/8eeeeed0c2615610c998d1d0873310904cc2289c))
+* remove commented-out console.log from winston config ([0baf51b](https://github.com/ColdPBC/cold-monorepo/commit/0baf51b1df941bd83a3bbf811ccda66166cdbc06))
+
+
+### Features
+
+* add default lifecycle hooks for entity operations ([dc53318](https://github.com/ColdPBC/cold-monorepo/commit/dc53318cc41d47c8bdfff67ff61d1e01e1ef3bb8))
+* enhance entity hooks generator to support optional base car hooks ([1c85860](https://github.com/ColdPBC/cold-monorepo/commit/1c8586011c543baa54270174974cb148881c3961))
+
 # [1.417.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.416.2...v1.417.0) (2024-10-10)
 
 
