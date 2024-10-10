@@ -11,7 +11,9 @@ This is a GraphQL API for cold climate data. It is built with Node.js, Fastify, 
 This repository uses PNPM as the package manager. To install the dependencies, run the following command:
 
 ```bash
+
 pnpm install
+
 ```
 
 ## Generating Schema
