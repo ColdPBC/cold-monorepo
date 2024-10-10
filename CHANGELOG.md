@@ -1,3 +1,10 @@
+## [1.419.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.419.0...v1.419.1) (2024-10-10)
+
+
+### Bug Fixes
+
+* acl type issues ([dde6295](https://github.com/ColdPBC/cold-monorepo/commit/dde62954d127fa48c50e42a4284737b8976db931))
+
 # [1.419.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.418.2...v1.419.0) (2024-10-10)
 
 
