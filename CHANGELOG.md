@@ -1,3 +1,10 @@
+## [1.418.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.418.0...v1.418.1) (2024-10-10)
+
+
+### Bug Fixes
+
+* update access control imports and adjust hook methods formatting ([3c7b2ff](https://github.com/ColdPBC/cold-monorepo/commit/3c7b2ff1b5120e61960e17717114049ba50bfece))
+
 # [1.418.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.417.0...v1.418.0) (2024-10-10)
 
 
