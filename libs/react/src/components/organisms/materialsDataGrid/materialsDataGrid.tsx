@@ -13,10 +13,9 @@ import {
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import { get, has, uniq } from 'lodash';
-import { listFilterOperators } from '@coldpbc/lib';
+import {listFilterOperators, listSortComparator} from '@coldpbc/lib';
 import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
-import { HexColors } from '@coldpbc/themes';
 
 const _MaterialsDataGrid = () => {
   const { orgId } = useAuth0Wrapper();
@@ -64,21 +63,6 @@ const _MaterialsDataGrid = () => {
     return <Spinner />;
   }
 
-  const renderBubbles = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    // loop through the array and return bubbles
-    return (
-      <div className={'h-full flex items-center text-body text-tc-primary font-bold gap-[10px] truncate'}>
-        {params.value.map((label: string, index: number) => {
-          return (
-            <div key={index} className={'rounded-[32px] border-[1px] border-primary px-[12px] w-auto whitespace-nowrap'}>
-              <span className={'text-body'}>{label}</span>
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
   const columns: GridColDef[] = [
     {
       field: 'name',
@@ -94,13 +78,16 @@ const _MaterialsDataGrid = () => {
       field: 'sustainabilityAttributes',
       headerName: 'Sustainability Attributes',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      minWidth: 230,
       type: 'singleSelect',
       valueOptions: uniqSusAttributes,
-      renderCell: renderBubbles,
-      filterOperators: listFilterOperators,
       valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
+      renderCell: (params) => {
+        return <DataGridCellHoverPopover params={params} />;
+      },
+      width: 350,
+      resizable: false,
+      sortComparator: listSortComparator,
+      filterOperators: listFilterOperators,
     },
     {
       field: 'tier2Supplier',
@@ -115,12 +102,16 @@ const _MaterialsDataGrid = () => {
       field: 'usedBy',
       headerName: 'Used By',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      minWidth: 230,
-      renderCell: renderBubbles,
       type: 'singleSelect',
       valueOptions: uniqTier1Suppliers,
       valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
+      renderCell: (params) => {
+        return <DataGridCellHoverPopover params={params} />;
+      },
+      width: 350,
+      resizable: false,
+      sortComparator: listSortComparator,
+      filterOperators: listFilterOperators,
     },
   ];
 
