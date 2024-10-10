@@ -1,0 +1,28 @@
+
+// PrismaMigration Hooks
+import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
+import { BaseSidecar } from '../base.sidecar';
+import { OrgContext } from '../../libs/acls/acl_policies';
+import { PrismaMigration } from '../postgresql';
+
+export class PrismaMigrationHooks extends BaseSidecar {
+	constructor() {
+		super(PrismaMigrationHooks.name, PrismaMigration);
+	}
+	// Overrride BeforeReadHook here:
+
+	// Overrride AfterReadHook here:
+
+	// Overrride BeforeCreateHook here:
+
+	// Overrride AfterCreateHook here:
+
+	// Overrride BeforeUpdateHook here:
+
+	// Overrride AfterUpdateHook here:
+
+	// Overrride BeforeDeleteHook here:
+
+	// Overrride AfterDeleteHook here:
+
+}

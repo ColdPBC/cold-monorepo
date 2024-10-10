@@ -1,0 +1,28 @@
+
+// OrganizationComplianceNoteLink Hooks
+import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
+import { BaseSidecar } from '../base.sidecar';
+import { OrgContext } from '../../libs/acls/acl_policies';
+import { OrganizationComplianceNoteLink } from '../postgresql';
+
+export class OrganizationComplianceNoteLinkHooks extends BaseSidecar {
+	constructor() {
+		super(OrganizationComplianceNoteLinkHooks.name, OrganizationComplianceNoteLink);
+	}
+	// Overrride BeforeReadHook here:
+
+	// Overrride AfterReadHook here:
+
+	// Overrride BeforeCreateHook here:
+
+	// Overrride AfterCreateHook here:
+
+	// Overrride BeforeUpdateHook here:
+
+	// Overrride AfterUpdateHook here:
+
+	// Overrride BeforeDeleteHook here:
+
+	// Overrride AfterDeleteHook here:
+
+}
