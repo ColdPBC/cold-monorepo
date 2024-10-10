@@ -1,3 +1,10 @@
+## [1.419.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.419.1...v1.419.2) (2024-10-10)
+
+
+### Bug Fixes
+
+* correct README.md formatting issues ([705f1ad](https://github.com/ColdPBC/cold-monorepo/commit/705f1ad26ab6b22111b945d31458f1b3c0c9badc))
+
 ## [1.419.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.419.0...v1.419.1) (2024-10-10)
 
 
