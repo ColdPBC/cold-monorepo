@@ -1,3 +1,10 @@
+# [1.417.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.416.2...v1.417.0) (2024-10-10)
+
+
+### Features
+
+* add upcCode fields and refactor ACL policies ([24b24e7](https://github.com/ColdPBC/cold-monorepo/commit/24b24e7ce7df4e8f20aa23837ded1ed91c08f80d))
+
 ## [1.416.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.416.1...v1.416.2) (2024-10-10)
 
 
