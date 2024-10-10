@@ -27,7 +27,6 @@ export const DataGridCellHoverPopover = (props: {
 						<li key={index}>{value}</li>
 					))}
 				</ul>
-				Click on the row for more details
 			</div>
 		);
 	};
