@@ -17,6 +17,10 @@ export class BaseSidecar {
 		this.entityName = this.entity.name;
 	}
 
+	/**
+	 * Before Read Hook
+	 * @param params
+	 */
 	async beforeReadHook(params: ReadHookParams<typeof this.entity, OrgContext>) {
 		this.logger.log(`before read ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 		return params;
