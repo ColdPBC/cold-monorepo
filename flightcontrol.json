@@ -95,6 +95,7 @@
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
             "libs/nest/prisma/schema.prisma",
+            "libs/nest/prisma/seeds/**",
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
