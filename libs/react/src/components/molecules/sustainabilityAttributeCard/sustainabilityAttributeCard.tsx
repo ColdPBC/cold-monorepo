@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { AttributeAssuranceGraph } from '../attributeAssuranceGraph';
 
 export interface SustainabilityAttribute {
   id: string;
@@ -36,13 +37,78 @@ interface SustainabilityAttributeCardProps {
 
 const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
 
-function toSentenceCase(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+interface SustainabilityAttributeAssuranceData {
+  activeCount: number;
+  expiredCount: number;
+  notDocumentedCount: number;
 }
 
-function pluralize(word: string, count: number) {
-  const sentenceCaseWord = toSentenceCase(word);
-  return `${count} ${sentenceCaseWord}${count !== 1 ? 's' : ''}`;
+function processSustainabilityAttribute(attribute: SustainabilityAttribute): SustainabilityAttributeAssuranceData {
+  const result: SustainabilityAttributeAssuranceData = {
+    activeCount: 0,
+    expiredCount: 0,
+    notDocumentedCount: 0,
+  };
+
+  const currentDate = new Date();
+  const entityAssurances = new Map<string, AttributeAssurance[]>();
+
+  // Group assurances by entity ID
+  attribute.attributeAssurances.forEach(assurance => {
+    let entityId: string | undefined;
+
+    switch (attribute.level) {
+      case 'MATERIAL':
+        entityId = assurance.material?.id;
+        break;
+      case 'ORGANIZATION':
+        entityId = assurance.organization?.id;
+        break;
+      case 'PRODUCT':
+        entityId = assurance.product?.id;
+        break;
+      case 'SUPPLIER':
+        entityId = assurance.organizationFacility?.id;
+        break;
+    }
+
+    if (entityId) {
+      if (!entityAssurances.has(entityId)) {
+        entityAssurances.set(entityId, []);
+      }
+      entityAssurances.get(entityId)!.push(assurance);
+    }
+  });
+
+  // Process grouped assurances
+  entityAssurances.forEach((assurances, _entityId) => {
+    let hasActiveAssurance = false;
+    let hasExpiredAssurance = false;
+
+    for (const assurance of assurances) {
+      const hasDocument = !!assurance.organizationFile?.id;
+      const expirationDate = assurance.effectiveEndDate ? new Date(assurance.effectiveEndDate) : undefined;
+
+      if (hasDocument) {
+        if (!expirationDate || expirationDate > currentDate) {
+          hasActiveAssurance = true;
+          break;  // Active assurance found, no need to check further
+        } else {
+          hasExpiredAssurance = true;
+        }
+      }
+    }
+
+    if (hasActiveAssurance) {
+      result.activeCount++;
+    } else if (hasExpiredAssurance) {
+      result.expiredCount++;
+    } else {
+      result.notDocumentedCount++;
+    }
+  });
+
+  return result;
 }
 
 const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> = ({ sustainabilityAttribute }) => {
@@ -50,22 +116,17 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
 	const [imgSrc, setImgSrc] = useState<string>(sustainabilityAttribute.logoUrl || DEFAULT_ICON_URL);
 
 	return (
-		<div className="w-full h-auto p-4 rounded-2xl border border-gray-90 justify-start items-start gap-4 inline-flex">
-			<div className="w-24 h-24 flex-shrink-0 rounded-lg justify-start items-center gap-2.5 flex">
+		<div className="w-full h-auto p-4 rounded-2xl border border-gray-90 flex">
+			<div className="w-24 h-24 flex-shrink-0 mr-4">
 				<img className="w-full h-full object-cover rounded-lg" src={imgSrc} alt={`Logo for ${sustainabilityAttribute.name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
 			</div>
-			<div className="grow shrink basis-0 self-stretch flex-col justify-between items-start inline-flex">
-				<div className="self-stretch text-tc-primary text-l font-bold">{sustainabilityAttribute.name}</div>
-				<div className="self-stretch justify-start items-end gap-2 inline-flex">
-					<div
-						className={`
-              text-sm leading-[21px]
-              ${(sustainabilityAttribute.attributeAssurances?.length || 0) > 0 ? 'text-tc-primary' : 'text-tc-disabled'}
-            `}
-          >
-						{pluralize(sustainabilityAttribute.level, sustainabilityAttribute.attributeAssurances?.length || 0)}
+			<div className="flex-grow flex flex-col justify-between min-w-0 overflow-hidden">
+				<div className="w-full overflow-hidden">
+					<div className="text-tc-primary text-l font-bold truncate" title={sustainabilityAttribute.name}>
+						{sustainabilityAttribute.name}
 					</div>
 				</div>
+				<AttributeAssuranceGraph entity={sustainabilityAttribute.level} {...processSustainabilityAttribute(sustainabilityAttribute)} />
 			</div>
 		</div>
 	);
