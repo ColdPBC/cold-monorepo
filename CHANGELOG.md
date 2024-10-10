@@ -1,3 +1,10 @@
+## [1.418.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.418.1...v1.418.2) (2024-10-10)
+
+
+### Bug Fixes
+
+* add seeds directory to list of files that trigger a new deployment of the Cold API ([de44c32](https://github.com/ColdPBC/cold-monorepo/commit/de44c32f464086d21e330625ea803ffe1c66d623))
+
 ## [1.418.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.418.0...v1.418.1) (2024-10-10)
 
 
