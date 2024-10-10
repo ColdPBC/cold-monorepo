@@ -1,3 +1,10 @@
+# [1.419.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.418.2...v1.419.0) (2024-10-10)
+
+
+### Features
+
+* implement ID generation and MQTT messaging on create/update/delete on all entities ([afce367](https://github.com/ColdPBC/cold-monorepo/commit/afce3678dc819a535481b5df172a7b30e5dddb65))
+
 ## [1.418.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.418.1...v1.418.2) (2024-10-10)
 
 
