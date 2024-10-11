@@ -1,35 +1,8 @@
 import React, { useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { AttributeAssuranceGraph } from '../attributeAssuranceGraph';
-
-export interface SustainabilityAttribute {
-  id: string;
-  name: string;
-  logoUrl?: string;
-  level: 'MATERIAL' | 'ORGANIZATION' | 'PRODUCT' | 'SUPPLIER';
-  attributeAssurances: AttributeAssurance[];
-}
-
-interface AttributeAssurance {
-  id: string;
-  effectiveEndDate: string | null;
-  material: {
-    id: string;
-  } | null;
-  organization: {
-    id: string;
-  } | null;
-  organizationFile: {
-    id: string;
-  } | null;
-  organizationFacility: {
-    id: string;
-  } | null;
-  product: {
-    id: string;
-  } | null;
-}
+import { AttributeAssuranceGraph } from '@coldpbc/components';
+import { AttributeAssurance, SustainabilityAttribute } from '@coldpbc/interfaces';
 
 interface SustainabilityAttributeCardProps {
   sustainabilityAttribute: SustainabilityAttribute;
