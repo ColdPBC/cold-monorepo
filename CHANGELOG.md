@@ -1,3 +1,23 @@
+# [1.422.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.421.0...v1.422.0) (2024-10-11)
+
+
+### Bug Fixes
+
+* adjust column width and responsiveness for DataGrid components ([a8481cd](https://github.com/ColdPBC/cold-monorepo/commit/a8481cdee28146512a0ed64009f019089efd79c2))
+* improve text truncation logic by adding debug logs and refactoring ([50224de](https://github.com/ColdPBC/cold-monorepo/commit/50224dea0f9afee0fae0e6c1ff21e28cb798595e))
+* remove redundant text from datagrid cell hover popover ([334d0d7](https://github.com/ColdPBC/cold-monorepo/commit/334d0d7ccdb0389bfe862809e9dfd02d06e7e892))
+* replace Popover with Tooltip for cell hover interaction ([32fc097](https://github.com/ColdPBC/cold-monorepo/commit/32fc097c9566655f3fd2839744a77d87e6c1bd22))
+* sort values in datagridCellHoverPopover component ([7d5b6e4](https://github.com/ColdPBC/cold-monorepo/commit/7d5b6e4447485ac3bd5a416fa2e075f3019beb57))
+* update hover handling logic for popover visibility ([b79e2e3](https://github.com/ColdPBC/cold-monorepo/commit/b79e2e3fe87cd37319dad70eb9ab2f7d1668cc60))
+* update popover resizing logic and style adjustments ([615eb91](https://github.com/ColdPBC/cold-monorepo/commit/615eb916767b3b7ca0174ed17f2724a9959f9bbf))
+
+
+### Features
+
+* add width and resizable properties to DataGrid columns ([132a4e2](https://github.com/ColdPBC/cold-monorepo/commit/132a4e2c7436168da227abf2bef6a6c82293a8ff))
+* enhance suppliers mock data and remove unused import from story ([f7e3092](https://github.com/ColdPBC/cold-monorepo/commit/f7e3092ae01d57cb4bd87962b92545696a914e62))
+* replace hardcoded cell rendering with DataGridCellHoverPopover component ([3989580](https://github.com/ColdPBC/cold-monorepo/commit/3989580de12cc847833e620bb6f6190a04045696))
+
 # [1.421.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.420.0...v1.421.0) (2024-10-11)
 
 
