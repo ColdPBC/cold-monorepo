@@ -1,3 +1,11 @@
+# [1.421.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.420.0...v1.421.0) (2024-10-11)
+
+
+### Features
+
+* add AttributeAssuranceGraph to SustainabilityAttributeCard ([af53f72](https://github.com/ColdPBC/cold-monorepo/commit/af53f721aaf93279fa52246d7e4fc59f2bf291c6))
+* create new AttributeAssuranceGraph component ([3d30b5e](https://github.com/ColdPBC/cold-monorepo/commit/3d30b5e3d520f896672609d81222ca700e9d0079))
+
 # [1.420.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.419.2...v1.420.0) (2024-10-10)
 
 
