@@ -101,8 +101,8 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       type: 'singleSelect',
       sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
-      width: 350,
-      resizable: false,
+      minWidth: 350,
+      flex: 1,
     },
   ];
 
@@ -126,8 +126,8 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
       valueOptions: uniqProducts,
-      width: 350,
-      resizable: false,
+      minWidth: 350,
+      flex: 1,
     });
   } else {
     const uniqMaterials = uniqWith(
@@ -148,8 +148,8 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
       valueOptions: uniqMaterials,
-      width: 350,
-      resizable: false,
+      minWidth: 350,
+      flex: 1,
     });
   }
 

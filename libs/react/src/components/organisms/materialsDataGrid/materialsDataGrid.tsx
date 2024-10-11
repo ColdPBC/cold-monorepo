@@ -84,8 +84,8 @@ const _MaterialsDataGrid = () => {
       renderCell: (params) => {
         return <DataGridCellHoverPopover params={params} />;
       },
-      width: 350,
-      resizable: false,
+      minWidth: 350,
+      flex: 1,
       sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
     },
@@ -108,8 +108,8 @@ const _MaterialsDataGrid = () => {
       renderCell: (params) => {
         return <DataGridCellHoverPopover params={params} />;
       },
-      width: 350,
-      resizable: false,
+      minWidth: 350,
+      flex: 1,
       sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
     },

@@ -279,10 +279,10 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			type: 'singleSelect',
 			valueOptions: toArray(allAssociatedRecords),
       renderCell: renderAssociatedRecords,
+      minWidth: 350,
+      flex: 1,
 			sortComparator: listSortComparator,
 			filterOperators: listFilterOperators,
-      width: 350,
-      resizable: false,
 		},
 	];
 
