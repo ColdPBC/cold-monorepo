@@ -1,4 +1,4 @@
-export interface AttributeAssurance {
+export interface SustainabilityAttributeAssurance {
   id: string;
   effectiveEndDate: string | null;
   material: {

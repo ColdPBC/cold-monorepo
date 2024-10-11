@@ -1,6 +1,6 @@
 import React from 'react';
 import { EmptyState, SustainabilityAttributeCard } from '@coldpbc/components';
-import type { SustainabilityAttribute } from '@coldpbc/components';
+import type { SustainabilityAttribute } from '@coldpbc/interfaces';
 
 interface SustainabilityAttributeTabProps {
   tab: 'My Attributes' | 'Other Attributes';
