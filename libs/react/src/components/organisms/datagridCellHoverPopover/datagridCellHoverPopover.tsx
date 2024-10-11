@@ -18,8 +18,8 @@ export const DataGridCellHoverPopover = (props: {
   const [valuesToDisplay, setValuesToDisplay] = React.useState<string[]>(
     values
   );
-  const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
-  const open = Boolean(anchorEl);
+  const [hovering, setHovering] = React.useState<boolean>(false);
+  const anchorRef = useRef<HTMLDivElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const popperRef = useRef<HTMLDivElement>(null);
@@ -39,11 +39,11 @@ export const DataGridCellHoverPopover = (props: {
 	};
 
   const onMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
-    setAnchorEl(event.currentTarget);
+    setHovering(true);
   }
 
   const onMouseLeave = () => {
-    setAnchorEl(null);
+    setHovering(false);
   }
 
   const getExtraContentElement = () => {
@@ -59,15 +59,18 @@ export const DataGridCellHoverPopover = (props: {
         }}
         onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
       >
-        <div className={'h-full w-auto'}>
+        <div
+          className={'h-full w-auto'}
+          ref={anchorRef}
+        >
           <span className={'text-body'}>{`+${values.length - valuesToDisplay.length}`}</span>
         </div>
         <Popover
           sx={{
-            pointerEvents: 'none',
+            pointerEvents: 'auto',
           }}
-          open={open}
-          anchorEl={anchorEl}
+          open={hovering}
+          anchorEl={anchorRef.current}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'left',
@@ -79,8 +82,12 @@ export const DataGridCellHoverPopover = (props: {
           ref={popperRef}
           onClose={onMouseLeave}
           disableRestoreFocus={true}
-          disableScrollLock={true}
-
+          slotProps={{
+            paper: {
+              onMouseEnter: onMouseEnter,
+              onMouseLeave: onMouseLeave,
+            }
+          }}
         >
           {getPopoverContent()}
         </Popover>
