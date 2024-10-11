@@ -247,6 +247,22 @@ export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG = gql`
       id
       attributeAssurances(filter: { organization: { id: $organizationId } }) {
         id
+        effectiveEndDate
+        material {
+          id
+        }
+        organizationFile {
+          id
+        }
+        organization {
+          id
+        }
+        organizationFacility {
+          id
+        }
+        product {
+          id
+        }
       }
       level
       logoUrl

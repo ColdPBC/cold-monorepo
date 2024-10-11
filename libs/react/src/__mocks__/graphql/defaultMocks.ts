@@ -24,6 +24,7 @@ import {getSchemaMocks} from "../schemaMocks";
 import {getSupplierMocks} from "../suppliersMock";
 import {getProductsMock} from "../productsMock";
 import {getMaterialsMocksWithAssurances} from "../materialsMock";
+import { AttributeAssuranceMock } from '../attributeAssuranceMock';
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
@@ -516,12 +517,14 @@ export const sustainabilityAttributesMocks = [
               id: 'a',
               name: 'Global Recycled Standard',
               logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
-              attributeAssurances: [{id: 'a'}],
+              attributeAssurances: [
+                AttributeAssuranceMock({ entity: 'MATERIAL', status: 'ACTIVE', index: 1}),
+              ],
               level: 'MATERIAL',
             },
             // For 'Other Attributes'
             {
-              id: 'a',
+              id: 'b',
               name: 'Fair Wear',
               logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
               attributeAssurances: [],
