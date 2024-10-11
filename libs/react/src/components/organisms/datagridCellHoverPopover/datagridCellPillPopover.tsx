@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Popover} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
 
@@ -10,15 +10,25 @@ export const DataGridCellPillPopover = (props: {
 }) => {
   const { text, color = HexColors.primary.DEFAULT, width = 200 } = props;
   const textRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [isTruncated, setIsTruncated] = useState(false);
 
   useEffect(() => {
-    if(!textRef.current) {
-      return;
-    }
     const element = textRef.current;
-    const overflow = element.offsetWidth < element.scrollWidth;
-    setIsTruncated(overflow);
+
+    const checkTruncation = () => {
+      if(element) {
+        const isOverflowing = element.clientWidth < element.scrollWidth;
+        if(text === 'CloudBreaker Down Coat'){
+          console.log('text', text);
+          console.log('isOverflowing', isOverflowing);
+          console.log('element.scrollWidth', element.scrollWidth);
+          console.log('element.clientWidth', element.clientWidth - 32);
+        }
+        setIsTruncated(isOverflowing);
+      }
+    }
+    checkTruncation();
   }, [text]);
 
   if(!isTruncated) {
@@ -31,7 +41,11 @@ export const DataGridCellPillPopover = (props: {
         }}
         ref={textRef}
       >
-        <span className={'text-body'}>{text}</span>
+        <span
+          ref={contentRef}
+        >
+          {text}
+        </span>
       </div>
     );
   } else {
@@ -45,7 +59,11 @@ export const DataGridCellPillPopover = (props: {
           }}
           ref={textRef}
         >
-          <span className={'text-body'}>{text}</span>
+          <span
+            ref={contentRef}
+          >
+            {text}
+          </span>
         </div>
       </Popover>
     )
