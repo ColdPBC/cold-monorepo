@@ -1,3 +1,10 @@
+## [1.422.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.0...v1.422.1) (2024-10-11)
+
+
+### Bug Fixes
+
+* fix imports after moving AttributeAssurance and SustainabilityAttribute into Interfaces ([bd8defa](https://github.com/ColdPBC/cold-monorepo/commit/bd8defa7d2b5431c501c30bbd855a7b747b77b89))
+
 # [1.422.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.421.0...v1.422.0) (2024-10-11)
 
 
