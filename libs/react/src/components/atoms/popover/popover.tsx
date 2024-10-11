@@ -1,76 +1,59 @@
-import React, { ReactNode } from 'react';
-import { Positions } from '../../../enums/positions';
-import { ColorNames } from '../../../enums/colors';
-import { GlobalSizes } from '../../../enums/sizes';
-import { Tooltip } from 'flowbite-react';
-import {
-  getA11yTextColorStyle,
-  getBackgroundColorStyle,
-  getBorderColorStyle,
-} from '../../../lib/colorUtils';
-import { flowbiteThemeOverride } from '../../../themes/flowbiteThemeOverride';
-import { cloneDeep } from 'lodash';
+import React, {ReactNode, useRef} from 'react';
+import {Popover as MUIPopover, PopoverProps} from '@mui/material';
+import {twMerge} from "tailwind-merge";
 
-interface PopoverProps {
+
+export interface MUIPopoverProps {
   children: ReactNode;
-  content?: ReactNode;
-  position?: Positions;
-  color?: ColorNames;
-  width?: GlobalSizes.small | GlobalSizes.medium | GlobalSizes.large;
-  arrow?: boolean;
+  content: ReactNode;
+  containerClassName?: string;
+  contentClassName?: string;
+  popoverProps?: PopoverProps;
 }
 
-export const Popover = (props: PopoverProps) => {
-  // how to make the tooltip visible on hover
-  const {
-    children,
-    content,
-    position = Positions.Auto,
-    color = ColorNames.jetBlack,
-    width = GlobalSizes.medium,
-    arrow = true,
-  } = props;
-  const customTheme = cloneDeep(flowbiteThemeOverride.tooltip);
+export const Popover = (props: MUIPopoverProps) => {
+  const { containerClassName, contentClassName, content, children, popoverProps,  } = props;
+  const [hovering, setHovering] = React.useState<boolean>(false);
+  const anchorRef = useRef<HTMLDivElement>(null);
 
-  const getWidthStyle = () => {
-    switch (width) {
-      case GlobalSizes.small:
-        return 'w-32';
-      default:
-      case GlobalSizes.medium:
-        return 'w-48';
-      case GlobalSizes.large:
-        return 'w-80';
-    }
-  };
+  const onMouseEnter = () => {
+    setHovering(true);
+  }
 
-  const getPopoverColorStyle = () => {
-    return (
-      getBackgroundColorStyle(color) +
-      ' ' +
-      getA11yTextColorStyle(color) +
-      ' border ' +
-      getBorderColorStyle(color) +
-      ' ' +
-      getWidthStyle()
-    );
-  };
-
-  const getTooltipTheme = () => {
-    customTheme.arrow.style.auto = getBackgroundColorStyle(color);
-    customTheme.style.auto = getPopoverColorStyle();
-    return customTheme;
-  };
+  const onMouseLeave = () => {
+    setHovering(false);
+  }
 
   return (
-    <Tooltip
-      theme={getTooltipTheme()}
-      content={content}
-      placement={position}
-      arrow={arrow}
-      style={'auto'}
+    <div
+      className={twMerge('text-tc-primary text-body', containerClassName)}
+      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
+      ref={anchorRef}
     >
       {children}
-    </Tooltip>
-  );
+      <MUIPopover
+        sx={{
+          pointerEvents: 'none',
+        }}
+        open={hovering}
+        anchorEl={anchorRef.current}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        onClose={onMouseLeave}
+        disableRestoreFocus={true}
+        {...popoverProps}
+      >
+        <div
+          className={twMerge('rounded-[8px] bg-gray-50 border-[1px] border-lightblue-300 p-[8px] text-tc-primary text-body transition-none w-[275px] max-h-[200px] overflow-y-scroll', contentClassName)}>
+          {content}
+        </div>
+      </MUIPopover>
+    </div>
+);
 };

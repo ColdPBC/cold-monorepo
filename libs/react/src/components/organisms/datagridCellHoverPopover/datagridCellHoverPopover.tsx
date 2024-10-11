@@ -2,10 +2,7 @@ import React, {useEffect, useRef} from "react";
 import {Popover} from '@mui/material';
 import {HexColors} from "@coldpbc/themes";
 import {GridRenderCellParams, GridTreeNodeWithRender} from "@mui/x-data-grid";
-import {orderBy, sortBy} from "lodash";
-import {child} from "winston";
-
-// todo: set max width
+import {DataGridCellPillPopover} from "./datagridCellPillPopover";
 
 const MAX_WIDTH = 200;
 
@@ -38,7 +35,7 @@ export const DataGridCellHoverPopover = (props: {
 		);
 	};
 
-  const onMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+  const onMouseEnter = () => {
     setHovering(true);
   }
 
@@ -94,6 +91,11 @@ export const DataGridCellHoverPopover = (props: {
       </div>
 		);
   };
+
+  const displayPill = (value: string, index: number) => {
+    // first check if the div is truncated. if so use a popover component to display the rest of the value
+    return <DataGridCellPillPopover key={index} text={value} color={color} width={MAX_WIDTH} />;
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -151,18 +153,7 @@ export const DataGridCellHoverPopover = (props: {
             {
               valuesToDisplay
               .map((value: string, index: number) => {
-              return (
-                <div
-                  key={index}
-                  className={'rounded-[32px] border-[1px] px-[16px] py-[4px] whitespace-nowrap truncate w-auto'}
-                  style={{
-                    borderColor: color,
-                    maxWidth: MAX_WIDTH,
-                  }}
-                >
-                  <span className={'text-body'}>{value}</span>
-                </div>
-              );
+              return displayPill(value, index);
             })}
           </div>
         )
@@ -172,14 +163,8 @@ export const DataGridCellHoverPopover = (props: {
       }
       {/* This div is hidden offscreen and is used to calculate the actual width of the elements*/}
       <div
-        style={{
-          position: 'absolute',
-          left: '-9999px',
-          // Ensures the items stay in a line and don't wrap to next line
-          whiteSpace: 'nowrap',
-        }}
         ref={divRef}
-        className={'w-auto flex items-center gap-[10px]'}
+        className={'w-auto flex items-center gap-[10px] invisible whitespace-nowrap'}
       >
         {
           values
