@@ -13,6 +13,7 @@ import {
   getFilesProcessingMock,
   getFilesWithAssurances,
   getFilesWithoutAssurances,
+  filesWithTooManyRecordsMock,
   materialsForAssurancesMock,
   suppliersForAssurancesMock
 } from '../filesMock';
@@ -534,4 +535,19 @@ export const sustainabilityAttributesMocks = [
         },
       }),
   }
+];
+
+export const filesWithTooManyRecordsMocks: {
+  query: DocumentNode;
+  handler: RequestHandler;
+}[] = [
+  {
+    query: GET_ALL_FILES,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          organizationFiles: filesWithTooManyRecordsMock(),
+        },
+      }),
+  },
 ];

@@ -18,12 +18,8 @@ export const listFilterOperators = getGridSingleSelectOperators().map(operator =
           isOk = isOk && toArray(params).includes(fv);
         });
         return isOk;
-      } else if (operator.value === 'isNot') {
-        let isOk = true;
-        filterItem?.value?.forEach((fv: any) => {
-          isOk = isOk && !toArray(params).includes(fv);
-        });
-        return isOk;
+      } else if (operator.value === 'not') {
+        return !toArray(params).includes(filterItem.value);
       } else {
         return toArray(params).includes(filterItem.value);
       }

@@ -1,6 +1,6 @@
 import { DataGrid, GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridValidRowModel, MuiEvent } from '@mui/x-data-grid';
 import { ClaimStatus, IconNames } from '@coldpbc/enums';
-import { ColdIcon, ErrorFallback, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
+import {ColdIcon, DataGridCellHoverPopover, ErrorFallback, MUIDataGridNoRowsOverlay} from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays, format } from 'date-fns';
 import { capitalize } from 'lodash';
@@ -165,17 +165,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
       );
     }
 
-    return (
-      <div className={'h-full w-full flex flex-row items-center gap-[10px]'}>
-        {params.value.map((record: string, index: number) => {
-          return (
-            <div key={index} className={'text-tc-primary text-body p-[4px] rounded-[32px] border-[1px] border-purple-200'}>
-              {capitalize(record)}
-            </div>
-          );
-        })}
-      </div>
-    );
+    return <DataGridCellHoverPopover params={params} color={HexColors.purple["200"]} />
   };
 
   const onRowClick = (params: GridRowParams, event: MuiEvent<React.MouseEvent>, details: GridCallbackDetails) => {
@@ -286,11 +276,11 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			field: 'associated_records',
 			headerName: 'Associated Records',
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
-			flex: 1,
-			minWidth: 300,
 			type: 'singleSelect',
 			valueOptions: toArray(allAssociatedRecords),
-			renderCell: renderAssociatedRecords,
+      renderCell: renderAssociatedRecords,
+      minWidth: 350,
+      flex: 1,
 			sortComparator: listSortComparator,
 			filterOperators: listFilterOperators,
 		},

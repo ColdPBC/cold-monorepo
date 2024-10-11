@@ -10,12 +10,13 @@ import {
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import { IconNames } from '@coldpbc/enums';
-import { ColdIcon, MuiDataGrid, Spinner } from '@coldpbc/components';
+import {ColdIcon, DataGridCellHoverPopover, MuiDataGrid, Spinner} from '@coldpbc/components';
 import React, { useEffect, useState } from 'react';
 import { SuppliersWithAssurances } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
 import { get, has, isEqual, uniqWith } from 'lodash';
+import {listFilterOperators, listSortComparator} from "@coldpbc/lib";
 
 export const SuppliersDataGrid = (props: { tier: number }) => {
   const { tier } = props;
@@ -49,20 +50,6 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
   if (suppliersQuery.isLoading) {
     return <Spinner />;
   }
-
-  const renderCell = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    return (
-      <div className={'h-full w-full flex flex-row items-center gap-[10px]'}>
-        {params.value.map((object: string, index: number) => {
-          return (
-            <div key={index} className={'text-tc-primary text-body p-[4px] rounded-[32px] border-[1px] border-primary'}>
-              {object}
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
 
   const renderHeader = (params: GridColumnHeaderParams<any, any, any>) => {
     // check if the header is materials or products
@@ -107,33 +94,62 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       field: 'sustainabilityAttributes',
       headerName: 'Sustainability Attributes',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      minWidth: 230,
       valueOptions: uniqSusAttributes,
-      renderCell: renderCell,
+      renderCell: (params) => {
+        return <DataGridCellHoverPopover params={params} />;
+      },
+      type: 'singleSelect',
+      sortComparator: listSortComparator,
+      filterOperators: listFilterOperators,
+      minWidth: 350,
+      flex: 1,
     },
   ];
 
   if (tier === 1) {
+    const uniqProducts = uniqWith(
+      suppliers
+        .map(supplier => supplier.products.map(product => product.name))
+        .flat(),
+      isEqual,
+    );
     // add a products column
     columns.push({
       field: 'products',
       headerName: 'Products',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      minWidth: 230,
-      renderCell: renderCell,
+      renderCell: (params) => {
+        return <DataGridCellHoverPopover params={params} />;
+      },
       renderHeader: renderHeader,
+      type: 'singleSelect',
+      sortComparator: listSortComparator,
+      filterOperators: listFilterOperators,
+      valueOptions: uniqProducts,
+      minWidth: 350,
+      flex: 1,
     });
   } else {
+    const uniqMaterials = uniqWith(
+      suppliers
+        .map(supplier => supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.name))
+        .flat(),
+      isEqual,
+    );
     columns.push({
       field: 'materials',
       headerName: 'Materials',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      minWidth: 230,
-      renderCell: renderCell,
+      renderCell: (params) => {
+        return <DataGridCellHoverPopover params={params} />;
+      },
       renderHeader: renderHeader,
+      type: 'singleSelect',
+      sortComparator: listSortComparator,
+      filterOperators: listFilterOperators,
+      valueOptions: uniqMaterials,
+      minWidth: 350,
+      flex: 1,
     });
   }
 

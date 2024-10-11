@@ -5,7 +5,7 @@ import {
   filesProcessedWithDatesMocks,
   filesProcessingMocks,
   filesWithAssurancesMocks,
-  filesWithOutAssurancesMocks,
+  filesWithOutAssurancesMocks, filesWithTooManyRecordsMocks,
   StoryMockProvider
 } from '@coldpbc/mocks';
 
@@ -53,6 +53,16 @@ export const FilesProcessedWithDates: Story = {
   render: () => {
     return (
       <StoryMockProvider graphqlMocks={filesProcessedWithDatesMocks}>
+        <DocumentsPage />
+      </StoryMockProvider>
+    );
+  },
+};
+
+export const FilesWithTooManyRecords: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider graphqlMocks={filesWithTooManyRecordsMocks}>
         <DocumentsPage />
       </StoryMockProvider>
     );
