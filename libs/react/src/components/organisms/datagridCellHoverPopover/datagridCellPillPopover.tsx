@@ -19,12 +19,6 @@ export const DataGridCellPillPopover = (props: {
     const checkTruncation = () => {
       if(element) {
         const isOverflowing = element.clientWidth < element.scrollWidth;
-        if(text === 'CloudBreaker Down Coat'){
-          console.log('text', text);
-          console.log('isOverflowing', isOverflowing);
-          console.log('element.scrollWidth', element.scrollWidth);
-          console.log('element.clientWidth', element.clientWidth - 32);
-        }
         setIsTruncated(isOverflowing);
       }
     }
