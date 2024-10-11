@@ -11,7 +11,7 @@ export const DataGridCellHoverPopover = (props: {
   color?: string;
 }) => {
   const { params, color = HexColors.primary.DEFAULT } = props;
-  const values = params.value as string[];
+  const values = (params.value as string[]).sort();
   const [valuesToDisplay, setValuesToDisplay] = React.useState<string[]>(
     values
   );
