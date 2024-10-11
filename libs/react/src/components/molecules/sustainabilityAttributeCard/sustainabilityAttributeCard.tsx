@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { AttributeAssuranceGraph } from '@coldpbc/components';
-import { AttributeAssurance, SustainabilityAttribute } from '@coldpbc/interfaces';
+import { SustainabilityAttributeAssurance, SustainabilityAttribute } from '@coldpbc/interfaces';
 
 interface SustainabilityAttributeCardProps {
   sustainabilityAttribute: SustainabilityAttribute;
@@ -24,7 +24,7 @@ function processSustainabilityAttribute(attribute: SustainabilityAttribute): Sus
   };
 
   const currentDate = new Date();
-  const entityAssurances = new Map<string, AttributeAssurance[]>();
+  const entityAssurances = new Map<string, SustainabilityAttributeAssurance[]>();
 
   // Group assurances by entity ID
   attribute.attributeAssurances.forEach(assurance => {
