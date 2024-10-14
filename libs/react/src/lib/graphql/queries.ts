@@ -213,6 +213,43 @@ export const GET_ALL_PRODUCTS= gql`
     products(filter: $filter){
       id
       name
+      productMaterials {
+        id
+        material {
+          id
+          name
+          attributeAssurances {
+            id
+            sustainabilityAttribute {
+              id
+              name
+            }
+          }
+        }
+      }
+      attributeAssurances {
+        id
+        sustainabilityAttribute {
+          id
+          name
+        }
+      }
+      organizationFacility {
+        id
+        name
+        attributeAssurances {
+          id
+          sustainabilityAttribute {
+            id
+            name
+          }
+        }
+      }
+      metadata
+      seasonCode
+      upcCode
+      styleCode
+      productCategoryHeirarchy
     }
   }
 `;
