@@ -77,7 +77,7 @@ export const DataGridCellHoverPopover = (props: {
 	useEffect(() => {
 		const handleResize = () => {
 			let observer: ResizeObserver | null = null;
-			if (containerRef.current && divRef.current) {
+			if (containerRef.current && divRef.current && values.length > 0) {
 				observer = new ResizeObserver(() => {
 					if (divRef.current && containerRef.current) {
 						const totalWidth = containerRef.current.getBoundingClientRect().width - 110;
