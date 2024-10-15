@@ -1,3 +1,10 @@
+## [1.422.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.2...v1.422.3) (2024-10-15)
+
+
+### Bug Fixes
+
+* update classification service and enums for sustainability attributes ([19bd9a8](https://github.com/ColdPBC/cold-monorepo/commit/19bd9a82acbda172824f0913958419b179827f43))
+
 ## [1.422.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.1...v1.422.2) (2024-10-15)
 
 
