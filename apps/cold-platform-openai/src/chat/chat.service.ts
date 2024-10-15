@@ -1202,7 +1202,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 							},
 						},
 						create: {
-							id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAIResponse).scopedId,
+							id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAiResponse).scopedId,
 							justification: response.justification,
 							answer: response.answer,
 							references: references,
