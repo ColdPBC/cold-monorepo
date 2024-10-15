@@ -48,7 +48,7 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
           outline: 'none',
         },
         '& .MuiDataGrid-row': {
-          minHeight: '37px !important',
+          minHeight: '55px !important',
         },
         ...props.sx,
       }}
