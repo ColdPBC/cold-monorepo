@@ -1,7 +1,7 @@
 import {Combobox, Transition} from '@headlessui/react';
 import {InputOption} from "@coldpbc/interfaces";
 import {SelectProps} from "@coldpbc/components";
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import {clsx} from "clsx";
 import {ChevronUpDownIcon} from '@heroicons/react/20/solid';
 
@@ -25,19 +25,29 @@ export const ComboBox = (props: ComboBoxProps) => {
       })
 
   return (
-		<Combobox value={value} onChange={onChange} name={name}>
+		<Combobox
+			value={value}
+			onChange={onChange}
+			name={name}>
 			<div className="relative" data-testid={name}>
-				<div className="relative w-full border-[1.5px] border-gray-90 rounded-[8px] cursor-pointer p-0 pr-8">
+				<Combobox.Button className="relative w-full border-[1.5px] border-gray-90 rounded-[8px] cursor-pointer p-0 flex justify-between items-center" as={'div'}>
 					<Combobox.Input
 						className="w-full bg-transparent border-none text-tc-primary p-4 text-left text-body focus:border-none focus:ring-0"
-						displayValue={(option: InputOption) => option.name}
 						onChange={event => setQuery(event.target.value)}
+						displayValue={(option: InputOption) => option.name}
 					/>
-					<Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+					<div className={'pr-2'}>
 						<ChevronUpDownIcon className="h-5 w-5 text-white" aria-hidden="true" />
-					</Combobox.Button>
-				</div>
-				<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0" afterLeave={() => setQuery('')}>
+					</div>
+				</Combobox.Button>
+				<Transition
+					as={Fragment}
+					leave="transition ease-in duration-100"
+					leaveFrom="opacity-100"
+					leaveTo="opacity-0"
+					afterLeave={() => {
+            setQuery('');
+					}}>
 					<Combobox.Options
 						className={`
               ${dropdownDirection === 'up' ? 'bottom-full' : ''}
