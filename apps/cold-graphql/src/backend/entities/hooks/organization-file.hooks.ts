@@ -7,7 +7,7 @@ import { OrganizationFile } from '../postgresql';
 
 export class OrganizationFileHooks extends BaseSidecar {
 	constructor() {
-		super(OrganizationFile);
+		super(OrganizationFile, 'organization_files');
 	}
 	// Overrride BeforeReadHook here:
 

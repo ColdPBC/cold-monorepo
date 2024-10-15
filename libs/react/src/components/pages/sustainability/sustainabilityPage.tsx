@@ -1,5 +1,5 @@
 import { ErrorFallback, ErrorPage, MainContent, Spinner, SustainabilityAttributeTab } from '@coldpbc/components';
-import type { SustainabilityAttribute } from '@coldpbc/components';
+import type { SustainabilityAttribute } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';

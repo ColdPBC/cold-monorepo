@@ -35,8 +35,16 @@ fs.readdir(entityPath, (err, files) => {
 				if (classNameMatch) {
 					const entityClassName = classNameMatch[1];
 					const entityFileName = path.basename(file, '.ts');
+					const tableNameRegex = /@Entity\(\{ tableName: '(\w+)' \}\)/;
+					const tableNameMatch = data.match(tableNameRegex);
+
+					if (!tableNameMatch) {
+						logger.error(`Unable to find table name for ${entityClassName}`);
+						return;
+					}
+
 					const sidecarFilePath = path.join(hookPath, `${entityFileName}.hooks.ts`);
-					const sidecarContent = GenerateSideCarClass(entityClassName, entityFileName, true);
+					const sidecarContent = GenerateSideCarClass(entityClassName, entityFileName, tableNameMatch[1].toLowerCase(), true);
 
 					fs.access(sidecarFilePath, fs.constants.F_OK, err => {
 						if (err || overwriteSidecars) {

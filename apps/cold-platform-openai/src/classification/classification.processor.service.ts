@@ -9,7 +9,7 @@ import { ExtractionJobPayload } from '../extraction/extraction.processor.service
 import { isImage } from '../utility';
 
 @Injectable()
-@Processor({ name: 'openai:classification', scope: Scope.REQUEST })
+@Processor({ name: 'openai:classification' })
 export class ClassificationProcessorService extends BaseWorker {
 	constructor(
 		@InjectQueue('openai:extraction') readonly extractionQueue: Queue,
@@ -29,7 +29,7 @@ export class ClassificationProcessorService extends BaseWorker {
 			let openAiImageUrlContent: OpenAiBase64ImageUrl[] = [
 				{
 					type: 'text',
-					text: this.classification.getClassifyPrompt(organization),
+					text: await this.classification.getClassifyPrompt(organization),
 				},
 			];
 

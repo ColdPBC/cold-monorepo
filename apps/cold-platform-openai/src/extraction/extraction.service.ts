@@ -27,7 +27,7 @@ import {
 	wrap,
 } from '../schemas';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class ExtractionService extends BaseWorker {
 	private openAi;
 
@@ -235,7 +235,7 @@ export class ExtractionService extends BaseWorker {
 			});
 
 			// if the classification does not contain a sustainability attribute, return the parsed response
-			if (!classification.attriutes.find(item => item.name === classification.sustainability_attribute)) {
+			if (!attributes.find(item => item.name === classification.sustainability_attribute)) {
 				this.sendMetrics('organization.files', 'cold-openai', 'no-sustainability-attribute', 'completed', {
 					start,
 					sendEvent: true,
@@ -340,6 +340,7 @@ export class ExtractionService extends BaseWorker {
 	 * @param user
 	 * @param orgFile
 	 * @param organization
+	 * @param attributes
 	 */
 	async extractDataFromContent(
 		content: any[] | string,
@@ -453,7 +454,7 @@ export class ExtractionService extends BaseWorker {
 			});
 
 			// if the classification does not contain a sustainability attribute, return the parsed response
-			if (!classification.attriutes.find(item => item.name === classification.sustainability_attribute)) {
+			if (!attributes?.find(item => item.name === classification.sustainability_attribute)) {
 				this.sendMetrics('organization.files', 'cold-openai', 'no-sustainability-attribute', 'completed', {
 					start,
 					sendEvent: true,

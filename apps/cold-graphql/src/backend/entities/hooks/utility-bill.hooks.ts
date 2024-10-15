@@ -7,7 +7,7 @@ import { UtilityBill } from '../postgresql';
 
 export class UtilityBillHooks extends BaseSidecar {
 	constructor() {
-		super(UtilityBill);
+		super(UtilityBill, 'utility_bills');
 	}
 	// Overrride BeforeReadHook here:
 

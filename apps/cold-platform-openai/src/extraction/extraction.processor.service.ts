@@ -19,7 +19,7 @@ export interface ExtractionJobPayload {
 }
 
 @Injectable()
-@Processor({ name: 'openai:extraction', scope: Scope.REQUEST })
+@Processor('openai:extraction')
 export class ExtractionProcessorService extends BaseWorker {
 	constructor(
 		@InjectQueue('openai:products') readonly productQueue: Queue,

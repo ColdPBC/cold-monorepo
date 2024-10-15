@@ -11,10 +11,34 @@ export class BaseSidecar {
 	mqtt: MqttService;
 	entityName: string;
 	secrets: any;
-	constructor(readonly entity: any) {
+	isOrgScoped: boolean;
+	orgScopedTables = [
+		'actions',
+		'attribute_assurances',
+		'category_data',
+		'facility_footprints',
+		'integrations',
+		'materials',
+		'oranization_compliance',
+		'organization_compliance_ai_response_files',
+		'organization_ai_responses',
+		'organization_compliance_statuses',
+		'organization_compliances_old',
+		'organization_facilities',
+		'organizaton_files',
+		'organizations',
+		'products',
+		'survey_data',
+		'survey_definitions',
+		'survey_status',
+		'sustainability_attributes',
+		'utility_bills',
+	];
+	constructor(readonly entity: any, readonly tableName: string) {
 		this.logger = new WorkerLogger('organization');
 		this.mqtt = mqttService;
 		this.entityName = this.entity.name;
+		this.isOrgScoped = this.orgScopedTables.includes(this.tableName);
 	}
 
 	/**
@@ -40,9 +64,14 @@ export class BaseSidecar {
 
 		for (const item of params.args.items) {
 			set(item, 'id', new Cuid2Generator(GuidPrefixes[`${this.entity.name}` as keyof typeof GuidPrefixes]).scopedId);
-			set(item, 'organization.id', params.context.user.organization.id);
 			set(item, 'updatedAt', new Date());
 			set(item, 'createdAt', new Date());
+
+			if (this.isOrgScoped) {
+				if (!params.context.user.isColdAdmin && item.organization?.id !== params.context.user.organization?.id) {
+					set(item, 'organization.id', params.context.user.organization?.id);
+				}
+			}
 		}
 
 		return params;
@@ -64,7 +93,7 @@ export class BaseSidecar {
 
 		await this.mqtt.publishMQTT(payload, params);
 
-		this.logger.info(`Sent MQTT Message: Created ${this.entityName}`, { params, payload });
+		this.logger.info(`Created ${this.entityName}`, { params, payload });
 		return params;
 	}
 

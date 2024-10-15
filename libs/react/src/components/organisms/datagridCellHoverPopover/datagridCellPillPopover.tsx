@@ -43,7 +43,7 @@ export const DataGridCellPillPopover = (props: {
     );
   } else {
     return (
-      <Popover content={text}>
+      <Popover content={text} contentClassName='w-[275px] max-h-[200px] overflow-y-scroll'>
         <div
           className={'rounded-[32px] border-[1px] px-[16px] py-[4px] whitespace-nowrap truncate w-auto'}
           style={{

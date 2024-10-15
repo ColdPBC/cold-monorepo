@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import z from 'zod';
 import { file_types, organization_files, organizations, sustainability_attributes } from '@prisma/client';
@@ -6,7 +6,7 @@ import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { summary } from '../schemas';
-import { omit } from 'lodash';
+import { omit, set } from 'lodash';
 import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
 
 @Injectable()
@@ -37,7 +37,19 @@ export class ClassificationService extends BaseWorker {
 	}
 
 	async init() {
+		//
+	}
+
+	contentIsUrl(content: any[] | string) {
+		return typeof content === 'string' && z.string().url().safeParse(content).success;
+	}
+
+	// generate a prompt for the classification
+	async getClassifyPrompt(organization: organizations) {
 		this.sus_attributes = (await this.prisma.sustainability_attributes.findMany({
+			where: {
+				OR: [{ organization_id: null }, { organization_id: organization.id }],
+			},
 			select: {
 				id: true,
 				name: true,
@@ -51,15 +63,25 @@ export class ClassificationService extends BaseWorker {
 			sustainability_attribute: z
 				.string()
 				.describe(
-					`Select the sustainability attribute that best matches the document according to the following list: Unknown, ${attributes.join(
+					`You are a helpful assistant who has expert knowledge in sustainability compliance and manufacturing processes of both products and materials. Select the sustainability attribute that best matches the document according to the following list: Unknown, ${attributes.join(
 						', ',
 					)}.  It is important that you do not use any other sustainability attribute that is not listed here.`,
 				),
 		});
-	}
 
-	contentIsUrl(content: any[] | string) {
-		return typeof content === 'string' && z.string().url().safeParse(content).success;
+		return `You are a helpful assistant for ${organization.display_name} who has expert knowledge in sustainability compliance and manufacturing processes of both products and materials.  Classify this content using the following rules:
+    - if the content is an RSL (Restricted Substance List), classify it as a POLICY
+    - if the content is a wrap certificate, classify it as a CERTIFICATE
+    - if the content is a bluesign certificate, classify it as a CERTIFICATE
+    - if the content is a bluesign product certificate, classify it as a CERTIFICATE
+    - if the content is a certificate, classify it as a CERTIFICATE
+    - if the content is a scope certificate, then classify it as a SCOPE_CERTIFICATE.  Only classify it this way if 'Scope Certificate' is found in the content.
+    - if the content is a transaction certificate, then classify it as a TRANSACTION_CERTIFICATE. Only classify it this way if 'Transaction Certificate' is found in the content.
+    - if the content is a statement, classify it as a STATEMENT
+    - if the content is a bill of materials or BOM, classify it as a BILL_OF_MATERIALS.  If it does not contain 'BOM' or 'Bill Of Materials' anywhere in the content, then DO NOT CLASSIFY IT AS A BILL_OF_MATERIALS.
+    - if the document is a purchase order or list of purchase orders, classify it as a PURCHASE_ORDER.  A purchase order must have a "PO NUMBER", and Ship To information.  If it does not contain 'Purchase Order' anywhere in the content, then DO NOT CLASSIFY IT AS A PURCHASE_ORDER
+    - if the content is an impact assessment from ${organization.display_name}, classify it as a STATEMENT
+    `;
 	}
 
 	async classifyImageUrls(images: OpenAiBase64ImageUrl[], user: IAuthenticatedUser, orgFile: organization_files, organization: organizations) {
@@ -82,24 +104,9 @@ export class ClassificationService extends BaseWorker {
 			response_format: zodResponseFormat(this.classificationSchema, 'content_classification'),
 		});
 
-		return classifyResponse.choices[0].message?.parsed;
-	}
+		set(classifyResponse.choices[0].message?.parsed, 'attributes', this.sus_attributes);
 
-	// generate a prompt for the classification
-	getClassifyPrompt(organization: organizations) {
-		return `You are a helpful assistant for ${organization.display_name} and you help users classify and extract data from documents that they upload.  Classify this content using the following rules:
-    - if the content is an RSL (Restricted Substance List), classify it as a POLICY
-    - if the content is a wrap certificate, classify it as a CERTIFICATE
-    - if the content is a bluesign certificate, classify it as a CERTIFICATE
-    - if the content is a bluesign product certificate, classify it as a CERTIFICATE
-    - if the content is a certificate, classify it as a CERTIFICATE
-    - if the content is a scope certificate, then classify it as a SCOPE_CERTIFICATE.  Only classify it this way if 'Scope Certificate' is found in the content.
-    - if the content is a transaction certificate, then classify it as a TRANSACTION_CERTIFICATE. Only classify it this way if 'Transaction Certificate' is found in the content.
-    - if the content is a statement, classify it as a STATEMENT
-    - if the content is a bill of materials or BOM, classify it as a BILL_OF_MATERIALS.  If it does not contain 'BOM' or 'Bill Of Materials' anywhere in the content, then DO NOT CLASSIFY IT AS A BILL_OF_MATERIALS.
-    - if the document is a purchase order or list of purchase orders, classify it as a PURCHASE_ORDER.  A purchase order must have a "PO NUMBER", and Ship To information.  If it does not contain 'Purchase Order' anywhere in the content, then DO NOT CLASSIFY IT AS A PURCHASE_ORDER
-    - if the content is an impact assessment from ${organization.display_name}, classify it as a STATEMENT
-    `;
+		return classifyResponse.choices[0].message?.parsed;
 	}
 
 	/**
@@ -150,6 +157,8 @@ export class ClassificationService extends BaseWorker {
 				],
 				response_format: zodResponseFormat(this.classificationSchema, 'content_classification'),
 			});
+
+			set(classifyResponse.choices[0].message?.parsed, 'attributes', this.sus_attributes);
 
 			this.logger.info('content_classification response', { classification: classifyResponse.choices[0].message.parsed, user, file: orgFile });
 

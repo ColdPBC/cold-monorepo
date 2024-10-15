@@ -15,199 +15,202 @@ import process from 'process';
 @Injectable()
 @Global()
 export class BaseWorker extends RedactorService implements OnModuleInit {
-  public tags: Tags;
-  public details: IWorkerDetails;
-  protected logger: WorkerLogger;
-  public fs = fs;
-  protected metrics: StatsD;
+	public tags: Tags;
+	public details: IWorkerDetails;
+	protected logger: WorkerLogger;
+	public fs = fs;
+	protected metrics: StatsD;
 
-  tracer: TraceService;
+	tracer: TraceService;
 
-  constructor(readonly className: string) {
-    super();
-    const config = new ConfigService();
+	constructor(readonly className: string) {
+		super();
+		const config = new ConfigService();
 
-    this.details = {
-      service: config.getOrThrow('DD_SERVICE'),
-      version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
-      home_dir: appRoot.toString(),
-      env: config.getOrThrow('NODE_ENV'),
-      host_name: hostname(),
-      system_details: {
-        load_avg: loadavg(),
-        up_time: process.uptime(),
-        total_mem: totalmem(),
-        free_mem: freemem(),
-        cpus: cpus(),
-        ips: this.getNetworkDetails(),
-      },
-    };
-    this.tags = {
-      service: this.details.service,
-      version: this.details.version,
-      app: this.details.app,
-      //home_dir: this.details.home_dir,
-      env: this.details.env,
-      host_name: this.details.host_name,
-      //system_details: this.details.system_details,
-    };
+		this.details = {
+			service: config.getOrThrow('DD_SERVICE'),
+			version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
+			home_dir: appRoot.toString(),
+			env: config.getOrThrow('NODE_ENV'),
+			host_name: hostname(),
+			system_details: {
+				load_avg: loadavg(),
+				up_time: process.uptime(),
+				total_mem: totalmem(),
+				free_mem: freemem(),
+				cpus: cpus(),
+				ips: this.getNetworkDetails(),
+			},
+		};
+		this.tags = {
+			service: this.details.service,
+			version: this.details.version,
+			app: this.details.app,
+			//home_dir: this.details.home_dir,
+			env: this.details.env,
+			host_name: this.details.host_name,
+			//system_details: this.details.system_details,
+		};
 
-    this.tracer = new TraceService();
-    this.metrics = new StatsD({
-      host: '127.0.0.1',
-      port: 8125,
-      globalize: true,
-      globalTags: this.tags,
-    });
-    this.tracer.getTracer().init({
-      service: this.details.service,
-      version: this.details.version,
-      env: this.details.env,
-      logInjection: true,
-      hostname: '127.0.0.1',
-      profiling: true,
-      runtimeMetrics: true,
-      dogstatsd: {
-        hostname: '127.0.0.1',
-        port: 8125,
-      },
-      logLevel: 'debug',
-      plugins: true,
-      dbmPropagationMode: 'full',
-      experimental: { iast: true, runtimeId: true },
-      appsec: { enabled: true, eventTracking: { mode: 'extended' } },
-      remoteConfig: {
-        pollInterval: 5,
-      },
-      clientIpEnabled: true,
-      port: 8126,
-    });
+		this.tracer = new TraceService();
+		this.metrics = new StatsD({
+			host: '127.0.0.1',
+			port: 8125,
+			globalize: true,
+			globalTags: this.tags,
+		});
+		this.tracer.getTracer().init({
+			service: this.details.service,
+			version: this.details.version,
+			env: this.details.env,
+			logInjection: true,
+			hostname: '127.0.0.1',
+			profiling: true,
+			runtimeMetrics: true,
+			dogstatsd: {
+				hostname: '127.0.0.1',
+				port: 8125,
+			},
+			logLevel: 'debug',
+			plugins: true,
+			dbmPropagationMode: 'full',
+			experimental: { iast: true, runtimeId: true },
+			appsec: { enabled: true, eventTracking: { mode: 'extended' } },
+			remoteConfig: {
+				pollInterval: 5,
+			},
+			clientIpEnabled: true,
+			port: 8126,
+		});
 
-    this.logger = new WorkerLogger(this.className);
-    const pkg = JSON.parse(BaseWorker.getJSON('package.json'));
-    if (pkg) {
-      if (!pkg.name) {
-        this.logger.warn('Package name not defined in package.json.  This can be ignored for now.', pkg);
-      }
-      if (!pkg.version) {
-        this.logger.warn('Package version not defined in package.json.  This can be ignored for now.', pkg);
-      }
+		this.logger = new WorkerLogger(this.className);
 
-      process.env['npm_package_name'] || pkg.name;
-      //process.env['DD_VERSION'] = process.env['npm_package_version'] || get(pkg, 'version');
-    } else {
-      this.logger.warn('Package.json not found.  This can be ignored for now.', null);
-    }
-  }
+		const pkg = JSON.parse(BaseWorker.getJSON('package.json'));
+		if (pkg) {
+			if (!pkg.name) {
+				this.logger.warn('Package name not defined in package.json.  This can be ignored for now.', pkg);
+			}
+			if (!pkg.version) {
+				this.logger.warn('Package version not defined in package.json.  This can be ignored for now.', pkg);
+			}
 
-  async onModuleInit() {}
+			process.env['npm_package_name'] || pkg.name;
+			//process.env['DD_VERSION'] = process.env['npm_package_version'] || get(pkg, 'version');
+		} else {
+			this.logger.warn('Package.json not found.  This can be ignored for now.', null);
+		}
+	}
 
-  public setTags(tags: Tags) {
-    this.tags = merge(this.tags, tags);
-    this.logger.setTags(this.tags);
-  }
+	async onModuleInit() {
+		this.logger.setTags(this.tags);
+	}
 
-  /***
-   * returns the service name defined in package.json
-   * @returns {string}
-   */
-  public static getServiceName(path: string = '../../../../../package.json'): string {
-    const parsed = JSON.parse(BaseWorker.getJSON(path));
-    const logger: WorkerLogger = new WorkerLogger('Static.BaseWorker', parsed);
+	public setTags(tags: Tags) {
+		this.tags = merge(this.tags, tags);
+		this.logger.setTags(this.tags);
+	}
 
-    const serviceName = get(parsed, 'workerOptions.serviceName');
+	/***
+	 * returns the service name defined in package.json
+	 * @returns {string}
+	 */
+	public static getServiceName(path = '../../../../../package.json'): string {
+		const parsed = JSON.parse(BaseWorker.getJSON(path));
+		const logger: WorkerLogger = new WorkerLogger('Static.BaseWorker', parsed);
 
-    if (!serviceName) {
-      logger.warn('Service name not defined in package.json.  This can be ignored for now.', null);
-    }
+		const serviceName = get(parsed, 'workerOptions.serviceName');
 
-    return get(parsed, 'workerOptions.definition.name');
-  }
+		if (!serviceName) {
+			logger.warn('Service name not defined in package.json.  This can be ignored for now.', null);
+		}
 
-  public static getProjectName(projectPath?: string) {
-    let proj: any;
+		return get(parsed, 'workerOptions.definition.name');
+	}
 
-    if (projectPath) {
-      proj = BaseWorker.getParsedJSON(`${projectPath}/project.json`);
-    } else {
-      proj = BaseWorker.getParsedJSON('project.json');
-    }
+	public static getProjectName(projectPath?: string) {
+		let proj: any;
 
-    return proj.name;
-  }
+		if (projectPath) {
+			proj = BaseWorker.getParsedJSON(`${projectPath}/project.json`);
+		} else {
+			proj = BaseWorker.getParsedJSON('project.json');
+		}
 
-  public static getPkgVersion() {
-    const pkg = BaseWorker.getParsedJSON('package.json');
-    return pkg.version;
-  }
+		return proj.name;
+	}
 
-  public static getParsedJSON(relativePath: string): any {
-    return JSON.parse(BaseWorker.getJSON(relativePath));
-  }
+	public static getPkgVersion() {
+		const pkg = BaseWorker.getParsedJSON('package.json');
+		return pkg.version;
+	}
 
-  public static getJSON(relativePath: string): string {
-    const firstPath = path.resolve(appRoot.toString(), relativePath);
-    if (fs.existsSync(firstPath)) {
-      return fs.readFileSync(firstPath).toString();
-    } else {
-      throw new Error(`${relativePath} is not found in '${firstPath}'`);
-    }
-  }
+	public static getParsedJSON(relativePath: string): any {
+		return JSON.parse(BaseWorker.getJSON(relativePath));
+	}
 
-  public sendMetrics(
-    resource: string,
-    source: string,
-    event: string,
-    status: string,
-    options: {
-      start?: Date;
-      sendEvent?: boolean;
-      tags: { [key: string]: any };
-    },
-  ) {
-    const tags = {
-      ...options.tags,
-      event,
-      status,
-      source,
-    };
+	public static getJSON(relativePath: string): string {
+		const firstPath = path.resolve(appRoot.toString(), relativePath);
+		if (fs.existsSync(firstPath)) {
+			return fs.readFileSync(firstPath).toString();
+		} else {
+			throw new Error(`${relativePath} is not found in '${firstPath}'`);
+		}
+	}
 
-    this.metrics.increment(`cold.${resource}`, tags);
+	public sendMetrics(
+		resource: string,
+		source: string,
+		event: string,
+		status: string,
+		options: {
+			start?: Date;
+			sendEvent?: boolean;
+			tags: { [key: string]: any };
+		},
+	) {
+		const tags = {
+			...options.tags,
+			event,
+			status,
+			source,
+		};
 
-    if (options.start) {
-      this.metrics.histogram(`cold.${resource}.duration`, new Date().getTime() - options.start.getTime(), tags);
-    }
+		this.metrics.increment(`cold.${resource}`, tags);
 
-    if (options.sendEvent) {
-      let alert_type: 'info' | 'error' | 'success' | 'warning' = 'info';
-      if (['completed', 'complete', 'done', 'success'].includes(status)) {
-        alert_type = 'success';
-      }
-      if (['error', 'failed'].includes(status)) {
-        alert_type = 'error';
-      }
+		if (options.start) {
+			this.metrics.histogram(`cold.${resource}.duration`, new Date().getTime() - options.start.getTime(), tags);
+		}
 
-      this.metrics.event(
-        `cold.${resource}`,
-        `${resource} ${status} ${options.tags.error ? ' | ' + options.tags.error.message : ''}`,
-        {
-          alert_type: alert_type,
-          priority: alert_type === 'info' ? 'low' : 'normal',
-          source_type_name: source,
-        },
-        tags,
-      );
-    }
-  }
-  // Instance Functions
-  public getJSON(name = 'package.json') {
-    return BaseWorker.getJSON(name);
-  }
+		if (options.sendEvent) {
+			let alert_type: 'info' | 'error' | 'success' | 'warning' = 'info';
+			if (['completed', 'complete', 'done', 'success'].includes(status)) {
+				alert_type = 'success';
+			}
+			if (['error', 'failed'].includes(status)) {
+				alert_type = 'error';
+			}
 
-  private getNetworkDetails(): NodeJS.Dict<NetworkInterfaceInfo[]> {
-    //const nets = networkInterfaces();
-    const ips = {};
+			this.metrics.event(
+				`cold.${resource}`,
+				`${resource} ${status} ${options.tags.error ? ' | ' + options.tags.error.message : ''}`,
+				{
+					alert_type: alert_type,
+					priority: alert_type === 'info' ? 'low' : 'normal',
+					source_type_name: source,
+				},
+				tags,
+			);
+		}
+	}
+	// Instance Functions
+	public getJSON(name = 'package.json') {
+		return BaseWorker.getJSON(name);
+	}
 
-    return ips;
-  }
+	private getNetworkDetails(): NodeJS.Dict<NetworkInterfaceInfo[]> {
+		//const nets = networkInterfaces();
+		const ips = {};
+
+		return ips;
+	}
 }

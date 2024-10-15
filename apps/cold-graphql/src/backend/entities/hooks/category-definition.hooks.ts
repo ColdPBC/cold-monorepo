@@ -7,7 +7,7 @@ import { CategoryDefinition } from '../postgresql';
 
 export class CategoryDefinitionHooks extends BaseSidecar {
 	constructor() {
-		super(CategoryDefinition);
+		super(CategoryDefinition, 'category_definitions');
 	}
 	// Overrride BeforeReadHook here:
 

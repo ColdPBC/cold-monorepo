@@ -7,7 +7,7 @@ import { Action } from '../postgresql';
 
 export class ActionHooks extends BaseSidecar {
 	constructor() {
-		super(Action);
+		super(Action, 'actions');
 	}
 	// Overrride BeforeReadHook here:
 

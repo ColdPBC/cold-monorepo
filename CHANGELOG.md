@@ -1,3 +1,71 @@
+# [1.423.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.5...v1.423.0) (2024-10-15)
+
+
+### Bug Fixes
+
+* use 'contentClassName' ([f7ee183](https://github.com/ColdPBC/cold-monorepo/commit/f7ee183419d6759530380fdce541346f8697d084))
+
+
+### Features
+
+* new component SustainabilityAttributeLogoWithStatus ([19ef794](https://github.com/ColdPBC/cold-monorepo/commit/19ef7942b0ef28a46fa72b9488571dce634af78b))
+
+## [1.422.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.4...v1.422.5) (2024-10-15)
+
+
+### Bug Fixes
+
+* **base.sidecar.ts:** ensure organization ID is set correctly for non-admin users ([c1194cb](https://github.com/ColdPBC/cold-monorepo/commit/c1194cb12da8ca47f5f761870d617f4fa99b6486))
+
+## [1.422.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.3...v1.422.4) (2024-10-15)
+
+
+### Bug Fixes
+
+* prevent organization ID overwrite by cold admin ([70c9279](https://github.com/ColdPBC/cold-monorepo/commit/70c927978601eb44ffe962a310b189a1148e3e9f))
+
+## [1.422.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.2...v1.422.3) (2024-10-15)
+
+
+### Bug Fixes
+
+* update classification service and enums for sustainability attributes ([19bd9a8](https://github.com/ColdPBC/cold-monorepo/commit/19bd9a82acbda172824f0913958419b179827f43))
+
+## [1.422.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.1...v1.422.2) (2024-10-15)
+
+
+### Bug Fixes
+
+* add table name in create_sidecar generator ([cb5deec](https://github.com/ColdPBC/cold-monorepo/commit/cb5deec5b85f658ee834af81d5376e2f4267a3da))
+* check if table is scoped to organization_id and add parameter if so ([03143e6](https://github.com/ColdPBC/cold-monorepo/commit/03143e63697094682b3550314f01f338bde3cc91))
+
+## [1.422.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.0...v1.422.1) (2024-10-11)
+
+
+### Bug Fixes
+
+* fix imports after moving AttributeAssurance and SustainabilityAttribute into Interfaces ([bd8defa](https://github.com/ColdPBC/cold-monorepo/commit/bd8defa7d2b5431c501c30bbd855a7b747b77b89))
+
+# [1.422.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.421.0...v1.422.0) (2024-10-11)
+
+
+### Bug Fixes
+
+* adjust column width and responsiveness for DataGrid components ([a8481cd](https://github.com/ColdPBC/cold-monorepo/commit/a8481cdee28146512a0ed64009f019089efd79c2))
+* improve text truncation logic by adding debug logs and refactoring ([50224de](https://github.com/ColdPBC/cold-monorepo/commit/50224dea0f9afee0fae0e6c1ff21e28cb798595e))
+* remove redundant text from datagrid cell hover popover ([334d0d7](https://github.com/ColdPBC/cold-monorepo/commit/334d0d7ccdb0389bfe862809e9dfd02d06e7e892))
+* replace Popover with Tooltip for cell hover interaction ([32fc097](https://github.com/ColdPBC/cold-monorepo/commit/32fc097c9566655f3fd2839744a77d87e6c1bd22))
+* sort values in datagridCellHoverPopover component ([7d5b6e4](https://github.com/ColdPBC/cold-monorepo/commit/7d5b6e4447485ac3bd5a416fa2e075f3019beb57))
+* update hover handling logic for popover visibility ([b79e2e3](https://github.com/ColdPBC/cold-monorepo/commit/b79e2e3fe87cd37319dad70eb9ab2f7d1668cc60))
+* update popover resizing logic and style adjustments ([615eb91](https://github.com/ColdPBC/cold-monorepo/commit/615eb916767b3b7ca0174ed17f2724a9959f9bbf))
+
+
+### Features
+
+* add width and resizable properties to DataGrid columns ([132a4e2](https://github.com/ColdPBC/cold-monorepo/commit/132a4e2c7436168da227abf2bef6a6c82293a8ff))
+* enhance suppliers mock data and remove unused import from story ([f7e3092](https://github.com/ColdPBC/cold-monorepo/commit/f7e3092ae01d57cb4bd87962b92545696a914e62))
+* replace hardcoded cell rendering with DataGridCellHoverPopover component ([3989580](https://github.com/ColdPBC/cold-monorepo/commit/3989580de12cc847833e620bb6f6190a04045696))
+
 # [1.421.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.420.0...v1.421.0) (2024-10-11)
 
 

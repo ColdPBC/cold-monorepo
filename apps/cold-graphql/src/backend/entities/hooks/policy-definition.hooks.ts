@@ -7,7 +7,7 @@ import { PolicyDefinition } from '../postgresql';
 
 export class PolicyDefinitionHooks extends BaseSidecar {
 	constructor() {
-		super(PolicyDefinition);
+		super(PolicyDefinition, 'policy_definitions');
 	}
 	// Overrride BeforeReadHook here:
 

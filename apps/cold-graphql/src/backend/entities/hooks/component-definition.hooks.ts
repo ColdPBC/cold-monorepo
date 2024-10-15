@@ -7,7 +7,7 @@ import { ComponentDefinition } from '../postgresql';
 
 export class ComponentDefinitionHooks extends BaseSidecar {
 	constructor() {
-		super(ComponentDefinition);
+		super(ComponentDefinition, 'component_definitions');
 	}
 	// Overrride BeforeReadHook here:
 

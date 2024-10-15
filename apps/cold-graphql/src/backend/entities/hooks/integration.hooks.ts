@@ -7,7 +7,7 @@ import { Integration } from '../postgresql';
 
 export class IntegrationHooks extends BaseSidecar {
 	constructor() {
-		super(Integration);
+		super(Integration, 'integrations');
 	}
 	// Overrride BeforeReadHook here:
 

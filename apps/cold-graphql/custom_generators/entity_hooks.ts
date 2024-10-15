@@ -1,6 +1,6 @@
 export const importGraphWeaverHookClasses = `import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';\n`;
 
-export const GenerateSideCarClass = (entityClassName: string, entityFileName: string, useBaseCarHooks: boolean) => `
+export const GenerateSideCarClass = (entityClassName: string, entityFileName: string, tableName: string, useBaseCarHooks: boolean) => `
 // ${entityClassName} Hooks
 import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 import { BaseSidecar } from '../base.sidecar';
@@ -9,7 +9,7 @@ import { ${entityClassName} } from '../postgresql';
 
 export class ${entityClassName}Hooks extends BaseSidecar {
 \tconstructor() {
-\t\tsuper(${entityClassName});
+\t\tsuper(${entityClassName}, '${tableName}');
 \t}
 \t${useBaseCarHooks ? '// Overrride BeforeReadHook here:\n' : BEFORE_READ_HOOK_FUNCTION(entityClassName)}
 \t${useBaseCarHooks ? '// Overrride AfterReadHook here:\n' : AFTER_READ_HOOK_FUNCTION(entityClassName)}

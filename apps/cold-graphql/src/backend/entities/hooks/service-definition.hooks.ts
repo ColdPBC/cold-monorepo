@@ -7,7 +7,7 @@ import { ServiceDefinition } from '../postgresql';
 
 export class ServiceDefinitionHooks extends BaseSidecar {
 	constructor() {
-		super(ServiceDefinition);
+		super(ServiceDefinition, 'service_definitions');
 	}
 	// Overrride BeforeReadHook here:
 
