@@ -8,7 +8,7 @@ import {
   GridToolbarQuickFilter
 } from "@mui/x-data-grid";
 import React from "react";
-import {get} from "lodash";
+import {get, uniq} from "lodash";
 
 
 const getColumnRows = (products: ProductsQuery[]) => {
@@ -17,7 +17,7 @@ const getColumnRows = (products: ProductsQuery[]) => {
     return {
       id: product.id,
       name: product.name,
-      sustainabilityAttributes: product.attributeAssurances.map(attribute => attribute.sustainabilityAttribute.name),
+      sustainabilityAttributes: uniq(product.attributeAssurances.map(attribute => attribute.sustainabilityAttribute.name)),
       tier1Supplier: product.organizationFacility?.name ?? '',
       materials: product.productMaterials.map(material => material.material?.name).filter((material): material is string => material !== null),
       upcCode: product.upcCode ?? '',
