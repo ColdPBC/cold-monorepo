@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { MaterialsWithRelations } from '@coldpbc/interfaces';
+import { MaterialsWithRelations, SustainabilityAttribute } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
-import {DataGridCellHoverPopover, ErrorFallback, MuiDataGrid, Spinner} from '@coldpbc/components';
+import {
+  DataGridCellHoverPopover,
+  ErrorFallback,
+  MuiDataGrid,
+  Spinner,
+  SustainabilityAttributeColumnList,
+} from '@coldpbc/components';
 import {
   GridColDef,
-  GridRenderCellParams,
   GridToolbarColumnsButton,
   GridToolbarContainer,
   GridToolbarExport,
   GridToolbarQuickFilter,
-  GridTreeNodeWithRender,
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import { get, has, uniq } from 'lodash';
 import {listFilterOperators, listSortComparator} from '@coldpbc/lib';
-import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 
 const _MaterialsDataGrid = () => {
   const { orgId } = useAuth0Wrapper();
-  const navigate = useNavigate();
   const [materials, setMaterials] = useState<MaterialsWithRelations[]>([]);
   const materialsWithRelations = useGraphQLSWR(orgId ? 'GET_ALL_MATERIALS_FOR_ORG' : null, {
     filter: {
@@ -82,9 +84,9 @@ const _MaterialsDataGrid = () => {
       valueOptions: uniqSusAttributes,
       valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
       renderCell: (params) => {
-        return <DataGridCellHoverPopover params={params} />;
+        return <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />;
       },
-      minWidth: 350,
+      minWidth: 206,
       flex: 1,
       sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
@@ -122,10 +124,39 @@ const _MaterialsDataGrid = () => {
     const tier1Suppliers = material.productMaterials.map(pm => pm.product.organizationFacility);
     // While the database schema allows for multiple MaterialSuppliers, we insist on 1 per Material
     const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
+
+    // We have to map the AttributeAssurances, with nested SustainabilityAttributes,
+    // into a unique list of SustainabilityAttributes, with nested AttributeAssurances
+    const groupedAssurances = new Map<string, SustainabilityAttribute>();
+
+    for (const assurance of material.attributeAssurances) {
+      const { id: assuranceId, effectiveEndDate, sustainabilityAttribute, organizationFile } = assurance;
+      const { id: attributeId, name, logoUrl } = sustainabilityAttribute;
+
+      if (!groupedAssurances.has(attributeId)) {
+        groupedAssurances.set(attributeId, {
+          id: attributeId,
+          name,
+          logoUrl,
+          level: 'MATERIAL',
+          attributeAssurances: [],
+        });
+      }
+
+      const attribute = groupedAssurances.get(attributeId)!;
+      attribute.attributeAssurances.push({
+        id: assuranceId,
+        effectiveEndDate,
+        organizationFile,
+      });
+    }
+
+    const sustainabilityAttributes = Array.from(groupedAssurances.values());
+
     const row = {
       id: material.id,
       name: material.name,
-      sustainabilityAttributes: material.attributeAssurances.map(assurance => assurance.sustainabilityAttribute.name),
+      sustainabilityAttributes: sustainabilityAttributes,
       tier2Supplier: tier2Supplier ? tier2Supplier.name : '',
       usedBy: uniq(tier1Suppliers.map(supplier => supplier.name).sort((a,b) => a.localeCompare(b))),
     };

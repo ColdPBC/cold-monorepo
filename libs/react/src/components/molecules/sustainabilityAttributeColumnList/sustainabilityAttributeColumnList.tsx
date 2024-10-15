@@ -19,18 +19,22 @@ const _SustainabilityAttributeColumnList: React.FC<SustainabilityAttributeColumn
   const [availableContainerWidth, setAvailableContainerWidth] = useState(0);
 
 	useEffect(() => {
-		const updateContainerWidth = () => {
+    let observer: ResizeObserver | null = null;
+    observer = new ResizeObserver(() => {
 			if (containerRef.current) {
         const newContainerWidth = containerRef.current.offsetWidth;
         const availableWidth = newContainerWidth - CONTAINER_PADDING_X;
         setAvailableContainerWidth(availableWidth);
 			}
-		};
+		});
 
-    updateContainerWidth();
-		window.addEventListener('resize', updateContainerWidth);
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
 
-		return () => window.removeEventListener('resize', updateContainerWidth);
+    return () => {
+      observer?.disconnect();
+    };
 	}, []);
 
   const { visibleAttributes, overflowItemCount } = useMemo(() => {
@@ -48,7 +52,7 @@ const _SustainabilityAttributeColumnList: React.FC<SustainabilityAttributeColumn
   }, [sustainabilityAttributes, availableContainerWidth]);
 
 	return (
-		<div ref={containerRef} className="px-4 py-4 flex items-start" style={{ gap: `${CARD_GAP}px`, minWidth: `${(MIN_VISIBLE_CARDS * TOTAL_CARD_WIDTH) - CARD_GAP + CONTAINER_PADDING_X}px` }}>
+		<div ref={containerRef} className="px-4 py-4 flex items-start w-full" style={{ gap: `${CARD_GAP}px`, minWidth: `${(MIN_VISIBLE_CARDS * TOTAL_CARD_WIDTH) - CARD_GAP + CONTAINER_PADDING_X}px` }}>
 			{visibleAttributes.map((sustainabilityAttribute, index) => (
 				<SustainabilityAttributeLogoWithStatus
           key={index}

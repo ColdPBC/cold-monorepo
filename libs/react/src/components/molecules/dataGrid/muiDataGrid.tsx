@@ -11,7 +11,8 @@ export interface MUIDataGridProps extends DataGridProps {
 export const MuiDataGrid = (props: MUIDataGridProps) => {
   return (
     <DataGrid
-      rowHeight={37}
+      getRowHeight={() => 'auto'}
+      getEstimatedRowHeight={() => 98} // Provide an estimate for better performance
       getRowClassName={() => {
         return 'text-tc-primary cursor-pointer';
       }}
@@ -30,6 +31,10 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
         '& .MuiDataGrid-columnHeaderTitle': {
           fontWeight: 'bold',
         },
+        '& .MuiDataGrid-cell': {
+          display: 'flex',
+          alignItems: 'center',
+        },
         '& .MuiDataGrid-cell:focus': {
           outline: 'none',
         },
@@ -41,6 +46,9 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
         },
         '& .MuiDataGrid-columnHeader:focus-within': {
           outline: 'none',
+        },
+        '& .MuiDataGrid-row': {
+          minHeight: '37px !important',
         },
         ...props.sx,
       }}
