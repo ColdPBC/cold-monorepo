@@ -199,7 +199,7 @@ const _MaterialsDataGrid = () => {
         columns={columns}
         slots={{ toolbar: getToolbar }}
         columnHeaderHeight={55}
-        rowHeight={55}
+        rowHeight={114}
       />
     </div>
   );
