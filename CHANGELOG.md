@@ -1,3 +1,10 @@
+# [1.425.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.424.0...v1.425.0) (2024-10-15)
+
+
+### Features
+
+* add error boundaries to ProductsPage and ProductsDataGrid ([0664afc](https://github.com/ColdPBC/cold-monorepo/commit/0664afcb5a7aa27f5971143c3128731cf3af9dfe))
+
 # [1.424.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.423.0...v1.424.0) (2024-10-15)
 
 
