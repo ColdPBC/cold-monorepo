@@ -67,8 +67,10 @@ export class BaseSidecar {
 			set(item, 'updatedAt', new Date());
 			set(item, 'createdAt', new Date());
 
-			if (this.isOrgScoped && !params.context.user.isColdAdmin) {
-				set(item, 'organization.id', params.context.user.organization.id);
+			if (this.isOrgScoped) {
+				if (!params.context.user.isColdAdmin && item.organization?.id !== params.context.user.organization?.id) {
+					set(item, 'organization.id', params.context.user.organization?.id);
+				}
 			}
 		}
 
