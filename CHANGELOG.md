@@ -1,3 +1,15 @@
+# [1.423.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.5...v1.423.0) (2024-10-15)
+
+
+### Bug Fixes
+
+* use 'contentClassName' ([f7ee183](https://github.com/ColdPBC/cold-monorepo/commit/f7ee183419d6759530380fdce541346f8697d084))
+
+
+### Features
+
+* new component SustainabilityAttributeLogoWithStatus ([19ef794](https://github.com/ColdPBC/cold-monorepo/commit/19ef7942b0ef28a46fa72b9488571dce634af78b))
+
 ## [1.422.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.4...v1.422.5) (2024-10-15)
 
 
