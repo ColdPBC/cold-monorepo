@@ -1,3 +1,10 @@
+## [1.422.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.4...v1.422.5) (2024-10-15)
+
+
+### Bug Fixes
+
+* **base.sidecar.ts:** ensure organization ID is set correctly for non-admin users ([c1194cb](https://github.com/ColdPBC/cold-monorepo/commit/c1194cb12da8ca47f5f761870d617f4fa99b6486))
+
 ## [1.422.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.3...v1.422.4) (2024-10-15)
 
 
