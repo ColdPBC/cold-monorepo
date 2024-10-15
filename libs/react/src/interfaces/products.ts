@@ -19,7 +19,7 @@ export interface ProductsQuery {
   organizationFacility: {
     id: string
     name: string
-  }
+  } | null;
   attributeAssurances: {
     id: string
     sustainabilityAttribute: {

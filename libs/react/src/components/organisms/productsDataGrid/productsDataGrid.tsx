@@ -18,7 +18,7 @@ const getColumnRows = (products: ProductsQuery[]) => {
       id: product.id,
       name: product.name,
       sustainabilityAttributes: product.attributeAssurances.map(attribute => attribute.sustainabilityAttribute.name),
-      tier1Supplier: product.organizationFacility.name,
+      tier1Supplier: product.organizationFacility?.name ?? '',
       materials: product.productMaterials.map(material => material.material?.name).filter((material): material is string => material !== null),
       upcCode: product.upcCode ?? '',
       styleCode: product.styleCode ?? '',
