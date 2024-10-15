@@ -8,10 +8,11 @@ import { Popover } from '@coldpbc/components';
 const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
 
 interface SustainabilityAttributeLogoWithStatusProps {
+  key: number,
   name: string,
   logoUrl?: string,
   assuranceStatus: AttributeAssuranceStatus,
-  assuranceExpiration?: Date,
+  assuranceExpiration?: Date | null,
 }
 
 const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLogoWithStatusProps> = ({ name, logoUrl, assuranceStatus, assuranceExpiration }) => {
@@ -55,7 +56,7 @@ const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLo
 
 	return (
 		<Popover content={popoverText}>
-			<div className="relative inline-block">
+			<div className="w-[82px] h-[82px] relative inline-block">
 				<img className="w-[82px] h-[82px] object-cover rounded-lg" src={imgSrc} alt={`Logo for ${name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
 				<div className="absolute -top-1 -right-1 w-[17px] h-[17px]">
 					<div className={`absolute inset-0 ${iconBackgroundColor} rounded-full`}></div>
