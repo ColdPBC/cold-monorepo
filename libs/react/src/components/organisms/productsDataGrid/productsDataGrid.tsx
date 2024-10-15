@@ -1,4 +1,4 @@
-import {DataGridCellHoverPopover, MuiDataGrid, Spinner} from "@coldpbc/components";
+import {DataGridCellHoverPopover, ErrorFallback, MuiDataGrid, Spinner} from "@coldpbc/components";
 import {useAuth0Wrapper, useGraphQLSWR} from "@coldpbc/hooks";
 import {ProductsQuery} from "@coldpbc/interfaces";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@mui/x-data-grid";
 import React from "react";
 import {get, uniq} from "lodash";
+import {withErrorBoundary} from "react-error-boundary";
 
 
 const getColumnRows = (products: ProductsQuery[]) => {
@@ -27,7 +28,7 @@ const getColumnRows = (products: ProductsQuery[]) => {
   })
 }
 
-export const ProductsDataGrid = () => {
+export const _ProductsDataGrid = () => {
   const {orgId} = useAuth0Wrapper()
   const productsQuery = useGraphQLSWR<{
     products: ProductsQuery[]
@@ -161,3 +162,10 @@ export const ProductsDataGrid = () => {
     </div>
   )
 }
+
+export const ProductsDataGrid = withErrorBoundary(_ProductsDataGrid, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ProductsDataGrid: ', error);
+  },
+});
