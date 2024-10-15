@@ -7,7 +7,7 @@ import { SurveyDefinition } from '../postgresql';
 
 export class SurveyDefinitionHooks extends BaseSidecar {
 	constructor() {
-		super(SurveyDefinition);
+		super(SurveyDefinition, 'survey_definitions');
 	}
 	// Overrride BeforeReadHook here:
 

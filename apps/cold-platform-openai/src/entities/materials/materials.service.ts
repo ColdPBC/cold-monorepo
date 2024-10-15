@@ -27,7 +27,7 @@ export class MaterialsService extends BaseWorker {
 		const messages = [
 			{
 				type: 'text',
-				text: `You are a helpful assistant tasked with extracting a list of materials used in making a product from the JSON provided:
+				text: `You are a helpful assistant who has expert knowledge in sustainability compliance and manufacturing processes of both products and materials and are tasked with extracting a list of materials used in making a product from the JSON provided:
 				JSON: ${content}`,
 			},
 		];
@@ -44,7 +44,7 @@ export class MaterialsService extends BaseWorker {
 				response_format: zodResponseFormat(materialsSchema, 'material_processing'),
 			});
 
-			if (response.choices[0].message.parsed.materials) {
+			if (response?.choices[0].message?.parsed?.materials) {
 				for (const item of response.choices[0].message.parsed.materials) {
 					const data = {
 						id: new Cuid2Generator(GuidPrefixes.Material).scopedId,
@@ -68,6 +68,28 @@ export class MaterialsService extends BaseWorker {
 					});
 
 					this.logger.info('created material', { material });
+
+					if (item.supplier) {
+						const supplier = await this.prisma.organization_facilities.upsert({
+							where: {
+								orgFacilityName: {
+									organization_id: job.data.organization.id,
+									name: item.supplier.name,
+								},
+							},
+							create: {
+								id: new Cuid2Generator(GuidPrefixes.OrganizationFacility).scopedId,
+								organization_id: job.data.organization.id,
+								...item.supplier,
+								supplier_tier: 2,
+							},
+							update: {
+								...item.supplier,
+								supplier_tier: 2,
+							},
+						});
+						this.logger.info('created supplier', { supplier });
+					}
 				}
 			}
 

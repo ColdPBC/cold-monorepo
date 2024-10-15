@@ -7,7 +7,7 @@ import { Emission } from '../postgresql';
 
 export class EmissionHooks extends BaseSidecar {
 	constructor() {
-		super(Emission);
+		super(Emission, 'emissions');
 	}
 	// Overrride BeforeReadHook here:
 

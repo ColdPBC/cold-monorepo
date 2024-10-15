@@ -7,7 +7,7 @@ import { VectorRecord } from '../postgresql';
 
 export class VectorRecordHooks extends BaseSidecar {
 	constructor() {
-		super(VectorRecord);
+		super(VectorRecord, 'vector_records');
 	}
 	// Overrride BeforeReadHook here:
 
