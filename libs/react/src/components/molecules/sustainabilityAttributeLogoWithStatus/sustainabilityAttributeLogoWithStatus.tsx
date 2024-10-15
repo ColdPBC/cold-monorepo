@@ -35,7 +35,7 @@ const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLo
       ? `Expiring in ${differenceInDays(assuranceExpiration, new Date())} days`
       : 'Expiring';
 	} else if (assuranceStatus === AttributeAssuranceStatus.EXPIRED) {
-		iconName = IconNames.ColdCalendarDaysIcon; // TODO: Replace with new calendar icon
+		iconName = IconNames.ColdCalendarCloseIcon;
 		iconBackgroundColor = 'bg-gray-300';
     hoverLabelText = assuranceExpiration
       ? `Expired on ${format(assuranceExpiration, 'M/d/yyyy')}`

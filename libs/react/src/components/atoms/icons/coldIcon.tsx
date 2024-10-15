@@ -8,6 +8,7 @@ import {
   ColdAiIcon,
   ColdBillingIcon,
   ColdBookmarkIcon,
+  ColdCalendarCloseIcon,
   ColdCalendarDaysIcon,
   ColdCalendarEventIcon,
   ColdChartIcon,
@@ -135,6 +136,8 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdChartIcon {...props} />;
     case IconNames.ColdSustainabilityIcon:
       return <ColdSustainabilityIcon {...props} />;
+    case IconNames.ColdCalendarCloseIcon:
+      return <ColdCalendarCloseIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;
