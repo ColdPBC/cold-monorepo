@@ -1,3 +1,11 @@
+## [1.422.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.1...v1.422.2) (2024-10-15)
+
+
+### Bug Fixes
+
+* add table name in create_sidecar generator ([cb5deec](https://github.com/ColdPBC/cold-monorepo/commit/cb5deec5b85f658ee834af81d5376e2f4267a3da))
+* check if table is scoped to organization_id and add parameter if so ([03143e6](https://github.com/ColdPBC/cold-monorepo/commit/03143e63697094682b3550314f01f338bde3cc91))
+
 ## [1.422.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.0...v1.422.1) (2024-10-11)
 
 
