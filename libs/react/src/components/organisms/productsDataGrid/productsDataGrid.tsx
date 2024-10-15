@@ -1,4 +1,4 @@
-import {DataGridCellHoverPopover, MuiDataGrid, Spinner} from "@coldpbc/components";
+import {DataGridCellHoverPopoverWrap, MuiDataGrid, Spinner} from "@coldpbc/components";
 import {useAuth0Wrapper, useGraphQLSWR} from "@coldpbc/hooks";
 import {ProductsQuery} from "@coldpbc/interfaces";
 import {
@@ -8,9 +8,7 @@ import {
   GridToolbarQuickFilter
 } from "@mui/x-data-grid";
 import React from "react";
-import {DataGridCellHoverPopoverWrap} from "../datagridCellHoverPopover/datagridCellHoverPopoverWrap";
 import {get} from "lodash";
-import {GridInitialStateCommunity} from "@mui/x-data-grid/models/gridStateCommunity";
 
 
 const getColumnRows = (products: ProductsQuery[]) => {
@@ -123,10 +121,9 @@ export const ProductsDataGrid = () => {
     rows = []
   }
 
-  if(productsQuery.data?.data.products) {
+  if(productsQuery.data && get(productsQuery.data, 'data.products', []).length > 0) {
     rows = getColumnRows(productsQuery.data.data.products)
   }
-
 
   const getToolbar = () => {
     return (
@@ -155,40 +152,6 @@ export const ProductsDataGrid = () => {
     );
   };
 
-  const getInitialState = (): GridInitialStateCommunity | undefined => {
-    // check the columns upcCode, styleCode, seasonCode
-    // if 1 row has data, then show the column, else hide the column
-    let upcCode = false, styleCode = false, seasonCode = false;
-    for (const row of rows) {
-      if (!upcCode && row.upcCode !== '') {
-        upcCode = true;
-      }
-      if (!styleCode && row.styleCode !== '') {
-        styleCode = true;
-      }
-      if (!seasonCode && row.seasonCode !== '') {
-        seasonCode = true;
-      }
-      if (upcCode && styleCode && seasonCode) {
-        break; // If all are non-empty, no need to continue the loop
-      }
-    }
-
-    const data = {
-			columns: {
-				columnVisibilityModel: {
-					upcCode: upcCode,
-					styleCode: styleCode,
-					seasonCode: seasonCode,
-				},
-			},
-		};
-    console.log(data)
-    return data;
-  }
-
-  console.log(rows)
-
   return (
     <div className={'w-full'}>
       <MuiDataGrid
@@ -196,7 +159,6 @@ export const ProductsDataGrid = () => {
         rows={rows}
         rowHeight={114}
         slots={{ toolbar: getToolbar }}
-        initialState={getInitialState()}
       />
     </div>
   )

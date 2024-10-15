@@ -7,6 +7,10 @@ export const ProductRoutes = () => {
   const ldFlags = useFlags();
 
   return (
-    <Route path={'/products'} element={<ProductsPage /> } />
+    <>
+      {
+        ldFlags.showProductsPageCold1096 && <Route path={'/products'} element={<ProductsPage /> } />
+      }
+    </>
   );
 }
