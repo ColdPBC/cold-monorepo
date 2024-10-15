@@ -1,4 +1,4 @@
-import {DataGridCellHoverPopoverWrap, MuiDataGrid, Spinner} from "@coldpbc/components";
+import {DataGridCellHoverPopover, MuiDataGrid, Spinner} from "@coldpbc/components";
 import {useAuth0Wrapper, useGraphQLSWR} from "@coldpbc/hooks";
 import {ProductsQuery} from "@coldpbc/interfaces";
 import {
@@ -45,8 +45,6 @@ export const ProductsDataGrid = () => {
   }
 
   const columns = [
-    // default columns
-    // columns: Name, Sustainability Attributes, Tier 1 Supplier, Materials
     {
       ...defaultColumnProperties,
       field: 'name',
@@ -58,10 +56,10 @@ export const ProductsDataGrid = () => {
       field: 'sustainabilityAttributes',
       headerName: 'Sustainability Attributes',
       flex: 1,
-      minWidth: 250,
+      minWidth: 350,
       renderCell: (params) => {
         return (
-          <DataGridCellHoverPopoverWrap params={params} />
+          <DataGridCellHoverPopover params={params} />
         )
       },
     },
@@ -75,10 +73,10 @@ export const ProductsDataGrid = () => {
       ...defaultColumnProperties,
       field: 'materials', headerName: 'Materials',
       flex: 1,
-      minWidth: 250,
+      minWidth: 350,
       renderCell: (params) => {
         return (
-          <DataGridCellHoverPopoverWrap params={params} />
+          <DataGridCellHoverPopover params={params} />
         )
       },
     },
@@ -157,8 +155,8 @@ export const ProductsDataGrid = () => {
       <MuiDataGrid
         columns={columns}
         rows={rows}
-        rowHeight={114}
         slots={{ toolbar: getToolbar }}
+        rowHeight={55}
       />
     </div>
   )
