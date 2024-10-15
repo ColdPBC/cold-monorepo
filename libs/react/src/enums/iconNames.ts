@@ -26,6 +26,7 @@ export enum IconNames {
   ColdBookmarkIcon = 'ColdBookmarkIcon',
   ColdDocumentUploadIcon = 'ColdDocumentUploadIcon',
   ColdSwitchIcon = 'ColdSwitchIcon',
+  ColdCalendarCloseIcon = 'ColdCalendarCloseIcon',
   ColdCalendarDaysIcon = 'ColdCalendarDaysIcon',
   ColdCalendarEventIcon = 'ColdCalendarEventIcon',
   ColdClockIcon = 'ColdClockIcon',

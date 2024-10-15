@@ -50,7 +50,7 @@ export const Popover = (props: MUIPopoverProps) => {
         {...popoverProps}
       >
         <div
-          className={twMerge('rounded-[8px] bg-gray-50 border-[1px] border-lightblue-300 p-[8px] text-tc-primary text-body transition-none w-[275px] max-h-[200px] overflow-y-scroll', contentClassName)}>
+          className={twMerge('rounded-[8px] bg-gray-50 border-[1px] border-lightblue-300 p-[8px] text-tc-primary text-body transition-none', contentClassName)}>
           {content}
         </div>
       </MUIPopover>
