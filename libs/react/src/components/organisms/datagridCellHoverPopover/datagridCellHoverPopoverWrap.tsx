@@ -6,9 +6,6 @@ import {DataGridCellPillPopover} from "./datagridCellPillPopover";
 
 const MAX_WIDTH = 200;
 
-// todo: show first and second row of values
-// todo: handle shuffling of values between first and second row
-
 export const DataGridCellHoverPopoverWrap = (props: {
   params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>;
   color?: string;
@@ -121,7 +118,7 @@ export const DataGridCellHoverPopoverWrap = (props: {
   }, []);
 
   return (
-		<div className={'h-full w-full flex-col py-[16px] text-body text-tc-primary space-y-[10px] relative'} ref={containerRef}>
+		<div className={'h-full w-full flex-col py-[21px] text-body text-tc-primary space-y-[10px] relative'} ref={containerRef}>
 			{firstRow.length > 0 && (
 				<div className={'h-auto flex gap-[10px]'}>
 					{firstRow.map((value: string, index: number) => {
