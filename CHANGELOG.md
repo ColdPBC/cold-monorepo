@@ -1,3 +1,10 @@
+## [1.422.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.3...v1.422.4) (2024-10-15)
+
+
+### Bug Fixes
+
+* prevent organization ID overwrite by cold admin ([70c9279](https://github.com/ColdPBC/cold-monorepo/commit/70c927978601eb44ffe962a310b189a1148e3e9f))
+
 ## [1.422.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.2...v1.422.3) (2024-10-15)
 
 
