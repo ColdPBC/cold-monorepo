@@ -1,3 +1,10 @@
+# [1.431.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.430.0...v1.431.0) (2024-10-16)
+
+
+### Features
+
+* upgrade Sustainability Attribute column on suppliers page ([532220d](https://github.com/ColdPBC/cold-monorepo/commit/532220db26763ed3a514aad59609df1af25ede88))
+
 # [1.430.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.429.1...v1.430.0) (2024-10-16)
 
 
