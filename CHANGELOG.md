@@ -1,3 +1,11 @@
+## [1.429.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.429.0...v1.429.1) (2024-10-16)
+
+
+### Bug Fixes
+
+* remove deprecated `productCategoryHeirarchy` field from product mock and interface ([4117afe](https://github.com/ColdPBC/cold-monorepo/commit/4117afedebd81d8aef4b4b69cc2a4d2a133c9a79))
+* remove unused productCategoryHierarchy field from GraphQL query ([8f60c2d](https://github.com/ColdPBC/cold-monorepo/commit/8f60c2daa3e434fae7c2d742a15388f02b418867))
+
 # [1.429.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.428.1...v1.429.0) (2024-10-16)
 
 
