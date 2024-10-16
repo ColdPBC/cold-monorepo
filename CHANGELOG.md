@@ -1,3 +1,10 @@
+## [1.426.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.426.0...v1.426.1) (2024-10-16)
+
+
+### Bug Fixes
+
+* set supplier field to true in organization facility initialization ([36031c3](https://github.com/ColdPBC/cold-monorepo/commit/36031c357f562ae4b5e3c2ef7d3070a7c6457343))
+
 # [1.426.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.425.2...v1.426.0) (2024-10-16)
 
 
