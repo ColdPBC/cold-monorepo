@@ -24,7 +24,6 @@ const getColumnRows = (products: ProductsQuery[]) => {
       sustainabilityAttributes: uniq(product.attributeAssurances.map(attribute => attribute.sustainabilityAttribute.name)),
       tier1Supplier: product.organizationFacility?.name ?? '',
       seasonCode: product.seasonCode ?? '',
-      styleCode: product.styleCode ?? '',
       upcCode: product.upcCode ?? '',
       brandProductId: product.brandProductId ?? '',
       supplierProductId: product.supplierProductId ?? '',
@@ -127,13 +126,6 @@ export const _ProductsDataGrid = () => {
     },
     {
       ...defaultColumnProperties,
-      field: 'styleCode',
-      headerName: 'Style',
-      minWidth: 200,
-      flex: 1,
-    },
-    {
-      ...defaultColumnProperties,
       field: 'upcCode',
       headerName: 'UPC',
       minWidth: 200,
@@ -171,14 +163,18 @@ export const _ProductsDataGrid = () => {
   }
 
   let rows: {
-    id: string,
-    name: string,
-    sustainabilityAttributes: string[],
-    tier1Supplier: string,
-    materials: string[],
-    upcCode: string,
-    styleCode: string,
-    seasonCode: string,
+    id: string;
+    name: string;
+    category: string;
+    subcategory: string;
+    description: string;
+    sustainabilityAttributes: string[];
+    tier1Supplier: string;
+    seasonCode: string;
+    upcCode: string;
+    brandProductId: string;
+    supplierProductId: string;
+    materials: string[];
   }[] = []
 
   if(get(productsQuery.data, 'errors')) {
