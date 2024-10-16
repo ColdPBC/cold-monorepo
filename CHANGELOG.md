@@ -1,3 +1,10 @@
+## [1.425.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.425.0...v1.425.1) (2024-10-16)
+
+
+### Bug Fixes
+
+* enhance supplier linking and classification logic ([f09d4bc](https://github.com/ColdPBC/cold-monorepo/commit/f09d4bc61edc992b97577f616753bdec14220998))
+
 # [1.425.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.424.0...v1.425.0) (2024-10-15)
 
 
