@@ -9,6 +9,9 @@ export interface Products {
 export interface ProductsQuery {
   id: string;
   name: string;
+  description: string | null;
+  productCategory: string | null;
+  productSubcategory: string | null;
   productMaterials: {
     id: string
     material: {
@@ -30,4 +33,6 @@ export interface ProductsQuery {
   metadata: any | null;
   seasonCode: string | null;
   upcCode: string | null;
+  brandProductId: string | null;
+  supplierProductId: string | null;
 }

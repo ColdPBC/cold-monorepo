@@ -1,3 +1,17 @@
+# [1.430.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.429.1...v1.430.0) (2024-10-16)
+
+
+### Bug Fixes
+
+* simplify category and subcategory text generation ([893c613](https://github.com/ColdPBC/cold-monorepo/commit/893c613fde98382ab3b659cfae2402b61dea8cb7))
+* use break-words instead of truncate for descriptions ([0e4f43b](https://github.com/ColdPBC/cold-monorepo/commit/0e4f43ba8fbf8b9a80c5d5a60c4d9de0417200f4))
+
+
+### Features
+
+* enhance products data grid display ([b137807](https://github.com/ColdPBC/cold-monorepo/commit/b13780739560f02b395399dc6e24f74a49ab6b42))
+* enhance ProductsDataGrid component with additional product fields ([e5025ec](https://github.com/ColdPBC/cold-monorepo/commit/e5025ec2ae0022da1c17f64380ab6adfcd358712))
+
 ## [1.429.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.429.0...v1.429.1) (2024-10-16)
 
 
