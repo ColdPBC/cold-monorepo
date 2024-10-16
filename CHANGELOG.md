@@ -1,3 +1,17 @@
+# [1.426.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.425.2...v1.426.0) (2024-10-16)
+
+
+### Bug Fixes
+
+* prevent unnecessary state update on value change ([23f44e2](https://github.com/ColdPBC/cold-monorepo/commit/23f44e254c5738ea439bcad095446ce1f2b8a441))
+
+
+### Features
+
+* add ability to click into input to open dropdown ([d10dbfa](https://github.com/ColdPBC/cold-monorepo/commit/d10dbfaf6333fff5521f7c3ea41db3095ab47d46))
+* clear input when searching to avoid having to clear the whole text ([076fef6](https://github.com/ColdPBC/cold-monorepo/commit/076fef68aa75c84dbde0f60038e47d7c09c9f70e))
+* enforce minimum height for options in the dropdown ([d9ad012](https://github.com/ColdPBC/cold-monorepo/commit/d9ad01243ffdd48d7f22f47f36e28887ffe028fa))
+
 ## [1.425.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.425.1...v1.425.2) (2024-10-16)
 
 
