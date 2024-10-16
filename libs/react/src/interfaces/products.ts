@@ -30,5 +30,4 @@ export interface ProductsQuery {
   metadata: any | null;
   seasonCode: string | null;
   upcCode: string | null;
-  styleCode: string | null;
 }

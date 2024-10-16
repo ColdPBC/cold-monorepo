@@ -253,7 +253,6 @@ export const GET_ALL_PRODUCTS= gql`
       metadata
       seasonCode
       upcCode
-      styleCode
     }
   }
 `;
