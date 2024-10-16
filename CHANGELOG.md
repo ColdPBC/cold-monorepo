@@ -1,3 +1,10 @@
+## [1.431.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.431.0...v1.431.1) (2024-10-16)
+
+
+### Bug Fixes
+
+* remove unused styleCode field from product interfaces and mocks ([2366083](https://github.com/ColdPBC/cold-monorepo/commit/2366083407246561d443f91fc3fa112f8c8a1b73))
+
 # [1.431.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.430.0...v1.431.0) (2024-10-16)
 
 
