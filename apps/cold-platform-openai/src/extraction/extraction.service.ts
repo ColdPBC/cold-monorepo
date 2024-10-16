@@ -496,6 +496,9 @@ export class ExtractionService extends BaseWorker {
 				return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
 			}
 
+			if (parsedResponse.supplier?.name && parsedResponse.matched_name) {
+				await this.setSupplierId(parsedResponse, organization);
+			}
 			await this.setSupplierId(parsedResponse, organization);
 
 			await this.createAttributeAssurances(classification, organization, orgFile, updateData, orgFile, user, attributes, parsedResponse.supplier_id);
@@ -566,7 +569,7 @@ export class ExtractionService extends BaseWorker {
 	}
 
 	private async setSupplierId(parsedResponse: any, organization: organizations) {
-		if (parsedResponse.matched_name !== 'NOT FOUND') {
+		if (parsedResponse.matched_name && !parsedResponse.matched_name.includes('NOT FOUND')) {
 			const matchedSupplier = await this.prisma.organization_facilities.findUnique({
 				where: {
 					orgFacilityName: {
@@ -582,6 +585,10 @@ export class ExtractionService extends BaseWorker {
 		}
 
 		if (!parsedResponse.supplier_id) {
+			if (!parsedResponse.supplier?.name || parsedResponse.supplier?.name === 'NOT FOUND') {
+				throw new UnprocessableEntityException('Supplier name not found in classification');
+			}
+
 			const newSupplier = await this.prisma.organization_facilities.upsert({
 				where: {
 					orgFacilityName: {
