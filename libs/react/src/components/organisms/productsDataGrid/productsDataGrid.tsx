@@ -54,18 +54,9 @@ export const _ProductsDataGrid = () => {
     const name = get(params, 'row.name', '')
     const category = get(params, 'row.category', '')
     const subcategory = get(params, 'row.subcategory', '')
-    let text = ``
-    let oneExists = false;
-    if (category && subcategory) {
-      oneExists = true;
-      text = `${category} | ${subcategory}`
-    } else if (category) {
-      oneExists = true;
-      text = `${category}`
-    } else if (subcategory){
-      oneExists = true;
-      text = `${subcategory}`
-    }
+    const text = [category, subcategory]
+			.filter((i: string) => (i !== ''))
+			.join(' | ');
 
     return (
       <div className={'flex flex-col w-full h-full justify-center gap-[8px]'}>
@@ -73,7 +64,7 @@ export const _ProductsDataGrid = () => {
           <span>{name}</span>
         </div>
         {
-          oneExists &&
+          text &&
           <div className={'w-full h-auto items-center text-body text-tc-disabled truncate'}>
             <span>{text}</span>
           </div>
