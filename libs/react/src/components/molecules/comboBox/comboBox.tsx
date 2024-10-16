@@ -16,6 +16,8 @@ export const ComboBox = (props: ComboBoxProps) => {
   const { options, name, label, value, onChange, className, buttonClassName = '', dropdownDirection, id } = props;
 
   const [query, setQuery] = useState('')
+  const [tempOption, setTempOption] = useState<InputOption>(value)
+  const [selectedOption, setSelectedOption] = useState<InputOption | null>(value)
 
   const filteredOptions =
     query === ''
@@ -24,17 +26,41 @@ export const ComboBox = (props: ComboBoxProps) => {
         return option.name.toLowerCase().includes(query.toLowerCase())
       })
 
+  const handleInputClick = () => {
+    setTempOption(value)
+    setSelectedOption(null)
+  }
+
+  const onValueChange = (value: InputOption | null) => {
+    if(value) {
+      setSelectedOption(value)
+      setTempOption(value)
+      onChange(value)
+    } else {
+      onChange(tempOption)
+    }
+  }
+
   return (
 		<Combobox
-			value={value}
-			onChange={onChange}
-			name={name}>
+			value={selectedOption}
+			onChange={onValueChange}
+			name={name}
+      nullable={true}
+    >
 			<div className="relative" data-testid={name}>
 				<Combobox.Button className="relative w-full border-[1.5px] border-gray-90 rounded-[8px] cursor-pointer p-0 flex justify-between items-center" as={'div'}>
 					<Combobox.Input
 						className="w-full bg-transparent border-none text-tc-primary p-4 text-left text-body focus:border-none focus:ring-0"
 						onChange={event => setQuery(event.target.value)}
-						displayValue={(option: InputOption) => option.name}
+						displayValue={(option: InputOption | null) => {
+              if (option) {
+                return option.name
+              } else {
+                return ''
+              }
+            }}
+            onClick={handleInputClick}
 					/>
 					<div className={'pr-2'}>
 						<ChevronUpDownIcon className="h-5 w-5 text-white" aria-hidden="true" />
@@ -46,7 +72,8 @@ export const ComboBox = (props: ComboBoxProps) => {
 					leaveFrom="opacity-100"
 					leaveTo="opacity-0"
 					afterLeave={() => {
-            setQuery('');
+						setQuery('');
+            setSelectedOption(tempOption)
 					}}>
 					<Combobox.Options
 						className={`
