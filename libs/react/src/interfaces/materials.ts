@@ -43,9 +43,14 @@ export interface MaterialsWithRelations extends Materials {
   }[];
   attributeAssurances: {
     id: string;
+    effectiveEndDate: string | null;
+    organizationFile: {
+      id: string;
+    } | null;
     sustainabilityAttribute: {
       id: string;
       name: string;
+      logoUrl?: string;
     };
   }[];
   productMaterials: {

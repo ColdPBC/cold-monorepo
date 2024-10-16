@@ -1,4 +1,5 @@
 import { MaterialsWithCertifications, MaterialsWithRelations } from '@coldpbc/interfaces';
+import { addDays, subDays } from 'date-fns';
 
 export function getMaterialsMock(): MaterialsWithCertifications[] {
   return [
@@ -168,6 +169,8 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
       attributeAssurances: [
         {
           id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: 'mat_qg9aabgn9a81mb90bijv9dtf',
             name: 'PFAS test',
@@ -175,20 +178,32 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
         },
         {
           id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          effectiveEndDate: null,
+          organizationFile: {
+            id: '123',
+          },
           sustainabilityAttribute: {
             id: 'mat_qg9aabgn9a81mb90bijv9dtf',
-            name: 'bluesign',
+            name: 'Bluesign',
+            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Bluesign.png',
           },
         },
         {
           id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          effectiveEndDate: subDays(new Date(), 5).toISOString(), // Expired
+          organizationFile: {
+            id: '123',
+          },
           sustainabilityAttribute: {
             id: "c8396184-16c5-46fb-a772-44b097473a3d",
-            name: "ISO 26000 - Social Responsibility"
+            name: "ISO 26000 - Social Responsibility",
+            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/ISO+26000.png',
           }
         },
         {
           id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: 'mat_qg9aabgn9a81mb90bijv9dtf',
             name: 'Certified Organic',
@@ -196,9 +211,26 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
         },
         {
           id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          effectiveEndDate: addDays(new Date(), 25).toISOString(), // Expiring
+          organizationFile: {
+            id: '123',
+          },
           sustainabilityAttribute: {
             id: "a99e4eff-72ee-40f4-a476-0385ac6f52d3",
-            name: "Worldwide Responsible Accredited Production (WRAP)"
+            name: "Worldwide Responsible Accredited Production (WRAP)",
+            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png',
+          },
+        },
+        {
+          id: 'abc',
+          effectiveEndDate: addDays(new Date(), 25).toISOString(), // Expiring
+          organizationFile: {
+            id: '123',
+          },
+          sustainabilityAttribute: {
+            id: "xyz",
+            name: "Organic Wool",
+            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png',
           },
         }
       ],
@@ -239,6 +271,8 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
       attributeAssurances: [
         {
           id: 'claim_weeo1u7kox8l7lh2ggstrhgl',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: "61121ffb-a0d5-44d9-b553-22b11c53533b",
             name: "SBTi Accreditation - Long Term Target (Net Zero by 2050)"
@@ -308,6 +342,8 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
       attributeAssurances: [
         {
           id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: 'mat_j7xtvksv2jrlxdzrd2m6bvbt',
             name: 'Certified Organic',

@@ -3,6 +3,8 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { AttributeAssuranceGraph } from '@coldpbc/components';
 import { SustainabilityAttributeAssurance, SustainabilityAttribute } from '@coldpbc/interfaces';
+import { getAggregateStatusFromAttributeAssurances } from '@coldpbc/lib';
+import { AttributeAssuranceStatus } from '@coldpbc/enums';
 
 interface SustainabilityAttributeCardProps {
   sustainabilityAttribute: SustainabilityAttribute;
@@ -23,7 +25,6 @@ function processSustainabilityAttribute(attribute: SustainabilityAttribute): Sus
     notDocumentedCount: 0,
   };
 
-  const currentDate = new Date();
   const entityAssurances = new Map<string, SustainabilityAttributeAssurance[]>();
 
   // Group assurances by entity ID
@@ -55,26 +56,11 @@ function processSustainabilityAttribute(attribute: SustainabilityAttribute): Sus
 
   // Process grouped assurances
   entityAssurances.forEach((assurances, _entityId) => {
-    let hasActiveAssurance = false;
-    let hasExpiredAssurance = false;
+    const { assuranceStatus } = getAggregateStatusFromAttributeAssurances(assurances);
 
-    for (const assurance of assurances) {
-      const hasDocument = !!assurance.organizationFile?.id;
-      const expirationDate = assurance.effectiveEndDate ? new Date(assurance.effectiveEndDate) : undefined;
-
-      if (hasDocument) {
-        if (!expirationDate || expirationDate > currentDate) {
-          hasActiveAssurance = true;
-          break;  // Active assurance found, no need to check further
-        } else {
-          hasExpiredAssurance = true;
-        }
-      }
-    }
-
-    if (hasActiveAssurance) {
+    if (assuranceStatus === AttributeAssuranceStatus.ACTIVE || assuranceStatus === AttributeAssuranceStatus.EXPIRING) {
       result.activeCount++;
-    } else if (hasExpiredAssurance) {
+    } else if (assuranceStatus === AttributeAssuranceStatus.EXPIRED) {
       result.expiredCount++;
     } else {
       result.notDocumentedCount++;

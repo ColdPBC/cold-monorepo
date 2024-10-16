@@ -1,7 +1,7 @@
-import { subDays } from 'date-fns';
+import { addDays, subDays } from 'date-fns';
 
 type Entity = 'MATERIAL' | 'ORGANIZATION' | 'PRODUCT' | 'SUPPLIER';
-type AssuranceStatus = 'ACTIVE' | 'EXPIRED' | 'NOT DOCUMENTED';
+type AssuranceStatus = 'ACTIVE' | 'EXPIRING' | 'EXPIRED' | 'NOT DOCUMENTED';
 
 interface AttributeAssuranceMockParams {
   entity: Entity;
@@ -14,11 +14,22 @@ export const AttributeAssuranceMock = ({
   status,
   index
 }: AttributeAssuranceMockParams) => {
-  const yesterday = subDays(new Date(), 1).toISOString();
+  let effectiveEndDate: string | null;
+
+  switch (status) {
+    case 'EXPIRING':
+      effectiveEndDate = addDays(new Date(), 10).toISOString();
+      break;
+    case 'EXPIRED':
+      effectiveEndDate = subDays(new Date(), 1).toISOString();
+      break;
+    default:
+      effectiveEndDate = null;
+  }
 
   const baseObject = {
     id: index.toString(),
-    effectiveEndDate: status === 'EXPIRED' ? yesterday : null,
+    effectiveEndDate: effectiveEndDate,
     material: null,
     organization: null,
     organizationFacility: null,

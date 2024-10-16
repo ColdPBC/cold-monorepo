@@ -1,19 +1,19 @@
 export interface SustainabilityAttributeAssurance {
   id: string;
   effectiveEndDate: string | null;
-  material: {
+  material?: {
     id: string;
   } | null;
-  organization: {
+  organization?: {
     id: string;
   } | null;
   organizationFile: {
     id: string;
   } | null;
-  organizationFacility: {
+  organizationFacility?: {
     id: string;
   } | null;
-  product: {
+  product?: {
     id: string;
   } | null;
 }
