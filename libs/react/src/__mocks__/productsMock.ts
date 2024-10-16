@@ -45,6 +45,11 @@ export const getProductsMock = (): ProductsQuery[] => {
       seasonCode: '123456789',
       upcCode: '123456789',
       styleCode: '123456789',
+      brandProductId: '123456789',
+      supplierProductId: '123456789',
+      description: 'Description 1',
+      productCategory: 'Product Category 1',
+      productSubcategory: 'Product Subcategory 1',
     },
     {
       id: '2',
@@ -75,6 +80,11 @@ export const getProductsMock = (): ProductsQuery[] => {
       seasonCode: '123456789',
       upcCode: '123456789',
       styleCode: '123456789',
+      brandProductId: '123456789',
+      supplierProductId: '123456789',
+      description: 'pneumonoultramicroscopicsilicovolcanoconiosis Odio quis eum non ullam voluptatem quas. Aut hic laboriosam nesciunt nisi omnis voluptas expedita. Quos iusto totam doloribus molestiae eum dolores sint ipsam. Maxime fuga neque qui ipsam tempore. Quisquam quia exercitationem voluptatum et earum enim beatae exercitationem quas. Nihil voluptatem maiores vel hic necessitatibus cumque.',
+      productCategory: null,
+      productSubcategory: 'Product Subcategory 1',
     },
     {
       id: '3',
@@ -105,6 +115,11 @@ export const getProductsMock = (): ProductsQuery[] => {
       seasonCode: '123456789',
       upcCode: '123456789',
       styleCode: '123456789',
+      brandProductId: '123456789',
+      supplierProductId: '123456789',
+      description: 'Description 1',
+      productCategory: 'Product Category 1',
+      productSubcategory: null,
     },
   ]
 }
