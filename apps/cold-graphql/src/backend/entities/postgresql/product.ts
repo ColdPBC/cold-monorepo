@@ -40,9 +40,6 @@ export class Product {
 	@Property({ type: 'json', nullable: true })
 	metadata?: Record<string, unknown>;
 
-	@Property({ type: 'json', nullable: true })
-	productCategoryHeirarchy?: Record<string, unknown>;
-
 	@Property({ type: 'text', nullable: true })
 	seasonCode?: string;
 
@@ -65,6 +62,14 @@ export class Product {
 	@Index({ name: 'supplier_product_id_idx1' })
 	@Property({ type: 'text', nullable: true })
 	supplierProductId?: string;
+
+	@Index({ name: 'brand_category_idx1' })
+	@Property({ type: 'text', nullable: true })
+	productCategory?: string;
+
+	@Index({ name: 'brand_subcategory_idx1' })
+	@Property({ type: 'text', nullable: true })
+	productSubcategory?: string;
 
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'product' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);

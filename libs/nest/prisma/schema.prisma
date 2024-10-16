@@ -654,6 +654,8 @@ model products {
   deleted                    Boolean?                 @default(false)
   organization_id            String
 	description								 String?
+	product_category					 String?
+	product_subcategory			 	 String?
   metadata                   Json?
   season_code                String?
 	upc_code									 String?
@@ -661,7 +663,6 @@ model products {
 	supplier_product_id				 String?
   supplier_id                String?
   style_code                 String?
-  product_category_heirarchy Json?
   materials                  product_materials[]
   organization               organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   supplier                   organization_facilities? @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
@@ -670,6 +671,8 @@ model products {
 	@@unique([organization_id, upc_code, name], name: "orgIdNameUpc")
 	@@unique([organization_id, name], name: "orgIdName")
 
+	@@index([product_category], map: "brand_category_idx1")
+	@@index([product_subcategory], map: "brand_subcategory_idx1")
 	@@index([brand_product_id], map: "brand_product_id_idx1")
 	@@index([supplier_product_id], map: "supplier_product_id_idx1")
   @@index([organization_id], map: "products_organization_id_idx1")
