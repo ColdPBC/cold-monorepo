@@ -1,3 +1,48 @@
+## [1.425.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.425.0...v1.425.1) (2024-10-16)
+
+
+### Bug Fixes
+
+* enhance supplier linking and classification logic ([f09d4bc](https://github.com/ColdPBC/cold-monorepo/commit/f09d4bc61edc992b97577f616753bdec14220998))
+
+# [1.425.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.424.0...v1.425.0) (2024-10-15)
+
+
+### Features
+
+* add error boundaries to ProductsPage and ProductsDataGrid ([0664afc](https://github.com/ColdPBC/cold-monorepo/commit/0664afcb5a7aa27f5971143c3128731cf3af9dfe))
+
+# [1.424.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.423.0...v1.424.0) (2024-10-15)
+
+
+### Bug Fixes
+
+* adjust padding in DataGridCellHoverPopoverWrap ([87b39ad](https://github.com/ColdPBC/cold-monorepo/commit/87b39adbdcc135abe204f19afbf6bc98047e2899))
+* ensure unique sustainability attributes in productsDataGrid component ([6fd27cb](https://github.com/ColdPBC/cold-monorepo/commit/6fd27cb2d87755ace8b01a5a4c87c8d94627ad33))
+* handle null organizationFacility.name in productsDataGrid ([e3619f2](https://github.com/ColdPBC/cold-monorepo/commit/e3619f2c776333482cc752c51659a03cca280e88))
+* replace DataGridCellHoverPopoverWrap with DataGridCellHoverPopover and adjust column properties ([4b30454](https://github.com/ColdPBC/cold-monorepo/commit/4b3045485962988e552c0cfce0568a7da1b8a8a0))
+
+
+### Features
+
+* add product routes and products page with data grid ([837cead](https://github.com/ColdPBC/cold-monorepo/commit/837cead2d38cd0f70006f9df1607e4f5c333826b))
+* conditionally display Products page and sidebar item based on feature flag ([caade65](https://github.com/ColdPBC/cold-monorepo/commit/caade65cf6a640d091411e13bde131ca5115b53e))
+* enhance product mock data with materials and attribute assurances ([1d2c8aa](https://github.com/ColdPBC/cold-monorepo/commit/1d2c8aa80a54100969c0d87280e120de415ec07b))
+* ensure accurate truncation check ([eb2ce0b](https://github.com/ColdPBC/cold-monorepo/commit/eb2ce0b875211158843c746e5eb9008f73f2d2d7))
+* ensure ResizeObserver initializes only when values array is not empty ([8212656](https://github.com/ColdPBC/cold-monorepo/commit/821265630fb6d238c565db9f0f9733df930f871e))
+
+# [1.423.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.5...v1.423.0) (2024-10-15)
+
+
+### Bug Fixes
+
+* use 'contentClassName' ([f7ee183](https://github.com/ColdPBC/cold-monorepo/commit/f7ee183419d6759530380fdce541346f8697d084))
+
+
+### Features
+
+* new component SustainabilityAttributeLogoWithStatus ([19ef794](https://github.com/ColdPBC/cold-monorepo/commit/19ef7942b0ef28a46fa72b9488571dce634af78b))
+
 ## [1.422.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.422.4...v1.422.5) (2024-10-15)
 
 

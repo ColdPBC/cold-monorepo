@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from "react";
 import {Popover} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
 
-
 export const DataGridCellPillPopover = (props: {
   text: string,
   color?: string
@@ -18,7 +17,7 @@ export const DataGridCellPillPopover = (props: {
 
     const checkTruncation = () => {
       if(element) {
-        const isOverflowing = element.clientWidth < element.scrollWidth;
+        const isOverflowing = element.clientWidth < element.scrollWidth && element.getBoundingClientRect().width === width;
         setIsTruncated(isOverflowing);
       }
     }

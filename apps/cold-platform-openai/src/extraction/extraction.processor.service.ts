@@ -33,7 +33,7 @@ export class ExtractionProcessorService extends BaseWorker {
 
 	@Process('extract')
 	async processExtractionJob(job: any) {
-		const { extension, classification, content, isImage, filePayload, user, organization, attributes } = job.data;
+		const { extension, classification, content, isImage, filePayload, user, organization, attributes, suppliers } = job.data;
 
 		this.logger.info(`Extracting data from ${filePayload.original_name}`, { extension, classification, filePayload, user, organization });
 
@@ -41,9 +41,9 @@ export class ExtractionProcessorService extends BaseWorker {
 			let extracted: any;
 
 			if (content) {
-				extracted = await this.extraction.extractDataFromContent(content, classification, user, filePayload, organization, attributes);
+				extracted = await this.extraction.extractDataFromContent(content, classification, user, filePayload, organization, attributes, suppliers);
 			} else {
-				extracted = await this.extraction.extractDataFromImages(classification, extension, isImage, user, filePayload, organization, attributes);
+				extracted = await this.extraction.extractDataFromImages(classification, extension, isImage, user, filePayload, organization, attributes, suppliers);
 			}
 
 			if (extracted) {

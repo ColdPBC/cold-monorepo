@@ -27,11 +27,11 @@ export class SuppliersService extends BaseWorker {
 		const parsed = typeof content === 'string' ? JSON.parse(content) : content;
 
 		if (parsed.name) {
-			const supplier = await this.prisma.organization_facilities.upsert({
+			/*const supplier = await this.prisma.organization_facilities.upsert({
 				where: {
 					orgFacilityName: {
 						organization_id: job.data.organization.id,
-						name: parsed.supplier.name,
+						name: parsed.matched_name,
 					},
 				},
 				create: {
@@ -56,6 +56,7 @@ export class SuppliersService extends BaseWorker {
 			return {};
 		}
 
-		throw new Error('No supplier name found');
+		throw new Error('No supplier name found');*/
+		}
 	}
 }

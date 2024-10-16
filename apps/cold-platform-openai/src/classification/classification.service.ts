@@ -1,7 +1,7 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import z from 'zod';
-import { file_types, organization_files, organizations, sustainability_attributes } from '@prisma/client';
+import { file_types, organization_facilities, organization_files, organizations, sustainability_attributes } from '@prisma/client';
 import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
@@ -60,6 +60,18 @@ export class ClassificationService extends BaseWorker {
 
 		// extend existing schema to add sustainability attributes
 		this.classificationSchema = this.classificationSchema.extend({
+			type: z.nativeEnum(file_types).describe(`
+			Classify the type of document from the list of file_types defined in this schema.  Do not use any other file type that is not listed here.  If you are unsure of the file type then consider these additional rules:
+			- Restricted Substance Lists should be classified as a POLICY
+      - Only classify a certificate as a SCOPE_CERTIFICATE if 'Scope' is found in the content.
+      - Only classify a certificate as a TRANSACTION_CERTIFICATE if 'Transaction Certificate' is found in the content.
+      - if the content is a statement , classify it as a STATEMENT
+      - if the content is a bill of materials or BOM, classify it as a BILL_OF_MATERIALS.  If it does not contain 'BOM' or 'Bill Of Materials' anywhere in the content, then DO NOT CLASSIFY IT AS A BILL_OF_MATERIALS.
+      - if the document is a purchase order or list of purchase orders, classify it as a PURCHASE_ORDER.  A purchase order must have a "PO NUMBER", and Ship To information.  If it does not contain 'Purchase Order' anywhere in the content, then DO NOT CLASSIFY IT AS A PURCHASE_ORDER
+      - if the content is an impact assessment from ${organization.display_name}, classify it as a STATEMENT
+      
+      Otherwise do your best to classify the document type from the list of file_types defined in this schema.
+      `),
 			sustainability_attribute: z
 				.string()
 				.describe(
@@ -69,18 +81,7 @@ export class ClassificationService extends BaseWorker {
 				),
 		});
 
-		return `You are a helpful assistant for ${organization.display_name} who has expert knowledge in sustainability compliance and manufacturing processes of both products and materials.  Classify this content using the following rules:
-    - if the content is an RSL (Restricted Substance List), classify it as a POLICY
-    - if the content is a wrap certificate, classify it as a CERTIFICATE
-    - if the content is a bluesign certificate, classify it as a CERTIFICATE
-    - if the content is a bluesign product certificate, classify it as a CERTIFICATE
-    - if the content is a certificate, classify it as a CERTIFICATE
-    - if the content is a scope certificate, then classify it as a SCOPE_CERTIFICATE.  Only classify it this way if 'Scope Certificate' is found in the content.
-    - if the content is a transaction certificate, then classify it as a TRANSACTION_CERTIFICATE. Only classify it this way if 'Transaction Certificate' is found in the content.
-    - if the content is a statement, classify it as a STATEMENT
-    - if the content is a bill of materials or BOM, classify it as a BILL_OF_MATERIALS.  If it does not contain 'BOM' or 'Bill Of Materials' anywhere in the content, then DO NOT CLASSIFY IT AS A BILL_OF_MATERIALS.
-    - if the document is a purchase order or list of purchase orders, classify it as a PURCHASE_ORDER.  A purchase order must have a "PO NUMBER", and Ship To information.  If it does not contain 'Purchase Order' anywhere in the content, then DO NOT CLASSIFY IT AS A PURCHASE_ORDER
-    - if the content is an impact assessment from ${organization.display_name}, classify it as a STATEMENT
+		return `You are a helpful assistant for ${organization.display_name} who has expert knowledge in sustainability compliance and manufacturing processes of both products and materials.
     `;
 	}
 
@@ -105,6 +106,19 @@ export class ClassificationService extends BaseWorker {
 		});
 
 		set(classifyResponse.choices[0].message?.parsed, 'attributes', this.sus_attributes);
+
+		const suppliers = (await this.prisma.organization_facilities.findMany({
+			where: {
+				organization_id: organization.id,
+				supplier: true,
+			},
+			select: {
+				id: true,
+				name: true,
+			},
+		})) as organization_facilities[];
+
+		set(classifyResponse.choices[0].message?.parsed, 'suppliers', suppliers.map(k => k.name) as readonly string[]);
 
 		return classifyResponse.choices[0].message?.parsed;
 	}
@@ -159,6 +173,19 @@ export class ClassificationService extends BaseWorker {
 			});
 
 			set(classifyResponse.choices[0].message?.parsed, 'attributes', this.sus_attributes);
+
+			const suppliers = (await this.prisma.organization_facilities.findMany({
+				where: {
+					organization_id: organization.id,
+					supplier: true,
+				},
+				select: {
+					id: true,
+					name: true,
+				},
+			})) as organization_facilities[];
+
+			set(classifyResponse.choices[0].message?.parsed, 'suppliers', suppliers.map(k => k.name) as readonly string[]);
 
 			this.logger.info('content_classification response', { classification: classifyResponse.choices[0].message.parsed, user, file: orgFile });
 

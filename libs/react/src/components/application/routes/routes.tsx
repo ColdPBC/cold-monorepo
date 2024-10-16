@@ -24,6 +24,7 @@ import {
 } from '@coldpbc/components';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { QuestionnaireRoutes } from './questionnaireRoutes';
+import {ProductRoutes} from "./productRoutes";
 
 export const ColdRoutes = () => {
   const ldFlags = useFlags();
@@ -46,6 +47,7 @@ export const ColdRoutes = () => {
         {WizardRoutes()}
         {MaterialRoutes()}
         {SupplierRoutes()}
+        {ProductRoutes()}
         <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={defaultPage} replace={true} />} />
 
         // Temporary redirects from old route until we're certain that the seeds are updated to the new sidebar.

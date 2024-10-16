@@ -88,7 +88,26 @@ export class MaterialsService extends BaseWorker {
 								supplier_tier: 2,
 							},
 						});
-						this.logger.info('created supplier', { supplier });
+
+						if (material.id && supplier.id) {
+							await this.prisma.material_suppliers.upsert({
+								where: {
+									materialSupplierKey: {
+										material_id: material.id,
+										supplier_id: supplier.id,
+									},
+								},
+								create: {
+									material_id: material.id,
+									supplier_id: supplier.id,
+								},
+								update: {
+									material_id: material.id,
+									supplier_id: supplier.id,
+								},
+							});
+						}
+						this.logger.info('linked material and supplier', { supplier, material });
 					}
 				}
 			}

@@ -31,6 +31,14 @@ export function getSidebarMock() {
           route: '/materials',
         },
         {
+          key: 'products_key',
+          icon: {
+            name: 'ColdProductsNavIcon',
+          },
+          label: 'Products',
+          route: '/products',
+        },
+        {
           key: 'suppliers_key',
           icon: {
             name: 'ColdSuppliersNavIcon',

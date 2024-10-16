@@ -1,7 +1,7 @@
-import { Injectable, Scope } from '@nestjs/common';
-import { toUTCDate, BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
+import { Injectable, Scope, UnprocessableEntityException } from '@nestjs/common';
+import { toUTCDate, BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service, Cuid2Generator, GuidPrefixes } from '@coldpbc/nest';
 import z from 'zod';
-import { attribute_assurances, file_types, organization_files, organizations, sustainability_attributes } from '@prisma/client';
+import { attribute_assurances, file_types, organization_facilities, organization_files, organizations, sustainability_attributes } from '@prisma/client';
 import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
@@ -12,9 +12,14 @@ import { PDFDocument } from 'pdf-lib';
 import { fromBuffer } from 'pdf2pic';
 import { pdfToText } from './extractTextFromPDF';
 import {
+	address_line_1,
+	address_line_2,
+	baseCertificateSchema,
 	BillOfMaterialsSchema,
 	bluesignProductSchema,
 	bluesignSchema,
+	city,
+	country,
 	defaultCertificateSchema,
 	defaultExtractionSchema,
 	defaultPolicySchema,
@@ -22,7 +27,9 @@ import {
 	defaultTestSchema,
 	intertek,
 	PoProductsSchema,
+	postal_code,
 	sgs,
+	state_province,
 	tuv_rhineland,
 	wrap,
 } from '../schemas';
@@ -122,6 +129,7 @@ export class ExtractionService extends BaseWorker {
 		filePayload: organization_files,
 		organization: organizations,
 		attributes: sustainability_attributes[],
+		suppliers: organization_facilities[],
 	) {
 		const start = new Date();
 		try {
@@ -265,7 +273,9 @@ export class ExtractionService extends BaseWorker {
 				return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
 			}
 
-			await this.createAttributeAssurances(classification, organization, filePayload, updateData, filePayload, user, attributes);
+			await this.setSupplierId(parsedResponse, organization);
+
+			await this.createAttributeAssurances(classification, organization, filePayload, updateData, filePayload, user, attributes, parsedResponse.supplier_id);
 
 			this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
 				start,
@@ -341,6 +351,7 @@ export class ExtractionService extends BaseWorker {
 	 * @param orgFile
 	 * @param organization
 	 * @param attributes
+	 * @param suppliers
 	 */
 	async extractDataFromContent(
 		content: any[] | string,
@@ -349,6 +360,7 @@ export class ExtractionService extends BaseWorker {
 		orgFile: organization_files,
 		organization: organizations,
 		attributes: sustainability_attributes[],
+		suppliers: organization_facilities[],
 	) {
 		const start = new Date();
 		try {
@@ -484,7 +496,9 @@ export class ExtractionService extends BaseWorker {
 				return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
 			}
 
-			await this.createAttributeAssurances(classification, organization, orgFile, updateData, orgFile, user, attributes);
+			await this.setSupplierId(parsedResponse, organization);
+
+			await this.createAttributeAssurances(classification, organization, orgFile, updateData, orgFile, user, attributes, parsedResponse.supplier_id);
 
 			this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
 				start,
@@ -551,6 +565,43 @@ export class ExtractionService extends BaseWorker {
 		}
 	}
 
+	private async setSupplierId(parsedResponse: any, organization: organizations) {
+		if (parsedResponse.matched_name !== 'NOT FOUND') {
+			const matchedSupplier = await this.prisma.organization_facilities.findUnique({
+				where: {
+					orgFacilityName: {
+						organization_id: organization.id,
+						name: parsedResponse.matched_name,
+					},
+				},
+			});
+
+			if (matchedSupplier?.id) {
+				parsedResponse.supplier_id = matchedSupplier.id;
+			}
+		}
+
+		if (!parsedResponse.supplier_id) {
+			const newSupplier = await this.prisma.organization_facilities.upsert({
+				where: {
+					orgFacilityName: {
+						organization_id: organization.id,
+						name: parsedResponse.supplier.name,
+					},
+				},
+				create: {
+					id: new Cuid2Generator(GuidPrefixes.OrganizationFacility).scopedId,
+					organization_id: organization.id,
+					...parsedResponse.supplier,
+					supplier_tier: parsedResponse.supplier.supplier_tier || 2,
+				},
+				update: {},
+			});
+
+			parsedResponse.supplier_id = newSupplier.id;
+		}
+	}
+
 	private async resolveExtractionSchema(classification: any) {
 		if (typeof classification === 'string') {
 			classification = JSON.parse(classification);
@@ -580,24 +631,56 @@ export class ExtractionService extends BaseWorker {
 			case file_types.SCOPE_CERTIFICATE:
 			case file_types.TRANSACTION_CERTIFICATE:
 			case file_types.CERTIFICATE: {
+				//You have a list of known suppliers, and you need to extract the supplier name from a document. You are expected to find the best matching supplier from the list using partial string matching. The goal is to match only the core, significant part of the supplier’s name.
 				if (!classification.sustainability_attribute) {
 					//content.sustainability_attribute = 'certificate_AttributeUnknown';
-					classification.extraction_schema = defaultCertificateSchema;
+					throw new UnprocessableEntityException('Sustainability attribute not found in classification');
 				} else {
+					const certSchema = baseCertificateSchema.extend({
+						matched_name: z.string().describe(
+							`Here is a list of known suppliers: ${classification.suppliers.join(
+								', ',
+							)}, and you need to extract the supplier name from a document. You are expected to find the best matching supplier from the list using partial string matching. The goal is to match only the core, significant part of the supplier’s name.
+
+\t•\tIf a name in the document contains a segment that partially matches a name in the list, return the best matching name found in the list of known suppliers.
+\t•\tIf no match is found, return ‘NOT FOUND’.`,
+						),
+						supplier: z.object({
+							name: z
+								.string()
+								.describe(`Look for the name of the company to which this certificate is awarded and find the best match for the name from this known list of supplier names.`),
+							address_line_1,
+							address_line_2,
+							city,
+							state_province,
+							postal_code,
+							country,
+						}),
+					});
+
 					classification.extraction_name = snakeCase(`certificate ${classification.sustainability_attribute}`);
 					switch (classification.sustainability_attribute) {
-						case 'Bluesign Product':
-							classification.extraction_schema = bluesignProductSchema;
+						case 'Bluesign Product': {
+							classification.extraction_schema = certSchema.extend({
+								name: z.enum(['bluesign Product']).describe('The name of the bluesign product certificate.'),
+							});
 							break;
+						}
 						case 'Bluesign':
-							classification.extraction_schema = bluesignSchema;
+							classification.extraction_schema = certSchema.extend({
+								name: z.enum(['bluesign']).describe('The name of the certificate.'),
+							});
 							break;
 						case 'WRAP':
 						case 'Worldwide Responsible Accredited Production':
-							classification.extraction_schema = wrap;
+							classification.extraction_schema = certSchema.extend({
+								name: z.enum(['Worldwide Responsible Accredited Production (WRAP)']),
+							});
 							break;
 						default:
-							classification.extraction_schema = defaultCertificateSchema;
+							classification.extraction_schema = certSchema.extend({
+								name: z.enum([classification.sustainability_attribute]).describe('The name of the certificate.'),
+							});
 							break;
 					}
 				}
@@ -620,8 +703,9 @@ export class ExtractionService extends BaseWorker {
 				classification.extraction_schema = PoProductsSchema;
 				break;
 			default:
+				throw new UnprocessableEntityException('File type not found in classification');
 				// if it failed to correctly identify type of document, but did identify a sustainability attribute switch on attribute name
-				if (classification.sustainability_attribute) {
+				/*if (classification.sustainability_attribute) {
 					switch (classification.sustainability_attribute) {
 						case 'Worldwide Responsible Accredited Production (WRAP)':
 							classification.extraction_schema = wrap;
@@ -652,7 +736,7 @@ export class ExtractionService extends BaseWorker {
 				} else {
 					classification.extraction_name = snakeCase(`default extraction`);
 					classification.extraction_schema = defaultExtractionSchema;
-				}
+				}*/
 				break;
 		}
 
@@ -667,6 +751,7 @@ export class ExtractionService extends BaseWorker {
 		updatedFile: any,
 		user: IAuthenticatedUser,
 		attributes: sustainability_attributes[],
+		supplier_id: string,
 	) {
 		const attribute_id = attributes.find(a => a.name === classification.sustainability_attribute)?.id;
 
@@ -674,6 +759,7 @@ export class ExtractionService extends BaseWorker {
 			sustainability_attribute_id: attribute_id,
 			organization_id: organization.id,
 			organization_file_id: orgFile.id,
+			organization_facility_id: supplier_id,
 			effective_start_date: updateData.effective_start_date,
 			effective_end_date: updateData.effective_end_date,
 		} as attribute_assurances;
