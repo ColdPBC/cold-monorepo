@@ -85,7 +85,7 @@ export const _ProductsDataGrid = () => {
   const renderDescription = (params: any) => {
     const description = get(params, 'row.description', '')
     return (
-      <div className={'w-full h-full text-body items-center flex text-wrap truncate'}>
+      <div className={'w-full h-full text-body items-center flex text-wrap break-words'}>
         <span className={'line-clamp-3'}>{description}</span>
       </div>
     )
