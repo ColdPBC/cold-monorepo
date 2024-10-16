@@ -62,6 +62,7 @@ export const ComboBox = (props: ComboBoxProps) => {
               return option ? option.name : ''
             }}
             onClick={handleInputClick}
+            data-testid={name + '_input'}
 					/>
 					<div className={'pr-2'}>
 						<ChevronUpDownIcon className="h-5 w-5 text-white" aria-hidden="true" />
