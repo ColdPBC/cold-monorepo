@@ -50,6 +50,7 @@ export interface MaterialsWithRelations extends Materials {
     sustainabilityAttribute: {
       id: string;
       name: string;
+      level: 'MATERIAL' | 'ORGANIZATION' | 'SUPPLIER' | 'PRODUCT';
       logoUrl?: string;
     };
   }[];

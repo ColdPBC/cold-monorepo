@@ -16,4 +16,10 @@ export interface SustainabilityAttributeAssurance {
   product?: {
     id: string;
   } | null;
+  sustainabilityAttribute?: {
+    id: string;
+    name: string;
+    level: 'MATERIAL' | 'ORGANIZATION' | 'SUPPLIER' | 'PRODUCT';
+    logoUrl?: string;
+  } | null;
 }

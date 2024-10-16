@@ -136,6 +136,7 @@ export const GET_ALL_MATERIALS_FOR_ORG = gql`
         sustainabilityAttribute {
           id
           name
+          level
           logoUrl
         }
         organizationFile {
