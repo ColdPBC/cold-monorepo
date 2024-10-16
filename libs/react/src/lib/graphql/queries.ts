@@ -132,9 +132,14 @@ export const GET_ALL_MATERIALS_FOR_ORG = gql`
       }
       attributeAssurances {
         id
+        effectiveEndDate
         sustainabilityAttribute {
           id
           name
+          logoUrl
+        }
+        organizationFile {
+          id
         }
       }
       productMaterials {
