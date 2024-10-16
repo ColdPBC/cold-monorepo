@@ -4,6 +4,7 @@ import {SelectProps} from "@coldpbc/components";
 import React, {Fragment, useEffect, useState} from "react";
 import {clsx} from "clsx";
 import {ChevronUpDownIcon} from '@heroicons/react/20/solid';
+import {isEqual} from "lodash";
 
 export interface ComboBoxProps extends SelectProps {
   options: Array<InputOption>;
@@ -32,6 +33,10 @@ export const ComboBox = (props: ComboBoxProps) => {
   }
 
   const onValueChange = (value: InputOption | null) => {
+    if(isEqual(value, selectedOption)) {
+      return
+    }
+
     if(value) {
       setSelectedOption(value)
       setTempOption(value)
@@ -54,11 +59,7 @@ export const ComboBox = (props: ComboBoxProps) => {
 						className="w-full bg-transparent border-none text-tc-primary p-4 text-left text-body focus:border-none focus:ring-0"
 						onChange={event => setQuery(event.target.value)}
 						displayValue={(option: InputOption | null) => {
-              if (option) {
-                return option.name
-              } else {
-                return ''
-              }
+              return option ? option.name : ''
             }}
             onClick={handleInputClick}
 					/>
