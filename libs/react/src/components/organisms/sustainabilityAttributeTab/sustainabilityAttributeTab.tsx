@@ -46,7 +46,7 @@ export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProp
         <div className='py-6 grid single:grid-cols-1 double:grid-cols-2 triple:grid-cols-3 gap-4'>
           {
             sustainabilityAttributes.map(sustainabilityAttribute => (
-              <div key={sustainabilityAttribute.id} className='w-full w-min-[475px]'>
+              <div key={sustainabilityAttribute.id} className='w-full min-w-[475px]'>
                 <SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />
               </div>
             ))
