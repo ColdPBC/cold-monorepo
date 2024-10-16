@@ -653,9 +653,12 @@ model products {
   updated_at                 DateTime?                @updatedAt @db.Timestamptz(6)
   deleted                    Boolean?                 @default(false)
   organization_id            String
+	description								 String?
   metadata                   Json?
   season_code                String?
 	upc_code									 String?
+	brand_product_id					 String?
+	supplier_product_id				 String?
   supplier_id                String?
   style_code                 String?
   product_category_heirarchy Json?
@@ -667,6 +670,8 @@ model products {
 	@@unique([organization_id, upc_code, name], name: "orgIdNameUpc")
 	@@unique([organization_id, name], name: "orgIdName")
 
+	@@index([brand_product_id], map: "brand_product_id_idx1")
+	@@index([supplier_product_id], map: "supplier_product_id_idx1")
   @@index([organization_id], map: "products_organization_id_idx1")
 }
 
