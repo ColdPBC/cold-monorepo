@@ -1,13 +1,11 @@
 import z from 'zod';
 import { effective_start_date, summary, location, contact } from '../../global.schema';
+import { baseSupplierSchema } from '../../supplier.schema';
 
 export const baseTestSchema = z.object({
 	effective_start_date: effective_start_date,
-	applicant: z.object({
-		name: z.string().describe('If the document contains an applicant, place it here'),
-		location: location.describe('If the document is a test document, attempt to extract data for applicant address information'),
-		contact: contact.describe('If the document is a test document, attempt to extract data for applicant contact information'),
-	}),
+
+	supplier: baseSupplierSchema,
 	test_date: z.string().describe('If the document contains a test date, place it here'),
 	test_number: z.string().describe('If the document contains a test number, place it here'),
 	sample: z.object({

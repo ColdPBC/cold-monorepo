@@ -7,89 +7,89 @@ import { fromSSO } from '@aws-sdk/credential-provider-sso';
 
 @Injectable()
 export class SecretsService extends BaseWorker implements OnModuleInit {
-  client: SecretsManager;
+	client: SecretsManager;
 
-  constructor() {
-    super(SecretsService.name);
+	constructor() {
+		super(SecretsService.name);
 
-    this.client = new SecretsManager({
-      region: get('AWS_REGION', 'us-east-1'),
-    });
-  }
+		this.client = new SecretsManager({
+			region: get('AWS_REGION', 'us-east-1'),
+		});
+	}
 
-  override async onModuleInit() {
-    let awsCreds: any = {};
+	override async onModuleInit() {
+		let awsCreds: any = {};
 
-    // FC_ENV should only be set in the Flight Control environment, not in SM
-    if (process.env['FC_ENV'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
-      awsCreds = {
-        region: process.env['AWS_REGION'] || 'us-east-1',
-        credentials: {
-          accessKeyId: process.env['AWS_ACCESS_KEY_ID'],
-          secretAccessKey: process.env['AWS_SECRET_ACCESS_KEY'],
-        },
-      };
+		// FC_ENV should only be set in the Flight Control environment, not in SM
+		if (process.env['FC_ENV'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
+			awsCreds = {
+				region: process.env['AWS_REGION'] || 'us-east-1',
+				credentials: {
+					accessKeyId: process.env['AWS_ACCESS_KEY_ID'],
+					secretAccessKey: process.env['AWS_SECRET_ACCESS_KEY'],
+				},
+			};
 
-      return { ...awsCreds };
-    }
+			return { ...awsCreds };
+		}
 
-    const profile = process.env['AWS_PROFILE'] || 'SSO-SYSADMIN';
-    const ssoCreds = await fromSSO({ profile: profile })();
+		const profile = process.env['AWS_PROFILE'] || 'SSO-SYSADMIN';
+		const ssoCreds = await fromSSO({ profile: profile })();
 
-    this.client = new SecretsManager({ region: process.env['AWS_REGION'] || 'us-east-1', ...ssoCreds });
+		this.client = new SecretsManager({ region: process.env['AWS_REGION'] || 'us-east-1', ...ssoCreds });
 
-    this.logger.info('SecretsService initialized');
-  }
+		this.logger.info('SecretsService initialized');
+	}
 
-  async getServiceSecrets(serviceName: string): Promise<any> {
-    try {
-      const parts = serviceName.split('-');
-      const type = parts.length > 2 ? parts[1] : 'core';
-      const project = parts.length > 2 ? parts[2] : parts[1];
+	async getServiceSecrets(serviceName: string): Promise<any> {
+		try {
+			const parts = serviceName.split('-');
+			const type = parts.length > 2 ? parts[1] : 'core';
+			const project = parts.length > 2 ? parts[2] : parts[1];
 
-      const secrets = await this.getSecrets(`${type}/${project}`);
+			const secrets = await this.getSecrets(`${type}/${project}`);
 
-      return secrets;
-    } catch (e: any) {
-      this.logger.error(e.message, e);
-      return {};
-    }
-  }
+			return secrets;
+		} catch (e: any) {
+			this.logger.error(e.message, e);
+			return {};
+		}
+	}
 
-  async getRootSecrets(serviceName: string): Promise<any> {
-    try {
-      const parts = serviceName.split('-');
-      const type = parts.length > 2 ? parts[1] : 'core';
+	async getRootSecrets(serviceName: string): Promise<any> {
+		try {
+			const parts = serviceName.split('-');
+			const type = parts.length > 2 ? parts[1] : 'core';
 
-      const secrets = await this.getSecrets(type);
+			const secrets = await this.getSecrets(type);
 
-      return secrets;
-    } catch (e: any) {
-      this.logger.error(e.message, e);
+			return secrets;
+		} catch (e: any) {
+			this.logger.error(e.message, e);
 
-      throw e;
-    }
-  }
+			throw e;
+		}
+	}
 
-  async getSecrets(name: string): Promise<any> {
-    const secretName = `${get(process.env, 'NODE_ENV', 'development')}/${name}`;
-    try {
-      const result: GetSecretValueResponse = await this.client.getSecretValue({ SecretId: secretName });
-      let secret: any = {};
-      if (result.SecretString) {
-        secret = JSON.parse(result.SecretString);
-      }
+	async getSecrets(name: string): Promise<any> {
+		const secretName = `${get(process.env, 'NODE_ENV', 'development')}/${name}`;
+		try {
+			const result: GetSecretValueResponse = await this.client.getSecretValue({ SecretId: secretName });
+			let secret: any = {};
+			if (result.SecretString) {
+				secret = JSON.parse(result.SecretString);
+			}
 
-      await map(Object.keys(secret), key => {
-        this.logger.info(`${key} loaded`);
-      });
+			const keysLoaded = map(Object.keys(secret), key => {
+				return key;
+			});
 
-      this.logger.info(`Secrets loaded for ${secretName}`);
+			this.logger.info(`Secrets loaded for ${secretName}`, { keysLoaded });
 
-      return secret;
-    } catch (err: any) {
-      this.logger.error(`${err.message}: ${secretName}`, err);
-      throw err;
-    }
-  }
+			return secret;
+		} catch (err: any) {
+			this.logger.error(`${err.message}: ${secretName}`, err);
+			throw err;
+		}
+	}
 }

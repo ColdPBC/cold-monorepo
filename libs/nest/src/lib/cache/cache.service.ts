@@ -14,126 +14,126 @@ import stream from 'stream';
 @Span()
 @Injectable()
 export class CacheService extends BaseWorker {
-  store: Store;
-  defaultTTL: number;
-  initialized: boolean = false;
+	store: Store;
+	defaultTTL: number;
+	initialized = false;
 
-  constructor(@Inject(CACHE_MANAGER) readonly cacheManager: RedisCache, readonly config: ConfigService) {
-    super('CacheService');
-    this.store = this.cacheManager.store;
-    this.defaultTTL = parseInt(this.config.get('CACHE_TTL', `${1000 * 60 * 60}`));
+	constructor(@Inject(CACHE_MANAGER) readonly cacheManager: RedisCache, readonly config: ConfigService) {
+		super('CacheService');
+		this.store = this.cacheManager.store;
+		this.defaultTTL = parseInt(this.config.get('CACHE_TTL', `${1000 * 60 * 60}`));
 
-    this.init();
-  }
+		this.init();
+	}
 
-  async init(): Promise<boolean> {
-    if (this.initialized) {
-      return true;
-    }
+	async init(): Promise<boolean> {
+		if (this.initialized) {
+			return true;
+		}
 
-    this.logger.debug('CacheService initialized');
-    this.initialized = true;
+		this.logger.debug('CacheService initialized');
+		this.initialized = true;
 
-    return this.initialized;
-  }
+		return this.initialized;
+	}
 
-  async calculateChecksum(content: Buffer): Promise<string> {
-    return await CacheService.calculateChecksum(content);
-  }
+	async calculateChecksum(content: Buffer): Promise<string> {
+		return await CacheService.calculateChecksum(content);
+	}
 
-  static async calculateChecksum(content: Buffer): Promise<string> {
-    const hash = crypto.createHash('md5');
-    // Create a readable stream from the buffer
-    const readStream = new stream.Readable();
-    readStream.push(content);
-    readStream.push(null);
+	static async calculateChecksum(content: Buffer): Promise<string> {
+		const hash = crypto.createHash('md5');
+		// Create a readable stream from the buffer
+		const readStream = new stream.Readable();
+		readStream.push(content);
+		readStream.push(null);
 
-    // Pipe the stream through the hash to calculate checksum
-    await new Promise<void>((resolve, reject) => {
-      stream.pipeline(readStream, hash, error => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve();
-        }
-      });
-    });
+		// Pipe the stream through the hash to calculate checksum
+		await new Promise<void>((resolve, reject) => {
+			stream.pipeline(readStream, hash, error => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve();
+				}
+			});
+		});
 
-    return hash.digest('hex');
-  }
+		return hash.digest('hex');
+	}
 
-  async get<T>(key: string, wildcard?: boolean): Promise<T | undefined> {
-    if (!(await this.init())) {
-      return undefined;
-    }
+	async get<T>(key: string, wildcard?: boolean): Promise<T | undefined> {
+		if (!(await this.init())) {
+			return undefined;
+		}
 
-    this.setTags({ action: 'get', key });
+		this.setTags({ action: 'get', key });
 
-    const response = await this.cacheManager.store.get<T>(key);
+		const response = await this.cacheManager.store.get<T>(key);
 
-    this.metrics.increment('cold.api.cache', this.tags);
+		this.metrics.increment('cold.api.cache', this.tags);
 
-    return response;
-  }
+		return response;
+	}
 
-  async set<T>(key: string, value: T, options?: { ttl?: number; update?: boolean; wildcard?: boolean }): Promise<void> {
-    try {
-      if (!(await this.init())) {
-        return undefined;
-      }
+	async set<T>(key: string, value: T, options?: { ttl?: number; update?: boolean; wildcard?: boolean }): Promise<void> {
+		try {
+			if (!(await this.init())) {
+				return undefined;
+			}
 
-      this.setTags({ action: 'set', key, options });
+			this.setTags({ action: 'set', key, options });
 
-      if (!options) {
-        options = { ttl: this.defaultTTL, update: false, wildcard: false };
-      }
+			if (!options) {
+				options = { ttl: this.defaultTTL, update: false, wildcard: false };
+			}
 
-      if (options.update && (await this.cacheManager.store.get(key))) {
-        await this.delete(key, options.wildcard);
-      }
+			if (options.update && (await this.cacheManager.store.get(key))) {
+				await this.delete(key, options.wildcard);
+			}
 
-      this.metrics.increment('cold.api.cache', { event: 'set', status: 'complete', ...this.tags });
+			this.metrics.increment('cold.api.cache', { event: 'set', status: 'complete', ...this.tags });
 
-      return await this.cacheManager.store.set(key, value, options.ttl);
-    } catch (err: any) {
-      this.metrics.increment('cold.api.cache', { event: 'set', status: 'failed', ...this.tags });
-      this.logger.error(err.message, { error: err, key: key, value: value, options: options });
-    }
-  }
+			return await this.cacheManager.store.set(key, value, options.ttl);
+		} catch (err: any) {
+			this.metrics.increment('cold.api.cache', { event: 'set', status: 'failed', ...this.tags });
+			this.logger.error(err.message, { error: err, key: key, value: value, options: options });
+		}
+	}
 
-  async delete(pattern: string, wildcard?: boolean): Promise<void> {
-    if (!(await this.init())) {
-      return undefined;
-    }
+	async delete(pattern: string, wildcard?: boolean): Promise<void> {
+		if (!(await this.init())) {
+			return undefined;
+		}
 
-    this.setTags({ action: 'delete', key: pattern });
+		this.setTags({ action: 'delete', key: pattern });
 
-    this.metrics.increment('cold.api.cache', { event: 'delete', status: 'complete', ...this.tags });
+		this.metrics.increment('cold.api.cache', { event: 'delete', status: 'complete', ...this.tags });
 
-    if (wildcard) {
-      const keys = await this.store.keys();
+		if (wildcard) {
+			const keys = await this.store.keys();
 
-      const filtered = await filter(keys, key => key.startsWith(pattern));
+			const filtered = await filter(keys, key => key.startsWith(pattern));
 
-      for (const k of filtered) {
-        await this.store.del(k);
-      }
-    } else {
-      await this.store.del(pattern);
-    }
+			for (const k of filtered) {
+				await this.store.del(k);
+			}
+		} else {
+			await this.store.del(pattern);
+		}
 
-    return;
-  }
+		return;
+	}
 
-  async reset(): Promise<void> {
-    if (!(await this.init())) {
-      return undefined;
-    }
+	async reset(): Promise<void> {
+		if (!(await this.init())) {
+			return undefined;
+		}
 
-    this.setTags({ action: 'reset' });
+		this.setTags({ action: 'reset' });
 
-    this.metrics.increment('cold.api.cache', { event: 'reset', status: 'complete', ...this.tags });
+		this.metrics.increment('cold.api.cache', { event: 'reset', status: 'complete', ...this.tags });
 
-    return await this.store.reset();
-  }
+		return await this.store.reset();
+	}
 }

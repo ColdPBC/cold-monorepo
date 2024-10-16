@@ -90,7 +90,6 @@ export class AppModule {
 				}),
 				ClassificationModule,
 				EntitiesModule,
-				PrismaModule,
 				await ColdRabbitModule.forRootAsync(),
 				AssistantModule,
 				PineconeModule,

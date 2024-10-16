@@ -1,6 +1,6 @@
 import { BadRequestException, Global, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, CacheService, ComplianceDefinitionsRepository, Cuid2Generator, DarklyService, GuidPrefixes, IRequest, MqttService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, ComplianceDefinitionsRepository, Cuid2Generator, DarklyService, GuidPrefixes, IRequest, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance-definitions.schema';
 import { compliance_definitions } from '@prisma/client';
 import { omit, pick } from 'lodash';
@@ -16,7 +16,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 	constructor(
 		readonly darkly: DarklyService,
 		readonly prisma: PrismaService,
-		readonly cache: CacheService,
+		/*readonly cache: CacheService,*/
 		readonly mqtt: MqttService,
 		readonly event: EventService,
 		readonly definitions: ComplianceDefinitionsRepository,
@@ -450,7 +450,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 		const { user, url } = req;
 		this.setTags({ user: user.coldclimate_claims });
 		try {
-			await this.cache.delete(`organizations:${orgId}:compliance:${name}:legacy_org_compliance`);
+			//await this.cache.delete(`organizations:${orgId}:compliance:${name}:legacy_org_compliance`);
 
 			const definition = await this.findOne(name, req, bpc);
 
@@ -499,7 +499,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 				},
 			});
 
-			await this.cache.set(`organizations:${orgId}:compliance:${name}:legacy_org_compliance`, compliance, { update: true });
+			//await this.cache.set(`organizations:${orgId}:compliance:${name}:legacy_org_compliance`, compliance, { update: true });
 
 			this.logger.info(`created ${name} compliance for ${orgId}`, {
 				compliance_definition: name,
@@ -630,7 +630,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 				throw new NotFoundException({ organization, user }, `Unable to find compliance definition with name: ${name}`);
 			}
 
-			await this.cache.set(`compliance:${name}`, def, { update: true });
+			//await this.cache.set(`compliance:${name}`, def, { update: true });
 
 			return def;
 		} catch (e) {
@@ -653,7 +653,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 		});
 
 		try {
-			await this.cache.delete(`compliance:${name}`, true);
+			//await this.cache.delete(`compliance:${name}`, true);
 
 			const def = await this.findOne(name, req, true);
 
@@ -718,7 +718,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 		});
 
 		try {
-			await this.cache.delete(`compliance:${name}`, true);
+			//await this.cache.delete(`compliance:${name}`, true);
 
 			await this.prisma.compliance_definitions.delete({ where: { name: name } });
 
