@@ -54,6 +54,18 @@ export const _ProductsDataGrid = () => {
     const name = get(params, 'row.name', '')
     const category = get(params, 'row.category', '')
     const subcategory = get(params, 'row.subcategory', '')
+    let text = ``
+    let oneExists = false;
+    if (category && subcategory) {
+      oneExists = true;
+      text = `${category} | ${subcategory}`
+    } else if (category) {
+      oneExists = true;
+      text = `${category}`
+    } else if (subcategory){
+      oneExists = true;
+      text = `${subcategory}`
+    }
 
     return (
       <div className={'flex flex-col w-full h-full justify-center gap-[8px]'}>
@@ -61,11 +73,20 @@ export const _ProductsDataGrid = () => {
           <span>{name}</span>
         </div>
         {
-          category && subcategory &&
-          <div className={'w-full h-auto items-center text-body font-bold truncate'}>
-            <div className={'text-body text-gray-50'}>{category} | {subcategory}</div>
+          oneExists &&
+          <div className={'w-full h-auto items-center text-body text-tc-disabled truncate'}>
+            <span>{text}</span>
           </div>
         }
+      </div>
+    )
+  }
+
+  const renderDescription = (params: any) => {
+    const description = get(params, 'row.description', '')
+    return (
+      <div className={'w-full h-full text-body items-center flex text-wrap truncate'}>
+        <span className={'line-clamp-3'}>{description}</span>
       </div>
     )
   }
@@ -85,6 +106,7 @@ export const _ProductsDataGrid = () => {
       headerName: 'Description',
       minWidth: 200,
       flex: 1,
+      renderCell: renderDescription,
     },
     {
       ...defaultColumnProperties,
