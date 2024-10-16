@@ -5,7 +5,7 @@ import {ComboBox, ComboBoxProps} from "./comboBox";
 import {InputOption} from "@coldpbc/interfaces";
 
 const meta: Meta<typeof ComboBox> = {
-  title: 'Atoms/ComboBox',
+  title: 'Molecules/ComboBox',
   component: ComboBox,
   tags: ['autodocs'],
   decorators: [withKnobs],

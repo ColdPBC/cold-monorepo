@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import {CreateSupplierPage} from '@coldpbc/components';
-import { withKnobs } from '@storybook/addon-knobs';
+import { withKnobs} from '@storybook/addon-knobs';
 import { StoryMockProvider } from '@coldpbc/mocks';
 import {waitForElementToBeRemoved, within} from "@storybook/testing-library";
 
@@ -36,9 +36,8 @@ export const Tier1Selected: Story = {
     const canvas = within(canvasElement);
     await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
     const comboBox = await canvas.findByTestId('tier select');
-    //  find the button and click it
-    const button = within(comboBox).getByRole('button');
-    button.click();
+    const comboBoxInput = await within(comboBox).findByTestId('tier select_input');
+    comboBoxInput.click();
     // find Tier 1 and click it
     const tier1Option = await within(comboBox).findByTestId('option_1');
     tier1Option.click();
@@ -57,9 +56,9 @@ export const Tier2Selected: Story = {
     const canvas = within(canvasElement);
     await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
     const comboBox = await canvas.findByTestId('tier select');
+    const comboBoxInput = await within(comboBox).findByTestId('tier select_input');
     //  find the button and click it
-    const button = within(comboBox).getByRole('button');
-    button.click();
+    comboBoxInput.click();
     // find Tier 1 and click it
     const tier1Option = await within(comboBox).findByTestId('option_2');
     tier1Option.click();
