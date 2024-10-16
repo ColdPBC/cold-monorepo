@@ -218,6 +218,9 @@ export const GET_ALL_PRODUCTS= gql`
     products(filter: $filter){
       id
       name
+      productCategory
+      productSubcategory
+      description
       productMaterials {
         id
         material {
@@ -254,7 +257,8 @@ export const GET_ALL_PRODUCTS= gql`
       seasonCode
       upcCode
       styleCode
-      productCategoryHeirarchy
+      brandProductId
+      supplierProductId
     }
   }
 `;
