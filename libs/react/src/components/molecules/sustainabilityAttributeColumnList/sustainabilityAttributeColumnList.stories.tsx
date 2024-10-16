@@ -65,17 +65,12 @@ export const Default: Story = {
 export const FixedWidthToFit2ItemsPlusOverflow: Story = {
   args: {
     sustainabilityAttributes: [
-      // Active Assurance
+      // Not documented
       {
         id: 'a',
-        name: 'Default Product Attribute',
-        attributeAssurances: [
-          AttributeAssuranceMock({ entity: 'PRODUCT', status: 'ACTIVE', index: 1}),
-          AttributeAssuranceMock({ entity: 'MATERIAL', status: 'EXPIRING', index: 2}),
-          AttributeAssuranceMock({ entity: 'SUPPLIER', status: 'EXPIRED', index: 3}),
-          AttributeAssuranceMock({ entity: 'SUPPLIER', status: 'NOT DOCUMENTED', index: 4}),
-        ],
-        level: 'PRODUCT',
+        name: 'Another Default Product Attribute',
+        attributeAssurances: [],
+        level: 'SUPPLIER',
       },
       // Expiring Assurance
       {
@@ -99,13 +94,18 @@ export const FixedWidthToFit2ItemsPlusOverflow: Story = {
         ],
         level: 'SUPPLIER',
       },
-      // Not documented
+      // Active Assurance
       {
         id: 'a',
-        name: 'Another Default Product Attribute',
-        attributeAssurances: [],
-        level: 'SUPPLIER',
-      }
+        name: 'Default Product Attribute',
+        attributeAssurances: [
+          AttributeAssuranceMock({ entity: 'PRODUCT', status: 'ACTIVE', index: 1}),
+          AttributeAssuranceMock({ entity: 'MATERIAL', status: 'EXPIRING', index: 2}),
+          AttributeAssuranceMock({ entity: 'SUPPLIER', status: 'EXPIRED', index: 3}),
+          AttributeAssuranceMock({ entity: 'SUPPLIER', status: 'NOT DOCUMENTED', index: 4}),
+        ],
+        level: 'PRODUCT',
+      },
     ]
   },
   render: args => {

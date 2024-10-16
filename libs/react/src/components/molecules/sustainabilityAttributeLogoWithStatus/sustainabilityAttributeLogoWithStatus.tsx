@@ -4,42 +4,39 @@ import { ColdIcon, ErrorFallback } from '@coldpbc/components';
 import { differenceInDays, format } from 'date-fns';
 import { withErrorBoundary } from 'react-error-boundary';
 import { Popover } from '@coldpbc/components';
+import { SustainabilityAttributeWithStatus } from '@coldpbc/interfaces';
 
 const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
 
 interface SustainabilityAttributeLogoWithStatusProps {
-  key: number,
-  name: string,
-  logoUrl?: string,
-  assuranceStatus: AttributeAssuranceStatus,
-  assuranceExpiration?: Date | null,
+  sustainabilityAttribute: SustainabilityAttributeWithStatus;
 }
 
-const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLogoWithStatusProps> = ({ name, logoUrl, assuranceStatus, assuranceExpiration }) => {
+const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLogoWithStatusProps> = ({ sustainabilityAttribute }) => {
 	// If we don't get a logo image from the backend, we'll use the default
-	const [imgSrc, setImgSrc] = useState<string>(logoUrl || DEFAULT_ICON_URL);
+	const [imgSrc, setImgSrc] = useState<string>(sustainabilityAttribute.logoUrl || DEFAULT_ICON_URL);
 
 	let iconName: IconNames;
 	let iconBackgroundColor: string;
 	let hoverLabelText: string;
 
-	if (assuranceStatus === AttributeAssuranceStatus.ACTIVE) {
+	if (sustainabilityAttribute.assuranceStatus === AttributeAssuranceStatus.ACTIVE) {
 		iconName = IconNames.ColdCheckIcon;
 		iconBackgroundColor = 'bg-green-300';
-    hoverLabelText = assuranceExpiration
-      ? `Active until ${format(assuranceExpiration, 'M/d/yyyy')}`
+    hoverLabelText = sustainabilityAttribute.expirationDate
+      ? `Active until ${format(sustainabilityAttribute.expirationDate, 'M/d/yyyy')}`
       : 'Active';
-  } else if (assuranceStatus === AttributeAssuranceStatus.EXPIRING) {
+  } else if (sustainabilityAttribute.assuranceStatus === AttributeAssuranceStatus.EXPIRING) {
 		iconName = IconNames.ColdExpiringIcon;
 		iconBackgroundColor = 'bg-yellow-300';
-    hoverLabelText = assuranceExpiration
-      ? `Expiring in ${differenceInDays(assuranceExpiration, new Date())} days`
+    hoverLabelText = sustainabilityAttribute.expirationDate
+      ? `Expiring in ${differenceInDays(sustainabilityAttribute.expirationDate, new Date())} days`
       : 'Expiring';
-	} else if (assuranceStatus === AttributeAssuranceStatus.EXPIRED) {
+	} else if (sustainabilityAttribute.assuranceStatus === AttributeAssuranceStatus.EXPIRED) {
 		iconName = IconNames.ColdCalendarCloseIcon;
 		iconBackgroundColor = 'bg-gray-300';
-    hoverLabelText = assuranceExpiration
-      ? `Expired on ${format(assuranceExpiration, 'M/d/yyyy')}`
+    hoverLabelText = sustainabilityAttribute.expirationDate
+      ? `Expired on ${format(sustainabilityAttribute.expirationDate, 'M/d/yyyy')}`
       : 'Expired';
 	} else {
 		iconName = IconNames.ColdDangerIcon;
@@ -49,7 +46,7 @@ const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLo
 
   const popoverText = (
 		<div className="flex flex-col">
-			<span className="font-bold">{name}</span>
+			<span className="font-bold">{sustainabilityAttribute.name}</span>
 			<span>{hoverLabelText}</span>
 		</div>
 	);
@@ -57,7 +54,7 @@ const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLo
 	return (
 		<Popover content={popoverText}>
 			<div className="w-[82px] h-[82px] relative inline-block">
-				<img className="w-[82px] h-[82px] object-cover rounded-lg" src={imgSrc} alt={`Logo for ${name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
+				<img className="w-[82px] h-[82px] object-cover rounded-lg" src={imgSrc} alt={`Logo for ${sustainabilityAttribute.name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
 				<div className="absolute -top-1 -right-1 w-[17px] h-[17px]">
 					<div className={`absolute inset-0 ${iconBackgroundColor} rounded-full`}></div>
 					<div className="absolute inset-0 flex items-center justify-center">
