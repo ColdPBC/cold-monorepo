@@ -600,6 +600,7 @@ export class ExtractionService extends BaseWorker {
 					id: new Cuid2Generator(GuidPrefixes.OrganizationFacility).scopedId,
 					organization_id: organization.id,
 					...parsedResponse.supplier,
+					supplier: true,
 					supplier_tier: parsedResponse.supplier.supplier_tier || 2,
 				},
 				update: {},
