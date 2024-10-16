@@ -1,3 +1,17 @@
+# [1.427.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.426.1...v1.427.0) (2024-10-16)
+
+
+### Bug Fixes
+
+* set row height explicitly on MaterialsDataGrid and roll back changes to base component ([be2cda6](https://github.com/ColdPBC/cold-monorepo/commit/be2cda6e8ea9b5d851ad27d4676c738faaa82372))
+
+
+### Features
+
+* connect new component to Materials data grid & page ([158209c](https://github.com/ColdPBC/cold-monorepo/commit/158209cf8a22ee8c9220d650144e55e20bde7865))
+* little component for the overflow item ([72ca393](https://github.com/ColdPBC/cold-monorepo/commit/72ca3937a6f3335803dfcc271bfe7d8572856eb1))
+* SustainabilityAttributeColumnList component ([f8892f7](https://github.com/ColdPBC/cold-monorepo/commit/f8892f7d845bdee57ed819175b78b9b855637da3))
+
 ## [1.426.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.426.0...v1.426.1) (2024-10-16)
 
 
