@@ -27,7 +27,7 @@ datadogRum.init({
   version: import.meta.env.VITE_DD_VERSION,
   sessionSampleRate: 100,
   premiumSampleRate: 100,
-  defaultPrivacyLevel: 'mask-user-input',
+  defaultPrivacyLevel: 'allow',
   trackResources: true,
   trackLongTasks: true,
   trackUserInteractions: true,
