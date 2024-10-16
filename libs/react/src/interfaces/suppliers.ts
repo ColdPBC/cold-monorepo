@@ -29,9 +29,15 @@ export interface SuppliersWithAssurances {
   supplierTier: number | null;
   attributeAssurances: {
     id: string;
+    effectiveEndDate: string | null;
+    organizationFile: {
+      id: string;
+    } | null;
     sustainabilityAttribute: {
       id: string;
       name: string;
+      level: 'MATERIAL' | 'ORGANIZATION' | 'SUPPLIER' | 'PRODUCT';
+      logoUrl?: string;
     };
   }[];
   materialSuppliers: {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MaterialsWithRelations, SustainabilityAttribute } from '@coldpbc/interfaces';
+import { MaterialsWithRelations } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import {
   DataGridCellHoverPopover,
@@ -17,7 +17,7 @@ import {
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import { get, has, uniq } from 'lodash';
-import {listFilterOperators, listSortComparator} from '@coldpbc/lib';
+import {listFilterOperators, listSortComparator, mapAttributeAssurancesToSustainabilityAttributes} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 
 const _MaterialsDataGrid = () => {
@@ -125,33 +125,7 @@ const _MaterialsDataGrid = () => {
     // While the database schema allows for multiple MaterialSuppliers, we insist on 1 per Material
     const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
 
-    // We have to map the AttributeAssurances, with nested SustainabilityAttributes,
-    // into a unique list of SustainabilityAttributes, with nested AttributeAssurances
-    const groupedAssurances = new Map<string, SustainabilityAttribute>();
-
-    for (const assurance of material.attributeAssurances) {
-      const { id: assuranceId, effectiveEndDate, sustainabilityAttribute, organizationFile } = assurance;
-      const { id: attributeId, name, logoUrl } = sustainabilityAttribute;
-
-      if (!groupedAssurances.has(attributeId)) {
-        groupedAssurances.set(attributeId, {
-          id: attributeId,
-          name,
-          logoUrl,
-          level: 'MATERIAL',
-          attributeAssurances: [],
-        });
-      }
-
-      const attribute = groupedAssurances.get(attributeId)!;
-      attribute.attributeAssurances.push({
-        id: assuranceId,
-        effectiveEndDate,
-        organizationFile,
-      });
-    }
-
-    const sustainabilityAttributes = Array.from(groupedAssurances.values());
+    const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(material.attributeAssurances);
 
     const row = {
       id: material.id,

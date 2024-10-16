@@ -1,4 +1,4 @@
-import { SustainabilityAttributeAssurance } from '@coldpbc/interfaces';
+import { SustainabilityAttribute, SustainabilityAttributeAssurance } from '@coldpbc/interfaces';
 import { AttributeAssuranceStatus } from '@coldpbc/enums';
 import { addDays } from 'date-fns';
 
@@ -47,3 +47,38 @@ export const getAggregateStatusFromAttributeAssurances = (
     assuranceExpiration: maxExpirationDate
   }
 };
+
+export const mapAttributeAssurancesToSustainabilityAttributes = (
+  assurances: SustainabilityAttributeAssurance[],
+) => {
+  // We have to map the AttributeAssurances, with nested SustainabilityAttributes,
+  // into a unique list of SustainabilityAttributes, with nested AttributeAssurances
+  const groupedAssurances = new Map<string, SustainabilityAttribute>();
+
+  for (const assurance of assurances) {
+    const { id: assuranceId, effectiveEndDate, sustainabilityAttribute, organizationFile } = assurance;
+
+    if (sustainabilityAttribute) {
+      const { id: attributeId, name, level, logoUrl } = sustainabilityAttribute;
+
+      if (!groupedAssurances.has(attributeId)) {
+        groupedAssurances.set(attributeId, {
+          id: attributeId,
+          name,
+          logoUrl,
+          level,
+          attributeAssurances: [],
+        });
+      }
+
+      const attribute = groupedAssurances.get(attributeId)!;
+      attribute.attributeAssurances.push({
+        id: assuranceId,
+        effectiveEndDate,
+        organizationFile,
+      });
+    }
+  }
+
+  return Array.from(groupedAssurances.values());
+}

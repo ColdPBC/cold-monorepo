@@ -173,6 +173,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
           organizationFile: null,
           sustainabilityAttribute: {
             id: 'mat_qg9aabgn9a81mb90bijv9dtf',
+            level: "MATERIAL",
             name: 'PFAS test',
           },
         },
@@ -184,6 +185,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
           },
           sustainabilityAttribute: {
             id: 'mat_qg9aabgn9a81mb90bijv9dtf',
+            level: "MATERIAL",
             name: 'Bluesign',
             logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Bluesign.png',
           },
@@ -196,6 +198,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
           },
           sustainabilityAttribute: {
             id: "c8396184-16c5-46fb-a772-44b097473a3d",
+            level: "MATERIAL",
             name: "ISO 26000 - Social Responsibility",
             logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/ISO+26000.png',
           }
@@ -206,6 +209,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
           organizationFile: null,
           sustainabilityAttribute: {
             id: 'mat_qg9aabgn9a81mb90bijv9dtf',
+            level: "MATERIAL",
             name: 'Certified Organic',
           },
         },
@@ -217,6 +221,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
           },
           sustainabilityAttribute: {
             id: "a99e4eff-72ee-40f4-a476-0385ac6f52d3",
+            level: "MATERIAL",
             name: "Worldwide Responsible Accredited Production (WRAP)",
             logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png',
           },
@@ -229,6 +234,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
           },
           sustainabilityAttribute: {
             id: "xyz",
+            level: "MATERIAL",
             name: "Organic Wool",
             logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png',
           },
@@ -275,6 +281,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
           organizationFile: null,
           sustainabilityAttribute: {
             id: "61121ffb-a0d5-44d9-b553-22b11c53533b",
+            level: "MATERIAL",
             name: "SBTi Accreditation - Long Term Target (Net Zero by 2050)"
           },
         },
@@ -346,6 +353,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
           organizationFile: null,
           sustainabilityAttribute: {
             id: 'mat_j7xtvksv2jrlxdzrd2m6bvbt',
+            level: "MATERIAL",
             name: 'Certified Organic',
           },
         },

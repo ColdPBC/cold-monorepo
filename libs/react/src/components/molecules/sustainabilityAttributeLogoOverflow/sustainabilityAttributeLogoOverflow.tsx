@@ -9,7 +9,7 @@ interface SustainabilityAttributeLogoOverflowProps {
 
 const _SustainabilityAttributeLogoOverflow: React.FC<SustainabilityAttributeLogoOverflowProps> = ({ overflowItemCount }) => {
   return (
-    <Popover content={"Open Product detail to see all"}>
+    <Popover content={"Expand column to see all"}>
       <div className="w-[82px] h-[82px] bg-gray-50 rounded-lg flex items-center justify-center">
         <span className="text-white">{`+${overflowItemCount} more`}</span>
       </div>

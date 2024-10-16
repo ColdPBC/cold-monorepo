@@ -415,8 +415,13 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       attributeAssurances: [
         {
           id: '1',
+          effectiveEndDate: null,
+          organizationFile: {
+            id: '123',
+          },
           sustainabilityAttribute: {
             id: '1',
+            level: 'SUPPLIER',
             name: 'PFAS-Test',
           },
         },
@@ -436,38 +441,62 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       supplierTier: 1,
       attributeAssurances: [
         {
-          id: '2',
+          id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
-            id: '2',
-            name: 'Lead-Test',
-          },
-        },
-        {
-          id: '3',
-          sustainabilityAttribute: {
-            id: '3',
-            name: 'phthalate',
+            id: 'mat_qg9aabgn9a81mb90bijv9dtf',
+            level: "SUPPLIER",
+            name: 'PFAS test',
           },
         },
         {
           id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          effectiveEndDate: null,
+          organizationFile: {
+            id: '123',
+          },
+          sustainabilityAttribute: {
+            id: 'mat_qg9aabgn9a81mb90bijv9dtf',
+            level: "SUPPLIER",
+            name: 'Bluesign',
+            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Bluesign.png',
+          },
+        },
+        {
+          id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          effectiveEndDate: subDays(new Date(), 5).toISOString(), // Expired
+          organizationFile: {
+            id: '123',
+          },
           sustainabilityAttribute: {
             id: "c8396184-16c5-46fb-a772-44b097473a3d",
-            name: "ISO 26000 - Social Responsibility"
+            level: "SUPPLIER",
+            name: "ISO 26000 - Social Responsibility",
+            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/ISO+26000.png',
           }
         },
         {
           id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: 'mat_qg9aabgn9a81mb90bijv9dtf',
+            level: "SUPPLIER",
             name: 'Certified Organic',
           },
         },
         {
           id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          effectiveEndDate: addDays(new Date(), 25).toISOString(), // Expiring
+          organizationFile: {
+            id: '123',
+          },
           sustainabilityAttribute: {
             id: "a99e4eff-72ee-40f4-a476-0385ac6f52d3",
-            name: "Worldwide Responsible Accredited Production (WRAP)"
+            level: "SUPPLIER",
+            name: "Worldwide Responsible Accredited Production (WRAP)",
+            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png',
           },
         }
       ],
@@ -514,15 +543,21 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       attributeAssurances: [
         {
           id: '4',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '4',
+            level: "SUPPLIER",
             name: 'bluesign',
           },
         },
         {
           id: '5',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '5',
+            level: "SUPPLIER",
             name: 'Lead-Test',
           },
         },
@@ -559,15 +594,21 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       attributeAssurances: [
         {
           id: '6',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '6',
+            level: 'SUPPLIER',
             name: 'PFAS-Test',
           },
         },
         {
           id: '7',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '7',
+            level: 'SUPPLIER',
             name: 'bluesign',
           },
         },
@@ -594,15 +635,21 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       attributeAssurances: [
         {
           id: '8',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '8',
+            level: 'SUPPLIER',
             name: 'PFAS-Test',
           },
         },
         {
           id: '9',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '9',
+            level: 'SUPPLIER',
             name: 'bluesign',
           },
         },
@@ -629,15 +676,21 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       attributeAssurances: [
         {
           id: '10',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '10',
+            level: 'SUPPLIER',
             name: 'Lead-Test',
           },
         },
         {
           id: '11',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '11',
+            level: 'SUPPLIER',
             name: 'phthalate',
           },
         },
@@ -664,15 +717,21 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       attributeAssurances: [
         {
           id: '12',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '12',
+            level: 'SUPPLIER',
             name: 'PFAS-Test',
           },
         },
         {
           id: '13',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '13',
+            level: 'SUPPLIER',
             name: 'Lead-Test',
           },
         },
@@ -693,15 +752,21 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       attributeAssurances: [
         {
           id: '14',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '14',
+            level: 'SUPPLIER',
             name: 'PFAS-Test',
           },
         },
         {
           id: '15',
+          effectiveEndDate: null,
+          organizationFile: null,
           sustainabilityAttribute: {
             id: '15',
+            level: 'SUPPLIER',
             name: 'Lead-Test',
           },
         },
