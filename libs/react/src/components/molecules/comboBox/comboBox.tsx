@@ -88,7 +88,7 @@ export const ComboBox = (props: ComboBoxProps) => {
 							filteredOptions.map(option => (
 								<Combobox.Option
 									key={option.id}
-									className={({ active }) => clsx(active ? 'bg-bgc-accent' : 'bg-bgc-elevated', 'relative cursor-pointer select-none p-4 text-body rounded-lg')}
+									className={({ active }) => clsx(active ? 'bg-bgc-accent' : 'bg-bgc-elevated', 'relative cursor-pointer select-none p-4 text-body rounded-lg min-h-[53px]')}
 									value={option}>
 									{({ active }) => (
 										<>
