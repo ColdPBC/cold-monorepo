@@ -33,9 +33,6 @@ export class Product {
 	@Field(() => GraphQLJSON, { nullable: true })
 	metadata?: Record<string, unknown>;
 
-	@Field(() => GraphQLJSON, { nullable: true })
-	productCategoryHeirarchy?: Record<string, unknown>;
-
 	@Field(() => String, { nullable: true })
 	seasonCode?: string;
 
@@ -56,6 +53,12 @@ export class Product {
 
 	@Field(() => String, { nullable: true })
 	supplierProductId?: string;
+
+	@Field(() => String, { nullable: true })
+	productCategory?: string;
+
+	@Field(() => String, { nullable: true })
+	productSubcategory?: string;
 
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'product' })
 	attributeAssurances!: AttributeAssurance[];
