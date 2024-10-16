@@ -31,5 +31,4 @@ export interface ProductsQuery {
   seasonCode: string | null;
   upcCode: string | null;
   styleCode: string | null;
-  productCategoryHeirarchy: string | null;
 }

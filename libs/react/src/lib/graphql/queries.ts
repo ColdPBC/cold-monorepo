@@ -254,7 +254,6 @@ export const GET_ALL_PRODUCTS= gql`
       seasonCode
       upcCode
       styleCode
-      productCategoryHeirarchy
     }
   }
 `;

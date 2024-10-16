@@ -45,7 +45,6 @@ export const getProductsMock = (): ProductsQuery[] => {
       seasonCode: '123456789',
       upcCode: '123456789',
       styleCode: '123456789',
-      productCategoryHeirarchy: null,
     },
     {
       id: '2',
@@ -76,7 +75,6 @@ export const getProductsMock = (): ProductsQuery[] => {
       seasonCode: '123456789',
       upcCode: '123456789',
       styleCode: '123456789',
-      productCategoryHeirarchy: null,
     },
     {
       id: '3',
@@ -107,7 +105,6 @@ export const getProductsMock = (): ProductsQuery[] => {
       seasonCode: '123456789',
       upcCode: '123456789',
       styleCode: '123456789',
-      productCategoryHeirarchy: null,
     },
   ]
 }
