@@ -1,10 +1,10 @@
 import { addDays, subDays } from 'date-fns';
+import { EntityLevel } from '@coldpbc/enums';
 
-type Entity = 'MATERIAL' | 'ORGANIZATION' | 'PRODUCT' | 'SUPPLIER';
 type AssuranceStatus = 'ACTIVE' | 'EXPIRING' | 'EXPIRED' | 'NOT DOCUMENTED';
 
 interface AttributeAssuranceMockParams {
-  entity: Entity;
+  entity: EntityLevel;
   status: AssuranceStatus;
   index: number;
 }
@@ -38,13 +38,15 @@ export const AttributeAssuranceMock = ({
   };
 
   switch (entity) {
-    case 'MATERIAL':
+    case EntityLevel.MATERIAL:
       return { ...baseObject, material: { id: `mat_${index}` } };
-    case 'ORGANIZATION':
+    case EntityLevel.ORGANIZATION:
       return { ...baseObject, organization: { id: `org_${index}` } };
-    case 'PRODUCT':
+    case EntityLevel.PRODUCT:
       return { ...baseObject, product: { id: `prod_${index}` } };
-    case 'SUPPLIER':
+    case EntityLevel.SUPPLIER:
       return { ...baseObject, organizationFacility: { id: `sup_${index}` } };
+    default:
+      throw new Error(`Unsupported Entity Entity: ${entity}`);
   }
 };

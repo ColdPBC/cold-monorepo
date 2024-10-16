@@ -1,7 +1,8 @@
 import React from 'react';
+import { EntityLevel } from '@coldpbc/enums';
 
 interface AttributeAssuranceGraphProps {
-  entity: 'MATERIAL' | 'ORGANIZATION' | 'PRODUCT' | 'SUPPLIER';
+  entity: EntityLevel;
   activeCount: number;
   expiredCount: number;
   notDocumentedCount: number;
@@ -33,7 +34,7 @@ export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = (
     <>
       <div className="flex justify-between items-baseline">
         <p className={`text-sm ${total > 0 ? 'text-white' : 'text-tc-disabled'}`}>
-          {pluralize(entity, total)}
+          {pluralize(EntityLevel[entity], total)}
         </p>
         {total > 0 && (
           <p className="text-sm text-tc-disabled">

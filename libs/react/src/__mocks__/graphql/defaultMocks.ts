@@ -1,31 +1,40 @@
 import {
-  CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE, CREATE_MATERIAL, CREATE_MATERIAL_SUPPLIER, CREATE_PRODUCT_MATERIAL,
-  GET_ALL_FILES, GET_ALL_MATERIALS_FOR_ORG,
-  GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-  GET_ALL_ORGS, GET_ALL_PRODUCTS, GET_ALL_SCHEMA_ENUMS, GET_ALL_SUPPLIERS_FOR_ORG,
-  GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-  GET_ALL_SUS_ATTRIBUTES, GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
-  UPDATE_DOCUMENT_ASSURANCE,
-  UPDATE_DOCUMENT_FIELDS,
+	CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
+	CREATE_MATERIAL,
+	CREATE_MATERIAL_SUPPLIER,
+	CREATE_PRODUCT_MATERIAL,
+	GET_ALL_FILES,
+	GET_ALL_MATERIALS_FOR_ORG,
+	GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+	GET_ALL_ORGS,
+	GET_ALL_PRODUCTS,
+	GET_ALL_SCHEMA_ENUMS,
+	GET_ALL_SUPPLIERS_FOR_ORG,
+	GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+	GET_ALL_SUS_ATTRIBUTES,
+	GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
+	UPDATE_DOCUMENT_ASSURANCE,
+	UPDATE_DOCUMENT_FIELDS,
 } from '@coldpbc/lib';
 import {
-  filesProcessedWithDatesMock,
-  getFilesProcessingMock,
-  getFilesWithAssurances,
-  getFilesWithoutAssurances,
-  filesWithTooManyRecordsMock,
-  materialsForAssurancesMock,
-  suppliersForAssurancesMock
+	filesProcessedWithDatesMock,
+	filesWithTooManyRecordsMock,
+	getFilesProcessingMock,
+	getFilesWithAssurances,
+	getFilesWithoutAssurances,
+	materialsForAssurancesMock,
+	suppliersForAssurancesMock,
 } from '../filesMock';
 import { getClaimsMock } from '../claimsMock';
 import { DocumentNode } from '@apollo/client';
 import { RequestHandler } from 'mock-apollo-client';
 import { get } from 'lodash';
-import {getSchemaMocks} from "../schemaMocks";
-import {getSupplierMocks} from "../suppliersMock";
-import {getProductsMock} from "../productsMock";
-import {getMaterialsMocksWithAssurances} from "../materialsMock";
+import { getSchemaMocks } from '../schemaMocks';
+import { getSupplierMocks } from '../suppliersMock';
+import { getProductsMock } from '../productsMock';
+import { getMaterialsMocksWithAssurances } from '../materialsMock';
 import { AttributeAssuranceMock } from '../attributeAssuranceMock';
+import { EntityLevel } from '@coldpbc/enums';
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
@@ -299,15 +308,15 @@ export const defaultGraphqlMocks: {
 				},
 			}),
 	},
-  {
-    query: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
-    handler: () =>
-      Promise.resolve({
-        data: {
-          sustainabilityAttributes: [],
-        },
-      }),
-  },
+	{
+		query: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					sustainabilityAttributes: [],
+				},
+			}),
+	},
 	{
 		query: GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
 		handler: () =>
@@ -347,7 +356,7 @@ export const defaultGraphqlMocks: {
 		query: UPDATE_DOCUMENT_FIELDS,
 		handler: variables => {
 			const createdAt = new Date().toISOString();
-			const type = get(variables, 'input.type', "OTHER");
+			const type = get(variables, 'input.type', 'OTHER');
 			return Promise.resolve({
 				data: {
 					updateOrganizationFile: {
@@ -374,76 +383,78 @@ export const defaultGraphqlMocks: {
 			});
 		},
 	},
-  {
-    query: GET_ALL_SCHEMA_ENUMS,
-    handler: () =>
-      Promise.resolve({
-        data: {
-          _graphweaver: {
-            enums: getSchemaMocks()
-          }
-        }
-      })
-  }, {
-    query: GET_ALL_SUPPLIERS_FOR_ORG,
-    handler: (variables) => {
-      return Promise.resolve({
-        data: {
-          organizationFacilities: getSupplierMocks(),
-        },
-      });
-    }
-  }, {
-    query: CREATE_MATERIAL,
-    handler: () =>
-      Promise.resolve({
-        data: {
-          createMaterial: {
-            id: 'material_1',
-          },
-        },
-      }),
-  },
-  {
-    query: CREATE_MATERIAL_SUPPLIER,
-    handler: () =>
-      Promise.resolve({
-        data: {
-          createMaterialSupplier: {
-            id: 'material_supplier_1',
-          },
-        },
-      }),
-  },
-  {
-    query: GET_ALL_PRODUCTS,
-    handler: () =>
-      Promise.resolve({
-        data: {
-          products: getProductsMock(),
-        },
-      }),
-  },
-  {
-    query: CREATE_PRODUCT_MATERIAL,
-    handler: () =>
-      Promise.resolve({
-        data: {
-          createProductMaterial: {
-            id: 'product_material_1',
-          },
-        },
-      }),
-  },
-  {
-    query: GET_ALL_MATERIALS_FOR_ORG,
-    handler: () =>
-      Promise.resolve({
-        data: {
-          materials: getMaterialsMocksWithAssurances(),
-        },
-      }),
-  }
+	{
+		query: GET_ALL_SCHEMA_ENUMS,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					_graphweaver: {
+						enums: getSchemaMocks(),
+					},
+				},
+			}),
+	},
+	{
+		query: GET_ALL_SUPPLIERS_FOR_ORG,
+		handler: variables => {
+			return Promise.resolve({
+				data: {
+					organizationFacilities: getSupplierMocks(),
+				},
+			});
+		},
+	},
+	{
+		query: CREATE_MATERIAL,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					createMaterial: {
+						id: 'material_1',
+					},
+				},
+			}),
+	},
+	{
+		query: CREATE_MATERIAL_SUPPLIER,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					createMaterialSupplier: {
+						id: 'material_supplier_1',
+					},
+				},
+			}),
+	},
+	{
+		query: GET_ALL_PRODUCTS,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					products: getProductsMock(),
+				},
+			}),
+	},
+	{
+		query: CREATE_PRODUCT_MATERIAL,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					createProductMaterial: {
+						id: 'product_material_1',
+					},
+				},
+			}),
+	},
+	{
+		query: GET_ALL_MATERIALS_FOR_ORG,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					materials: getMaterialsMocksWithAssurances(),
+				},
+			}),
+	},
 ];
 
 export const filesWithAssurancesMocks: {
@@ -519,7 +530,7 @@ export const sustainabilityAttributesMocks = [
               name: 'Global Recycled Standard',
               logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
               attributeAssurances: [
-                AttributeAssuranceMock({ entity: 'MATERIAL', status: 'ACTIVE', index: 1}),
+                AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: 'ACTIVE', index: 1}),
               ],
               level: 'MATERIAL',
             },

@@ -1,4 +1,5 @@
 import { Claims } from './claims';
+import { EntityLevel } from '@coldpbc/enums';
 
 export interface Suppliers {
   id: string;
@@ -36,7 +37,7 @@ export interface SuppliersWithAssurances {
     sustainabilityAttribute: {
       id: string;
       name: string;
-      level: 'MATERIAL' | 'ORGANIZATION' | 'SUPPLIER' | 'PRODUCT';
+      level: EntityLevel;
       logoUrl?: string;
     };
   }[];
