@@ -1,3 +1,10 @@
+## [1.428.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.428.0...v1.428.1) (2024-10-16)
+
+
+### Bug Fixes
+
+* update defaultPrivacyLevel to 'allow' ([a745178](https://github.com/ColdPBC/cold-monorepo/commit/a745178e39cb1af166bd5f8667546a7ba38cf85c))
+
 # [1.428.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.427.0...v1.428.0) (2024-10-16)
 
 
