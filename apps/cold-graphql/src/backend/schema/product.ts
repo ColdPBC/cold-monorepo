@@ -48,6 +48,15 @@ export class Product {
 	@Field(() => String, { nullable: true })
 	upcCode?: string;
 
+	@Field(() => String, { nullable: true })
+	brandProductId?: string;
+
+	@Field(() => String, { nullable: true })
+	description?: string;
+
+	@Field(() => String, { nullable: true })
+	supplierProductId?: string;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'product' })
 	attributeAssurances!: AttributeAssurance[];
 
