@@ -180,8 +180,14 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
       country
       attributeAssurances {
         id
+        effectiveEndDate
+        organizationFile {
+          id
+        }
         sustainabilityAttribute {
           id
+          level
+          logoUrl
           name
         }
       }

@@ -10,13 +10,19 @@ import {
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import { IconNames } from '@coldpbc/enums';
-import {ColdIcon, DataGridCellHoverPopover, MuiDataGrid, Spinner} from '@coldpbc/components';
+import {
+  ColdIcon,
+  DataGridCellHoverPopover,
+  MuiDataGrid,
+  Spinner,
+  SustainabilityAttributeColumnList,
+} from '@coldpbc/components';
 import React, { useEffect, useState } from 'react';
 import { SuppliersWithAssurances } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
 import { get, has, isEqual, uniqWith } from 'lodash';
-import {listFilterOperators, listSortComparator} from "@coldpbc/lib";
+import {listFilterOperators, listSortComparator, mapAttributeAssurancesToSustainabilityAttributes} from "@coldpbc/lib";
 
 export const SuppliersDataGrid = (props: { tier: number }) => {
   const { tier } = props;
@@ -96,7 +102,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       valueOptions: uniqSusAttributes,
       renderCell: (params) => {
-        return <DataGridCellHoverPopover params={params} />;
+        return <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />;
       },
       type: 'singleSelect',
       sortComparator: listSortComparator,
@@ -156,12 +162,12 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
   const newRows: GridValidRowModel[] = [];
 
   suppliers.forEach((supplier, index) => {
-    const susAttributes = supplier.attributeAssurances.map(assurance => assurance.sustainabilityAttribute.name);
+    const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(supplier.attributeAssurances);
     const row = {
       id: supplier.id,
       name: supplier.name,
       country: supplier.country,
-      sustainabilityAttributes: susAttributes,
+      sustainabilityAttributes: sustainabilityAttributes,
     };
 
     if (tier === 1) {
@@ -212,7 +218,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
         }}
         slots={{ toolbar: getToolbar }}
         columnHeaderHeight={55}
-        rowHeight={55}
+        rowHeight={114}
       />
     </div>
   );
