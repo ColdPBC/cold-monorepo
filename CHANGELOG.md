@@ -1,3 +1,10 @@
+## [1.425.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.425.1...v1.425.2) (2024-10-16)
+
+
+### Bug Fixes
+
+* improve supplier ID setting logic in extraction service ([deb790a](https://github.com/ColdPBC/cold-monorepo/commit/deb790a133e94178d51dfc5e650f61de834bf0d6))
+
 ## [1.425.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.425.0...v1.425.1) (2024-10-16)
 
 
