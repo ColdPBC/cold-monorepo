@@ -1,3 +1,11 @@
+# [1.429.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.428.1...v1.429.0) (2024-10-16)
+
+
+### Features
+
+* update products table and schema to include category and subcat… ([#617](https://github.com/ColdPBC/cold-monorepo/issues/617)) ([18bd457](https://github.com/ColdPBC/cold-monorepo/commit/18bd45746d7dcf867456142ef9e376eea6610e90))
+* update products table and schema to include category and subcategory fields ([aff7054](https://github.com/ColdPBC/cold-monorepo/commit/aff7054c55a2cce5876a48368d1d9906a650b883))
+
 ## [1.428.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.428.0...v1.428.1) (2024-10-16)
 
 
