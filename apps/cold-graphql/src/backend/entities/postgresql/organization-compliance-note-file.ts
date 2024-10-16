@@ -20,11 +20,11 @@ export class OrganizationComplianceNoteFile {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
-	@Property({ type: 'datetime', length: 3 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 3 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
 
 	@ManyToOne({ entity: () => OrganizationComplianceNote, ref: true, index: 'organization_compliance_note__organization_compliance_note__idx' })
 	organizationComplianceNote!: Ref<OrganizationComplianceNote>;

@@ -13,11 +13,11 @@ export class OrganizationComplianceNoteFile {
 	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@RelationshipField<OrganizationComplianceNoteFile>(() => OrganizationComplianceNote, { id: (entity) => entity.organizationComplianceNote?.id })
 	organizationComplianceNote!: OrganizationComplianceNote;

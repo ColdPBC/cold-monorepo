@@ -15,11 +15,11 @@ export class OrganizationComplianceNoteLink {
 	@Field(() => String)
 	url!: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@RelationshipField<OrganizationComplianceNoteLink>(() => OrganizationComplianceNote, { id: (entity) => entity.organizationComplianceNote?.id })
 	organizationComplianceNote!: OrganizationComplianceNote;

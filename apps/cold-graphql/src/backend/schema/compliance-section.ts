@@ -24,11 +24,11 @@ export class ComplianceSection {
 	@Field(() => GraphQLJSON, { nullable: true })
 	metadata?: Record<string, unknown>;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@RelationshipField<ComplianceSection>(() => ComplianceSectionGroup, { id: (entity) => entity.complianceSectionGroup?.id })
 	complianceSectionGroup!: ComplianceSectionGroup;

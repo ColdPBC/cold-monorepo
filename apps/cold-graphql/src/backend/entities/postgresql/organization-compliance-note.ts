@@ -25,11 +25,11 @@ export class OrganizationComplianceNote {
 	@Property({ type: 'text' })
 	note!: string;
 
-	@Property({ type: 'datetime', length: 3 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 3 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
 
 	@ManyToOne({ entity: () => ComplianceQuestion, ref: true, index: 'organization_compliance_notes_compliance_question_id_idx' })
 	complianceQuestion!: Ref<ComplianceQuestion>;

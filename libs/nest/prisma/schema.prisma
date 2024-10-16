@@ -629,8 +629,8 @@ model attribute_assurances {
   organization_file_id        String?
   effective_start_date        DateTime?
   effective_end_date          DateTime?
-  created_at                  DateTime                   @default(now()) @db.Timestamptz(6)
-  updated_at                  DateTime                   @updatedAt @db.Timestamptz(6)
+  created_at                  DateTime?                   @default(now()) @db.Timestamptz(6)
+  updated_at                  DateTime?                   @updatedAt @db.Timestamptz(6)
   organization                organizations              @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   organization_files          organization_files?        @relation(fields: [organization_file_id], references: [id])
   material                    materials?                 @relation(fields: [material_id], references: [id])
@@ -728,8 +728,8 @@ model organization_compliance {
   description                               String
   compliance_definition_name                String
   metadata                                  Json?
-  created_at                                DateTime                                     @default(now())
-  updated_at                                DateTime                                     @updatedAt
+  created_at                                DateTime?                                     @default(now())
+  updated_at                                DateTime?                                     @updatedAt
   organization_id                           String
   deleted                                   Boolean                                      @default(false)
   visible                                   Boolean                                      @default(true)
@@ -753,8 +753,8 @@ model compliance_definitions {
   name                      String                         @unique
   logo_url                  String
   surveys                   Json
-  created_at                DateTime                       @default(now())
-  updated_at                DateTime                       @updatedAt
+  created_at                DateTime?                       @default(now())
+  updated_at                DateTime?                       @updatedAt
   title                     String
   image_url                 String?
   metadata                  Json?
@@ -776,8 +776,8 @@ model compliance_section_groups {
   title                      String
   compliance_definition_name String
   metadata                   Json?
-  created_at                 DateTime                @default(now())
-  updated_at                 DateTime                @updatedAt
+  created_at                 DateTime?                @default(now())
+  updated_at                 DateTime?                @updatedAt
   deleted                    Boolean                 @default(false)
   compliance_definition_id   String?
   compliance_definition      compliance_definitions? @relation(fields: [compliance_definition_id], references: [id], onDelete: Cascade)
@@ -793,8 +793,8 @@ model compliance_sections {
   key                                    String
   title                                  String
   metadata                               Json?
-  created_at                             DateTime                              @default(now())
-  updated_at                             DateTime                              @updatedAt
+  created_at                             DateTime?                              @default(now())
+  updated_at                             DateTime?                             @updatedAt
   compliance_section_group_id            String
   order                                  Int
   compliance_definition_name             String
@@ -827,8 +827,8 @@ model compliance_questions {
   dependency_expression                   String?
   question_summary                        String?
   additional_context                      Json?
-  created_at                              DateTime                                     @default(now())
-  updated_at                              DateTime                                     @updatedAt
+  created_at                              DateTime?                                     @default(now())
+  updated_at                              DateTime?                                     @updatedAt
   compliance_section_id                   String
   coresponding_question                   String?
   compliance_definition_name              String
@@ -859,8 +859,8 @@ model compliance_section_dependency_chains {
   compliance_section_group_id String
   compliance_definition_name  String
   dependency_expression       String
-  created_at                  DateTime              @default(now())
-  updated_at                  DateTime              @updatedAt
+  created_at                  DateTime?              @default(now())
+  updated_at                  DateTime?              @updatedAt
   deleted                     Boolean               @default(false)
   compliance_sections         compliance_sections[]
 
@@ -878,8 +878,8 @@ model compliance_question_dependency_chains {
   compliance_section_group_id String
   compliance_definition_name  String
   dependency_expression       String
-  created_at                  DateTime               @default(now())
-  updated_at                  DateTime               @updatedAt
+  created_at                  DateTime?               @default(now())
+  updated_at                  DateTime?               @updatedAt
   deleted                     Boolean                @default(false)
   compliance_questions        compliance_questions[]
 
@@ -898,8 +898,8 @@ model compliance_question_dependency_chains {
 model organization_compliance_statuses {
   id                         String                  @id
   type                       String
-  created_at                 DateTime                @default(now())
-  updated_at                 DateTime                @updatedAt
+  created_at                 DateTime?                @default(now())
+  updated_at                 DateTime?                @updatedAt
   email                      String
   organization_compliance_id String
   deleted                    Boolean                 @default(false)
@@ -911,8 +911,8 @@ model organization_compliance_statuses {
 model organization_compliance_notes {
   id                         String                               @id
   note                       String
-  created_at                 DateTime                             @default(now())
-  updated_at                 DateTime                             @updatedAt
+  created_at                 DateTime?                             @default(now())
+  updated_at                 DateTime?                             @updatedAt
   compliance_question_id     String
   organization_compliance_id String
   deleted                    Boolean                              @default(false)
@@ -928,8 +928,8 @@ model organization_compliance_notes {
 
 model organization_compliance_note_files {
   id                              String                        @id
-  created_at                      DateTime                      @default(now())
-  updated_at                      DateTime                      @updatedAt
+  created_at                      DateTime?                      @default(now())
+  updated_at                      DateTime?                      @updatedAt
   organization_compliance_note_id String
   organization_files_id           String
   deleted                         Boolean                       @default(false)
@@ -943,8 +943,8 @@ model organization_compliance_note_files {
 model organization_compliance_note_links {
   id                              String                        @id
   url                             String
-  created_at                      DateTime                      @default(now())
-  updated_at                      DateTime                      @updatedAt
+  created_at                      DateTime?                      @default(now())
+  updated_at                      DateTime?                     @updatedAt
   organization_compliance_note_id String
   deleted                         Boolean                       @default(false)
   note                            organization_compliance_notes @relation(fields: [organization_compliance_note_id], references: [id])
@@ -955,8 +955,8 @@ model organization_compliance_note_links {
 model organization_compliance_question_bookmarks {
   id                         String                  @id
   email                      String
-  created_at                 DateTime                @default(now())
-  updated_at                 DateTime                @updatedAt
+  created_at                 DateTime?                @default(now())
+  updated_at                 DateTime?                @updatedAt
   compliance_question_id     String
   organization_compliance_id String
   deleted                    Boolean                 @default(false)
@@ -970,8 +970,8 @@ model organization_compliance_question_bookmarks {
 
 model organization_compliance_responses {
   id                         String                  @id
-  created_at                 DateTime                @default(now())
-  updated_at                 DateTime                @updatedAt
+  created_at                 DateTime?                @default(now())
+  updated_at                 DateTime?                @updatedAt
   compliance_question_id     String
   organization_compliance_id String
   additional_context         Json?
@@ -990,8 +990,8 @@ model organization_compliance_ai_responses {
   justification              String
   references                 Json?
   sources                    Json?
-  created_at                 DateTime                                    @default(now())
-  updated_at                 DateTime                                    @updatedAt
+  created_at                 DateTime?                                    @default(now())
+  updated_at                 DateTime?                                    @updatedAt
   compliance_question_id     String
   organization_compliance_id String
   organization_id            String
@@ -1011,8 +1011,8 @@ model organization_compliance_ai_responses {
 
 model organization_compliance_ai_response_files {
   id                                     String                               @id
-  created_at                             DateTime                             @default(now())
-  updated_at                             DateTime                             @updatedAt
+  created_at                             DateTime?                             @default(now())
+  updated_at                             DateTime?                             @updatedAt
   organization_files_id                  String
   organization_compliance_ai_response_id String
   organization_compliance_id             String

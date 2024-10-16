@@ -31,11 +31,11 @@ export class ComplianceSection {
 	@Property({ type: 'json', nullable: true })
 	metadata?: Record<string, unknown>;
 
-	@Property({ type: 'datetime', length: 3 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 3 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
 
 	@ManyToOne({ entity: () => ComplianceSectionGroup, ref: true })
 	complianceSectionGroup!: Ref<ComplianceSectionGroup>;

@@ -22,11 +22,11 @@ export class OrganizationComplianceNoteLink {
 	@Property({ type: 'text' })
 	url!: string;
 
-	@Property({ type: 'datetime', length: 3 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 3 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
 
 	@ManyToOne({ entity: () => OrganizationComplianceNote, ref: true, index: 'organization_compliance_note__organization_compliance_note_idx1' })
 	organizationComplianceNote!: Ref<OrganizationComplianceNote>;

@@ -22,11 +22,11 @@ export class OrganizationComplianceAiResponseFile {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
-	@Property({ type: 'datetime', length: 3 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 3 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
 
 	@ManyToOne({ entity: () => OrganizationFile, ref: true, fieldName: 'organization_files_id', index: 'organization_compliance_ai_response__organization_files_id_idx1' })
 	organizationFile!: Ref<OrganizationFile>;

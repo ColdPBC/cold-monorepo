@@ -25,11 +25,11 @@ export class ComplianceDefinition {
 	@Field(() => GraphQLJSON)
 	surveys!: Record<string, unknown>;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@Field(() => String)
 	title!: string;

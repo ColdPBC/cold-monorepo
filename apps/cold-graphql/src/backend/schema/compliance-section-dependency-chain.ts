@@ -30,11 +30,11 @@ export class ComplianceSectionDependencyChain {
 	@Field(() => String)
 	dependencyExpression!: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@Field(() => Boolean)
 	deleted = false;

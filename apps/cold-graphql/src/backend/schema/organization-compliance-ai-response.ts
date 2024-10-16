@@ -24,11 +24,11 @@ export class OrganizationComplianceAiResponse {
 	@Field(() => GraphQLJSON, { nullable: true })
 	sources?: Record<string, unknown>;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@RelationshipField<OrganizationComplianceAiResponse>(() => ComplianceQuestion, { id: (entity) => entity.complianceQuestion?.id })
 	complianceQuestion!: ComplianceQuestion;

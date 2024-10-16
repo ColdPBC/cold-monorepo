@@ -41,9 +41,9 @@ export class AttributeAssurance {
 	@Field(() => ISODateStringScalar, { nullable: true })
 	effectiveEndDate?: Date;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 }
