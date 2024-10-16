@@ -1,3 +1,10 @@
+# [1.428.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.427.0...v1.428.0) (2024-10-16)
+
+
+### Features
+
+* add new product fields and indexes to schema ([64ca510](https://github.com/ColdPBC/cold-monorepo/commit/64ca5104e375ffdb237c16c920dab5249448a090))
+
 # [1.427.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.426.1...v1.427.0) (2024-10-16)
 
 
