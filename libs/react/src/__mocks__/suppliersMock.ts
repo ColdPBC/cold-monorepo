@@ -445,8 +445,10 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
         },
         {
           id: "16e53094-f98d-4051-9a39-8139e49f6acb",
-          effectiveEndDate: null,
-          organizationFile: null,
+          effectiveEndDate: addDays(new Date(), 25).toISOString(),
+          organizationFile: {
+            id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+          },
           sustainabilityAttribute: {
             id: "11739d63-10c6-4849-af49-e6a7f9e59f81",
             level: EntityLevel.PRODUCT,
@@ -455,8 +457,10 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
         },
         {
           id: "b1a880e6-4c82-4b4d-bd84-cfe354c13129",
-          effectiveEndDate: null,
-          organizationFile: null,
+          effectiveEndDate: addDays(new Date(), 75).toISOString(),
+          organizationFile: {
+            id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+          },
           sustainabilityAttribute: {
             id: "9d148721-1bf0-4e6f-bf7e-d037a30b8718",
             level: EntityLevel.MATERIAL,
@@ -536,8 +540,10 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       attributeAssurances: [
         {
           id: "db61726d-69f5-4b61-87ba-673b476cfe82",
-          effectiveEndDate: null,
-          organizationFile: null,
+          effectiveEndDate: addDays(new Date(), 75).toISOString(),
+          organizationFile: {
+            id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+          },
           sustainabilityAttribute: {
             id: "d84409f2-e671-42b8-845e-437d941938a0",
             level: EntityLevel.ORGANIZATION,
@@ -556,8 +562,10 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
         },
         {
           id: "569b381b-3173-4b7e-a969-fbed4a2357a2",
-          effectiveEndDate: null,
-          organizationFile: null,
+          effectiveEndDate: addDays(new Date(), 35).toISOString(),
+          organizationFile: {
+            id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+          },
           sustainabilityAttribute: {
             id: "24fd9960-7e35-45a1-8075-f99f2d841de6",
             level: EntityLevel.SUPPLIER,

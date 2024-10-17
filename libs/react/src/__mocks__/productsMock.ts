@@ -507,8 +507,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             attributeAssurances: [
               {
                 id: "381c0b18-d9df-4734-84b8-d30e95ef454c",
-                effectiveEndDate: null,
-                organizationFile: null,
+                effectiveEndDate: addDays(new Date(), 50).toISOString(),
+                organizationFile: {
+                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+                },
                 sustainabilityAttribute: {
                   id: "58421269-225a-4736-acdd-9acd7b4a1147",
                   level: EntityLevel.MATERIAL,
@@ -518,8 +520,10 @@ export const getProductsMock = (): ProductsQuery[] => {
               },
               {
                 id: "ded47c4c-8706-4db3-8716-ae4b3f891b67",
-                effectiveEndDate: null,
-                organizationFile: null,
+                effectiveEndDate: addDays(new Date(), 50).toISOString(),
+                organizationFile: {
+                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+                },
                 sustainabilityAttribute: {
                   id: "7cb028eb-bafe-4dd3-b11a-dddaa535b807",
                   level: EntityLevel.SUPPLIER,
@@ -529,8 +533,10 @@ export const getProductsMock = (): ProductsQuery[] => {
               },
               {
                 id: "c43b195d-75ad-4a87-8d20-e47ea16d409e",
-                effectiveEndDate: null,
-                organizationFile: null,
+                effectiveEndDate: addDays(new Date(), 50).toISOString(),
+                organizationFile: {
+                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+                },
                 sustainabilityAttribute: {
                   id: "ccac80fd-2c4a-4ca0-aec3-989b615461c0",
                   level: EntityLevel.ORGANIZATION,
@@ -730,8 +736,10 @@ export const getProductsMock = (): ProductsQuery[] => {
       attributeAssurances: [
         {
           id: "attrass_qtu8uc01hqportfm2cq4vfdi",
-          effectiveEndDate: null,
-          organizationFile: null,
+          effectiveEndDate: addDays(new Date(), 75).toISOString(),
+          organizationFile: {
+            id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+          },
           sustainabilityAttribute: {
             id: "susatr_ctzexktkgpudh39j7fr5v506",
             level: EntityLevel.PRODUCT,

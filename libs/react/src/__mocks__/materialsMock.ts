@@ -193,24 +193,28 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
             attributeAssurances: [
               {
                 id: "8ce77def-b624-4ce4-8b1b-f3ed0d6bd74e",
-                effectiveEndDate: null,
+                effectiveEndDate: addDays(new Date(), 75).toISOString(),
+                organizationFile: {
+                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+                },
                 sustainabilityAttribute: {
                   id: "24fd9960-7e35-45a1-8075-f99f2d841de6",
                   name: "Adherence to ZDHC MRSL",
                   level: EntityLevel.SUPPLIER,
                   logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/ZDHC.png",
                 },
-                organizationFile: null,
               },
               {
                 id: "16e53094-f98d-4051-9a39-8139e49f6acb",
-                effectiveEndDate: null,
+                effectiveEndDate: subDays(new Date(), 75).toISOString(),
+                organizationFile: {
+                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+                },
                 sustainabilityAttribute: {
                   id: "11739d63-10c6-4849-af49-e6a7f9e59f81",
                   name: "Altitude Sports",
                   level: EntityLevel.PRODUCT,
                 },
-                organizationFile: null,
               },
               {
                 id: "b1a880e6-4c82-4b4d-bd84-cfe354c13129",
@@ -318,24 +322,28 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
             attributeAssurances: [
               {
                 id: "attrass_s3iebkcv577x77f697ujxo7d",
-                effectiveEndDate: null,
+                effectiveEndDate: addDays(new Date(), 75).toISOString(),
+                organizationFile: {
+                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+                },
                 sustainabilityAttribute: {
                   id: "7d061431-6c78-40e7-94ca-02bc55b32d9f",
                   name: "Oeko-Tex STeP",
                   level: EntityLevel.SUPPLIER,
                   logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Okeo+Tex+STeP.png",
                 },
-                organizationFile: null,
               },
               {
                 id: "attrass_mrq8zrxkwno9cc9kipog2kzf",
-                effectiveEndDate: null,
+                effectiveEndDate: addDays(new Date(), 15).toISOString(),
+                organizationFile: {
+                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+                },
                 sustainabilityAttribute: {
                   id: "b315a3e4-6cc2-4443-8c0e-09dc651b3ac8",
                   name: "Recycled Down",
                   level: EntityLevel.MATERIAL,
                 },
-                organizationFile: null,
               },
               {
                 id: "attrass_po7apmssyulyanrti03n00xg",
@@ -493,14 +501,16 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
             attributeAssurances: [
               {
                 id: "6fd8a117-76b3-431d-b766-556d0c437a3a",
-                effectiveEndDate: "2024-05-09T00:00:00.000Z",
+                effectiveEndDate: addDays(new Date(), 75).toISOString(),
+                organizationFile: {
+                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+                },
                 sustainabilityAttribute: {
                   id: "a99e4eff-72ee-40f4-a476-0385ac6f52d3",
                   name: "Worldwide Responsible Accredited Production (WRAP)",
                   level: EntityLevel.SUPPLIER,
                   logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png",
                 },
-                organizationFile: null,
               }
             ],
           },
@@ -509,25 +519,29 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
       attributeAssurances: [
         {
           id: "381c0b18-d9df-4734-84b8-d30e95ef454c",
-          effectiveEndDate: null,
+          effectiveEndDate: addDays(new Date(), 15).toISOString(),
+          organizationFile: {
+            id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+          },
           sustainabilityAttribute: {
             id: "58421269-225a-4736-acdd-9acd7b4a1147",
             name: "Down Codex",
             level: EntityLevel.MATERIAL,
             logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Down+Codex.png",
           },
-          organizationFile: null,
         },
         {
           id: "ded47c4c-8706-4db3-8716-ae4b3f891b67",
-          effectiveEndDate: null,
+          effectiveEndDate: addDays(new Date(), 50).toISOString(),
+          organizationFile: {
+            id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+          },
           sustainabilityAttribute: {
             id: "7cb028eb-bafe-4dd3-b11a-dddaa535b807",
             name: "SMETA Audit",
             level: EntityLevel.SUPPLIER,
             logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/SMETA+Audit.png",
           },
-          organizationFile: null,
         },
         {
           id: "c43b195d-75ad-4a87-8d20-e47ea16d409e",
