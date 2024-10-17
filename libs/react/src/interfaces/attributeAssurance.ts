@@ -1,3 +1,5 @@
+import { EntityLevel } from '@coldpbc/enums';
+
 export interface SustainabilityAttributeAssurance {
   id: string;
   effectiveEndDate: string | null;
@@ -19,7 +21,7 @@ export interface SustainabilityAttributeAssurance {
   sustainabilityAttribute?: {
     id: string;
     name: string;
-    level: 'MATERIAL' | 'ORGANIZATION' | 'SUPPLIER' | 'PRODUCT';
+    level: EntityLevel;
     logoUrl?: string;
   } | null;
 }

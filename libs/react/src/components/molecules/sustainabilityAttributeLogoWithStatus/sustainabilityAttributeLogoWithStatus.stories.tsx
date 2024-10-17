@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
 
 import { SustainabilityAttributeLogoWithStatus } from '@coldpbc/components';
-import { AttributeAssuranceStatus } from '@coldpbc/enums';
+import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 import { addDays } from 'date-fns';
 
 const meta: Meta<typeof SustainabilityAttributeLogoWithStatus> = {
@@ -19,7 +19,7 @@ export const Default: Story = {
     sustainabilityAttribute: {
       id: '123',
       name: 'Default Product Attribute',
-      level: 'MATERIAL',
+      level: EntityLevel.MATERIAL,
       assuranceStatus: AttributeAssuranceStatus.ACTIVE,
       expirationDate: new Date(2025, 11, 31, 17), // "Active until 12/31/2025"
     }
@@ -31,7 +31,7 @@ export const Expiring: Story = {
     sustainabilityAttribute: {
       id: '123',
       name: 'Global Recycled Standard',
-      level: 'MATERIAL',
+      level: EntityLevel.MATERIAL,
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
       assuranceStatus: AttributeAssuranceStatus.EXPIRING,
       expirationDate: addDays(new Date(), 25), // "Expiring in 24 days"
@@ -44,7 +44,7 @@ export const Expired: Story = {
     sustainabilityAttribute: {
       id: '123',
       name: 'Fair Wear',
-      level: 'MATERIAL',
+      level: EntityLevel.MATERIAL,
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
       assuranceStatus: AttributeAssuranceStatus.EXPIRED,
       expirationDate: new Date(2024, 2, 1, 17), // "Expired on 2/1/2024"
@@ -57,7 +57,7 @@ export const MissingDocuments: Story = {
     sustainabilityAttribute: {
       id: '123',
       name: 'REACH (Registration, Evaluation, Authorisation and Restriction of Chemical)',
-      level: 'MATERIAL',
+      level: EntityLevel.MATERIAL,
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/No+Image.png',
       assuranceStatus: AttributeAssuranceStatus.NOT_DOCUMENTED, // "Missing documents"
     }

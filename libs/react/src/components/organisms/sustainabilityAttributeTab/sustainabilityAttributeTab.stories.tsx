@@ -2,6 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 
 import {SustainabilityAttributeTab} from '@coldpbc/components';
 import { AttributeAssuranceMock } from '@coldpbc/mocks';
+import { EntityLevel } from '@coldpbc/enums';
 
 const meta: Meta<typeof SustainabilityAttributeTab> = {
   title: "Molecules/SustainabilityAttributeTab",
@@ -21,29 +22,29 @@ export const Default: Story = {
         id: 'a',
         name: 'Default Product Attribute',
         attributeAssurances: [
-          AttributeAssuranceMock({ entity: 'PRODUCT', status: 'ACTIVE', index: 1}),
+          AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: 'ACTIVE', index: 1}),
         ],
-        level: 'PRODUCT',
+        level: EntityLevel.PRODUCT,
       },
       {
         id: 'a',
         name: 'Global Recycled Standard',
         logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
         attributeAssurances: [
-          AttributeAssuranceMock({ entity: 'MATERIAL', status: 'EXPIRED', index: 1}),
+          AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: 'EXPIRED', index: 1}),
         ],
-        level: 'MATERIAL',
+        level: EntityLevel.MATERIAL,
       },
       {
         id: 'a',
         name: 'Fair Wear',
         logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
         attributeAssurances: [
-          AttributeAssuranceMock({ entity: 'SUPPLIER', status: 'ACTIVE', index: 1}),
-          AttributeAssuranceMock({ entity: 'SUPPLIER', status: 'EXPIRED', index: 2}),
-          AttributeAssuranceMock({ entity: 'SUPPLIER', status: 'NOT DOCUMENTED', index: 3}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'ACTIVE', index: 1}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'EXPIRED', index: 2}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'NOT DOCUMENTED', index: 3}),
         ],
-        level: 'SUPPLIER',
+        level: EntityLevel.SUPPLIER,
       }
     ]
   }
@@ -64,21 +65,21 @@ export const OtherAttributes: Story = {
         id: 'a',
         name: 'Default Product Attribute',
         attributeAssurances: [],
-        level: 'PRODUCT',
+        level: EntityLevel.PRODUCT,
       },
       {
         id: 'a',
         name: 'Global Recycled Standard',
         logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
         attributeAssurances: [],
-        level: 'MATERIAL',
+        level: EntityLevel.MATERIAL,
       },
       {
         id: 'a',
         name: 'Fair Wear',
         logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
         attributeAssurances: [],
-        level: 'SUPPLIER',
+        level: EntityLevel.SUPPLIER,
       }
     ]
   }

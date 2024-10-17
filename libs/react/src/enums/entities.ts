@@ -1,0 +1,6 @@
+export enum EntityLevel {
+  MATERIAL = 'MATERIAL',
+  ORGANIZATION = 'ORGANIZATION',
+  PRODUCT = 'PRODUCT',
+  SUPPLIER = 'SUPPLIER',
+}

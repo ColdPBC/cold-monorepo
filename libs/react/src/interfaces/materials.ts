@@ -1,5 +1,6 @@
 import { Suppliers } from './suppliers';
 import { Claims } from './claims';
+import { EntityLevel } from '@coldpbc/enums';
 
 export interface Materials {
   id: string;
@@ -50,7 +51,7 @@ export interface MaterialsWithRelations extends Materials {
     sustainabilityAttribute: {
       id: string;
       name: string;
-      level: 'MATERIAL' | 'ORGANIZATION' | 'SUPPLIER' | 'PRODUCT';
+      level: EntityLevel;
       logoUrl?: string;
     };
   }[];
