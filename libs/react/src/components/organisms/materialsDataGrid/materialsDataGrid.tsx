@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {MaterialsWithRelations, SuppliersWithAssurances} from '@coldpbc/interfaces';
+import {MaterialsWithRelations, SustainabilityAttributeAssurance} from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import {
   DataGridCellHoverPopover,
@@ -19,8 +19,10 @@ import {
 import { get, has, uniq } from 'lodash';
 import {listFilterOperators, listSortComparator, mapAttributeAssurancesToSustainabilityAttributes} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
+import {useFlags} from "launchdarkly-react-client-sdk";
 
 const _MaterialsDataGrid = () => {
+  const ldFlags = useFlags();
   const { orgId } = useAuth0Wrapper();
   const [materials, setMaterials] = useState<MaterialsWithRelations[]>([]);
   const materialsWithRelations = useGraphQLSWR<{
@@ -127,11 +129,16 @@ const _MaterialsDataGrid = () => {
     // While the database schema allows for multiple MaterialSuppliers, we insist on 1 per Material
     const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
 
+    const extraAttributes: SustainabilityAttributeAssurance[] = [];
+
+    if(ldFlags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
+      extraAttributes.push(...material.productMaterials.map(pm => pm.product.attributeAssurances).flat());
+      extraAttributes.push(...tier2Supplier?.attributeAssurances || []);
+    }
     // get all related attribute assurances from the related entities
     const allRelatedAttributeAssurances = [
       ...material.attributeAssurances,
-      ...material.productMaterials.map(pm => pm.product.attributeAssurances).flat(),
-      ...tier2Supplier?.attributeAssurances || [],
+      ...extraAttributes,
     ]
     const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(allRelatedAttributeAssurances);
 

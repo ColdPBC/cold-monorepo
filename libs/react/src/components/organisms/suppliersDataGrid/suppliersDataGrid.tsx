@@ -18,13 +18,15 @@ import {
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
 import React, { useEffect, useState } from 'react';
-import { SuppliersWithAssurances } from '@coldpbc/interfaces';
+import {SuppliersWithAssurances, SustainabilityAttributeAssurance} from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
 import { get, has, isEqual, uniqWith } from 'lodash';
 import {listFilterOperators, listSortComparator, mapAttributeAssurancesToSustainabilityAttributes} from "@coldpbc/lib";
+import {useFlags} from "launchdarkly-react-client-sdk";
 
 export const SuppliersDataGrid = (props: { tier: number }) => {
+  const ldFlags = useFlags();
   const { tier } = props;
   const navigate = useNavigate();
   const [suppliers, setSuppliers] = useState<SuppliersWithAssurances[]>([]);
@@ -162,12 +164,18 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
   const newRows: GridValidRowModel[] = [];
 
   suppliers.forEach((supplier, index) => {
-    // const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(supplier.attributeAssurances);
+    const extraAttributes: SustainabilityAttributeAssurance[] = [];
+
+    if(ldFlags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
+      extraAttributes.push(...supplier.products.map(product => product.attributeAssurances).flat());
+      extraAttributes.push(...supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.attributeAssurances).flat());
+    }
+
     const allAttributeAssurances = [
       ...supplier.attributeAssurances,
-      ...supplier.products.map(product => product.attributeAssurances).flat(),
-      ...supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.attributeAssurances).flat(),
+      ...extraAttributes,
     ]
+
     const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(allAttributeAssurances);
 
     const row = {

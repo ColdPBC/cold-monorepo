@@ -22,3 +22,20 @@ export const Default: Story = {
     );
   },
 };
+
+export const OldPage: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider>
+        <SuppliersPage />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showEntitySustainabilityAttributesForRelatedEntitiesCold1128: false,
+      },
+    },
+  }
+};

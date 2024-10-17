@@ -17,16 +17,27 @@ import React from "react";
 import {get, uniq} from "lodash";
 import {withErrorBoundary} from "react-error-boundary";
 import {mapAttributeAssurancesToSustainabilityAttributes} from "@coldpbc/lib";
+import {useFlags} from "launchdarkly-react-client-sdk";
 
 
-const getColumnRows = (products: ProductsQuery[]) => {
+const getColumnRows = (
+  products: ProductsQuery[],
+  flags: {
+    [key: string]: boolean
+  }) => {
   return products.map(product => {
+    const extraAttributes: SustainabilityAttributeAssurance[] = [];
+
+    if(flags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
+      extraAttributes.push(...product.organizationFacility?.attributeAssurances ?? []);
+      extraAttributes.push(...product.productMaterials.map(prodMaterial => prodMaterial.material?.attributeAssurances ?? []).flat());
+    }
     // get all attribute assurances for the product and related materials and tier 1 supplier
     const allAttributeAssurances: SustainabilityAttributeAssurance[] = [
       ...product.attributeAssurances,
-      ...product.productMaterials.map(prodMaterial => prodMaterial.material?.attributeAssurances ?? []).flat(),
-      ...product.organizationFacility?.attributeAssurances ?? []
+      ...extraAttributes,
     ]
+
     const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(allAttributeAssurances);
 
     return {
@@ -47,6 +58,7 @@ const getColumnRows = (products: ProductsQuery[]) => {
 }
 
 export const _ProductsDataGrid = () => {
+  const ldFlags = useFlags();
   const {orgId} = useAuth0Wrapper()
   const productsQuery = useGraphQLSWR<{
     products: ProductsQuery[]
@@ -196,7 +208,7 @@ export const _ProductsDataGrid = () => {
   }
 
   if(productsQuery.data && get(productsQuery.data, 'data.products', []).length > 0) {
-    rows = getColumnRows(productsQuery.data.data.products)
+    rows = getColumnRows(productsQuery.data.data.products, ldFlags)
   }
 
   const getToolbar = () => {
