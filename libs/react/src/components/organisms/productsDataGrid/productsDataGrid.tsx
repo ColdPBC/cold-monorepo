@@ -86,7 +86,7 @@ export const _ProductsDataGrid = () => {
       ...defaultColumnProperties,
       field: 'name',
       headerName: 'Name',
-      minWidth: 200,
+      minWidth: 230,
       flex: 1,
       renderCell: renderName,
     },
