@@ -1,3 +1,10 @@
+## [1.431.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.431.1...v1.431.2) (2024-10-17)
+
+
+### Bug Fixes
+
+* adjust column minWidth for better readability ([2e572cb](https://github.com/ColdPBC/cold-monorepo/commit/2e572cb835c104730d6b2a51a0574aea6f917e8b))
+
 ## [1.431.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.431.0...v1.431.1) (2024-10-16)
 
 
