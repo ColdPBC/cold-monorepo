@@ -1,5 +1,7 @@
 import './tracer';
+
 import { NestFactory } from '@nestjs/core';
+
 import * as dotenv from 'dotenv';
 import { AppModule } from './platform/modules/app.module';
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -10,7 +12,9 @@ import { OpenapiModule } from './platform/modules/swagger/openapi.module';
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule.forRootAsync(), {
+
+
+	const app = await NestFactory.create(AppModule.forRootAsync(), {
     logger: false,
     bufferLogs: true,
   });
@@ -19,7 +23,6 @@ async function bootstrap() {
 
   server.keepAliveTimeout = 61000;
   server.headersTimeout = 65000;
-
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
 

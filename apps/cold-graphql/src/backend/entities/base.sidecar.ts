@@ -59,7 +59,7 @@ export class BaseSidecar {
 		return params;
 	}
 
-	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>, provider: any) {
 		this.logger.log(`before create ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 
 		for (const item of params.args.items) {

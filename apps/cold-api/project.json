@@ -23,8 +23,14 @@
         "webpackConfig": "apps/cold-api/webpack.config.js"
       },
       "configurations": {
-        "development": {},
-        "staging": {},
+        "development": {
+	        "optimization": false,
+					"sourceMap": true,
+					"watch": true
+        },
+        "staging": {
+
+        },
         "production": {}
       }
     },

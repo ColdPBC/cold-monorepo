@@ -12,12 +12,12 @@ import { Auth0TokenService } from './auth0-token.service';
 @Global()
 @Module({})
 export class AuthorizationModule {
-  static async forFeatureAsync() {
-    return {
-      module: AuthorizationModule,
-      imports: [ConfigModule, ColdCacheModule, HttpModule, PassportModule.register({ defaultStrategy: 'jwt' })],
-      providers: [CacheService, WorkerLogger, JwtStrategy, JwtService, ConfigService, JwtAuthGuard, RolesGuard, PermissionsGuard, Auth0TokenService],
-      exports: [PassportModule, JwtStrategy, JwtService, JwtAuthGuard, WorkerLogger, CacheService, Auth0TokenService],
-    };
-  }
+	static async forFeatureAsync() {
+		return {
+			module: AuthorizationModule,
+			imports: [ConfigModule, ColdCacheModule, HttpModule, PassportModule.register({ defaultStrategy: 'jwt' })],
+			providers: [CacheService, WorkerLogger, JwtStrategy, JwtService, ConfigService, JwtAuthGuard, RolesGuard, PermissionsGuard, Auth0TokenService],
+			exports: [PassportModule, JwtStrategy, JwtService, JwtAuthGuard, ConfigService, WorkerLogger, RolesGuard, PermissionsGuard, CacheService, Auth0TokenService],
+		};
+	}
 }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { HttpModule } from '@nestjs/axios';
@@ -34,9 +34,7 @@ export interface service_flags {
 	disableMqttModule: boolean;
 }
 
-@Module({
-	imports: [MqttModule, GeneratorsModule],
-})
+@Module({})
 export class NestModule {
 	static async forRootAsync(flags?: service_flags) {
 		const logger = new WorkerLogger('NestModule');

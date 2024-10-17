@@ -153,7 +153,10 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
 		if (fs.existsSync(firstPath)) {
 			return fs.readFileSync(firstPath).toString();
 		} else {
-			throw new Error(`${relativePath} is not found in '${firstPath}'`);
+			const file = fs.readFileSync(path.resolve(`${appRoot.toString()}/apps/cold-api`, relativePath).toString()).toString();
+
+			console.error(`${relativePath} is not found in '${firstPath}'`);
+			return file;
 		}
 	}
 

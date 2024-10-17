@@ -19885,7 +19885,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bindings@npm:^1.5.0":
+"bindings@npm:^1.2.1, bindings@npm:^1.5.0":
   version: 1.5.0
   resolution: "bindings@npm:1.5.0"
   dependencies:
@@ -21732,6 +21732,7 @@ __metadata:
     luxon: "npm:^3.4.3"
     mammoth: "npm:^1.7.1"
     markdown-to-jsx: "npm:^7.3.2"
+    memwatch-next: "npm:^0.3.0"
     mock-apollo-client: "npm:^1.3.1"
     msw: "npm:2.4.2"
     multer: "npm:^1.4.5-lts.1"
@@ -34526,6 +34527,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"memwatch-next@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "memwatch-next@npm:0.3.0"
+  dependencies:
+    bindings: "npm:^1.2.1"
+    nan: "npm:^2.3.2"
+    node-gyp: "npm:latest"
+  checksum: 10/4257a8b3a5e6ba061b03613c3f6436c1f715a73649b04d99a1db012949e3e45c458bdc9d4688494c602d98953a0f649363f17a248563298f6b98e7a9e70d636a
+  languageName: node
+  linkType: hard
+
 "meow@npm:^12.0.1":
   version: 12.1.1
   resolution: "meow@npm:12.1.1"
@@ -35936,6 +35948,15 @@ __metadata:
   dependencies:
     node-gyp: "npm:latest"
   checksum: 10/5f16e4c9953075d9920229c703c1d781c0b74118ce3d9e926b448a4eef92b7d8be5ac6adc748a13a5fafb594436cbfe63250e3471aefdd78e3a0cd14603b9ba7
+  languageName: node
+  linkType: hard
+
+"nan@npm:^2.3.2":
+  version: 2.22.0
+  resolution: "nan@npm:2.22.0"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 10/ab165ba910e549fcc21fd561a33f534d86e81ae36c97b1019dcfe506b09692ff867c97794a54b49c9a83b8b485f529f0f58d24966c3a11863c97dc70814f4d50
   languageName: node
   linkType: hard
 
