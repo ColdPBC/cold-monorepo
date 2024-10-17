@@ -1,6 +1,12 @@
-import {DataGridCellHoverPopover, ErrorFallback, MuiDataGrid, Spinner} from "@coldpbc/components";
+import {
+  DataGridCellHoverPopover,
+  ErrorFallback,
+  MuiDataGrid,
+  Spinner,
+  SustainabilityAttributeColumnList
+} from "@coldpbc/components";
 import {useAuth0Wrapper, useGraphQLSWR} from "@coldpbc/hooks";
-import {ProductsQuery} from "@coldpbc/interfaces";
+import {ProductsQuery, SustainabilityAttribute, SustainabilityAttributeAssurance} from "@coldpbc/interfaces";
 import {
   GridToolbarColumnsButton,
   GridToolbarContainer,
@@ -10,18 +16,26 @@ import {
 import React from "react";
 import {get, uniq} from "lodash";
 import {withErrorBoundary} from "react-error-boundary";
+import {mapAttributeAssurancesToSustainabilityAttributes} from "@coldpbc/lib";
 
 
 const getColumnRows = (products: ProductsQuery[]) => {
-  // get sustainability attributes for each product
   return products.map(product => {
+    // get all attribute assurances for the product and related materials and tier 1 supplier
+    const allAttributeAssurances: SustainabilityAttributeAssurance[] = [
+      ...product.attributeAssurances,
+      ...product.productMaterials.map(prodMaterial => prodMaterial.material?.attributeAssurances ?? []).flat(),
+      ...product.organizationFacility?.attributeAssurances ?? []
+    ]
+    const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(allAttributeAssurances);
+
     return {
       id: product.id,
       name: product.name,
       category: product.productCategory ?? '',
       subcategory: product.productSubcategory ?? '',
       description: product.description ?? '',
-      sustainabilityAttributes: uniq(product.attributeAssurances.map(attribute => attribute.sustainabilityAttribute.name)),
+      sustainabilityAttributes: sustainabilityAttributes,
       tier1Supplier: product.organizationFacility?.name ?? '',
       seasonCode: product.seasonCode ?? '',
       upcCode: product.upcCode ?? '',
@@ -106,7 +120,7 @@ export const _ProductsDataGrid = () => {
       minWidth: 350,
       renderCell: (params) => {
         return (
-          <DataGridCellHoverPopover params={params} />
+          <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />
         )
       },
     },
@@ -168,7 +182,7 @@ export const _ProductsDataGrid = () => {
     category: string;
     subcategory: string;
     description: string;
-    sustainabilityAttributes: string[];
+    sustainabilityAttributes: SustainabilityAttribute[];
     tier1Supplier: string;
     seasonCode: string;
     upcCode: string;

@@ -26,7 +26,7 @@ export interface SuppliersWithCertifications extends Suppliers {
 export interface SuppliersWithAssurances {
   id: string;
   name: string;
-  country: string;
+  country: string | null;
   supplierTier: number | null;
   attributeAssurances: {
     id: string;
@@ -44,10 +44,36 @@ export interface SuppliersWithAssurances {
   materialSuppliers: {
     material: {
       name: string;
+      attributeAssurances: {
+        id: string;
+        effectiveEndDate: string | null;
+        organizationFile: {
+          id: string;
+        } | null;
+        sustainabilityAttribute: {
+          id: string;
+          name: string;
+          level: EntityLevel;
+          logoUrl?: string;
+        };
+      }[];
     };
   }[];
   products: {
     id: string;
     name: string;
+    attributeAssurances: {
+      id: string;
+      effectiveEndDate: string | null;
+      organizationFile: {
+        id: string;
+      } | null;
+      sustainabilityAttribute: {
+        id: string;
+        name: string;
+        level: EntityLevel;
+        logoUrl?: string;
+      };
+    }[];
   }[]
 }

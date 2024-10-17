@@ -1,4 +1,4 @@
-import {Materials} from "./materials";
+import {EntityLevel} from "@coldpbc/enums";
 
 export interface Products {
   id: string;
@@ -17,18 +17,50 @@ export interface ProductsQuery {
     material: {
       id: string
       name: string
+      attributeAssurances: {
+        id: string;
+        effectiveEndDate: string | null;
+        organizationFile: {
+          id: string;
+        } | null;
+        sustainabilityAttribute: {
+          id: string;
+          name: string;
+          level: EntityLevel;
+          logoUrl?: string;
+        };
+      }[];
     } | null;
   }[];
   organizationFacility: {
     id: string
     name: string
+    attributeAssurances: {
+      id: string;
+      effectiveEndDate: string | null;
+      organizationFile: {
+        id: string;
+      } | null;
+      sustainabilityAttribute: {
+        id: string;
+        name: string;
+        level: EntityLevel;
+        logoUrl?: string;
+      };
+    }[];
   } | null;
   attributeAssurances: {
-    id: string
+    id: string;
+    effectiveEndDate: string | null;
+    organizationFile: {
+      id: string;
+    } | null;
     sustainabilityAttribute: {
-      id: string
-      name: string
-    }
+      id: string;
+      name: string;
+      level: EntityLevel;
+      logoUrl?: string;
+    };
   }[];
   metadata: any | null;
   seasonCode: string | null;

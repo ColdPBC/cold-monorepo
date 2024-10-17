@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MaterialsWithRelations } from '@coldpbc/interfaces';
+import {MaterialsWithRelations, SuppliersWithAssurances} from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import {
   DataGridCellHoverPopover,
@@ -23,7 +23,9 @@ import { withErrorBoundary } from 'react-error-boundary';
 const _MaterialsDataGrid = () => {
   const { orgId } = useAuth0Wrapper();
   const [materials, setMaterials] = useState<MaterialsWithRelations[]>([]);
-  const materialsWithRelations = useGraphQLSWR(orgId ? 'GET_ALL_MATERIALS_FOR_ORG' : null, {
+  const materialsWithRelations = useGraphQLSWR<{
+    materials: MaterialsWithRelations[];
+  }>(orgId ? 'GET_ALL_MATERIALS_FOR_ORG' : null, {
     filter: {
       organization: {
         id: orgId,
@@ -125,7 +127,13 @@ const _MaterialsDataGrid = () => {
     // While the database schema allows for multiple MaterialSuppliers, we insist on 1 per Material
     const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
 
-    const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(material.attributeAssurances);
+    // get all related attribute assurances from the related entities
+    const allRelatedAttributeAssurances = [
+      ...material.attributeAssurances,
+      ...material.productMaterials.map(pm => pm.product.attributeAssurances).flat(),
+      ...tier2Supplier?.attributeAssurances || [],
+    ]
+    const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(allRelatedAttributeAssurances);
 
     const row = {
       id: material.id,

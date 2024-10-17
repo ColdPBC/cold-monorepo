@@ -162,11 +162,18 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
   const newRows: GridValidRowModel[] = [];
 
   suppliers.forEach((supplier, index) => {
-    const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(supplier.attributeAssurances);
+    // const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(supplier.attributeAssurances);
+    const allAttributeAssurances = [
+      ...supplier.attributeAssurances,
+      ...supplier.products.map(product => product.attributeAssurances).flat(),
+      ...supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.attributeAssurances).flat(),
+    ]
+    const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(allAttributeAssurances);
+
     const row = {
       id: supplier.id,
       name: supplier.name,
-      country: supplier.country,
+      country: supplier.country ?? '',
       sustainabilityAttributes: sustainabilityAttributes,
     };
 
