@@ -23,7 +23,7 @@ export const Default: Story = {
   },
 };
 
-export const OldPage: Story = {
+export const WithoutAttributesFromRelatedEntitiesFlagEnabled: Story = {
   render: () => {
     return (
       <StoryMockProvider graphqlMocks={materialsGraphqlMock}>
