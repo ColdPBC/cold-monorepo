@@ -1,3 +1,11 @@
+# [1.432.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.431.2...v1.432.0) (2024-10-18)
+
+
+### Features
+
+* add feature flag for entity sustainability attributes ([2221fcb](https://github.com/ColdPBC/cold-monorepo/commit/2221fcb34649190fb00d0390da01923d8c427f78))
+* enhance sustainability attributes mapping for data grids ([2eec604](https://github.com/ColdPBC/cold-monorepo/commit/2eec60426c98cd48a435fa3318693d19b56c9288))
+
 ## [1.431.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.431.1...v1.431.2) (2024-10-17)
 
 
