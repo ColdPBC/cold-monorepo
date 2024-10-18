@@ -40,6 +40,19 @@ export interface MaterialsWithRelations extends Materials {
       id: string;
       name: string;
       supplierTier: number | null;
+      attributeAssurances: {
+        id: string;
+        effectiveEndDate: string | null;
+        organizationFile: {
+          id: string;
+        } | null;
+        sustainabilityAttribute: {
+          id: string;
+          name: string;
+          level: EntityLevel;
+          logoUrl?: string;
+        };
+      }[]
     };
   }[];
   attributeAssurances: {
@@ -63,6 +76,19 @@ export interface MaterialsWithRelations extends Materials {
         id: string;
         name: string;
       };
+      attributeAssurances: {
+        id: string;
+        effectiveEndDate: string | null;
+        organizationFile: {
+          id: string;
+        } | null;
+        sustainabilityAttribute: {
+          id: string;
+          name: string;
+          level: EntityLevel;
+          logoUrl?: string;
+        };
+      }[]
     };
   }[];
 }

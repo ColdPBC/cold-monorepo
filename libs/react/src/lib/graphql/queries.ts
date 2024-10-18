@@ -124,10 +124,24 @@ export const GET_ALL_MATERIALS_FOR_ORG = gql`
       id
       name
       materialSuppliers {
+        id
         organizationFacility {
           id
           name
           supplierTier
+          attributeAssurances {
+            id
+            effectiveEndDate
+            sustainabilityAttribute {
+              id
+              name
+              level
+              logoUrl
+            }
+            organizationFile {
+              id
+            }
+          }
         }
       }
       attributeAssurances {
@@ -150,6 +164,19 @@ export const GET_ALL_MATERIALS_FOR_ORG = gql`
           organizationFacility {
             id
             name
+          }
+          attributeAssurances {
+            id
+            effectiveEndDate
+            sustainabilityAttribute {
+              id
+              name
+              level
+              logoUrl
+            }
+            organizationFile {
+              id
+            }
           }
         }
       }
@@ -194,11 +221,37 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
       materialSuppliers {
         material {
           name
+          attributeAssurances {
+            id
+            effectiveEndDate
+            organizationFile {
+              id
+            }
+            sustainabilityAttribute {
+              id
+              level
+              logoUrl
+              name
+            }
+          }
         }
       }
       products {
         id
         name
+        attributeAssurances {
+          id
+          effectiveEndDate
+          organizationFile {
+            id
+          }
+          sustainabilityAttribute {
+            id
+            level
+            logoUrl
+            name
+          }
+        }
       }
     }
   }
@@ -235,8 +288,14 @@ export const GET_ALL_PRODUCTS= gql`
           name
           attributeAssurances {
             id
+            effectiveEndDate
+            organizationFile {
+              id
+            }
             sustainabilityAttribute {
               id
+              level
+              logoUrl
               name
             }
           }
@@ -244,8 +303,14 @@ export const GET_ALL_PRODUCTS= gql`
       }
       attributeAssurances {
         id
+        effectiveEndDate
+        organizationFile {
+          id
+        }
         sustainabilityAttribute {
           id
+          level
+          logoUrl
           name
         }
       }
@@ -254,8 +319,14 @@ export const GET_ALL_PRODUCTS= gql`
         name
         attributeAssurances {
           id
+          effectiveEndDate
+          organizationFile {
+            id
+          }
           sustainabilityAttribute {
             id
+            level
+            logoUrl
             name
           }
         }

@@ -409,415 +409,233 @@ export const getSupplierMockById = (id: string) => {
 export const getSupplierMocks = (): SuppliersWithAssurances[] => {
   return [
     {
-      id: '1',
-      name: 'VietWear Garments Co., Ltd.',
+      id: "ofac_rlpejwnhc2d7i3g28ize24rl",
+      name: "Supplier Gamma",
       supplierTier: 1,
-      country: 'Vietnam',
-      attributeAssurances: [
-        {
-          id: '1',
-          effectiveEndDate: null,
-          organizationFile: {
-            id: '123',
-          },
-          sustainabilityAttribute: {
-            id: '1',
-            level: EntityLevel.SUPPLIER,
-            name: 'PFAS-Test',
-          },
-        },
-      ],
+      country: "US",
+      attributeAssurances: [],
       materialSuppliers: [],
-      products: [
-        {
-            id: '1',
-            name: 'T-shirt',
-        }
-      ]
+      products: [],
     },
     {
-      id: '2',
-      name: 'Pritt, Inc.',
-      country: 'China',
+      id: "ofac_nhfgwti6s91duov4okyf0b6z",
+      name: "KNK",
       supplierTier: 1,
+      country: "US",
+      attributeAssurances: [],
+      materialSuppliers: [],
+      products: [],
+    },
+    {
+      id: "ofac_ziiewcq7wmehkgcnt6jhb6re",
+      name: "Supplier 6",
+      supplierTier: 2,
+      country: "US",
       attributeAssurances: [
         {
-          id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          id: "8ce77def-b624-4ce4-8b1b-f3ed0d6bd74e",
           effectiveEndDate: null,
           organizationFile: null,
           sustainabilityAttribute: {
-            id: 'mat_qg9aabgn9a81mb90bijv9dtf',
+            id: "24fd9960-7e35-45a1-8075-f99f2d841de6",
             level: EntityLevel.SUPPLIER,
-            name: 'PFAS test',
+            logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/ZDHC.png",
+            name: "Adherence to ZDHC MRSL",
           },
         },
         {
-          id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
-          effectiveEndDate: null,
+          id: "16e53094-f98d-4051-9a39-8139e49f6acb",
+          effectiveEndDate: addDays(new Date(), 25).toISOString(),
           organizationFile: {
-            id: '123',
+            id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
           },
           sustainabilityAttribute: {
-            id: 'mat_qg9aabgn9a81mb90bijv9dtf',
-            level: EntityLevel.SUPPLIER,
-            name: 'Bluesign',
-            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Bluesign.png',
+            id: "11739d63-10c6-4849-af49-e6a7f9e59f81",
+            level: EntityLevel.PRODUCT,
+            name: "Altitude Sports",
           },
         },
         {
-          id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
-          effectiveEndDate: subDays(new Date(), 5).toISOString(), // Expired
+          id: "b1a880e6-4c82-4b4d-bd84-cfe354c13129",
+          effectiveEndDate: addDays(new Date(), 75).toISOString(),
           organizationFile: {
-            id: '123',
+            id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
           },
           sustainabilityAttribute: {
-            id: "c8396184-16c5-46fb-a772-44b097473a3d",
-            level: EntityLevel.SUPPLIER,
-            name: "ISO 26000 - Social Responsibility",
-            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/ISO+26000.png',
-          }
+            id: "9d148721-1bf0-4e6f-bf7e-d037a30b8718",
+            level: EntityLevel.MATERIAL,
+            name: "Arylamines",
+          },
         },
         {
-          id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
+          id: "5505336d-445f-4078-a25a-098f683a4710",
           effectiveEndDate: null,
           organizationFile: null,
           sustainabilityAttribute: {
-            id: 'mat_qg9aabgn9a81mb90bijv9dtf',
-            level: EntityLevel.SUPPLIER,
-            name: 'Certified Organic',
-          },
-        },
-        {
-          id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
-          effectiveEndDate: addDays(new Date(), 25).toISOString(), // Expiring
-          organizationFile: {
-            id: '123',
-          },
-          sustainabilityAttribute: {
-            id: "a99e4eff-72ee-40f4-a476-0385ac6f52d3",
-            level: EntityLevel.SUPPLIER,
-            name: "Worldwide Responsible Accredited Production (WRAP)",
-            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png',
+            id: "da1bcee4-5118-4dc6-9fa5-cdec1e26827d",
+            level: EntityLevel.ORGANIZATION,
+            name: "B-Corp Certification",
           },
         }
       ],
       materialSuppliers: [
         {
           material: {
-            name: 'Cotton',
+            name: "Material 10",
+            attributeAssurances: [],
           },
         },
         {
           material: {
-            name: 'Polyester',
-          },
-        },
-      ],
-      products: [
-        {
-          id: '2',
-          name: 'Pants',
-        },
-        {
-          id: '2',
-          name: 'Product 1',
-        },
-        {
-          id: '2',
-          name: 'Product 2',
-        },
-        {
-          id: '2',
-          name: 'Product 3',
-        },
-        {
-          id: '2',
-          name: 'Product 4',
-        },
-      ]
-    },
-    {
-      id: '3',
-      name: 'Smotherman, Inc.',
-      country: 'Vietnam',
-      supplierTier: 2,
-      attributeAssurances: [
-        {
-          id: '4',
-          effectiveEndDate: null,
-          organizationFile: null,
-          sustainabilityAttribute: {
-            id: '4',
-            level: EntityLevel.SUPPLIER,
-            name: 'bluesign',
-          },
-        },
-        {
-          id: '5',
-          effectiveEndDate: null,
-          organizationFile: null,
-          sustainabilityAttribute: {
-            id: '5',
-            level: EntityLevel.SUPPLIER,
-            name: 'Lead-Test',
-          },
-        },
-      ],
-      materialSuppliers: [
-        {
-          material: {
-            name: 'Cotton',
+            name: "Material 2",
+            attributeAssurances: [],
           },
         },
         {
           material: {
-            name: 'Polyester',
+            name: "Material 8",
+            attributeAssurances: [
+              {
+                id: "96ae4fab-9641-4488-b50e-da998dd786d6",
+                effectiveEndDate: null,
+                organizationFile: null,
+                sustainabilityAttribute: {
+                  id: "6ebfad9b-39de-4ad3-aa45-4af4d2232ba7",
+                  level: EntityLevel.PRODUCT,
+                  logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Bluesign+Product.png",
+                  name: "Bluesign Product",
+                },
+              },
+              {
+                id: "6fbefc76-53d3-446d-bb0e-120a15ba3fce",
+                effectiveEndDate: null,
+                organizationFile: null,
+                sustainabilityAttribute: {
+                  id: "e200cb55-51b9-4851-82df-23b467c8aef4",
+                  level: EntityLevel.ORGANIZATION,
+                  name: "BSCI",
+                },
+              },
+              {
+                id: "aadc599d-5245-457c-9292-a95a3274322e",
+                effectiveEndDate: null,
+                organizationFile: null,
+                sustainabilityAttribute: {
+                  id: "057a266f-ab44-4b34-876f-14fc3edb92fc",
+                  level: EntityLevel.MATERIAL,
+                  name: "BPA",
+                },
+              }
+            ],
           },
-        },
-        {
-          material: {
-            name: 'Material 1',
-          },
-        },
-        {
-          material: {
-            name: 'Material 2',
-          },
-        },
+        }
       ],
       products: [],
     },
     {
-      id: '4',
-      name: 'Menzie, Inc.',
-      country: 'Vietnam',
-      supplierTier: 2,
-      attributeAssurances: [
-        {
-          id: '6',
-          effectiveEndDate: null,
-          organizationFile: null,
-          sustainabilityAttribute: {
-            id: '6',
-            level: EntityLevel.SUPPLIER,
-            name: 'PFAS-Test',
-          },
-        },
-        {
-          id: '7',
-          effectiveEndDate: null,
-          organizationFile: null,
-          sustainabilityAttribute: {
-            id: '7',
-            level: EntityLevel.SUPPLIER,
-            name: 'bluesign',
-          },
-        },
-      ],
-      materialSuppliers: [
-        {
-          material: {
-            name: 'Cotton',
-          },
-        },
-        {
-          material: {
-            name: 'Polyester',
-          },
-        },
-      ],
-      products: []
-    },
-    {
-      id: '5',
-      name: 'Want, Inc.',
-      country: 'Vietnam',
-      supplierTier: 2,
-      attributeAssurances: [
-        {
-          id: '8',
-          effectiveEndDate: null,
-          organizationFile: null,
-          sustainabilityAttribute: {
-            id: '8',
-            level: EntityLevel.SUPPLIER,
-            name: 'PFAS-Test',
-          },
-        },
-        {
-          id: '9',
-          effectiveEndDate: null,
-          organizationFile: null,
-          sustainabilityAttribute: {
-            id: '9',
-            level: EntityLevel.SUPPLIER,
-            name: 'bluesign',
-          },
-        },
-      ],
-      materialSuppliers: [
-        {
-          material: {
-            name: 'Cotton',
-          },
-        },
-        {
-          material: {
-            name: 'Polyester',
-          },
-        },
-      ],
-      products: []
-    },
-    {
-      id: '6',
-      name: 'Tattershall, Inc.',
-      country: 'Vietnam',
-      supplierTier: 2,
-      attributeAssurances: [
-        {
-          id: '10',
-          effectiveEndDate: null,
-          organizationFile: null,
-          sustainabilityAttribute: {
-            id: '10',
-            level: EntityLevel.SUPPLIER,
-            name: 'Lead-Test',
-          },
-        },
-        {
-          id: '11',
-          effectiveEndDate: null,
-          organizationFile: null,
-          sustainabilityAttribute: {
-            id: '11',
-            level: EntityLevel.SUPPLIER,
-            name: 'phthalate',
-          },
-        },
-      ],
-      materialSuppliers: [
-        {
-          material: {
-            name: 'Cotton',
-          },
-        },
-        {
-          material: {
-            name: 'Polyester',
-          },
-        },
-      ],
-      products: []
-    },
-    {
-      id: '7',
-      name: 'Panek, Inc.',
-      country: 'Vietnam',
+      id: "ofac_urbq1tb8hrt430fkcgjvet6v",
+      name: "Supplier 5",
       supplierTier: 1,
+      country: "",
       attributeAssurances: [
         {
-          id: '12',
-          effectiveEndDate: null,
-          organizationFile: null,
+          id: "db61726d-69f5-4b61-87ba-673b476cfe82",
+          effectiveEndDate: addDays(new Date(), 75).toISOString(),
+          organizationFile: {
+            id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+          },
           sustainabilityAttribute: {
-            id: '12',
-            level: EntityLevel.SUPPLIER,
-            name: 'PFAS-Test',
+            id: "d84409f2-e671-42b8-845e-437d941938a0",
+            level: EntityLevel.ORGANIZATION,
+            name: "1% for the Planet",
           },
         },
         {
-          id: '13',
+          id: "dca7bd7b-b77b-4bb6-a983-70660603c6af",
           effectiveEndDate: null,
           organizationFile: null,
           sustainabilityAttribute: {
-            id: '13',
-            level: EntityLevel.SUPPLIER,
-            name: 'Lead-Test',
+            id: "11739d63-10c6-4849-af49-e6a7f9e59f81",
+            level: EntityLevel.PRODUCT,
+            name: "Altitude Sports",
           },
         },
+        {
+          id: "569b381b-3173-4b7e-a969-fbed4a2357a2",
+          effectiveEndDate: addDays(new Date(), 35).toISOString(),
+          organizationFile: {
+            id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+          },
+          sustainabilityAttribute: {
+            id: "24fd9960-7e35-45a1-8075-f99f2d841de6",
+            level: EntityLevel.SUPPLIER,
+            logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/ZDHC.png",
+            name: "Adherence to ZDHC MRSL",
+          },
+        },
+        {
+          id: "a2a5b0dd-efce-4040-9cdf-e2e38fa01327",
+          effectiveEndDate: null,
+          organizationFile: null,
+          sustainabilityAttribute: {
+            id: "6fc74c15-cf95-4a4a-95ae-4f0f0eb3c401",
+            level: EntityLevel.MATERIAL,
+            name: "AP & APEO",
+          },
+        }
       ],
       materialSuppliers: [],
-      products: [
-        {
-            id: '7',
-            name: 'Dress',
-        }
-      ]
+      products: [],
     },
     {
-      id: '8',
-      name: 'Faul, Inc.',
-      country: 'Vietnam',
+      id: "ofac_ij8qfc31mhiz4l5ku7khi4e2",
+      name: "Example Supplier 1234",
       supplierTier: 1,
+      country: "USA",
       attributeAssurances: [
         {
-          id: '14',
+          id: "4e764c02-9545-47fc-a93e-c8f7872fd632",
           effectiveEndDate: null,
           organizationFile: null,
           sustainabilityAttribute: {
-            id: '14',
+            id: "a99e4eff-72ee-40f4-a476-0385ac6f52d3",
             level: EntityLevel.SUPPLIER,
-            name: 'PFAS-Test',
+            logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png",
+            name: "Worldwide Responsible Accredited Production (WRAP)",
           },
         },
         {
-          id: '15',
+          id: "ee02b9df-3fa2-404b-8da6-233edff6db3a",
           effectiveEndDate: null,
           organizationFile: null,
           sustainabilityAttribute: {
-            id: '15',
-            level: EntityLevel.SUPPLIER,
-            name: 'Lead-Test',
+            id: "68d7ad19-f176-4b84-8c80-6bc395569467",
+            level: EntityLevel.MATERIAL,
+            logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png",
+            name: "Global Recycled Standard",
           },
-        },
-      ],
-      materialSuppliers: [
-        {
-          material: {
-            name: 'Cotton',
-          },
-        },
-        {
-          material: {
-            name: 'Polyester',
-          },
-        },
-      ],
-      products: [
-        {
-          id: '8',
-          name: 'Skirt',
         }
-      ]
+      ],
+      materialSuppliers: [],
+      products: [],
     },
     {
-      id: '9',
-      name: 'Hushon, Inc.',
-      country: 'Vietnam',
-      supplierTier: 1,
+      id: "ofac_xim58848n1fgxinkl3qzur71",
+      name: "Supplier Zeta",
+      supplierTier: 2,
+      country: "US",
       attributeAssurances: [],
       materialSuppliers: [],
-      products: [
-        {
-          id: '9',
-          name: 'Hat',
-        }
-      ]
+      products: [],
     },
     {
-      id: '10',
-      name: 'Supplier Alpha',
-      country: 'US',
+      id: "ofac_r7gn3op6kmfiu8il0pudcq15",
+      name: "Coats Phong Phu Co. Ltd.",
       supplierTier: 2,
+      country: null,
       attributeAssurances: [],
       materialSuppliers: [],
-      products: [
-        {
-          id: '10',
-          name: 'Shoes',
-        }
-      ]
+      products: [],
     },
   ];
 };

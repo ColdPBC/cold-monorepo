@@ -1,6 +1,12 @@
-import {DataGridCellHoverPopover, ErrorFallback, MuiDataGrid, Spinner} from "@coldpbc/components";
+import {
+  DataGridCellHoverPopover,
+  ErrorFallback,
+  MuiDataGrid,
+  Spinner,
+  SustainabilityAttributeColumnList
+} from "@coldpbc/components";
 import {useAuth0Wrapper, useGraphQLSWR} from "@coldpbc/hooks";
-import {ProductsQuery} from "@coldpbc/interfaces";
+import {ProductsQuery, SustainabilityAttribute, SustainabilityAttributeAssurance} from "@coldpbc/interfaces";
 import {
   GridToolbarColumnsButton,
   GridToolbarContainer,
@@ -10,18 +16,37 @@ import {
 import React from "react";
 import {get, uniq} from "lodash";
 import {withErrorBoundary} from "react-error-boundary";
+import {mapAttributeAssurancesToSustainabilityAttributes} from "@coldpbc/lib";
+import {useFlags} from "launchdarkly-react-client-sdk";
 
 
-const getColumnRows = (products: ProductsQuery[]) => {
-  // get sustainability attributes for each product
+const getColumnRows = (
+  products: ProductsQuery[],
+  flags: {
+    [key: string]: boolean
+  }) => {
   return products.map(product => {
+    const extraAttributes: SustainabilityAttributeAssurance[] = [];
+
+    if(flags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
+      extraAttributes.push(...product.organizationFacility?.attributeAssurances ?? []);
+      extraAttributes.push(...product.productMaterials.map(prodMaterial => prodMaterial.material?.attributeAssurances ?? []).flat());
+    }
+    // get all attribute assurances for the product and related materials and tier 1 supplier
+    const allAttributeAssurances: SustainabilityAttributeAssurance[] = [
+      ...product.attributeAssurances,
+      ...extraAttributes,
+    ]
+
+    const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(allAttributeAssurances);
+
     return {
       id: product.id,
       name: product.name,
       category: product.productCategory ?? '',
       subcategory: product.productSubcategory ?? '',
       description: product.description ?? '',
-      sustainabilityAttributes: uniq(product.attributeAssurances.map(attribute => attribute.sustainabilityAttribute.name)),
+      sustainabilityAttributes: sustainabilityAttributes,
       tier1Supplier: product.organizationFacility?.name ?? '',
       seasonCode: product.seasonCode ?? '',
       upcCode: product.upcCode ?? '',
@@ -33,6 +58,7 @@ const getColumnRows = (products: ProductsQuery[]) => {
 }
 
 export const _ProductsDataGrid = () => {
+  const ldFlags = useFlags();
   const {orgId} = useAuth0Wrapper()
   const productsQuery = useGraphQLSWR<{
     products: ProductsQuery[]
@@ -106,7 +132,7 @@ export const _ProductsDataGrid = () => {
       minWidth: 350,
       renderCell: (params) => {
         return (
-          <DataGridCellHoverPopover params={params} />
+          <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />
         )
       },
     },
@@ -168,7 +194,7 @@ export const _ProductsDataGrid = () => {
     category: string;
     subcategory: string;
     description: string;
-    sustainabilityAttributes: string[];
+    sustainabilityAttributes: SustainabilityAttribute[];
     tier1Supplier: string;
     seasonCode: string;
     upcCode: string;
@@ -182,7 +208,7 @@ export const _ProductsDataGrid = () => {
   }
 
   if(productsQuery.data && get(productsQuery.data, 'data.products', []).length > 0) {
-    rows = getColumnRows(productsQuery.data.data.products)
+    rows = getColumnRows(productsQuery.data.data.products, ldFlags)
   }
 
   const getToolbar = () => {
