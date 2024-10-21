@@ -33,8 +33,8 @@ export class MaterialSupplier {
 	updatedAt?: Date;
 
 	@Index({ name: 'material_suppliers_organization_id_idx1' })
-	@Property({ type: 'text', nullable: true })
-	organizationId?: string;
+	@Property({ type: 'text' })
+	organizationId!: string;
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof MaterialSupplier, OrgContext>) {

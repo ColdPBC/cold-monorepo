@@ -25,6 +25,6 @@ export class MaterialSupplier {
 	@Field(() => ISODateStringScalar, { nullable: true })
 	updatedAt?: Date;
 
-	@Field(() => String, { nullable: true })
-	organizationId?: string;
+	@Field(() => String)
+	organizationId!: string;
 }

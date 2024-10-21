@@ -699,7 +699,7 @@ model materials {
 model material_suppliers {
   id          String                  @id @default(cuid())
   material_id String
-	organization_id            String?
+	organization_id            String
   supplier_id String
   created_at  DateTime?               @default(now()) @db.Timestamptz(6)
   updated_at  DateTime?               @updatedAt @db.Timestamptz(6)
@@ -717,7 +717,7 @@ model product_materials {
   product_id           String
   material_id          String?
   material_supplier_id String?
-	organization_id			 String?
+	organization_id			 String
   created_at           DateTime?  @default(now()) @db.Timestamptz(6)
   updated_at           DateTime?  @updatedAt @db.Timestamptz(6)
   material             materials? @relation(fields: [material_id], references: [id], onDelete: Cascade)
