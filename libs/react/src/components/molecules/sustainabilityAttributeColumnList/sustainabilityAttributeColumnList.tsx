@@ -92,6 +92,7 @@ const _SustainabilityAttributeColumnList: React.FC<SustainabilityAttributeColumn
 			{visibleAttributes.map(sustainabilityAttribute => (
 				<SustainabilityAttributeLogoWithStatus
           sustainabilityAttribute={sustainabilityAttribute}
+          key={sustainabilityAttribute.id}
 				/>
 			))}
 			{overflowItemCount > 0 && <SustainabilityAttributeLogoOverflow overflowItemCount={overflowItemCount} />}
