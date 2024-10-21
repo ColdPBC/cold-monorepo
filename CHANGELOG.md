@@ -1,3 +1,17 @@
+# [1.435.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.434.1...v1.435.0) (2024-10-21)
+
+
+### Bug Fixes
+
+* add unique key to SustainabilityAttributeLogoWithStatus component ([effa83f](https://github.com/ColdPBC/cold-monorepo/commit/effa83f9e6d4030f94b73936e7ad976eab33d419))
+* fix casing issues in SVG attribute names ([b6ddc9d](https://github.com/ColdPBC/cold-monorepo/commit/b6ddc9d0851336728b1e4418fcf041e747761b13))
+
+
+### Features
+
+* add product detail page and row click navigation ([4c5e8ac](https://github.com/ColdPBC/cold-monorepo/commit/4c5e8ac136b1dca1f1faae12a7c6fbc4323c7ae0))
+* add Storybook entry for ProductDetail page ([f9dd084](https://github.com/ColdPBC/cold-monorepo/commit/f9dd08415be4b12619fb08f2ad6019bb529735d8))
+
 ## [1.434.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.434.0...v1.434.1) (2024-10-21)
 
 
