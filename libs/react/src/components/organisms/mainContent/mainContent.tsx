@@ -6,6 +6,7 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export interface MainContentProps {
   title?: string;
+  subTitle?: string;
   headerElement?: ReactNode;
   isLoading?: boolean;
   className?: string;
@@ -18,6 +19,28 @@ export interface MainContentProps {
 
 export function MainContent(props: PropsWithChildren<MainContentProps>) {
   const ldFlags = useFlags();
+
+  const getTitle = () => {
+    return (
+      <div className={'flex flex-col gap-[4px]'}>
+        {
+          props.title && (
+            <div data-testid={'main-content-title'} className="text-h1 self-stretch text-tc-primary">
+              {props.title}
+            </div>
+          )
+        }
+        {
+          props.subTitle && (
+            <div data-testid={'main-content-subtitle'} className="text-body self-stretch text-tc-primary">
+              {props.subTitle}
+            </div>
+          )
+        }
+      </div>
+    )
+  }
+
   if(props.breadcrumbs){
     return (
       <div className={twMerge('w-[1129px] flex flex-col items-center gap-6 text-tc-primary', props.className)}>
@@ -26,11 +49,7 @@ export function MainContent(props: PropsWithChildren<MainContentProps>) {
           <div
             className={'w-full flex flex-row justify-between items-center'}>
             {
-              props.title && (
-                <div data-testid={'main-content-title'} className="text-h1 self-stretch text-tc-primary">
-                  {props.title}
-                </div>
-              )
+              getTitle()
             }
             {
               props.headerElement && props.headerElement
@@ -40,7 +59,6 @@ export function MainContent(props: PropsWithChildren<MainContentProps>) {
         </div>
       </div>
     );
-
   } else {
     return (
       <div
