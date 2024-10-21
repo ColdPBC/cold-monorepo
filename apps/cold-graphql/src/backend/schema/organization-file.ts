@@ -9,6 +9,8 @@ import { OrganizationComplianceNoteFile } from './organization-compliance-note-f
 import { VectorRecord } from './vector-record';
 import { OrganizationFilesType, OrganizationFile as OrmOrganizationFile } from '../entities';
 import { connection } from '../database';
+import { s3StorageProvider } from '../libs/providers/s3.provider';
+import { MediaField } from '@exogee/graphweaver-storage-provider';
 
 graphweaverMetadata.collectEnumInformation({ target: OrganizationFilesType, name: 'OrganizationFilesType' });
 
@@ -16,6 +18,16 @@ graphweaverMetadata.collectEnumInformation({ target: OrganizationFilesType, name
 	provider: new MikroBackendProvider(OrmOrganizationFile, connection),
 })
 export class OrganizationFile {
+	// "resourceId" must match the name of the field on the entity that gets the url from s3
+	@MediaField({ storageProvider: s3StorageProvider })
+	downloadUrl?: string;
+
+	@MediaField({ storageProvider: s3StorageProvider })
+	uploadUrl?: string;
+
+	@MediaField({ storageProvider: s3StorageProvider })
+	deleteUrl?: string;
+
 	@Field(() => String, { nullable: true })
 	bucket?: string;
 
@@ -25,7 +37,7 @@ export class OrganizationFile {
 	@Field(() => String)
 	originalName!: string;
 
-	@RelationshipField<OrganizationFile>(() => Organization, { id: (entity) => entity.organization?.id })
+	@RelationshipField<OrganizationFile>(() => Organization, { id: entity => entity.organization?.id })
 	organization!: Organization;
 
 	@Field(() => String, { nullable: true })
@@ -43,7 +55,7 @@ export class OrganizationFile {
 	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
-	@RelationshipField<OrganizationFile>(() => Integration, { id: (entity) => entity.integration?.id, nullable: true })
+	@RelationshipField<OrganizationFile>(() => Integration, { id: entity => entity.integration?.id, nullable: true })
 	integration?: Integration;
 
 	@Field(() => String, { nullable: true })

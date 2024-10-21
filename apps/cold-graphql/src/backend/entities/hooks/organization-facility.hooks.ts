@@ -18,7 +18,7 @@ export class OrganizationFacilityHooks extends BaseSidecar {
 			}
 		});
 
-		return params;
+		return super.beforeCreateHook(params);
 	}
 	// Overrride BeforeReadHook here:
 

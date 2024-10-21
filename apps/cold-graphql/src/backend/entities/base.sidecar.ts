@@ -5,40 +5,22 @@ import { CreateOrUpdateHookParams, DeleteHookParams, ReadHookParams } from '@exo
 import { OrgContext } from '../libs/acls/acl_policies';
 import { set } from 'lodash';
 import { GuidPrefixes } from '../libs/cuid/compliance.enums';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { connection } from '../database';
+import { getConnection } from '../database.config';
 
 export class BaseSidecar {
 	logger;
 	mqtt: MqttService;
 	entityName: string;
 	secrets: any;
-	isOrgScoped: boolean;
-	orgScopedTables = [
-		'actions',
-		'attribute_assurances',
-		'category_data',
-		'facility_footprints',
-		'integrations',
-		'materials',
-		'oranization_compliance',
-		'organization_compliance_ai_response_files',
-		'organization_ai_responses',
-		'organization_compliance_statuses',
-		'organization_compliances_old',
-		'organization_facilities',
-		'organizaton_files',
-		'organizations',
-		'products',
-		'survey_data',
-		'survey_definitions',
-		'survey_status',
-		'sustainability_attributes',
-		'utility_bills',
-	];
+	provider: MikroBackendProvider<any>;
+
 	constructor(readonly entity: any, readonly tableName: string) {
 		this.logger = new WorkerLogger('organization');
 		this.mqtt = mqttService;
 		this.entityName = this.entity.name;
-		this.isOrgScoped = this.orgScopedTables.includes(this.tableName);
+		this.provider = new MikroBackendProvider(this.entity, getConnection());
 	}
 
 	/**
@@ -59,7 +41,7 @@ export class BaseSidecar {
 		return params;
 	}
 
-	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>, provider: any) {
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
 		this.logger.log(`before create ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 
 		for (const item of params.args.items) {
@@ -67,8 +49,8 @@ export class BaseSidecar {
 			set(item, 'updatedAt', new Date());
 			set(item, 'createdAt', new Date());
 
-			if (this.isOrgScoped) {
-				if (!params.context.user.isColdAdmin && item.organization?.id !== params.context.user.organization?.id) {
+			if (Object.prototype.hasOwnProperty.call(this.entity.prototype, 'organization')) {
+				if (!params.context.user.isColdAdmin) {
 					set(item, 'organization.id', params.context.user.organization?.id);
 				}
 			}

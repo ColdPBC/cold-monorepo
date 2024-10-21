@@ -19,6 +19,7 @@ export const readOnlyEntities: string[] = [
 	'compliance_sections',
 	'component_definitions',
 	'emission_scopes',
+	'organizations',
 	'organization_compliance_ai_response_files',
 	'organization_compliance_ai_responses',
 	'policy_definitions',
