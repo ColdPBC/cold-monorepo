@@ -1,7 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
-import {ProductDetail} from '@coldpbc/components';
+import {ProductDetail, SupplierDetail} from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryMockProvider } from '@coldpbc/mocks';
+import {Route, Routes} from "react-router-dom";
 
 const meta: Meta<typeof ProductDetail> = {
   title: 'Pages/ProductDetail',
@@ -22,7 +23,9 @@ export const Default: Story = {
       <StoryMockProvider memoryRouterProps={{
         initialEntries: [`/products/${args.id}`],
       }}>
-        <ProductDetail />
+        <Routes>
+          <Route path={'/products/:id'} element={<ProductDetail />} />
+        </Routes>
       </StoryMockProvider>
     );
   },

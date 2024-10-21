@@ -460,7 +460,7 @@ export const defaultGraphqlMocks: {
       const {id} = variables as {id: string};
       return Promise.resolve({
         data: {
-          materials: getProductsMockById(id),
+          product: getProductsMockById(id),
         },
       })
     }
