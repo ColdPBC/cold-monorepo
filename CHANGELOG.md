@@ -1,3 +1,10 @@
+# [1.434.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.433.0...v1.434.0) (2024-10-21)
+
+
+### Features
+
+* add schema validated data ingestion tool ([45075e4](https://github.com/ColdPBC/cold-monorepo/commit/45075e4bc55adf2fefb5998f47aec80807f87ae3))
+
 # [1.433.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.432.0...v1.433.0) (2024-10-21)
 
 
