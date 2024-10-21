@@ -1,3 +1,10 @@
+## [1.434.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.434.0...v1.434.1) (2024-10-21)
+
+
+### Bug Fixes
+
+* **schemas:** update transform logic for peak_design_schema ([aad8e87](https://github.com/ColdPBC/cold-monorepo/commit/aad8e878687bb28f316b65301f81bfd875849437))
+
 # [1.434.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.433.0...v1.434.0) (2024-10-21)
 
 
