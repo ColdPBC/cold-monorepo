@@ -1,7 +1,7 @@
 import { ProductMaterialHooks } from '../hooks/product-material.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { Entity, Index, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { Material } from './material';
 import { Product } from './product';
 
@@ -34,6 +34,10 @@ export class ProductMaterial {
 
 	@Property({ type: 'datetime', length: 6, nullable: true })
 	updatedAt?: Date;
+
+	@Index({ name: 'product_materials_organization_id_idx1' })
+	@Property({ type: 'text', nullable: true })
+	organizationId?: string;
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof ProductMaterial, OrgContext>) {

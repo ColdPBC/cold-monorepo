@@ -60,6 +60,9 @@ export class Product {
 	@Field(() => String, { nullable: true })
 	productSubcategory?: string;
 
+	@Field(() => String, { nullable: true })
+	brandProductSku?: string;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'product' })
 	attributeAssurances!: AttributeAssurance[];
 

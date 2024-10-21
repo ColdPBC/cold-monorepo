@@ -659,6 +659,7 @@ model products {
   metadata                   Json?
   season_code                String?
 	upc_code									 String?
+	brand_product_sku					 String?
 	brand_product_id					 String?
 	supplier_product_id				 String?
   supplier_id                String?
@@ -674,6 +675,7 @@ model products {
 	@@index([product_category], map: "brand_category_idx1")
 	@@index([product_subcategory], map: "brand_subcategory_idx1")
 	@@index([brand_product_id], map: "brand_product_id_idx1")
+	@@index([brand_product_sku], map: "brand_product_sku_idx1")
 	@@index([supplier_product_id], map: "supplier_product_id_idx1")
   @@index([organization_id], map: "products_organization_id_idx1")
 }
@@ -697,6 +699,7 @@ model materials {
 model material_suppliers {
   id          String                  @id @default(cuid())
   material_id String
+	organization_id            String?
   supplier_id String
   created_at  DateTime?               @default(now()) @db.Timestamptz(6)
   updated_at  DateTime?               @updatedAt @db.Timestamptz(6)
@@ -705,7 +708,8 @@ model material_suppliers {
 
   @@unique([material_id, supplier_id], name: "materialSupplierKey")
   @@index([supplier_id], map: "material_suppliers_supplier_id_idx1")
-  @@index([material_id], map: "material_suppliers_material_id_idx1")
+	@@index([organization_id], map: "material_suppliers_organization_id_idx1")
+	@@index([material_id], map: "material_suppliers_material_id_idx1")
 }
 
 model product_materials {
@@ -713,6 +717,7 @@ model product_materials {
   product_id           String
   material_id          String?
   material_supplier_id String?
+	organization_id			 String?
   created_at           DateTime?  @default(now()) @db.Timestamptz(6)
   updated_at           DateTime?  @updatedAt @db.Timestamptz(6)
   material             materials? @relation(fields: [material_id], references: [id], onDelete: Cascade)
@@ -720,6 +725,7 @@ model product_materials {
 
 	@@unique([material_id, product_id], name: "materialProductKey")
   @@index([material_id], map: "product_materials_material_id_idx1")
+	@@index([organization_id], map: "product_materials_organization_id_idx1")
   @@index([product_id], map: "product_materials_product_id_idx1")
 }
 

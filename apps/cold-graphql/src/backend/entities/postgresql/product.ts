@@ -71,6 +71,10 @@ export class Product {
 	@Property({ type: 'text', nullable: true })
 	productSubcategory?: string;
 
+	@Index({ name: 'brand_product_sku_idx1' })
+	@Property({ type: 'text', nullable: true })
+	brandProductSku?: string;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'product' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 
