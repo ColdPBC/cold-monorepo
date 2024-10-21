@@ -1,3 +1,15 @@
+# [1.433.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.432.0...v1.433.0) (2024-10-21)
+
+
+### Bug Fixes
+
+* **prisma:** make organization_id required in material_suppliers and product_materials ([ecd5933](https://github.com/ColdPBC/cold-monorepo/commit/ecd59332a1dd90be4895fb1404b4faf283d2636f))
+
+
+### Features
+
+* add organization_id to material_suppliers and product_materials, add brand_product_sku to products ([775ce2b](https://github.com/ColdPBC/cold-monorepo/commit/775ce2be6279e78bdc83f1cb85c409dc03d2a579))
+
 # [1.432.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.431.2...v1.432.0) (2024-10-18)
 
 
