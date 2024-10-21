@@ -394,6 +394,23 @@ export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG = gql`
   }
 `;
 
+export const GET_PRODUCT = gql`
+  query GetProduct($id: ID!) {
+    product(id: $id) {
+      id
+      name
+      productCategory
+      productSubcategory
+      description
+      metadata
+      seasonCode
+      upcCode
+      brandProductId
+      supplierProductId
+    }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -416,4 +433,5 @@ export const queries: {
   CREATE_PRODUCT_MATERIAL: CREATE_PRODUCT_MATERIAL,
   CREATE_SUPPLIER: CREATE_SUPPLIER,
   UPDATE_PRODUCT: UPDATE_PRODUCT,
+  GET_PRODUCT: GET_PRODUCT,
 };

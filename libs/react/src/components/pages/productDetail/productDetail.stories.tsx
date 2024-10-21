@@ -14,9 +14,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => {
+  args: {
+    id: "op_c0y7e5zsg09r0kxxlw2ha9cm"
+  },
+  render: (args) => {
     return (
-      <StoryMockProvider>
+      <StoryMockProvider memoryRouterProps={{
+        initialEntries: [`/products/${args.id}`],
+      }}>
         <ProductDetail />
       </StoryMockProvider>
     );
