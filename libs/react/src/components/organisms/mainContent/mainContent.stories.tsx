@@ -6,7 +6,7 @@ import {ButtonTypes} from "@coldpbc/enums";
 import React from "react";
 
 const meta = {
-  title: 'Molecules/MainContent',
+  title: 'Organisms/MainContent',
   component: MainContent,
   tags: ['autodocs'],
   decorators: [withKnobs],
@@ -68,4 +68,18 @@ export const WithBreadCrumbs: Story = {
 			</StoryMockProvider>
 		);
 	},
+};
+
+export const WithSubtitle: Story = {
+  args: {
+    title: 'MainContent',
+    subTitle: 'Subtitle Under Content',
+  },
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <MainContent {...args} />
+      </StoryMockProvider>
+    );
+  },
 };
