@@ -18,6 +18,7 @@ import {get, uniq} from "lodash";
 import {withErrorBoundary} from "react-error-boundary";
 import {mapAttributeAssurancesToSustainabilityAttributes} from "@coldpbc/lib";
 import {useFlags} from "launchdarkly-react-client-sdk";
+import {useNavigate} from "react-router-dom";
 
 
 const getColumnRows = (
@@ -59,6 +60,7 @@ const getColumnRows = (
 
 export const _ProductsDataGrid = () => {
   const ldFlags = useFlags();
+  const navigate = useNavigate();
   const {orgId} = useAuth0Wrapper()
   const productsQuery = useGraphQLSWR<{
     products: ProductsQuery[]
@@ -245,6 +247,11 @@ export const _ProductsDataGrid = () => {
         rows={rows}
         slots={{ toolbar: getToolbar }}
         rowHeight={114}
+        onRowClick={(params) => {
+          if(ldFlags.showProductDetailPageCold1140){
+            navigate(`/products/${params.id}`)
+          }
+        }}
       />
     </div>
   )
