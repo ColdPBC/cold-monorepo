@@ -11,16 +11,14 @@ export const InputSchema = z.object({
 		"COUNTRY": z.string().optional(),
 	})
 	.transform(data => {
-		const [tier2SupplierName, tier2SupplierCountry] = data['Supplier Info'] ? data['Supplier Info'].split(' ').slice(0, 2) : ['Unknown Supplier', 'Unknown Country'];
-
 		return {
 			productName: data['Product Name - Color'],
 			upc: data['SKU'],
 			seasonCode: 'DEFAULT', // Default value
 			tier1SupplierName: data['Product Vendor Name'],
-			materialName: data['Material Description'],
-			tier2SupplierName: data['Product Vendor Name'],
-			tier2SupplierCountry,
+			materialName: data['MATERIAL ITEM DESCRIPTION :'],
+			tier2SupplierName: data['SUPPLIER NAME :'] || 'Unknown Supplier',
+			tier2SupplierCountry: data['COUNTRY'] || 'Unknown Country',
 			blueSignMaterial: 'F', // Default value
 		};
 	});

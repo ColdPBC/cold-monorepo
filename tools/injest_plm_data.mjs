@@ -37,25 +37,6 @@ console.log('Injesting from Schema:', Path.resolve(argv.schema));
 const { InputSchema } = await import(Path.resolve(argv.schema));
 
 console.log('Starting transformation...', Path.resolve(argv.input));
-const InjestionSchema = InputSchema.transform(data => {
-	// Extract supplier name and country from the supplierInfo field
-	const [supplierName, country] = data.supplierInfo ? data.supplierInfo.split(' ').slice(0, 2) : [null, null];
-
-	return {
-		productName: data.productName,
-		upc: data.sku,
-		seasonCode: 'DEFAULT', // Default value
-		tier1SupplierName: data.tier1SupplierName || 'Unknown Supplier',
-		materialName: data.materialName,
-		tier2SupplierName: data.productVendorName,
-		tier2SupplierCountry: country || 'Unknown Country',
-		blueSignMaterial: 'F', // Defaulted value
-	};
-});
-
-
-// Load and parse the Zod schema dynamically
-
 // Read the Excel file provided as input
 const workbook = XLSX.readFile(Path.resolve(argv.input));
 const sheetName = workbook.SheetNames[0]; // Assuming the data is in the first sheet
