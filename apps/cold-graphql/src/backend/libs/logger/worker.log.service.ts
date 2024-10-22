@@ -18,6 +18,8 @@ export class WorkerLogger {
 	 * @param meta
 	 */
 	constructor(className: string, meta?: any) {
+		meta = typeof meta === 'string' ? JSON.parse(meta) : JSON.parse(safeStringify(meta));
+
 		this.context = className;
 		this.logger = createLogger(winstonConfig(className, meta)).child({
 			context: className,
@@ -54,13 +56,17 @@ export class WorkerLogger {
 				error.response?.data?.message,
 				safeStringify({
 					error: error?.response?.data,
-					meta: optionalParams,
+					meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 					...this.tags,
 				}),
 			);
 		} else {
 			if (error?.message) {
-				this.logger.error(error?.message, { error, meta: optionalParams, ...this.tags });
+				this.logger.error(error?.message, {
+					error,
+					meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+					...this.tags,
+				});
 			} else if (!error) {
 				this.logger.error(optionalParams.error);
 			}
@@ -76,7 +82,7 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.warn(message, { meta: optionalParams, ...this.tags });
+		this.logger.warn(message, { meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)), ...this.tags });
 	}
 
 	info(message: string, optionalParams?: any | any[]): void {
@@ -88,7 +94,7 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.info(message, { meta: optionalParams, ...this.tags });
+		this.logger.info(message, { meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)), ...this.tags });
 	}
 
 	log(message: string, optionalParams?: any | any[]): void {
@@ -100,7 +106,7 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.info(message, { meta: safeStringify(optionalParams), ...this.tags });
+		this.logger.info(message, { meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)), ...this.tags });
 	}
 
 	verbose(message: string, optionalParams?: any | any[]): void {
@@ -124,7 +130,7 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.debug(message, { meta: optionalParams, ...this.tags });
+		this.logger.debug(message, { meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)), ...this.tags });
 	}
 
 	trace(message: any, optionalParams?: any | any[]): void {
@@ -136,6 +142,6 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.data(message, { meta: optionalParams, ...this.tags });
+		this.logger.data(message, { meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)), ...this.tags });
 	}
 }
