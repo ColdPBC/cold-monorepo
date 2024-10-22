@@ -281,12 +281,6 @@ const seeds: Array<{
     logo_url: `${baseUrl}/ISO+50001.png`,
 	},
 	{
-		name: '1% for the Planet',
-		type: 'THIRD_PARTY',
-		level: 'ORGANIZATION',
-    logo_url: `${baseUrl}/1%25+for+the+planet.png`,
-	},
-	{
 		name: 'BSCI',
 		type: 'THIRD_PARTY',
 		level: 'ORGANIZATION',
@@ -321,24 +315,6 @@ const seeds: Array<{
 		type: 'THIRD_PARTY',
 		level: 'PRODUCT',
     logo_url: `${baseUrl}/Green+Shape.png`,
-	},
-	{
-		name: 'Yonderland',
-		type: 'THIRD_PARTY',
-		level: 'PRODUCT',
-    logo_url: `${baseUrl}/Yonderland.png`,
-	},
-	{
-		name: 'Altitude Sports',
-		type: 'THIRD_PARTY',
-		level: 'PRODUCT',
-    logo_url: `${baseUrl}/Altitude+Sports.png`,
-	},
-	{
-		name: 'Globetrotter',
-		type: 'THIRD_PARTY',
-		level: 'PRODUCT',
-    logo_url: `${baseUrl}/Globetrotter.png`,
 	},
 	{
 		name: 'Bluesign Product',
@@ -700,6 +676,12 @@ const seeds: Array<{
 		level: 'MATERIAL',
     logo_url: `${baseUrl}/generics/Legislation.png`,
 	},
+  {
+    name: 'Bluesign System Partner',
+    type: 'THIRD_PARTY',
+    level: 'ORGANIZATION',
+    logo_url: `${baseUrl}/Bluesign.png`,
+  }
 ];
 
 export async function seedSustainabilityAttributes() {
