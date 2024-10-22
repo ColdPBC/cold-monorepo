@@ -8,6 +8,7 @@ import { CategoryDatum } from './category-datum';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { Material } from './material';
+import { MaterialSupplier } from './material-supplier';
 import { OrganizationCompliance } from './organization-compliance';
 import { OrganizationComplianceAiResponse } from './organization-compliance-ai-response';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
@@ -15,6 +16,7 @@ import { OrganizationCompliancesOld } from './organization-compliances-old';
 import { OrganizationFacility } from './organization-facility';
 import { OrganizationFile } from './organization-file';
 import { Product } from './product';
+import { ProductMaterial } from './product-material';
 import { SurveyDatum } from './survey-datum';
 import { SurveyStatus } from './survey-status';
 import { SustainabilityAttribute } from './sustainability-attribute';
@@ -88,6 +90,9 @@ export class Organization {
 	@OneToMany({ entity: () => Integration, mappedBy: 'organization' })
 	integrations = new Collection<Integration>(this);
 
+	@OneToMany({ entity: () => MaterialSupplier, mappedBy: 'organization' })
+	materialSuppliers = new Collection<MaterialSupplier>(this);
+
 	@OneToMany({ entity: () => Material, mappedBy: 'organization' })
 	materials = new Collection<Material>(this);
 
@@ -108,6 +113,9 @@ export class Organization {
 
 	@OneToMany({ entity: () => OrganizationFile, mappedBy: 'organization' })
 	organizationFiles = new Collection<OrganizationFile>(this);
+
+	@OneToMany({ entity: () => ProductMaterial, mappedBy: 'organization' })
+	productMaterials = new Collection<ProductMaterial>(this);
 
 	@OneToMany({ entity: () => Product, mappedBy: 'organization' })
 	products = new Collection<Product>(this);

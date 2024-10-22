@@ -2,6 +2,7 @@ import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Material } from './material';
+import { Organization } from './organization';
 import { OrganizationFacility } from './organization-facility';
 import { MaterialSupplier as OrmMaterialSupplier } from '../entities';
 import { connection } from '../database';
@@ -25,6 +26,6 @@ export class MaterialSupplier {
 	@Field(() => ISODateStringScalar, { nullable: true })
 	updatedAt?: Date;
 
-	@Field(() => String)
-	organizationId!: string;
+	@RelationshipField<MaterialSupplier>(() => Organization, { id: (entity) => entity.organization?.id })
+	organization!: Organization;
 }

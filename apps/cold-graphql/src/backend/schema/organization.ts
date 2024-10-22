@@ -7,6 +7,7 @@ import { CategoryDatum } from './category-datum';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { Material } from './material';
+import { MaterialSupplier } from './material-supplier';
 import { OrganizationCompliance } from './organization-compliance';
 import { OrganizationComplianceAiResponse } from './organization-compliance-ai-response';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
@@ -14,6 +15,7 @@ import { OrganizationCompliancesOld } from './organization-compliances-old';
 import { OrganizationFacility } from './organization-facility';
 import { OrganizationFile } from './organization-file';
 import { Product } from './product';
+import { ProductMaterial } from './product-material';
 import { SurveyDatum } from './survey-datum';
 import { SurveyStatus } from './survey-status';
 import { SustainabilityAttribute } from './sustainability-attribute';
@@ -80,6 +82,9 @@ export class Organization {
 	@RelationshipField<Integration>(() => [Integration], { relatedField: 'organization' })
 	integrations!: Integration[];
 
+	@RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'organization' })
+	materialSuppliers!: MaterialSupplier[];
+
 	@RelationshipField<Material>(() => [Material], { relatedField: 'organization' })
 	materials!: Material[];
 
@@ -100,6 +105,9 @@ export class Organization {
 
 	@RelationshipField<OrganizationFile>(() => [OrganizationFile], { relatedField: 'organization' })
 	organizationFiles!: OrganizationFile[];
+
+	@RelationshipField<ProductMaterial>(() => [ProductMaterial], { relatedField: 'organization' })
+	productMaterials!: ProductMaterial[];
 
 	@RelationshipField<Product>(() => [Product], { relatedField: 'organization' })
 	products!: Product[];
