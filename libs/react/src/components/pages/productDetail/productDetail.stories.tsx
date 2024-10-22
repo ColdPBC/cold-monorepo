@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import {ProductDetail, SupplierDetail} from '@coldpbc/components';
+import {ProductDetail} from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryMockProvider } from '@coldpbc/mocks';
 import {Route, Routes} from "react-router-dom";
