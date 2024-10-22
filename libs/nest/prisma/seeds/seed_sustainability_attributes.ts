@@ -107,7 +107,7 @@ const seeds: Array<{
     logo_url: `${baseUrl}/GOTS.png`,
 	},
   {
-    name: 'Better Cotton Initative',
+    name: 'Better Cotton Initiative',
     type: 'THIRD_PARTY',
     level: 'MATERIAL',
     logo_url: `${baseUrl}/Better+Cotton+Iniative.png`,
@@ -227,7 +227,7 @@ const seeds: Array<{
     logo_url: `${baseUrl}/Carbon+Trust+-+Carbon+Reduction+Certification.png`,
 	},
 	{
-		name: 'Carbon Trust - Lower Co2 Lable',
+		name: 'Carbon Trust - Lower Co2 Label',
 		type: 'THIRD_PARTY',
 		level: 'ORGANIZATION',
     logo_url: `${baseUrl}/Carbon+Trust+-+Lower+Co2+Lable.png`,
@@ -299,7 +299,7 @@ const seeds: Array<{
     logo_url: `${baseUrl}/Ethical+Trading+Initiative+Base+Code.png`,
 	},
 	{
-		name: 'Fair Trade Quaterly Reporting',
+		name: 'Fair Trade Quarterly Reporting',
 		type: 'THIRD_PARTY',
 		level: 'PRODUCT',
     logo_url: `${baseUrl}/Fairtrade.png`,
@@ -575,7 +575,7 @@ const seeds: Array<{
     logo_url: `${baseUrl}/generics/Policy+or+Statement.png`,
 	},
 	{
-		name: 'Digial Product Passport (DPP)',
+		name: 'Digital Product Passport (DPP)',
 		type: 'THIRD_PARTY',
 		level: 'PRODUCT',
     logo_url: `${baseUrl}/generics/Legislation.png`,
@@ -587,7 +587,7 @@ const seeds: Array<{
     logo_url: `${baseUrl}/generics/Legislation.png`,
 	},
 	{
-		name: 'Uses Rewneable Energy',
+		name: 'Uses Renewable Energy',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
     logo_url: `${baseUrl}/generics/Renewable+Energy.png`,
