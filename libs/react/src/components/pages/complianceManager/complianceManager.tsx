@@ -1,7 +1,15 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { forEach, get } from 'lodash';
-import { ColdIcon, ColdLeftArrowIcon, ComplianceManagerOverview, ComplianceManagerPreview, ErrorFallback, Spinner } from '@coldpbc/components';
+import {
+  ColdIcon,
+  ColdLeftArrowIcon,
+  ComplianceManagerOverview,
+  ComplianceManagerPreview,
+  ErrorFallback,
+  Spinner,
+  Tabs
+} from '@coldpbc/components';
 import React, { useContext, useEffect, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
@@ -19,10 +27,9 @@ import { isDefined } from 'class-validator';
 const _ComplianceManager = () => {
   const { name } = useParams();
   const { orgId } = useAuth0Wrapper();
-  const { subscribeSWR, publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
+  const { subscribeSWR } = useContext(ColdMQTTContext);
   const navigate = useNavigate();
   const [showOverviewModal, setShowOverviewModal] = useState<boolean>(false);
-  const [managementView, setManagementView] = useState<string>('Overview');
   const [status, setStatus] = useState<ComplianceManagerStatus>(ComplianceManagerStatus.notActivated);
   const { logBrowser } = useColdContext();
   const ldFlags = useFlags();
@@ -128,12 +135,11 @@ const _ComplianceManager = () => {
       orgId,
       compliance,
       status,
-      managementView,
       currentAIStatus: currentAIStatus.data,
       files: files.data,
       complianceSWR: complianceSWR.data,
     });
-  }, [files, currentAIStatus, name, orgId, compliance, status, managementView, complianceSWR]);
+  }, [files, currentAIStatus, name, orgId, compliance, status, complianceSWR]);
 
   if (files.isLoading || countsDataSWR.isLoading || sectionGroups.isLoading || complianceSWR.isLoading) {
     return <Spinner />;
@@ -153,19 +159,19 @@ const _ComplianceManager = () => {
     imageURL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png';
   }
 
-  const getActiveTabElement = (tab: string) => {
-    switch (tab) {
-      case 'Preview':
-        return <ComplianceManagerPreview />;
-      default:
-        return <ComplianceManagerOverview />;
-    }
-  };
-
-  const tabs: string[] = ['Overview'];
+  const tabs: {
+    label: string;
+    content: React.ReactNode;
+  }[] = [{
+    label: 'Overview',
+    content: <ComplianceManagerOverview />
+  }];
 
   if (ldFlags.showNewComplianceManagerPreviewCold713) {
-    tabs.push('Preview');
+    tabs.push({
+      label: 'Preview',
+      content: <ComplianceManagerPreview />,
+    });
   }
 
   return (
@@ -222,23 +228,11 @@ const _ComplianceManager = () => {
             </div>
           </div>
         </div>
-        <div className={'flex flex-col w-full gap-[48px] px-[64px] justify-items-center items-center'}>
-          <div className={'flex flex-col justify-center relative w-full max-w-[1400px]'} data-testid={'compliance-manager-tabs'}>
-            <div className={'absolute bottom-0 left-0 h-[2px] bg-gray-90 w-full'}></div>
-            <div className={'flex flex-row w-full justify-start'} data-testid={'compliance-manager-tabs'}>
-              {tabs.map(tab => (
-                <div
-                  className={`px-[16px] py-[8px] text-h5 cursor-pointer relative ` + (managementView === tab ? 'text-tc-primary' : 'text-tc-disabled')}
-                  onClick={() => setManagementView(tab)}
-                  key={tab}>
-                  {tab}
-                  {managementView === tab && <div className={'absolute bottom-0 left-0 w-full h-[4px] bg-primary-300'}></div>}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className={'flex flex-row justify-center w-full max-w-[1400px]'}>{getActiveTabElement(managementView)}</div>
-        </div>
+        <Tabs
+          tabs={tabs}
+          className={'flex flex-col w-full gap-[48px] px-[64px] justify-items-center items-center'}
+          defaultTab={'Overview'}
+        />
       </div>
     </ColdComplianceManagerContext.Provider>
   );
