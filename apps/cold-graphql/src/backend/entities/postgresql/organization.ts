@@ -22,9 +22,9 @@ import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { read_only_acl, OrgContext } from '../../libs/acls/acl_policies';
+import { organization_acl, OrgContext } from '../../libs/acls/acl_policies';
 
-@ApplyAccessControlList(read_only_acl)
+@ApplyAccessControlList(organization_acl)
 @Entity({ tableName: 'organizations' })
 export class Organization {
 	sidecar: OrganizationHooks;

@@ -15,11 +15,11 @@ export class OrganizationComplianceAiResponseFile {
 	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@RelationshipField<OrganizationComplianceAiResponseFile>(() => OrganizationFile, { id: (entity) => entity.organizationFile?.id })
 	organizationFile!: OrganizationFile;

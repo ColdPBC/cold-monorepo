@@ -15,11 +15,11 @@ export class OrganizationComplianceStatus {
 	@Field(() => String)
 	type!: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@Field(() => String)
 	email!: string;

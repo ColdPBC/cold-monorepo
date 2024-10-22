@@ -23,11 +23,11 @@ export class OrganizationComplianceQuestionBookmark {
 	@Property({ type: 'text' })
 	email!: string;
 
-	@Property({ type: 'datetime', length: 3 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 3 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
 
 	@ManyToOne({ entity: () => ComplianceQuestion, ref: true, index: 'organization_compliance_question_bo_compliance_question_id_idx1' })
 	complianceQuestion!: Ref<ComplianceQuestion>;

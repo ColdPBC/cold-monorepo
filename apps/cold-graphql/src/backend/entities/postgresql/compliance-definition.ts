@@ -33,11 +33,11 @@ export class ComplianceDefinition {
 	@Property({ type: 'json' })
 	surveys!: Record<string, unknown>;
 
-	@Property({ type: 'datetime', length: 3 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 3 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
 
 	@Property({ type: 'text' })
 	title!: string;

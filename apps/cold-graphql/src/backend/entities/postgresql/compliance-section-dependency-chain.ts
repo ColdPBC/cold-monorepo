@@ -37,11 +37,11 @@ export class ComplianceSectionDependencyChain {
 	@Property({ type: 'text' })
 	dependencyExpression!: string;
 
-	@Property({ type: 'datetime', length: 3 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 3 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
 
 	@Property({ type: 'boolean', default: false })
 	deleted = false;

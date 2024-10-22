@@ -18,11 +18,11 @@ export class OrganizationComplianceNote {
 	@Field(() => String)
 	note!: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@RelationshipField<OrganizationComplianceNote>(() => ComplianceQuestion, { id: (entity) => entity.complianceQuestion?.id })
 	complianceQuestion!: ComplianceQuestion;

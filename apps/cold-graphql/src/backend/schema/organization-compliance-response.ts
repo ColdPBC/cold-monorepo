@@ -13,11 +13,11 @@ export class OrganizationComplianceResponse {
 	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
-	@Field(() => ISODateStringScalar)
-	createdAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	createdAt?: Date;
 
-	@Field(() => ISODateStringScalar)
-	updatedAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@RelationshipField<OrganizationComplianceResponse>(() => ComplianceQuestion, { id: (entity) => entity.complianceQuestion?.id })
 	complianceQuestion!: ComplianceQuestion;

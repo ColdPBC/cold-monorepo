@@ -35,11 +35,11 @@ export class OrganizationCompliance {
 	@Property({ type: 'json', nullable: true })
 	metadata?: Record<string, unknown>;
 
-	@Property({ type: 'datetime', length: 3 })
-	createdAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	createdAt?: Date;
 
-	@Property({ type: 'datetime', length: 3 })
-	updatedAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
 
 	@ManyToOne({ entity: () => Organization, ref: true })
 	organization!: Ref<Organization>;
