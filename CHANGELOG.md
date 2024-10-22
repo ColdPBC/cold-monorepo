@@ -1,3 +1,15 @@
+# [1.439.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.7...v1.439.0) (2024-10-22)
+
+
+### Bug Fixes
+
+* add data-testid attribute and minor style tweaks ([06ce839](https://github.com/ColdPBC/cold-monorepo/commit/06ce83910eb1bb096e28ab8bcbaa8b5c56ea6cc4))
+
+
+### Features
+
+* replace custom tab components with shared Tabs component ([8c05e46](https://github.com/ColdPBC/cold-monorepo/commit/8c05e46d1a3dbb494f66c5b5f7921db5f41eff9d))
+
 ## [1.438.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.6...v1.438.7) (2024-10-22)
 
 
