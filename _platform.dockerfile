@@ -69,7 +69,6 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_VERSION=${DD_VERSION}
 
 WORKDIR /home/node/apps/${DD_SERVICE}
-COPY .git ./.git
 
 LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
