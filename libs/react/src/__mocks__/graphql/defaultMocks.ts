@@ -1,20 +1,21 @@
 import {
-	CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
-	CREATE_MATERIAL,
-	CREATE_MATERIAL_SUPPLIER,
-	CREATE_PRODUCT_MATERIAL,
-	GET_ALL_FILES,
-	GET_ALL_MATERIALS_FOR_ORG,
-	GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-	GET_ALL_ORGS,
-	GET_ALL_PRODUCTS,
-	GET_ALL_SCHEMA_ENUMS,
-	GET_ALL_SUPPLIERS_FOR_ORG,
-	GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-	GET_ALL_SUS_ATTRIBUTES,
-	GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
-	UPDATE_DOCUMENT_ASSURANCE,
-	UPDATE_DOCUMENT_FIELDS,
+  CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
+  CREATE_MATERIAL,
+  CREATE_MATERIAL_SUPPLIER,
+  CREATE_PRODUCT_MATERIAL,
+  GET_ALL_FILES,
+  GET_ALL_MATERIALS_FOR_ORG,
+  GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+  GET_ALL_ORGS,
+  GET_ALL_PRODUCTS,
+  GET_ALL_SCHEMA_ENUMS,
+  GET_ALL_SUPPLIERS_FOR_ORG,
+  GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+  GET_ALL_SUS_ATTRIBUTES,
+  GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
+  GET_PRODUCT,
+  UPDATE_DOCUMENT_ASSURANCE,
+  UPDATE_DOCUMENT_FIELDS,
 } from '@coldpbc/lib';
 import {
 	filesProcessedWithDatesMock,
@@ -31,7 +32,7 @@ import { RequestHandler } from 'mock-apollo-client';
 import { get } from 'lodash';
 import { getSchemaMocks } from '../schemaMocks';
 import { getSupplierMocks } from '../suppliersMock';
-import { getProductsMock } from '../productsMock';
+import {getProductsMock, getProductsMockById} from '../productsMock';
 import { getMaterialsMocksWithAssurances } from '../materialsMock';
 import { AttributeAssuranceMock } from '../attributeAssuranceMock';
 import { EntityLevel } from '@coldpbc/enums';
@@ -454,7 +455,17 @@ export const defaultGraphqlMocks: {
 					materials: getMaterialsMocksWithAssurances(),
 				},
 			}),
-	},
+	}, {
+    query: GET_PRODUCT,
+    handler: (variables) => {
+      const {id} = variables as {id: string};
+      return Promise.resolve({
+        data: {
+          product: getProductsMockById(id),
+        },
+      })
+    }
+  }
 ];
 
 export const filesWithAssurancesMocks: {

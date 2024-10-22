@@ -249,7 +249,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 
       },
       metadata: null,
-      seasonCode: '123456789',
+      seasonCode: 'Fall2024',
       upcCode: '123456789',
       brandProductId: '123456789',
       supplierProductId: '123456789',
@@ -479,7 +479,7 @@ export const getProductsMock = (): ProductsQuery[] => {
         ],
       },
       metadata: null,
-      seasonCode: '123456789',
+      seasonCode: 'Fall2024',
       upcCode: '123456789',
       brandProductId: '123456789',
       supplierProductId: '123456789',
@@ -812,7 +812,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 
       },
       metadata: null,
-      seasonCode: '123456789',
+      seasonCode: 'Fall2024',
       upcCode: '123456789',
       brandProductId: '123456789',
       supplierProductId: '123456789',
@@ -821,4 +821,8 @@ export const getProductsMock = (): ProductsQuery[] => {
       productSubcategory: null,
     },
   ]
+}
+
+export const getProductsMockById = (id: string): ProductsQuery | null => {
+  return getProductsMock().find(product => product.id === id) || null;
 }
