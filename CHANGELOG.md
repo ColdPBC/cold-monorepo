@@ -1,3 +1,10 @@
+## [1.438.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.6...v1.438.7) (2024-10-22)
+
+
+### Bug Fixes
+
+* remove unnecessary .git copying in Dockerfile ([af04ee2](https://github.com/ColdPBC/cold-monorepo/commit/af04ee2faa97a1050d60eebc6103aac8dae2d926))
+
 ## [1.438.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.5...v1.438.6) (2024-10-22)
 
 
