@@ -1,3 +1,10 @@
+## [1.439.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.439.0...v1.439.1) (2024-10-22)
+
+
+### Bug Fixes
+
+* ensure optionalParams is handled correctly in logger service ([5b77c6f](https://github.com/ColdPBC/cold-monorepo/commit/5b77c6fa8a59e5011441204ddff48d361977dcf7))
+
 # [1.439.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.7...v1.439.0) (2024-10-22)
 
 
