@@ -51,7 +51,8 @@ export class WorkerLogger {
 
 		if (typeof error === 'string') {
 			this.logger.error(error, {
-				meta: !optionalParams ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+				meta:
+					!optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 				...this.tags,
 				context: this.context,
 			});
@@ -60,7 +61,8 @@ export class WorkerLogger {
 				error.response?.data?.message,
 				safeStringify({
 					error: error?.response?.data,
-					meta: !optionalParams ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+					meta:
+						!optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 					...this.tags,
 				}),
 			);
@@ -68,7 +70,8 @@ export class WorkerLogger {
 			if (error?.message) {
 				this.logger.error(error?.message, {
 					error,
-					meta: !optionalParams ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+					meta:
+						!optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 					...this.tags,
 				});
 			} else if (!error) {
@@ -87,7 +90,7 @@ export class WorkerLogger {
 		}*/
 
 		this.logger.warn(message, {
-			meta: !optionalParams ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 			...this.tags,
 		});
 	}
@@ -102,7 +105,7 @@ export class WorkerLogger {
 		}*/
 
 		this.logger.info(message, {
-			meta: !optionalParams ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 			...this.tags,
 		});
 	}
@@ -117,7 +120,7 @@ export class WorkerLogger {
 		}*/
 
 		this.logger.info(message, {
-			meta: !optionalParams ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 			...this.tags,
 		});
 	}
@@ -132,7 +135,7 @@ export class WorkerLogger {
 		}*/
 
 		this.logger.verbose(message, {
-			meta: !optionalParams ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 			...this.tags,
 		});
 	}
@@ -147,7 +150,7 @@ export class WorkerLogger {
 		}*/
 
 		this.logger.debug(message, {
-			meta: !optionalParams ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 			...this.tags,
 		});
 	}
@@ -162,7 +165,7 @@ export class WorkerLogger {
 		}*/
 
 		this.logger.data(message, {
-			meta: !optionalParams ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 			...this.tags,
 		});
 	}
