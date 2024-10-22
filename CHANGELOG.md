@@ -1,3 +1,10 @@
+## [1.436.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.436.0...v1.436.1) (2024-10-22)
+
+
+### Bug Fixes
+
+* make dates optional ([170cc7c](https://github.com/ColdPBC/cold-monorepo/commit/170cc7cbadeed730a6d825008f778d616afb5050))
+
 # [1.436.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.435.1...v1.436.0) (2024-10-22)
 
 
