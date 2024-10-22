@@ -28,6 +28,7 @@ LABEL com.datadoghq.tags.env=${NODE_ENV}
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 WORKDIR /app
+COPY .git ./.git
 # uninstall old yarn or pnpm
 #RUN npm uninstall -g yarn pnpm
 
@@ -64,6 +65,7 @@ RUN npx nx reset
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
 WORKDIR /home/node/app
+COPY .git ./.git
 
 ADD --chown=node:node ./apps/cold-api/project.json /home/node/app/
 ADD --chown=node:node ./apps/cold-api/src/assets /home/node/app/

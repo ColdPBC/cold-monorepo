@@ -3,6 +3,7 @@ FROM node:${NODE_VERSION}-bullseye-slim as base
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 WORKDIR /repo
+COPY .git ./.git
 # uninstall old yarn or pnpm
 #RUN npm uninstall -g yarn pnpm
 
@@ -15,6 +16,7 @@ ADD . /repo
 
 FROM base as dependencies
 WORKDIR /repo
+COPY .git ./.git
 ARG NODE_ENV
 
 ENV NODE_ENV=${NODE_ENV}
@@ -67,6 +69,7 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_VERSION=${DD_VERSION}
 
 WORKDIR /home/node/apps/${DD_SERVICE}
+COPY .git ./.git
 
 LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}

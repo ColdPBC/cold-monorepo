@@ -1,4 +1,7 @@
 node_modules
+!.git/HEAD
+!.git/config
+!.git/refs
 .git
 .gitignore
 *.md

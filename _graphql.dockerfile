@@ -2,6 +2,7 @@
 FROM node:20.9-bullseye-slim as base
 USER root
 WORKDIR /home/node/app
+COPY .git ./.git
 # Set the working directory within the container
 COPY ./apps/cold-graphql/src ./src
 COPY ./apps/cold-graphql/tsconfig.json .
