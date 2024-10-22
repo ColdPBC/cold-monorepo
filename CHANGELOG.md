@@ -1,3 +1,10 @@
+## [1.438.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.5...v1.438.6) (2024-10-22)
+
+
+### Bug Fixes
+
+* update date fields to allow null and undefined values in compliance response repository ([c9ed067](https://github.com/ColdPBC/cold-monorepo/commit/c9ed067de7660ed38928f61967e583385b0e5b22))
+
 ## [1.438.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.4...v1.438.5) (2024-10-22)
 
 
