@@ -1,3 +1,10 @@
+## [1.438.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.1...v1.438.2) (2024-10-22)
+
+
+### Bug Fixes
+
+* simplify compliance section groups repository methods ([e4aa895](https://github.com/ColdPBC/cold-monorepo/commit/e4aa8953a31d9b0f32f0243d3bdce5266c3492a2))
+
 ## [1.438.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.0...v1.438.1) (2024-10-22)
 
 
