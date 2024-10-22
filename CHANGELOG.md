@@ -1,3 +1,10 @@
+## [1.438.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.3...v1.438.4) (2024-10-22)
+
+
+### Bug Fixes
+
+* **docker:** remove .git directory from Dockerfile copies ([51f86e5](https://github.com/ColdPBC/cold-monorepo/commit/51f86e5295e0fd9ed89b9567c5f4f9ddee543f82))
+
 ## [1.438.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.2...v1.438.3) (2024-10-22)
 
 
