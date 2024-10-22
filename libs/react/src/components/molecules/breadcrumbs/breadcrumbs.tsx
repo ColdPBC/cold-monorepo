@@ -2,6 +2,7 @@ import React from "react";
 import {useNavigate} from "react-router-dom";
 import opacity from "hex-color-opacity";
 import {HexColors} from "@coldpbc/themes";
+import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
 export const Breadcrumbs = (props: {
   items: {
@@ -35,14 +36,18 @@ export const Breadcrumbs = (props: {
     interleavedBreadcrumbs.push(breadcrumb);
     if (index < breadcrumbs.length - 1) {
       interleavedBreadcrumbs.push(
-        <span key={`interleaved_${index}`} className={'w-[24px] h-[24px] flex items-center justify-center'}>{'>'}</span>
+        <span key={`interleaved_${index}`} className={'h-full w-[16px] flex items-center justify-center'}>
+          <ChevronRightIcon
+            color={'white'}
+          />
+        </span>
       );
     }
   });
 
   return (
     <div
-      className={'w-full px-[16px] flex flex-row py-[8px] gap-[6px] text-tc-primary'}
+      className={'w-full px-[16px] flex flex-row py-[8px] gap-[6px] text-tc-primary items-center'}
       style={{
         backgroundColor: opacity(HexColors.gray['30'], 0.5),
       }}>
