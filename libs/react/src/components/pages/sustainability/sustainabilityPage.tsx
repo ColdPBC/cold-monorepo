@@ -51,7 +51,8 @@ const _SustainabilityPage = () => {
             content: <SustainabilityAttributeTab sustainabilityAttributes={otherAttributes} tab={'Other Attributes'} />
           }
         ]}
-        className={'flex flex-col w-full h-full'}
+        className={'flex flex-col w-full h-full gap-[0px]'}
+        data-testid={'sustainability-tabs'}
         />
 		</MainContent>
 	);
