@@ -21,7 +21,8 @@ export const seedDB = async () => {
 	await seedUtilities();
 	await seedScopes();
 	await seedComplianceDefinitions();
-	await seedSustainabilityAttributes();
+  // Temporarily turn off seeds while we work on migrating the names
+	// await seedSustainabilityAttributes();
 	if (process.env['LOCAL_SERVICE'] === 'seed') {
 		await seedComplianceModels();
 		await buildQuestionDependencyChains();
