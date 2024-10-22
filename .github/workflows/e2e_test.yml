@@ -28,7 +28,7 @@ jobs:
     name: 🔬E2E API Tests
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment.payload.deployment.projectId == 'cluagwibz000ka6p9uzas7p26' && github.event.deployment.payload.deployment.isPreviewEnvironment == true
+    if: github.event.inputs.api_url || (github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment.payload.deployment.projectId == 'cluagwibz000ka6p9uzas7p26' && github.event.deployment.payload.deployment.isPreviewEnvironment == true)
     permissions:
       contents: write # to be able to publish a GitHub release  env:
       issues: write # to be able to comment on released issues    DD_ENV: ci
@@ -36,6 +36,7 @@ jobs:
       id-token: write # to enable use of OIDC for npm provenance    DD_SITE: us5.datadoghq.com
     steps:
       - name: Set DOMAIN env varible
+        if: github.event.deployment_status.state == 'success'
         run: |
           RESULT=$(echo '${{ toJson(github.event.deployment.payload.deployment) }}' | jq -r --arg serviceGivenId "$FC_SERVICE_GIVEN_ID" '.serviceDeployments[] | select(.serviceGivenId == $serviceGivenId) | .serviceDomain')
           echo "Domain $RESULT"
