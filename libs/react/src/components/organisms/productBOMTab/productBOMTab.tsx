@@ -64,6 +64,7 @@ export const ProductBOMTab = (props: {
     <Card
       title={'Bill of Materials'}
       className={'w-full'}
+      data-testid={'product-bom-tab-card'}
     >
       <MuiDataGrid
         rows={rows}
