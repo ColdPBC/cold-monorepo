@@ -1,3 +1,12 @@
+# [1.436.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.435.1...v1.436.0) (2024-10-22)
+
+
+### Features
+
+* add subtitle support to MainContent component ([f014971](https://github.com/ColdPBC/cold-monorepo/commit/f0149710197a43ebc1c6328bdaddc582aaaecad4))
+* centralize title rendering in MainContent component ([8ebeb75](https://github.com/ColdPBC/cold-monorepo/commit/8ebeb752767139d706c27a99c94a8bb2d6aa61fa))
+* enhance ProductDetail with GraphQL integration and tabs component ([19ac907](https://github.com/ColdPBC/cold-monorepo/commit/19ac907d0a89937a06fba11e0a2ba95178457836))
+
 ## [1.435.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.435.0...v1.435.1) (2024-10-22)
 
 
