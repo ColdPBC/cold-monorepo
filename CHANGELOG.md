@@ -1,3 +1,10 @@
+## [1.438.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.4...v1.438.5) (2024-10-22)
+
+
+### Bug Fixes
+
+* update e2e_test workflow trigger condition ([e6be5df](https://github.com/ColdPBC/cold-monorepo/commit/e6be5dfc9bdfb30308c1396fcff854ec13c81417))
+
 ## [1.438.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.3...v1.438.4) (2024-10-22)
 
 
