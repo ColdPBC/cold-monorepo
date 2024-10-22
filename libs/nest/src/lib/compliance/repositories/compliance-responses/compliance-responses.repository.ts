@@ -1089,8 +1089,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
 		user_response: {
 			id: string;
 			value: Prisma.JsonValue | null;
-			created_at: Date;
-			updated_at: Date;
+			created_at: Date | null | undefined;
+			updated_at: Date | null | undefined;
 			compliance_question_id: string;
 			organization_compliance_id: string;
 			additional_context: Prisma.JsonValue | null;
@@ -1153,7 +1153,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
 	private async upsertAIResponse(
 		start: Date,
-		aiResponseEntity,
+		aiResponseEntity: any,
 		ai_response: {
 			id: string;
 			answer: Prisma.JsonValue | null;
@@ -1163,8 +1163,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
 			additional_context: Prisma.JsonValue | null;
 			organization_id: string;
 			organization_compliance_id: string;
-			created_at: Date;
-			updated_at: Date;
+			created_at: Date | null | undefined;
+			updated_at: Date | null | undefined;
 			compliance_question_id: string;
 			deleted: boolean;
 		},
