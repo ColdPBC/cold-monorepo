@@ -1,3 +1,12 @@
+## [1.438.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.2...v1.438.3) (2024-10-22)
+
+
+### Bug Fixes
+
+* handle stringified meta in logger ([dde7669](https://github.com/ColdPBC/cold-monorepo/commit/dde7669dfb78e8b6b30313560be4607b7cc36627))
+* include .git directory in Dockerfiles and update .dockerignore ([7cc045d](https://github.com/ColdPBC/cold-monorepo/commit/7cc045d497c6917fc75af7b16f68ad4708d64fb4))
+* update e2e_test.yml for improved workflows ([4c4016b](https://github.com/ColdPBC/cold-monorepo/commit/4c4016b73e798dc9ace25e493ecf15cbdfd041ed))
+
 ## [1.438.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.1...v1.438.2) (2024-10-22)
 
 
