@@ -1,3 +1,11 @@
+## [1.438.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.0...v1.438.1) (2024-10-22)
+
+
+### Bug Fixes
+
+* tailwinds doesn't support string interpolation ([fca754e](https://github.com/ColdPBC/cold-monorepo/commit/fca754e2b2e406bb74f6b09bb338914520d6cc10))
+* tailwinds doesn't support string interpolation [follow up for COLD-1120] ([#632](https://github.com/ColdPBC/cold-monorepo/issues/632)) ([7af4ebe](https://github.com/ColdPBC/cold-monorepo/commit/7af4ebe61160b3d01e6a93dd3131409fe80131eb))
+
 # [1.438.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.437.0...v1.438.0) (2024-10-22)
 
 
