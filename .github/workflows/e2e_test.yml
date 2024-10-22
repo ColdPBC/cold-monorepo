@@ -1,5 +1,6 @@
 name: ⏮ E2E Tests ⏭
 on:
+  deployment_status:
   workflow_dispatch:
     inputs:
       api_url:
@@ -7,13 +8,7 @@ on:
         type: string
         default: 'https://api.coldclimate.online'
         required: true
-  deployment_status:
-    types: [completed, success]
 env:
-  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-  NODE_ENV: ci
-  DD_SERVICE: cold-api
-  DD_SITE: us5.datadoghq.com
   DD_CIVISIBILITY_AGENTLESS_ENABLED: true
   DD_API_KEY: ${{ secrets.DD_APP_KEY }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -28,29 +23,28 @@ env:
   AUTH0_ORG_ID: ${{ secrets.TEST_AUTH0_ORG_ID }}
   AUTH0_TOKEN_URL: ${{ secrets.TEST_AUTH0_TOKEN_URL }}
   API_SERVER_URL: ${{ github.event.inputs.api_url || github.event.deployment_status.target_url }}
-
 jobs:
   api-e2e:
-    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment.payload.deployment.isPreviewEnvironment == true
-    name: 🔬 API Tests
+    name: 🔬E2E API Tests
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment.payload.deployment.projectId == 'cluagwibz000ka6p9uzas7p26' && github.event.deployment.payload.deployment.isPreviewEnvironment == true
     permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-      id-token: write # to enable use of OIDC for npm provenance
+      contents: write # to be able to publish a GitHub release  env:
+      issues: write # to be able to comment on released issues    DD_ENV: ci
+      pull-requests: write # to be able to comment on released pull requests    DD_SERVICE: cold-api
+      id-token: write # to enable use of OIDC for npm provenance    DD_SITE: us5.datadoghq.com
     steps:
+      - name: Set DOMAIN env varible
+        run: |
+          RESULT=$(echo '${{ toJson(github.event.deployment.payload.deployment) }}' | jq -r --arg serviceGivenId "$FC_SERVICE_GIVEN_ID" '.serviceDeployments[] | select(.serviceGivenId == $serviceGivenId) | .serviceDomain')
+          echo "Domain $RESULT"
+          echo "DOMAIN=$RESULT" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v4
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Set DOMAIN env varaible
-        run: |
-          RESULT=$(echo '${{ toJson(github.event.deployment.payload.deployment) }}' | jq -r --arg serviceGivenId "$FC_SERVICE_GIVEN_ID" '.serviceDeployments[] | select(.serviceGivenId == $serviceGivenId) | .serviceDomain')
-          echo "Domain $RESULT"
-          echo "DOMAIN=$RESULT" >> $GITHUB_ENV
       - name: 👨‍💻Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -75,11 +69,19 @@ jobs:
       - name: 🏗 build development
         run: yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
 
-      - name: 🩻 Run Manual API E2E Tests
+      - name: 🩻 Run Manual REST E2E Tests
         if: github.event.inputs.api_url
-        run: API_SERVER_URL=$(echo '${{ toJson(github.event.deployment.payload.deployment) }}' | jq -r --arg serviceGivenId "$FC_SERVICE_GIVEN_ID" '.serviceDeployments[] | select(.serviceGivenId == $serviceGivenId) | .serviceDomain') DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
+        run: API_SERVER_URL=github.event.inputs.api_url DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
 
-      - name: 🩻 Run Deployed API E2E Tests
+      - name: 🩻 Run Manual GraphQL E2E Tests
+        if: github.event.inputs.api_url
+        run: API_SERVER_URL=github.event.inputs.api_url DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
+
+      - name: 🩻 Run Deployed REST E2E Tests
         if: github.event.deployment_status.state == 'success'
-        run: API_SERVER_URL=$(echo '${{ toJson(github.event.deployment.payload.deployment) }}' | jq -r --arg serviceGivenId "$FC_SERVICE_GIVEN_ID" '.serviceDeployments[] | select(.serviceGivenId == $serviceGivenId) | .serviceDomain') DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r $(pwd)/.pnp.cjs -r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
+        run: API_SERVER_URL=$DOMAIN DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r $(pwd)/.pnp.cjs -r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
+
+      - name: 🩻 Run Deployed GraphQL E2E Tests
+        if: github.event.deployment_status.state == 'success'
+        run: API_SERVER_URL=$DOMAIN DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r $(pwd)/.pnp.cjs -r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
 
