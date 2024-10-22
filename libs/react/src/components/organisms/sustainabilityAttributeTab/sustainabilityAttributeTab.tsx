@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { EmptyState, SustainabilityAttributeCard } from '@coldpbc/components';
 import type { SustainabilityAttribute } from '@coldpbc/interfaces';
 
@@ -7,9 +7,12 @@ interface SustainabilityAttributeTabProps {
   sustainabilityAttributes: SustainabilityAttribute[];
 }
 
+const CARD_MIN_WIDTH = 475; // Minimum width of a single card
+const GAP_WIDTH = 16; // Gap between cards
+
 const ASK_FOR_NEW_ATTRIBUTE = (
   <p>
-    Not seeing the certification you’re looking for?{' '}
+    Not seeing the certification you're looking for?{' '}
     If you would like to add a new Sustainability Attribute to Cold contact our{' '}
     <a href="mailto:support@coldclimate.com" className="hover:underline">
       support@coldclimate.com
@@ -31,33 +34,56 @@ const MY_ATTRIBUTES_EMPTY_STATE_PROPS = {
 };
 
 const OTHER_ATTRIBUTES_EMPTY_STATE_PROPS = {
-  header: "Wow! You’re already tracking all of Cold’s current sustainability attributes.",
+  header: "Wow! You're already tracking all of Cold's current sustainability attributes.",
   body: ASK_FOR_NEW_ATTRIBUTE
 };
 
 export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProps> = ({ tab, sustainabilityAttributes }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [columnCount, setColumnCount] = useState(1);
+
+  useEffect(() => {
+    const updateColumnCount = () => {
+      if (!containerRef.current) return;
+
+      const containerWidth = containerRef.current.offsetWidth;
+      const newColumnCount = Math.floor((containerWidth + GAP_WIDTH) / (CARD_MIN_WIDTH + GAP_WIDTH));
+
+      setColumnCount(newColumnCount);
+    };
+
+    // Initial calculation
+    updateColumnCount();
+
+    // Create ResizeObserver to watch for container size changes
+    const resizeObserver = new ResizeObserver(updateColumnCount);
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
   if (sustainabilityAttributes.length === 0) {
     return (
       <EmptyState {...tab === 'My Attributes' ? MY_ATTRIBUTES_EMPTY_STATE_PROPS : OTHER_ATTRIBUTES_EMPTY_STATE_PROPS } />
     );
-  } else {
-    return (
-      <div className={'justify-items-stretch'}>
-        <div className='py-6 grid single:grid-cols-1 double:grid-cols-2 triple:grid-cols-3 gap-4'>
-          {
-            sustainabilityAttributes.map(sustainabilityAttribute => (
-              <div key={sustainabilityAttribute.id} className='w-full min-w-[475px]'>
-                <SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />
-              </div>
-            ))
-          }
-        </div>
-        { tab === 'Other Attributes' && (
-          <div className={'mt-3 w-full'}>
-            {ASK_FOR_NEW_ATTRIBUTE}
-          </div>
-        )}
-      </div>
-    );
   }
+
+  return (
+    <div ref={containerRef} className="w-full">
+      <div className={`py-6 grid grid-cols-${columnCount} gap-[${GAP_WIDTH}px]`}>
+        {sustainabilityAttributes.map(sustainabilityAttribute => (
+          <div key={sustainabilityAttribute.id} className="w-full">
+            <SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />
+          </div>
+        ))}
+      </div>
+      {tab === 'Other Attributes' && (
+        <div className="mt-3 w-full">
+          {ASK_FOR_NEW_ATTRIBUTE}
+        </div>
+      )}
+    </div>
+  );
 };

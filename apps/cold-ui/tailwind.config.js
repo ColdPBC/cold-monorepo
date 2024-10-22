@@ -31,9 +31,6 @@ module.exports = {
         shortWideScreen: {
           raw: '(max-height: 1200px) and (min-width: 1800px)',
         },
-        'single': '619px',  // Minimum width for 1 column (475 card width + 2 * 48 padding + 48 for sidebar)
-        'double': '1100px', // Minimum width for 2 columns (2 * 475 card width + 16 gap + 2 * 48 padding + 48 for sidebar)
-        'triple': '1601px', // Minimum width for 3 columns (3 * 475 card width + 2 * 16 gap + 2 * 48 padding + 48 for sidebar)
       },
       typography: {
         DEFAULT: {
