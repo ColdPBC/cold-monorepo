@@ -1,3 +1,29 @@
+## [1.439.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.439.1...v1.439.2) (2024-10-22)
+
+
+### Bug Fixes
+
+* handle undefined optionalParams in logger service ([cd9fae9](https://github.com/ColdPBC/cold-monorepo/commit/cd9fae9f159c6bab585f8a26d992295fa1df71d4))
+
+## [1.439.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.439.0...v1.439.1) (2024-10-22)
+
+
+### Bug Fixes
+
+* ensure optionalParams is handled correctly in logger service ([5b77c6f](https://github.com/ColdPBC/cold-monorepo/commit/5b77c6fa8a59e5011441204ddff48d361977dcf7))
+
+# [1.439.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.7...v1.439.0) (2024-10-22)
+
+
+### Bug Fixes
+
+* add data-testid attribute and minor style tweaks ([06ce839](https://github.com/ColdPBC/cold-monorepo/commit/06ce83910eb1bb096e28ab8bcbaa8b5c56ea6cc4))
+
+
+### Features
+
+* replace custom tab components with shared Tabs component ([8c05e46](https://github.com/ColdPBC/cold-monorepo/commit/8c05e46d1a3dbb494f66c5b5f7921db5f41eff9d))
+
 ## [1.438.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.438.6...v1.438.7) (2024-10-22)
 
 

@@ -50,13 +50,19 @@ export class WorkerLogger {
 		}*/
 
 		if (typeof error === 'string') {
-			this.logger.error(error, { optionalParams, ...this.tags, context: this.context });
+			this.logger.error(error, {
+				meta:
+					!optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+				...this.tags,
+				context: this.context,
+			});
 		} else if (error?.response?.data) {
 			this.logger.error(
 				error.response?.data?.message,
 				safeStringify({
 					error: error?.response?.data,
-					meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+					meta:
+						!optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 					...this.tags,
 				}),
 			);
@@ -64,7 +70,8 @@ export class WorkerLogger {
 			if (error?.message) {
 				this.logger.error(error?.message, {
 					error,
-					meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+					meta:
+						!optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
 					...this.tags,
 				});
 			} else if (!error) {
@@ -82,7 +89,10 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.warn(message, { meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)), ...this.tags });
+		this.logger.warn(message, {
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			...this.tags,
+		});
 	}
 
 	info(message: string, optionalParams?: any | any[]): void {
@@ -94,7 +104,10 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.info(message, { meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)), ...this.tags });
+		this.logger.info(message, {
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			...this.tags,
+		});
 	}
 
 	log(message: string, optionalParams?: any | any[]): void {
@@ -106,7 +119,10 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.info(message, { meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)), ...this.tags });
+		this.logger.info(message, {
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			...this.tags,
+		});
 	}
 
 	verbose(message: string, optionalParams?: any | any[]): void {
@@ -118,7 +134,10 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.verbose(message, { meta: optionalParams, ...this.tags });
+		this.logger.verbose(message, {
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			...this.tags,
+		});
 	}
 
 	debug(message: any, optionalParams?: any | any[]): void {
@@ -130,7 +149,10 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.debug(message, { meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)), ...this.tags });
+		this.logger.debug(message, {
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			...this.tags,
+		});
 	}
 
 	trace(message: any, optionalParams?: any | any[]): void {
@@ -142,6 +164,9 @@ export class WorkerLogger {
 			tracer.inject(span.context(), formats.LOG, record);
 		}*/
 
-		this.logger.data(message, { meta: typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)), ...this.tags });
+		this.logger.data(message, {
+			meta: !optionalParams || optionalParams === 'undefined' ? null : typeof optionalParams === 'string' ? JSON.parse(optionalParams) : JSON.parse(safeStringify(optionalParams)),
+			...this.tags,
+		});
 	}
 }
