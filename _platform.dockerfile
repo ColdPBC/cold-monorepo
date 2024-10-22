@@ -3,7 +3,6 @@ FROM node:${NODE_VERSION}-bullseye-slim as base
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 WORKDIR /repo
-COPY .git ./.git
 # uninstall old yarn or pnpm
 #RUN npm uninstall -g yarn pnpm
 
@@ -16,7 +15,6 @@ ADD . /repo
 
 FROM base as dependencies
 WORKDIR /repo
-COPY .git ./.git
 ARG NODE_ENV
 
 ENV NODE_ENV=${NODE_ENV}
