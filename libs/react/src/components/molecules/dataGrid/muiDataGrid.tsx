@@ -1,14 +1,59 @@
 import { HexColors } from '@coldpbc/themes';
 import { MUIDataGridNoRowsOverlay } from '@coldpbc/components';
-import { DataGrid, DataGridProps, GridColDef, GridValidRowModel } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  DataGridProps,
+  GridColDef,
+  GridToolbarColumnsButton,
+  GridToolbarContainer, GridToolbarExport, GridToolbarQuickFilter,
+  GridValidRowModel
+} from '@mui/x-data-grid';
 import { twMerge } from 'tailwind-merge';
+import React from "react";
 
 export interface MUIDataGridProps extends DataGridProps {
   rows: GridValidRowModel[];
   columns: GridColDef[];
+  showSearch?: boolean;
+  showExport?: boolean;
+  showManageColumns?: boolean;
 }
 
 export const MuiDataGrid = (props: MUIDataGridProps) => {
+  const { showSearch, showExport, showManageColumns } = props;
+
+  const toolbar = () => {
+    if (showSearch || showExport || showManageColumns)
+      return (
+				<GridToolbarContainer>
+					{
+            showManageColumns &&
+						<GridToolbarColumnsButton
+							slotProps={{
+								tooltip: {
+									sx: {
+										'& .MuiInput-input': {
+											backgroundColor: 'transparent',
+											fontFamily: 'Inter',
+											fontSize: '14px',
+											padding: '4px 0px 5px',
+											height: '32px',
+										},
+										'& .MuiDataGrid-filterFormColumnInput': {
+											backgroundColor: 'transparent',
+										},
+									},
+								},
+							}}
+						/>
+					}
+					{showExport && <GridToolbarExport />}
+					{showSearch && <GridToolbarQuickFilter />}
+				</GridToolbarContainer>
+			);
+    else return null;
+  }
+
   return (
     <DataGrid
       rowHeight={37}
@@ -46,6 +91,7 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
       }}
       slots={{
         noRowsOverlay: MUIDataGridNoRowsOverlay,
+        toolbar: toolbar,
         ...props.slots,
       }}
       slotProps={{

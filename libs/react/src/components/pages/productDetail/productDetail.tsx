@@ -3,6 +3,7 @@ import {useGraphQLSWR} from "@coldpbc/hooks";
 import {useParams} from "react-router-dom";
 import {ProductsQuery} from "@coldpbc/interfaces";
 import {get, isError} from "lodash";
+import {ProductBOMTab} from "../../organisms/productBOMTab/productBOMTab";
 
 export const ProductDetail = () => {
   const {id} = useParams();
@@ -54,7 +55,7 @@ export const ProductDetail = () => {
           },
           {
             label: 'BOM',
-            content: null
+            content: <ProductBOMTab product={product} />
           },
           {
             label: 'Documents',
