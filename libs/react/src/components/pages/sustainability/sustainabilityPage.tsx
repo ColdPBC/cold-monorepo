@@ -13,9 +13,6 @@ const _SustainabilityPage = () => {
   const sustainabilityAttributesQuery = useGraphQLSWR<{
     sustainabilityAttributes: SustainabilityAttribute[]
   }>(orgId ? 'GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG' : null, {
-    filter: {
-      type: 'THIRD_PARTY',
-    },
     organizationId: orgId,
   });
 
