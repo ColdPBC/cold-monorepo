@@ -1,3 +1,10 @@
+## [1.435.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.435.0...v1.435.1) (2024-10-22)
+
+
+### Bug Fixes
+
+* update axios to v1.7.7 ([097aeb3](https://github.com/ColdPBC/cold-monorepo/commit/097aeb3869b47bcf343cf0cdddfc3a5faf562ad3))
+
 # [1.435.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.434.1...v1.435.0) (2024-10-21)
 
 
