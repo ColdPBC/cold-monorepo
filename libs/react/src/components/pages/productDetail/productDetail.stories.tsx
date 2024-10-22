@@ -50,7 +50,7 @@ export const BOMTab: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-    const bomTab = await canvas.findByTestId('tabs-BOM');
+    const bomTab = await canvas.findByTestId('tab-BOM');
     bomTab.click();
     await canvas.findByTestId('product-bom-tab-card');
   }
