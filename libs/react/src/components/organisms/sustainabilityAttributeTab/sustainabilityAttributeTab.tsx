@@ -47,7 +47,8 @@ export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProp
       if (!containerRef.current) return;
 
       const containerWidth = containerRef.current.offsetWidth;
-      const newColumnCount = Math.floor((containerWidth + GAP_WIDTH) / (CARD_MIN_WIDTH + GAP_WIDTH));
+      const possibleColumns = Math.floor((containerWidth + GAP_WIDTH) / (CARD_MIN_WIDTH + GAP_WIDTH));
+      const newColumnCount = Math.max(1, Math.min(3, possibleColumns));
 
       setColumnCount(newColumnCount);
     };
@@ -64,6 +65,12 @@ export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProp
     return () => resizeObserver.disconnect();
   }, []);
 
+  const gridClassName = {
+    1: 'grid-cols-1',
+    2: 'grid-cols-2',
+    3: 'grid-cols-3'
+  }[columnCount];
+
   if (sustainabilityAttributes.length === 0) {
     return (
       <EmptyState {...tab === 'My Attributes' ? MY_ATTRIBUTES_EMPTY_STATE_PROPS : OTHER_ATTRIBUTES_EMPTY_STATE_PROPS } />
@@ -71,19 +78,15 @@ export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProp
   }
 
   return (
-    <div ref={containerRef} className="w-full">
-      <div className={`py-6 grid grid-cols-${columnCount} gap-[${GAP_WIDTH}px]`}>
-        {sustainabilityAttributes.map(sustainabilityAttribute => (
-          <div key={sustainabilityAttribute.id} className="w-full">
-            <SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />
-          </div>
-        ))}
-      </div>
-      {tab === 'Other Attributes' && (
-        <div className="mt-3 w-full">
-          {ASK_FOR_NEW_ATTRIBUTE}
-        </div>
-      )}
-    </div>
-  );
+		<div ref={containerRef} className="w-full">
+			<div className={`py-6 grid ${gridClassName} gap-4`}>
+				{sustainabilityAttributes.map(sustainabilityAttribute => (
+					<div key={sustainabilityAttribute.id} className="w-full">
+						<SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />
+					</div>
+				))}
+			</div>
+			{tab === 'Other Attributes' && <div className="mt-3 w-full">{ASK_FOR_NEW_ATTRIBUTE}</div>}
+		</div>
+	);
 };
