@@ -33,6 +33,7 @@
 	    "@mikro-orm/core": "6.3.5",
 	    "@mikro-orm/knex": "6.3.5",
 	    "@mikro-orm/postgresql": "6.3.5",
+	    "axios": "^1.7.7",
 	    "fast-safe-stringify": "^2.1.1",
 	    "graphql": "^16.9.0",
 	    "graphweaver": "^2.6.0",
