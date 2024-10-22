@@ -1,3 +1,10 @@
+# [1.438.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.437.0...v1.438.0) (2024-10-22)
+
+
+### Features
+
+* add foreign key constraints and make date fields optional in Prisma schema and migrations ([e3c148b](https://github.com/ColdPBC/cold-monorepo/commit/e3c148b2a4e38890e0651d39d0554130d50dfbf4))
+
 # [1.437.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.436.1...v1.437.0) (2024-10-22)
 
 
