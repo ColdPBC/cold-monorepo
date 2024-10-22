@@ -1,3 +1,15 @@
+# [1.437.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.436.1...v1.437.0) (2024-10-22)
+
+
+### Bug Fixes
+
+* include organizationId in supplier and material creation ([e8e5fd1](https://github.com/ColdPBC/cold-monorepo/commit/e8e5fd1a7ed3149e022c788c505ffc425d79086c))
+
+
+### Features
+
+* update breadcrumbs to use ChevronRightIcon ([d4ace43](https://github.com/ColdPBC/cold-monorepo/commit/d4ace43a7c9822b3d0fe06d4bc56acce49d746db))
+
 ## [1.436.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.436.0...v1.436.1) (2024-10-22)
 
 
