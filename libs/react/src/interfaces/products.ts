@@ -30,6 +30,13 @@ export interface ProductsQuery {
           logoUrl?: string;
         };
       }[];
+      materialSuppliers: {
+        id: string;
+        organizationFacility: {
+          id: string;
+          name: string;
+        };
+      }[];
     } | null;
   }[];
   organizationFacility: {
