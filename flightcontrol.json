@@ -83,13 +83,13 @@
             "clusterMaxInstances": 4
           },
           "memory": 3,
-          "buildType": "docker",
+          "buildType": "nixpacks",
           "dockerfilePath": "_api.dockerfile",
           "dockerContext": ".",
 	        "includeEnvVariablesInBuild": true,
 	        "injectEnvVariablesInDockerfile": true,
-	        "buildCommand": "docker build . -t cold-api-ec2 --build-arg DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
-          "containerImage": {
+	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
+	        "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
             "repository": "api-docker-images",
             "tag": "main"
