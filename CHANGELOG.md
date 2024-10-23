@@ -1,3 +1,16 @@
+# [1.442.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.441.1...v1.442.0) (2024-10-23)
+
+
+### Bug Fixes
+
+* improve browser launch initialization in Excel conversion service ([c9da90e](https://github.com/ColdPBC/cold-monorepo/commit/c9da90edde63bc5c0da0ec3bbf54bd7caad8a81f))
+* update build configurations and instance settings ([959986c](https://github.com/ColdPBC/cold-monorepo/commit/959986c298b9ccbc9c548e57375ed2d1c8049d7c))
+
+
+### Features
+
+* add environment variables for DD_GIT_REPOSITORY_URL and DD_GIT_COMMIT_SHA in Dockerfiles ([7b36c35](https://github.com/ColdPBC/cold-monorepo/commit/7b36c351f24bc6588662f80720204ba0a0aec48a))
+
 ## [1.441.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.441.0...v1.441.1) (2024-10-23)
 
 
