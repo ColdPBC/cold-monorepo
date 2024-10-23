@@ -88,7 +88,7 @@
           "dockerContext": ".",
 	        "includeEnvVariablesInBuild": true,
 	        "injectEnvVariablesInDockerfile": true,
-	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
+	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-api:build:production",
 	        "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
             "repository": "api-docker-images",
@@ -446,7 +446,7 @@
           "dockerContext": ".",
 	        "includeEnvVariablesInBuild": true,
 	        "injectEnvVariablesInDockerfile": true,
-	        "buildCommand": "docker build . -t cold-api-ec2 --build-arg DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
+	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-api:build:production",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
             "repository": "api-docker-images",
