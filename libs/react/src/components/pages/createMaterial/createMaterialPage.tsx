@@ -145,7 +145,9 @@ const _CreateMaterialPage = () => {
               organizationFacility: {
                 id: supplier.value,
               },
-              organizationId: orgId
+							organization: {
+								id: orgId,
+							},
             },
           })
         }
@@ -179,7 +181,9 @@ const _CreateMaterialPage = () => {
                 material: {
                   id: materialId,
                 },
-                organizationId: orgId
+								organization: {
+									id: orgId,
+								},
               },
             });
           }

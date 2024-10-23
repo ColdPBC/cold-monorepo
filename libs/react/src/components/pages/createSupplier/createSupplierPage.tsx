@@ -222,7 +222,9 @@ const _CreateSupplierPage = () => {
                 organizationFacility: {
                   id: supplierId,
                 },
-                organizationId: orgId
+                organization: {
+                  id: orgId,
+                },
               },
             });
           }

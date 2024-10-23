@@ -1,3 +1,25 @@
+## [1.444.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.444.2...v1.444.3) (2024-10-23)
+
+
+### Bug Fixes
+
+* change buildType from docker to nixpacks and update buildCommand ([6280ec3](https://github.com/ColdPBC/cold-monorepo/commit/6280ec3b6c9a4f2324eaf559911b479247521821))
+
+## [1.444.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.444.1...v1.444.2) (2024-10-23)
+
+
+### Bug Fixes
+
+* update build commands by removing redundant `.git` suffix and correct staging build command ([f1fd1a3](https://github.com/ColdPBC/cold-monorepo/commit/f1fd1a36e5f4b6b59337c224c803379cd2348910))
+
+## [1.444.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.444.0...v1.444.1) (2024-10-23)
+
+
+### Bug Fixes
+
+* update build commands to use nx for production builds ([fdfc1a5](https://github.com/ColdPBC/cold-monorepo/commit/fdfc1a57a52a79824dbe911ff0036bcfbd141812))
+* update organizationId structure in create pages ([34a4641](https://github.com/ColdPBC/cold-monorepo/commit/34a4641ed5749fb64e604503b049ffd158b7c96e))
+
 # [1.444.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.443.1...v1.444.0) (2024-10-23)
 
 
