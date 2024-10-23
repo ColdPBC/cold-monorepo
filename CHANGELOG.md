@@ -1,3 +1,13 @@
+# [1.443.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.442.0...v1.443.0) (2024-10-23)
+
+
+### Features
+
+* create a card component for the left side of the summary page (Details) ([fba8250](https://github.com/ColdPBC/cold-monorepo/commit/fba8250c60af2a0959f099868aac180ea194f2a3))
+* new atom for DetailsItem ([0d4e4fd](https://github.com/ColdPBC/cold-monorepo/commit/0d4e4fdffa03bbcfb9a193f4eebc8ccd42848ab0))
+* new component for details tab, and plug it into detail page ([2eb6cea](https://github.com/ColdPBC/cold-monorepo/commit/2eb6ceaf81b8cad1d03b3dc987858eb9e566dcd0))
+* new component right hand side of summary page (Sustainability Attributes) ([74abf9a](https://github.com/ColdPBC/cold-monorepo/commit/74abf9a41f04f88c9fd977c2ea622d7c8a1d1a14))
+
 # [1.442.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.441.1...v1.442.0) (2024-10-23)
 
 
