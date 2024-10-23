@@ -1,3 +1,10 @@
+# [1.445.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.444.3...v1.445.0) (2024-10-23)
+
+
+### Features
+
+* add startCommand to flight control configurations ([e944c61](https://github.com/ColdPBC/cold-monorepo/commit/e944c61e8726200dcf4369ae25099592a546f767))
+
 ## [1.444.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.444.2...v1.444.3) (2024-10-23)
 
 
