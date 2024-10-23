@@ -1,3 +1,10 @@
+# [1.440.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.439.3...v1.440.0) (2024-10-23)
+
+
+### Features
+
+* add ProductBOMTab to product detail page ([8906382](https://github.com/ColdPBC/cold-monorepo/commit/8906382e0bbfd4cf343b7808008696b74e1118b8))
+
 ## [1.439.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.439.2...v1.439.3) (2024-10-23)
 
 
