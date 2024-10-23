@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { AttributeAssuranceGraph } from '@coldpbc/components';
-import { SustainabilityAttributeAssurance, SustainabilityAttribute } from '@coldpbc/interfaces';
+import { SustainabilityAttribute, SustainabilityAttributeAssurance } from '@coldpbc/interfaces';
 import { getAggregateStatusFromAttributeAssurances } from '@coldpbc/lib';
-import { AttributeAssuranceStatus } from '@coldpbc/enums';
+import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
 interface SustainabilityAttributeCardProps {
-  sustainabilityAttribute: SustainabilityAttribute;
+	sustainabilityAttribute: SustainabilityAttribute;
 }
 
 const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
@@ -32,16 +32,16 @@ function processSustainabilityAttribute(attribute: SustainabilityAttribute): Sus
     let entityId: string | undefined;
 
     switch (attribute.level) {
-      case 'MATERIAL':
+      case EntityLevel.MATERIAL:
         entityId = assurance.material?.id;
         break;
-      case 'ORGANIZATION':
+      case EntityLevel.ORGANIZATION:
         entityId = assurance.organization?.id;
         break;
-      case 'PRODUCT':
+      case EntityLevel.PRODUCT:
         entityId = assurance.product?.id;
         break;
-      case 'SUPPLIER':
+      case EntityLevel.SUPPLIER:
         entityId = assurance.organizationFacility?.id;
         break;
     }
