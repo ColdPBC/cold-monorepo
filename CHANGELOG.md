@@ -1,3 +1,10 @@
+## [1.444.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.444.2...v1.444.3) (2024-10-23)
+
+
+### Bug Fixes
+
+* change buildType from docker to nixpacks and update buildCommand ([6280ec3](https://github.com/ColdPBC/cold-monorepo/commit/6280ec3b6c9a4f2324eaf559911b479247521821))
+
 ## [1.444.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.444.1...v1.444.2) (2024-10-23)
 
 
