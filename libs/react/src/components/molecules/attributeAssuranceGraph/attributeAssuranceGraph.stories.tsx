@@ -14,37 +14,37 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    entity: EntityLevel.MATERIAL,
-    activeCount: 7,
-    expiredCount: 8,
-    notDocumentedCount: 12,
-  }
+	args: {
+		entity: EntityLevel.MATERIAL,
+		activeCount: 7,
+		expiredCount: 8,
+		notDocumentedCount: 12,
+	},
 };
 
 export const NoAssurances: Story = {
-  args: {
-    entity: EntityLevel.PRODUCT,
-    activeCount: 0,
-    expiredCount: 0,
-    notDocumentedCount: 0,
-  }
+	args: {
+		entity: EntityLevel.PRODUCT,
+		activeCount: 0,
+		expiredCount: 0,
+		notDocumentedCount: 0,
+	},
 };
 
 export const OnlyActive: Story = {
-  args: {
-    entity: EntityLevel.ORGANIZATION,
-    activeCount: 10,
-    expiredCount: 0,
-    notDocumentedCount: 0,
-  }
+	args: {
+		entity: EntityLevel.ORGANIZATION,
+		activeCount: 10,
+		expiredCount: 0,
+		notDocumentedCount: 0,
+	},
 };
 
 export const OnlyNotDocumented: Story = {
-  args: {
-    entity: EntityLevel.SUPPLIER,
-    activeCount: 0,
-    expiredCount: 0,
-    notDocumentedCount: 10,
-  }
+	args: {
+		entity: EntityLevel.SUPPLIER,
+		activeCount: 0,
+		expiredCount: 0,
+		notDocumentedCount: 10,
+	},
 };

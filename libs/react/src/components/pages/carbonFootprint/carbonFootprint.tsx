@@ -4,13 +4,13 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ColdEmissionsProvider } from '@coldpbc/providers';
 
 const _CarbonFootprint = () => {
-  return (
-    <ColdEmissionsProvider>
-      <EmissionsCarbonFootprintBase />
-    </ColdEmissionsProvider>
-  );
+	return (
+		<ColdEmissionsProvider>
+			<EmissionsCarbonFootprintBase />
+		</ColdEmissionsProvider>
+	);
 };
 
 export const CarbonFootprint = withErrorBoundary(_CarbonFootprint, {
-  FallbackComponent: props => <ErrorFallback {...props} />,
+	FallbackComponent: props => <ErrorFallback {...props} />,
 });

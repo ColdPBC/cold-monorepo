@@ -8,35 +8,35 @@ import { useColdContext } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 
 const _NewsCard = () => {
-  const { data, isLoading, error } = useSWR<any, any, any>(['/news', 'GET'], axiosFetcher);
-  const { logError } = useColdContext();
+	const { data, isLoading, error } = useSWR<any, any, any>(['/news', 'GET'], axiosFetcher);
+	const { logError } = useColdContext();
 
-  if (error) {
-    logError(error, ErrorType.SWRError);
-    return null;
-  }
+	if (error) {
+		logError(error, ErrorType.SWRError);
+		return null;
+	}
 
-  const filteredNewsItems = data?.filter((newsItem: any) => newsItem.title && newsItem.image_url && newsItem.url).slice(0, 3);
-  const isEmpty = filteredNewsItems?.length === 0;
+	const filteredNewsItems = data?.filter((newsItem: any) => newsItem.title && newsItem.image_url && newsItem.url).slice(0, 3);
+	const isEmpty = filteredNewsItems?.length === 0;
 
-  if (isEmpty || isLoading) {
-    return null;
-  }
+	if (isEmpty || isLoading) {
+		return null;
+	}
 
-  return (
-    <Card title={'Latest On Climate'} className="flex flex-col gap-4" data-testid={'news-card'}>
-      {filteredNewsItems?.map((newsItem: any, index: number) => (
-        <div key={'news_item_' + index} className={'w-full'}>
-          <NewsItem item={newsItem} />
-        </div>
-      ))}
-    </Card>
-  );
+	return (
+		<Card title={'Latest On Climate'} className="flex flex-col gap-4" data-testid={'news-card'}>
+			{filteredNewsItems?.map((newsItem: any, index: number) => (
+				<div key={'news_item_' + index} className={'w-full'}>
+					<NewsItem item={newsItem} />
+				</div>
+			))}
+		</Card>
+	);
 };
 
 export const NewsCard = withErrorBoundary(_NewsCard, {
-  FallbackComponent: props => <ErrorFallback {...props} />,
-  onError: (error, info) => {
-    console.error('Error occurred in NewsCard: ', error);
-  },
+	FallbackComponent: props => <ErrorFallback {...props} />,
+	onError: (error, info) => {
+		console.error('Error occurred in NewsCard: ', error);
+	},
 });

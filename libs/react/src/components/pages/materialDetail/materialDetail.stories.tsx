@@ -5,23 +5,23 @@ import { StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
 
 const meta: Meta<typeof MaterialDetail> = {
-  title: 'Pages/MaterialDetail',
-  component: MaterialDetail,
-  tags: ['autodocs'],
-  decorators: [withKnobs],
+	title: 'Pages/MaterialDetail',
+	component: MaterialDetail,
+	tags: ['autodocs'],
+	decorators: [withKnobs],
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/materials/mat_qg9aabgn9a81mb90bijv9dtf'] }}>
-        <Routes>
-          <Route path={'/materials/:id'} element={<MaterialDetail />} />
-        </Routes>
-      </StoryMockProvider>
-    );
-  },
+	render: () => {
+		return (
+			<StoryMockProvider memoryRouterProps={{ initialEntries: ['/materials/mat_qg9aabgn9a81mb90bijv9dtf'] }}>
+				<Routes>
+					<Route path={'/materials/:id'} element={<MaterialDetail />} />
+				</Routes>
+			</StoryMockProvider>
+		);
+	},
 };

@@ -9,7 +9,7 @@ import { SustainabilityAttributeWithStatus } from '@coldpbc/interfaces';
 const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
 
 interface SustainabilityAttributeLogoWithStatusProps {
-  sustainabilityAttribute: SustainabilityAttributeWithStatus;
+	sustainabilityAttribute: SustainabilityAttributeWithStatus;
 }
 
 const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLogoWithStatusProps> = ({ sustainabilityAttribute }) => {
@@ -23,28 +23,22 @@ const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLo
 	if (sustainabilityAttribute.assuranceStatus === AttributeAssuranceStatus.ACTIVE) {
 		iconName = IconNames.ColdCheckIcon;
 		iconBackgroundColor = 'bg-green-300';
-    hoverLabelText = sustainabilityAttribute.expirationDate
-      ? `Active until ${format(sustainabilityAttribute.expirationDate, 'M/d/yyyy')}`
-      : 'Active';
-  } else if (sustainabilityAttribute.assuranceStatus === AttributeAssuranceStatus.EXPIRING) {
+		hoverLabelText = sustainabilityAttribute.expirationDate ? `Active until ${format(sustainabilityAttribute.expirationDate, 'M/d/yyyy')}` : 'Active';
+	} else if (sustainabilityAttribute.assuranceStatus === AttributeAssuranceStatus.EXPIRING) {
 		iconName = IconNames.ColdExpiringIcon;
 		iconBackgroundColor = 'bg-yellow-300';
-    hoverLabelText = sustainabilityAttribute.expirationDate
-      ? `Expiring in ${differenceInDays(sustainabilityAttribute.expirationDate, new Date())} days`
-      : 'Expiring';
+		hoverLabelText = sustainabilityAttribute.expirationDate ? `Expiring in ${differenceInDays(sustainabilityAttribute.expirationDate, new Date())} days` : 'Expiring';
 	} else if (sustainabilityAttribute.assuranceStatus === AttributeAssuranceStatus.EXPIRED) {
 		iconName = IconNames.ColdCalendarCloseIcon;
 		iconBackgroundColor = 'bg-gray-300';
-    hoverLabelText = sustainabilityAttribute.expirationDate
-      ? `Expired on ${format(sustainabilityAttribute.expirationDate, 'M/d/yyyy')}`
-      : 'Expired';
+		hoverLabelText = sustainabilityAttribute.expirationDate ? `Expired on ${format(sustainabilityAttribute.expirationDate, 'M/d/yyyy')}` : 'Expired';
 	} else {
 		iconName = IconNames.ColdDangerIcon;
 		iconBackgroundColor = 'bg-gray-300';
 		hoverLabelText = 'Missing documents';
 	}
 
-  const popoverText = (
+	const popoverText = (
 		<div className="flex flex-col">
 			<span className="font-bold">{sustainabilityAttribute.name}</span>
 			<span>{hoverLabelText}</span>

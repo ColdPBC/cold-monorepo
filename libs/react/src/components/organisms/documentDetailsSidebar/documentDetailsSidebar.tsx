@@ -1,18 +1,8 @@
 import React, { ReactNode, useEffect } from 'react';
 import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
-import {
-  BaseButton,
-  ColdIcon, ComboBox,
-  DocumentDetailsMenu,
-  DocumentMaterialsTable,
-  DocumentSuppliersTable,
-  ErrorFallback,
-  Input,
-  Select,
-  Spinner
-} from '@coldpbc/components';
+import { BaseButton, ColdIcon, ComboBox, DocumentDetailsMenu, DocumentMaterialsTable, DocumentSuppliersTable, ErrorFallback, Input, Select, Spinner } from '@coldpbc/components';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
-import {forEach, get, has, lowerCase, startCase} from 'lodash';
+import { forEach, get, has, lowerCase, startCase } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
@@ -20,28 +10,23 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation
 import { useSWRConfig } from 'swr';
 import { isSameDay } from 'date-fns';
 import { isApolloError } from '@apollo/client';
-import {
-  addTZOffset,
-  getEffectiveEndDate,
-  getEffectiveStartDate,
-  removeTZOffset
-} from '@coldpbc/lib';
+import { addTZOffset, getEffectiveEndDate, getEffectiveStartDate, removeTZOffset } from '@coldpbc/lib';
 
 export interface DocumentDetailsSidebarFileState {
-  id: string;
-  type: string;
-  originalName: string;
-  metadata: any;
-  startDate: Date | null;
-  endDate: Date | null;
-  sustainabilityAttribute: string;
-  certificate_number: string | null;
+	id: string;
+	type: string;
+	originalName: string;
+	metadata: any;
+	startDate: Date | null;
+	endDate: Date | null;
+	sustainabilityAttribute: string;
+	certificate_number: string | null;
 }
 
 const _DocumentDetailsSidebar = (props: {
 	file: FilesWithAssurances | undefined;
 	sustainabilityAttributes: Claims[];
-  fileTypes: string[];
+	fileTypes: string[];
 	refreshFiles: () => void;
 	closeSidebar: () => void;
 	innerRef: React.RefObject<HTMLDivElement>;
@@ -49,10 +34,7 @@ const _DocumentDetailsSidebar = (props: {
 	isLoading: boolean;
 	downloadFile: (url: string | undefined) => void;
 	signedUrl: string | undefined;
-	addAssurance: (
-		fileState: DocumentDetailsSidebarFileState,
-		isAdding: boolean,
-	) => void;
+	addAssurance: (fileState: DocumentDetailsSidebarFileState, isAdding: boolean) => void;
 }) => {
 	const { mutate } = useSWRConfig();
 	const { logBrowser } = useColdContext();
@@ -92,11 +74,7 @@ const _DocumentDetailsSidebar = (props: {
 		await mutate('GET_ALL_FILES');
 	};
 
-	const getInitialFileState = (
-		file: FilesWithAssurances | undefined,
-	):
-		| DocumentDetailsSidebarFileState
-		| undefined => {
+	const getInitialFileState = (file: FilesWithAssurances | undefined): DocumentDetailsSidebarFileState | undefined => {
 		if (file) {
 			const fileState: DocumentDetailsSidebarFileState = {
 				id: file.id,
@@ -106,7 +84,7 @@ const _DocumentDetailsSidebar = (props: {
 				startDate: null,
 				endDate: null,
 				sustainabilityAttribute: '-1',
-        certificate_number: null
+				certificate_number: null,
 			};
 
 			const startDate = getEffectiveStartDate(file);
@@ -119,9 +97,9 @@ const _DocumentDetailsSidebar = (props: {
 				fileState['sustainabilityAttribute'] = file.attributeAssurances[0]?.sustainabilityAttribute?.id || '-1';
 			}
 
-      if(file.type === 'CERTIFICATE' || file.type === 'SCOPE_CERTIFICATE') {
-        fileState['certificate_number'] = get(file.metadata, 'certificate_number', null);
-      }
+			if (file.type === 'CERTIFICATE' || file.type === 'SCOPE_CERTIFICATE') {
+				fileState['certificate_number'] = get(file.metadata, 'certificate_number', null);
+			}
 
 			return fileState;
 		} else {
@@ -129,24 +107,23 @@ const _DocumentDetailsSidebar = (props: {
 		}
 	};
 
-	const [fileState, setFileState] = React.useState<
-		| DocumentDetailsSidebarFileState
-		| undefined
-	>(undefined);
+	const [fileState, setFileState] = React.useState<DocumentDetailsSidebarFileState | undefined>(undefined);
 
 	useEffect(() => {
 		// listen to file changes and update the file state
 		setFileState(getInitialFileState(file));
 	}, [file]);
 
-	const documentTypeOptions: InputOption[] = fileTypes.map((type, index) => {
-		const name = startCase(lowerCase(type.replace(/_/g, ' ')));
-		return {
-			id: index,
-			name: name,
-			value: type,
-		};
-	}).sort((a, b) => a.name.localeCompare(b.name));
+	const documentTypeOptions: InputOption[] = fileTypes
+		.map((type, index) => {
+			const name = startCase(lowerCase(type.replace(/_/g, ' ')));
+			return {
+				id: index,
+				name: name,
+				value: type,
+			};
+		})
+		.sort((a, b) => a.name.localeCompare(b.name));
 
 	const getSustainabilityAttributeDropdown = (fileState: DocumentDetailsSidebarFileState) => {
 		const defaultSustainabilityAttributeOption = {
@@ -156,13 +133,13 @@ const _DocumentDetailsSidebar = (props: {
 		};
 
 		const susAttributes: InputOption[] = [
-      defaultSustainabilityAttributeOption,
-      ...sustainabilityAttributes.map((attribute, index) => ({
-        id: index,
-        name: attribute.name,
-        value: attribute.id,
-      })),
-    ];
+			defaultSustainabilityAttributeOption,
+			...sustainabilityAttributes.map((attribute, index) => ({
+				id: index,
+				name: attribute.name,
+				value: attribute.id,
+			})),
+		];
 
 		return (
 			<div className={'w-full flex flex-col gap-[8px]'}>
@@ -181,39 +158,39 @@ const _DocumentDetailsSidebar = (props: {
 		);
 	};
 
-  const getCertificateNumberInput = (fileState: DocumentDetailsSidebarFileState) => {
-    if(fileState.type !== 'CERTIFICATE' && fileState.type !== 'SCOPE_CERTIFICATE') {
-      return null;
-    }
-    return (
-      <div className={'w-full flex flex-col gap-[8px]'}>
-        <div className={'w-full text-tc-primary text-eyebrow'}>Certificate ID</div>
-        <Input
-          input_props={{
-            className: 'w-full border-[1.5px] border-gray-90 rounded-[8px] p-4 text-body focus:border-gray-90 focus:border-[1.5px]',
-            name: 'certificate_number',
-            type: 'text',
-            value: fileState.certificate_number || '',
-            placeholder: 'Enter certificate ID',
-            onValueChange: (value: any) => {
-              if(value === '') {
-                setFileState({ ...fileState, certificate_number: null });
-              } else {
-                setFileState({ ...fileState, certificate_number: value });
-              }
-            },
-            onChange: (e: any) => {
-              if(e.target.value === '') {
-                setFileState({ ...fileState, certificate_number: null });
-              } else {
-                setFileState({...fileState, certificate_number: e.target.value});
-              }
-            }
-          }}
-        />
-      </div>
-    );
-  }
+	const getCertificateNumberInput = (fileState: DocumentDetailsSidebarFileState) => {
+		if (fileState.type !== 'CERTIFICATE' && fileState.type !== 'SCOPE_CERTIFICATE') {
+			return null;
+		}
+		return (
+			<div className={'w-full flex flex-col gap-[8px]'}>
+				<div className={'w-full text-tc-primary text-eyebrow'}>Certificate ID</div>
+				<Input
+					input_props={{
+						className: 'w-full border-[1.5px] border-gray-90 rounded-[8px] p-4 text-body focus:border-gray-90 focus:border-[1.5px]',
+						name: 'certificate_number',
+						type: 'text',
+						value: fileState.certificate_number || '',
+						placeholder: 'Enter certificate ID',
+						onValueChange: (value: any) => {
+							if (value === '') {
+								setFileState({ ...fileState, certificate_number: null });
+							} else {
+								setFileState({ ...fileState, certificate_number: value });
+							}
+						},
+						onChange: (e: any) => {
+							if (e.target.value === '') {
+								setFileState({ ...fileState, certificate_number: null });
+							} else {
+								setFileState({ ...fileState, certificate_number: e.target.value });
+							}
+						},
+					}}
+				/>
+			</div>
+		);
+	};
 
 	const getDatePickers = (fileState: DocumentDetailsSidebarFileState) => {
 		return (
@@ -224,11 +201,11 @@ const _DocumentDetailsSidebar = (props: {
 						// @ts-ignore
 						value={fileState.startDate}
 						onChange={(date: Date | null) => {
-              if(date) {
-                setFileState({...fileState, startDate: date});
-              } else {
-                setFileState({...fileState, startDate: date});
-              }
+							if (date) {
+								setFileState({ ...fileState, startDate: date });
+							} else {
+								setFileState({ ...fileState, startDate: date });
+							}
 						}}
 						slotProps={{
 							field: {
@@ -279,11 +256,11 @@ const _DocumentDetailsSidebar = (props: {
 						// @ts-ignore
 						value={fileState.endDate}
 						onChange={(date: Date | null) => {
-              if(date) {
-                setFileState({...fileState, endDate: date});
-              } else {
-                setFileState({...fileState, endDate: date});
-              }
+							if (date) {
+								setFileState({ ...fileState, endDate: date });
+							} else {
+								setFileState({ ...fileState, endDate: date });
+							}
 						}}
 						slotProps={{
 							field: {
@@ -409,15 +386,15 @@ const _DocumentDetailsSidebar = (props: {
 						type: fileState.type,
 					},
 				};
-        // update the file metadata
-        variables.input.metadata = {
-          ...(file.metadata || {}),
-          effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-          effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
-        };
-        if(fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
-          variables.input.metadata.certificate_number = fileState.certificate_number;
-        }
+				// update the file metadata
+				variables.input.metadata = {
+					...(file.metadata || {}),
+					effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+					effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+				};
+				if (fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
+					variables.input.metadata.certificate_number = fileState.certificate_number;
+				}
 				promises.push(updateDocument(variables));
 			}
 
@@ -446,62 +423,62 @@ const _DocumentDetailsSidebar = (props: {
 
 			const sustainabilityAttribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttribute);
 
-      // update assurances if sustainability attribute is not undefined
+			// update assurances if sustainability attribute is not undefined
 			if (sustainabilityAttribute !== undefined) {
-        if (hasAssurances) {
-          // delete existing assurances
-          const deleteCals = getDeleteAttributeAssuranceCalls(sustainabilityAttribute);
-          promises.push(...deleteCals);
-          // update each assurance
-          forEach(file.attributeAssurances, assurance => {
-            if (assurance.organizationFacility !== null && sustainabilityAttribute.level === 'MATERIAL') {
-              return;
-            } else if (assurance.material !== null && sustainabilityAttribute.level === 'SUPPLIER') {
-              return;
-            }
-            promises.push(
-              updateAssurance({
-                input: {
-                  id: assurance.id,
-                  effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-                  effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
-                  sustainabilityAttribute: {
-                    id: fileState.sustainabilityAttribute,
-                  },
-                  updatedAt: new Date().toISOString(),
-                },
-              }),
-            );
-          });
-        } else {
-          // create new assurance
-          promises.push(
-            createAttributeAssurance({
-              input: {
-                effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-                effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
-                organizationFile: {
-                  id: fileState.id,
-                },
-                sustainabilityAttribute: {
-                  id: fileState.sustainabilityAttribute
-                },
-                organization: {
-                  id: orgId,
-                },
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-              },
-            }),
-          );
-        }
-      } else {
-        // if the sustainability attribute is not defined, delete all assurances
-        if(fileState.sustainabilityAttribute === '-1') {
-          const deleteCals = deleteAllAssurances();
-          promises.push(...deleteCals);
-        }
-      }
+				if (hasAssurances) {
+					// delete existing assurances
+					const deleteCals = getDeleteAttributeAssuranceCalls(sustainabilityAttribute);
+					promises.push(...deleteCals);
+					// update each assurance
+					forEach(file.attributeAssurances, assurance => {
+						if (assurance.organizationFacility !== null && sustainabilityAttribute.level === 'MATERIAL') {
+							return;
+						} else if (assurance.material !== null && sustainabilityAttribute.level === 'SUPPLIER') {
+							return;
+						}
+						promises.push(
+							updateAssurance({
+								input: {
+									id: assurance.id,
+									effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+									effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+									sustainabilityAttribute: {
+										id: fileState.sustainabilityAttribute,
+									},
+									updatedAt: new Date().toISOString(),
+								},
+							}),
+						);
+					});
+				} else {
+					// create new assurance
+					promises.push(
+						createAttributeAssurance({
+							input: {
+								effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+								effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+								organizationFile: {
+									id: fileState.id,
+								},
+								sustainabilityAttribute: {
+									id: fileState.sustainabilityAttribute,
+								},
+								organization: {
+									id: orgId,
+								},
+								createdAt: new Date().toISOString(),
+								updatedAt: new Date().toISOString(),
+							},
+						}),
+					);
+				}
+			} else {
+				// if the sustainability attribute is not defined, delete all assurances
+				if (fileState.sustainabilityAttribute === '-1') {
+					const deleteCals = deleteAllAssurances();
+					promises.push(...deleteCals);
+				}
+			}
 
 			await Promise.all(promises)
 				.then(responses => {
@@ -553,19 +530,19 @@ const _DocumentDetailsSidebar = (props: {
 		return deleteCalls;
 	};
 
-  const deleteAllAssurances = (): Promise<any>[] => {
-    const deleteCalls: Promise<any>[] = [];
-    file?.attributeAssurances.forEach(assurance => {
-      deleteCalls.push(
-        deleteAssurance({
-          filter: {
-            id: assurance.id,
-          },
-        }),
-      );
-    })
-    return deleteCalls;
-  }
+	const deleteAllAssurances = (): Promise<any>[] => {
+		const deleteCalls: Promise<any>[] = [];
+		file?.attributeAssurances.forEach(assurance => {
+			deleteCalls.push(
+				deleteAssurance({
+					filter: {
+						id: assurance.id,
+					},
+				}),
+			);
+		});
+		return deleteCalls;
+	};
 
 	const hasFileStateChanged = (fileState: DocumentDetailsSidebarFileState) => {
 		if (file === undefined) return false;
@@ -575,32 +552,36 @@ const _DocumentDetailsSidebar = (props: {
 		const endDatesAreSame = isSameDay(compareFileState.endDate || 0, fileState.endDate || 0);
 		const compareFileStateSustainabilityAttribute = compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute;
 		const isFileTypeSame = compareFileState.type === fileState.type;
-    let certificateNumberSame = true;
-    if(fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
-      certificateNumberSame = compareFileState.certificate_number === fileState.certificate_number;
-    }
+		let certificateNumberSame = true;
+		if (fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
+			certificateNumberSame = compareFileState.certificate_number === fileState.certificate_number;
+		}
 		return !(startDatesAreSame && endDatesAreSame && compareFileStateSustainabilityAttribute && isFileTypeSame && certificateNumberSame);
 	};
 
-  const ifOnlyTypeOrCertIdChanged = (
-    fileState: DocumentDetailsSidebarFileState,
-    compareFileState: DocumentDetailsSidebarFileState
-  ) => {
-    return (
-      compareFileState.endDate !== null &&
-      compareFileState.startDate !== null &&
-      fileState.endDate !== null &&
-      fileState.startDate !== null &&
-      isSameDay(compareFileState.startDate, fileState.startDate) &&
-      isSameDay(compareFileState.endDate, fileState.endDate) &&
-      compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute &&
-      (compareFileState.type !== fileState.type || compareFileState.certificate_number !== fileState.certificate_number) &&
-      hasAssurances
-    )
+	const ifOnlyTypeOrCertIdChanged = (fileState: DocumentDetailsSidebarFileState, compareFileState: DocumentDetailsSidebarFileState) => {
+		return (
+			compareFileState.endDate !== null &&
+			compareFileState.startDate !== null &&
+			fileState.endDate !== null &&
+			fileState.startDate !== null &&
+			isSameDay(compareFileState.startDate, fileState.startDate) &&
+			isSameDay(compareFileState.endDate, fileState.endDate) &&
+			compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute &&
+			(compareFileState.type !== fileState.type || compareFileState.certificate_number !== fileState.certificate_number) &&
+			hasAssurances
+		);
+	};
 
-  }
-
-	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
+	logBrowser('DocumentDetailsSidebar', 'info', {
+		file,
+		fileState,
+		sustainabilityAttributes,
+		isLoading,
+		signedUrl,
+		hasSustainabilityAttribute,
+		hasAssurances,
+	});
 
 	return (
 		<div
@@ -652,7 +633,7 @@ const _DocumentDetailsSidebar = (props: {
 									buttonClassName={'w-full border-[1.5px] border-gray-90 rounded-[8px]'}
 								/>
 							</div>
-              {getCertificateNumberInput(fileState)}
+							{getCertificateNumberInput(fileState)}
 							{getDatePickers(fileState)}
 							{getSaveButton(fileState)}
 							{getAssociatedRecordsTables(fileState)}

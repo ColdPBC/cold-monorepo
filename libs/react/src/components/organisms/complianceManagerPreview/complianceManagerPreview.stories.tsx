@@ -6,40 +6,40 @@ import { SWRResponse } from 'swr';
 import { ComplianceManagerCountsPayload } from '@coldpbc/interfaces';
 
 const meta: Meta<typeof ComplianceManagerPreview> = {
-  title: 'Organisms/ComplianceManagerPreview',
-  component: ComplianceManagerPreview,
-  tags: ['autodocs'],
-  decorators: [withKnobs],
+	title: 'Organisms/ComplianceManagerPreview',
+	component: ComplianceManagerPreview,
+	tags: ['autodocs'],
+	decorators: [withKnobs],
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const NonTargetScoreCompliance: Story = {
-  render: args => (
-    <StoryMockProvider>
-      <ComplianceManagerPreview />
-    </StoryMockProvider>
-  ),
+	render: args => (
+		<StoryMockProvider>
+			<ComplianceManagerPreview />
+		</StoryMockProvider>
+	),
 };
 
 export const TargetScoreCompliance: Story = {
-  render: args => (
-    <StoryMockProvider
-      complianceManagerContext={{
-        data: {
-          complianceCounts: {
-            data: getComplianceCountsMockWithOrgScore(),
-            error: undefined,
-            revalidate: () => {},
-            isValidating: false,
-            isLoading: false,
-            mutate: () => Promise.resolve(),
-          } as SWRResponse<ComplianceManagerCountsPayload, any, any>,
-          compliance: getComplianceMock().find(c => c.metadata.target_score !== undefined),
-        },
-      }}>
-      <ComplianceManagerPreview />
-    </StoryMockProvider>
-  ),
+	render: args => (
+		<StoryMockProvider
+			complianceManagerContext={{
+				data: {
+					complianceCounts: {
+						data: getComplianceCountsMockWithOrgScore(),
+						error: undefined,
+						revalidate: () => {},
+						isValidating: false,
+						isLoading: false,
+						mutate: () => Promise.resolve(),
+					} as SWRResponse<ComplianceManagerCountsPayload, any, any>,
+					compliance: getComplianceMock().find(c => c.metadata.target_score !== undefined),
+				},
+			}}>
+			<ComplianceManagerPreview />
+		</StoryMockProvider>
+	),
 };

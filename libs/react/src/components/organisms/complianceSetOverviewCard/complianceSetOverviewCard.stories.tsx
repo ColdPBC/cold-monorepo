@@ -7,153 +7,153 @@ import { ComplianceStatus } from '@coldpbc/enums';
 import { addDays } from 'date-fns';
 
 const meta = {
-  title: 'Organisms/ComplianceSetOverviewCard',
-  component: ComplianceSetOverviewCard,
-  tags: ['autodocs'],
-  decorators: [withKnobs],
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showNewCompliancePageHomeCold671: true,
-      },
-    },
-  },
+	title: 'Organisms/ComplianceSetOverviewCard',
+	component: ComplianceSetOverviewCard,
+	tags: ['autodocs'],
+	decorators: [withKnobs],
+	parameters: {
+		launchdarkly: {
+			flags: {
+				showNewCompliancePageHomeCold671: true,
+			},
+		},
+	},
 } satisfies Meta<typeof ComplianceSetOverviewCard>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const NotActive: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <ColdComplianceSetsProvider>
-          <ComplianceSetOverviewCard {...args} />
-        </ColdComplianceSetsProvider>
-      </StoryMockProvider>
-    );
-  },
-  args: {
-    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inActive),
-  },
+	render: args => {
+		return (
+			<StoryMockProvider>
+				<ColdComplianceSetsProvider>
+					<ComplianceSetOverviewCard {...args} />
+				</ColdComplianceSetsProvider>
+			</StoryMockProvider>
+		);
+	},
+	args: {
+		complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inActive),
+	},
 };
 
 export const InProgress0Percent: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <ColdComplianceSetsProvider>
-          <ComplianceSetOverviewCard {...args} />
-        </ColdComplianceSetsProvider>
-      </StoryMockProvider>
-    );
-  },
-  args: {
-    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 0),
-  },
+	render: args => {
+		return (
+			<StoryMockProvider>
+				<ColdComplianceSetsProvider>
+					<ComplianceSetOverviewCard {...args} />
+				</ColdComplianceSetsProvider>
+			</StoryMockProvider>
+		);
+	},
+	args: {
+		complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 0),
+	},
 };
 
 export const InProgress50Percent: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <ColdComplianceSetsProvider>
-          <ComplianceSetOverviewCard {...args} />
-        </ColdComplianceSetsProvider>
-      </StoryMockProvider>
-    );
-  },
-  args: {
-    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 50),
-  },
+	render: args => {
+		return (
+			<StoryMockProvider>
+				<ColdComplianceSetsProvider>
+					<ComplianceSetOverviewCard {...args} />
+				</ColdComplianceSetsProvider>
+			</StoryMockProvider>
+		);
+	},
+	args: {
+		complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 50),
+	},
 };
 
 export const InProgress100Percent: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <ColdComplianceSetsProvider>
-          <ComplianceSetOverviewCard {...args} />
-        </ColdComplianceSetsProvider>
-      </StoryMockProvider>
-    );
-  },
-  args: {
-    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 100),
-  },
+	render: args => {
+		return (
+			<StoryMockProvider>
+				<ColdComplianceSetsProvider>
+					<ComplianceSetOverviewCard {...args} />
+				</ColdComplianceSetsProvider>
+			</StoryMockProvider>
+		);
+	},
+	args: {
+		complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 100),
+	},
 };
 
 export const SubmittedByUser: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <ColdComplianceSetsProvider>
-          <ComplianceSetOverviewCard {...args} />
-        </ColdComplianceSetsProvider>
-      </StoryMockProvider>
-    );
-  },
-  args: {
-    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.submissionInProgress, 0),
-  },
+	render: args => {
+		return (
+			<StoryMockProvider>
+				<ColdComplianceSetsProvider>
+					<ComplianceSetOverviewCard {...args} />
+				</ColdComplianceSetsProvider>
+			</StoryMockProvider>
+		);
+	},
+	args: {
+		complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.submissionInProgress, 0),
+	},
 };
 
 export const SubmittedByCold: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <ColdComplianceSetsProvider>
-          <ComplianceSetOverviewCard {...args} />
-        </ColdComplianceSetsProvider>
-      </StoryMockProvider>
-    );
-  },
-  args: {
-    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.submittedByCold, 0),
-  },
+	render: args => {
+		return (
+			<StoryMockProvider>
+				<ColdComplianceSetsProvider>
+					<ComplianceSetOverviewCard {...args} />
+				</ColdComplianceSetsProvider>
+			</StoryMockProvider>
+		);
+	},
+	args: {
+		complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.submittedByCold, 0),
+	},
 };
 
 export const WithDueDate: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <ColdComplianceSetsProvider>
-          <ComplianceSetOverviewCard {...args} />
-        </ColdComplianceSetsProvider>
-      </StoryMockProvider>
-    );
-  },
-  args: {
-    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 0, addDays(new Date(), 30)),
-  },
+	render: args => {
+		return (
+			<StoryMockProvider>
+				<ColdComplianceSetsProvider>
+					<ComplianceSetOverviewCard {...args} />
+				</ColdComplianceSetsProvider>
+			</StoryMockProvider>
+		);
+	},
+	args: {
+		complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 0, addDays(new Date(), 30)),
+	},
 };
 
 export const WithNearDueDate: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <ColdComplianceSetsProvider>
-          <ComplianceSetOverviewCard {...args} />
-        </ColdComplianceSetsProvider>
-      </StoryMockProvider>
-    );
-  },
-  args: {
-    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 0, addDays(new Date(), 5)),
-  },
+	render: args => {
+		return (
+			<StoryMockProvider>
+				<ColdComplianceSetsProvider>
+					<ComplianceSetOverviewCard {...args} />
+				</ColdComplianceSetsProvider>
+			</StoryMockProvider>
+		);
+	},
+	args: {
+		complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 0, addDays(new Date(), 5)),
+	},
 };
 
 export const WithNearDueDateButSubmitted: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <ColdComplianceSetsProvider>
-          <ComplianceSetOverviewCard {...args} />
-        </ColdComplianceSetsProvider>
-      </StoryMockProvider>
-    );
-  },
-  args: {
-    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.submittedByCold, 0, addDays(new Date(), 5)),
-  },
+	render: args => {
+		return (
+			<StoryMockProvider>
+				<ColdComplianceSetsProvider>
+					<ComplianceSetOverviewCard {...args} />
+				</ColdComplianceSetsProvider>
+			</StoryMockProvider>
+		);
+	},
+	args: {
+		complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.submittedByCold, 0, addDays(new Date(), 5)),
+	},
 };

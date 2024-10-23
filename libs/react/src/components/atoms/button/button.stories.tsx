@@ -8,74 +8,74 @@ import React from 'react';
 import { Spinner } from '@coldpbc/components';
 
 const meta: Meta<typeof BaseButton> = {
-  title: 'Atoms/Button',
-  component: BaseButton,
-  tags: ['autodocs'],
-  decorators: [withKnobs],
-  argTypes: {
-    variant: {
-      control: 'select',
-      options: ButtonTypes,
-    },
-  },
+	title: 'Atoms/Button',
+	component: BaseButton,
+	tags: ['autodocs'],
+	decorators: [withKnobs],
+	argTypes: {
+		variant: {
+			control: 'select',
+			options: ButtonTypes,
+		},
+	},
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    label: 'Button',
-  },
+	args: {
+		label: 'Button',
+	},
 };
 
 export const DefaultIcon: Story = {
-  args: {
-    label: 'Button',
-    iconRight: IconNames.ColdJourneyIcon,
-  },
+	args: {
+		label: 'Button',
+		iconRight: IconNames.ColdJourneyIcon,
+	},
 };
 
 export const DefaultDisabled: Story = {
-  args: {
-    variant: ButtonTypes.primary,
-    label: 'Button',
-    disabled: true,
-  },
+	args: {
+		variant: ButtonTypes.primary,
+		label: 'Button',
+		disabled: true,
+	},
 };
 
 export const Secondary: Story = {
-  args: {
-    variant: ButtonTypes.secondary,
-    label: 'Button',
-  },
+	args: {
+		variant: ButtonTypes.secondary,
+		label: 'Button',
+	},
 };
 
 export const Warning: Story = {
-  args: {
-    variant: ButtonTypes.warning,
-    label: 'Cancel',
-  },
+	args: {
+		variant: ButtonTypes.warning,
+		label: 'Cancel',
+	},
 };
 
 export const Link: Story = {
-  args: {
-    variant: ButtonTypes.hyperlink,
-    label: 'This is a link',
-  },
+	args: {
+		variant: ButtonTypes.hyperlink,
+		label: 'This is a link',
+	},
 };
 
 export const ButtonWithSpinner: Story = {
-  render: (args) => (
-    <BaseButton {...args}>
-      <div className={'flex gap-2'}>
-        <span>Continue</span>
-        <Spinner size={GlobalSizes.small} />
-      </div>
-    </BaseButton>
-  ),
-  args: {
-    variant: ButtonTypes.primary,
-    disabled: true,
-  },
+	render: args => (
+		<BaseButton {...args}>
+			<div className={'flex gap-2'}>
+				<span>Continue</span>
+				<Spinner size={GlobalSizes.small} />
+			</div>
+		</BaseButton>
+	),
+	args: {
+		variant: ButtonTypes.primary,
+		disabled: true,
+	},
 };

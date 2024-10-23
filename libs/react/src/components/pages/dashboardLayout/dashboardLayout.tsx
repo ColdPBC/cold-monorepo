@@ -6,14 +6,14 @@ import { twMerge } from 'tailwind-merge';
 import { ApplicationToaster } from '../../molecules';
 
 export const DashboardLayout = (props: PropsWithChildren<any>) => {
-  const ldFlags = useFlags();
-  return (
-    <div className={twMerge('overflow-y-auto', ldFlags.showNewNavigationCold698 ? 'flex-row relative justify-start w-full h-full pl-[58px]' : 'flex gap-6 p-10')}>
-      <SideBar />
-      <>
-        <Outlet />
-        <ApplicationToaster />
-      </>
-    </div>
-  );
+	const ldFlags = useFlags();
+	return (
+		<div className={twMerge('overflow-y-auto', ldFlags.showNewNavigationCold698 ? 'flex-row relative justify-start w-full h-full pl-[58px]' : 'flex gap-6 p-10')}>
+			<SideBar />
+			<>
+				<Outlet />
+				<ApplicationToaster />
+			</>
+		</div>
+	);
 };

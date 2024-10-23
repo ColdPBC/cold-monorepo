@@ -5,37 +5,37 @@ import { StoryMockProvider } from '@coldpbc/mocks';
 import { useState } from 'react';
 
 const meta: Meta<typeof QuestionnaireSidebar> = {
-  title: 'Organisms/QuestionnaireSidebar',
-  component: QuestionnaireSidebar,
-  tags: ['autodocs'],
-  decorators: [withKnobs],
+	title: 'Organisms/QuestionnaireSidebar',
+	component: QuestionnaireSidebar,
+	tags: ['autodocs'],
+	decorators: [withKnobs],
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: args => {
-    return <SidebarStory {...args} />;
-  },
-  args: {
-    sidebarOpen: true,
-    setSidebarOpen: () => {},
-  },
+	render: args => {
+		return <SidebarStory {...args} />;
+	},
+	args: {
+		sidebarOpen: true,
+		setSidebarOpen: () => {},
+	},
 };
 
 const SidebarStory = (args: any) => {
-  const [open, setOpen] = useState(true);
-  return (
-    <StoryMockProvider>
-      <div className={'w-[407px] h-screen'}>
-        <QuestionnaireSidebar
-          sidebarOpen={open}
-          setSidebarOpen={() => {
-            setOpen(!open);
-          }}
-        />
-      </div>
-    </StoryMockProvider>
-  );
+	const [open, setOpen] = useState(true);
+	return (
+		<StoryMockProvider>
+			<div className={'w-[407px] h-screen'}>
+				<QuestionnaireSidebar
+					sidebarOpen={open}
+					setSidebarOpen={() => {
+						setOpen(!open);
+					}}
+				/>
+			</div>
+		</StoryMockProvider>
+	);
 };

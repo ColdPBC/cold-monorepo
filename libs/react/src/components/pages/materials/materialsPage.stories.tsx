@@ -4,38 +4,38 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { materialsGraphqlMock, StoryMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof MaterialsPage> = {
-  title: 'Pages/MaterialsPage',
-  component: MaterialsPage,
-  tags: ['autodocs'],
-  decorators: [withKnobs],
+	title: 'Pages/MaterialsPage',
+	component: MaterialsPage,
+	tags: ['autodocs'],
+	decorators: [withKnobs],
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider graphqlMocks={materialsGraphqlMock}>
-        <MaterialsPage />
-      </StoryMockProvider>
-    );
-  },
+	render: () => {
+		return (
+			<StoryMockProvider graphqlMocks={materialsGraphqlMock}>
+				<MaterialsPage />
+			</StoryMockProvider>
+		);
+	},
 };
 
 export const WithoutAttributesFromRelatedEntitiesFlagEnabled: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider graphqlMocks={materialsGraphqlMock}>
-        <MaterialsPage />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showEntitySustainabilityAttributesForRelatedEntitiesCold1128: false,
-      },
-    },
-  }
+	render: () => {
+		return (
+			<StoryMockProvider graphqlMocks={materialsGraphqlMock}>
+				<MaterialsPage />
+			</StoryMockProvider>
+		);
+	},
+	parameters: {
+		launchdarkly: {
+			flags: {
+				showEntitySustainabilityAttributesForRelatedEntitiesCold1128: false,
+			},
+		},
+	},
 };

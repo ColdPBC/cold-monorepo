@@ -12,49 +12,44 @@ interface ProductSustainabilityAttributesCardProps {
 
 const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttributesCardProps> = ({ product }) => {
 	// Grab the attribute assurances for each entity level, and append the entity ID
-  const productAttributeAssurances = product.attributeAssurances.map((attributeAssurance) => ({...attributeAssurance, product: { id: product.id }, }));
-	const materialAttributeAssurances = product.productMaterials.flatMap(
-    productMaterial => {
-      const material = productMaterial.material
-      if (material) {
-        return material.attributeAssurances.map(
-          attributeAssurance => (
-            { ...attributeAssurance, material: { id: material.id } }
-          )
-        );
-      } else {
-        return [];
-      }
-    }
-  ) || [];
-	const tier1supplierAttributeAssurances = product.organizationFacility?.attributeAssurances.map((attributeAssurance) => ({...attributeAssurance, organizationFacility: {id: product.organizationFacility!.id }})) || [];
-  const tier2supplierAttributeAssurances = product.productMaterials.flatMap(
-    productMaterial => {
-      // Note: In practice each material can only have one tier 2 supplier.
-      const tier2Supplier = productMaterial.material?.materialSuppliers[0]?.organizationFacility;
-      if (tier2Supplier) {
-        return tier2Supplier.attributeAssurances.map(
-          attributeAssurance => (
-            { ...attributeAssurance, organizationFacility: { id: tier2Supplier.id } }
-          )
-        );
-      } else {
-        return [];
-      }
-    }
-  );
+	const productAttributeAssurances = product.attributeAssurances.map(attributeAssurance => ({
+		...attributeAssurance,
+		product: { id: product.id },
+	}));
+	const materialAttributeAssurances =
+		product.productMaterials.flatMap(productMaterial => {
+			const material = productMaterial.material;
+			if (material) {
+				return material.attributeAssurances.map(attributeAssurance => ({ ...attributeAssurance, material: { id: material.id } }));
+			} else {
+				return [];
+			}
+		}) || [];
+	const tier1supplierAttributeAssurances =
+		product.organizationFacility?.attributeAssurances.map(attributeAssurance => ({
+			...attributeAssurance,
+			organizationFacility: { id: product.organizationFacility!.id },
+		})) || [];
+	const tier2supplierAttributeAssurances = product.productMaterials.flatMap(productMaterial => {
+		// Note: In practice each material can only have one tier 2 supplier.
+		const tier2Supplier = productMaterial.material?.materialSuppliers[0]?.organizationFacility;
+		if (tier2Supplier) {
+			return tier2Supplier.attributeAssurances.map(attributeAssurance => ({ ...attributeAssurance, organizationFacility: { id: tier2Supplier.id } }));
+		} else {
+			return [];
+		}
+	});
 
-  // These filters reflect the current state of our data, but be unnecessary if we had better data validations
-  const productSustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(productAttributeAssurances).
-    filter(sustainabilityAttribute => sustainabilityAttribute.level === EntityLevel.PRODUCT).
-    sort((a, b) => a.name.localeCompare(b.name));
-  const materialSustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(materialAttributeAssurances).
-    filter(sustainabilityAttribute => sustainabilityAttribute.level === EntityLevel.MATERIAL).
-    sort((a, b) => a.name.localeCompare(b.name));
-  const supplierSustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(
-    [...tier1supplierAttributeAssurances, ...tier2supplierAttributeAssurances]
-  ).filter(sustainabilityAttribute => sustainabilityAttribute.level === EntityLevel.SUPPLIER).
-    sort((a, b) => a.name.localeCompare(b.name));
+	// These filters reflect the current state of our data, but be unnecessary if we had better data validations
+	const productSustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(productAttributeAssurances)
+		.filter(sustainabilityAttribute => sustainabilityAttribute.level === EntityLevel.PRODUCT)
+		.sort((a, b) => a.name.localeCompare(b.name));
+	const materialSustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(materialAttributeAssurances)
+		.filter(sustainabilityAttribute => sustainabilityAttribute.level === EntityLevel.MATERIAL)
+		.sort((a, b) => a.name.localeCompare(b.name));
+	const supplierSustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes([...tier1supplierAttributeAssurances, ...tier2supplierAttributeAssurances])
+		.filter(sustainabilityAttribute => sustainabilityAttribute.level === EntityLevel.SUPPLIER)
+		.sort((a, b) => a.name.localeCompare(b.name));
 
 	return (
 		<Card title={'Sustainability Attributes'} className={'w-full h-fit'} data-testid={'product-sustainability-attributes-card'}>

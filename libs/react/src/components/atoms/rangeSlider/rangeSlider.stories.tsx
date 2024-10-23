@@ -5,35 +5,35 @@ import { Meta, StoryObj } from '@storybook/react';
 import { RangeSlider } from './rangeSlider';
 
 const meta: Meta<typeof RangeSlider> = {
-  title: 'Atoms/RangeSlider',
-  component: RangeSlider,
-  tags: ['autodocs'],
-  decorators: [withKnobs],
+	title: 'Atoms/RangeSlider',
+	component: RangeSlider,
+	tags: ['autodocs'],
+	decorators: [withKnobs],
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args: any) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [values, setValues] = useState([0] as number[]);
+	render: (args: any) => {
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		const [values, setValues] = useState([0] as number[]);
 
-    const onChange = (values: number[]) => {
-      setValues(values);
-    };
+		const onChange = (values: number[]) => {
+			setValues(values);
+		};
 
-    return (
-      <div className={'w-96'}>
-        <RangeSlider {...args} defaultValue={values[0]} onChange={onChange} />
-      </div>
-    );
-  },
-  args: {
-    min: 0,
-    max: 10,
-    label: 'Number of employees',
-    inputName: 'employee_number',
-    title: 'Select estimated value',
-  },
+		return (
+			<div className={'w-96'}>
+				<RangeSlider {...args} defaultValue={values[0]} onChange={onChange} />
+			</div>
+		);
+	},
+	args: {
+		min: 0,
+		max: 10,
+		label: 'Number of employees',
+		inputName: 'employee_number',
+		title: 'Select estimated value',
+	},
 };

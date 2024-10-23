@@ -3,81 +3,77 @@ import { EmptyState, SustainabilityAttributeCard } from '@coldpbc/components';
 import type { SustainabilityAttribute } from '@coldpbc/interfaces';
 
 interface SustainabilityAttributeTabProps {
-  tab: 'My Attributes' | 'Other Attributes';
-  sustainabilityAttributes: SustainabilityAttribute[];
+	tab: 'My Attributes' | 'Other Attributes';
+	sustainabilityAttributes: SustainabilityAttribute[];
 }
 
 const CARD_MIN_WIDTH = 475; // Minimum width of a single card
 const GAP_WIDTH = 16; // Gap between cards
 
 const ASK_FOR_NEW_ATTRIBUTE = (
-  <p>
-    Not seeing the certification you're looking for?{' '}
-    If you would like to add a new Sustainability Attribute to Cold contact our{' '}
-    <a href="mailto:support@coldclimate.com" className="hover:underline">
-      support@coldclimate.com
-    </a>{' '}
-    to request.
-  </p>
+	<p>
+		Not seeing the certification you're looking for? If you would like to add a new Sustainability Attribute to Cold contact our{' '}
+		<a href="mailto:support@coldclimate.com" className="hover:underline">
+			support@coldclimate.com
+		</a>{' '}
+		to request.
+	</p>
 );
 
 const MY_ATTRIBUTES_EMPTY_STATE_PROPS = {
-  header: (
-    <p>
-      Welcome! To get started with sustainability attribute tracking, upload documents for any certifications,
-      standards, or statements on the{' '}
-      <a href={'/documents'} className="hover:underline">
-        Documents Tab
-      </a>
-    </p>
-  )
+	header: (
+		<p>
+			Welcome! To get started with sustainability attribute tracking, upload documents for any certifications, standards, or statements on the{' '}
+			<a href={'/documents'} className="hover:underline">
+				Documents Tab
+			</a>
+		</p>
+	),
 };
 
 const OTHER_ATTRIBUTES_EMPTY_STATE_PROPS = {
-  header: "Wow! You're already tracking all of Cold's current sustainability attributes.",
-  body: ASK_FOR_NEW_ATTRIBUTE
+	header: "Wow! You're already tracking all of Cold's current sustainability attributes.",
+	body: ASK_FOR_NEW_ATTRIBUTE,
 };
 
 export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProps> = ({ tab, sustainabilityAttributes }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [columnCount, setColumnCount] = useState(1);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const [columnCount, setColumnCount] = useState(1);
 
-  useEffect(() => {
-    const updateColumnCount = () => {
-      if (!containerRef.current) return;
+	useEffect(() => {
+		const updateColumnCount = () => {
+			if (!containerRef.current) return;
 
-      const containerWidth = containerRef.current.offsetWidth;
-      const possibleColumns = Math.floor((containerWidth + GAP_WIDTH) / (CARD_MIN_WIDTH + GAP_WIDTH));
-      const newColumnCount = Math.max(1, Math.min(3, possibleColumns));
+			const containerWidth = containerRef.current.offsetWidth;
+			const possibleColumns = Math.floor((containerWidth + GAP_WIDTH) / (CARD_MIN_WIDTH + GAP_WIDTH));
+			const newColumnCount = Math.max(1, Math.min(3, possibleColumns));
 
-      setColumnCount(newColumnCount);
-    };
+			setColumnCount(newColumnCount);
+		};
 
-    // Initial calculation
-    updateColumnCount();
+		// Initial calculation
+		updateColumnCount();
 
-    // Create ResizeObserver to watch for container size changes
-    const resizeObserver = new ResizeObserver(updateColumnCount);
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
+		// Create ResizeObserver to watch for container size changes
+		const resizeObserver = new ResizeObserver(updateColumnCount);
+		if (containerRef.current) {
+			resizeObserver.observe(containerRef.current);
+		}
 
-    return () => resizeObserver.disconnect();
-  }, []);
+		return () => resizeObserver.disconnect();
+	}, []);
 
-  const gridClassName = {
-    1: 'grid-cols-1',
-    2: 'grid-cols-2',
-    3: 'grid-cols-3'
-  }[columnCount];
+	const gridClassName = {
+		1: 'grid-cols-1',
+		2: 'grid-cols-2',
+		3: 'grid-cols-3',
+	}[columnCount];
 
-  if (sustainabilityAttributes.length === 0) {
-    return (
-      <EmptyState {...tab === 'My Attributes' ? MY_ATTRIBUTES_EMPTY_STATE_PROPS : OTHER_ATTRIBUTES_EMPTY_STATE_PROPS } />
-    );
-  }
+	if (sustainabilityAttributes.length === 0) {
+		return <EmptyState {...(tab === 'My Attributes' ? MY_ATTRIBUTES_EMPTY_STATE_PROPS : OTHER_ATTRIBUTES_EMPTY_STATE_PROPS)} />;
+	}
 
-  return (
+	return (
 		<div ref={containerRef} className="w-full">
 			<div className={`py-6 grid ${gridClassName} gap-4`}>
 				{sustainabilityAttributes.map(sustainabilityAttribute => (

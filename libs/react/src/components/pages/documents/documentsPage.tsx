@@ -1,37 +1,37 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLSWR, useOrgSWR } from '@coldpbc/hooks';
 import {
-  DocumentDetailsSidebar,
-  DocumentsHeaderTypes,
-  DocumentsTable,
-  DocumentUploadButton,
-  ErrorFallback,
-  MainContent,
-  Modal,
-  Spinner,
-  DocumentsAddAssuranceModal,
-  DocumentDetailsSidebarFileState
+	DocumentDetailsSidebar,
+	DocumentsHeaderTypes,
+	DocumentsTable,
+	DocumentUploadButton,
+	ErrorFallback,
+	MainContent,
+	Modal,
+	Spinner,
+	DocumentsAddAssuranceModal,
+	DocumentDetailsSidebarFileState,
 } from '@coldpbc/components';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { FilesWithAssurances, SchemaEnum, ToastMessage } from '@coldpbc/interfaces';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
-import {AxiosError, isAxiosError} from 'axios';
+import { AxiosError, isAxiosError } from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
-import {get} from 'lodash';
+import { get } from 'lodash';
 
 const _DocumentsPage = () => {
 	const [selectedDocument, setSelectedDocument] = React.useState<string | undefined>(undefined);
 	const [documentToDelete, setDocumentToDelete] = React.useState<FilesWithAssurances | undefined>(undefined);
 	const [documentToAddAssurance, setDocumentToAddAssurance] = React.useState<
-		{
-        fileState: DocumentDetailsSidebarFileState;
-        isAdding: boolean;
-    }
+		| {
+				fileState: DocumentDetailsSidebarFileState;
+				isAdding: boolean;
+		  }
 		| undefined
 	>(undefined);
 	const [deleteButtonLoading, setDeleteButtonLoading] = React.useState(false);
 	const [files, setFiles] = React.useState<FilesWithAssurances[]>([]);
-  const [fileTypes, setFileTypes] = React.useState<string[]>([]);
+	const [fileTypes, setFileTypes] = React.useState<string[]>([]);
 	const [selectedDocumentURL, setSelectedDocumentURL] = React.useState<string | undefined>(undefined);
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
@@ -43,7 +43,7 @@ const _DocumentsPage = () => {
 			organization: {
 				id: orgId,
 			},
-      visible: true,
+			visible: true,
 		},
 	});
 	const allSustainabilityAttributes = useGraphQLSWR('GET_ALL_SUS_ATTRIBUTES', {
@@ -53,7 +53,7 @@ const _DocumentsPage = () => {
 			},
 		},
 	});
-  const allFileTypes = useGraphQLSWR('GET_ALL_SCHEMA_ENUMS');
+	const allFileTypes = useGraphQLSWR('GET_ALL_SCHEMA_ENUMS');
 
 	useEffect(() => {
 		const files = get(allFiles.data, 'data.organizationFiles', []);
@@ -68,25 +68,22 @@ const _DocumentsPage = () => {
 		}
 	}, [selectedFileURLSWR]);
 
-  useEffect(() => {
-    if(!allFileTypes.data) return;
-    const fileTypes = get(allFileTypes.data, 'data._graphweaver.enums', []);
-    const errors = get(allFileTypes.data, 'errors', []);
-    if(!errors || (errors && errors.length === 0)) {
-      // find the enum with the name 'OrganizationFilesType'
-      const fileEnum = fileTypes.find((fileType: SchemaEnum) => fileType.name === 'OrganizationFilesType');
-      // get all the value fields from the values array
-      const typeValues = fileEnum?.values.map((value: {
-        name: string;
-        value: string;
-      }) => value.value);
-      if(typeValues) {
-        setFileTypes(typeValues);
-      }
-    } else {
-      setFileTypes([]);
-    }
-  }, [allFileTypes.data]);
+	useEffect(() => {
+		if (!allFileTypes.data) return;
+		const fileTypes = get(allFileTypes.data, 'data._graphweaver.enums', []);
+		const errors = get(allFileTypes.data, 'errors', []);
+		if (!errors || (errors && errors.length === 0)) {
+			// find the enum with the name 'OrganizationFilesType'
+			const fileEnum = fileTypes.find((fileType: SchemaEnum) => fileType.name === 'OrganizationFilesType');
+			// get all the value fields from the values array
+			const typeValues = fileEnum?.values.map((value: { name: string; value: string }) => value.value);
+			if (typeValues) {
+				setFileTypes(typeValues);
+			}
+		} else {
+			setFileTypes([]);
+		}
+	}, [allFileTypes.data]);
 
 	if (allFiles.error) {
 		logBrowser('Error fetching files', 'error', { ...allFiles.error }, allFiles.error);
@@ -96,63 +93,63 @@ const _DocumentsPage = () => {
 		return <Spinner />;
 	}
 
-  const handleFileUpload = async (response: any, context: any) => {
-    if (isAxiosError(response)) {
-      logBrowser('Upload failed', 'error', {...context, response});
-      const error: AxiosError = response;
-      if(error.response?.status === 409) {
-        await addToastMessage({
-          type: ToastMessage.FAILURE,
-          message: 'File already exists. Error Uploading',
-          position: 'bottomRight',
-        });
-      } else {
-        await addToastMessage({
-          type: ToastMessage.FAILURE,
-          message: 'Upload failed',
-          position: 'bottomRight',
-        });
-      }
-    } else {
-      await addToastMessage({
-        type: ToastMessage.SUCCESS,
-        message: (
-          <div className={'flex flex-col gap-[10px]'}>
-            <div className={'font-bold'}>Upload Complete</div>
-            <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
-          </div>
-        ),
-        position: 'bottomRight',
-      });
-      logBrowser('File Upload successful', 'info', {...context, response});
-    }
-  }
+	const handleFileUpload = async (response: any, context: any) => {
+		if (isAxiosError(response)) {
+			logBrowser('Upload failed', 'error', { ...context, response });
+			const error: AxiosError = response;
+			if (error.response?.status === 409) {
+				await addToastMessage({
+					type: ToastMessage.FAILURE,
+					message: 'File already exists. Error Uploading',
+					position: 'bottomRight',
+				});
+			} else {
+				await addToastMessage({
+					type: ToastMessage.FAILURE,
+					message: 'Upload failed',
+					position: 'bottomRight',
+				});
+			}
+		} else {
+			await addToastMessage({
+				type: ToastMessage.SUCCESS,
+				message: (
+					<div className={'flex flex-col gap-[10px]'}>
+						<div className={'font-bold'}>Upload Complete</div>
+						<div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
+					</div>
+				),
+				position: 'bottomRight',
+			});
+			logBrowser('File Upload successful', 'info', { ...context, response });
+		}
+	};
 
-  const getPageButtons = () => {
-    return (
-      <div className={'h-auto'}>
-        <DocumentUploadButton
-          buttonProps={{
-            label: 'Add New',
-            iconLeft: IconNames.PlusIcon,
-          }}
-          mutateFunction={allFiles.mutate}
-          successfulToastMessage={{
-            message: (
-              <div className={'flex flex-col gap-[10px]'}>
-                <div className={'font-bold'}>Upload Complete</div>
-                <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
-              </div>
-            ),
-            position: 'bottomRight',
-          }}
-          failureToastMessage={{
-            position: 'bottomRight',
-          }}
-        />
-      </div>
-    );
-  };
+	const getPageButtons = () => {
+		return (
+			<div className={'h-auto'}>
+				<DocumentUploadButton
+					buttonProps={{
+						label: 'Add New',
+						iconLeft: IconNames.PlusIcon,
+					}}
+					mutateFunction={allFiles.mutate}
+					successfulToastMessage={{
+						message: (
+							<div className={'flex flex-col gap-[10px]'}>
+								<div className={'font-bold'}>Upload Complete</div>
+								<div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
+							</div>
+						),
+						position: 'bottomRight',
+					}}
+					failureToastMessage={{
+						position: 'bottomRight',
+					}}
+				/>
+			</div>
+		);
+	};
 
 	const deleteDocument = async (documentToDelete: FilesWithAssurances) => {
 		setDeleteButtonLoading(true);
@@ -249,17 +246,21 @@ const _DocumentsPage = () => {
 		);
 	};
 
-	const onAddAssuranceClick = (
-		fileState: DocumentDetailsSidebarFileState,
-		isAdding: boolean,
-	) => {
+	const onAddAssuranceClick = (fileState: DocumentDetailsSidebarFileState, isAdding: boolean) => {
 		setDocumentToAddAssurance({
 			fileState,
 			isAdding,
 		});
 	};
 
-	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, documentToDelete, documentToAddAssurance, files, allSustainabilityAttributes, fileTypes });
+	logBrowser('DocumentsPage rendered', 'info', {
+		selectedDocument,
+		documentToDelete,
+		documentToAddAssurance,
+		files,
+		allSustainabilityAttributes,
+		fileTypes,
+	});
 
 	return (
 		<div className="relative overflow-y-auto h-full w-full">
@@ -270,7 +271,7 @@ const _DocumentsPage = () => {
 			<DocumentDetailsSidebar
 				file={files.find(file => file.id === selectedDocument)}
 				sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
-        fileTypes={fileTypes}
+				fileTypes={fileTypes}
 				refreshFiles={updateFile}
 				closeSidebar={onSidebarClose}
 				innerRef={ref}

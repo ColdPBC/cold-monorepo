@@ -3,10 +3,10 @@ import MarkdownToJSX from 'markdown-to-jsx';
 import { twMerge } from 'tailwind-merge';
 
 export interface MarkdownProps {
-  className?: string;
-  markdown: string;
+	className?: string;
+	markdown: string;
 }
 
 export const Markdown = ({ markdown, className }: MarkdownProps) => {
-  return <MarkdownToJSX className={twMerge('prose', className)}>{markdown}</MarkdownToJSX>;
+	return <MarkdownToJSX className={twMerge('prose', className)}>{markdown}</MarkdownToJSX>;
 };

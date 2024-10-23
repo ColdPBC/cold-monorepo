@@ -1,4 +1,3 @@
-
 export type UserRole = {
-  name: string;
+	name: string;
 };

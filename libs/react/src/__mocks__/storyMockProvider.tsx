@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect } from 'react';
-import ColdContext, {ColdContextType, Organization} from '../context/coldContext';
+import ColdContext, { ColdContextType, Organization } from '../context/coldContext';
 import { worker } from './browser';
 import { HttpHandler } from 'msw';
 import { SWRConfig, SWRResponse } from 'swr';

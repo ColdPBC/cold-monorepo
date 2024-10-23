@@ -1,14 +1,8 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import {
-  getClaimsMock,
-  getFilesWithAssurances,
-  getFilesWithoutAssurances,
-  getFileTypesMock,
-  StoryMockProvider
-} from '@coldpbc/mocks';
-import {DocumentDetailsSidebar, DocumentDetailsSidebarFileState, DocumentsAddAssuranceModal} from '@coldpbc/components';
+import { getClaimsMock, getFilesWithAssurances, getFilesWithoutAssurances, getFileTypesMock, StoryMockProvider } from '@coldpbc/mocks';
+import { DocumentDetailsSidebar, DocumentDetailsSidebarFileState, DocumentsAddAssuranceModal } from '@coldpbc/components';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
 
 const meta = {
@@ -31,7 +25,7 @@ export const NoAssurances: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
+		fileTypes: getFileTypesMock(),
 	},
 };
 
@@ -45,7 +39,7 @@ export const WithAssurancesSupplierClaim: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
+		fileTypes: getFileTypesMock(),
 	},
 };
 
@@ -59,28 +53,28 @@ export const WithAssurancesMaterialClaim: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
+		fileTypes: getFileTypesMock(),
 	},
 };
 
 export const NonCertificateDocument: Story = {
-  render: args => {
-    return <SidebarStory {...args} />;
-  },
-  args: {
-    file: getFilesWithAssurances()[1],
-    innerRef: React.createRef(),
-    isLoading: false,
-    signedUrl: '',
-    sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
-  },
+	render: args => {
+		return <SidebarStory {...args} />;
+	},
+	args: {
+		file: getFilesWithAssurances()[1],
+		innerRef: React.createRef(),
+		isLoading: false,
+		signedUrl: '',
+		sustainabilityAttributes: getClaimsMock(),
+		fileTypes: getFileTypesMock(),
+	},
 };
 
 const SidebarStory = (props: {
 	file: FilesWithAssurances | undefined;
 	sustainabilityAttributes: Claims[];
-  fileTypes: string[];
+	fileTypes: string[];
 	refreshFiles: () => void;
 	closeSidebar: () => void;
 	innerRef: React.RefObject<HTMLDivElement>;
@@ -104,7 +98,7 @@ const SidebarStory = (props: {
 			<DocumentDetailsSidebar
 				file={selectedFile}
 				sustainabilityAttributes={sustainabilityAttributes}
-        fileTypes={fileTypes}
+				fileTypes={fileTypes}
 				refreshFiles={() => {}}
 				closeSidebar={() => setSelectedFile(undefined)}
 				innerRef={innerRef}
@@ -114,10 +108,7 @@ const SidebarStory = (props: {
 				downloadFile={() => {}}
 				signedUrl={''}
 				isLoading={false}
-				addAssurance={(
-					fileState: DocumentDetailsSidebarFileState,
-					isAdding: boolean,
-				) => {
+				addAssurance={(fileState: DocumentDetailsSidebarFileState, isAdding: boolean) => {
 					setAddAssuranceFile({ fileState, isAdding });
 				}}
 			/>

@@ -19,16 +19,15 @@ export const ErrorFallback = (props: FallbackProps) => {
 	addToastMessage({
 		// use a user friendly message about the component failing to render
 		message: (
-      <div className={'flex flex-col gap-[10px]'}>
-        <div className={'font-bold'}>Oops! Something went wrong.</div>
-        <div className={'test-eyebrow'}>
-          Please try refreshing the page.
-          If the issue persists please contact <a href="mailto:support@coldclimate.com">support@coldclimate.com</a>.
-        </div>
-      </div>
-    ),
+			<div className={'flex flex-col gap-[10px]'}>
+				<div className={'font-bold'}>Oops! Something went wrong.</div>
+				<div className={'test-eyebrow'}>
+					Please try refreshing the page. If the issue persists please contact <a href="mailto:support@coldclimate.com">support@coldclimate.com</a>.
+				</div>
+			</div>
+		),
 		type: ToastMessage.FAILURE,
-    position: 'bottomRight',
+		position: 'bottomRight',
 	});
 	return <div></div>;
 };

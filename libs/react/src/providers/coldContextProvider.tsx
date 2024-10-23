@@ -12,64 +12,64 @@ import { datadogLogs, StatusType } from '@datadog/browser-logs';
 import { ColdApolloProvider } from './coldApolloProvider';
 
 export interface ColdContextProviderProps {
-  auth0Options: Auth0ProviderOptions;
-  launchDarklyClientSideId: string;
+	auth0Options: Auth0ProviderOptions;
+	launchDarklyClientSideId: string;
 }
 
 export const ColdContextProvider = (props: PropsWithChildren<ColdContextProviderProps>) => {
-  const { auth0Options, launchDarklyClientSideId, children } = props;
+	const { auth0Options, launchDarklyClientSideId, children } = props;
 
-  const getImpersonatingOrg = () => {
-    const impersonatingOrg = sessionStorage.getItem('impersonatingOrg');
-    if (impersonatingOrg) {
-      return JSON.parse(impersonatingOrg);
-    } else {
-      return undefined;
-    }
-  };
+	const getImpersonatingOrg = () => {
+		const impersonatingOrg = sessionStorage.getItem('impersonatingOrg');
+		if (impersonatingOrg) {
+			return JSON.parse(impersonatingOrg);
+		} else {
+			return undefined;
+		}
+	};
 
-  const [impersonatingOrg, setImpersonatingOrg] = React.useState<any | undefined>(getImpersonatingOrg());
+	const [impersonatingOrg, setImpersonatingOrg] = React.useState<any | undefined>(getImpersonatingOrg());
 
-  const logError = (error: any, type: ErrorType, context?: object) => {
-    error.name = type;
-    datadogRum.addError(error, context);
-  };
+	const logError = (error: any, type: ErrorType, context?: object) => {
+		error.name = type;
+		datadogRum.addError(error, context);
+	};
 
-  const logBrowser = (message: string, type: StatusType, context?: any, error?: any) => {
-    datadogLogs.logger.log(message, context, type, error);
-  };
+	const logBrowser = (message: string, type: StatusType, context?: any, error?: any) => {
+		datadogLogs.logger.log(message, context, type, error);
+	};
 
-  const setSelectedOrg = (org: any) => {
-    logBrowser('Impersonating new organization', 'info', { org: org });
-    setImpersonatingOrg(org);
-    if (org) {
-      sessionStorage.setItem('impersonatingOrg', JSON.stringify(org));
-    } else {
-      sessionStorage.removeItem('impersonatingOrg');
-    }
-  };
+	const setSelectedOrg = (org: any) => {
+		logBrowser('Impersonating new organization', 'info', { org: org });
+		setImpersonatingOrg(org);
+		if (org) {
+			sessionStorage.setItem('impersonatingOrg', JSON.stringify(org));
+		} else {
+			sessionStorage.removeItem('impersonatingOrg');
+		}
+	};
 
-  return (
-    <BrowserRouter>
-      <ColdContext.Provider
-        value={{
-          auth0Options: auth0Options,
-          launchDarklyClientSideId: launchDarklyClientSideId,
-          logError: logError,
-          logBrowser: logBrowser,
-          impersonatingOrg: impersonatingOrg,
-          setImpersonatingOrg: setSelectedOrg,
-        }}>
-        <ColdAuthProvider>
-          <ColdAxiosInterceptorProvider>
-            <ColdLDProvider>
-              <ColdMQTTProvider>
-                <ColdApolloProvider>{children}</ColdApolloProvider>
-              </ColdMQTTProvider>
-            </ColdLDProvider>
-          </ColdAxiosInterceptorProvider>
-        </ColdAuthProvider>
-      </ColdContext.Provider>
-    </BrowserRouter>
-  );
+	return (
+		<BrowserRouter>
+			<ColdContext.Provider
+				value={{
+					auth0Options: auth0Options,
+					launchDarklyClientSideId: launchDarklyClientSideId,
+					logError: logError,
+					logBrowser: logBrowser,
+					impersonatingOrg: impersonatingOrg,
+					setImpersonatingOrg: setSelectedOrg,
+				}}>
+				<ColdAuthProvider>
+					<ColdAxiosInterceptorProvider>
+						<ColdLDProvider>
+							<ColdMQTTProvider>
+								<ColdApolloProvider>{children}</ColdApolloProvider>
+							</ColdMQTTProvider>
+						</ColdLDProvider>
+					</ColdAxiosInterceptorProvider>
+				</ColdAuthProvider>
+			</ColdContext.Provider>
+		</BrowserRouter>
+	);
 };

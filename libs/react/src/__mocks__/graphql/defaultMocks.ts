@@ -1,21 +1,21 @@
 import {
-  CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
-  CREATE_MATERIAL,
-  CREATE_MATERIAL_SUPPLIER,
-  CREATE_PRODUCT_MATERIAL,
-  GET_ALL_FILES,
-  GET_ALL_MATERIALS_FOR_ORG,
-  GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-  GET_ALL_ORGS,
-  GET_ALL_PRODUCTS,
-  GET_ALL_SCHEMA_ENUMS,
-  GET_ALL_SUPPLIERS_FOR_ORG,
-  GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-  GET_ALL_SUS_ATTRIBUTES,
-  GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
-  GET_PRODUCT,
-  UPDATE_DOCUMENT_ASSURANCE,
-  UPDATE_DOCUMENT_FIELDS,
+	CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
+	CREATE_MATERIAL,
+	CREATE_MATERIAL_SUPPLIER,
+	CREATE_PRODUCT_MATERIAL,
+	GET_ALL_FILES,
+	GET_ALL_MATERIALS_FOR_ORG,
+	GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+	GET_ALL_ORGS,
+	GET_ALL_PRODUCTS,
+	GET_ALL_SCHEMA_ENUMS,
+	GET_ALL_SUPPLIERS_FOR_ORG,
+	GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+	GET_ALL_SUS_ATTRIBUTES,
+	GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
+	GET_PRODUCT,
+	UPDATE_DOCUMENT_ASSURANCE,
+	UPDATE_DOCUMENT_FIELDS,
 } from '@coldpbc/lib';
 import {
 	filesProcessedWithDatesMock,
@@ -32,7 +32,7 @@ import { RequestHandler } from 'mock-apollo-client';
 import { get } from 'lodash';
 import { getSchemaMocks } from '../schemaMocks';
 import { getSupplierMocks } from '../suppliersMock';
-import {getProductsMock, getProductsMockById} from '../productsMock';
+import { getProductsMock, getProductsMockById } from '../productsMock';
 import { getMaterialsMocksWithAssurances } from '../materialsMock';
 import { AttributeAssuranceMock } from '../attributeAssuranceMock';
 import { EntityLevel } from '@coldpbc/enums';
@@ -455,17 +455,18 @@ export const defaultGraphqlMocks: {
 					materials: getMaterialsMocksWithAssurances(),
 				},
 			}),
-	}, {
-    query: GET_PRODUCT,
-    handler: (variables) => {
-      const {id} = variables as {id: string};
-      return Promise.resolve({
-        data: {
-          product: getProductsMockById(id),
-        },
-      })
-    }
-  }
+	},
+	{
+		query: GET_PRODUCT,
+		handler: variables => {
+			const { id } = variables as { id: string };
+			return Promise.resolve({
+				data: {
+					product: getProductsMockById(id),
+				},
+			});
+		},
+	},
 ];
 
 export const filesWithAssurancesMocks: {
@@ -514,62 +515,60 @@ export const filesProcessingMocks: {
 ];
 
 export const filesProcessedWithDatesMocks: {
-  query: DocumentNode;
-  handler: RequestHandler;
+	query: DocumentNode;
+	handler: RequestHandler;
 }[] = [
-  {
-    query: GET_ALL_FILES,
-    handler: () =>
-      Promise.resolve({
-        data: {
-          organizationFiles: filesProcessedWithDatesMock(),
-        },
-      }),
-  },
+	{
+		query: GET_ALL_FILES,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					organizationFiles: filesProcessedWithDatesMock(),
+				},
+			}),
+	},
 ];
 
 export const sustainabilityAttributesMocks = [
-  {
-    query: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
-    handler: () =>
-      Promise.resolve({
-        data: {
-          sustainabilityAttributes: [
-            // For 'My Attributes'
-            {
-              id: 'a',
-              name: 'Global Recycled Standard',
-              logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
-              attributeAssurances: [
-                AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: 'ACTIVE', index: 1}),
-              ],
-              level: 'MATERIAL',
-            },
-            // For 'Other Attributes'
-            {
-              id: 'b',
-              name: 'Fair Wear',
-              logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
-              attributeAssurances: [],
-              level: 'SUPPLIER',
-            }
-          ],
-        },
-      }),
-  }
+	{
+		query: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					sustainabilityAttributes: [
+						// For 'My Attributes'
+						{
+							id: 'a',
+							name: 'Global Recycled Standard',
+							logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
+							attributeAssurances: [AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: 'ACTIVE', index: 1 })],
+							level: 'MATERIAL',
+						},
+						// For 'Other Attributes'
+						{
+							id: 'b',
+							name: 'Fair Wear',
+							logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
+							attributeAssurances: [],
+							level: 'SUPPLIER',
+						},
+					],
+				},
+			}),
+	},
 ];
 
 export const filesWithTooManyRecordsMocks: {
-  query: DocumentNode;
-  handler: RequestHandler;
+	query: DocumentNode;
+	handler: RequestHandler;
 }[] = [
-  {
-    query: GET_ALL_FILES,
-    handler: () =>
-      Promise.resolve({
-        data: {
-          organizationFiles: filesWithTooManyRecordsMock(),
-        },
-      }),
-  },
+	{
+		query: GET_ALL_FILES,
+		handler: () =>
+			Promise.resolve({
+				data: {
+					organizationFiles: filesWithTooManyRecordsMock(),
+				},
+			}),
+	},
 ];

@@ -10,41 +10,41 @@ export const DocumentsHeaderTypes = (props: { files: FilesWithAssurances[] }) =>
 
 	const fileTypes: { title: string; amount: number; totalAmount: number }[] = [
 		{
-			title: "Certificates",
+			title: 'Certificates',
 			amount: 0,
 			totalAmount: files.length,
 		},
 		{
-			title: "Statements",
+			title: 'Statements',
 			amount: 0,
 			totalAmount: files.length,
 		},
 		{
-			title: "Test Reports",
+			title: 'Test Reports',
 			amount: 0,
 			totalAmount: files.length,
 		},
 		{
-			title: "Other",
+			title: 'Other',
 			amount: 0,
 			totalAmount: files.length,
 		},
 	];
 
 	forEach(files, file => {
-    switch(file.type) {
-      case "CERTIFICATE":
-        fileTypes[0].amount += 1;
-      break;
-      case "STATEMENT":
-        fileTypes[1].amount += 1;
-      break;
-      case "TEST_REPORT":
-        fileTypes[2].amount += 1;
-      break;
-      default:
-        fileTypes[3].amount += 1;
-    }
+		switch (file.type) {
+			case 'CERTIFICATE':
+				fileTypes[0].amount += 1;
+				break;
+			case 'STATEMENT':
+				fileTypes[1].amount += 1;
+				break;
+			case 'TEST_REPORT':
+				fileTypes[2].amount += 1;
+				break;
+			default:
+				fileTypes[3].amount += 1;
+		}
 	});
 
 	const otherType = cloneDeep(fileTypes[3]);

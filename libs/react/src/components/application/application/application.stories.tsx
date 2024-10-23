@@ -34,8 +34,8 @@ export const Loading: Story = {
 	},
 	parameters: {
 		auth0AddOn: {
-      isLoading: true,
-    },
+			isLoading: true,
+		},
 	},
 };
 

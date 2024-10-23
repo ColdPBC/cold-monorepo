@@ -5,64 +5,64 @@ import { getComplianceManagerOverviewSectionsMock, StoryMockProvider } from '@co
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 
 const meta: Meta<typeof ComplianceManagerOverviewSection> = {
-  title: 'Molecules/ComplianceManagerOverviewSection',
-  component: ComplianceManagerOverviewSection,
-  tags: ['autodocs'],
-  decorators: [withKnobs],
+	title: 'Molecules/ComplianceManagerOverviewSection',
+	component: ComplianceManagerOverviewSection,
+	tags: ['autodocs'],
+	decorators: [withKnobs],
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const NotActivated: Story = {
-  render: args => (
-    <StoryMockProvider>
-      <ComplianceManagerOverviewSection {...args} />
-    </StoryMockProvider>
-  ),
-  args: {
-    section: getComplianceManagerOverviewSectionsMock(),
-    groupId: 'csg_u52xp76tclba5djc',
-    collapseOpen: true,
-  },
+	render: args => (
+		<StoryMockProvider>
+			<ComplianceManagerOverviewSection {...args} />
+		</StoryMockProvider>
+	),
+	args: {
+		section: getComplianceManagerOverviewSectionsMock(),
+		groupId: 'csg_u52xp76tclba5djc',
+		collapseOpen: true,
+	},
 };
 
 export const Activated: Story = {
-  render: args => (
-    <StoryMockProvider
-      complianceManagerContext={{
-        status: ComplianceManagerStatus.activated,
-      }}>
-      <ComplianceManagerOverviewSection {...args} />
-    </StoryMockProvider>
-  ),
-  args: {
-    section: getComplianceManagerOverviewSectionsMock(),
-    groupId: 'csg_u52xp76tclba5djc',
-    collapseOpen: true,
-  },
+	render: args => (
+		<StoryMockProvider
+			complianceManagerContext={{
+				status: ComplianceManagerStatus.activated,
+			}}>
+			<ComplianceManagerOverviewSection {...args} />
+		</StoryMockProvider>
+	),
+	args: {
+		section: getComplianceManagerOverviewSectionsMock(),
+		groupId: 'csg_u52xp76tclba5djc',
+		collapseOpen: true,
+	},
 };
 
 export const ColdAIRunning: Story = {
-  render: args => (
-    <StoryMockProvider
-      complianceManagerContext={{
-        status: ComplianceManagerStatus.startedAi,
-        data: {
-          currentAIStatus: [
-            {
-              section: 'CHEM',
-              questions: ['CHEM-1', 'CHEM-3'],
-            },
-          ],
-        },
-      }}>
-      <ComplianceManagerOverviewSection {...args} />
-    </StoryMockProvider>
-  ),
-  args: {
-    section: getComplianceManagerOverviewSectionsMock(),
-    groupId: 'csg_u52xp76tclba5djc',
-    collapseOpen: true,
-  },
+	render: args => (
+		<StoryMockProvider
+			complianceManagerContext={{
+				status: ComplianceManagerStatus.startedAi,
+				data: {
+					currentAIStatus: [
+						{
+							section: 'CHEM',
+							questions: ['CHEM-1', 'CHEM-3'],
+						},
+					],
+				},
+			}}>
+			<ComplianceManagerOverviewSection {...args} />
+		</StoryMockProvider>
+	),
+	args: {
+		section: getComplianceManagerOverviewSectionsMock(),
+		groupId: 'csg_u52xp76tclba5djc',
+		collapseOpen: true,
+	},
 };

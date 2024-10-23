@@ -6,19 +6,19 @@ import { ErrorFallback } from '../../application/errors/errorFallback';
 import { TeamMemberSettings } from '../../organisms';
 
 const _Settings = () => {
-  const ldFlags = useFlags();
+	const ldFlags = useFlags();
 
-  return (
-    <MainContent title="Settings">
-      <UserSettings />
-      {ldFlags.showTeamMemberTable && <TeamMemberSettings />}
-    </MainContent>
-  );
+	return (
+		<MainContent title="Settings">
+			<UserSettings />
+			{ldFlags.showTeamMemberTable && <TeamMemberSettings />}
+		</MainContent>
+	);
 };
 
 export const Settings = withErrorBoundary(_Settings, {
-  FallbackComponent: props => <ErrorFallback {...props} />,
-  onError: (error, info) => {
-    console.error('Error occurred in Settings: ', error);
-  },
+	FallbackComponent: props => <ErrorFallback {...props} />,
+	onError: (error, info) => {
+		console.error('Error occurred in Settings: ', error);
+	},
 });

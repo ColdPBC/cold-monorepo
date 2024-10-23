@@ -1,71 +1,73 @@
-import {GridActionsCellItem, GridColDef} from "@mui/x-data-grid";
-import React from "react";
-import {ErrorFallback, MuiDataGrid} from "@coldpbc/components";
-import {lowerCase, startCase} from "lodash";
-import {withErrorBoundary} from "react-error-boundary";
+import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
+import React from 'react';
+import { ErrorFallback, MuiDataGrid } from '@coldpbc/components';
+import { lowerCase, startCase } from 'lodash';
+import { withErrorBoundary } from 'react-error-boundary';
 
-const _CreateMaterialTable = (props: {
-  type: 'products' | 'attributes' | 'materials',
-  remove: (id: string) => void
-  entities: any[]
-}) => {
-  const {type, remove, entities} = props;
-  let columns: GridColDef[] = [];
-  const rows: any[] = entities
+const _CreateMaterialTable = (props: { type: 'products' | 'attributes' | 'materials'; remove: (id: string) => void; entities: any[] }) => {
+	const { type, remove, entities } = props;
+	let columns: GridColDef[] = [];
+	const rows: any[] = entities;
 
-  columns = [
-    {field: 'name', headerName: 'Name', minWidth: 130, flex: 1, headerClassName: 'bg-gray-30', cellClassName: 'bg-gray-10'},
-  ]
+	columns = [
+		{
+			field: 'name',
+			headerName: 'Name',
+			minWidth: 130,
+			flex: 1,
+			headerClassName: 'bg-gray-30',
+			cellClassName: 'bg-gray-10',
+		},
+	];
 
-  columns.push({
-    field: 'actions',
-    type: 'actions',
-    width: 60,
-    headerClassName: 'bg-gray-30 text-body',
-    cellClassName: 'bg-gray-10',
-    getActions: params => [
-      <GridActionsCellItem
-        label={'Remove'}
-        onClick={() => {
-          remove(params.row.id);
-        }}
-        showInMenu={true}
-      />,
-      // todo: add back in with functionality once attribute pages are implemented
-      //
-      // <GridActionsCellItem
-      //   label={'View'}
-      //   onClick={() => {
-      //
-      //   }}
-      //   showInMenu={true}
-      // />,
-    ],
-  })
+	columns.push({
+		field: 'actions',
+		type: 'actions',
+		width: 60,
+		headerClassName: 'bg-gray-30 text-body',
+		cellClassName: 'bg-gray-10',
+		getActions: params => [
+			<GridActionsCellItem
+				label={'Remove'}
+				onClick={() => {
+					remove(params.row.id);
+				}}
+				showInMenu={true}
+			/>,
+			// todo: add back in with functionality once attribute pages are implemented
+			//
+			// <GridActionsCellItem
+			//   label={'View'}
+			//   onClick={() => {
+			//
+			//   }}
+			//   showInMenu={true}
+			// />,
+		],
+	});
 
-
-  return (
-    <div className={'w-full h-[400px]'}>
-      <MuiDataGrid
-        rows={rows}
-        columns={columns}
-        sx={{
-          '--DataGrid-overlayHeight': '100px',
-        }}
-        autoHeight={false}
-        className={'h-full'}
-        rowSelection={false}
-        initialState={{
-          sorting: {
-            sortModel: [{ field: 'name', sort: 'asc' }],
-          },
-        }}
-      />
-    </div>
-  )
-}
+	return (
+		<div className={'w-full h-[400px]'}>
+			<MuiDataGrid
+				rows={rows}
+				columns={columns}
+				sx={{
+					'--DataGrid-overlayHeight': '100px',
+				}}
+				autoHeight={false}
+				className={'h-full'}
+				rowSelection={false}
+				initialState={{
+					sorting: {
+						sortModel: [{ field: 'name', sort: 'asc' }],
+					},
+				}}
+			/>
+		</div>
+	);
+};
 
 // create error boundary withErrorBoundary HOC to wrap the component
 export const CreateEntityTable = withErrorBoundary(_CreateMaterialTable, {
-  FallbackComponent: props => <ErrorFallback {...props} />,
+	FallbackComponent: props => <ErrorFallback {...props} />,
 });

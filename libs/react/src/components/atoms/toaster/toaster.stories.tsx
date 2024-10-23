@@ -5,26 +5,26 @@ import { Toaster } from './toaster';
 import { ToastMessage } from '../../../interfaces/toastMessage';
 
 const meta: Meta<typeof Toaster> = {
-  title: 'Atoms/Toaster',
-  component: Toaster,
-  tags: ['autodocs'],
-  decorators: [withKnobs],
+	title: 'Atoms/Toaster',
+	component: Toaster,
+	tags: ['autodocs'],
+	decorators: [withKnobs],
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => {
-    return (
-      <div className={'relative w-full h-screen'}>
-        <Toaster {...args} />
-      </div>
-    );
-  },
-  args: {
-    toastMessage: {
-      message: 'This is a toast message',
-    },
-  },
+	render: args => {
+		return (
+			<div className={'relative w-full h-screen'}>
+				<Toaster {...args} />
+			</div>
+		);
+	},
+	args: {
+		toastMessage: {
+			message: 'This is a toast message',
+		},
+	},
 };

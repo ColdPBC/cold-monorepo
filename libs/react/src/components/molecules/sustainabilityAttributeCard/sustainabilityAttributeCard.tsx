@@ -13,61 +13,61 @@ interface SustainabilityAttributeCardProps {
 const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
 
 interface SustainabilityAttributeAssuranceData {
-  activeCount: number;
-  expiredCount: number;
-  notDocumentedCount: number;
+	activeCount: number;
+	expiredCount: number;
+	notDocumentedCount: number;
 }
 
 function processSustainabilityAttribute(attribute: SustainabilityAttribute): SustainabilityAttributeAssuranceData {
-  const result: SustainabilityAttributeAssuranceData = {
-    activeCount: 0,
-    expiredCount: 0,
-    notDocumentedCount: 0,
-  };
+	const result: SustainabilityAttributeAssuranceData = {
+		activeCount: 0,
+		expiredCount: 0,
+		notDocumentedCount: 0,
+	};
 
-  const entityAssurances = new Map<string, SustainabilityAttributeAssurance[]>();
+	const entityAssurances = new Map<string, SustainabilityAttributeAssurance[]>();
 
-  // Group assurances by entity ID
-  attribute.attributeAssurances.forEach(assurance => {
-    let entityId: string | undefined;
+	// Group assurances by entity ID
+	attribute.attributeAssurances.forEach(assurance => {
+		let entityId: string | undefined;
 
-    switch (attribute.level) {
-      case EntityLevel.MATERIAL:
-        entityId = assurance.material?.id;
-        break;
-      case EntityLevel.ORGANIZATION:
-        entityId = assurance.organization?.id;
-        break;
-      case EntityLevel.PRODUCT:
-        entityId = assurance.product?.id;
-        break;
-      case EntityLevel.SUPPLIER:
-        entityId = assurance.organizationFacility?.id;
-        break;
-    }
+		switch (attribute.level) {
+			case EntityLevel.MATERIAL:
+				entityId = assurance.material?.id;
+				break;
+			case EntityLevel.ORGANIZATION:
+				entityId = assurance.organization?.id;
+				break;
+			case EntityLevel.PRODUCT:
+				entityId = assurance.product?.id;
+				break;
+			case EntityLevel.SUPPLIER:
+				entityId = assurance.organizationFacility?.id;
+				break;
+		}
 
-    if (entityId) {
-      if (!entityAssurances.has(entityId)) {
-        entityAssurances.set(entityId, []);
-      }
-      entityAssurances.get(entityId)!.push(assurance);
-    }
-  });
+		if (entityId) {
+			if (!entityAssurances.has(entityId)) {
+				entityAssurances.set(entityId, []);
+			}
+			entityAssurances.get(entityId)!.push(assurance);
+		}
+	});
 
-  // Process grouped assurances
-  entityAssurances.forEach((assurances, _entityId) => {
-    const { assuranceStatus } = getAggregateStatusFromAttributeAssurances(assurances);
+	// Process grouped assurances
+	entityAssurances.forEach((assurances, _entityId) => {
+		const { assuranceStatus } = getAggregateStatusFromAttributeAssurances(assurances);
 
-    if (assuranceStatus === AttributeAssuranceStatus.ACTIVE || assuranceStatus === AttributeAssuranceStatus.EXPIRING) {
-      result.activeCount++;
-    } else if (assuranceStatus === AttributeAssuranceStatus.EXPIRED) {
-      result.expiredCount++;
-    } else {
-      result.notDocumentedCount++;
-    }
-  });
+		if (assuranceStatus === AttributeAssuranceStatus.ACTIVE || assuranceStatus === AttributeAssuranceStatus.EXPIRING) {
+			result.activeCount++;
+		} else if (assuranceStatus === AttributeAssuranceStatus.EXPIRED) {
+			result.expiredCount++;
+		} else {
+			result.notDocumentedCount++;
+		}
+	});
 
-  return result;
+	return result;
 }
 
 const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> = ({ sustainabilityAttribute }) => {

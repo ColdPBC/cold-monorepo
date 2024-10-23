@@ -3,19 +3,19 @@ import { createContext } from 'react';
 import { CompliancePageFilter } from '@coldpbc/enums';
 
 export interface CompliancePageData {
-  allComplianceSets: AllCompliance[] | undefined;
+	allComplianceSets: AllCompliance[] | undefined;
 }
 
 export interface CompliancePageContextType {
-  data: CompliancePageData;
-  filter: CompliancePageFilter;
-  setFilter: (filter: CompliancePageFilter) => void;
+	data: CompliancePageData;
+	filter: CompliancePageFilter;
+	setFilter: (filter: CompliancePageFilter) => void;
 }
 
 export const ColdCompliancePageContext = createContext<CompliancePageContextType>({
-  data: {
-    allComplianceSets: [],
-  },
-  filter: CompliancePageFilter.all,
-  setFilter: () => {},
+	data: {
+		allComplianceSets: [],
+	},
+	filter: CompliancePageFilter.all,
+	setFilter: () => {},
 });

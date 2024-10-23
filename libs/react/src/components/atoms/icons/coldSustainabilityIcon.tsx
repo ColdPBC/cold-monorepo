@@ -1,9 +1,9 @@
-import {IconProps} from "@coldpbc/interfaces";
+import { IconProps } from '@coldpbc/interfaces';
 
 export const ColdSustainabilityIcon = (props: IconProps) => {
-  const fillColor= props.color || "white";
+	const fillColor = props.color || 'white';
 
-  return (
+	return (
 		<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<path
 				fillRule="evenodd"
@@ -15,19 +15,19 @@ export const ColdSustainabilityIcon = (props: IconProps) => {
 				fillRule="evenodd"
 				clipRule="evenodd"
 				d="M11.25 17.6L11.25 14.6H12.75L12.75 17.6C12.75 18.0142 12.4142 18.35 12 18.35C11.5858 18.35 11.25 18.0142 11.25 17.6Z"
-        fill={fillColor}
+				fill={fillColor}
 			/>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
 				d="M11.25 17.6L11.25 14.6H12.75L12.75 17.6C12.75 18.0142 12.4142 18.35 12 18.35C11.5858 18.35 11.25 18.0142 11.25 17.6Z"
-        fill={fillColor}
+				fill={fillColor}
 			/>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
 				d="M12 15.6C12 15.6 15 13.4509 15 10.8C15 8.14901 12 5.99998 12 5.99998C12 5.99998 9 8.14901 9 10.8C9 13.4509 12 15.6 12 15.6ZM12 13.1727C12.0458 13.1225 12.0917 13.0708 12.1376 13.0177C12.7934 12.2582 13.2 11.4736 13.2 10.8C13.2 10.1264 12.7934 9.34174 12.1376 8.58222C12.0917 8.52912 12.0458 8.47744 12 8.42727C11.9542 8.47744 11.9083 8.52912 11.8624 8.58222C11.2066 9.34174 10.8 10.1264 10.8 10.8C10.8 11.4736 11.2066 12.2582 11.8624 13.0177C11.9083 13.0708 11.9542 13.1225 12 13.1727ZM10.9467 7.45965L10.9472 7.45998L10.9467 7.45965Z"
-        fill={fillColor}
+				fill={fillColor}
 			/>
 		</svg>
 	);

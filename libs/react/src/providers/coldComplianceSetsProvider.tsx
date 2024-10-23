@@ -8,28 +8,28 @@ import { ColdCompliancePageContext } from '@coldpbc/context';
 import { CompliancePageFilter } from '@coldpbc/enums';
 
 export const ColdComplianceSetsProvider = ({ children }: PropsWithChildren) => {
-  const { orgId } = useAuth0Wrapper();
-  const [filter, setFilter] = React.useState<CompliancePageFilter>(CompliancePageFilter.all);
-  const allComplianceSets = useSWR<AllCompliance[], any, any>([`/compliance/all/organizations/${orgId}`, 'GET'], axiosFetcher);
+	const { orgId } = useAuth0Wrapper();
+	const [filter, setFilter] = React.useState<CompliancePageFilter>(CompliancePageFilter.all);
+	const allComplianceSets = useSWR<AllCompliance[], any, any>([`/compliance/all/organizations/${orgId}`, 'GET'], axiosFetcher);
 
-  if (allComplianceSets.isLoading) {
-    return <Spinner />;
-  }
+	if (allComplianceSets.isLoading) {
+		return <Spinner />;
+	}
 
-  if (allComplianceSets.error) {
-    return null;
-  }
+	if (allComplianceSets.error) {
+		return null;
+	}
 
-  return (
-    <ColdCompliancePageContext.Provider
-      value={{
-        data: {
-          allComplianceSets: allComplianceSets.data?.filter(compliance => compliance.visible),
-        },
-        filter,
-        setFilter,
-      }}>
-      {children}
-    </ColdCompliancePageContext.Provider>
-  );
+	return (
+		<ColdCompliancePageContext.Provider
+			value={{
+				data: {
+					allComplianceSets: allComplianceSets.data?.filter(compliance => compliance.visible),
+				},
+				filter,
+				setFilter,
+			}}>
+			{children}
+		</ColdCompliancePageContext.Provider>
+	);
 };

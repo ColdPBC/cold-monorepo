@@ -3,18 +3,15 @@ import { ButtonTypes } from '@coldpbc/enums';
 import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 
 export interface TableActionButtonProps {
-  onClick: () => void;
+	onClick: () => void;
 }
 
 export const TableActionButton = (props: TableActionButtonProps) => {
-  const { onClick } = props;
+	const { onClick } = props;
 
-  return (
-    <BaseButton
-      onClick={onClick}
-      variant={ButtonTypes.secondary}
-    >
-      <EllipsisHorizontalIcon className='w-[24px]' />
-    </BaseButton>
-  );
+	return (
+		<BaseButton onClick={onClick} variant={ButtonTypes.secondary}>
+			<EllipsisHorizontalIcon className="w-[24px]" />
+		</BaseButton>
+	);
 };
