@@ -1,12 +1,12 @@
 import { FilesWithAssurances, ProductsQuery } from '@coldpbc/interfaces';
-import { forEach } from 'lodash';
+import { forEach, get } from 'lodash';
 
 export const parseDocumentsForProductDetails = (product: ProductsQuery, files: FilesWithAssurances[]): FilesWithAssurances[] => {
 	const tier1SupplierId = product.organizationFacility?.id;
 	const productId = product.id;
-	const materialIds = product.productMaterials.map(productMaterial => productMaterial.material?.id).filter(Boolean);
+	const materialIds = product.productMaterials.map(productMaterial => get(productMaterial, 'material.id', '')).filter(Boolean);
 	const tier2SupplierIds = product.productMaterials
-		.map(productMaterial => productMaterial.material?.materialSuppliers[0]?.organizationFacility.id)
+		.map(productMaterial => get(productMaterial, 'material.materialSuppliers[0].organizationFacility.id', ''))
 		.flat()
 		.filter(Boolean);
 	// filter out fileAssurances that are not related to the product or its material
@@ -25,6 +25,5 @@ export const parseDocumentsForProductDetails = (product: ProductsQuery, files: F
 			return oneFieldExists && (isTier1Supplier || isTier2Supplier) && isMaterial && isProduct;
 		});
 	});
-	// filter out documents that have no valid assurances
 	return files.filter(file => file.attributeAssurances.length > 0);
 };

@@ -3,7 +3,7 @@ import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import { ColdIcon, DataGridCellHoverPopover, ErrorFallback, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays, format } from 'date-fns';
-import { get, lowerCase, startCase, toArray, uniqWith } from 'lodash';
+import { get, lowerCase, startCase, toArray, uniq, uniqWith } from 'lodash';
 import React from 'react';
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { addTZOffset, getDateActiveStatus, getEffectiveEndDate, getFileProcessingStatus, listFilterOperators, listSortComparator } from '@coldpbc/lib';
@@ -176,10 +176,13 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
 				return get(assurance, 'organizationFacility.name', '');
 			})
 			.filter(name => name !== '');
-		const productNames = file.attributeAssurances.map(assurance => {
-			return get(assurance, 'product.name', '');
-		});
-		return [...materialNames, ...supplierNames, ...productNames];
+		const productNames = file.attributeAssurances
+			.map(assurance => {
+				return get(assurance, 'product.name', '');
+			})
+			.filter(name => name !== '');
+
+		return uniq([...materialNames, ...supplierNames, ...productNames]);
 	};
 
 	const rows = files
@@ -300,7 +303,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
 				columns={columns}
 				rowHeight={55}
 				getRowClassName={() => {
-					return 'text-tc-primary cursor-pointer';
+					return 'text-tc-primary cursor-pointer bg-gray-10';
 				}}
 				className={'text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto'}
 				sx={{
