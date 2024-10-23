@@ -1,3 +1,41 @@
+# [1.443.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.442.0...v1.443.0) (2024-10-23)
+
+
+### Features
+
+* create a card component for the left side of the summary page (Details) ([fba8250](https://github.com/ColdPBC/cold-monorepo/commit/fba8250c60af2a0959f099868aac180ea194f2a3))
+* new atom for DetailsItem ([0d4e4fd](https://github.com/ColdPBC/cold-monorepo/commit/0d4e4fdffa03bbcfb9a193f4eebc8ccd42848ab0))
+* new component for details tab, and plug it into detail page ([2eb6cea](https://github.com/ColdPBC/cold-monorepo/commit/2eb6ceaf81b8cad1d03b3dc987858eb9e566dcd0))
+* new component right hand side of summary page (Sustainability Attributes) ([74abf9a](https://github.com/ColdPBC/cold-monorepo/commit/74abf9a41f04f88c9fd977c2ea622d7c8a1d1a14))
+
+# [1.442.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.441.1...v1.442.0) (2024-10-23)
+
+
+### Bug Fixes
+
+* improve browser launch initialization in Excel conversion service ([c9da90e](https://github.com/ColdPBC/cold-monorepo/commit/c9da90edde63bc5c0da0ec3bbf54bd7caad8a81f))
+* update build configurations and instance settings ([959986c](https://github.com/ColdPBC/cold-monorepo/commit/959986c298b9ccbc9c548e57375ed2d1c8049d7c))
+
+
+### Features
+
+* add environment variables for DD_GIT_REPOSITORY_URL and DD_GIT_COMMIT_SHA in Dockerfiles ([7b36c35](https://github.com/ColdPBC/cold-monorepo/commit/7b36c351f24bc6588662f80720204ba0a0aec48a))
+
+## [1.441.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.441.0...v1.441.1) (2024-10-23)
+
+
+### Bug Fixes
+
+* add missing organization_id to upsert operations in materials.service.ts ([7f1d537](https://github.com/ColdPBC/cold-monorepo/commit/7f1d537af442e8b37fef517fec7174867d6b125f))
+* **products.service:** ensure organization_id is included in upsert operations ([c7398f5](https://github.com/ColdPBC/cold-monorepo/commit/c7398f5af0cf127e85e1de01565085baad6b2dfb))
+
+# [1.441.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.440.0...v1.441.0) (2024-10-23)
+
+
+### Features
+
+* enrich supplier and material data schemas to include additional fields. ([521b82d](https://github.com/ColdPBC/cold-monorepo/commit/521b82d206033a17f0b53bd1029e0c0a494adf20))
+
 # [1.440.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.439.3...v1.440.0) (2024-10-23)
 
 

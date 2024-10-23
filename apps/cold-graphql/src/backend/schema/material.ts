@@ -30,6 +30,12 @@ export class Material {
 	@RelationshipField<Material>(() => Organization, { id: (entity) => entity.organization?.id })
 	organization!: Organization;
 
+	@Field(() => String, { nullable: true })
+	materialCategory?: string;
+
+	@Field(() => String, { nullable: true })
+	materialSubcategory?: string;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'material' })
 	attributeAssurances!: AttributeAssurance[];
 

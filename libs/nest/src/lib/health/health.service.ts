@@ -1,17 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { BaseWorker } from '../worker';
 
-@Injectable()
-export class HealthService extends BaseWorker {
-  constructor() {
-    super(HealthService.name);
-  }
-
-  /**
-   * Used for health checks
-   * @returns {Promise<any>}
-   */
-  async health(): Promise<any> {
-    return 'ok';
-  }
+@Injectable({ scope: Scope.REQUEST })
+export class HealthService {
+	/**
+	 * Used for health checks
+	 * @returns {Promise<any>}
+	 */
+	async health(): Promise<any> {
+		return 'ok';
+	}
 }

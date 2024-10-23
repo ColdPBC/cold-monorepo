@@ -1,5 +1,5 @@
 import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
+import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Material } from './material';
 import { Organization } from './organization';
@@ -31,4 +31,13 @@ export class ProductMaterial {
 
 	@RelationshipField<ProductMaterial>(() => Organization, { id: (entity) => entity.organization?.id })
 	organization!: Organization;
+
+	@Field(() => GraphQLJSON, { nullable: true })
+	metadata?: Record<string, unknown>;
+
+	@Field(() => String, { nullable: true })
+	unitOfMeasure?: string;
+
+	@Field(() => Number, { nullable: true })
+	yield?: number;
 }

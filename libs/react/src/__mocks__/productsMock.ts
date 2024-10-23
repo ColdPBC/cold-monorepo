@@ -27,6 +27,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_f20621xztckbtqirkjlc7qgy',
 									name: 'Global Apparel Ltd.',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -44,6 +45,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 									name: 'Kerluke - Armstrong',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -95,6 +97,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 									name: 'Kerluke - Armstrong',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -148,6 +151,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_vd809v326es9yz3rygkeb14f',
 									name: 'Supplier Delta',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -276,6 +280,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_f20621xztckbtqirkjlc7qgy',
 									name: 'Global Apparel Ltd.',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -293,6 +298,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_vd809v326es9yz3rygkeb14f',
 									name: 'Supplier Delta',
+                  attributeAssurances: [],
 								},
 							},
 							{
@@ -300,6 +306,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_ziiewcq7wmehkgcnt6jhb6re',
 									name: 'Supplier 6',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -351,6 +358,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_c833b42yr2kv52p73oy0nuve',
 									name: 'Supplier 15',
+                  attributeAssurances: [],
 								},
 							},
 							{
@@ -358,6 +366,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_djkh7ccfbm738mkijm69gks8',
 									name: 'Supplier 3',
+                  attributeAssurances: [],
 								},
 							},
 							{
@@ -365,6 +374,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
 									name: 'Supplier 12',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -405,6 +415,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_vd809v326es9yz3rygkeb14f',
 									name: 'Supplier Delta',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -532,6 +543,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
 									name: 'Supplier 12',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -549,6 +561,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 									name: 'Kerluke - Armstrong',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -606,6 +619,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_vd809v326es9yz3rygkeb14f',
 									name: 'Supplier Delta',
+                  attributeAssurances: [],
 								},
 							},
 							{
@@ -613,6 +627,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_ziiewcq7wmehkgcnt6jhb6re',
 									name: 'Supplier 6',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -664,6 +679,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 									name: 'Kerluke - Armstrong',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -715,6 +731,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_c833b42yr2kv52p73oy0nuve',
 									name: 'Supplier 15',
+                  attributeAssurances: [],
 								},
 							},
 							{
@@ -722,6 +739,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_djkh7ccfbm738mkijm69gks8',
 									name: 'Supplier 3',
+                  attributeAssurances: [],
 								},
 							},
 							{
@@ -729,6 +747,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
 									name: 'Supplier 12',
+                  attributeAssurances: [],
 								},
 							},
 						],
@@ -769,6 +788,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_vd809v326es9yz3rygkeb14f',
 									name: 'Supplier Delta',
+                  attributeAssurances: [],
 								},
 							},
 						],
