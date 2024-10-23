@@ -1,4 +1,4 @@
-import { ErrorFallback, ErrorPage, MainContent, Spinner, Tabs } from '@coldpbc/components';
+import { ErrorFallback, ErrorPage, MainContent, ProductDetailsTab, Spinner, Tabs } from '@coldpbc/components';
 import { useGraphQLSWR } from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
 import { ProductsQuery } from '@coldpbc/interfaces';
@@ -38,8 +38,8 @@ const _ProductDetail = () => {
 			<Tabs
 				tabs={[
 					{
-						label: 'Details',
-						content: null,
+						label: 'Summary',
+						content: <ProductDetailsTab product={product} />,
 					},
 					{
 						label: 'BOM',

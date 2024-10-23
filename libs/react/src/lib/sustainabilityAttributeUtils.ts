@@ -56,7 +56,7 @@ export const mapAttributeAssurancesToSustainabilityAttributes = (
   const groupedAssurances = new Map<string, SustainabilityAttribute>();
 
   for (const assurance of assurances) {
-    const { id: assuranceId, effectiveEndDate, sustainabilityAttribute, organizationFile } = assurance;
+    const { sustainabilityAttribute } = assurance;
 
     if (sustainabilityAttribute) {
       const { id: attributeId, name, level, logoUrl } = sustainabilityAttribute;
@@ -72,11 +72,7 @@ export const mapAttributeAssurancesToSustainabilityAttributes = (
       }
 
       const attribute = groupedAssurances.get(attributeId)!;
-      attribute.attributeAssurances.push({
-        id: assuranceId,
-        effectiveEndDate,
-        organizationFile,
-      });
+      attribute.attributeAssurances.push(assurance);
     }
   }
 
