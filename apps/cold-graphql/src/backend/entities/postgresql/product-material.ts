@@ -39,6 +39,15 @@ export class ProductMaterial {
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'product_materials_organization_id_idx1' })
 	organization!: Ref<Organization>;
 
+	@Property({ type: 'json', nullable: true })
+	metadata?: Record<string, unknown>;
+
+	@Property({ type: 'text', nullable: true })
+	unitOfMeasure?: string;
+
+	@Property({ type: 'double', nullable: true })
+	yield?: number;
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof ProductMaterial, OrgContext>) {
 		if(!this.sidecar) {
