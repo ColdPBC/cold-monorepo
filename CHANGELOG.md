@@ -1,3 +1,10 @@
+## [1.444.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.444.1...v1.444.2) (2024-10-23)
+
+
+### Bug Fixes
+
+* update build commands by removing redundant `.git` suffix and correct staging build command ([f1fd1a3](https://github.com/ColdPBC/cold-monorepo/commit/f1fd1a36e5f4b6b59337c224c803379cd2348910))
+
 ## [1.444.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.444.0...v1.444.1) (2024-10-23)
 
 
