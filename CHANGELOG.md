@@ -1,3 +1,11 @@
+## [1.441.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.441.0...v1.441.1) (2024-10-23)
+
+
+### Bug Fixes
+
+* add missing organization_id to upsert operations in materials.service.ts ([7f1d537](https://github.com/ColdPBC/cold-monorepo/commit/7f1d537af442e8b37fef517fec7174867d6b125f))
+* **products.service:** ensure organization_id is included in upsert operations ([c7398f5](https://github.com/ColdPBC/cold-monorepo/commit/c7398f5af0cf127e85e1de01565085baad6b2dfb))
+
 # [1.441.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.440.0...v1.441.0) (2024-10-23)
 
 
