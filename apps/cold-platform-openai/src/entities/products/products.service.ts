@@ -159,12 +159,14 @@ export class ProductsService extends BaseWorker {
 		if (product.id && material.id) {
 			const productMaterial = await this.prisma.product_materials.upsert({
 				where: {
+					organization_id: organization.id,
 					materialProductKey: {
 						product_id: product.id,
 						material_id: material.id,
 					},
 				},
 				create: {
+					organization_id: organization.id,
 					product_id: product.id,
 					material_id: material.id,
 				},
@@ -179,6 +181,7 @@ export class ProductsService extends BaseWorker {
 			if (item.supplier) {
 				const supplier = await this.prisma.organization_facilities.upsert({
 					where: {
+						organization_id: organization.id,
 						orgFacilityName: {
 							name: item.supplier.name,
 							organization_id: organization.id,
@@ -224,6 +227,7 @@ export class ProductsService extends BaseWorker {
 						create: {
 							material_id: material.id,
 							supplier_id: supplier.id,
+							organization_id: organization.id,
 						},
 						update: {
 							material_id: material.id,
