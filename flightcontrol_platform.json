@@ -42,6 +42,7 @@
 	        "includeEnvVariablesInBuild": true,
 	        "injectEnvVariablesInDockerfile": true,
 	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
+	        "startCommand": "nx run cold-platform-openai:serve:production",
 	        "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "libs/nest/src/**",
@@ -146,7 +147,8 @@
 	        "includeEnvVariablesInBuild": true,
 	        "injectEnvVariablesInDockerfile": true,
 	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-stripe:build:production",
-          "watchPaths": [
+	        "startCommand": "nx run cold-platform-stripe:serve:production",
+	        "watchPaths": [
             "apps/cold-platform-stripe/src/**",
             "libs/nest/src/**",
             "_platform.dockerfile"
@@ -273,7 +275,8 @@
 	        "includeEnvVariablesInBuild": true,
 	        "injectEnvVariablesInDockerfile": true,
 	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
-          "watchPaths": [
+	        "startCommand": "nx run cold-platform-openai:serve:staging",
+	        "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "libs/nest/src/**",
             "_platform.dockerfile"
@@ -376,7 +379,7 @@
 	        "includeEnvVariablesInBuild": true,
 	        "injectEnvVariablesInDockerfile": true,
 	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-stripe:build:production",
-
+	        "startCommand": "nx run cold-platform-stripe:serve:staging",
           "watchPaths": [
             "apps/cold-platform-stripe/src/**",
             "libs/nest/src/**",
@@ -503,7 +506,8 @@
 	        "includeEnvVariablesInBuild": true,
 	        "injectEnvVariablesInDockerfile": true,
 	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
-          "watchPaths": [
+	        "startCommand": "nx run cold-platform-openai:serve:staging",
+	        "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "apps/cold-platform-openai/test/**",
             "libs/nest/src/**",
