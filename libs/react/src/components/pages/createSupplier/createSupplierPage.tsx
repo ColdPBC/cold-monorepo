@@ -1,29 +1,32 @@
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
-import { useNavigate } from 'react-router-dom';
-import { Claims, InputOption, Materials, ToastMessage } from '@coldpbc/interfaces';
-import React, { useEffect, useState } from 'react';
-import { get, has, some } from 'lodash';
+import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR} from "@coldpbc/hooks";
+import {useNavigate} from "react-router-dom";
+import {
+	Claims,
+	InputOption,
+	Materials,
+	ToastMessage
+} from "@coldpbc/interfaces";
+import React, {useEffect, useState} from "react";
+import {get, has, some} from "lodash";
 import {
 	AddProductOrMaterialsToCreateSupplierCard,
 	AddToCreateEntityModal,
 	BaseButton,
 	Card,
 	ComboBox,
-	CreateEntityTable,
-	ErrorFallback,
+	CreateEntityTable, ErrorFallback,
 	Input,
-	MainContent,
-	Modal,
-} from '@coldpbc/components';
-import { ButtonTypes, IconNames } from '@coldpbc/enums';
-import { withErrorBoundary } from 'react-error-boundary';
-import { useSWRConfig } from 'swr';
-import { Products } from '../../../interfaces/products';
+	MainContent, Modal,
+} from "@coldpbc/components";
+import {ButtonTypes, IconNames} from "@coldpbc/enums";
+import {withErrorBoundary} from "react-error-boundary";
+import {useSWRConfig} from "swr";
+import {Products} from "../../../interfaces/products";
 
 const _CreateSupplierPage = () => {
-	const { addToastMessage } = useAddToastMessage();
-	const { mutate } = useSWRConfig();
-	const { logBrowser } = useColdContext();
+	const {addToastMessage} = useAddToastMessage();
+	const {mutate} = useSWRConfig();
+	const {logBrowser} = useColdContext();
 	const { orgId } = useAuth0Wrapper();
 	const navigate = useNavigate();
 	const placeHolderOption: InputOption = {
@@ -34,7 +37,7 @@ const _CreateSupplierPage = () => {
 
 	const isFormValid = (name: string, tier: InputOption) => {
 		return name !== '' && tier.value !== '0';
-	};
+	}
 
 	const [supplierState, setSupplierState] = useState<{
 		name: string;
@@ -65,10 +68,10 @@ const _CreateSupplierPage = () => {
 	const [saveButtonLoading, setSaveButtonLoading] = useState(false);
 	const [showCancelModal, setShowCancelModal] = useState(false);
 	const [createModalType, setCreateModalType] = useState<'products' | 'attributes' | 'materials' | undefined>(undefined);
-	const { mutateGraphQL: createSupplier } = useGraphQLMutation('CREATE_SUPPLIER');
-	const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
-	const { mutateGraphQL: createMaterialSupplier } = useGraphQLMutation('CREATE_MATERIAL_SUPPLIER');
-	const { mutateGraphQL: updateProduct } = useGraphQLMutation('UPDATE_PRODUCT');
+	const {mutateGraphQL: createSupplier} = useGraphQLMutation('CREATE_SUPPLIER');
+	const {mutateGraphQL: createAttributeAssurance} = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
+	const {mutateGraphQL: createMaterialSupplier} = useGraphQLMutation('CREATE_MATERIAL_SUPPLIER');
+	const {mutateGraphQL: updateProduct} = useGraphQLMutation('UPDATE_PRODUCT');
 
 	const allSustainabilityAttributes = useGraphQLSWR<{
 		sustainabilityAttributes: Claims[];
@@ -134,7 +137,7 @@ const _CreateSupplierPage = () => {
 	useEffect(() => {
 		if (tier.value === '1') {
 			setMaterialsToAdd([]);
-		} else if (tier.value === '2') {
+		} else if(tier.value === '2') {
 			setProductsToAdd([]);
 		}
 	}, [tier]);
@@ -150,7 +153,7 @@ const _CreateSupplierPage = () => {
 			name: 'Tier 2',
 			value: '2',
 		},
-	];
+	]
 
 	const onSaveButtonClick = async () => {
 		setSaveButtonLoading(true);
@@ -164,7 +167,7 @@ const _CreateSupplierPage = () => {
 				postalCode: supplierState.postal_code,
 				country: supplierState.country,
 				supplierTier: parseInt(tier.value),
-			};
+			}
 			const createSupplierResponse = await createSupplier({
 				input: {
 					organization: {
@@ -173,10 +176,10 @@ const _CreateSupplierPage = () => {
 					supplier: true,
 					...supplier,
 				},
-			});
+			})
 			const supplierId = get(createSupplierResponse, 'data.createOrganizationFacility.id');
 			if (supplierId) {
-				if (attributesToAdd.length !== 0) {
+				if(attributesToAdd.length !== 0) {
 					for (const attribute of attributesToAdd) {
 						await createAttributeAssurance({
 							input: {
@@ -196,20 +199,20 @@ const _CreateSupplierPage = () => {
 					}
 				}
 
-				if (productsToAdd.length !== 0 && tier.value === '1') {
+				if(productsToAdd.length !== 0 && tier.value === '1') {
 					for (const product of productsToAdd) {
 						await updateProduct({
 							input: {
 								id: product.id,
 								organizationFacility: {
 									id: supplierId,
-								},
+								}
 							},
 						});
 					}
 				}
 
-				if (materialsToAdd.length !== 0 && tier.value === '2') {
+				if(materialsToAdd.length !== 0 && tier.value === '2') {
 					for (const material of materialsToAdd) {
 						await createMaterialSupplier({
 							input: {
@@ -229,46 +232,42 @@ const _CreateSupplierPage = () => {
 
 				logBrowser('Supplier created with assurances successfully', 'error', {
 					orgId,
-					supplierId,
+					supplierId
 				});
 				addToastMessage({
 					message: 'Supplier created successfully',
 					type: ToastMessage.SUCCESS,
-				});
+				})
 				await mutate('GET_ALL_SUPPLIERS_FOR_ORG');
 				navigate('/suppliers');
 			} else {
 				logBrowser(
-					'Error creating supplier',
-					'error',
-					{
+					'Error creating supplier', 'error', {
 						orgId,
 						response: createSupplierResponse,
 					},
-					createSupplierResponse,
-				);
+					createSupplierResponse);
 				addToastMessage({
 					message: 'Error creating supplier',
 					type: ToastMessage.FAILURE,
-				});
+				})
 			}
 		} catch (e) {
 			logBrowser(
 				'Error creating supplier',
-				'error',
-				{
+				'error', {
 					orgId,
 					error: e,
 				},
-				e,
+				e
 			);
 			addToastMessage({
 				message: 'Error creating supplier',
 				type: ToastMessage.FAILURE,
-			});
+			})
 		}
 		setSaveButtonLoading(false);
-	};
+	}
 
 	const pageButtons = () => {
 		return (
@@ -291,8 +290,8 @@ const _CreateSupplierPage = () => {
 					className={'h-[40px]'}
 				/>
 			</div>
-		);
-	};
+		)
+	}
 
 	const getEntities = (createModalType: string) => {
 		if (createModalType === 'products') {
@@ -302,13 +301,13 @@ const _CreateSupplierPage = () => {
 		} else if (createModalType === 'materials') {
 			return materials.filter(material => {
 				return !some(materialsToAdd, { id: material.id, name: material.name });
-			});
+			})
 		} else {
 			return attributes.filter(attribute => {
 				return !some(attributesToAdd, { id: attribute.id, name: attribute.name });
 			});
 		}
-	};
+	}
 
 	return (
 		<MainContent
@@ -324,7 +323,8 @@ const _CreateSupplierPage = () => {
 			]}
 			className={'w-full'}
 			headerElement={pageButtons()}
-			isLoading={allSustainabilityAttributes.isLoading || productsQuery.isLoading || materialsQuery.isLoading}>
+			isLoading={allSustainabilityAttributes.isLoading || productsQuery.isLoading || materialsQuery.isLoading}
+		>
 			<div className={'flex flex-row gap-[40px] w-full'}>
 				<div className={'flex flex-col w-1/2 gap-[40px]'}>
 					<div className={'flex flex-col gap-[8px] w-full'}>
@@ -524,7 +524,7 @@ const _CreateSupplierPage = () => {
 								}
 							});
 							setProductsToAdd([...productsToAdd, ...newProducts]);
-						} else if (createModalType === 'attributes') {
+						} else if(createModalType === 'attributes') {
 							const newAttributes: Claims[] = [];
 							ids.forEach(id => {
 								const foundAttribute = attributes.find(attr => attr.id === id);
@@ -580,7 +580,7 @@ const _CreateSupplierPage = () => {
 			/>
 		</MainContent>
 	);
-};
+}
 
 export const CreateSupplierPage = withErrorBoundary(_CreateSupplierPage, {
 	FallbackComponent: props => <ErrorFallback {...props} />,

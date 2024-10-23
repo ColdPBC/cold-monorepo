@@ -1,15 +1,25 @@
-import { AddToCreateEntityModal, BaseButton, Card, ComboBox, CreateEntityTable, ErrorFallback, Input, MainContent, Modal, Spinner } from '@coldpbc/components';
+import {
+	AddToCreateEntityModal,
+	BaseButton,
+	Card,
+	ComboBox,
+	CreateEntityTable, ErrorFallback,
+	Input,
+	MainContent,
+	Modal,
+	Spinner
+} from '@coldpbc/components';
 import React, { useEffect, useState } from 'react';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
 import { Claims, InputOption, SuppliersWithAssurances, ToastMessage } from '@coldpbc/interfaces';
-import { get, has, some } from 'lodash';
+import {get, has, some} from 'lodash';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
-import { withErrorBoundary } from 'react-error-boundary';
+import {withErrorBoundary} from "react-error-boundary";
 
 const _CreateMaterialPage = () => {
-	const { addToastMessage } = useAddToastMessage();
-	const { logBrowser } = useColdContext();
+	const {addToastMessage} = useAddToastMessage();
+	const {logBrowser} = useColdContext();
 	const { orgId } = useAuth0Wrapper();
 	const navigate = useNavigate();
 	const placeHolderOption: InputOption = {
@@ -20,23 +30,23 @@ const _CreateMaterialPage = () => {
 
 	const isFormValid = (name: string) => {
 		return name !== '';
-	};
+	}
 
 	const [name, setName] = useState('');
 	const [supplier, setSupplier] = useState<InputOption>(placeHolderOption);
 	const [suppliers, setSuppliers] = useState<SuppliersWithAssurances[]>([]);
 	const [attributes, setAttributes] = useState<Claims[]>([]);
 	const [attributesToAdd, setAttributesToAdd] = useState<Claims[]>([]);
-	const [products, setProducts] = useState<{ id: string; name: string }[]>([]);
-	const [productsToAdd, setProductsToAdd] = useState<{ id: string; name: string }[]>([]);
+	const [products, setProducts] = useState<{id: string, name: string}[]>([]);
+	const [productsToAdd, setProductsToAdd] = useState<{id: string, name: string}[]>([]);
 	const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
 	const [saveButtonLoading, setSaveButtonLoading] = useState(false);
 	const [showCancelModal, setShowCancelModal] = useState(false);
 	const [createModalType, setCreateModalType] = useState<'products' | 'attributes' | undefined>(undefined);
-	const { mutateGraphQL: createMaterial } = useGraphQLMutation('CREATE_MATERIAL');
-	const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
-	const { mutateGraphQL: createMaterialSupplier } = useGraphQLMutation('CREATE_MATERIAL_SUPPLIER');
-	const { mutateGraphQL: createProductMaterial } = useGraphQLMutation('CREATE_PRODUCT_MATERIAL');
+	const {mutateGraphQL: createMaterial} = useGraphQLMutation('CREATE_MATERIAL');
+	const {mutateGraphQL: createAttributeAssurance} = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
+	const {mutateGraphQL: createMaterialSupplier} = useGraphQLMutation('CREATE_MATERIAL_SUPPLIER');
+	const {mutateGraphQL: createProductMaterial} = useGraphQLMutation('CREATE_PRODUCT_MATERIAL');
 
 	const suppliersQuery = useGraphQLSWR<{
 		organizationFacilities: SuppliersWithAssurances[];
@@ -55,7 +65,7 @@ const _CreateMaterialPage = () => {
 	}>('GET_ALL_SUS_ATTRIBUTES');
 
 	const productsQuery = useGraphQLSWR<{
-		products: { id: string; name: string }[];
+		products: {id: string, name: string}[];
 	}>(orgId ? 'GET_ALL_PRODUCTS' : null, {
 		filter: {
 			organization: {
@@ -123,10 +133,10 @@ const _CreateMaterialPage = () => {
 						id: orgId,
 					},
 				},
-			});
+			})
 			const materialId = get(createMaterialResponse, 'data.createMaterial.id');
 			if (materialId) {
-				if (supplier.id !== -1) {
+				if(supplier.id !== -1) {
 					await createMaterialSupplier({
 						input: {
 							material: {
@@ -139,9 +149,9 @@ const _CreateMaterialPage = () => {
 								id: orgId,
 							},
 						},
-					});
+					})
 				}
-				if (attributesToAdd.length !== 0) {
+				if(attributesToAdd.length !== 0) {
 					for (const attribute of attributesToAdd) {
 						await createAttributeAssurance({
 							input: {
@@ -161,7 +171,7 @@ const _CreateMaterialPage = () => {
 					}
 				}
 
-				if (productsToAdd.length !== 0) {
+				if(productsToAdd.length !== 0) {
 					for (const product of productsToAdd) {
 						await createProductMaterial({
 							input: {
@@ -185,7 +195,7 @@ const _CreateMaterialPage = () => {
 				addToastMessage({
 					message: 'Material created successfully',
 					type: ToastMessage.SUCCESS,
-				});
+				})
 				navigate('/materials');
 			} else {
 				logBrowser('Error creating material', 'error', {
@@ -195,7 +205,7 @@ const _CreateMaterialPage = () => {
 				addToastMessage({
 					message: 'Error creating material',
 					type: ToastMessage.FAILURE,
-				});
+				})
 			}
 		} catch (e) {
 			logBrowser('Error creating material', 'error', {
@@ -205,10 +215,10 @@ const _CreateMaterialPage = () => {
 			addToastMessage({
 				message: 'Error creating material',
 				type: ToastMessage.FAILURE,
-			});
+			})
 		}
 		setSaveButtonLoading(false);
-	};
+	}
 
 	const pageButtons = () => {
 		return (
@@ -231,8 +241,8 @@ const _CreateMaterialPage = () => {
 					className={'h-[40px]'}
 				/>
 			</div>
-		);
-	};
+		)
+	}
 
 	const getEntities = (createModalType: string) => {
 		if (createModalType === 'products') {
@@ -244,7 +254,7 @@ const _CreateMaterialPage = () => {
 				return !some(attributesToAdd, { id: attribute.id, name: attribute.name });
 			});
 		}
-	};
+	}
 
 	return (
 		<MainContent
@@ -259,11 +269,14 @@ const _CreateMaterialPage = () => {
 				},
 			]}
 			className={'w-full'}
-			headerElement={pageButtons()}>
+			headerElement={pageButtons()}
+		>
 			<div className={'flex flex-row gap-[40px] w-full'}>
 				<div className={'flex flex-col w-1/2 gap-[40px]'}>
 					<div className={'flex flex-col gap-[8px] w-full'}>
-						<div className={'text-eyebrow'}>Name</div>
+						<div className={'text-eyebrow'}>
+							Name
+						</div>
 						<Input
 							input_props={{
 								name: 'name',
@@ -277,11 +290,16 @@ const _CreateMaterialPage = () => {
 						/>
 					</div>
 					<Card title={'Products'} glow={true}>
-						<BaseButton label={'Add'} iconLeft={IconNames.PlusIcon} variant={ButtonTypes.secondary} onClick={() => setCreateModalType('products')} />
+						<BaseButton
+							label={'Add'}
+							iconLeft={IconNames.PlusIcon}
+							variant={ButtonTypes.secondary}
+							onClick={() => setCreateModalType('products')}
+						/>
 						<CreateEntityTable
 							type={'products'}
-							remove={id => {
-								const newProducts = productsToAdd.filter(product => product.id !== id);
+							remove={(id) => {
+								const newProducts = productsToAdd.filter((product) => product.id !== id);
 								setProductsToAdd(newProducts);
 							}}
 							entities={productsToAdd}
@@ -290,15 +308,22 @@ const _CreateMaterialPage = () => {
 				</div>
 				<div className={'flex flex-col w-1/2 gap-[40px]'}>
 					<div className={'flex flex-col gap-[8px] w-full'}>
-						<div className={'text-eyebrow'}>Tier 2 Supplier</div>
+						<div className={'text-eyebrow'}>
+							Tier 2 Supplier
+						</div>
 						<ComboBox options={[placeHolderOption, ...supplierOptions]} value={supplier} name={'tier 2 supplier'} onChange={option => setSupplier(option)} />
 					</div>
 					<Card title={'Sustainability Attributes'} glow={true}>
-						<BaseButton label={'Add'} iconLeft={IconNames.PlusIcon} variant={ButtonTypes.secondary} onClick={() => setCreateModalType('attributes')} />
+						<BaseButton
+							label={'Add'}
+							iconLeft={IconNames.PlusIcon}
+							variant={ButtonTypes.secondary}
+							onClick={() => setCreateModalType('attributes')}
+						/>
 						<CreateEntityTable
 							type={'attributes'}
-							remove={id => {
-								const newAttributes = attributesToAdd.filter(attr => attr.id !== id);
+							remove={(id) => {
+								const newAttributes = attributesToAdd.filter((attr) => attr.id !== id);
 								setAttributesToAdd(newAttributes);
 							}}
 							entities={attributesToAdd}
@@ -306,46 +331,54 @@ const _CreateMaterialPage = () => {
 					</Card>
 				</div>
 			</div>
-			{createModalType !== undefined && (
-				<AddToCreateEntityModal
-					show={true}
-					onClose={() => {
-						setCreateModalType(undefined);
-					}}
-					onAdd={(ids: string[]) => {
-						if (createModalType === 'products') {
-							const newProducts: { id: string; name: string }[] = [];
-							ids.forEach(id => {
-								const foundProduct = products.find(product => product.id === id);
-								if (foundProduct) {
-									newProducts.push(foundProduct);
-								}
-							});
-							setProductsToAdd([...productsToAdd, ...newProducts]);
-						} else {
-							const newAttributes: Claims[] = [];
-							ids.forEach(id => {
-								const foundAttribute = attributes.find(attr => attr.id === id);
-								if (foundAttribute) {
-									newAttributes.push(foundAttribute);
-								}
-							});
-							setAttributesToAdd([...attributesToAdd, ...newAttributes]);
-						}
-						setCreateModalType(undefined);
-					}}
-					type={createModalType}
-					entities={getEntities(createModalType)}
-				/>
-			)}
+			{
+				createModalType !== undefined && (
+					<AddToCreateEntityModal
+						show={true}
+						onClose={() => {
+							setCreateModalType(undefined);
+						}}
+						onAdd={(ids: string[]) => {
+							if(createModalType === 'products') {
+								const newProducts: {id: string, name: string}[] = [];
+								ids.forEach((id) => {
+									const foundProduct = products.find((product) => product.id === id);
+									if(foundProduct) {
+										newProducts.push(foundProduct);
+									}
+								});
+								setProductsToAdd([
+									...productsToAdd,
+									...newProducts,
+								]);
+							} else {
+								const newAttributes: Claims[] = [];
+								ids.forEach((id) => {
+									const foundAttribute = attributes.find((attr) => attr.id === id);
+									if(foundAttribute) {
+										newAttributes.push(foundAttribute);
+									}
+								});
+								setAttributesToAdd([
+									...attributesToAdd,
+									...newAttributes,
+								]);
+							}
+							setCreateModalType(undefined);
+						}}
+						type={createModalType}
+						entities={getEntities(createModalType)}
+					/>
+				)
+			}
 			<Modal
 				show={showCancelModal}
 				setShowModal={setShowCancelModal}
 				header={{
 					title: 'Cancel without saving?',
 					cardProps: {
-						className: 'relative p-6',
-					},
+						className: 'relative p-6'
+					}
 				}}
 				body={<div>All progress made on creating this material will be lost.</div>}
 				footer={{
@@ -361,10 +394,10 @@ const _CreateMaterialPage = () => {
 							navigate('/materials');
 						},
 						variant: ButtonTypes.warning,
-					},
+					}
 				}}
 				modalProps={{
-					style: {},
+					style: {}
 				}}
 			/>
 		</MainContent>
