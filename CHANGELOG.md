@@ -1,3 +1,10 @@
+## [1.443.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.443.0...v1.443.1) (2024-10-23)
+
+
+### Bug Fixes
+
+* update DD_GIT_REPOSITORY_URL to use hardcoded GitHub URL ([640998a](https://github.com/ColdPBC/cold-monorepo/commit/640998a0faab6049a4fa042aa5ef2a1250bf2cfd))
+
 # [1.443.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.442.0...v1.443.0) (2024-10-23)
 
 
