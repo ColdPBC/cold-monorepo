@@ -80,8 +80,8 @@ export const DocumentsTab: Story = {
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 		await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-		const bomTab = await canvas.findByTestId('tab-BOM');
+		const bomTab = await canvas.findByTestId('tab-Documents');
 		bomTab.click();
-		await canvas.findByTestId('product-bom-tab-card');
+		await canvas.findByTestId('product-documents-tab-card');
 	},
 };

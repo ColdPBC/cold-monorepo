@@ -6,7 +6,7 @@ import { FilesWithAssurances } from '@coldpbc/interfaces';
 export const _ProductDocumentsTab = (props: { files: FilesWithAssurances[] }) => {
 	const { files } = props;
 	return (
-		<Card title={'Documents'} className={'w-full'}>
+		<Card title={'Documents'} className={'w-full'} data-testid={'product-documents-tab-card'}>
 			<DocumentsTable files={files} selectDocument={() => {}} />
 		</Card>
 	);
