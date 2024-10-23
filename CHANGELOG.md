@@ -1,3 +1,10 @@
+## [1.439.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.439.2...v1.439.3) (2024-10-23)
+
+
+### Bug Fixes
+
+* **logger:** handle undefined meta and optionalParams values correctly ([b0c98d1](https://github.com/ColdPBC/cold-monorepo/commit/b0c98d1acbb1e93e1b716b458b7ad053d3b1d04a))
+
 ## [1.439.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.439.1...v1.439.2) (2024-10-22)
 
 
