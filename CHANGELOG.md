@@ -1,3 +1,10 @@
+# [1.446.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.445.0...v1.446.0) (2024-10-23)
+
+
+### Features
+
+* add health check endpoint and increase EC2 instance storage ([691f235](https://github.com/ColdPBC/cold-monorepo/commit/691f2359520ad2abcc385040143a975084da02fb))
+
 # [1.445.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.444.3...v1.445.0) (2024-10-23)
 
 
