@@ -88,7 +88,7 @@
           "dockerContext": ".",
 	        "includeEnvVariablesInBuild": true,
 	        "injectEnvVariablesInDockerfile": true,
-	        "buildCommand": "docker build . -t cold-api-ec2 --build-arg DD_GIT_REPOSITORY_URL=$(git config --get remote.origin.url) --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
+	        "buildCommand": "docker build . -t cold-api-ec2 --build-arg DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
             "repository": "api-docker-images",
@@ -446,7 +446,7 @@
           "dockerContext": ".",
 	        "includeEnvVariablesInBuild": true,
 	        "injectEnvVariablesInDockerfile": true,
-	        "buildCommand": "docker build . -t cold-api-ec2 --build-arg DD_GIT_REPOSITORY_URL=$(git config --get remote.origin.url) --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
+	        "buildCommand": "docker build . -t cold-api-ec2 --build-arg DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
             "repository": "api-docker-images",
@@ -557,7 +557,7 @@
           "memory": 4,
           "buildType": "nixpacks",
           "installCommand": "corepack enable pnpm && pnpm install",
-	        "buildCommand": "DD_GIT_REPOSITORY_URL=$(git config --get remote.origin.url) DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
+	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
 	        "includeEnvVariablesInBuild": true,
           "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
