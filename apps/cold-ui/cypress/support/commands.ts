@@ -10,16 +10,16 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Cypress {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    interface Chainable<Subject> {
-      login(email: string, password: string): void;
+	// eslint-disable-next-line @typescript-eslint/no-namespace
+	namespace Cypress {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		interface Chainable<Subject> {
+			login(email: string, password: string): void;
 
-      // TODO: define a mount command
-      // mount: typeof mount;
-    }
-  }
+			// TODO: define a mount command
+			// mount: typeof mount;
+		}
+	}
 }
 
 // Cypress.Commands.add('mount', mount)
@@ -29,7 +29,7 @@ declare global {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 Cypress.Commands.add('login', (email, password) => {
-  console.log('Custom command example: Login', email, password);
+	console.log('Custom command example: Login', email, password);
 });
 //
 // -- This is a child command --

@@ -3,40 +3,36 @@ import turbosnap from 'vite-plugin-turbosnap';
 import { mergeConfig } from 'vite';
 
 const config: StorybookConfig = {
-  stories: [
-    '../src/**/*.stories.@(js|jsx|tsx|ts|mdx)',
-    '../src/**/*.mdx',
-    '../../../libs/react/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
-  ],
-  addons: [
-    '@storybook/addon-knobs',
-    '@storybook/addon-essentials',
-    'storybook-addon-auth0-react',
-    'storybook-addon-cookie',
-    'storybook-addon-launchdarkly',
-    '@storybook/addon-interactions',
-  ],
-  framework: {
-    name: '@storybook/react-vite',
-    options: {
-      builder: {
-        viteConfigPath: 'apps/cold-ui/vite.config.ts',
-      },
-    },
-  },
-  async viteFinal(config, { configType }) {
-    return mergeConfig(config, {
-      plugins:
-        configType === 'PRODUCTION'
-          ? [
-              turbosnap({
-                // This should be the base path of your storybook.  In monorepos, you may only need process.cwd().
-                rootDir: process.cwd(),
-              }),
-            ]
-          : [],
-    });
-  },
+	stories: ['../src/**/*.stories.@(js|jsx|tsx|ts|mdx)', '../src/**/*.mdx', '../../../libs/react/src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
+	addons: [
+		'@storybook/addon-knobs',
+		'@storybook/addon-essentials',
+		'storybook-addon-auth0-react',
+		'storybook-addon-cookie',
+		'storybook-addon-launchdarkly',
+		'@storybook/addon-interactions',
+	],
+	framework: {
+		name: '@storybook/react-vite',
+		options: {
+			builder: {
+				viteConfigPath: 'apps/cold-ui/vite.config.ts',
+			},
+		},
+	},
+	async viteFinal(config, { configType }) {
+		return mergeConfig(config, {
+			plugins:
+				configType === 'PRODUCTION'
+					? [
+							turbosnap({
+								// This should be the base path of your storybook.  In monorepos, you may only need process.cwd().
+								rootDir: process.cwd(),
+							}),
+					  ]
+					: [],
+		});
+	},
 };
 
 export default config;

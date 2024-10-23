@@ -7,72 +7,72 @@
 
 /* Accommodations to account for flowbite sidebar styling not overwriting appropriately */
 @layer components {
-  .sidebar-item span {
-    @apply px-0 !important;
-  }
+    .sidebar-item span {
+        @apply px-0 !important;
+    }
 
-  .shrink-sidebar-item svg, .shrink-sidebar-item span {
-    @apply -translate-x-0.5 !important;
-  }
+    .shrink-sidebar-item svg, .shrink-sidebar-item span {
+        @apply -translate-x-0.5 !important;
+    }
 
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
 
-  /* For IE, Edge and Firefox */
-  .scrollbar-hide {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
+    /* For IE, Edge and Firefox */
+    .scrollbar-hide {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
 }
 
 @media print {
-  /* Disable overflow for the content container */
-  .w-screen, .h-screen, .overflow-y-auto, .h-full, .w-full, .markdown-terms {
-    overflow: visible !important;
-    height: auto !important;
-    width: auto !important;
-  }
+    /* Disable overflow for the content container */
+    .w-screen, .h-screen, .overflow-y-auto, .h-full, .w-full, .markdown-terms {
+        overflow: visible !important;
+        height: auto !important;
+        width: auto !important;
+    }
 
-  /* Style the terms and conditions for printing */
-  .markdown-terms {
-    font-family: 'Merriweather', Georgia, serif;
-    margin: 20px 40px;
-    max-width: 60rem;
-  }
+    /* Style the terms and conditions for printing */
+    .markdown-terms {
+        font-family: 'Merriweather', Georgia, serif;
+        margin: 20px 40px;
+        max-width: 60rem;
+    }
 
-  .markdown-terms a,
-  .markdown-terms a:visited {
-    color: #3498db;
-  }
+    .markdown-terms a,
+    .markdown-terms a:visited {
+        color: #3498db;
+    }
 
-  /* Ensuring the entire page is used for printing */
-  @page {
-    margin: 20mm;
-  }
+    /* Ensuring the entire page is used for printing */
+    @page {
+        margin: 20mm;
+    }
 
 }
 
 @media screen and (min-width: 32rem) and (max-width: 48rem) {
-  .markdown-terms html {
-    font-size: 15px;
-  }
+    .markdown-terms html {
+        font-size: 15px;
+    }
 }
 
 @media screen and (min-width: 48rem) {
-  .markdown-terms html {
-    font-size: 16px;
-  }
+    .markdown-terms html {
+        font-size: 16px;
+    }
 }
 
 .markdown-terms body {
-  line-height: 1.85;
+    line-height: 1.85;
 }
 
 .markdown-terms p,
 .splendor-p {
-  font-size: 1rem;
-  margin-bottom: .8rem;
+    font-size: 1rem;
+    margin-bottom: .8rem;
 }
 
 .markdown-terms h1,
@@ -83,45 +83,45 @@
 .splendor-h3,
 .markdown-terms h4,
 .splendor-h4 {
-  margin: 1.414rem 0 .5rem;
-  font-weight: inherit;
-  line-height: 1.42;
+    margin: 1.414rem 0 .5rem;
+    font-weight: inherit;
+    line-height: 1.42;
 }
 
 .markdown-terms h1,
 .splendor-h1 {
-  margin-top: 0;
-  font-size: 3.998rem;
+    margin-top: 0;
+    font-size: 3.998rem;
 }
 
 .markdown-terms h2,
 .splendor-h2 {
-  font-size: 2.827rem;
+    font-size: 2.827rem;
 }
 
 .markdown-terms h3,
 .splendor-h3 {
-  font-size: 1.999rem;
+    font-size: 1.999rem;
 }
 
 .markdown-terms h4,
 .splendor-h4 {
-  font-size: 1.414rem;
+    font-size: 1.414rem;
 }
 
 .markdown-terms h5,
 .splendor-h5 {
-  font-size: 1.121rem;
+    font-size: 1.121rem;
 }
 
 .markdown-terms h6,
 .splendor-h6 {
-  font-size: .88rem;
+    font-size: .88rem;
 }
 
 .markdown-terms small,
 .splendor-small {
-  font-size: .707em;
+    font-size: .707em;
 }
 
 /* https://github.com/mrmrs/fluidity */
@@ -133,93 +133,93 @@
 .markdown-terms svg,
 .markdown-terms select,
 .markdown-terms textarea {
-  max-width: 100%;
+    max-width: 100%;
 }
 
 .markdown-terms html {
-  font-size: 18px;
-  max-width: 100%;
+    font-size: 18px;
+    max-width: 100%;
 }
 
 .markdown-terms {
-  color: #444;
-  font-family: 'Merriweather', Georgia, serif;
-  margin: 20px 40px;
-  max-width: 60rem;
+    color: #444;
+    font-family: 'Merriweather', Georgia, serif;
+    margin: 20px 40px;
+    max-width: 60rem;
 }
 
 /* === A bit of a gross hack so we can have bleeding divs/blockquotes. */
 
 .markdown-terms p,
 .markdown-terms *:not(div):not(img):not(body):not(html):not(li):not(blockquote):not(p) {
-  padding: .25rem;
+    padding: .25rem;
 }
 
 .markdown-terms div {
-  width: 100%;
+    width: 100%;
 }
 
 .markdown-terms div img {
-  width: 100%;
+    width: 100%;
 }
 
 .markdown-terms blockquote p {
-  font-size: 1.5rem;
-  font-style: italic;
-  margin: 1rem auto 1rem;
-  max-width: 48rem;
+    font-size: 1.5rem;
+    font-style: italic;
+    margin: 1rem auto 1rem;
+    max-width: 48rem;
 }
 
 .markdown-terms li {
-  margin-left: 2rem;
-  margin-bottom: .2rem;
+    margin-left: 2rem;
+    margin-bottom: .2rem;
 }
 
 .markdown-terms ul {
-  list-style-type: circle;
+    list-style-type: circle;
 }
 
 .markdown-terms ol {
-  list-style-type: decimal;
+    list-style-type: decimal;
 }
 
 .markdown-terms ol ol {
-  list-style-type: lower-alpha;
+    list-style-type: lower-alpha;
 }
 
 /* Counteract the specificity of the gross *:not() chain. */
 
 .markdown-terms h1 {
-  padding: 4rem 0 !important;
+    padding: 4rem 0 !important;
 }
 
 /*  === End gross hack */
 
 .markdown-terms p {
-  color: #555;
-  height: auto;
-  line-height: 1.45;
+    color: #555;
+    height: auto;
+    line-height: 1.45;
 }
 
 .markdown-terms pre,
 .markdown-terms code {
-  font-family: Menlo, Monaco, "Courier New", monospace;
+    font-family: Menlo, Monaco, "Courier New", monospace;
 }
 
 .markdown-terms pre {
-  background-color: #fafafa;
-  font-size: .8rem;
-  overflow-x: scroll;
-  padding: 1.125em;
+    background-color: #fafafa;
+    font-size: .8rem;
+    overflow-x: scroll;
+    padding: 1.125em;
 }
 
 .markdown-terms a,
 .markdown-terms a:visited {
-  color: #3498db;
+    color: #3498db;
 }
 
 .markdown-terms a:hover,
 .markdown-terms a:focus,
 .markdown-terms a:active {
-  color: #2980b9;
+    color: #2980b9;
 }

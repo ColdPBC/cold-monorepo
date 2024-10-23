@@ -4,11 +4,7 @@ import React from 'react';
 import '../src/styles/globals.css';
 
 const Layout = ({ children }: any) => {
-  return (
-    <>
-      <div className="px-20 py-10">{children}</div>
-    </>
-  );
+	return <div className="px-20 py-10">{children}</div>;
 };
 
 export default Layout;
