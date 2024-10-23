@@ -112,8 +112,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 							},
 							{
 								id: '0e9b422d-089a-4b68-955c-37af2d1ee5d1',
-								effectiveEndDate: null,
-								organizationFile: null,
+								effectiveEndDate: addDays(new Date(), 75).toISOString(),
+								organizationFile: {
+									id: 'f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b',
+								},
 								sustainabilityAttribute: {
 									id: '6fc74c15-cf95-4a4a-95ae-4f0f0eb3c401',
 									level: EntityLevel.MATERIAL,
