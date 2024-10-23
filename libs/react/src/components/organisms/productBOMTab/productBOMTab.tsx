@@ -64,16 +64,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 
 	return (
 		<Card title={'Bill of Materials'} className={'w-full'} data-testid={'product-bom-tab-card'}>
-			<MuiDataGrid
-				rows={rows}
-				columns={columns}
-				showSearch
-				columnHeaderHeight={55}
-				rowHeight={114}
-				getRowClassName={() => {
-					return 'bg-gray-10';
-				}}
-			/>
+			<MuiDataGrid rows={rows} columns={columns} showSearch columnHeaderHeight={55} rowHeight={114} />
 		</Card>
 	);
 };

@@ -1,6 +1,5 @@
 import { Files, FilesWithAssurances } from '@coldpbc/interfaces';
 import { addDays } from 'date-fns';
-import {filesProcessedWithDatesMocks} from "./graphql";
 
 export function getAllFilesMock() {
 	return [
@@ -60,7 +59,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'PFAS-Test Certificate.pdf',
 			effective_start_date: addDays(new Date(), 5).toISOString(),
 			effective_end_date: addDays(new Date(), 5).toISOString(),
-			type: "CERTIFICATE",
+			type: 'CERTIFICATE',
 			organization_claims: [],
 		},
 		{
@@ -68,7 +67,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'Lead-Test Certificate.pdf',
 			effective_start_date: null,
 			effective_end_date: null,
-			type: "CERTIFICATE",
+			type: 'CERTIFICATE',
 			organization_claims: [],
 		},
 		{
@@ -76,7 +75,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'phthalate Certificate.pdf',
 			effective_start_date: null,
 			effective_end_date: null,
-			type: "CERTIFICATE",
+			type: 'CERTIFICATE',
 			organization_claims: [],
 		},
 		{
@@ -84,7 +83,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'bluesign Certificate without date.pdf',
 			effective_start_date: null,
 			effective_end_date: null,
-			type: "CERTIFICATE",
+			type: 'CERTIFICATE',
 			organization_claims: [],
 		},
 		{
@@ -92,7 +91,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'bluesign Certificate expiring soon.pdf',
 			effective_start_date: addDays(new Date(), 5).toISOString(),
 			effective_end_date: addDays(new Date(), 5).toISOString(),
-			type: "CERTIFICATE",
+			type: 'CERTIFICATE',
 			organization_claims: [],
 		},
 		{
@@ -100,7 +99,7 @@ export function getFilesWithCertificateClaimsMock(): Files[] {
 			original_name: 'PFAS-Test Certificate Want, Inc.pdf',
 			effective_start_date: addDays(new Date(), 70).toISOString(),
 			effective_end_date: addDays(new Date(), 70).toISOString(),
-			type: "CERTIFICATE",
+			type: 'CERTIFICATE',
 			organization_claims: [],
 		},
 	];
@@ -112,7 +111,7 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			id: '1',
 			originalName: 'PFAS-Test Certificate.pdf',
 			createdAt: '2024-05-01T20:00:00.000Z',
-			type: "OTHER",
+			type: 'OTHER',
 			attributeAssurances: [],
 			metadata: null,
 		},
@@ -120,7 +119,7 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			id: '2',
 			originalName: 'PFAS-Test Certificate.pdf',
 			createdAt: '2024-05-02T20:00:00.000Z',
-			type: "OTHER",
+			type: 'OTHER',
 			attributeAssurances: [],
 			metadata: null,
 		},
@@ -128,7 +127,7 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			id: '3',
 			originalName: 'PFAS-Test Certificate.pdf',
 			createdAt: '2024-05-03T20:00:00.000Z',
-			type: "OTHER",
+			type: 'OTHER',
 			attributeAssurances: [],
 			metadata: null,
 		},
@@ -141,7 +140,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 			id: '1',
 			originalName: 'PFAS-Test Certificate.pdf',
 			createdAt: '2024-05-01T20:00:00.000Z',
-			type: "CERTIFICATE",
+			type: 'CERTIFICATE',
 			attributeAssurances: [
 				{
 					id: '1',
@@ -167,6 +166,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 						],
 					},
 					material: null,
+					product: null,
 				},
 			],
 			metadata: {
@@ -174,14 +174,14 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 				effective_end_date: null,
 				effective_start_date: null,
 				status: 'ai_extracted',
-        certificate_number: 'CU1077874GRS-2023-00051776',
+				certificate_number: 'CU1077874GRS-2023-00051776',
 			},
 		},
 		{
 			id: '2',
 			originalName: 'Lead-Test Certificate.pdf',
 			createdAt: '2024-05-01T20:00:00.000Z',
-			type: "STATEMENT",
+			type: 'STATEMENT',
 			attributeAssurances: [
 				{
 					id: '2',
@@ -206,6 +206,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 						],
 					},
 					organizationFacility: null,
+					product: null,
 				},
 				{
 					id: '3',
@@ -230,6 +231,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 						],
 					},
 					organizationFacility: null,
+					product: null,
 				},
 			],
 			metadata: {
@@ -237,7 +239,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 				effective_end_date: null,
 				effective_start_date: null,
 				status: 'ai_extracted',
-        certificate_number: 'CU1077874GRS-2023-00051776',
+				certificate_number: 'CU1077874GRS-2023-00051776',
 			},
 		},
 	];
@@ -285,7 +287,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 			id: '1',
 			originalName: 'PFAS-Test Certificate.pdf',
 			createdAt: '2024-05-01T20:00:00.000Z',
-			type: "SCOPE_CERTIFICATE",
+			type: 'SCOPE_CERTIFICATE',
 			attributeAssurances: [
 				{
 					id: '1',
@@ -311,6 +313,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 						],
 					},
 					material: null,
+					product: null,
 				},
 			],
 			metadata: {
@@ -318,14 +321,14 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 				effective_end_date: null,
 				effective_start_date: null,
 				status: 'uploaded',
-        certificate_number: 'CU1077874GRS-2023-00051776',
+				certificate_number: 'CU1077874GRS-2023-00051776',
 			},
 		},
 		{
 			id: '2',
 			originalName: 'Lead-Test Certificate.pdf',
 			createdAt: '2024-05-01T20:00:00.000Z',
-			type: "CERTIFICATE",
+			type: 'CERTIFICATE',
 			attributeAssurances: [
 				{
 					id: '2',
@@ -350,6 +353,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 						],
 					},
 					organizationFacility: null,
+					product: null,
 				},
 				{
 					id: '3',
@@ -374,6 +378,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 						],
 					},
 					organizationFacility: null,
+					product: null,
 				},
 			],
 			metadata: {
@@ -381,186 +386,179 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 				effective_end_date: null,
 				effective_start_date: null,
 				status: 'uploaded',
-        certificate_number: 'CU1077874GRS-2023-00051776',
+				certificate_number: 'CU1077874GRS-2023-00051776',
 			},
 		},
 	];
 }
 
 export function filesProcessedWithDatesMock(): FilesWithAssurances[] {
-  return [
-    {
-      id: '1',
-      originalName: 'PFAS-Test Certificate.pdf',
-      createdAt: '2024-05-01T20:00:00.000Z',
-      type: "CERTIFICATE",
-      attributeAssurances: [],
-      metadata: {
-        summary: 'This is a summary',
-        effective_end_date: '2024-05-01',
-        effective_start_date: '2024-05-01',
-        status: 'ai_extracted',
-        certificate_number: 'CU1077874GRS-2023-00051776',
-      },
-    },
-    {
-      id: '2',
-      originalName: 'Lead-Test Certificate.pdf',
-      createdAt: '2024-05-21T20:00:00.000Z',
-      type: "CERTIFICATE",
-      attributeAssurances: [],
-      metadata: {
-        summary: 'This is a summary',
-        effective_end_date: '2024-04-20',
-        effective_start_date: '2024-04-20',
-        status: 'ai_extracted',
-        certificate_number: 'CU1077874GRS-2023-00051776',
-      },
-    },
-  ];
+	return [
+		{
+			id: '1',
+			originalName: 'PFAS-Test Certificate.pdf',
+			createdAt: '2024-05-01T20:00:00.000Z',
+			type: 'CERTIFICATE',
+			attributeAssurances: [],
+			metadata: {
+				summary: 'This is a summary',
+				effective_end_date: '2024-05-01',
+				effective_start_date: '2024-05-01',
+				status: 'ai_extracted',
+				certificate_number: 'CU1077874GRS-2023-00051776',
+			},
+		},
+		{
+			id: '2',
+			originalName: 'Lead-Test Certificate.pdf',
+			createdAt: '2024-05-21T20:00:00.000Z',
+			type: 'CERTIFICATE',
+			attributeAssurances: [],
+			metadata: {
+				summary: 'This is a summary',
+				effective_end_date: '2024-04-20',
+				effective_start_date: '2024-04-20',
+				status: 'ai_extracted',
+				certificate_number: 'CU1077874GRS-2023-00051776',
+			},
+		},
+	];
 }
 
 export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
-  return [
-    {
-      id: '1',
-      originalName: 'PFAS-Test Certificate.pdf',
-      createdAt: '2024-05-01T20:00:00.000Z',
-      type: "CERTIFICATE",
-      attributeAssurances: [],
-      metadata: {
-        summary: 'This is a summary',
-        effective_end_date: '2024-05-01',
-        effective_start_date: '2024-05-01',
-        status: 'ai_extracted',
-        certificate_number: 'CU1077874GRS-2023-00051776',
-      },
-    },
-    {
-      id: '2',
-      originalName: 'Lead-Test Certificate.pdf',
-      createdAt: '2024-05-21T20:00:00.000Z',
-      type: "CERTIFICATE",
-      attributeAssurances: [
-        {
-          id: '2',
-          effectiveStartDate: addDays(new Date(), 1).toISOString(),
-          effectiveEndDate: addDays(new Date(), 70).toISOString(),
-          sustainabilityAttribute: {
-            id: '4',
-            name: 'bluesign',
-            level: 'MATERIAL',
-          },
-          material: {
-            id: '1',
-            name: 'Material 1',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 2,
-                },
-              },
-            ],
-          },
-          organizationFacility: null,
-        },
-        {
-          id: '3',
-          effectiveStartDate: addDays(new Date(), 1).toISOString(),
-          effectiveEndDate: addDays(new Date(), 70).toISOString(),
-          sustainabilityAttribute: {
-            id: '4',
-            name: 'bluesign',
-            level: 'MATERIAL',
-          },
-          material: {
-            id: '2',
-            name: 'Material 2',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 1,
-                },
-              },
-            ],
-          },
-          organizationFacility: null,
-        },
-        {
-          id: '4',
-          effectiveStartDate: addDays(new Date(), 1).toISOString(),
-          effectiveEndDate: addDays(new Date(), 70).toISOString(),
-          sustainabilityAttribute: {
-            id: '4',
-            name: 'bluesign',
-            level: 'MATERIAL',
-          },
-          material: {
-            id: '2',
-            name: 'Material 3',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 1,
-                },
-              },
-            ],
-          },
-          organizationFacility: null,
-        },
-        {
-          id: '5',
-          effectiveStartDate: addDays(new Date(), 1).toISOString(),
-          effectiveEndDate: addDays(new Date(), 70).toISOString(),
-          sustainabilityAttribute: {
-            id: '4',
-            name: 'bluesign',
-            level: 'MATERIAL',
-          },
-          material: {
-            id: '2',
-            name: 'Material 4',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 1,
-                },
-              },
-            ],
-          },
-          organizationFacility: null,
-        },
-      ],
-      metadata: {
-        summary: 'This is a summary',
-        effective_end_date: '2024-04-20',
-        effective_start_date: '2024-04-20',
-        status: 'ai_extracted',
-        certificate_number: 'CU1077874GRS-2023-00051776',
-      },
-    },
-  ];
+	return [
+		{
+			id: '1',
+			originalName: 'PFAS-Test Certificate.pdf',
+			createdAt: '2024-05-01T20:00:00.000Z',
+			type: 'CERTIFICATE',
+			attributeAssurances: [],
+			metadata: {
+				summary: 'This is a summary',
+				effective_end_date: '2024-05-01',
+				effective_start_date: '2024-05-01',
+				status: 'ai_extracted',
+				certificate_number: 'CU1077874GRS-2023-00051776',
+			},
+		},
+		{
+			id: '2',
+			originalName: 'Lead-Test Certificate.pdf',
+			createdAt: '2024-05-21T20:00:00.000Z',
+			type: 'CERTIFICATE',
+			attributeAssurances: [
+				{
+					id: '2',
+					effectiveStartDate: addDays(new Date(), 1).toISOString(),
+					effectiveEndDate: addDays(new Date(), 70).toISOString(),
+					sustainabilityAttribute: {
+						id: '4',
+						name: 'bluesign',
+						level: 'MATERIAL',
+					},
+					material: {
+						id: '1',
+						name: 'Material 1',
+						materialSuppliers: [
+							{
+								organizationFacility: {
+									id: '1',
+									name: 'Supplier',
+									supplierTier: 2,
+								},
+							},
+						],
+					},
+					organizationFacility: null,
+					product: null,
+				},
+				{
+					id: '3',
+					effectiveStartDate: addDays(new Date(), 1).toISOString(),
+					effectiveEndDate: addDays(new Date(), 70).toISOString(),
+					sustainabilityAttribute: {
+						id: '4',
+						name: 'bluesign',
+						level: 'MATERIAL',
+					},
+					material: {
+						id: '2',
+						name: 'Material 2',
+						materialSuppliers: [
+							{
+								organizationFacility: {
+									id: '1',
+									name: 'Supplier',
+									supplierTier: 1,
+								},
+							},
+						],
+					},
+					organizationFacility: null,
+					product: null,
+				},
+				{
+					id: '4',
+					effectiveStartDate: addDays(new Date(), 1).toISOString(),
+					effectiveEndDate: addDays(new Date(), 70).toISOString(),
+					sustainabilityAttribute: {
+						id: '4',
+						name: 'bluesign',
+						level: 'MATERIAL',
+					},
+					material: {
+						id: '2',
+						name: 'Material 3',
+						materialSuppliers: [
+							{
+								organizationFacility: {
+									id: '1',
+									name: 'Supplier',
+									supplierTier: 1,
+								},
+							},
+						],
+					},
+					organizationFacility: null,
+					product: null,
+				},
+				{
+					id: '5',
+					effectiveStartDate: addDays(new Date(), 1).toISOString(),
+					effectiveEndDate: addDays(new Date(), 70).toISOString(),
+					sustainabilityAttribute: {
+						id: '4',
+						name: 'bluesign',
+						level: 'MATERIAL',
+					},
+					material: {
+						id: '2',
+						name: 'Material 4',
+						materialSuppliers: [
+							{
+								organizationFacility: {
+									id: '1',
+									name: 'Supplier',
+									supplierTier: 1,
+								},
+							},
+						],
+					},
+					organizationFacility: null,
+					product: null,
+				},
+			],
+			metadata: {
+				summary: 'This is a summary',
+				effective_end_date: '2024-04-20',
+				effective_start_date: '2024-04-20',
+				status: 'ai_extracted',
+				certificate_number: 'CU1077874GRS-2023-00051776',
+			},
+		},
+	];
 }
 
 export const getFileTypesMock = (): string[] => {
-  return [
-    "CERTIFICATE",
-    "TEST_REPORT",
-    "STATEMENT",
-    "ASSESSMENT",
-    "PURCHASE_ORDER",
-    "BILL_OF_MATERIALS",
-    "POLICY",
-    "OTHER",
-    "AUDIT_REPORT",
-    "SCOPE_CERTIFICATE",
-  ]
-}
+	return ['CERTIFICATE', 'TEST_REPORT', 'STATEMENT', 'ASSESSMENT', 'PURCHASE_ORDER', 'BILL_OF_MATERIALS', 'POLICY', 'OTHER', 'AUDIT_REPORT', 'SCOPE_CERTIFICATE'];
+};

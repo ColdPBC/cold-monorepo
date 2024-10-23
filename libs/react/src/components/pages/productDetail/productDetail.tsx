@@ -1,13 +1,16 @@
 import { ErrorFallback, ErrorPage, MainContent, Spinner, Tabs } from '@coldpbc/components';
-import { useGraphQLSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
-import { ProductsQuery } from '@coldpbc/interfaces';
+import { FilesWithAssurances, ProductsQuery } from '@coldpbc/interfaces';
 import { get, isError } from 'lodash';
 import { ProductBOMTab } from '../../organisms/productBOMTab/productBOMTab';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
+import { ProductDocumentsTab } from '../../organisms/productDocumentsTab/productDocumentsTab';
+import { parseDocumentsForProductDetails } from '../../../lib/productUtils';
 
 const _ProductDetail = () => {
+	const { orgId } = useAuth0Wrapper();
 	const { id } = useParams();
 
 	const productQuery = useGraphQLSWR<{
@@ -16,16 +19,29 @@ const _ProductDetail = () => {
 		id: id,
 	});
 
-	if (productQuery.isLoading) {
+	const allFiles = useGraphQLSWR<{
+		organizationFiles: FilesWithAssurances[];
+	}>('GET_ALL_FILES', {
+		filter: {
+			organization: {
+				id: orgId,
+			},
+			visible: true,
+		},
+	});
+
+	if (productQuery.isLoading || allFiles.isLoading) {
 		return <Spinner />;
 	}
 
-	if (isError(productQuery.data)) {
+	if (isError(productQuery.data) || isError(allFiles.data)) {
 		const error = get(productQuery.data, 'error', new Error('An error occurred'));
+		// todo: create a new error handling component
 		return <ErrorPage error={error.message} showLogout={false} />;
 	}
 
 	const product = get(productQuery.data, 'data.product');
+	const files: FilesWithAssurances[] = get(allFiles.data, 'data.organizationFiles', []);
 
 	if (product === null || product === undefined) {
 		return null;
@@ -47,7 +63,7 @@ const _ProductDetail = () => {
 					},
 					{
 						label: 'Documents',
-						content: null,
+						content: <ProductDocumentsTab files={parseDocumentsForProductDetails(product, files)} />,
 					},
 				]}
 			/>
