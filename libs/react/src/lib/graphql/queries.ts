@@ -281,11 +281,23 @@ export const GET_ALL_PRODUCTS= gql`
       productCategory
       productSubcategory
       description
+      metadata
+      seasonCode
+      upcCode
+      brandProductId
+      supplierProductId
       productMaterials {
         id
         material {
           id
           name
+          materialSuppliers {
+            id
+            organizationFacility {
+              id
+              name
+            }
+          }
           attributeAssurances {
             id
             effectiveEndDate
@@ -331,11 +343,6 @@ export const GET_ALL_PRODUCTS= gql`
           }
         }
       }
-      metadata
-      seasonCode
-      upcCode
-      brandProductId
-      supplierProductId
     }
   }
 `;
@@ -407,6 +414,63 @@ export const GET_PRODUCT = gql`
       upcCode
       brandProductId
       supplierProductId
+      productMaterials {
+        id
+        material {
+          id
+          name
+          materialSuppliers {
+            id
+            organizationFacility {
+              id
+              name
+            }
+          }
+          attributeAssurances {
+            id
+            effectiveEndDate
+            organizationFile {
+              id
+            }
+            sustainabilityAttribute {
+              id
+              level
+              logoUrl
+              name
+            }
+          }
+        }
+      }
+      attributeAssurances {
+        id
+        effectiveEndDate
+        organizationFile {
+          id
+        }
+        sustainabilityAttribute {
+          id
+          level
+          logoUrl
+          name
+        }
+      }
+      organizationFacility {
+        id
+        name
+        attributeAssurances {
+          id
+          effectiveEndDate
+          organizationFile {
+            id
+          }
+          sustainabilityAttribute {
+            id
+            level
+            logoUrl
+            name
+          }
+        }
+      }
     }
   }
 `;
