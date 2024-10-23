@@ -1,3 +1,10 @@
+# [1.441.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.440.0...v1.441.0) (2024-10-23)
+
+
+### Features
+
+* enrich supplier and material data schemas to include additional fields. ([521b82d](https://github.com/ColdPBC/cold-monorepo/commit/521b82d206033a17f0b53bd1029e0c0a494adf20))
+
 # [1.440.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.439.3...v1.440.0) (2024-10-23)
 
 
