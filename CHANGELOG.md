@@ -1,3 +1,10 @@
+# [1.444.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.443.1...v1.444.0) (2024-10-23)
+
+
+### Features
+
+* update build configuration to use Nixpacks ([2b428cf](https://github.com/ColdPBC/cold-monorepo/commit/2b428cf9b8052b8bc0d139d319a44dc55fd4f0ce))
+
 ## [1.443.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.443.0...v1.443.1) (2024-10-23)
 
 
