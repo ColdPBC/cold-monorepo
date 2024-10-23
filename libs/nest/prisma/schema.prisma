@@ -690,6 +690,8 @@ model materials {
   deleted              Boolean?               @default(false)
   organization_id      String
   material_suppliers   material_suppliers[]
+	material_category			String?
+	material_subcategory	String?
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   attribute_assurances attribute_assurances[]
   product_materials    product_materials[]
@@ -703,6 +705,7 @@ model material_suppliers {
   material_id     String
   organization_id String
   supplier_id     String
+	supplier_product_id String?
   created_at      DateTime?               @default(now()) @db.Timestamptz(6)
   updated_at      DateTime?               @updatedAt @db.Timestamptz(6)
   organization    organizations           @relation(fields: [organization_id], references: [id], onDelete: Cascade)
@@ -721,6 +724,9 @@ model product_materials {
   material_id          String?
   material_supplier_id String?
   organization_id      String
+	yield						 		 Float?
+	unit_of_measure			 String?
+	metadata						 Json?
   created_at           DateTime?     @default(now()) @db.Timestamptz(6)
   updated_at           DateTime?     @updatedAt @db.Timestamptz(6)
   organization         organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)

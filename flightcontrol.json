@@ -86,6 +86,9 @@
           "buildType": "docker",
           "dockerfilePath": "_api.dockerfile",
           "dockerContext": ".",
+	        "includeEnvVariablesInBuild": true,
+	        "injectEnvVariablesInDockerfile": true,
+	        "buildCommand": "docker build . -t cold-api-ec2 --build-arg DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
             "repository": "api-docker-images",
@@ -104,8 +107,6 @@
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": false,
-          "includeEnvVariablesInBuild": true,
-          "injectEnvVariablesInDockerfile": true,
           "versionHistoryCount": 10,
           "dockerLabels": {
             "com.datadoghq.tags.environment": "production",
@@ -199,13 +200,13 @@
           "memory": 4,
           "buildType": "nixpacks",
           "installCommand": "corepack enable pnpm && pnpm install",
-          "buildCommand": "pnpm run build",
-          "startCommand": "pnpm run start",
+          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
+	        "includeEnvVariablesInBuild": true,
+	        "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
           "watchPaths": [
             "apps/cold-graphql/src/backend/**"
           ],
-          "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
           "maxInstances": 2,
           "minInstances": 1,
@@ -443,6 +444,9 @@
           "buildType": "docker",
           "dockerfilePath": "_api.dockerfile",
           "dockerContext": ".",
+	        "includeEnvVariablesInBuild": true,
+	        "injectEnvVariablesInDockerfile": true,
+	        "buildCommand": "docker build . -t cold-api-ec2 --build-arg DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
             "repository": "api-docker-images",
@@ -455,8 +459,6 @@
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
-          "includeEnvVariablesInBuild": true,
-          "injectEnvVariablesInDockerfile": true,
           "maxInstances": 2,
           "minInstances": 1,
           "autoscaling": {
@@ -555,13 +557,13 @@
           "memory": 4,
           "buildType": "nixpacks",
           "installCommand": "corepack enable pnpm && pnpm install",
-          "buildCommand": "pnpm run build",
+	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
+	        "includeEnvVariablesInBuild": true,
           "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
           "watchPaths": [
             "apps/cold-graphql/src/backend/**"
           ],
-          "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
           "maxInstances": 2,
           "minInstances": 1,

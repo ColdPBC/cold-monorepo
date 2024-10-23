@@ -54,8 +54,8 @@ const _ProductDetail = () => {
 			<Tabs
 				tabs={[
 					{
-						label: 'Details',
-						content: null,
+						label: 'Summary',
+						content: <ProductDetailsTab product={product} />,
 					},
 					{
 						label: 'BOM',

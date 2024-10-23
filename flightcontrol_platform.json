@@ -37,9 +37,12 @@
           "maxInstances": 2,
           "minInstances": 2,
           "buildType": "docker",
-          "dockerfilePath": "_platform.dockerfile",
+          "dockerfilePath": "_openai.dockerfile",
           "dockerContext": ".",
-          "watchPaths": [
+	        "includeEnvVariablesInBuild": true,
+	        "injectEnvVariablesInDockerfile": true,
+	        "buildCommand": "docker build . -t cold-platform-openai --build-arg DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
+	        "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "libs/nest/src/**",
             "_platform.dockerfile"
@@ -129,17 +132,20 @@
           },
           "target": {
             "type": "ecs-ec2",
-            "clusterInstanceSize": "t3.xlarge",
+            "clusterInstanceSize": "t3.small",
             "clusterMinInstances": 1,
-            "clusterMaxInstances": 4
+            "clusterMaxInstances": 2
           },
           "cpu": 1,
-          "memory": 3,
-          "maxInstances": 2,
-          "minInstances": 2,
+          "memory": 1,
+          "maxInstances": 1,
+          "minInstances": 1,
           "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
+	        "includeEnvVariablesInBuild": true,
+	        "injectEnvVariablesInDockerfile": true,
+	        "buildCommand": "docker build . -t cold-platform-stripe --build-arg DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
           "watchPaths": [
             "apps/cold-platform-stripe/src/**",
             "libs/nest/src/**",
@@ -264,6 +270,9 @@
           "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
+	        "includeEnvVariablesInBuild": true,
+	        "injectEnvVariablesInDockerfile": true,
+	        "buildCommand": "docker build . -t cold-platform-openai --build-arg DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
           "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "libs/nest/src/**",
@@ -352,17 +361,22 @@
           },
           "target": {
             "type": "ecs-ec2",
-            "clusterInstanceSize": "t3.medium",
+            "clusterInstanceSize": "t3.small",
             "clusterMinInstances": 1,
             "clusterMaxInstances": 2
           },
           "cpu": 1,
-          "memory": 2,
+          "memory": 1,
           "maxInstances": 1,
           "minInstances": 1,
           "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
+
+	        "includeEnvVariablesInBuild": true,
+	        "injectEnvVariablesInDockerfile": true,
+	        "buildCommand": "docker build . -t cold-platform-stripe --build-arg DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
+
           "watchPaths": [
             "apps/cold-platform-stripe/src/**",
             "libs/nest/src/**",
@@ -486,6 +500,9 @@
           "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
+	        "includeEnvVariablesInBuild": true,
+	        "injectEnvVariablesInDockerfile": true,
+	        "buildCommand": "docker build . -t cold-platform-openai --build-arg DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo.git --build-arg DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)",
           "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "apps/cold-platform-openai/test/**",

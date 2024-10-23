@@ -37,6 +37,12 @@ export class Material {
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'materials_organization_id_idx1' })
 	organization!: Ref<Organization>;
 
+	@Property({ type: 'text', nullable: true })
+	materialCategory?: string;
+
+	@Property({ type: 'text', nullable: true })
+	materialSubcategory?: string;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'material' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 
