@@ -92,6 +92,7 @@ export class MaterialsService extends BaseWorker {
 						if (material.id && supplier.id) {
 							await this.prisma.material_suppliers.upsert({
 								where: {
+									organization_id: job.data.organization.id,
 									materialSupplierKey: {
 										material_id: material.id,
 										supplier_id: supplier.id,
@@ -99,6 +100,7 @@ export class MaterialsService extends BaseWorker {
 								},
 								create: {
 									material_id: material.id,
+									organization_id: job.data.organization.id,
 									supplier_id: supplier.id,
 								},
 								update: {
