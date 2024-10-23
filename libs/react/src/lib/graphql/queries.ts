@@ -300,6 +300,19 @@ export const GET_ALL_PRODUCTS = gql`
 						organizationFacility {
 							id
 							name
+							attributeAssurances {
+								id
+								effectiveEndDate
+								organizationFile {
+									id
+								}
+								sustainabilityAttribute {
+									id
+									level
+									logoUrl
+									name
+								}
+							}
 						}
 					}
 					attributeAssurances {
@@ -428,6 +441,19 @@ export const GET_PRODUCT = gql`
 						organizationFacility {
 							id
 							name
+							attributeAssurances {
+								id
+								effectiveEndDate
+								organizationFile {
+									id
+								}
+								sustainabilityAttribute {
+									id
+									level
+									logoUrl
+									name
+								}
+							}
 						}
 					}
 					attributeAssurances {
