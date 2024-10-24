@@ -65,4 +65,8 @@ export interface AttributeAssurance {
     name: string;
     level: string;
   } | null;
+  product: {
+    id: string;
+    name: string;
+  } | null;
 }

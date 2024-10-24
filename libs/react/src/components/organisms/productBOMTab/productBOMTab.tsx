@@ -70,9 +70,6 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 				showSearch
 				columnHeaderHeight={55}
 				rowHeight={114}
-				getRowClassName={() => {
-					return 'bg-gray-10';
-				}}
 			/>
 		</Card>
 	);

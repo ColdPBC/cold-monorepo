@@ -1,9 +1,10 @@
 import { Meta, StoryObj } from '@storybook/react';
 import {ProductDetail} from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import {fileWithProductMocks, StoryMockProvider} from '@coldpbc/mocks';
 import {Route, Routes} from "react-router-dom";
 import {waitForElementToBeRemoved, within} from "@storybook/testing-library";
+import {GET_ALL_FILES} from "@coldpbc/lib";
 
 const meta: Meta<typeof ProductDetail> = {
   title: 'Pages/ProductDetail',
@@ -16,13 +17,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    id: "op_c0y7e5zsg09r0kxxlw2ha9cm"
-  },
   render: (args) => {
     return (
       <StoryMockProvider memoryRouterProps={{
-        initialEntries: [`/products/${args.id}`],
+        initialEntries: [`/products/op_c0y7e5zsg09r0kxxlw2ha9cm`],
       }}>
         <Routes>
           <Route path={'/products/:id'} element={<ProductDetail />} />
@@ -33,13 +31,10 @@ export const Default: Story = {
 };
 
 export const BOMTab: Story = {
-  args: {
-    id: "op_c0y7e5zsg09r0kxxlw2ha9cm"
-  },
   render: (args) => {
     return (
       <StoryMockProvider memoryRouterProps={{
-        initialEntries: [`/products/${args.id}`],
+        initialEntries: [`/products/op_c0y7e5zsg09r0kxxlw2ha9cm`],
       }}>
         <Routes>
           <Route path={'/products/:id'} element={<ProductDetail />} />
@@ -56,3 +51,35 @@ export const BOMTab: Story = {
   }
 };
 
+export const DocumentsTab: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider
+        memoryRouterProps={{
+          initialEntries: [`/products/op_c0y7e5zsg09r0kxxlw2ha9cm`],
+        }}
+        graphqlMocks={[
+          {
+            query: GET_ALL_FILES,
+            handler: () =>
+              Promise.resolve({
+                data: {
+                  organizationFiles: fileWithProductMocks(),
+                },
+              }),
+          },
+        ]}>
+        <Routes>
+          <Route path={'/products/:id'} element={<ProductDetail />} />
+        </Routes>
+      </StoryMockProvider>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
+    const documentsTab = await canvas.findByTestId('tab-Documents');
+    documentsTab.click();
+    await canvas.findByTestId('product-documents-tab-card');
+  },
+};
