@@ -40,8 +40,7 @@ ENV DD_SERVICE=${DD_SERVICE}
 WORKDIR /repo
 RUN yarn dlx nx run cold-nest-library:prisma-generate
 RUN yarn prebuild
-RUN git rev-parse HEAD > commit_hash && \
-    if [ "${NODE_ENV}" = "production" ] ; then \
+RUN if [ "${NODE_ENV}" = "production" ] ; then \
         echo "building for production..." && \
         DD_GIT_COMMIT_SHA=$(cat commit_hash) npx nx run --skip-nx-cache cold-api:build:production ; \
     else \
@@ -55,6 +54,11 @@ USER root
 RUN apt-get update
 RUN apt-get install graphicsmagick -y
 
+RUN apt-get update && \
+    apt-get install -y git && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* \
+
 USER node
 
 ARG DD_SERVICE
@@ -65,10 +69,7 @@ ARG FC_GIT_COMMIT_SHA
 ARG PORT
 
 RUN export DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
-
-RUN git rev-parse HEAD > commit_hash && \
-    export DD_GIT_COMMIT_SHA=$(cat commit_hash) \
-
+RUN export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)
 
 ENV NODE_ENV=${NODE_ENV}
 ENV DD_SERVICE=${DD_SERVICE}
@@ -95,5 +96,6 @@ COPY --from=build --chown=node:node /repo/node_modules /home/node/node_modules
 # Expose the port that the application listens on.
 EXPOSE ${PORT}
 
-CMD ["node", "main.js"]
+CMD ["sh", "-c", "export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) && node main.js"]
+
 # Run the application.

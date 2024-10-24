@@ -3,9 +3,6 @@ FROM node:${NODE_VERSION}-bullseye-slim as base
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 WORKDIR /repo
-# uninstall old yarn or pnpm
-#RUN npm uninstall -g yarn pnpm
-
 # install global dependencies
 RUN yarn global add nx nx-cloud prisma zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto ts-node eslint
 
@@ -75,8 +72,6 @@ WORKDIR /home/node/apps/${DD_SERVICE}
 LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
-
-RUN export DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
 
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json /home/node/apps/${DD_SERVICE}/project.json
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json /home/node/apps/${DD_SERVICE}/package.json

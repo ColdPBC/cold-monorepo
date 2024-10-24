@@ -36,7 +36,7 @@
           "memory": 4,
           "maxInstances": 2,
           "minInstances": 2,
-          "buildType": "nixpacks",
+          "buildType": "docker",
           "dockerfilePath": "_openai.dockerfile",
           "dockerContext": ".",
 	        "includeEnvVariablesInBuild": true,
@@ -74,8 +74,7 @@
           "envVariables": {
             "DD_SERVICE": "cold-platform-openai",
             "DD_ENV": "production",
-            "NODE_ENV": "production",
-            "FC_ENV": "production"
+            "NODE_ENV": "production"
           },
           "sidecars": [
             {
@@ -93,7 +92,6 @@
               "envVariables": {
                 "DD_ENV": "production",
                 "NODE_ENV": "production",
-                "FC_ENV": "production",
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_API_KEY": {
@@ -141,7 +139,7 @@
           "memory": 1,
           "maxInstances": 1,
           "minInstances": 1,
-          "buildType": "nixpacks",
+          "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
 	        "includeEnvVariablesInBuild": true,
@@ -180,7 +178,6 @@
             "DD_SERVICE": "cold-platform-stripe",
             "DD_ENV": "production",
             "NODE_ENV": "production",
-            "FC_ENV": "production",
             "STRIPE_FRONTEND_URL": "https://app.coldclimate.com"
           },
           "sidecars": [
@@ -199,7 +196,6 @@
               "envVariables": {
                 "DD_ENV": "production",
                 "NODE_ENV": "production",
-                "FC_ENV": "production",
                 "ECS_FARGATE": true,
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
@@ -231,8 +227,7 @@
       ],
       "envVariables": {
         "DD_ENV": "production",
-        "NODE_ENV": "production",
-        "FC_ENV": "production"
+        "NODE_ENV": "production"
       }
     },
     {
@@ -269,7 +264,7 @@
           "memory": 4,
           "maxInstances": 2,
           "minInstances": 1,
-          "buildType": "nixpacks",
+          "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
 	        "includeEnvVariablesInBuild": true,
@@ -306,8 +301,7 @@
           "envVariables": {
             "DD_SERVICE": "cold-platform-openai",
             "DD_ENV": "staging",
-            "NODE_ENV": "staging",
-            "FC_ENV": "staging"
+            "NODE_ENV": "staging"
           },
           "sidecars": [
             {
@@ -372,7 +366,7 @@
           "memory": 1,
           "maxInstances": 1,
           "minInstances": 1,
-          "buildType": "nixpacks",
+          "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
 
@@ -411,7 +405,6 @@
             "DD_SERVICE": "cold-platform-stripe",
             "DD_ENV": "staging",
             "NODE_ENV": "staging",
-            "FC_ENV": "staging",
             "STRIPE_FRONTEND_URL": "https://app.coldclimate.online"
           },
           "sidecars": [
@@ -461,7 +454,6 @@
       "envVariables": {
         "NODE_ENV": "staging",
         "DD_ENV": "staging",
-        "FC_ENV": "staging",
         "ENABLE_HEALTH_LOGS": false
       }
     },
@@ -500,7 +492,7 @@
             "clusterMaxInstances": 1
           },
           "memory": 2,
-          "buildType": "nixpacks",
+          "buildType": "docker",
           "dockerfilePath": "_openai.dockerfile",
           "dockerContext": ".",
 	        "includeEnvVariablesInBuild": true,
@@ -540,8 +532,7 @@
           "envVariables": {
             "DD_SERVICE": "cold-platform-openai",
             "NODE_ENV": "test",
-            "DD_ENV": "test",
-            "FC_ENV": "test"
+            "DD_ENV": "test"
           },
           "sidecars": [
             {
@@ -593,8 +584,7 @@
           "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
         },
         "NODE_ENV": "test",
-        "DD_ENV": "test",
-        "FC_ENV": "test"
+        "DD_ENV": "test"
       }
     }
   ]

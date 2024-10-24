@@ -131,7 +131,6 @@
           "envVariables": {
             "DD_SERVICE": "cold-api",
             "DD_ENV": "production",
-            "FC_ENV": "production",
             "NODE_ENV": "production",
             "NIXPACKS_VERSION": "1.26.1"
           },
@@ -238,7 +237,6 @@
           "envVariables": {
             "DD_SERVICE": "cold-graphql",
             "DD_ENV": "production",
-            "FC_ENV": "production",
             "NODE_ENV": "production",
             "GRAPHWEAVER_API_PORT": 9001,
             "NIXPACKS_VERSION": "1.26.1"
@@ -357,8 +355,7 @@
       "envVariables": {
         "DD_SERVICE": "cold-api",
         "DD_ENV": "production",
-        "NODE_ENV": "production",
-        "FC_ENV": "production"
+        "NODE_ENV": "production"
       }
     },
     {
@@ -536,7 +533,6 @@
           "envVariables": {
             "DD_SERVICE": "cold-api",
             "DD_ENV": "staging",
-            "FC_ENV": "staging",
             "NODE_ENV": "staging"
           }
         },
@@ -597,7 +593,6 @@
           "envVariables": {
             "DD_SERVICE": "cold-graphql",
             "DD_ENV": "staging",
-            "FC_ENV": "staging",
             "NODE_ENV": "staging",
             "GRAPHWEAVER_API_PORT": 9001,
             "NIXPACKS_VERSION": "1.26.1"
@@ -719,7 +714,6 @@
       "envVariables": {
         "DD_SERVICE": "cold-api",
         "DD_ENV": "staging",
-        "FC_ENV": "staging",
         "NODE_ENV": "staging"
       }
     },
@@ -741,7 +735,6 @@
       "envVariables": {
         "DD_SERVICE": "cold-api",
         "DD_ENV": "test",
-        "FC_ENV": "test",
         "NODE_ENV": "test"
       }
     }

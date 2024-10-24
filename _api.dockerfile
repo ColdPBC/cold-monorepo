@@ -6,12 +6,6 @@ ARG DD_SERVICE
 ARG DD_VERSION
 ARG DD_API_KEY
 
-ARG DD_GIT_REPOSITORY_URL
-ARG DD_GIT_COMMIT_SHA
-
-ENV DD_GIT_REPOSITORY_URL=${DD_GIT_REPOSITORY_URL}
-ENV DD_GIT_COMMIT_SHA=${DD_GIT_COMMIT_SHA}
-
 ENV NODE_ENV=${NODE_ENV}
 ENV DD_ENV=${NODE_ENV}
 ENV DD_API_KEY=${DD_API_KEY}
@@ -58,17 +52,11 @@ FROM dependencies as build
 WORKDIR /app
 RUN yarn dlx nx run cold-nest-library:prisma-generate
 RUN yarn prebuild
+
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping migration" ; else prisma migrate deploy ; fi
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping seed" ; else prisma db seed ; fi
 
-RUN git rev-parse HEAD > commit_hash && \
-    if [ "${NODE_ENV}" = "production" ] ; then \
-        echo "building for production..." && \
-        DD_GIT_COMMIT_SHA=$(cat commit_hash) npx nx run --skip-nx-cache cold-api:build:production ; \
-    else \
-        echo "building development..." && \
-        DD_GIT_COMMIT_SHA=$(cat commit_hash) npx nx run --skip-nx-cache cold-api:build:development ; \
-    fi
+RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-api:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-api:build:development ; fi
 
 RUN npx nx reset
 

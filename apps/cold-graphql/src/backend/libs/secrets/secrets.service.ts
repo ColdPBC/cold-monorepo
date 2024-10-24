@@ -18,7 +18,7 @@ export class SecretsService {
 		let awsCreds: any = {};
 
 		// FC_ENV should only be set in the Flight Control environment, not in SM
-		if (process.env['FC_ENV'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
+		if (process.env['FLIGHTCONTROL'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
 			awsCreds = {
 				region: process.env['AWS_REGION'] || 'us-east-1',
 				credentials: {

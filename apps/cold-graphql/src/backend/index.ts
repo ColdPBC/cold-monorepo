@@ -4,6 +4,14 @@ import './schema';
 import { AuthZero, setAddUserToContext, setAdministratorRoleName } from '@exogee/graphweaver-auth';
 import { addUserToContext } from './cold_profile';
 import { WorkerLogger } from './libs/logger';
+
+if (!process.env.FC_GIT_COMMIT_SHA) {
+	console.warn('FC_GIT_COMMIT_SHA is not set');
+} else {
+	process.env.DD_GIT_COMMIT_SHA = process.env.FC_GIT_COMMIT_SHA;
+	process.env.DD_GIT_REPOSITORY_URL = process.env.FC_GIT_REPOSITORY_URL || 'github.com/ColdPBC/cold-monorepo';
+}
+
 export const authZero = new AuthZero();
 
 setAddUserToContext(addUserToContext);
