@@ -1,15 +1,15 @@
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from '@storybook/react';
 
-import { SustainabilityAttributeCard } from '@coldpbc/components';
+import { SustainabilityAttributeCard, SustainabilityAttributeCardStyle } from '@coldpbc/components';
 import { AttributeAssuranceMock, StoryMockProvider } from '@coldpbc/mocks';
 import React from 'react';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
 const meta: Meta<typeof SustainabilityAttributeCard> = {
-  title: "Molecules/SustainabilityAttributeCard",
-  component: SustainabilityAttributeCard,
-  tags: ["autodocs"],
-  decorators: [],
+	title: 'Molecules/SustainabilityAttributeCard',
+	component: SustainabilityAttributeCard,
+	tags: ['autodocs'],
+	decorators: [],
 };
 
 export default meta;
@@ -83,4 +83,74 @@ export const LongNameThatTruncatesInsideOfASmallBox: Story = {
       </StoryMockProvider>
     );
   },
+};
+
+export const SingleStatusActive: Story = {
+  args: {
+    sustainabilityAttribute: {
+      id: 'a',
+      name: 'Default Product Attribute',
+      attributeAssurances: [
+        AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.ACTIVE, index: 1}),
+      ],
+      level: EntityLevel.PRODUCT,
+    },
+    cardStyle: SustainabilityAttributeCardStyle.SINGLE_STATUS,
+  }
+};
+
+export const SingleStatusExpiring: Story = {
+  args: {
+    sustainabilityAttribute: {
+      id: 'a',
+      name: 'Default Product Attribute',
+      attributeAssurances: [
+        AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.EXPIRING, index: 1}),
+      ],
+      level: EntityLevel.PRODUCT,
+    },
+    cardStyle: SustainabilityAttributeCardStyle.SINGLE_STATUS,
+  }
+};
+
+export const SingleStatusExpired: Story = {
+  args: {
+    sustainabilityAttribute: {
+      id: 'a',
+      name: 'Default Product Attribute',
+      attributeAssurances: [
+        AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.EXPIRED, index: 1}),
+      ],
+      level: EntityLevel.PRODUCT,
+    },
+    cardStyle: SustainabilityAttributeCardStyle.SINGLE_STATUS,
+  }
+};
+
+export const SingleStatusMissingDate: Story = {
+  args: {
+    sustainabilityAttribute: {
+      id: 'a',
+      name: 'Default Product Attribute',
+      attributeAssurances: [
+        AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.MISSING_DATE, index: 1}),
+      ],
+      level: EntityLevel.PRODUCT,
+    },
+    cardStyle: SustainabilityAttributeCardStyle.SINGLE_STATUS,
+  }
+};
+
+export const SingleStatusNotDocumented: Story = {
+  args: {
+    sustainabilityAttribute: {
+      id: 'a',
+      name: 'Default Product Attribute',
+      attributeAssurances: [
+        AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: 1}),
+      ],
+      level: EntityLevel.PRODUCT,
+    },
+    cardStyle: SustainabilityAttributeCardStyle.SINGLE_STATUS,
+  }
 };
