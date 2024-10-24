@@ -2,5 +2,6 @@ export enum AttributeAssuranceStatus {
   ACTIVE = 'ACTIVE',
   EXPIRED = 'EXPIRED',
   EXPIRING = 'EXPIRING',
+  MISSING_DATE = 'MISSING_DATE',
   NOT_DOCUMENTED = 'NOT DOCUMENTED',
 }
