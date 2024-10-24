@@ -198,17 +198,18 @@
             "clusterMaxInstances": 4
           },
           "memory": 4,
-          "buildType": "nixpacks",
-	        "dockerfilePath": "_api.dockerfile",
+          "buildType": "docker",
+	        "dockerContext": ".",
+	        "dockerfilePath": "_graphql.dockerfile",
+	        "includeEnvVariablesInBuild": true,
+	        "injectEnvVariablesInDockerfile": true,
           "installCommand": "corepack enable pnpm && pnpm install",
           "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
-	        "includeEnvVariablesInBuild": true,
 	        "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
           "watchPaths": [
             "apps/cold-graphql/src/backend/**"
           ],
-          "injectEnvVariablesInDockerfile": true,
           "maxInstances": 2,
           "minInstances": 1,
           "healthCheckPath": "/health",
@@ -255,7 +256,7 @@
                 5000
               ],
               "envVariables": {
-                "DD_SERVICE": "cold-datadog-api-production",
+                "DD_SERVICE": "cold-datadog-graphql-production",
                 "ECS_FARGATE": true,
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
                 "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
@@ -554,17 +555,18 @@
             "clusterMaxInstances": 4
           },
           "memory": 4,
-          "buildType": "nixpacks",
-	        "dockerfilePath": "_api.dockerfile",
+	        "buildType": "docker",
+	        "dockerContext": ".",
+	        "dockerfilePath": "_graphql.dockerfile",
+	        "includeEnvVariablesInBuild": true,
+	        "injectEnvVariablesInDockerfile": true,
           "installCommand": "corepack enable pnpm && pnpm install",
 	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
-	        "includeEnvVariablesInBuild": true,
           "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
           "watchPaths": [
             "apps/cold-graphql/src/backend/**"
           ],
-          "injectEnvVariablesInDockerfile": true,
           "maxInstances": 2,
           "minInstances": 1,
           "healthCheckPath": "/health",
