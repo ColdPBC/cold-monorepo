@@ -34,6 +34,8 @@ export interface MaterialSuppliers {
 }
 
 export interface MaterialsWithRelations extends Materials {
+  category: string | null;
+  subCategory: string | null;
   materialSuppliers: {
     id: string;
     organizationFacility: {

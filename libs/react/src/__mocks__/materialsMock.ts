@@ -157,6 +157,8 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
     {
       id: "mat_lc4oufc9130spa0rpmsp6ou0",
       name: "Material 6",
+      category: 'Category 1',
+      subCategory: 'Sub Category 1',
       materialSuppliers: [
         {
           id: "msup_jhzunmfmnvq7knye5w5nwd2j",
@@ -174,6 +176,8 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
     {
       id: "mat_u9lckkyqyii41q3by2wdt86i",
       name: "Material 8",
+      category: 'Category 1',
+      subCategory: 'Sub Category 2',
       materialSuppliers: [
         {
           id: "msup_sn673pues18vmk8l1d9jrehp",
@@ -312,6 +316,8 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
     {
       id: "mat_sdk8wipu9fq5a7ihxhthx5pv",
       name: "Example Nylon 1234",
+      category: 'Category 1',
+      subCategory: 'Sub Category 3',
       materialSuppliers: [
         {
           id: "matsup_e04icuz1dctp13hndqpvi3o1",
@@ -484,6 +490,8 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
     {
       id: "39da1a03-22b2-4b97-ac3c-49dae6dbaa7c",
       name: "nylon test",
+      category: 'Category 2',
+      subCategory: 'Sub Category 1',
       materialSuppliers: [],
       attributeAssurances: [],
       productMaterials: [],
@@ -491,6 +499,8 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
     {
       id: "mat_beq7hd4e7efg5vzrzpp1xcb9",
       name: "Material 7",
+      category: null,
+      subCategory: null,
       materialSuppliers: [
         {
           id: "msup_mvldtl3a1y1y27i6dpuz7qs2",
@@ -593,6 +603,8 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
     {
       id: "32832c48-6794-4494-9437-aa14e44363c9",
       name: "Material 2",
+      category: 'Category 2',
+      subCategory: 'Sub Category 2',
       materialSuppliers: [
         {
           id: "msup_srmnw3c1k3kybgpic4govht9",
