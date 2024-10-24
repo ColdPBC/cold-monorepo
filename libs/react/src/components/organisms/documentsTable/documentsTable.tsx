@@ -1,12 +1,23 @@
 import { DataGrid, GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridValidRowModel, MuiEvent } from '@mui/x-data-grid';
 import { ClaimStatus, IconNames } from '@coldpbc/enums';
-import {ColdIcon, DataGridCellHoverPopover, ErrorFallback, MUIDataGridNoRowsOverlay} from '@coldpbc/components';
+import {
+  ColdIcon,
+  DataGridCellHoverPopover,
+  ErrorFallback,
+  MUIDataGridNoRowsOverlay,
+  SustainabilityAttributeColumn
+} from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays, format } from 'date-fns';
 import {capitalize, uniq} from 'lodash';
 import React from 'react';
 import {get, lowerCase, startCase, toArray, uniqWith} from 'lodash';
-import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
+import {
+  Claims,
+  FilesWithAssurances,
+  SustainabilityAttribute,
+  SustainabilityAttributeWithoutAssurances
+} from '@coldpbc/interfaces';
 import {
   addTZOffset,
   getDateActiveStatus,
@@ -150,6 +161,23 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
     return <div className={'text-tc-secondary overflow-hidden text-ellipsis'}>{params.value}</div>;
   };
 
+  const renderSustainabilityAttribute = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+    const file = files.find(file => file.id === params.row.id);
+    const fileStatus = getFileProcessingStatus(file);
+    if (fileStatus === 'uploaded') {
+      return (
+        <div className={'w-full h-full py-[16px] px-[0px]'}>
+          <div
+            className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
+            style={{
+              background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
+            }}></div>
+        </div>
+      );
+    }
+    return <SustainabilityAttributeColumn sustainabilityAttribute={params.value as SustainabilityAttributeWithoutAssurances | null} />;
+  };
+
   const renderAssociatedRecords = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
     const file = files.find(file => file.id === params.row.id);
     const fileStatus = getFileProcessingStatus(file);
@@ -195,7 +223,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
 	const rows = files
 		.map(file => {
 			const effectiveEndDate = getEffectiveEndDate(file);
-			const sustainabilityAttribute = get(file.attributeAssurances, '[0].sustainabilityAttribute.name', '');
+			const sustainabilityAttribute = get(file.attributeAssurances, '[0].sustainabilityAttribute', null)
 			return {
 				id: file.id,
 				name: file.originalName,
@@ -279,7 +307,10 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
       flex: 1,
 			minWidth: 200,
 			valueOptions: uniqSustainabilityAttributes,
-      renderCell: renderType,
+      valueFormatter: (value: any) => {
+        return value ? get(value, 'name') : "";
+      },
+      renderCell: renderSustainabilityAttribute,
 		},
 		{
 			field: 'associated_records',
@@ -305,7 +336,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
 			<DataGrid
 				rows={tableRows}
 				columns={columns}
-				rowHeight={55}
+				rowHeight={58}
 				getRowClassName={() => {
 					return 'text-tc-primary cursor-pointer';
 				}}

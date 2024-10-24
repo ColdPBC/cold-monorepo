@@ -1,5 +1,6 @@
 import { Claims } from './claims';
 import { MaterialsWithCertifications } from './materials';
+import {SustainabilityAttributeWithoutAssurances} from "./sustainabilityAttribute";
 
 export interface Files {
 	id: string;
@@ -60,11 +61,7 @@ export interface AttributeAssurance {
       };
     }[];
   };
-  sustainabilityAttribute: {
-    id: string;
-    name: string;
-    level: string;
-  } | null;
+  sustainabilityAttribute: SustainabilityAttributeWithoutAssurances;
   product: {
     id: string;
     name: string;

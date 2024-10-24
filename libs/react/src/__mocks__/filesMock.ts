@@ -1,6 +1,7 @@
 import { Files, FilesWithAssurances } from '@coldpbc/interfaces';
 import {addDays, subDays} from 'date-fns';
 import {filesProcessedWithDatesMocks} from "./graphql";
+import {EntityLevel} from "@coldpbc/enums";
 
 export function getAllFilesMock() {
 	return [
@@ -150,7 +151,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 					sustainabilityAttribute: {
 						id: '6',
 						name: 'PFAS',
-						level: 'SUPPLIER',
+						level: EntityLevel.SUPPLIER,
 					},
 					organizationFacility: {
 						id: '1',
@@ -191,7 +192,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 					sustainabilityAttribute: {
 						id: '4',
 						name: 'bluesign',
-						level: 'MATERIAL',
+						level: EntityLevel.MATERIAL,
 					},
 					material: {
 						id: '1',
@@ -216,7 +217,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 					sustainabilityAttribute: {
 						id: '4',
 						name: 'bluesign',
-						level: 'MATERIAL',
+						level: EntityLevel.MATERIAL,
 					},
 					material: {
 						id: '2',
@@ -297,7 +298,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 					sustainabilityAttribute: {
 						id: '6',
 						name: 'PFAS',
-						level: 'SUPPLIER',
+						level: EntityLevel.SUPPLIER,
 					},
 					organizationFacility: {
 						id: '1',
@@ -338,7 +339,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 					sustainabilityAttribute: {
 						id: '4',
 						name: 'bluesign',
-						level: 'MATERIAL',
+						level: EntityLevel.MATERIAL,
 					},
 					material: {
 						id: '1',
@@ -363,7 +364,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 					sustainabilityAttribute: {
 						id: '4',
 						name: 'bluesign',
-						level: 'MATERIAL',
+						level: EntityLevel.MATERIAL,
 					},
 					material: {
 						id: '2',
@@ -455,7 +456,7 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: '4',
             name: 'bluesign',
-            level: 'MATERIAL',
+            level: EntityLevel.MATERIAL,
           },
           material: {
             id: '1',
@@ -480,7 +481,7 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: '4',
             name: 'bluesign',
-            level: 'MATERIAL',
+            level: EntityLevel.MATERIAL,
           },
           material: {
             id: '2',
@@ -505,7 +506,7 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: '4',
             name: 'bluesign',
-            level: 'MATERIAL',
+            level: EntityLevel.MATERIAL,
           },
           material: {
             id: '2',
@@ -530,7 +531,7 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: '4',
             name: 'bluesign',
-            level: 'MATERIAL',
+            level: EntityLevel.MATERIAL,
           },
           material: {
             id: '2',
@@ -591,7 +592,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: '4f0941bb-2e80-4f2e-bff5-80aa6dc5957e',
             name: 'Oeko-Tex Standard 100',
-            level: 'MATERIAL',
+            level: EntityLevel.MATERIAL,
           },
           organizationFacility: null,
           material: null,
@@ -604,7 +605,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: '4f0941bb-2e80-4f2e-bff5-80aa6dc5957e',
             name: 'Oeko-Tex Standard 100',
-            level: 'MATERIAL',
+            level: EntityLevel.MATERIAL,
           },
           organizationFacility: null,
           material: {
@@ -621,7 +622,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: 'b6360d28-dfba-4b87-9632-0384ae9635e3',
             name: 'DPP (Digital Product Passport)',
-            level: 'PRODUCT',
+            level: EntityLevel.PRODUCT,
           },
           organizationFacility: null,
           material: null,
@@ -646,7 +647,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: 'c9e8676d-5e48-444f-b788-1b729fdb2d2c',
             name: 'PFAS',
-            level: 'MATERIAL',
+            level: EntityLevel.MATERIAL,
           },
           organizationFacility: null,
           material: null,
@@ -659,7 +660,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: '4f0941bb-2e80-4f2e-bff5-80aa6dc5957e',
             name: 'Oeko-Tex Standard 100',
-            level: 'MATERIAL',
+            level: EntityLevel.MATERIAL,
           },
           organizationFacility: null,
           material: null,
@@ -681,7 +682,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: '4f0941bb-2e80-4f2e-bff5-80aa6dc5957e',
             name: 'Oeko-Tex Standard 100',
-            level: 'MATERIAL',
+            level: EntityLevel.MATERIAL,
           },
           organizationFacility: null,
           material: null,
@@ -694,7 +695,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: 'b6360d28-dfba-4b87-9632-0384ae9635e3',
             name: 'DPP (Digital Product Passport)',
-            level: 'PRODUCT',
+            level: EntityLevel.PRODUCT,
           },
           organizationFacility: {
             id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
@@ -732,7 +733,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           sustainabilityAttribute: {
             id: '5355a00d-5429-40d9-8cb1-56cc6f914fc9',
             name: 'No Intentional PFAS',
-            level: 'SUPPLIER',
+            level: EntityLevel.SUPPLIER,
           },
           organizationFacility: {
             id: 'ofac_wxxekywiila10puwj2j7gmwg',
