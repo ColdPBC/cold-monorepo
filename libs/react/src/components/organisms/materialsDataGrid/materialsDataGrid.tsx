@@ -71,11 +71,11 @@ const _MaterialsDataGrid = () => {
 
   const uniqCategories = uniq(
 		materials.map(material =>  material.materialCategory || ''),
-  ).filter(Boolean);
+  ).filter(Boolean).sort( (a, b) => a.localeCompare(b));
 
   const uniqSubCategories = uniq(
     materials.map(material =>  material.materialSubcategory || ''),
-  ).filter(Boolean);
+  ).filter(Boolean).sort( (a, b) => a.localeCompare(b));
 
   const columns: GridColDef[] = [
     {
