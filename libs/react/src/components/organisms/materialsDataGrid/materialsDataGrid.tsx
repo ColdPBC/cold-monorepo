@@ -70,11 +70,11 @@ const _MaterialsDataGrid = () => {
   }
 
   const uniqCategories = uniq(
-		materials.map(material =>  material.category || ''),
+		materials.map(material =>  material.materialCategory || ''),
   ).filter(Boolean);
 
   const uniqSubCategories = uniq(
-    materials.map(material =>  material.subCategory || ''),
+    materials.map(material =>  material.materialSubcategory || ''),
   ).filter(Boolean);
 
   const columns: GridColDef[] = [
@@ -89,7 +89,7 @@ const _MaterialsDataGrid = () => {
       },
     },
     {
-      field: 'category',
+      field: 'materialCategory',
       headerName: 'Category',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
@@ -98,7 +98,7 @@ const _MaterialsDataGrid = () => {
       valueOptions: uniqCategories,
     },
     {
-      field: 'subCategory',
+      field: 'materialSubcategory',
       headerName: 'Sub Category',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
@@ -171,8 +171,8 @@ const _MaterialsDataGrid = () => {
     const row = {
       id: material.id,
       name: material.name,
-      category: material.category || '',
-      subCategory: material.subCategory || '',
+      materialCategory: material.materialCategory || '',
+      materialSubcategory: material.materialSubcategory || '',
       sustainabilityAttributes: sustainabilityAttributes,
       tier2Supplier: tier2Supplier ? tier2Supplier.name : '',
       usedBy: uniq(tier1Suppliers.map(supplier => supplier.name).sort((a,b) => a.localeCompare(b))),
