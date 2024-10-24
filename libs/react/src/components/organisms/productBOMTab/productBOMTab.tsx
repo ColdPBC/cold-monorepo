@@ -21,6 +21,20 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 			flex: 1,
 			minWidth: 230,
 		},
+    {
+      ...DEFAULT_GRID_COL_DEF,
+      field: 'materialCategory',
+      headerName: 'Category',
+      flex: 1,
+      minWidth: 230,
+    },
+    {
+      ...DEFAULT_GRID_COL_DEF,
+      field: 'materialSubcategory',
+      headerName: 'Sub Category',
+      flex: 1,
+      minWidth: 230,
+    },
 		{
 			...DEFAULT_GRID_COL_DEF,
 			field: 'tier2Supplier',
@@ -28,6 +42,20 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 			flex: 1,
 			minWidth: 230,
 		},
+    {
+      ...DEFAULT_GRID_COL_DEF,
+      field: 'yield',
+      headerName: 'Yield',
+      flex: 1,
+      minWidth: 70,
+    },
+    {
+      ...DEFAULT_GRID_COL_DEF,
+      field: 'unitOfMeasure',
+      headerName: 'UoM',
+      flex: 1,
+      minWidth: 70,
+    },
 		{
 			...DEFAULT_GRID_COL_DEF,
 			field: 'sustainabilityAttributes',
@@ -44,7 +72,11 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 		id: string;
 		materialId: string;
 		material: string;
+    materialCategory: string;
+    materialSubcategory: string;
 		tier2Supplier: string;
+    yield: string;
+    unitOfMeasure: string;
 		sustainabilityAttributes: SustainabilityAttribute[];
 	}[] = product.productMaterials
 		.filter(productMaterial => productMaterial.material !== null)
@@ -57,7 +89,11 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 				id: productMaterial.id,
 				materialId: material.id,
 				material: material.name,
+        materialCategory: material.materialCategory || '',
+        materialSubcategory: material.materialSubcategory || '',
 				tier2Supplier: tier2Supplier,
+        yield: productMaterial.yield ? productMaterial.yield.toString() : '',
+        unitOfMeasure: productMaterial.unitOfMeasure || '',
 				sustainabilityAttributes: susAttributes,
 			};
 		});
@@ -68,6 +104,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 				rows={rows}
 				columns={columns}
 				showSearch
+        showManageColumns
 				columnHeaderHeight={55}
 				rowHeight={72}
 			/>

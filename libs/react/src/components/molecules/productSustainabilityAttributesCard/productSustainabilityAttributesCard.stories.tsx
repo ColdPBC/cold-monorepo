@@ -34,9 +34,13 @@ export const Default: Story = {
       productMaterials: [
         {
           id: 'xyz',
+          yield: null,
+          unitOfMeasure: null,
           material: {
             id: 'qrs',
             name: 'Organic Wool',
+            materialCategory: null,
+            materialSubcategory: null,
             materialSuppliers: [
               {
                 id: 'ms_123',
@@ -104,9 +108,13 @@ export const NoAssurances: Story = {
       productMaterials: [
         {
           id: 'xyz',
+          yield: null,
+          unitOfMeasure: null,
           material: {
             id: 'qrs',
             name: 'Organic Wool',
+            materialCategory: null,
+            materialSubcategory: null,
             materialSuppliers: [
               {
                 id: 'ms_123',

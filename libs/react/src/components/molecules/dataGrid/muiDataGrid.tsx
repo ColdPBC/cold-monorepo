@@ -12,6 +12,7 @@ import {
 } from '@mui/x-data-grid';
 import { twMerge } from 'tailwind-merge';
 import React from 'react';
+import {Box} from "@mui/material";
 
 export interface MUIDataGridProps extends DataGridProps {
 	rows: GridValidRowModel[];
@@ -28,6 +29,12 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
 		if (showSearch || showExport || showManageColumns)
 			return (
 				<GridToolbarContainer>
+          {showSearch &&
+            <>
+              <GridToolbarQuickFilter />
+              <Box sx={{ flexGrow: 1 }} />
+            </>
+          }
 					{showManageColumns && (
 						<GridToolbarColumnsButton
 							slotProps={{
@@ -49,7 +56,6 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
 						/>
 					)}
 					{showExport && <GridToolbarExport />}
-					{showSearch && <GridToolbarQuickFilter />}
 				</GridToolbarContainer>
 			);
 		else return null;

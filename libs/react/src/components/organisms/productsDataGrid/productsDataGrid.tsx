@@ -213,45 +213,20 @@ export const _ProductsDataGrid = () => {
     rows = getColumnRows(productsQuery.data.data.products, ldFlags)
   }
 
-  const getToolbar = () => {
-    return (
-      <GridToolbarContainer>
-        <GridToolbarColumnsButton
-          slotProps={{
-            tooltip: {
-              sx: {
-                '& .MuiInput-input': {
-                  backgroundColor: 'transparent',
-                  fontFamily: 'Inter',
-                  fontSize: '14px',
-                  padding: '4px 0px 5px',
-                  height: '32px',
-                },
-                '& .MuiDataGrid-filterFormColumnInput': {
-                  backgroundColor: 'transparent',
-                },
-              },
-            },
-          }}
-        />
-        <GridToolbarExport />
-        <GridToolbarQuickFilter />
-      </GridToolbarContainer>
-    );
-  };
-
   return (
     <div className={'w-full'}>
       <MuiDataGrid
         columns={columns}
         rows={rows}
-        slots={{ toolbar: getToolbar }}
         rowHeight={72}
         onRowClick={(params) => {
           if(ldFlags.showProductDetailPageCold1140){
             navigate(`/products/${params.id}`)
           }
         }}
+        showManageColumns
+        showExport
+        showSearch
       />
     </div>
   )

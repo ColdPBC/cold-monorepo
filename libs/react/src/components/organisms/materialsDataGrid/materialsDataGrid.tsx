@@ -182,41 +182,16 @@ const _MaterialsDataGrid = () => {
 
   const rows: GridValidRowModel[] = newRows;
 
-  const getToolbar = () => {
-    return (
-      <GridToolbarContainer>
-        <GridToolbarColumnsButton
-          slotProps={{
-            tooltip: {
-              sx: {
-                '& .MuiInput-input': {
-                  backgroundColor: 'transparent',
-                  fontFamily: 'Inter',
-                  fontSize: '14px',
-                  padding: '4px 0px 5px',
-                  height: '32px',
-                },
-                '& .MuiDataGrid-filterFormColumnInput': {
-                  backgroundColor: 'transparent',
-                },
-              },
-            },
-          }}
-        />
-        <GridToolbarExport />
-        <GridToolbarQuickFilter />
-      </GridToolbarContainer>
-    );
-  };
-
   return (
     <div className={'w-full'}>
       <MuiDataGrid
         rows={rows}
         columns={columns}
-        slots={{ toolbar: getToolbar }}
         columnHeaderHeight={55}
         rowHeight={72}
+        showManageColumns
+        showExport
+        showSearch
       />
     </div>
   );

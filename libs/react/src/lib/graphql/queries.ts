@@ -294,9 +294,13 @@ export const GET_ALL_PRODUCTS= gql`
       supplierProductId
       productMaterials {
         id
+        yield
+        unitOfMeasure
         material {
           id
           name
+          materialCategory
+          materialSubcategory
           materialSuppliers {
             id
             organizationFacility {
@@ -435,9 +439,13 @@ export const GET_PRODUCT = gql`
       supplierProductId
       productMaterials {
         id
+        yield
+        unitOfMeasure
         material {
           id
           name
+          materialCategory
+          materialSubcategory
           materialSuppliers {
             id
             organizationFacility {

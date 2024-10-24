@@ -15,9 +15,13 @@ export interface ProductsQuery {
   productSubcategory: string | null;
   productMaterials: {
     id: string
+    yield: number | null;
+    unitOfMeasure: string | null;
     material: {
       id: string
       name: string
+      materialCategory: string | null;
+      materialSubcategory: string | null;
       attributeAssurances: SustainabilityAttributeAssurance[];
       materialSuppliers: {
         id: string;
