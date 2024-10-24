@@ -195,33 +195,6 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
 
   const rows: GridValidRowModel[] = newRows;
 
-  const getToolbar = () => {
-    return (
-      <GridToolbarContainer>
-        <GridToolbarColumnsButton
-          slotProps={{
-            tooltip: {
-              sx: {
-                '& .MuiInput-input': {
-                  backgroundColor: 'transparent',
-                  fontFamily: 'Inter',
-                  fontSize: '14px',
-                  padding: '4px 0px 5px',
-                  height: '32px',
-                },
-                '& .MuiDataGrid-filterFormColumnInput': {
-                  backgroundColor: 'transparent',
-                },
-              },
-            },
-          }}
-        />
-        <GridToolbarExport />
-        <GridToolbarQuickFilter />
-      </GridToolbarContainer>
-    );
-  };
-
   return (
     <div className={'w-full'}>
       <MuiDataGrid
@@ -231,9 +204,11 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
           // navigate(`/suppliers/${params.row.id}`);
           // todo: add back in when the supplier detail page is ready
         }}
-        slots={{ toolbar: getToolbar }}
         columnHeaderHeight={55}
         rowHeight={114}
+        showManageColumns
+        showExport
+        showSearch
       />
     </div>
   );
