@@ -2,7 +2,7 @@ import React from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { ProductsQuery } from '@coldpbc/interfaces';
-import { Card, SustainabilityAttributeCard } from '@coldpbc/components';
+import { Card, SustainabilityAttributeCard, SustainabilityAttributeCardStyle } from '@coldpbc/components';
 import { mapAttributeAssurancesToSustainabilityAttributes } from '@coldpbc/lib';
 import { EntityLevel } from '@coldpbc/enums';
 
@@ -67,7 +67,10 @@ const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttrib
 					<span className="text-body font-bold text-white">Product-level</span>
 					{productSustainabilityAttributes.map(sustainabilityAttribute => (
 						<div className="w-full" key={sustainabilityAttribute.id}>
-							<SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />
+							<SustainabilityAttributeCard
+                sustainabilityAttribute={sustainabilityAttribute}
+                cardStyle={SustainabilityAttributeCardStyle.SINGLE_STATUS}
+              />
 						</div>
 					))}
 				</div>
