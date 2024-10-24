@@ -56,7 +56,7 @@ RUN yarn prebuild
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping migration" ; else prisma migrate deploy ; fi
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping seed" ; else prisma db seed ; fi
 
-RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-api:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-api:build:development ;
+RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-api:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-api:build:development ; fi
 
 RUN npx nx reset
 

@@ -40,8 +40,7 @@ ENV DD_SERVICE=${DD_SERVICE}
 WORKDIR /repo
 RUN yarn dlx nx run cold-nest-library:prisma-generate
 RUN yarn prebuild
-RUN git rev-parse HEAD > commit_hash && \
-    if [ "${NODE_ENV}" = "production" ] ; then \
+RUN if [ "${NODE_ENV}" = "production" ] ; then \
         echo "building for production..." && \
         DD_GIT_COMMIT_SHA=$(cat commit_hash) npx nx run --skip-nx-cache cold-api:build:production ; \
     else \
