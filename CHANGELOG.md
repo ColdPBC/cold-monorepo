@@ -1,3 +1,17 @@
+# [1.447.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.446.2...v1.447.0) (2024-10-24)
+
+
+### Bug Fixes
+
+* **health.module:** add missing HealthService provider to module configuration ([8c26ecf](https://github.com/ColdPBC/cold-monorepo/commit/8c26ecf9c733d34e699f7b4b7f63508635abb0d3))
+
+
+### Features
+
+* add category and subCategory fields to materials data grid ([c5ea3a2](https://github.com/ColdPBC/cold-monorepo/commit/c5ea3a24d4ce5f2fa34f2788833667645e027b09))
+* sort unique categories and subcategories ([ae4b4a6](https://github.com/ColdPBC/cold-monorepo/commit/ae4b4a667d783204651874198ffb5fbfa3fd559b))
+* update material fields to use new naming conventions ([2751d11](https://github.com/ColdPBC/cold-monorepo/commit/2751d11409a20aa0991353f85f4c656d39d1cd82))
+
 ## [1.446.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.446.2...v1.446.3) (2024-10-24)
 
 
