@@ -14,14 +14,14 @@ const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/
 
 interface SustainabilityAttributeAssuranceData {
   activeCount: number;
-  expiredCount: number;
+  inactiveCount: number;
   notDocumentedCount: number;
 }
 
 function processSustainabilityAttribute(attribute: SustainabilityAttribute): SustainabilityAttributeAssuranceData {
   const result: SustainabilityAttributeAssuranceData = {
     activeCount: 0,
-    expiredCount: 0,
+    inactiveCount: 0,
     notDocumentedCount: 0,
   };
 
@@ -60,8 +60,8 @@ function processSustainabilityAttribute(attribute: SustainabilityAttribute): Sus
 
     if (assuranceStatus === AttributeAssuranceStatus.ACTIVE || assuranceStatus === AttributeAssuranceStatus.EXPIRING) {
       result.activeCount++;
-    } else if (assuranceStatus === AttributeAssuranceStatus.EXPIRED) {
-      result.expiredCount++;
+    } else if (assuranceStatus === AttributeAssuranceStatus.EXPIRED || assuranceStatus === AttributeAssuranceStatus.MISSING_DATE) {
+      result.inactiveCount++;
     } else {
       result.notDocumentedCount++;
     }

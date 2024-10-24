@@ -4,21 +4,21 @@ import { EntityLevel } from '@coldpbc/enums';
 interface AttributeAssuranceGraphProps {
   entity: EntityLevel;
   activeCount: number;
-  expiredCount: number;
+  inactiveCount: number;
   notDocumentedCount: number;
 }
 
 export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = ({
   entity,
   activeCount,
-  expiredCount,
+  inactiveCount,
   notDocumentedCount
 }) => {
-  const total = activeCount + expiredCount + notDocumentedCount;
-  const documentedCount = activeCount + expiredCount;
+  const total = activeCount + inactiveCount + notDocumentedCount;
+  const documentedCount = activeCount + inactiveCount;
 
   const activePercentage = (activeCount / total) * 100;
-  const expiredPercentage = (expiredCount / total) * 100;
+  const expiredPercentage = (inactiveCount / total) * 100;
   const notDocumentedPercentage = (notDocumentedCount / total) * 100;
 
   function toSentenceCase(str: string) {
@@ -58,7 +58,7 @@ export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = (
             </span>
             <span className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-gray-400 mr-1" />
-              <span>{expiredPercentage.toFixed(0)}% Expired</span>
+              <span>{expiredPercentage.toFixed(0)}% Inactive</span>
             </span>
             <span className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-red-400 mr-1" />
