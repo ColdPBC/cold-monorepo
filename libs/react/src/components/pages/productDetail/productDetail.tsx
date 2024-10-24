@@ -1,13 +1,11 @@
-import { ErrorFallback, ErrorPage, MainContent, Spinner, Tabs } from '@coldpbc/components';
+import { ErrorFallback, ErrorPage, MainContent, Spinner, Tabs, ProductBOMTab, ProductDetailsTab, ProductDocumentsTab} from '@coldpbc/components';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
 import { FilesWithAssurances, ProductsQuery } from '@coldpbc/interfaces';
 import { get, isError } from 'lodash';
-import { ProductBOMTab } from '../../organisms/productBOMTab/productBOMTab';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
-import { ProductDocumentsTab } from '../../organisms/productDocumentsTab/productDocumentsTab';
-import { parseDocumentsForProductDetails } from '../../../lib/productUtils';
+import { parseDocumentsForProductDetails } from '@coldpbc/lib';
 
 const _ProductDetail = () => {
 	const { orgId } = useAuth0Wrapper();
