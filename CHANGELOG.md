@@ -1,3 +1,10 @@
+## [1.447.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.447.0...v1.447.1) (2024-10-24)
+
+
+### Bug Fixes
+
+* remove redundant git operations in Dockerfiles ([fbf5b72](https://github.com/ColdPBC/cold-monorepo/commit/fbf5b7292ac1068e27fbdcf421a7c626ca5d036a))
+
 # [1.447.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.446.2...v1.447.0) (2024-10-24)
 
 
