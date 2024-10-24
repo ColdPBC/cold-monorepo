@@ -19,7 +19,8 @@ const statusPriority: { [key in AttributeAssuranceStatus]: number } = {
   [AttributeAssuranceStatus.ACTIVE]: 0,
   [AttributeAssuranceStatus.EXPIRING]: 1,
   [AttributeAssuranceStatus.EXPIRED]: 2,
-  [AttributeAssuranceStatus.NOT_DOCUMENTED]: 3,
+  [AttributeAssuranceStatus.MISSING_DATE]: 3,
+  [AttributeAssuranceStatus.NOT_DOCUMENTED]: 4,
 };
 
 export const sustainabilityAttributeSortFn = (

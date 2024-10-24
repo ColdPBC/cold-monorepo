@@ -35,7 +35,7 @@ import { getSupplierMocks } from '../suppliersMock';
 import {getProductsMock, getProductsMockById} from '../productsMock';
 import { getMaterialsMocksWithAssurances } from '../materialsMock';
 import { AttributeAssuranceMock } from '../attributeAssuranceMock';
-import { EntityLevel } from '@coldpbc/enums';
+import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
