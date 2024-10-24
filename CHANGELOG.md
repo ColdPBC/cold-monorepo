@@ -1,3 +1,10 @@
+## [1.446.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.446.0...v1.446.1) (2024-10-24)
+
+
+### Bug Fixes
+
+* replace string status in health check with HttpStatusCode enum ([7e2956d](https://github.com/ColdPBC/cold-monorepo/commit/7e2956d9e153d7a06b20fbb0de2b79d25d4ec896))
+
 # [1.446.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.445.0...v1.446.0) (2024-10-23)
 
 
