@@ -1,3 +1,10 @@
+## [1.446.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.446.2...v1.446.3) (2024-10-24)
+
+
+### Bug Fixes
+
+* **health.module:** add missing HealthService provider to module configuration ([8c26ecf](https://github.com/ColdPBC/cold-monorepo/commit/8c26ecf9c733d34e699f7b4b7f63508635abb0d3))
+
 ## [1.446.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.446.1...v1.446.2) (2024-10-24)
 
 
