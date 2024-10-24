@@ -79,8 +79,8 @@ export const _ProductsDataGrid = () => {
 
   const renderName = (params: any) => {
     const name = get(params, 'row.name', '')
-    const category = get(params, 'row.category', '')
-    const subcategory = get(params, 'row.subcategory', '')
+    const category = get(params, 'row.productCategory', '')
+    const subcategory = get(params, 'row.productSubcategory', '')
     const text = [category, subcategory]
 			.filter((i: string) => (i !== ''))
 			.join(' | ');
