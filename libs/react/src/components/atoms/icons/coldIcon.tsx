@@ -43,6 +43,7 @@ import {
   ColdSustainabilityIcon,
   ColdSwitchIcon,
   ColdTeamMembersIcon,
+  ColdUnknownIcon,
   PlusIcon,
   SubtractIcon,
 } from '@coldpbc/components';
@@ -138,6 +139,8 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdSustainabilityIcon {...props} />;
     case IconNames.ColdCalendarCloseIcon:
       return <ColdCalendarCloseIcon {...props} />;
+    case IconNames.ColdUnknownIcon:
+      return <ColdUnknownIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;
