@@ -60,7 +60,16 @@ RUN yarn dlx nx run cold-nest-library:prisma-generate
 RUN yarn prebuild
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping migration" ; else prisma migrate deploy ; fi
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping seed" ; else prisma db seed ; fi
-RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-api:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-api:build:development ; fi
+
+RUN git rev-parse HEAD > commit_hash && \
+    if [ "${NODE_ENV}" = "production" ] ; then \
+        echo "building for production..." && \
+        DD_GIT_COMMIT_SHA=$(cat commit_hash) npx nx run --skip-nx-cache cold-api:build:production ; \
+    else \
+        echo "building development..." && \
+        DD_GIT_COMMIT_SHA=$(cat commit_hash) npx nx run --skip-nx-cache cold-api:build:development ; \
+    fi
+
 RUN npx nx reset
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
@@ -71,6 +80,11 @@ ADD --chown=node:node ./apps/cold-api/project.json /home/node/app/
 ADD --chown=node:node ./apps/cold-api/src/assets /home/node/app/
 ADD --chown=node:node ./package.json /home/node/app/
 ADD --chown=node:node ./yarn.lock /home/node/app/
+
+RUN git rev-parse HEAD > commit_hash && \
+    export DD_GIT_COMMIT_SHA=$(cat commit_hash)
+
+RUN export DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
 
 COPY --from=build --chown=node:node /app/dist/apps/cold-api /home/node/app/cold-api
 COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_modules

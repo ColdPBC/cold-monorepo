@@ -27,6 +27,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.yarn \
     if [ "${NODE_ENV}" = "production" ] ; then echo "installing production dependencies..." && yarn workspaces focus --all --production ; else echo "installing dev dependencies..." && yarn ; fi
 
+
 RUN yarn add -D @typescript-eslint/eslint-plugin
 
 FROM dependencies as build
@@ -39,7 +40,14 @@ ENV DD_SERVICE=${DD_SERVICE}
 WORKDIR /repo
 RUN yarn dlx nx run cold-nest-library:prisma-generate
 RUN yarn prebuild
-RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache ${DD_SERVICE}:build:production ; else echo "building development..." && npx nx run --skip-nx-cache ${DD_SERVICE}:build:development ; fi
+RUN git rev-parse HEAD > commit_hash && \
+    if [ "${NODE_ENV}" = "production" ] ; then \
+        echo "building for production..." && \
+        DD_GIT_COMMIT_SHA=$(cat commit_hash) npx nx run --skip-nx-cache cold-api:build:production ; \
+    else \
+        echo "building development..." && \
+        DD_GIT_COMMIT_SHA=$(cat commit_hash) npx nx run --skip-nx-cache cold-api:build:development ; \
+    fi
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
@@ -56,8 +64,11 @@ ARG DD_API_KEY
 ARG FC_GIT_COMMIT_SHA
 ARG PORT
 
-ENV DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
-ENV DD_GIT_COMMIT_SHA=${FC_GIT_COMMIT_SHA}
+RUN export DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
+
+RUN git rev-parse HEAD > commit_hash && \
+    export DD_GIT_COMMIT_SHA=$(cat commit_hash) \
+
 
 ENV NODE_ENV=${NODE_ENV}
 ENV DD_SERVICE=${DD_SERVICE}
