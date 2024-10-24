@@ -1,3 +1,10 @@
+## [1.450.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.450.0...v1.450.1) (2024-10-24)
+
+
+### Bug Fixes
+
+* correct Dockerfile production build command ([3bb9521](https://github.com/ColdPBC/cold-monorepo/commit/3bb9521d0f073e14a53d45ae53f89d71edd05be0))
+
 # [1.450.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.449.0...v1.450.0) (2024-10-24)
 
 
