@@ -1,8 +1,6 @@
 import { Controller, Delete, Get, Param, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { coldAdminOnly, coldAndCompanyAdmins, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
-import { HTTPResponse } from 'puppeteer';
-import { HttpStatusCode } from 'axios';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseInterceptors(OrgUserInterceptor)
@@ -38,10 +36,5 @@ export class AppController {
 	@Delete('customers/:orgId')
 	deleteCustomer(@Req() req: IRequest) {
 		return this.appService.deleteCustomer(req);
-	}
-
-	@Get('health')
-	health(@Req() req: IRequest) {
-		return HttpStatusCode.Ok;
 	}
 }
