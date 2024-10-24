@@ -44,8 +44,8 @@ const getColumnRows = (
     return {
       id: product.id,
       name: product.name,
-      category: product.productCategory ?? '',
-      subcategory: product.productSubcategory ?? '',
+      productCategory: product.productCategory ?? '',
+      productSubcategory: product.productSubcategory ?? '',
       description: product.description ?? '',
       sustainabilityAttributes: sustainabilityAttributes,
       tier1Supplier: product.organizationFacility?.name ?? '',
@@ -114,6 +114,22 @@ export const _ProductsDataGrid = () => {
       ...defaultColumnProperties,
       field: 'name',
       headerName: 'Name',
+      minWidth: 230,
+      flex: 1,
+      renderCell: renderName,
+    },
+    {
+      ...defaultColumnProperties,
+      field: 'productCategory',
+      headerName: 'Category',
+      minWidth: 230,
+      flex: 1,
+      renderCell: renderName,
+    },
+    {
+      ...defaultColumnProperties,
+      field: 'productSubcategory',
+      headerName: 'Sub Category',
       minWidth: 230,
       flex: 1,
       renderCell: renderName,
@@ -193,8 +209,8 @@ export const _ProductsDataGrid = () => {
   let rows: {
     id: string;
     name: string;
-    category: string;
-    subcategory: string;
+    productCategory: string;
+    productSubcategory: string;
     description: string;
     sustainabilityAttributes: SustainabilityAttribute[];
     tier1Supplier: string;
