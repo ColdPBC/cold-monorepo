@@ -188,7 +188,7 @@ const _MaterialsDataGrid = () => {
         rows={rows}
         columns={columns}
         columnHeaderHeight={55}
-        rowHeight={114}
+        rowHeight={72}
         showManageColumns
         showExport
         showSearch

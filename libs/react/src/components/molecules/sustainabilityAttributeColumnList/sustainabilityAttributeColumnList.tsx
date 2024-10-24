@@ -9,7 +9,7 @@ interface SustainabilityAttributeColumnListProps {
   sustainabilityAttributes: SustainabilityAttribute[];
 }
 
-const CARD_WIDTH = 82; // Width of the image
+const CARD_WIDTH = 40; // Width of the image
 const CARD_GAP = 10; // Gap between cards
 const TOTAL_CARD_WIDTH = CARD_WIDTH + CARD_GAP; // Total width including gap
 const MIN_VISIBLE_CARDS = 2;

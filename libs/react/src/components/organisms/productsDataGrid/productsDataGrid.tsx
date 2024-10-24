@@ -86,7 +86,7 @@ export const _ProductsDataGrid = () => {
 			.join(' | ');
 
     return (
-      <div className={'flex flex-col w-full h-full justify-center gap-[8px]'}>
+      <div className={'flex flex-col w-full h-full justify-center gap-[2px]'}>
         <div className={'w-full h-auto items-center text-body font-bold truncate'}>
           <span>{name}</span>
         </div>
@@ -218,7 +218,7 @@ export const _ProductsDataGrid = () => {
       <MuiDataGrid
         columns={columns}
         rows={rows}
-        rowHeight={114}
+        rowHeight={72}
         onRowClick={(params) => {
           if(ldFlags.showProductDetailPageCold1140){
             navigate(`/products/${params.id}`)

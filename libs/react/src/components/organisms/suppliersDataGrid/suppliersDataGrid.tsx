@@ -205,7 +205,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
           // todo: add back in when the supplier detail page is ready
         }}
         columnHeaderHeight={55}
-        rowHeight={114}
+        rowHeight={72}
         showManageColumns
         showExport
         showSearch
