@@ -246,7 +246,7 @@ export const _ProductsDataGrid = () => {
         columns={columns}
         rows={rows}
         slots={{ toolbar: getToolbar }}
-        rowHeight={114}
+        rowHeight={72}
         onRowClick={(params) => {
           if(ldFlags.showProductDetailPageCold1140){
             navigate(`/products/${params.id}`)

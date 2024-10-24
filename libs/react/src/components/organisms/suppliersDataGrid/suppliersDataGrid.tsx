@@ -233,7 +233,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
         }}
         slots={{ toolbar: getToolbar }}
         columnHeaderHeight={55}
-        rowHeight={114}
+        rowHeight={72}
       />
     </div>
   );
