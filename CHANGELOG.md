@@ -1,3 +1,15 @@
+# [1.450.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.449.0...v1.450.0) (2024-10-24)
+
+
+### Bug Fixes
+
+* update environment variable checks for AWS credentials ([61212e1](https://github.com/ColdPBC/cold-monorepo/commit/61212e13a1e585886bcc3aa1eeff04dfcf131ad2))
+
+
+### Features
+
+* add Git commit SHA and repository URL to environment variables for tracing ([7663114](https://github.com/ColdPBC/cold-monorepo/commit/7663114e08ac9f6abd1f4b99ef867d49795f6240))
+
 # [1.449.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.448.0...v1.449.0) (2024-10-24)
 
 
