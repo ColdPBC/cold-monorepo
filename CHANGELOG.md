@@ -1,3 +1,13 @@
+# [1.449.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.448.0...v1.449.0) (2024-10-24)
+
+
+### Features
+
+* add manage columns functionality to product BOM Tab ([529653a](https://github.com/ColdPBC/cold-monorepo/commit/529653a6c941069f1f91847954ba2cdde2ff7b87))
+* add material category and subcategory fields ([129adc9](https://github.com/ColdPBC/cold-monorepo/commit/129adc9a70faecf82fb572a9b03a5ae885ca2f1a))
+* add yield and unit of measure fields to product materials ([f0feb9e](https://github.com/ColdPBC/cold-monorepo/commit/f0feb9e3e07833b80b9623be8f5bfc8e97733562))
+* streamline toolbar implementation in data grids ([b81fca4](https://github.com/ColdPBC/cold-monorepo/commit/b81fca4f4671a6296ebea37d122f382886c3371a))
+
 # [1.448.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.447.1...v1.448.0) (2024-10-24)
 
 
