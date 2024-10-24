@@ -1,3 +1,10 @@
+## [1.446.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.446.1...v1.446.2) (2024-10-24)
+
+
+### Bug Fixes
+
+* remove unused imports and health check endpoint ([1573fc5](https://github.com/ColdPBC/cold-monorepo/commit/1573fc56307bf82e5ae4eee3de2832f5b7bcb0db))
+
 ## [1.446.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.446.0...v1.446.1) (2024-10-24)
 
 
