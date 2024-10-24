@@ -1,7 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { BaseWorker } from '../worker';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class HealthService {
 	/**
 	 * Used for health checks
