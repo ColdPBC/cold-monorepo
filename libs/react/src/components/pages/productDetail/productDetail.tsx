@@ -1,31 +1,54 @@
-import { ErrorFallback, ErrorPage, MainContent, ProductDetailsTab, Spinner, Tabs } from '@coldpbc/components';
-import { useGraphQLSWR } from '@coldpbc/hooks';
+import { ErrorFallback, ErrorPage, MainContent, ProductDetailsTab, ProductDocumentsTab, Spinner, Tabs } from '@coldpbc/components';
+import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
-import { ProductsQuery } from '@coldpbc/interfaces';
+import {FilesWithAssurances, ProductsQuery} from '@coldpbc/interfaces';
 import { get, isError } from 'lodash';
 import { ProductBOMTab } from '../../organisms/productBOMTab/productBOMTab';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
+import {parseDocumentsForProductDetails} from "@coldpbc/lib";
 
 const _ProductDetail = () => {
+  const { orgId } = useAuth0Wrapper();
 	const { id } = useParams();
-
+  const { logBrowser } = useColdContext();
 	const productQuery = useGraphQLSWR<{
 		product: ProductsQuery | null;
 	}>('GET_PRODUCT', {
 		id: id,
 	});
 
-	if (productQuery.isLoading) {
-		return <Spinner />;
-	}
+  const allFiles = useGraphQLSWR<{
+    organizationFiles: FilesWithAssurances[];
+  }>('GET_ALL_FILES', {
+    filter: {
+      organization: {
+        id: orgId,
+      },
+      visible: true,
+    },
+  });
 
-	if (isError(productQuery.data)) {
-		const error = get(productQuery.data, 'error', new Error('An error occurred'));
-		return <ErrorPage error={error.message} showLogout={false} />;
+  if (productQuery.isLoading || allFiles.isLoading) {
+    return <Spinner />;
+  }
+
+	if (isError(productQuery.data) || isError(allFiles.data)) {
+    const productError = get(productQuery.data, 'error', null);
+    if(productError) {
+      logBrowser('Error fetching products', 'error', { productError }, productError);
+    }
+
+    const filesError = get(allFiles.data, 'error', null);
+    if(filesError) {
+      logBrowser('Error fetching files', 'error', { filesError }, filesError);
+    }
+
+		return <ErrorPage error={'An error occurred'} showLogout={false} />;
 	}
 
 	const product = get(productQuery.data, 'data.product');
+  const files: FilesWithAssurances[] = get(allFiles.data, 'data.organizationFiles', []);
 
 	if (product === null || product === undefined) {
 		return null;
@@ -46,9 +69,9 @@ const _ProductDetail = () => {
 						content: <ProductBOMTab product={product} />,
 					},
 					{
-						label: 'Documents',
-						content: null,
-					},
+            label: 'Documents',
+            content: <ProductDocumentsTab files={parseDocumentsForProductDetails(product, files)} />,
+          },
 				]}
 			/>
 		</MainContent>

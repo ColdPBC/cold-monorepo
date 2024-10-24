@@ -59,7 +59,7 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
 		<DataGrid
 			rowHeight={37}
 			getRowClassName={() => {
-				return 'text-tc-primary cursor-pointer';
+				return 'text-tc-primary cursor-pointer bg-gray-10';
 			}}
 			columnHeaderHeight={40}
 			autoHeight={true}

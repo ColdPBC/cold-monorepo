@@ -1,3 +1,11 @@
+# [1.448.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.447.1...v1.448.0) (2024-10-24)
+
+
+### Features
+
+* add product documents tab and utility function for parsing product details ([bbd60b3](https://github.com/ColdPBC/cold-monorepo/commit/bbd60b30724daa933408172fe3b11921c93deb51))
+* enhance product details with documents and product integration ([880894d](https://github.com/ColdPBC/cold-monorepo/commit/880894d27f07e44410d23aa51dae5f465ab371b5))
+
 ## [1.447.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.447.0...v1.447.1) (2024-10-24)
 
 

@@ -1,5 +1,5 @@
 import { Files, FilesWithAssurances } from '@coldpbc/interfaces';
-import { addDays } from 'date-fns';
+import {addDays, subDays} from 'date-fns';
 import {filesProcessedWithDatesMocks} from "./graphql";
 
 export function getAllFilesMock() {
@@ -167,6 +167,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 						],
 					},
 					material: null,
+          product: null,
 				},
 			],
 			metadata: {
@@ -206,6 +207,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 						],
 					},
 					organizationFacility: null,
+          product: null,
 				},
 				{
 					id: '3',
@@ -230,6 +232,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 						],
 					},
 					organizationFacility: null,
+          product: null,
 				},
 			],
 			metadata: {
@@ -311,6 +314,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 						],
 					},
 					material: null,
+          product: null,
 				},
 			],
 			metadata: {
@@ -350,6 +354,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 						],
 					},
 					organizationFacility: null,
+          product: null,
 				},
 				{
 					id: '3',
@@ -374,6 +379,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 						],
 					},
 					organizationFacility: null,
+          product: null,
 				},
 			],
 			metadata: {
@@ -465,6 +471,7 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
             ],
           },
           organizationFacility: null,
+          product: null,
         },
         {
           id: '3',
@@ -489,6 +496,7 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
             ],
           },
           organizationFacility: null,
+          product: null,
         },
         {
           id: '4',
@@ -513,6 +521,7 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
             ],
           },
           organizationFacility: null,
+          product: null,
         },
         {
           id: '5',
@@ -537,6 +546,7 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
             ],
           },
           organizationFacility: null,
+          product: null,
         },
       ],
       metadata: {
@@ -563,4 +573,178 @@ export const getFileTypesMock = (): string[] => {
     "AUDIT_REPORT",
     "SCOPE_CERTIFICATE",
   ]
+}
+
+export function fileWithProductMocks(): FilesWithAssurances[] {
+  return [
+    {
+      id: 'ofile_ia0wbdn2saqv7emiefqna2wy',
+      originalName: '2022 Oeko Certification- YKK.JPG',
+      createdAt: '2024-10-09T14:44:09.901Z',
+      type: 'CERTIFICATE',
+      metadata: null,
+      attributeAssurances: [
+        {
+          id: 'bafdab69-8b15-4d07-9ef5-927cc95e2330',
+          effectiveStartDate: addDays(new Date(), 1).toISOString(),
+          effectiveEndDate: addDays(new Date(), 70).toISOString(),
+          sustainabilityAttribute: {
+            id: '4f0941bb-2e80-4f2e-bff5-80aa6dc5957e',
+            name: 'Oeko-Tex Standard 100',
+            level: 'MATERIAL',
+          },
+          organizationFacility: null,
+          material: null,
+          product: null,
+        },
+        {
+          id: 'a6707bd7-fd9d-48ba-a87f-7ae2958ddffd',
+          effectiveStartDate: addDays(new Date(), 1).toISOString(),
+          effectiveEndDate: subDays(new Date(), 70).toISOString(),
+          sustainabilityAttribute: {
+            id: '4f0941bb-2e80-4f2e-bff5-80aa6dc5957e',
+            name: 'Oeko-Tex Standard 100',
+            level: 'MATERIAL',
+          },
+          organizationFacility: null,
+          material: {
+            id: '0e9135c9-c91d-45fd-8256-89e1c3fba854',
+            name: 'Material 4',
+            materialSuppliers: [],
+          },
+          product: null,
+        },
+        {
+          id: 'attrass_p8lwqc7led1gnapxc908fou3',
+          effectiveStartDate: null,
+          effectiveEndDate: null,
+          sustainabilityAttribute: {
+            id: 'b6360d28-dfba-4b87-9632-0384ae9635e3',
+            name: 'DPP (Digital Product Passport)',
+            level: 'PRODUCT',
+          },
+          organizationFacility: null,
+          material: null,
+          product: {
+            id: 'op_c0y7e5zsg09r0kxxlw2ha9cm',
+            name: 'Product 3',
+          },
+        },
+      ],
+    },
+    {
+      id: 'ofile_xtu8n9rqlgko4v1nu8v8v5cg',
+      originalName: '2022 Oeko-tex_YKK.JPG',
+      createdAt: '2024-07-25T18:37:21.187Z',
+      type: 'CERTIFICATE',
+      metadata: null,
+      attributeAssurances: [
+        {
+          id: 'c18540d8-0b2d-4bbb-9241-03ad922500ad',
+          effectiveStartDate: addDays(new Date(), 1).toISOString(),
+          effectiveEndDate: addDays(new Date(), 70).toISOString(),
+          sustainabilityAttribute: {
+            id: 'c9e8676d-5e48-444f-b788-1b729fdb2d2c',
+            name: 'PFAS',
+            level: 'MATERIAL',
+          },
+          organizationFacility: null,
+          material: null,
+          product: null,
+        },
+        {
+          id: '2af60020-93c5-418b-a523-cedaf3c96ddd',
+          effectiveStartDate: null,
+          effectiveEndDate: addDays(new Date(), 30).toISOString(),
+          sustainabilityAttribute: {
+            id: '4f0941bb-2e80-4f2e-bff5-80aa6dc5957e',
+            name: 'Oeko-Tex Standard 100',
+            level: 'MATERIAL',
+          },
+          organizationFacility: null,
+          material: null,
+          product: null,
+        },
+      ],
+    },
+    {
+      id: 'ofile_jqohnz87bn2fi2es7suhqb48',
+      originalName: 'Thread- Oeko-tex Certificate 11-24396 pdf.pdf',
+      createdAt: '2024-10-09T14:41:09.808Z',
+      type: 'CERTIFICATE',
+      metadata: null,
+      attributeAssurances: [
+        {
+          id: '620733ef-5232-4258-9a54-b2a475f10351',
+          effectiveStartDate: addDays(new Date(), 1).toISOString(),
+          effectiveEndDate: subDays(new Date(), 70).toISOString(),
+          sustainabilityAttribute: {
+            id: '4f0941bb-2e80-4f2e-bff5-80aa6dc5957e',
+            name: 'Oeko-Tex Standard 100',
+            level: 'MATERIAL',
+          },
+          organizationFacility: null,
+          material: null,
+          product: null,
+        },
+        {
+          id: 'attrass_bse2b9ysfnymaha6xpyjbmsh',
+          effectiveStartDate: null,
+          effectiveEndDate: null,
+          sustainabilityAttribute: {
+            id: 'b6360d28-dfba-4b87-9632-0384ae9635e3',
+            name: 'DPP (Digital Product Passport)',
+            level: 'PRODUCT',
+          },
+          organizationFacility: {
+            id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
+            name: 'Supplier 12',
+            country: '',
+            supplierTier: 2,
+            materialSuppliers: [
+              {
+                material: {
+                  id: '5926bb4c-5cbc-4b14-970f-968249444415',
+                  name: 'Material 1',
+                },
+              },
+              {
+                material: {
+                  id: 'mat_bj8zsf2imw9uvjjvk09h7ci0',
+                  name: 'Material 10',
+                },
+              },
+              {
+                material: {
+                  id: 'mat_vctuajyeyeuwow0djuxwzb9g',
+                  name: 'Material 11',
+                },
+              },
+            ],
+          },
+          material: null,
+          product: null,
+        },
+        {
+          id: 'attrass_iy6wgrb1j49hqen6mangzt3s',
+          effectiveStartDate: null,
+          effectiveEndDate: null,
+          sustainabilityAttribute: {
+            id: '5355a00d-5429-40d9-8cb1-56cc6f914fc9',
+            name: 'No Intentional PFAS',
+            level: 'SUPPLIER',
+          },
+          organizationFacility: {
+            id: 'ofac_wxxekywiila10puwj2j7gmwg',
+            name: 'Supplier 10',
+            country: '',
+            supplierTier: 1,
+            materialSuppliers: [],
+          },
+          material: null,
+          product: null,
+        },
+      ],
+    },
+  ];
 }

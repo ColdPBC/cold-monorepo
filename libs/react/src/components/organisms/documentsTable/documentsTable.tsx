@@ -3,7 +3,7 @@ import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import {ColdIcon, DataGridCellHoverPopover, ErrorFallback, MUIDataGridNoRowsOverlay} from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays, format } from 'date-fns';
-import { capitalize } from 'lodash';
+import {capitalize, uniq} from 'lodash';
 import React from 'react';
 import {get, lowerCase, startCase, toArray, uniqWith} from 'lodash';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
@@ -19,8 +19,8 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext } from '@coldpbc/hooks';
 import { twMerge } from 'tailwind-merge';
 
-const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAttributes: Claims[]; selectDocument: (id: string) => void }) => {
-	const { files, sustainabilityAttributes, selectDocument } = props;
+const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: (id: string) => void }) => {
+	const { files, selectDocument } = props;
 	const { logBrowser } = useColdContext();
 
   const renderName = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
@@ -184,7 +184,12 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 				return get(assurance, 'organizationFacility.name', '');
 			})
 			.filter(name => name !== '');
-		return [...materialNames, ...supplierNames];
+    const productNames = file.attributeAssurances
+      .map(assurance => {
+        return get(assurance, 'product.name', '');
+      })
+      .filter(name => name !== '');
+		return uniq([...materialNames, ...supplierNames, ...productNames]);
 	};
 
 	const rows = files
@@ -210,6 +215,10 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 	const allAssociatedRecords = uniqWith(files.map(file => getAssociatedRecords(file)).flat(), (a, b) => a === b);
 
   const uniqFileTypes = uniqWith(files.map(file => startCase(lowerCase(file.type.replace(/_/g, ' ')))), (a, b) => a === b);
+
+  const uniqSustainabilityAttributes = uniqWith(files.map(file => file.attributeAssurances.map(assurance => get(assurance, 'sustainabilityAttribute.name', ''))).flat()).filter(
+    value => value !== '',
+  );
 
 	const tableRows: GridValidRowModel[] = rows;
 
@@ -269,7 +278,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 			type: 'singleSelect',
       flex: 1,
 			minWidth: 200,
-			valueOptions: sustainabilityAttributes.map(attribute => attribute.name),
+			valueOptions: uniqSustainabilityAttributes,
       renderCell: renderType,
 		},
 		{
@@ -288,7 +297,6 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; sustainabilityAt
 
 	logBrowser('DocumentsTable', 'info', {
 		files,
-		sustainabilityAttributes,
 		selectDocument,
 	});
 

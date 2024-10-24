@@ -50,6 +50,10 @@ export const GET_ALL_FILES = gql`
             }
           }
         }
+        product {
+          id
+          name
+        }
       }
 		}
 	}
