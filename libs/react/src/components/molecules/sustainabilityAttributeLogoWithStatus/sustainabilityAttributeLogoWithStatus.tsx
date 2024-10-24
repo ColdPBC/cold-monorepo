@@ -53,8 +53,8 @@ const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLo
 
 	return (
 		<Popover content={popoverText}>
-			<div className="w-[82px] h-[82px] relative inline-block">
-				<img className="w-[82px] h-[82px] object-cover rounded-lg" src={imgSrc} alt={`Logo for ${sustainabilityAttribute.name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
+			<div className="w-[40px] h-[40px] relative inline-block">
+				<img className="w-[40px] h-[40px] object-cover rounded-lg" src={imgSrc} alt={`Logo for ${sustainabilityAttribute.name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
 				<div className="absolute -top-1 -right-1 w-[17px] h-[17px]">
 					<div className={`absolute inset-0 ${iconBackgroundColor} rounded-full`}></div>
 					<div className="absolute inset-0 flex items-center justify-center">
