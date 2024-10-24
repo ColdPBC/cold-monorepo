@@ -1,6 +1,8 @@
 import { Controller, Delete, Get, Param, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { coldAdminOnly, coldAndCompanyAdmins, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { HTTPResponse } from 'puppeteer';
+import { HttpStatusCode } from 'axios';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseInterceptors(OrgUserInterceptor)
@@ -40,6 +42,6 @@ export class AppController {
 
 	@Get('health')
 	health(@Req() req: IRequest) {
-		return 'ok';
+		return HttpStatusCode.Ok;
 	}
 }
