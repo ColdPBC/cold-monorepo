@@ -1,3 +1,10 @@
+## [1.450.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.450.1...v1.450.2) (2024-10-24)
+
+
+### Bug Fixes
+
+* update pnpm version, add lockfile, and correct environment variables ([c26a511](https://github.com/ColdPBC/cold-monorepo/commit/c26a511171a1e578da9fecc8799290782a3aae8b))
+
 ## [1.450.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.450.0...v1.450.1) (2024-10-24)
 
 
