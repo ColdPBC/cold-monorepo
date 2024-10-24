@@ -7,10 +7,13 @@ WORKDIR /home/node/app
 COPY ./apps/cold-graphql/src ./src
 COPY ./apps/cold-graphql/tsconfig.json .
 COPY ./apps/cold-graphql/package.json .
+COPY ./apps/cold-graphql/pnpm-lock.yaml .
 
 RUN corepack enable
+RUN corepack use pnpm@9.12.2
 
-RUN pnpm install
+
+RUN pnpm install --frozen-lockfile
 
 # Expose the port your app will run on (e.g., 9001)
 EXPOSE 9001

@@ -132,6 +132,7 @@
             "DD_SERVICE": "cold-api",
             "DD_ENV": "production",
             "NODE_ENV": "production",
+	          "DD_PROCESS_AGENT_ENABLED": true,
             "NIXPACKS_VERSION": "1.26.1"
           },
           "sidecars": [

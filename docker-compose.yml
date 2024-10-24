@@ -96,6 +96,7 @@ services:
       - '9001:9001'
     environment:
       AUTH_BASE_URI: http://localhost:9001
+      DD_SERVICE: cold-graphql
       AUTH_JWKS_URI: https://dev-6qt527e13qyo4ls6.us.auth0.com/.well-known/jwks.json
       AUTH_JWT_ALGORITHM: RS256
       AUTH_WHITELIST_DOMAINS: localhost
