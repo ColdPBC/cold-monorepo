@@ -16,7 +16,7 @@ import {
   GridToolbarQuickFilter,
   GridValidRowModel,
 } from '@mui/x-data-grid';
-import { get, has, uniq } from 'lodash';
+import {filter, get, has, uniq} from 'lodash';
 import {listFilterOperators, listSortComparator, mapAttributeAssurancesToSustainabilityAttributes} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import {useFlags} from "launchdarkly-react-client-sdk";
@@ -69,6 +69,14 @@ const _MaterialsDataGrid = () => {
     return <Spinner />;
   }
 
+  const uniqCategories = uniq(
+		materials.map(material =>  material.materialCategory || ''),
+  ).filter(Boolean).sort( (a, b) => a.localeCompare(b));
+
+  const uniqSubCategories = uniq(
+    materials.map(material =>  material.materialSubcategory || ''),
+  ).filter(Boolean).sort( (a, b) => a.localeCompare(b));
+
   const columns: GridColDef[] = [
     {
       field: 'name',
@@ -79,6 +87,24 @@ const _MaterialsDataGrid = () => {
       renderCell: params => {
         return <div className={'h-full flex items-center text-body text-tc-primary font-bold truncate'}>{params.value}</div>;
       },
+    },
+    {
+      field: 'materialCategory',
+      headerName: 'Category',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      flex: 1,
+      minWidth: 230,
+      type: 'singleSelect',
+      valueOptions: uniqCategories,
+    },
+    {
+      field: 'materialSubcategory',
+      headerName: 'Sub Category',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      flex: 1,
+      minWidth: 230,
+      type: 'singleSelect',
+      valueOptions: uniqSubCategories,
     },
     {
       field: 'sustainabilityAttributes',
@@ -145,6 +171,8 @@ const _MaterialsDataGrid = () => {
     const row = {
       id: material.id,
       name: material.name,
+      materialCategory: material.materialCategory || '',
+      materialSubcategory: material.materialSubcategory || '',
       sustainabilityAttributes: sustainabilityAttributes,
       tier2Supplier: tier2Supplier ? tier2Supplier.name : '',
       usedBy: uniq(tier1Suppliers.map(supplier => supplier.name).sort((a,b) => a.localeCompare(b))),
