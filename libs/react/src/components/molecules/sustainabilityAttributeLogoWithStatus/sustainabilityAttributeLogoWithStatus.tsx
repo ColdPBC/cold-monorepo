@@ -58,7 +58,7 @@ const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLo
 				<div className="absolute -top-1 -right-1 w-[17px] h-[17px]">
 					<div className={`absolute inset-0 ${iconBackgroundColor} rounded-full`}></div>
 					<div className="absolute inset-0 flex items-center justify-center">
-						<ColdIcon name={iconName} color="black" className={iconName === IconNames.ColdExpiringIcon ? 'w-[13px] h-[13px]' : 'w-full h-full'} />
+						<ColdIcon name={iconName} color="black" className={iconName === IconNames.ColdExpiringIcon ? 'w-[12px] h-[12x]' : 'w-full h-full'} />
 					</div>
 				</div>
 			</div>
