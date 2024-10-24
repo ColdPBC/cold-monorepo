@@ -1,12 +1,10 @@
 import { addDays, subDays } from 'date-fns';
-import { EntityLevel } from '@coldpbc/enums';
-
-type AssuranceStatus = 'ACTIVE' | 'EXPIRING' | 'EXPIRED' | 'NOT DOCUMENTED';
+import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
 interface AttributeAssuranceMockParams {
-  entity: EntityLevel;
-  status: AssuranceStatus;
-  index: number;
+	entity: EntityLevel;
+	status: AttributeAssuranceStatus;
+	index: number;
 }
 
 export const AttributeAssuranceMock = ({
@@ -17,10 +15,13 @@ export const AttributeAssuranceMock = ({
   let effectiveEndDate: string | null;
 
   switch (status) {
-    case 'EXPIRING':
+    case AttributeAssuranceStatus.ACTIVE:
+      effectiveEndDate = new Date('2027-12-31').toISOString();
+      break;
+    case AttributeAssuranceStatus.EXPIRING:
       effectiveEndDate = addDays(new Date(), 10).toISOString();
       break;
-    case 'EXPIRED':
+    case AttributeAssuranceStatus.EXPIRED:
       effectiveEndDate = subDays(new Date(), 1).toISOString();
       break;
     default:
@@ -33,7 +34,7 @@ export const AttributeAssuranceMock = ({
     material: null,
     organization: null,
     organizationFacility: null,
-    organizationFile: status === 'NOT DOCUMENTED' ? null : { id: '123' },
+    organizationFile: status === AttributeAssuranceStatus.NOT_DOCUMENTED ? null : { id: '123' },
     product: null,
   };
 
