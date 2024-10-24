@@ -104,6 +104,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 				rows={rows}
 				columns={columns}
 				showSearch
+        showManageColumns
 				columnHeaderHeight={55}
 				rowHeight={114}
 				getRowClassName={() => {
