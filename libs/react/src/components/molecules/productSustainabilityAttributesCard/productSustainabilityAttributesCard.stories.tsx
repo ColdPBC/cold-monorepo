@@ -37,6 +37,8 @@ export const Default: Story = {
           material: {
             id: 'qrs',
             name: 'Organic Wool',
+            materialCategory: null,
+            materialSubcategory: null,
             materialSuppliers: [
               {
                 id: 'ms_123',
@@ -107,6 +109,8 @@ export const NoAssurances: Story = {
           material: {
             id: 'qrs',
             name: 'Organic Wool',
+            materialCategory: null,
+            materialSubcategory: null,
             materialSuppliers: [
               {
                 id: 'ms_123',

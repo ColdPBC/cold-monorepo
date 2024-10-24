@@ -21,6 +21,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_xyqmz0hdf1p8p26wg3d5ju97',
 						name: 'Material 15',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'matsup_ty7un10erbcr9ruvuwye02e6',
@@ -39,6 +41,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_beq7hd4e7efg5vzrzpp1xcb9',
 						name: 'Material 7',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'msup_mvldtl3a1y1y27i6dpuz7qs2',
@@ -91,6 +95,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_x0x7th2m41zdgahmrbt9t58c',
 						name: 'Material 9',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'msup_v1092i9nodjiixmgf1ze4zfm',
@@ -145,6 +151,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'msup_i3819gq1c53fygmlcn4qyz8w',
@@ -274,6 +282,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_xyqmz0hdf1p8p26wg3d5ju97',
 						name: 'Material 15',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'matsup_ty7un10erbcr9ruvuwye02e6',
@@ -292,6 +302,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_u9lckkyqyii41q3by2wdt86i',
 						name: 'Material 8',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'msup_sn673pues18vmk8l1d9jrehp',
@@ -352,6 +364,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_vctuajyeyeuwow0djuxwzb9g',
 						name: 'Material 11',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'matsup_v2uj0x6hlvhqvmv2wqyszpd2',
@@ -409,6 +423,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'msup_i3819gq1c53fygmlcn4qyz8w',
@@ -537,6 +553,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: '5926bb4c-5cbc-4b14-970f-968249444415',
 						name: 'Material 1',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'matsup_ccwa08m14j91q4tjuzgz4zsv',
@@ -555,6 +573,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_beq7hd4e7efg5vzrzpp1xcb9',
 						name: 'Material 7',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'msup_mvldtl3a1y1y27i6dpuz7qs2',
@@ -613,6 +633,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_u9lckkyqyii41q3by2wdt86i',
 						name: 'Material 8',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'msup_sn673pues18vmk8l1d9jrehp',
@@ -673,6 +695,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_x0x7th2m41zdgahmrbt9t58c',
 						name: 'Material 9',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'msup_v1092i9nodjiixmgf1ze4zfm',
@@ -725,6 +749,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_vctuajyeyeuwow0djuxwzb9g',
 						name: 'Material 11',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'matsup_v2uj0x6hlvhqvmv2wqyszpd2',
@@ -782,6 +808,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
+            materialCategory: null,
+            materialSubcategory: null,
 						materialSuppliers: [
 							{
 								id: 'msup_i3819gq1c53fygmlcn4qyz8w',

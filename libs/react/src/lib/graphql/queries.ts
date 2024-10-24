@@ -291,6 +291,8 @@ export const GET_ALL_PRODUCTS= gql`
         material {
           id
           name
+          materialCategory
+          materialSubcategory
           materialSuppliers {
             id
             organizationFacility {
@@ -432,6 +434,8 @@ export const GET_PRODUCT = gql`
         material {
           id
           name
+          materialCategory
+          materialSubcategory
           materialSuppliers {
             id
             organizationFacility {

@@ -21,6 +21,20 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 			flex: 1,
 			minWidth: 230,
 		},
+    {
+      ...DEFAULT_GRID_COL_DEF,
+      field: 'materialCategory',
+      headerName: 'Category',
+      flex: 1,
+      minWidth: 230,
+    },
+    {
+      ...DEFAULT_GRID_COL_DEF,
+      field: 'materialSubcategory',
+      headerName: 'Sub Category',
+      flex: 1,
+      minWidth: 230,
+    },
 		{
 			...DEFAULT_GRID_COL_DEF,
 			field: 'tier2Supplier',
@@ -44,6 +58,8 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 		id: string;
 		materialId: string;
 		material: string;
+    materialCategory: string;
+    materialSubcategory: string;
 		tier2Supplier: string;
 		sustainabilityAttributes: SustainabilityAttribute[];
 	}[] = product.productMaterials
@@ -57,6 +73,8 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 				id: productMaterial.id,
 				materialId: material.id,
 				material: material.name,
+        materialCategory: material.materialCategory || '',
+        materialSubcategory: material.materialSubcategory || '',
 				tier2Supplier: tier2Supplier,
 				sustainabilityAttributes: susAttributes,
 			};

@@ -18,6 +18,8 @@ export interface ProductsQuery {
     material: {
       id: string
       name: string
+      materialCategory: string | null;
+      materialSubcategory: string | null;
       attributeAssurances: SustainabilityAttributeAssurance[];
       materialSuppliers: {
         id: string;
