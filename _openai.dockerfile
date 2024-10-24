@@ -78,9 +78,6 @@ LABEL com.datadoghq.tags.env=${NODE_ENV}
 
 RUN export DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
 
-RUN git rev-parse HEAD > commit_hash && \
-    export DD_GIT_COMMIT_SHA=$(cat commit_hash) \
-
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json /home/node/apps/${DD_SERVICE}/project.json
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json /home/node/apps/${DD_SERVICE}/package.json
 

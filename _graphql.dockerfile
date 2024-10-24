@@ -9,8 +9,7 @@ ARG DD_GIT_COMMIT_SHA
 ENV DD_GIT_REPOSITORY_URL=${DD_GIT_REPOSITORY_URL}
 ENV DD_GIT_COMMIT_SHA=${DD_GIT_COMMIT_SHA}
 
-RUN git rev-parse HEAD > commit_hash && \
-    export DD_GIT_COMMIT_SHA=$(cat commit_hash) \
+
 RUN export DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
 
 # Set the working directory within the container
@@ -21,7 +20,9 @@ COPY ./apps/cold-graphql/package.json .
 RUN corepack enable
 
 RUN pnpm install
-RUN pnpm build
+RUN git rev-parse HEAD > commit_hash && \
+    DD_GIT_COMMIT_SHA=$(cat commit_hash) pnpm build \
+
 
 # Expose the port your app will run on (e.g., 9001)
 EXPOSE 9001
