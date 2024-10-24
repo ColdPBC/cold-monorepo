@@ -20,28 +20,34 @@ const _SustainabilityAttributeLogoWithStatus: React.FC<SustainabilityAttributeLo
 	let iconBackgroundColor: string;
 	let hoverLabelText: string;
 
-	if (sustainabilityAttribute.assuranceStatus === AttributeAssuranceStatus.ACTIVE) {
-		iconName = IconNames.ColdCheckIcon;
-		iconBackgroundColor = 'bg-green-300';
-    hoverLabelText = sustainabilityAttribute.expirationDate
-      ? `Active until ${format(sustainabilityAttribute.expirationDate, 'M/d/yyyy')}`
-      : 'Active';
-  } else if (sustainabilityAttribute.assuranceStatus === AttributeAssuranceStatus.EXPIRING) {
-		iconName = IconNames.ColdExpiringIcon;
-		iconBackgroundColor = 'bg-yellow-300';
-    hoverLabelText = sustainabilityAttribute.expirationDate
-      ? `Expiring in ${differenceInDays(sustainabilityAttribute.expirationDate, new Date())} days`
-      : 'Expiring';
-	} else if (sustainabilityAttribute.assuranceStatus === AttributeAssuranceStatus.EXPIRED) {
-		iconName = IconNames.ColdCalendarCloseIcon;
-		iconBackgroundColor = 'bg-gray-300';
-    hoverLabelText = sustainabilityAttribute.expirationDate
-      ? `Expired on ${format(sustainabilityAttribute.expirationDate, 'M/d/yyyy')}`
-      : 'Expired';
-	} else {
-		iconName = IconNames.ColdDangerIcon;
-		iconBackgroundColor = 'bg-gray-300';
-		hoverLabelText = 'Missing documents';
+  switch (sustainabilityAttribute.assuranceStatus) {
+		case AttributeAssuranceStatus.ACTIVE:
+			iconName = IconNames.ColdCheckIcon;
+			iconBackgroundColor = 'bg-green-300';
+			hoverLabelText = sustainabilityAttribute.expirationDate ? `Active until ${format(sustainabilityAttribute.expirationDate, 'M/d/yyyy')}` : 'Active';
+      break;
+		case AttributeAssuranceStatus.EXPIRING:
+			iconName = IconNames.ColdExpiringIcon;
+			iconBackgroundColor = 'bg-yellow-300';
+			hoverLabelText = sustainabilityAttribute.expirationDate ? `Expiring in ${differenceInDays(sustainabilityAttribute.expirationDate, new Date())} days` : 'Expiring';
+      break;
+		case AttributeAssuranceStatus.EXPIRED:
+			iconName = IconNames.ColdCalendarCloseIcon;
+			iconBackgroundColor = 'bg-gray-300';
+			hoverLabelText = sustainabilityAttribute.expirationDate ? `Expired on ${format(sustainabilityAttribute.expirationDate, 'M/d/yyyy')}` : 'Expired';
+      break;
+		case AttributeAssuranceStatus.MISSING_DATE:
+      iconName = IconNames.ColdUnknownIcon;
+      iconBackgroundColor = 'bg-gray-300';
+      hoverLabelText = 'Missing expiration date';
+      break;
+		case AttributeAssuranceStatus.NOT_DOCUMENTED:
+			iconName = IconNames.ColdDangerIcon;
+			iconBackgroundColor = 'bg-gray-300';
+			hoverLabelText = 'Missing documents';
+      break;
+    default:
+      throw new Error('Unknown AttributeAssuranceStatus');
 	}
 
   const popoverText = (

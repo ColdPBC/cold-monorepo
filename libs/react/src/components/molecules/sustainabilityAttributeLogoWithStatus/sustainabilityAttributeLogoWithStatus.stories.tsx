@@ -52,6 +52,18 @@ export const Expired: Story = {
   }
 };
 
+export const MissingDate: Story = {
+  args: {
+    sustainabilityAttribute: {
+      id: '123',
+      name: 'B-Corp',
+      level: EntityLevel.ORGANIZATION,
+      logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/B-Corp.png',
+      assuranceStatus: AttributeAssuranceStatus.MISSING_DATE, // "Missing expiration date"
+    }
+  }
+};
+
 export const MissingDocuments: Story = {
   args: {
     sustainabilityAttribute: {
