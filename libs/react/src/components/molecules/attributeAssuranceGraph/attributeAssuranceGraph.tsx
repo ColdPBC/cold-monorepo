@@ -1,6 +1,7 @@
 import React from 'react';
 import { EntityLevel, IconNames } from '@coldpbc/enums';
 import { ColdIcon, Popover } from '@coldpbc/components';
+import { pluralize } from '@coldpbc/lib';
 
 interface AttributeAssuranceGraphProps {
   entity: EntityLevel;
@@ -21,15 +22,6 @@ export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = (
   const activePercentage = (activeCount / total) * 100;
   const expiredPercentage = (inactiveCount / total) * 100;
   const notDocumentedPercentage = (notDocumentedCount / total) * 100;
-
-  function toSentenceCase(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  }
-
-  function pluralize(word: string, count: number) {
-    const sentenceCaseWord = toSentenceCase(word);
-    return `${count} ${sentenceCaseWord}${count !== 1 ? 's' : ''}`;
-  }
 
   return (
     <>
