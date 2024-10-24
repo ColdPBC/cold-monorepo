@@ -34,6 +34,8 @@ export const Default: Story = {
       productMaterials: [
         {
           id: 'xyz',
+          yield: null,
+          unitOfMeasure: null,
           material: {
             id: 'qrs',
             name: 'Organic Wool',
@@ -106,6 +108,8 @@ export const NoAssurances: Story = {
       productMaterials: [
         {
           id: 'xyz',
+          yield: null,
+          unitOfMeasure: null,
           material: {
             id: 'qrs',
             name: 'Organic Wool',

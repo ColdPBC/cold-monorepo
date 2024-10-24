@@ -288,6 +288,8 @@ export const GET_ALL_PRODUCTS= gql`
       supplierProductId
       productMaterials {
         id
+        yield
+        unitOfMeasure
         material {
           id
           name
@@ -431,6 +433,8 @@ export const GET_PRODUCT = gql`
       supplierProductId
       productMaterials {
         id
+        yield
+        unitOfMeasure
         material {
           id
           name
