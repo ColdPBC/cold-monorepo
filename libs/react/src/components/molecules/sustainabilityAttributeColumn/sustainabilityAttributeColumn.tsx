@@ -19,7 +19,7 @@ export const SustainabilityAttributeColumn = (props: {
     <div className="w-full h-full flex flex-row gap-2 items-center">
       <img className="w-[40px] h-[40px] object-cover rounded-[4px]" src={imgSrc}
            alt={`Logo for ${sustainabilityAttribute.name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)}/>
-      <div className="w-full text-tc-secondary truncate">
+      <div className="w-full truncate">
         <span>
           {name}
         </span>

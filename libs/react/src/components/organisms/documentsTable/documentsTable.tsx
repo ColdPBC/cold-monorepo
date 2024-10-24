@@ -3,14 +3,14 @@ import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import {
   ColdIcon,
   DataGridCellHoverPopover,
-  ErrorFallback,
+  ErrorFallback, MuiDataGrid,
   MUIDataGridNoRowsOverlay,
   SustainabilityAttributeColumn
 } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays, format } from 'date-fns';
 import {capitalize, uniq} from 'lodash';
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {get, lowerCase, startCase, toArray, uniqWith} from 'lodash';
 import {
   Claims,
@@ -62,24 +62,28 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
     );
   };
 
-  const renderStatus = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    const file = files.find(file => file.id === params.row.id);
+  const fileProcessingStatusElement = (fileId: string, component: () => JSX.Element) => {
+    const file = files.find(file => file.id === fileId);
     const fileStatus = getFileProcessingStatus(file);
     if (fileStatus === 'uploaded') {
       return (
-        <div className={'w-full h-full py-[16px] px-[0px]'}>
-          <div
-            className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
-            style={{
-              background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
-            }}></div>
-        </div>
-      );
+      <div className={'w-full h-full py-[16px] px-[0px]'}>
+        <div
+          className={'w-full h-full flex flex-row rounded-lg animate-pulsate'}
+          style={{
+            background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
+          }}></div>
+      </div>
+      )
     } else {
-      // if the value is null return null
+      return component();
+    }
+  }
+
+  const renderStatus = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+    return fileProcessingStatusElement(params.row.id, () => {
       const expirationDate: string | null = params.row.expiration_date;
       let diff = 0;
-
       switch (params.value) {
         case ClaimStatus.Expired:
           return (
@@ -115,85 +119,39 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
             </div>
           );
       }
-    }
+    });
   };
 
   const renderDate = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    const file = files.find(file => file.id === params.row.id);
-    const fileStatus = getFileProcessingStatus(file);
-    if (fileStatus === 'uploaded') {
+    return fileProcessingStatusElement(params.row.id, () => {
+      let dateString = '--';
+      if (params.value.getTime() !== new Date(0).getTime()) {
+        dateString = format(new Date(params.value), 'M/d/yy');
+      }
       return (
-        <div className={'w-full h-full py-[16px] px-[0px]'}>
-          <div
-            className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
-            style={{
-              background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
-            }}></div>
+        <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
+          {dateString}
         </div>
       );
-    }
-
-    let dateString = '--';
-    if (params.value.getTime() !== new Date(0).getTime()) {
-      dateString = format(new Date(params.value), 'M/d/yy');
-    }
-    return (
-      <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
-        {dateString}
-      </div>
-    );
+    })
   };
 
   const renderType = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    const file = files.find(file => file.id === params.row.id);
-    const fileStatus = getFileProcessingStatus(file);
-    if (fileStatus === 'uploaded') {
-      return (
-        <div className={'w-full h-full py-[16px] px-[0px]'}>
-          <div
-            className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
-            style={{
-              background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
-            }}></div>
-        </div>
-      );
-    }
-    return <div className={'text-tc-secondary overflow-hidden text-ellipsis'}>{params.value}</div>;
+    return fileProcessingStatusElement(params.row.id, () => {
+      return <div className={'text-tc-secondary overflow-hidden text-ellipsis'}>{params.value}</div>;
+    });
   };
 
   const renderSustainabilityAttribute = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    const file = files.find(file => file.id === params.row.id);
-    const fileStatus = getFileProcessingStatus(file);
-    if (fileStatus === 'uploaded') {
-      return (
-        <div className={'w-full h-full py-[16px] px-[0px]'}>
-          <div
-            className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
-            style={{
-              background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
-            }}></div>
-        </div>
-      );
-    }
-    return <SustainabilityAttributeColumn sustainabilityAttribute={params.value as SustainabilityAttributeWithoutAssurances | null} />;
+    return fileProcessingStatusElement(params.row.id, () => {
+      return <SustainabilityAttributeColumn sustainabilityAttribute={params.value as SustainabilityAttributeWithoutAssurances | null} />;
+    });
   };
 
   const renderAssociatedRecords = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    const file = files.find(file => file.id === params.row.id);
-    const fileStatus = getFileProcessingStatus(file);
-    if (fileStatus === 'uploaded') {
-      return (
-        <div className={'w-full h-full py-[16px] px-[0px]'}>
-          <div
-            className={'w-full h-full flex flex-row rounded-[8px] animate-pulsate'}
-            style={{
-              background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
-            }}></div>
-        </div>
-      );
-    }
-
-    return <DataGridCellHoverPopover params={params} color={HexColors.purple["200"]} />
+    return fileProcessingStatusElement(params.row.id, () => {
+      return <DataGridCellHoverPopover params={params} color={HexColors.purple["200"]} />
+    });
   };
 
   const onRowClick = (params: GridRowParams, event: MuiEvent<React.MouseEvent>, details: GridCallbackDetails) => {
@@ -333,61 +291,16 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
 
 	return (
 		<div className={'w-full'}>
-			<DataGrid
+			<MuiDataGrid
 				rows={tableRows}
 				columns={columns}
 				rowHeight={58}
-				getRowClassName={() => {
-					return 'text-tc-primary cursor-pointer';
-				}}
-				className={'text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto'}
-				sx={{
-					'--DataGrid-overlayHeight': '300px',
-					'--DataGrid-rowBorderColor': HexColors.gray[30],
-					'& .MuiTablePagination-root': {
-						color: HexColors.tc.primary,
-					},
-					'& .MuiDataGrid-withBorderColor': {
-						borderColor: HexColors.gray[30],
-					},
-					'& .MuiDataGrid-columnHeaderTitle': {
-						fontWeight: 'bold',
-					},
-					'& .MuiDataGrid-cell:focus': {
-						outline: 'none',
-					},
-					'& .MuiDataGrid-cell:focus-within': {
-						outline: 'none',
-					},
-					'& .MuiDataGrid-columnHeader:focus': {
-						outline: 'none',
-					},
-					'& .MuiDataGrid-columnHeader:focus-within': {
-						outline: 'none',
-					},
-				}}
-				slotProps={{
-					filterPanel: {
-						sx: {
-							'& .MuiInput-input': {
-								backgroundColor: 'transparent',
-								fontFamily: 'Inter',
-								fontSize: '14px',
-								padding: '4px 0px 5px',
-								height: '32px',
-							},
-							'& .MuiDataGrid-filterFormColumnInput': {
-								backgroundColor: 'transparent',
-							},
-						},
-					},
-				}}
+        getRowClassName={() => {
+          return 'text-tc-secondary cursor-pointer';
+        }}
 				columnHeaderHeight={55}
 				onRowClick={onRowClick}
 				autoHeight={true}
-				slots={{
-					noRowsOverlay: MUIDataGridNoRowsOverlay,
-				}}
         initialState={{
           sorting: {
             sortModel: [{ field: 'uploaded', sort: 'desc' }],
