@@ -40,13 +40,10 @@ ENV DD_SERVICE=${DD_SERVICE}
 WORKDIR /repo
 RUN yarn dlx nx run cold-nest-library:prisma-generate
 RUN yarn prebuild
-RUN if [ "${NODE_ENV}" = "production" ] ; then \
-        echo "building for production..." && \
-        DD_GIT_COMMIT_SHA=$(cat commit_hash) npx nx run --skip-nx-cache cold-api:build:production ; \
-    else \
-        echo "building development..." && \
-        DD_GIT_COMMIT_SHA=$(cat commit_hash) npx nx run --skip-nx-cache cold-api:build:development ; \
-    fi
+
+RUN npx nx run --skip-nx-cache cold-api:build:production
+
+RUN ls -la /repo/dist
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
@@ -67,9 +64,6 @@ ARG DD_VERSION
 ARG DD_API_KEY
 ARG FC_GIT_COMMIT_SHA
 ARG PORT
-
-RUN export DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
-RUN export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)
 
 ENV NODE_ENV=${NODE_ENV}
 ENV DD_SERVICE=${DD_SERVICE}
@@ -96,6 +90,6 @@ COPY --from=build --chown=node:node /repo/node_modules /home/node/node_modules
 # Expose the port that the application listens on.
 EXPOSE ${PORT}
 
-CMD ["sh", "-c", "export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) && node main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node main.js"]
 
 # Run the application.

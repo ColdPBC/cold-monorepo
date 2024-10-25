@@ -37,7 +37,10 @@ ENV DD_SERVICE=${DD_SERVICE}
 WORKDIR /repo
 RUN yarn dlx nx run cold-nest-library:prisma-generate
 RUN yarn prebuild
-RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache ${DD_SERVICE}:build:production ; else echo "building development..." && npx nx run --skip-nx-cache ${DD_SERVICE}:build:development ; fi
+
+RUN npx nx run --skip-nx-cache ${DD_SERVICE}:build:production
+
+RUN ls -la /repo/dist
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
