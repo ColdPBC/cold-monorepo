@@ -26,6 +26,7 @@ export const GET_ALL_FILES = gql`
           id
           name
           level
+          logoUrl
         }
         organizationFacility {
           id

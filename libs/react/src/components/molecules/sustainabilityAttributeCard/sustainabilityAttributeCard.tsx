@@ -16,7 +16,7 @@ export enum SustainabilityAttributeCardStyle {
   SINGLE_STATUS = 'SINGLE_STATUS',
 }
 
-const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
+export const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
 
 interface SustainabilityAttributeAssuranceData {
   activeCount: number;
