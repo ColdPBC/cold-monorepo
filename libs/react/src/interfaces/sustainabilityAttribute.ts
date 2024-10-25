@@ -1,6 +1,13 @@
 import { SustainabilityAttributeAssurance } from './attributeAssurance';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
+export interface SustainabilityAttributeWithoutAssurances {
+  id: string;
+  name: string;
+  logoUrl?: string;
+  level: EntityLevel;
+}
+
 export interface SustainabilityAttribute {
   id: string;
   name: string;
