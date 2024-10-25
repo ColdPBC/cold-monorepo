@@ -1,3 +1,10 @@
+## [1.452.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.452.0...v1.452.1) (2024-10-25)
+
+
+### Bug Fixes
+
+* update Dockerfiles to include environment variables for observability ([1b05944](https://github.com/ColdPBC/cold-monorepo/commit/1b05944ca9f783e71e6f446adb6b155e67325e08))
+
 # [1.452.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.451.0...v1.452.0) (2024-10-25)
 
 
