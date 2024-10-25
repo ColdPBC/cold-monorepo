@@ -14,7 +14,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 	const { product } = props;
 
   const renderName = (params: any) => {
-    const name = get(params, 'row.name', '')
+    const name = get(params, 'row.material', '')
     const category = get(params, 'row.materialCategory', '')
     const subcategory = get(params, 'row.materialSubcategory', '')
     const text = [category, subcategory]
