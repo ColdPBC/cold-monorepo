@@ -1,4 +1,4 @@
-import { addDays, subDays } from 'date-fns';
+import { addDays } from 'date-fns';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
 interface AttributeAssuranceMockParams {
@@ -22,7 +22,7 @@ export const AttributeAssuranceMock = ({
       effectiveEndDate = addDays(new Date(), 10).toISOString();
       break;
     case AttributeAssuranceStatus.EXPIRED:
-      effectiveEndDate = subDays(new Date(), 1).toISOString();
+      effectiveEndDate = new Date('2024-10-24').toISOString();
       break;
     default:
       effectiveEndDate = null;
