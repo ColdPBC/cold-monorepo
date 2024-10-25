@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from "react";
 import { Tooltip } from '@mui/material';
 import {HexColors} from "@coldpbc/themes";
 import {GridRenderCellParams, GridTreeNodeWithRender} from "@mui/x-data-grid";
-import {DataGridCellPillPopover} from "./datagridCellPillPopover";
+import {BubbleWithPopover} from "./bubbleWithPopover";
 
 const MAX_WIDTH = 200;
 
@@ -69,7 +69,7 @@ export const DataGridCellHoverPopoverWrap = (props: {
 
   const displayPill = (value: string, index: number) => {
 		// first check if the div is truncated. if so use a popover component to display the rest of the value
-		return <DataGridCellPillPopover key={index} text={value} color={color} width={MAX_WIDTH} />;
+		return <BubbleWithPopover key={index} text={value} color={color} width={MAX_WIDTH} />;
 	};
 
 	useEffect(() => {

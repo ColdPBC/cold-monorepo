@@ -12,7 +12,7 @@ import {
 import { IconNames } from '@coldpbc/enums';
 import {
   ColdIcon,
-  DataGridCellHoverPopover,
+  BubbleList,
   MuiDataGrid,
   Spinner,
   SustainabilityAttributeColumnList,
@@ -132,7 +132,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       headerName: 'Products',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       renderCell: (params) => {
-        return <DataGridCellHoverPopover params={params} />;
+        return <BubbleList values={params.value as string[]} />;
       },
       renderHeader: renderHeader,
       type: 'singleSelect',
@@ -154,7 +154,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       headerName: 'Materials',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       renderCell: (params) => {
-        return <DataGridCellHoverPopover params={params} />;
+        return <BubbleList values={params.value as string[]} />;
       },
       renderHeader: renderHeader,
       type: 'singleSelect',

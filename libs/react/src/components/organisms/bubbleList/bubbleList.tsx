@@ -1,25 +1,28 @@
 import React, {useEffect, useRef} from "react";
 import { Tooltip } from '@mui/material';
 import {HexColors} from "@coldpbc/themes";
-import {GridRenderCellParams, GridTreeNodeWithRender} from "@mui/x-data-grid";
-import {DataGridCellPillPopover} from "./datagridCellPillPopover";
+import {BubbleWithPopover} from "./bubbleWithPopover";
 
 const MAX_WIDTH = 200;
 
-export const DataGridCellHoverPopover = (props: {
-  params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>;
+interface BubbleListProps {
+  values: string[];
   color?: string;
+}
+
+export const BubbleList: React.FC<BubbleListProps> = ({
+  values,
+  color = HexColors.primary.DEFAULT,
 }) => {
-  const { params, color = HexColors.primary.DEFAULT } = props;
-  const values = (params.value as string[]).sort();
+  const sortedValues = values.sort();
   const [valuesToDisplay, setValuesToDisplay] = React.useState<string[]>(
-    values
+    sortedValues
   );
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const getPopoverContent = () => {
-    const otherValues = values.slice(valuesToDisplay.length);
+    const otherValues = sortedValues.slice(valuesToDisplay.length);
     return (
       <ul className={'list-disc ml-[20px] text-tc-primary text-body'}>
         {otherValues.map((value, index) => (
@@ -71,7 +74,7 @@ export const DataGridCellHoverPopover = (props: {
 
 	const displayPill = (value: string, index: number) => {
 		// first check if the div is truncated. if so use a popover component to display the rest of the value
-		return <DataGridCellPillPopover key={index} text={value} color={color} width={MAX_WIDTH} />;
+		return <BubbleWithPopover key={index} text={value} color={color} width={MAX_WIDTH} />;
 	};
 
 	useEffect(() => {
@@ -81,7 +84,7 @@ export const DataGridCellHoverPopover = (props: {
 				observer = new ResizeObserver(() => {
 					if (divRef.current && containerRef.current) {
 						const totalWidth = containerRef.current.getBoundingClientRect().width - 110;
-						const tempValues = [...values];
+						const tempValues = [...sortedValues];
 						let tempWidth = 0;
 						let index = 0;
 						const itemWidths = Array.from(divRef.current.children).map((value: Element) => value.getBoundingClientRect().width);
@@ -145,7 +148,7 @@ export const DataGridCellHoverPopover = (props: {
         className={'w-auto flex items-center gap-[10px] invisible whitespace-nowrap'}
       >
         {
-          values
+          sortedValues
             .map((value: string, index: number) => {
               return (
                 <div
