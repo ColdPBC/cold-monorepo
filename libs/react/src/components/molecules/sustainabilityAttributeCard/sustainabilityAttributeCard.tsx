@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { AttributeAssuranceGraph } from '@coldpbc/components';
+import { AttributeAssuranceGraph, AttributeAssuranceSingleStatus } from '@coldpbc/components';
 import { SustainabilityAttribute, SustainabilityAttributeAssurance } from '@coldpbc/interfaces';
 import { getAggregateStatusFromAttributeAssurances } from '@coldpbc/lib';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
 interface SustainabilityAttributeCardProps {
-	sustainabilityAttribute: SustainabilityAttribute;
+  sustainabilityAttribute: SustainabilityAttribute;
+  cardStyle?: SustainabilityAttributeCardStyle;
+}
+
+export enum SustainabilityAttributeCardStyle {
+  GRAPH = 'GRAPH',
+  SINGLE_STATUS = 'SINGLE_STATUS',
 }
 
 export const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
@@ -70,9 +76,26 @@ function processSustainabilityAttribute(attribute: SustainabilityAttribute): Sus
   return result;
 }
 
-const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> = ({ sustainabilityAttribute }) => {
+const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> = ({ sustainabilityAttribute, cardStyle }) => {
 	// If we don't get a logo image from the backend, we'll use the default
 	const [imgSrc, setImgSrc] = useState<string>(sustainabilityAttribute.logoUrl || DEFAULT_ICON_URL);
+
+  const renderContent = () => {
+    switch (cardStyle) {
+      case SustainabilityAttributeCardStyle.SINGLE_STATUS:
+        return (
+          <AttributeAssuranceSingleStatus sustainabilityAttribute={sustainabilityAttribute} />
+        );
+      case SustainabilityAttributeCardStyle.GRAPH:
+      default:
+        return (
+          <AttributeAssuranceGraph
+            entity={sustainabilityAttribute.level}
+            {...processSustainabilityAttribute(sustainabilityAttribute)}
+          />
+        );
+    }
+  };
 
 	return (
 		<div className="w-full h-auto p-4 rounded-2xl border border-gray-90 flex">
@@ -85,7 +108,7 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
 						{sustainabilityAttribute.name}
 					</div>
 				</div>
-				<AttributeAssuranceGraph entity={sustainabilityAttribute.level} {...processSustainabilityAttribute(sustainabilityAttribute)} />
+				{renderContent()}
 			</div>
 		</div>
 	);
