@@ -1,5 +1,7 @@
+import { startCase, toLower } from 'lodash';
+
 export function toSentenceCase(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  return startCase(toLower(str));
 }
 
 export function pluralize(word: string, count: number) {
