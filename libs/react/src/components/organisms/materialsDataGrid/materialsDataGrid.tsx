@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {MaterialsWithRelations, SustainabilityAttributeAssurance} from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import {
-  DataGridCellHoverPopover,
+  BubbleList,
   ErrorFallback,
   MuiDataGrid,
   Spinner,
@@ -127,7 +127,7 @@ const _MaterialsDataGrid = () => {
       valueOptions: uniqTier1Suppliers,
       valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
       renderCell: (params) => {
-        return <DataGridCellHoverPopover params={params} />;
+        return <BubbleList values={params.value as string[]} />;
       },
       minWidth: 350,
       flex: 1,

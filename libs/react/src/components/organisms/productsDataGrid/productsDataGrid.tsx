@@ -1,5 +1,5 @@
 import {
-  DataGridCellHoverPopover,
+  BubbleList,
   ErrorFallback,
   MuiDataGrid,
   Spinner,
@@ -180,7 +180,7 @@ export const _ProductsDataGrid = () => {
       minWidth: 350,
       renderCell: (params) => {
         return (
-          <DataGridCellHoverPopover params={params} />
+          <BubbleList params={params} />
         )
       },
     },

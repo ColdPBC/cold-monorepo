@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Popover} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
 
-export const DataGridCellPillPopover = (props: {
+export const BubbleWithPopover = (props: {
   text: string,
   color?: string
   width?: number

@@ -2,7 +2,7 @@ import { DataGrid, GridCallbackDetails, GridColDef, GridRenderCellParams, GridRo
 import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import {
   ColdIcon,
-  DataGridCellHoverPopover,
+  BubbleList,
   ErrorFallback, MuiDataGrid,
   MUIDataGridNoRowsOverlay,
   SustainabilityAttributeColumn
@@ -150,7 +150,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
 
   const renderAssociatedRecords = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
     return fileProcessingStatusElement(params.row.id, () => {
-      return <DataGridCellHoverPopover params={params} color={HexColors.purple["200"]} />
+      return <BubbleList values={params.value as string[]} color={HexColors.purple["200"]} />
     });
   };
 
