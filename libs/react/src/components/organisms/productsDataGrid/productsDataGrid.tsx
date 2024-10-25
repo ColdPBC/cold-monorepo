@@ -124,7 +124,6 @@ export const _ProductsDataGrid = () => {
       headerName: 'Category',
       minWidth: 230,
       flex: 1,
-      renderCell: renderName,
     },
     {
       ...defaultColumnProperties,
@@ -132,7 +131,6 @@ export const _ProductsDataGrid = () => {
       headerName: 'Sub Category',
       minWidth: 230,
       flex: 1,
-      renderCell: renderName,
     },
     {
       ...defaultColumnProperties,
