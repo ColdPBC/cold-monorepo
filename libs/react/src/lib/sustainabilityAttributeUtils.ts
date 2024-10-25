@@ -8,6 +8,7 @@ export const getAggregateStatusFromAttributeAssurances = (
   const currentDate = new Date();
   let hasActiveAssurance = false;
   let hasExpiringAssurance = false;
+  let hasExpiredAssurance = false;
   let hasDocumentedAssurance = false;
   let maxExpirationDate: Date | null | undefined = undefined;
   let assuranceStatus: AttributeAssuranceStatus;
@@ -22,12 +23,14 @@ export const getAggregateStatusFromAttributeAssurances = (
     }
 
     if (hasDocument) {
-      if (!expirationDate || expirationDate > addDays(currentDate, 60)) {
+      if (!expirationDate) {
+        hasDocumentedAssurance = true;
+      } else if (expirationDate > addDays(currentDate, 60)) {
         hasActiveAssurance = true;
       } else if (expirationDate > currentDate) {
         hasExpiringAssurance = true;
-      } else {
-        hasDocumentedAssurance = true;
+      } else if (expirationDate) {
+        hasExpiredAssurance = true;
       }
     }
   }
@@ -36,8 +39,10 @@ export const getAggregateStatusFromAttributeAssurances = (
     assuranceStatus = AttributeAssuranceStatus.ACTIVE;
   } else if (hasExpiringAssurance) {
     assuranceStatus = AttributeAssuranceStatus.EXPIRING;
-  } else if (hasDocumentedAssurance) {
+  } else if (hasExpiredAssurance) {
     assuranceStatus = AttributeAssuranceStatus.EXPIRED;
+  } else if (hasDocumentedAssurance) {
+    assuranceStatus = AttributeAssuranceStatus.MISSING_DATE;
   } else {
     assuranceStatus = AttributeAssuranceStatus.NOT_DOCUMENTED;
   }

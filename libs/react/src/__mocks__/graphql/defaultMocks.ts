@@ -35,7 +35,7 @@ import { getSupplierMocks } from '../suppliersMock';
 import {getProductsMock, getProductsMockById} from '../productsMock';
 import { getMaterialsMocksWithAssurances } from '../materialsMock';
 import { AttributeAssuranceMock } from '../attributeAssuranceMock';
-import { EntityLevel } from '@coldpbc/enums';
+import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
@@ -541,7 +541,7 @@ export const sustainabilityAttributesMocks = [
               name: 'Global Recycled Standard',
               logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
               attributeAssurances: [
-                AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: 'ACTIVE', index: 1}),
+                AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.ACTIVE, index: 1}),
               ],
               level: 'MATERIAL',
             },

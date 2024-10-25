@@ -1,24 +1,25 @@
 import React from 'react';
-import { EntityLevel } from '@coldpbc/enums';
+import { EntityLevel, IconNames } from '@coldpbc/enums';
+import { ColdIcon, Popover } from '@coldpbc/components';
 
 interface AttributeAssuranceGraphProps {
   entity: EntityLevel;
   activeCount: number;
-  expiredCount: number;
+  inactiveCount: number;
   notDocumentedCount: number;
 }
 
 export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = ({
   entity,
   activeCount,
-  expiredCount,
+  inactiveCount,
   notDocumentedCount
 }) => {
-  const total = activeCount + expiredCount + notDocumentedCount;
-  const documentedCount = activeCount + expiredCount;
+  const total = activeCount + inactiveCount + notDocumentedCount;
+  const documentedCount = activeCount + inactiveCount;
 
   const activePercentage = (activeCount / total) * 100;
-  const expiredPercentage = (expiredCount / total) * 100;
+  const expiredPercentage = (inactiveCount / total) * 100;
   const notDocumentedPercentage = (notDocumentedCount / total) * 100;
 
   function toSentenceCase(str: string) {
@@ -52,18 +53,21 @@ export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = (
           </div>
 
           <div className="flex items-start justify-items-center text-label text-cold-secondary mt-1 gap-4">
-						<span className="flex items-center">
+						<div className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-green-200 mr-1" />
               <span>{activePercentage.toFixed(0)}% Active</span>
-            </span>
-            <span className="flex items-center">
+            </div>
+            <div className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-gray-400 mr-1" />
-              <span>{expiredPercentage.toFixed(0)}% Expired</span>
-            </span>
-            <span className="flex items-center">
+              <span>{expiredPercentage.toFixed(0)}% Inactive</span>
+              <Popover content="Expired or missing expiration dates">
+                <ColdIcon name={IconNames.ColdInfoIcon} color="CurrentColor" />
+              </Popover>
+            </div>
+            <div className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-red-400 mr-1" />
               <span>{notDocumentedPercentage.toFixed(0)}% No Assurance</span>
-            </span>
+            </div>
           </div>
         </div>
       ) : null}

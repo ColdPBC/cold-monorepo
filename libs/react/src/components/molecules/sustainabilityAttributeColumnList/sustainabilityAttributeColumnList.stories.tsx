@@ -3,7 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { SustainabilityAttributeColumnList } from '@coldpbc/components';
 import { AttributeAssuranceMock, StoryMockProvider } from '@coldpbc/mocks';
 import React from 'react';
-import { EntityLevel } from '@coldpbc/enums';
+import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
 const meta: Meta<typeof SustainabilityAttributeColumnList> = {
   title: "Molecules/SustainabilityAttributeListColumn",
@@ -23,10 +23,11 @@ export const Default: Story = {
         id: 'a',
         name: 'Default Product Attribute',
         attributeAssurances: [
-          AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: 'ACTIVE', index: 1}),
-          AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: 'EXPIRING', index: 2}),
-          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'EXPIRED', index: 3}),
-          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'NOT DOCUMENTED', index: 4}),
+          AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.ACTIVE, index: 1}),
+          AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.EXPIRING, index: 2}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.EXPIRED, index: 3}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.MISSING_DATE, index: 3}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: 5}),
         ],
         level: EntityLevel.PRODUCT,
       },
@@ -36,7 +37,7 @@ export const Default: Story = {
         name: 'Global Recycled Standard',
         logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
         attributeAssurances: [
-          AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: 'EXPIRING', index: 1}),
+          AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.EXPIRING, index: 1}),
         ],
         level: EntityLevel.MATERIAL,
       },
@@ -46,9 +47,9 @@ export const Default: Story = {
         name: 'Fair Wear',
         logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
         attributeAssurances: [
-          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'EXPIRED', index: 1}),
-          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'EXPIRED', index: 2}),
-          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'NOT DOCUMENTED', index: 3}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.EXPIRED, index: 1}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.EXPIRED, index: 2}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: 3}),
         ],
         level: EntityLevel.SUPPLIER,
       },
@@ -73,13 +74,23 @@ export const FixedWidthToFit2ItemsPlusOverflow: Story = {
         attributeAssurances: [],
         level: EntityLevel.SUPPLIER,
       },
+      // Missing date
+      {
+        id: 'a',
+        name: 'Recycled Down',
+        logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Recycled+Down.png',
+        attributeAssurances: [
+          AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.MISSING_DATE, index: 1}),
+        ],
+        level: EntityLevel.SUPPLIER,
+      },
       // Expiring Assurance
       {
         id: 'a',
         name: 'Global Recycled Standard',
         logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
         attributeAssurances: [
-          AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: 'EXPIRING', index: 1}),
+          AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.EXPIRING, index: 1}),
         ],
         level: EntityLevel.MATERIAL,
       },
@@ -89,9 +100,9 @@ export const FixedWidthToFit2ItemsPlusOverflow: Story = {
         name: 'Fair Wear',
         logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
         attributeAssurances: [
-          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'EXPIRED', index: 1}),
-          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'EXPIRED', index: 2}),
-          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'NOT DOCUMENTED', index: 3}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.EXPIRED, index: 1}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.EXPIRED, index: 2}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: 3}),
         ],
         level: EntityLevel.SUPPLIER,
       },
@@ -100,10 +111,11 @@ export const FixedWidthToFit2ItemsPlusOverflow: Story = {
         id: 'a',
         name: 'Default Product Attribute',
         attributeAssurances: [
-          AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: 'ACTIVE', index: 1}),
-          AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: 'EXPIRING', index: 2}),
-          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'EXPIRED', index: 3}),
-          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: 'NOT DOCUMENTED', index: 4}),
+          AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.ACTIVE, index: 1}),
+          AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.EXPIRING, index: 2}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.EXPIRED, index: 3}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.MISSING_DATE, index: 4}),
+          AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: 5}),
         ],
         level: EntityLevel.PRODUCT,
       },
