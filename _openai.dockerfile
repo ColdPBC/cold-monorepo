@@ -40,7 +40,7 @@ RUN yarn prebuild
 
 RUN npx nx run --skip-nx-cache ${DD_SERVICE}:build:production
 
-RUN ls -la /repo/dist
+RUN ls -la /repo/dist/apps
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root

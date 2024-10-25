@@ -44,8 +44,6 @@ const getColumnRows = (
     return {
       id: product.id,
       name: product.name,
-      category: product.productCategory ?? '',
-      subcategory: product.productSubcategory ?? '',
       description: product.description ?? '',
       sustainabilityAttributes: sustainabilityAttributes,
       tier1Supplier: product.organizationFacility?.name ?? '',
@@ -54,6 +52,8 @@ const getColumnRows = (
       brandProductId: product.brandProductId ?? '',
       supplierProductId: product.supplierProductId ?? '',
       materials: product.productMaterials.map(material => material.material?.name).filter((material): material is string => material !== null),
+      productCategory: product.productCategory ?? '',
+      productSubcategory: product.productSubcategory ?? '',
     }
   })
 }
@@ -79,8 +79,8 @@ export const _ProductsDataGrid = () => {
 
   const renderName = (params: any) => {
     const name = get(params, 'row.name', '')
-    const category = get(params, 'row.category', '')
-    const subcategory = get(params, 'row.subcategory', '')
+    const category = get(params, 'row.productCategory', '')
+    const subcategory = get(params, 'row.productSubcategory', '')
     const text = [category, subcategory]
 			.filter((i: string) => (i !== ''))
 			.join(' | ');
@@ -128,18 +128,6 @@ export const _ProductsDataGrid = () => {
     },
     {
       ...defaultColumnProperties,
-      field: 'sustainabilityAttributes',
-      headerName: 'Sustainability Attributes',
-      flex: 1,
-      minWidth: 350,
-      renderCell: (params) => {
-        return (
-          <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />
-        )
-      },
-    },
-    {
-      ...defaultColumnProperties,
       field: 'tier1Supplier',
       headerName: 'Tier 1 Supplier',
       minWidth: 200,
@@ -151,6 +139,18 @@ export const _ProductsDataGrid = () => {
       headerName: 'Season',
       minWidth: 200,
       flex: 1,
+    },
+    {
+      ...defaultColumnProperties,
+      field: 'sustainabilityAttributes',
+      headerName: 'Sustainability Attributes',
+      flex: 1,
+      minWidth: 350,
+      renderCell: (params) => {
+        return (
+          <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />
+        )
+      },
     },
     {
       ...defaultColumnProperties,
@@ -184,6 +184,20 @@ export const _ProductsDataGrid = () => {
         )
       },
     },
+    {
+      ...defaultColumnProperties,
+      field: 'productCategory',
+      headerName: 'Category',
+      minWidth: 230,
+      flex: 1,
+    },
+    {
+      ...defaultColumnProperties,
+      field: 'productSubcategory',
+      headerName: 'Sub Category',
+      minWidth: 230,
+      flex: 1,
+    },
   ]
 
   if(productsQuery.isLoading) {
@@ -193,8 +207,6 @@ export const _ProductsDataGrid = () => {
   let rows: {
     id: string;
     name: string;
-    category: string;
-    subcategory: string;
     description: string;
     sustainabilityAttributes: SustainabilityAttribute[];
     tier1Supplier: string;
@@ -203,6 +215,8 @@ export const _ProductsDataGrid = () => {
     brandProductId: string;
     supplierProductId: string;
     materials: string[];
+    productCategory: string;
+    productSubcategory: string;
   }[] = []
 
   if(get(productsQuery.data, 'errors')) {

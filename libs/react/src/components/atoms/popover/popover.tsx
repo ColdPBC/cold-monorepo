@@ -34,6 +34,9 @@ export const Popover = (props: MUIPopoverProps) => {
       <MUIPopover
         sx={{
           pointerEvents: 'none',
+          '& .MuiPaper-root': {
+            border: 'none'
+          }
         }}
         open={hovering}
         anchorEl={anchorRef.current}
@@ -49,8 +52,7 @@ export const Popover = (props: MUIPopoverProps) => {
         disableRestoreFocus={true}
         {...popoverProps}
       >
-        <div
-          className={twMerge('rounded-[8px] bg-gray-50 border-[1px] border-lightblue-300 p-[8px] text-tc-primary text-body transition-none', contentClassName)}>
+        <div className={twMerge('rounded-lg bg-gray-50 p-2 text-tc-primary text-body transition-none', contentClassName)}>
           {content}
         </div>
       </MUIPopover>

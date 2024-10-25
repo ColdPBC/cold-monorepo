@@ -35,6 +35,29 @@ const _MaterialsDataGrid = () => {
     },
   });
 
+  const renderName = (params: any) => {
+    const name = get(params, 'row.name', '')
+    const category = get(params, 'row.materialCategory', '')
+    const subcategory = get(params, 'row.materialSubcategory', '')
+    const text = [category, subcategory]
+      .filter((i: string) => (i !== ''))
+      .join(' | ');
+
+    return (
+      <div className={'flex flex-col w-full h-full justify-center gap-[2px]'}>
+        <div className={'w-full h-auto items-center text-body font-bold truncate'}>
+          <span>{name}</span>
+        </div>
+        {
+          text &&
+          <div className={'w-full h-auto items-center text-body text-tc-disabled truncate'}>
+            <span>{text}</span>
+          </div>
+        }
+      </div>
+    )
+  }
+
   useEffect(() => {
     if (materialsWithRelations.data) {
       if (has(materialsWithRelations.data, 'errors')) {
@@ -45,6 +68,7 @@ const _MaterialsDataGrid = () => {
       }
     }
   }, [materialsWithRelations.data]);
+
   const uniqSusAttributes = uniq(
     materials
       .map(material =>
@@ -84,42 +108,7 @@ const _MaterialsDataGrid = () => {
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
       minWidth: 230,
-      renderCell: params => {
-        return <div className={'h-full flex items-center text-body text-tc-primary font-bold truncate'}>{params.value}</div>;
-      },
-    },
-    {
-      field: 'materialCategory',
-      headerName: 'Category',
-      headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      minWidth: 230,
-      type: 'singleSelect',
-      valueOptions: uniqCategories,
-    },
-    {
-      field: 'materialSubcategory',
-      headerName: 'Sub Category',
-      headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      minWidth: 230,
-      type: 'singleSelect',
-      valueOptions: uniqSubCategories,
-    },
-    {
-      field: 'sustainabilityAttributes',
-      headerName: 'Sustainability Attributes',
-      headerClassName: 'bg-gray-30 h-[37px] text-body',
-      type: 'singleSelect',
-      valueOptions: uniqSusAttributes,
-      valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
-      renderCell: (params) => {
-        return <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />;
-      },
-      minWidth: 206,
-      flex: 1,
-      sortComparator: listSortComparator,
-      filterOperators: listFilterOperators,
+      renderCell: renderName,
     },
     {
       field: 'tier2Supplier',
@@ -144,6 +133,39 @@ const _MaterialsDataGrid = () => {
       flex: 1,
       sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
+    },
+    {
+      field: 'sustainabilityAttributes',
+      headerName: 'Sustainability Attributes',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      type: 'singleSelect',
+      valueOptions: uniqSusAttributes,
+      valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
+      renderCell: (params) => {
+        return <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />;
+      },
+      minWidth: 206,
+      flex: 1,
+      sortComparator: listSortComparator,
+      filterOperators: listFilterOperators,
+    },
+    {
+      field: 'materialCategory',
+      headerName: 'Category',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      flex: 1,
+      minWidth: 230,
+      type: 'singleSelect',
+      valueOptions: uniqCategories,
+    },
+    {
+      field: 'materialSubcategory',
+      headerName: 'Sub Category',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      flex: 1,
+      minWidth: 230,
+      type: 'singleSelect',
+      valueOptions: uniqSubCategories,
     },
   ];
 
