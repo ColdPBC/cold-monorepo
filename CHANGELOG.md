@@ -1,3 +1,10 @@
+## [1.452.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.452.1...v1.452.2) (2024-10-25)
+
+
+### Bug Fixes
+
+* issues with dockerfiles ([3dc7d23](https://github.com/ColdPBC/cold-monorepo/commit/3dc7d23eecd30ba33b1ba2c74047207422d2dd52))
+
 ## [1.452.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.452.0...v1.452.1) (2024-10-25)
 
 
