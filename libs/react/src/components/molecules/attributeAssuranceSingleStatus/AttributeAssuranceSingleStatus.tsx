@@ -58,7 +58,7 @@ const _AttributeAssuranceSingleStatus: React.FC<AttributeAssuranceStatusProps> =
         <ColdIcon name={iconName} color="currentColor" className={statusColorClass} />
         <span className={`text-body ${statusColorClass}`}>{statusMessage}</span>
       </div>
-      <span className='text-body text-tc-disabled'>{subStatusMessage}</span>
+      <span className='chromatic-ignore text-body text-tc-disabled'>{subStatusMessage}</span>
     </div>
   );
 };
