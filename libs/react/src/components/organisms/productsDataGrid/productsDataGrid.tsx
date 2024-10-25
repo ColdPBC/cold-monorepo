@@ -128,18 +128,6 @@ export const _ProductsDataGrid = () => {
     },
     {
       ...defaultColumnProperties,
-      field: 'sustainabilityAttributes',
-      headerName: 'Sustainability Attributes',
-      flex: 1,
-      minWidth: 350,
-      renderCell: (params) => {
-        return (
-          <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />
-        )
-      },
-    },
-    {
-      ...defaultColumnProperties,
       field: 'tier1Supplier',
       headerName: 'Tier 1 Supplier',
       minWidth: 200,
@@ -151,6 +139,18 @@ export const _ProductsDataGrid = () => {
       headerName: 'Season',
       minWidth: 200,
       flex: 1,
+    },
+    {
+      ...defaultColumnProperties,
+      field: 'sustainabilityAttributes',
+      headerName: 'Sustainability Attributes',
+      flex: 1,
+      minWidth: 350,
+      renderCell: (params) => {
+        return (
+          <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />
+        )
+      },
     },
     {
       ...defaultColumnProperties,
