@@ -43,7 +43,7 @@ export const RangeSlider = ({
   return (
     <div>
       {label && (
-        <label className="block mb-2 text-sm font-medium text-cold-jetBlack dark:text-white">
+        <label className="block mb-2 text-sm font-medium text-tc-primary">
           {label}
         </label>
       )}

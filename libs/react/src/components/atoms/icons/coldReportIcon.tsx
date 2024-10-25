@@ -2,9 +2,8 @@ import { IconProps } from '../../../interfaces/icons/iconProps';
 import React from 'react';
 
 export const ColdReportIcon = (props: IconProps) => {
-  const className = props.className ? props.className : 'hover:stroke-cold-starkWhite hover:fill-cold-starkWhite stroke-1 stroke-cold-limestone fill-cold-limestone';
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
         fillRule="evenodd"
         fill="none"
