@@ -86,5 +86,5 @@ RUN npx puppeteer browsers install chrome@stable
 # Expose the port that the application listens on.
 EXPOSE ${PORT}
 
-CMD ["node", "main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node main.js"]
 # Run the application.

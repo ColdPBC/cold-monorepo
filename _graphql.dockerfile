@@ -19,4 +19,4 @@ RUN pnpm install --frozen-lockfile
 EXPOSE 9001
 
 # Run the application (replace with your actual command)
-CMD ["pnpm", "watch"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && pnpm start"]

@@ -75,5 +75,6 @@ COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_module
 # Expose the port that the application listens on.
 EXPOSE 7001
 
-CMD ["node", "/home/node/app/cold-api/main.js"]
 # Run the application.
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node /home/node/app/cold-api/main.js"]
+
