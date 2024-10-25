@@ -2,7 +2,7 @@ import { ProductsQuery, SustainabilityAttribute } from '@coldpbc/interfaces';
 import { Card, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumnList } from '@coldpbc/components';
 import { GridColDef } from '@mui/x-data-grid';
 import { mapAttributeAssurancesToSustainabilityAttributes } from '@coldpbc/lib';
-import { get } from 'lodash';
+import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 
@@ -13,6 +13,38 @@ export const DEFAULT_GRID_COL_DEF = {
 const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 	const { product } = props;
 
+  const renderName = (params: any) => {
+    const name = get(params, 'row.name', '')
+    const category = get(params, 'row.materialCategory', '')
+    const subcategory = get(params, 'row.materialSubcategory', '')
+    const text = [category, subcategory]
+      .filter((i: string) => (i !== ''))
+      .join(' | ');
+
+    return (
+      <div className={'flex flex-col w-full h-full justify-center gap-[2px]'}>
+        <div className={'w-full h-auto items-center text-body font-bold truncate'}>
+          <span>{name}</span>
+        </div>
+        {
+          text &&
+          <div className={'w-full h-auto items-center text-body text-tc-disabled truncate'}>
+            <span>{text}</span>
+          </div>
+        }
+      </div>
+    )
+  }
+
+
+  const uniqCategories = uniq(
+    product.productMaterials.map(productMaterial => productMaterial.material?.materialCategory || ''),
+  ).filter(Boolean).sort( (a, b) => a.localeCompare(b));
+
+  const uniqSubCategories = uniq(
+    product.productMaterials.map(productMaterial => productMaterial.material?.materialSubcategory || ''),
+  ).filter(Boolean).sort( (a, b) => a.localeCompare(b));
+
 	const columns: GridColDef[] = [
 		{
 			...DEFAULT_GRID_COL_DEF,
@@ -20,6 +52,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 			headerName: 'Material',
 			flex: 1,
 			minWidth: 230,
+      renderCell: renderName,
 		},
 		{
 			...DEFAULT_GRID_COL_DEF,
@@ -58,6 +91,8 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
       headerName: 'Category',
       flex: 1,
       minWidth: 230,
+      type: 'singleSelect',
+      valueOptions: uniqCategories,
     },
     {
       ...DEFAULT_GRID_COL_DEF,
@@ -65,6 +100,8 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
       headerName: 'Sub Category',
       flex: 1,
       minWidth: 230,
+      type: 'singleSelect',
+      valueOptions: uniqSubCategories
     },
 	];
 
