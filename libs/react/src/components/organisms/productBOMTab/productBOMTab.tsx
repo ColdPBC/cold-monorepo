@@ -21,20 +21,6 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 			flex: 1,
 			minWidth: 230,
 		},
-    {
-      ...DEFAULT_GRID_COL_DEF,
-      field: 'materialCategory',
-      headerName: 'Category',
-      flex: 1,
-      minWidth: 230,
-    },
-    {
-      ...DEFAULT_GRID_COL_DEF,
-      field: 'materialSubcategory',
-      headerName: 'Sub Category',
-      flex: 1,
-      minWidth: 230,
-    },
 		{
 			...DEFAULT_GRID_COL_DEF,
 			field: 'tier2Supplier',
@@ -66,6 +52,20 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 				return <SustainabilityAttributeColumnList sustainabilityAttributes={params.value as SustainabilityAttribute[]} />;
 			},
 		},
+    {
+      ...DEFAULT_GRID_COL_DEF,
+      field: 'materialCategory',
+      headerName: 'Category',
+      flex: 1,
+      minWidth: 230,
+    },
+    {
+      ...DEFAULT_GRID_COL_DEF,
+      field: 'materialSubcategory',
+      headerName: 'Sub Category',
+      flex: 1,
+      minWidth: 230,
+    },
 	];
 
 	const rows: {
