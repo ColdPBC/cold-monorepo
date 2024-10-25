@@ -1,3 +1,15 @@
+# [1.452.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.451.0...v1.452.0) (2024-10-25)
+
+
+### Bug Fixes
+
+* update image border radius in sustainabilityAttributeColumn ([fe8d266](https://github.com/ColdPBC/cold-monorepo/commit/fe8d266301699ccee40582055369ea192dad5c5f))
+
+
+### Features
+
+* enhance documents table with sustainability attribute visual enhancements ([524a6d8](https://github.com/ColdPBC/cold-monorepo/commit/524a6d81011c22ee6a5857bcf215b172497d3861))
+
 # [1.451.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.450.2...v1.451.0) (2024-10-25)
 
 
