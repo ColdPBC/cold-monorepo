@@ -44,8 +44,6 @@ const getColumnRows = (
     return {
       id: product.id,
       name: product.name,
-      productCategory: product.productCategory ?? '',
-      productSubcategory: product.productSubcategory ?? '',
       description: product.description ?? '',
       sustainabilityAttributes: sustainabilityAttributes,
       tier1Supplier: product.organizationFacility?.name ?? '',
@@ -54,6 +52,8 @@ const getColumnRows = (
       brandProductId: product.brandProductId ?? '',
       supplierProductId: product.supplierProductId ?? '',
       materials: product.productMaterials.map(material => material.material?.name).filter((material): material is string => material !== null),
+      productCategory: product.productCategory ?? '',
+      productSubcategory: product.productSubcategory ?? '',
     }
   })
 }
@@ -117,20 +117,6 @@ export const _ProductsDataGrid = () => {
       minWidth: 230,
       flex: 1,
       renderCell: renderName,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'productCategory',
-      headerName: 'Category',
-      minWidth: 230,
-      flex: 1,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'productSubcategory',
-      headerName: 'Sub Category',
-      minWidth: 230,
-      flex: 1,
     },
     {
       ...defaultColumnProperties,
@@ -198,6 +184,20 @@ export const _ProductsDataGrid = () => {
         )
       },
     },
+    {
+      ...defaultColumnProperties,
+      field: 'productCategory',
+      headerName: 'Category',
+      minWidth: 230,
+      flex: 1,
+    },
+    {
+      ...defaultColumnProperties,
+      field: 'productSubcategory',
+      headerName: 'Sub Category',
+      minWidth: 230,
+      flex: 1,
+    },
   ]
 
   if(productsQuery.isLoading) {
@@ -207,8 +207,6 @@ export const _ProductsDataGrid = () => {
   let rows: {
     id: string;
     name: string;
-    productCategory: string;
-    productSubcategory: string;
     description: string;
     sustainabilityAttributes: SustainabilityAttribute[];
     tier1Supplier: string;
@@ -217,6 +215,8 @@ export const _ProductsDataGrid = () => {
     brandProductId: string;
     supplierProductId: string;
     materials: string[];
+    productCategory: string;
+    productSubcategory: string;
   }[] = []
 
   if(get(productsQuery.data, 'errors')) {
