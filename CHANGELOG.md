@@ -15,6 +15,23 @@
 * enhance product BOM tab with material category filtering ([24bb440](https://github.com/ColdPBC/cold-monorepo/commit/24bb440dd97d23761fd9155cfe05aa602b1de760))
 * update productsDataGrid to include productCategory and productSubcategory fields ([684a6d3](https://github.com/ColdPBC/cold-monorepo/commit/684a6d3ca8ca4336bbdc01b7133cf5a745737ac4))
 
+# [1.453.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.452.1...v1.453.0) (2024-10-25)
+
+
+### Bug Fixes
+
+* issues with dockerfiles ([3dc7d23](https://github.com/ColdPBC/cold-monorepo/commit/3dc7d23eecd30ba33b1ba2c74047207422d2dd52))
+* remove redundant renderCell properties in productsDataGrid ([69a6134](https://github.com/ColdPBC/cold-monorepo/commit/69a613424cfda5c81865c91a537a644bf58a91e8))
+* update Dockerfile RUN commands to list correct directories ([b55c6d2](https://github.com/ColdPBC/cold-monorepo/commit/b55c6d2a52feb5c211ea6f31a04a9bc02091208f))
+* update material name rendering ([e2799e9](https://github.com/ColdPBC/cold-monorepo/commit/e2799e9dc74cadfaa071b1e3b23007511dcb76ad))
+* update property names in productsDataGrid component ([c744408](https://github.com/ColdPBC/cold-monorepo/commit/c744408b372a6f1fba850f8dcdfb432225905ae5))
+
+
+### Features
+
+* enhance product BOM tab with material category filtering ([24bb440](https://github.com/ColdPBC/cold-monorepo/commit/24bb440dd97d23761fd9155cfe05aa602b1de760))
+* update productsDataGrid to include productCategory and productSubcategory fields ([684a6d3](https://github.com/ColdPBC/cold-monorepo/commit/684a6d3ca8ca4336bbdc01b7133cf5a745737ac4))
+
 ## [1.452.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.452.1...v1.452.2) (2024-10-25)
 
 
