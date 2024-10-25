@@ -1,3 +1,12 @@
+# [1.451.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.450.2...v1.451.0) (2024-10-25)
+
+
+### Features
+
+* add info icon with popover explaining Inactive ([4aae144](https://github.com/ColdPBC/cold-monorepo/commit/4aae1448f7df2ff972e25c609c3cade06125ef6d))
+* add new ColdUnknownIcon ([3b265a2](https://github.com/ColdPBC/cold-monorepo/commit/3b265a2a6538e1a5f56d28d180ef88e539c0206d))
+* handle MISSING_DATE in SustainabilityAttributeLogoWithStatus ([f7aafaa](https://github.com/ColdPBC/cold-monorepo/commit/f7aafaa70c9dc7694f43ad27903cb84f9a33e092))
+
 ## [1.450.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.450.1...v1.450.2) (2024-10-24)
 
 
