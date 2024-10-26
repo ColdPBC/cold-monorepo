@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { AttributeAssuranceGraph, AttributeAssuranceSingleStatus } from '@coldpbc/components';
-import { SustainabilityAttribute, SustainabilityAttributeAssurance } from '@coldpbc/interfaces';
+import { SustainabilityAttribute, SustainabilityAttributeAssuranceGraphQL } from '@coldpbc/interfaces';
 import { getAggregateStatusFromAttributeAssurances } from '@coldpbc/lib';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
@@ -31,7 +31,7 @@ function processSustainabilityAttribute(attribute: SustainabilityAttribute): Sus
     notDocumentedCount: 0,
   };
 
-  const entityAssurances = new Map<string, SustainabilityAttributeAssurance[]>();
+  const entityAssurances = new Map<string, SustainabilityAttributeAssuranceGraphQL[]>();
 
   // Group assurances by entity ID
   attribute.attributeAssurances.forEach(assurance => {

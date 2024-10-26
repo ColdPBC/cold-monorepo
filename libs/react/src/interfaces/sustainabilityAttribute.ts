@@ -1,4 +1,4 @@
-import { SustainabilityAttributeAssurance } from './attributeAssurance';
+import { SustainabilityAttributeAssuranceGraphQL } from './attributeAssurance';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
 export interface SustainabilityAttributeWithoutAssurances {
@@ -13,7 +13,7 @@ export interface SustainabilityAttribute {
   name: string;
   logoUrl?: string;
   level: EntityLevel;
-  attributeAssurances: SustainabilityAttributeAssurance[];
+  attributeAssurances: SustainabilityAttributeAssuranceGraphQL[];
 }
 
 export interface SustainabilityAttributeWithStatus {

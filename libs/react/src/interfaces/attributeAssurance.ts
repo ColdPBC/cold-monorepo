@@ -1,6 +1,6 @@
 import { EntityLevel } from '@coldpbc/enums';
 
-export interface SustainabilityAttributeAssurance {
+export interface SustainabilityAttributeAssuranceGraphQL {
   id: string;
   effectiveEndDate: string | null;
   material?: {

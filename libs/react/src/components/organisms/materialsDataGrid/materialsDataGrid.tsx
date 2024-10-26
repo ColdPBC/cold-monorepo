@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {MaterialsWithRelations, SustainabilityAttributeAssurance} from '@coldpbc/interfaces';
+import { MaterialsWithRelations, SustainabilityAttributeAssuranceGraphQL } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import {
   DataGridCellHoverPopover,
@@ -177,7 +177,7 @@ const _MaterialsDataGrid = () => {
     // While the database schema allows for multiple MaterialSuppliers, we insist on 1 per Material
     const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
 
-    const extraAttributes: SustainabilityAttributeAssurance[] = [];
+    const extraAttributes: SustainabilityAttributeAssuranceGraphQL[] = [];
 
     if(ldFlags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
       extraAttributes.push(...material.productMaterials.map(pm => pm.product.attributeAssurances).flat());

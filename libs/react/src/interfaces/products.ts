@@ -1,5 +1,5 @@
 import {EntityLevel} from "@coldpbc/enums";
-import { SustainabilityAttributeAssurance } from './attributeAssurance';
+import { SustainabilityAttributeAssuranceGraphQL } from './attributeAssurance';
 
 export interface Products {
   id: string;
@@ -22,13 +22,13 @@ export interface ProductsQuery {
       name: string
       materialCategory: string | null;
       materialSubcategory: string | null;
-      attributeAssurances: SustainabilityAttributeAssurance[];
+      attributeAssurances: SustainabilityAttributeAssuranceGraphQL[];
       materialSuppliers: {
         id: string;
         organizationFacility: {
           id: string;
           name: string;
-          attributeAssurances: SustainabilityAttributeAssurance[];
+          attributeAssurances: SustainabilityAttributeAssuranceGraphQL[];
         };
       }[];
     } | null;
@@ -36,9 +36,9 @@ export interface ProductsQuery {
   organizationFacility: {
     id: string
     name: string
-    attributeAssurances: SustainabilityAttributeAssurance[];
+    attributeAssurances: SustainabilityAttributeAssuranceGraphQL[];
   } | null;
-  attributeAssurances: SustainabilityAttributeAssurance[];
+  attributeAssurances: SustainabilityAttributeAssuranceGraphQL[];
   metadata: any | null;
   seasonCode: string | null;
   upcCode: string | null;

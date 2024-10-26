@@ -1,9 +1,9 @@
-import { SustainabilityAttribute, SustainabilityAttributeAssurance } from '@coldpbc/interfaces';
+import { SustainabilityAttribute, SustainabilityAttributeAssuranceGraphQL } from '@coldpbc/interfaces';
 import { AttributeAssuranceStatus } from '@coldpbc/enums';
 import { addDays } from 'date-fns';
 
 export const getAggregateStatusFromAttributeAssurances = (
-  assurances: SustainabilityAttributeAssurance[]
+  assurances: SustainabilityAttributeAssuranceGraphQL[]
 ) => {
   const currentDate = new Date();
   let hasActiveAssurance = false;
@@ -54,7 +54,7 @@ export const getAggregateStatusFromAttributeAssurances = (
 };
 
 export const mapAttributeAssurancesToSustainabilityAttributes = (
-  assurances: SustainabilityAttributeAssurance[],
+  assurances: SustainabilityAttributeAssuranceGraphQL[],
 ) => {
   // We have to map the AttributeAssurances, with nested SustainabilityAttributes,
   // into a unique list of SustainabilityAttributes, with nested AttributeAssurances

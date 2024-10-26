@@ -18,7 +18,7 @@ import {
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
 import React, { useEffect, useState } from 'react';
-import {SuppliersWithAssurances, SustainabilityAttributeAssurance} from '@coldpbc/interfaces';
+import { SuppliersWithAssurances, SustainabilityAttributeAssuranceGraphQL } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
 import { get, has, isEqual, uniqWith } from 'lodash';
@@ -164,7 +164,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
   const newRows: GridValidRowModel[] = [];
 
   suppliers.forEach((supplier, index) => {
-    const extraAttributes: SustainabilityAttributeAssurance[] = [];
+    const extraAttributes: SustainabilityAttributeAssuranceGraphQL[] = [];
 
     if(ldFlags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
       extraAttributes.push(...supplier.products.map(product => product.attributeAssurances).flat());

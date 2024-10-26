@@ -6,7 +6,7 @@ import {
   SustainabilityAttributeColumnList
 } from "@coldpbc/components";
 import {useAuth0Wrapper, useGraphQLSWR} from "@coldpbc/hooks";
-import {ProductsQuery, SustainabilityAttribute, SustainabilityAttributeAssurance} from "@coldpbc/interfaces";
+import { ProductsQuery, SustainabilityAttribute, SustainabilityAttributeAssuranceGraphQL } from "@coldpbc/interfaces";
 import {
   GridToolbarColumnsButton,
   GridToolbarContainer,
@@ -27,14 +27,14 @@ const getColumnRows = (
     [key: string]: boolean
   }) => {
   return products.map(product => {
-    const extraAttributes: SustainabilityAttributeAssurance[] = [];
+    const extraAttributes: SustainabilityAttributeAssuranceGraphQL[] = [];
 
     if(flags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
       extraAttributes.push(...product.organizationFacility?.attributeAssurances ?? []);
       extraAttributes.push(...product.productMaterials.map(prodMaterial => prodMaterial.material?.attributeAssurances ?? []).flat());
     }
     // get all attribute assurances for the product and related materials and tier 1 supplier
-    const allAttributeAssurances: SustainabilityAttributeAssurance[] = [
+    const allAttributeAssurances: SustainabilityAttributeAssuranceGraphQL[] = [
       ...product.attributeAssurances,
       ...extraAttributes,
     ]
