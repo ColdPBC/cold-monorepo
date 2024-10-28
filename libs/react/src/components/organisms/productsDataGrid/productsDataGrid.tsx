@@ -38,14 +38,6 @@ const getColumnRows = (
     ];
 
     if (flags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
-      if (tier1Supplier) {
-        entitiesWithAttributeAssurances.push({
-          id: tier1Supplier.id,
-          name: tier1Supplier.name,
-          attributeAssurances: tier1Supplier.attributeAssurances
-        });
-      }
-
       entitiesWithAttributeAssurances.push(...product.productMaterials.map(prodMaterial => (
         {
           id: prodMaterial.material.id,

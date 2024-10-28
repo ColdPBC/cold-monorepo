@@ -185,13 +185,7 @@ const _MaterialsDataGrid = () => {
     // While the database schema allows for multiple MaterialSuppliers, we insist on 1 per Material
     const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
 
-    const entitiesWithAttributeAssurances: EntityWithAttributeAssurances[] = [material];
-
-    if(ldFlags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128 && tier2Supplier) {
-      entitiesWithAttributeAssurances.push(tier2Supplier);
-    }
-
-    const sustainabilityAttributes = processEntityLevelAssurances(entitiesWithAttributeAssurances);
+    const sustainabilityAttributes = processEntityLevelAssurances([material]);
 
     const row = {
       id: material.id,
