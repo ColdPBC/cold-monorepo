@@ -1,8 +1,92 @@
-import { SustainabilityAttribute, SustainabilityAttributeAssuranceGraphQL } from '@coldpbc/interfaces';
+import {
+	EntityLevelAttributeAssuranceGraphQL,
+	EntityWithAttributeAssurances,
+	SustainabilityAttribute,
+	SustainabilityAttributeAssurance,
+	SustainabilityAttributeAssuranceGraphQL,
+	SustainabilityAttributeGraphQL,
+	SustainabilityAttributeWithStatus,
+} from '@coldpbc/interfaces';
 import { AttributeAssuranceStatus } from '@coldpbc/enums';
 import { addDays } from 'date-fns';
 
+const statusPriority: { [key in AttributeAssuranceStatus]: number } = {
+	[AttributeAssuranceStatus.ACTIVE]: 0,
+	[AttributeAssuranceStatus.EXPIRING]: 1,
+	[AttributeAssuranceStatus.EXPIRED]: 2,
+	[AttributeAssuranceStatus.MISSING_DATE]: 3,
+	[AttributeAssuranceStatus.NOT_DOCUMENTED]: 4,
+};
+
+export const sustainabilityAttributeSortFn = (
+  a: SustainabilityAttributeWithStatus,
+  b: SustainabilityAttributeWithStatus
+): number => {
+  // First, compare by status
+  const statusComparison = statusPriority[a.assuranceStatus] - statusPriority[b.assuranceStatus];
+
+  if (statusComparison !== 0) {
+    return statusComparison;
+  }
+
+  // If status is the same, compare by name
+  return a.name.localeCompare(b.name);
+};
+
+export const attributeAssuranceSortFn = (
+  a: SustainabilityAttributeAssurance,
+  b: SustainabilityAttributeAssurance,
+): number => {
+  // First, compare by status
+  const statusComparison = statusPriority[a.status] - statusPriority[b.status];
+
+  if (statusComparison !== 0) {
+    return statusComparison;
+  }
+
+  // If status is the same, compare by effective date
+  // Having a date comes before not having a date
+  if (!a.effectiveEndDate && !b.effectiveEndDate) {
+    return a.entity.id.localeCompare(b.entity.id);
+  }
+
+  if (!a.effectiveEndDate) {
+    return 1; // b comes first because it has a date
+  }
+
+  if (!b.effectiveEndDate) {
+    return -1; // a comes first because it has a date
+  }
+
+  // Both have dates, compare them (most future date first)
+  const dateComparison = b.effectiveEndDate.getTime() - a.effectiveEndDate.getTime();
+
+  if (dateComparison !== 0) {
+    return dateComparison;
+  }
+
+  // If dates are equal, compare by ID
+  return a.entity.id.localeCompare(b.entity.id);
+};
+
 export const getAggregateStatusFromAttributeAssurances = (
+  assurances: SustainabilityAttributeAssurance[]
+)=> {
+  if (assurances.length === 0) {
+    return {
+      assuranceStatus: AttributeAssuranceStatus.NOT_DOCUMENTED,
+      assuranceExpiration: null
+    };
+  } else {
+    const firstAssurance = assurances.sort(attributeAssuranceSortFn)[0];
+    return {
+      assuranceStatus: firstAssurance.status,
+      assuranceExpiration: firstAssurance.effectiveEndDate,
+    }
+  }
+}
+
+const getAggregateStatusFromAttributeAssurancesGraphQL = (
   assurances: SustainabilityAttributeAssuranceGraphQL[]
 ) => {
   const currentDate = new Date();
@@ -53,33 +137,102 @@ export const getAggregateStatusFromAttributeAssurances = (
   }
 };
 
-export const mapAttributeAssurancesToSustainabilityAttributes = (
-  assurances: SustainabilityAttributeAssuranceGraphQL[],
-) => {
-  // We have to map the AttributeAssurances, with nested SustainabilityAttributes,
-  // into a unique list of SustainabilityAttributes, with nested AttributeAssurances
-  const groupedAssurances = new Map<string, SustainabilityAttribute>();
+// When we get the data from the backend, each SustainabilityAttribute
+// can have multiple AttributeAssurances for the same entity. We want
+// to aggregate them into one status.
+export const processSustainabilityAttributeDataFromGraphQL = (
+  attributes: SustainabilityAttributeGraphQL[]
+): SustainabilityAttribute[] => {
+  return attributes.map(attribute => {
+    // Group assurances by entity
+    const assurancesByEntity = new Map<string, SustainabilityAttributeAssuranceGraphQL[]>();
 
-  for (const assurance of assurances) {
-    const { sustainabilityAttribute } = assurance;
+    for (const assurance of attribute.attributeAssurances) {
+      // Determine which entity this assurance belongs to
+      const entity =
+        assurance.material ??
+        assurance.organization ??
+        assurance.organizationFacility ??
+        assurance.product;
 
-    if (sustainabilityAttribute) {
-      const { id: attributeId, name, level, logoUrl } = sustainabilityAttribute;
+      if (!entity) continue;
 
-      if (!groupedAssurances.has(attributeId)) {
-        groupedAssurances.set(attributeId, {
-          id: attributeId,
-          name,
-          logoUrl,
-          level,
-          attributeAssurances: [],
-        });
+      const entityId = entity.id;
+      const existingAssurances = assurancesByEntity.get(entityId) ?? [];
+      assurancesByEntity.set(entityId, [...existingAssurances, assurance]);
+    }
+
+    // Transform each entity group into a single assurance
+    const transformedAssurances: SustainabilityAttributeAssurance[] =
+      Array.from(assurancesByEntity.entries()).map(([entityId, assurances]) => {
+        // Get status and max expiration for this group of assurances
+        const { assuranceStatus, assuranceExpiration } =
+          getAggregateStatusFromAttributeAssurancesGraphQL(assurances);
+
+        return {
+          effectiveEndDate: assuranceExpiration,
+          entity: {
+            id: entityId,
+          },
+          status: assuranceStatus
+        };
+      });
+
+    return {
+      id: attribute.id,
+      name: attribute.name,
+      logoUrl: attribute.logoUrl,
+      level: attribute.level,
+      attributeAssurances: transformedAssurances
+    };
+  });
+};
+
+export const processEntityLevelAssurances = (
+  entities: EntityWithAttributeAssurances[]
+): SustainabilityAttribute[] => {
+  // Map to track unique attributes by ID
+  const attributesMap = new Map<string, SustainabilityAttribute>();
+
+  // Process each entity
+  for (const entity of entities) {
+    // Group assurances by attribute for this entity
+    const assurancesByAttribute = new Map<string, EntityLevelAttributeAssuranceGraphQL[]>();
+
+    for (const assurance of entity.attributeAssurances) {
+      const attribute = assurance.sustainabilityAttribute;
+      if (!attribute) continue;
+
+      const existingAssurances = assurancesByAttribute.get(attribute.id) ?? [];
+      assurancesByAttribute.set(attribute.id, [...existingAssurances, assurance]);
+    }
+
+    // Process each attribute group for this entity
+    for (const [attributeId, assurances] of assurancesByAttribute) {
+      const attribute = assurances[0]!.sustainabilityAttribute!;
+      const { assuranceStatus, assuranceExpiration } = getAggregateStatusFromAttributeAssurancesGraphQL(assurances);
+
+      // Get or create the attribute in our map
+      let sustainabilityAttribute = attributesMap.get(attributeId);
+      if (!sustainabilityAttribute) {
+        sustainabilityAttribute = {
+          ...attribute,
+          attributeAssurances: []
+        };
+        attributesMap.set(attributeId, sustainabilityAttribute);
       }
 
-      const attribute = groupedAssurances.get(attributeId)!;
-      attribute.attributeAssurances.push(assurance);
+      // Add the aggregated assurance for this entity
+      sustainabilityAttribute.attributeAssurances.push({
+        effectiveEndDate: assuranceExpiration,
+        entity: {
+          id: entity.id
+        },
+        status: assuranceStatus
+      });
     }
   }
 
-  return Array.from(groupedAssurances.values());
-}
+  // Return alphabetized Sustainability Attribute list
+  return Array.from(attributesMap.values()).sort((a, b) => a.name.localeCompare(b.name));;
+};
