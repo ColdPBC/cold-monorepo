@@ -35,7 +35,7 @@ const _AttributeAssuranceStatusLabel: React.FC<AttributeAssuranceStatusLabelProp
 			break;
 		case AttributeAssuranceStatus.NOT_DOCUMENTED:
 			iconName = IconNames.ColdDangerIcon;
-			statusColorClass = 'text-red-200';
+			statusColorClass = 'text-red-100';
 			break;
 		default:
 			throw new Error('Unexpected AttributeAssuranceStatus');
