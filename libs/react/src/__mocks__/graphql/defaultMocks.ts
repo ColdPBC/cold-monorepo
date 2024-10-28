@@ -36,6 +36,7 @@ import {getProductsMock, getProductsMockById} from '../productsMock';
 import { getMaterialsMocksWithAssurances } from '../materialsMock';
 import { AttributeAssuranceMock } from '../attributeAssuranceMock';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
+import { addDays } from 'date-fns';
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
@@ -541,7 +542,18 @@ export const sustainabilityAttributesMocks = [
               name: 'Global Recycled Standard',
               logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
               attributeAssurances: [
-                AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.ACTIVE, index: 1}),
+                // This is the only SustainabilityAttributeAssurance mock that
+                // needs to be in the ...GraphQL type
+                {
+                  id: 'a',
+                  effectiveEndDate: addDays(new Date(), 100),
+                  material: {
+                    id: 'mat_1',
+                  },
+                  organizationFile: {
+                    id: 'doc_1',
+                  },
+                }
               ],
               level: 'MATERIAL',
             },
