@@ -6,6 +6,7 @@ import { SustainabilityAttribute } from '@coldpbc/interfaces';
 
 interface AttributeAssuranceGraphProps {
   sustainabilityAttribute: SustainabilityAttribute;
+  showHeader?: boolean;
 }
 
 interface GraphData {
@@ -40,7 +41,8 @@ function processSustainabilityAttribute(attribute: SustainabilityAttribute): Gra
 }
 
 export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = ({
-  sustainabilityAttribute
+  sustainabilityAttribute,
+  showHeader = true,
 }) => {
   const { activeCount, inactiveCount, notDocumentedCount } = processSustainabilityAttribute(sustainabilityAttribute)
 
@@ -53,16 +55,18 @@ export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = (
 
   return (
     <>
-      <div className="flex justify-between items-baseline">
-        <p className={`text-sm ${total > 0 ? 'text-white' : 'text-tc-disabled'}`}>
-          {pluralize(toSentenceCase(EntityLevel[sustainabilityAttribute.level]), total)}
-        </p>
-        {total > 0 && (
-          <p className="text-sm text-tc-disabled">
-            {documentedCount}/{total} Documented
+      {showHeader ? (
+        <div className="flex justify-between items-baseline">
+          <p className={`text-sm ${total > 0 ? 'text-white' : 'text-tc-disabled'}`}>
+            {pluralize(toSentenceCase(EntityLevel[sustainabilityAttribute.level]), total)}
           </p>
-        )}
-      </div>
+          {total > 0 && (
+            <p className="text-sm text-tc-disabled">
+              {documentedCount}/{total} Documented
+            </p>
+          )}
+        </div>
+      ) : null }
 
       {total > 0 ? (
         <div>

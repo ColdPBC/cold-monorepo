@@ -49,22 +49,26 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
   };
 
 	return (
-		<div className="w-full h-auto p-4 rounded-2xl border border-gray-90 flex">
-			<div className="w-24 h-24 flex-shrink-0 mr-4">
-				<img className="w-full h-full object-cover rounded-lg" src={imgSrc} alt={`Logo for ${sustainabilityAttribute.name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
-			</div>
-			<div className="flex-grow flex flex-col justify-between min-w-0 overflow-hidden">
-				<div className="w-full overflow-hidden">
-					<div className="text-tc-primary text-l font-bold truncate" title={sustainabilityAttribute.name}>
-						{sustainabilityAttribute.name}
-					</div>
-				</div>
-				{renderContent()}
-			</div>
+		<div>
+      <div className={`w-full h-auto p-4 ${expanded ? 'rounded-t-2xl' : 'rounded-2xl'} border border-gray-90 flex flex-col`}>
+        <div className="flex">
+          <div className="w-24 h-24 flex-shrink-0 mr-4">
+            <img className="w-full h-full object-cover rounded-lg" src={imgSrc} alt={`Logo for ${sustainabilityAttribute.name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
+          </div>
+          <div className="flex-grow flex flex-col justify-between min-w-0 overflow-hidden">
+            <div className="w-full overflow-hidden">
+              <div className="text-tc-primary text-l font-bold truncate" title={sustainabilityAttribute.name}>
+                {sustainabilityAttribute.name}
+              </div>
+            </div>
+            {renderContent()}
+          </div>
+        </div>
+      </div>
       {cardStyle === SustainabilityAttributeCardStyle.ENTITY_DETAIL && expanded && (
         <SustainabilityCardExpandedView sustainabilityAttribute={sustainabilityAttribute} />
       )}
-		</div>
+    </div>
 	);
 };
 

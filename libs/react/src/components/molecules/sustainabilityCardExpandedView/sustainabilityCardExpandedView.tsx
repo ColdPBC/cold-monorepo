@@ -28,20 +28,34 @@ const _SustainabilityCardExpandedView: React.FC<SustainabilityCardExpandedViewPr
 			headerClassName: 'text-body text-tc-primary truncate',
 			flex: 1,
 			minWidth: 100,
-			renderCell: (params) => params.value,
+      renderHeader: (params) => (
+        <div className="p-1 h-full flex items-center font-bold">{params.colDef.headerName}</div>
+      ),
+      renderCell: (params) => (
+        <div className="p-1 h-full flex items-center">{params.value}</div>
+      ),
 		},
 		{
 			field: 'assuranceStatus',
 			headerName: 'Assurance Status',
 			flex: 1,
 			minWidth: 100,
-      renderCell: params => {
-        return <AttributeAssuranceStatusLabel status={params.value.status} effectiveEndDate={params.value.effectiveEndDate} />;
-      },
+      renderHeader: (params) => (
+        <div className="p-1 h-full flex items-center font-bold">{params.colDef.headerName}</div>
+      ),
+      renderCell: (params) => (
+        <div className="p-1 h-full flex items-center">
+          <AttributeAssuranceStatusLabel
+            status={params.value.status}
+            effectiveEndDate={params.value.effectiveEndDate}
+          />
+        </div>
+      ),
 		},
 	];
 
   const rows: GridValidRowModel[] = sustainabilityAttribute.attributeAssurances.map(attributeAssurance => ({
+    id: attributeAssurance.entity.id,
     name: attributeAssurance.entity.name,
     assuranceStatus: {
       status: attributeAssurance.status,
@@ -50,15 +64,18 @@ const _SustainabilityCardExpandedView: React.FC<SustainabilityCardExpandedViewPr
   }));
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="w-full flex flex-col gap-2 p-4 rounded-b-2xl border-b border-l border-r border-gray-90 ">
       <span className="text-h4 text-tc-primary">Documentation</span>
-      <AttributeAssuranceGraph sustainabilityAttribute={sustainabilityAttribute} />
-      <div className={'w-full'}>
+      <AttributeAssuranceGraph sustainabilityAttribute={sustainabilityAttribute} showHeader={false} />
+      <div className="w-full rounded-xl overflow-hidden border border-gray-30">
         <MuiDataGrid
           rows={rows}
           columns={columns}
-          columnHeaderHeight={24}
-          rowHeight={24}
+          columnHeaderHeight={32}
+          rowHeight={32}
+          hideFooter={true}
+          disableColumnMenu={true}
+          disableRowSelectionOnClick={true}
         />
       </div>
     </div>
