@@ -7,7 +7,7 @@ export interface SustainabilityAttributeAssurance {
   effectiveEndDate?: Date | null;
   entity: {
     id: string;
-    name?: string;
+    name: string;
   }
   status: AttributeAssuranceStatus;
 }
@@ -19,7 +19,7 @@ export interface SustainabilityAttributeAssurance {
 // SustainabilityAttributeCard.
 export interface EntityWithAttributeAssurances {
   id: string;
-  name?: string;
+  name: string;
   attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
 }
 
@@ -46,17 +46,21 @@ export interface SustainabilityAttributeAssuranceGraphQL {
   effectiveEndDate: string | null;
   material?: {
     id: string;
+    name: string;
   } | null;
   organization?: {
     id: string;
+    name: string;
   } | null;
   organizationFile: {
     id: string;
   } | null;
   organizationFacility?: {
     id: string;
+    name: string;
   } | null;
   product?: {
     id: string;
+    name: string;
   } | null;
 }

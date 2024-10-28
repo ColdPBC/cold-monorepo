@@ -1,5 +1,6 @@
 import { addDays } from 'date-fns';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
+import { toSentenceCase } from '@coldpbc/lib';
 
 interface AttributeAssuranceMockParams {
 	entity: EntityLevel;
@@ -31,6 +32,7 @@ export const AttributeAssuranceMock = ({
   return {
     entity: {
       id: index.toString(),
+      name: `${toSentenceCase(entity)} ${index}`,
     },
     effectiveEndDate: effectiveEndDate,
     status,

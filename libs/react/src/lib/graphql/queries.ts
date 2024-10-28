@@ -405,18 +405,22 @@ export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG = gql`
         effectiveEndDate
         material {
           id
+          name
         }
         organizationFile {
           id
         }
         organization {
           id
+          name
         }
         organizationFacility {
           id
+          name
         }
         product {
           id
+          name
         }
       }
       level
