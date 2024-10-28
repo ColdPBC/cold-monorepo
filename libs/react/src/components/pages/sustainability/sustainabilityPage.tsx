@@ -1,5 +1,6 @@
 import {ErrorFallback, ErrorPage, MainContent, Spinner, SustainabilityAttributeTab, Tabs} from '@coldpbc/components';
-import type { SustainabilityAttribute } from '@coldpbc/interfaces';
+import type { SustainabilityAttribute, SustainabilityAttributeGraphQL } from '@coldpbc/interfaces';
+import { processSustainabilityAttributeDataFromGraphQL } from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
@@ -9,7 +10,7 @@ const _SustainabilityPage = () => {
   const { logBrowser } = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const sustainabilityAttributesQuery = useGraphQLSWR<{
-    sustainabilityAttributes: SustainabilityAttribute[]
+    sustainabilityAttributes: SustainabilityAttributeGraphQL[]
   }>(orgId ? 'GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG' : null, {
     organizationId: orgId,
   });
@@ -33,7 +34,8 @@ const _SustainabilityPage = () => {
     )
   }
 
-  const sustainabilityAttributes: SustainabilityAttribute[] = get(sustainabilityAttributesQuery.data, 'data.sustainabilityAttributes', []).sort(
+  const sustainabilityAttributesGraphQL: SustainabilityAttributeGraphQL[] = get(sustainabilityAttributesQuery.data, 'data.sustainabilityAttributes', [])
+  const sustainabilityAttributes: SustainabilityAttribute[] = processSustainabilityAttributeDataFromGraphQL(sustainabilityAttributesGraphQL).sort(
     (a, b) => a.name.localeCompare(b.name)
   );
   const myAttributes = sustainabilityAttributes.filter(attribute => (attribute.attributeAssurances?.length || 0) > 0);

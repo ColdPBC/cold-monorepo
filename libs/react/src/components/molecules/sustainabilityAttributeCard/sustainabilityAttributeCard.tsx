@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { AttributeAssuranceGraph, AttributeAssuranceSingleStatus } from '@coldpbc/components';
-import { SustainabilityAttribute, SustainabilityAttributeAssuranceGraphQL } from '@coldpbc/interfaces';
-import { getAggregateStatusFromAttributeAssurances } from '@coldpbc/lib';
-import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
+import { SustainabilityAttribute } from '@coldpbc/interfaces';
 
 interface SustainabilityAttributeCardProps {
   sustainabilityAttribute: SustainabilityAttribute;
@@ -17,64 +15,6 @@ export enum SustainabilityAttributeCardStyle {
 }
 
 export const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
-
-interface SustainabilityAttributeAssuranceData {
-  activeCount: number;
-  inactiveCount: number;
-  notDocumentedCount: number;
-}
-
-function processSustainabilityAttribute(attribute: SustainabilityAttribute): SustainabilityAttributeAssuranceData {
-  const result: SustainabilityAttributeAssuranceData = {
-    activeCount: 0,
-    inactiveCount: 0,
-    notDocumentedCount: 0,
-  };
-
-  const entityAssurances = new Map<string, SustainabilityAttributeAssuranceGraphQL[]>();
-
-  // Group assurances by entity ID
-  attribute.attributeAssurances.forEach(assurance => {
-    let entityId: string | undefined;
-
-    switch (attribute.level) {
-      case EntityLevel.MATERIAL:
-        entityId = assurance.material?.id;
-        break;
-      case EntityLevel.ORGANIZATION:
-        entityId = assurance.organization?.id;
-        break;
-      case EntityLevel.PRODUCT:
-        entityId = assurance.product?.id;
-        break;
-      case EntityLevel.SUPPLIER:
-        entityId = assurance.organizationFacility?.id;
-        break;
-    }
-
-    if (entityId) {
-      if (!entityAssurances.has(entityId)) {
-        entityAssurances.set(entityId, []);
-      }
-      entityAssurances.get(entityId)!.push(assurance);
-    }
-  });
-
-  // Process grouped assurances
-  entityAssurances.forEach((assurances, _entityId) => {
-    const { assuranceStatus } = getAggregateStatusFromAttributeAssurances(assurances);
-
-    if (assuranceStatus === AttributeAssuranceStatus.ACTIVE || assuranceStatus === AttributeAssuranceStatus.EXPIRING) {
-      result.activeCount++;
-    } else if (assuranceStatus === AttributeAssuranceStatus.EXPIRED || assuranceStatus === AttributeAssuranceStatus.MISSING_DATE) {
-      result.inactiveCount++;
-    } else {
-      result.notDocumentedCount++;
-    }
-  });
-
-  return result;
-}
 
 const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> = ({ sustainabilityAttribute, cardStyle }) => {
 	// If we don't get a logo image from the backend, we'll use the default
@@ -89,10 +29,7 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
       case SustainabilityAttributeCardStyle.GRAPH:
       default:
         return (
-          <AttributeAssuranceGraph
-            entity={sustainabilityAttribute.level}
-            {...processSustainabilityAttribute(sustainabilityAttribute)}
-          />
+          <AttributeAssuranceGraph sustainabilityAttribute={sustainabilityAttribute} />
         );
     }
   };
