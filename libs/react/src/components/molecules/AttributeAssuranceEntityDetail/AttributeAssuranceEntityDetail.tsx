@@ -13,22 +13,40 @@ interface AttributeAssuranceEntityDetailProps {
   onClick: () => void;
 }
 
+const getSupplierCounts = (attributeAssurances) => {
+  return attributeAssurances
+    // Filter out null/undefined supplierNames
+    .filter(assurance => assurance.entity.supplierName != null)
+    // Group by supplierName and count
+    .reduce((acc, assurance) => {
+      const supplierName = assurance.entity.supplierName;
+      acc[supplierName] = (acc[supplierName] || 0) + 1;
+      return acc;
+    }, {})
+    // Convert to array of formatted strings
+    .map(([supplierName, count]) => `${supplierName} (${count})`);
+};
+
 const _AttributeAssuranceEntityDetail: React.FC<AttributeAssuranceEntityDetailProps> = ({ sustainabilityAttribute, expanded, onClick }) => {
 	const attributeAssurances = sustainabilityAttribute.attributeAssurances;
 	const totalEntities = attributeAssurances.length;
 	const pluralizedEntities = pluralize(toLower(EntityLevel[sustainabilityAttribute.level]), totalEntities);
 
 	let subheader: string | null;
+  let bubbleLabels: string[];
 
 	switch (sustainabilityAttribute.level) {
 		case EntityLevel.SUPPLIER:
 			subheader = `Associated with ${pluralizedEntities} in this supply chain.`;
+      bubbleLabels = attributeAssurances.map(attributeAssurance => attributeAssurance.entity.name)
 			break;
 		case EntityLevel.MATERIAL:
 			subheader = `Associated with ${pluralizedEntities} used in this product.`;
+      bubbleLabels = getSupplierCounts(sustainabilityAttribute.attributeAssurances);
 			break;
 		default:
 			subheader = null;
+      bubbleLabels = [];
 	}
 
 	return (
@@ -36,7 +54,7 @@ const _AttributeAssuranceEntityDetail: React.FC<AttributeAssuranceEntityDetailPr
     <span className="text-tc-primary text-body">{subheader}</span>
     <div className="relative w-full flex items-center">
       <div className="w-[calc(100%-24px)]"> {/* Subtract space for chevron */}
-        <BubbleList values={attributeAssurances.map(attributeAssurance => attributeAssurance.entity.name)} />
+        <BubbleList values={bubbleLabels} />
       </div>
       <div className="absolute right-0 flex items-center h-full py-2 px-2">
         <ColdIcon name={expanded ? IconNames.ColdChevronUpIcon : IconNames.ColdChevronDownIcon} onClick={onClick} />
