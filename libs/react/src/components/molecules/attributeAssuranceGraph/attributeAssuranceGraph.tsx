@@ -1,7 +1,7 @@
 import React from 'react';
 import { AttributeAssuranceStatus, EntityLevel, IconNames } from '@coldpbc/enums';
 import { ColdIcon, Popover } from '@coldpbc/components';
-import { pluralize } from '@coldpbc/lib';
+import { pluralize, toSentenceCase } from '@coldpbc/lib';
 import { SustainabilityAttribute } from '@coldpbc/interfaces';
 
 interface AttributeAssuranceGraphProps {
@@ -55,7 +55,7 @@ export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = (
     <>
       <div className="flex justify-between items-baseline">
         <p className={`text-sm ${total > 0 ? 'text-white' : 'text-tc-disabled'}`}>
-          {pluralize(EntityLevel[sustainabilityAttribute.level], total)}
+          {pluralize(toSentenceCase(EntityLevel[sustainabilityAttribute.level]), total)}
         </p>
         {total > 0 && (
           <p className="text-sm text-tc-disabled">

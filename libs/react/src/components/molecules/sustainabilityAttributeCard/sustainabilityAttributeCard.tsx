@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { AttributeAssuranceGraph, AttributeAssuranceSingleStatus } from '@coldpbc/components';
+import {
+  AttributeAssuranceEntityDetail,
+  AttributeAssuranceGraph,
+  AttributeAssuranceSingleStatus,
+} from '@coldpbc/components';
 import { SustainabilityAttribute } from '@coldpbc/interfaces';
 
 interface SustainabilityAttributeCardProps {
@@ -10,8 +14,9 @@ interface SustainabilityAttributeCardProps {
 }
 
 export enum SustainabilityAttributeCardStyle {
+  ENTITY_DETAIL = 'ENTITY DETAIL',
   GRAPH = 'GRAPH',
-  SINGLE_STATUS = 'SINGLE_STATUS',
+  SINGLE_STATUS = 'SINGLE STATUS',
 }
 
 export const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
@@ -22,6 +27,10 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
 
   const renderContent = () => {
     switch (cardStyle) {
+      case SustainabilityAttributeCardStyle.ENTITY_DETAIL:
+        return (
+          <AttributeAssuranceEntityDetail sustainabilityAttribute={sustainabilityAttribute} />
+        );
       case SustainabilityAttributeCardStyle.SINGLE_STATUS:
         return (
           <AttributeAssuranceSingleStatus sustainabilityAttribute={sustainabilityAttribute} />
