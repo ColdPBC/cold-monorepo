@@ -34,6 +34,7 @@ export const GET_ALL_FILES = gql`
           country
           supplierTier
           materialSuppliers {
+            id
             material {
               id
               name
@@ -44,6 +45,7 @@ export const GET_ALL_FILES = gql`
           id
           name
           materialSuppliers {
+            id
             organizationFacility {
               id
               name

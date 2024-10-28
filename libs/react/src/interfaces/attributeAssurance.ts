@@ -8,6 +8,7 @@ export interface SustainabilityAttributeAssurance {
   entity: {
     id: string;
     name: string;
+    supplierName?: string;
   }
   status: AttributeAssuranceStatus;
 }
@@ -20,6 +21,13 @@ export interface SustainabilityAttributeAssurance {
 export interface EntityWithAttributeAssurances {
   id: string;
   name: string;
+  materialSuppliers?: {
+    id: string;
+    organizationFacility?: { // won't be defined when coming from supplier toward material
+      id: string;
+      name: string;
+    } | null;
+  }[];
   attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
 }
 

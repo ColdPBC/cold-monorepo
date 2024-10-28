@@ -21,42 +21,59 @@ interface SustainabilityCardExpandedViewProps {
 const _SustainabilityCardExpandedView: React.FC<SustainabilityCardExpandedViewProps> = ({
   sustainabilityAttribute
 }) => {
-  const columns: GridColDef[] = [
-		{
-			field: 'name',
-			headerName: toSentenceCase(EntityLevel[sustainabilityAttribute.level]),
-			headerClassName: 'text-body text-tc-primary truncate',
-			flex: 1,
-			minWidth: 100,
-      renderHeader: (params) => (
-        <div className="p-1 h-full flex items-center font-bold">{params.colDef.headerName}</div>
-      ),
-      renderCell: (params) => (
-        <div className="p-1 h-full flex items-center">{params.value}</div>
-      ),
-		},
-		{
-			field: 'assuranceStatus',
-			headerName: 'Assurance Status',
-			flex: 1,
-			minWidth: 100,
-      renderHeader: (params) => (
-        <div className="p-1 h-full flex items-center font-bold">{params.colDef.headerName}</div>
-      ),
-      renderCell: (params) => (
-        <div className="p-1 h-full flex items-center">
-          <AttributeAssuranceStatusLabel
-            status={params.value.status}
-            effectiveEndDate={params.value.effectiveEndDate}
-          />
-        </div>
-      ),
-		},
-	];
+  const nameColumn: GridColDef = {
+    field: 'name',
+    headerName: toSentenceCase(EntityLevel[sustainabilityAttribute.level]),
+    headerClassName: 'text-body text-tc-primary truncate',
+    flex: 1,
+    minWidth: 100,
+    renderHeader: (params) => (
+      <div className="p-1 h-full flex items-center font-bold">{params.colDef.headerName}</div>
+    ),
+    renderCell: (params) => (
+      <div className="p-1 h-full flex items-center">{params.value}</div>
+    ),
+  };
+
+  const statusColumn: GridColDef = {
+    field: 'assuranceStatus',
+    headerName: 'Assurance Status',
+    flex: 1,
+    minWidth: 100,
+    renderHeader: (params) => (
+      <div className="p-1 h-full flex items-center font-bold">{params.colDef.headerName}</div>
+    ),
+    renderCell: (params) => (
+      <div className="p-1 h-full flex items-center">
+        <AttributeAssuranceStatusLabel
+          status={params.value.status}
+          effectiveEndDate={params.value.effectiveEndDate}
+        />
+      </div>
+    ),
+  };
+
+  const tier2SupplierColumn: GridColDef = {
+    field: 'supplierName',
+    headerName: 'Supplier',
+    flex: 1,
+    minWidth: 100,
+    renderHeader: (params) => (
+      <div className="p-1 h-full flex items-center font-bold">{params.colDef.headerName}</div>
+    ),
+    renderCell: (params) => (
+      <div className="p-1 h-full flex items-center">{params.value.supplierName || ''}</div>
+    ),
+  };
+
+  const columns = sustainabilityAttribute.level === EntityLevel.MATERIAL
+    ? [nameColumn, tier2SupplierColumn, statusColumn]
+    : [nameColumn, statusColumn];
 
   const rows: GridValidRowModel[] = sustainabilityAttribute.attributeAssurances.map(attributeAssurance => ({
     id: attributeAssurance.entity.id,
     name: attributeAssurance.entity.name,
+    supplierName: attributeAssurance.entity.supplierName, // Only expected on Materials
     assuranceStatus: {
       status: attributeAssurance.status,
       effectiveEndDate: attributeAssurance.effectiveEndDate,

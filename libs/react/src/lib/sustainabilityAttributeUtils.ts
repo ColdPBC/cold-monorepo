@@ -238,6 +238,8 @@ export const processEntityLevelAssurances = (
         entity: {
           id: entity.id,
           name: attribute.name,
+          // For materials, we try to grab the Tier 2 supplier name
+          supplierName: (entity.materialSuppliers || [])[0]?.organizationFacility?.name,
         },
         status: assuranceStatus
       });
