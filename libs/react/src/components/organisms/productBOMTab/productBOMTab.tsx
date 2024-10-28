@@ -1,7 +1,7 @@
 import { ProductsQuery, SustainabilityAttribute } from '@coldpbc/interfaces';
 import { Card, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumnList } from '@coldpbc/components';
 import { GridColDef } from '@mui/x-data-grid';
-import { mapAttributeAssurancesToSustainabilityAttributes } from '@coldpbc/lib';
+import { processEntityLevelAssurances } from '@coldpbc/lib';
 import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
@@ -120,7 +120,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 		.map(productMaterial => {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const material = productMaterial.material!;
-			const susAttributes = mapAttributeAssurancesToSustainabilityAttributes(material.attributeAssurances || []);
+			const susAttributes = processEntityLevelAssurances([material]);
 			const tier2Supplier = get(material.materialSuppliers, '[0].organizationFacility.name', '');
 			return {
 				id: productMaterial.id,

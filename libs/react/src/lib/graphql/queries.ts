@@ -227,6 +227,7 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
       }
       materialSuppliers {
         material {
+          id
           name
           attributeAssurances {
             id

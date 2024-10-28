@@ -6,7 +6,7 @@ import {
   SustainabilityAttributeColumnList
 } from "@coldpbc/components";
 import {useAuth0Wrapper, useGraphQLSWR} from "@coldpbc/hooks";
-import {ProductsQuery, SustainabilityAttribute, SustainabilityAttributeAssurance} from "@coldpbc/interfaces";
+import { ProductsQuery, SustainabilityAttribute, SustainabilityAttributeAssuranceGraphQL } from "@coldpbc/interfaces";
 import {
   GridToolbarColumnsButton,
   GridToolbarContainer,
@@ -16,7 +16,7 @@ import {
 import React from "react";
 import {get, uniq} from "lodash";
 import {withErrorBoundary} from "react-error-boundary";
-import {mapAttributeAssurancesToSustainabilityAttributes} from "@coldpbc/lib";
+import { processEntityLevelAssurances } from '@coldpbc/lib';
 import {useFlags} from "launchdarkly-react-client-sdk";
 import {useNavigate} from "react-router-dom";
 
@@ -27,26 +27,34 @@ const getColumnRows = (
     [key: string]: boolean
   }) => {
   return products.map(product => {
-    const extraAttributes: SustainabilityAttributeAssurance[] = [];
+    const tier1Supplier = product.organizationFacility
 
-    if(flags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
-      extraAttributes.push(...product.organizationFacility?.attributeAssurances ?? []);
-      extraAttributes.push(...product.productMaterials.map(prodMaterial => prodMaterial.material?.attributeAssurances ?? []).flat());
+    const entitiesWithAttributeAssurances = [
+      {
+        id: product.id,
+        name: product.name,
+        attributeAssurances: product.attributeAssurances
+      }
+    ];
+
+    if (flags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
+      entitiesWithAttributeAssurances.push(...product.productMaterials.map(prodMaterial => (
+        {
+          id: prodMaterial.material.id,
+          name: prodMaterial.material.name,
+          attributeAssurances: prodMaterial.material.attributeAssurances
+        }
+      )));
     }
-    // get all attribute assurances for the product and related materials and tier 1 supplier
-    const allAttributeAssurances: SustainabilityAttributeAssurance[] = [
-      ...product.attributeAssurances,
-      ...extraAttributes,
-    ]
 
-    const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(allAttributeAssurances);
+    const sustainabilityAttributes = processEntityLevelAssurances(entitiesWithAttributeAssurances);
 
     return {
       id: product.id,
       name: product.name,
       description: product.description ?? '',
       sustainabilityAttributes: sustainabilityAttributes,
-      tier1Supplier: product.organizationFacility?.name ?? '',
+      tier1Supplier: tier1Supplier?.name ?? '',
       seasonCode: product.seasonCode ?? '',
       upcCode: product.upcCode ?? '',
       brandProductId: product.brandProductId ?? '',

@@ -1,21 +1,49 @@
 import React from 'react';
-import { EntityLevel, IconNames } from '@coldpbc/enums';
+import { AttributeAssuranceStatus, EntityLevel, IconNames } from '@coldpbc/enums';
 import { ColdIcon, Popover } from '@coldpbc/components';
 import { pluralize } from '@coldpbc/lib';
+import { SustainabilityAttribute } from '@coldpbc/interfaces';
 
 interface AttributeAssuranceGraphProps {
-  entity: EntityLevel;
+  sustainabilityAttribute: SustainabilityAttribute;
+}
+
+interface GraphData {
   activeCount: number;
   inactiveCount: number;
   notDocumentedCount: number;
 }
 
+function processSustainabilityAttribute(attribute: SustainabilityAttribute): GraphData {
+  const result: GraphData = {
+    activeCount: 0,
+    inactiveCount: 0,
+    notDocumentedCount: 0,
+  };
+
+  attribute.attributeAssurances.forEach((assurance) => {
+    switch(assurance.status) {
+      case AttributeAssuranceStatus.ACTIVE:
+      case AttributeAssuranceStatus.EXPIRING:
+        result.activeCount++;
+        break;
+      case AttributeAssuranceStatus.EXPIRED:
+      case AttributeAssuranceStatus.MISSING_DATE:
+        result.inactiveCount++;
+        break;
+      default:
+        result.notDocumentedCount++;
+    }
+  });
+
+  return result;
+}
+
 export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = ({
-  entity,
-  activeCount,
-  inactiveCount,
-  notDocumentedCount
+  sustainabilityAttribute
 }) => {
+  const { activeCount, inactiveCount, notDocumentedCount } = processSustainabilityAttribute(sustainabilityAttribute)
+
   const total = activeCount + inactiveCount + notDocumentedCount;
   const documentedCount = activeCount + inactiveCount;
 
@@ -27,7 +55,7 @@ export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = (
     <>
       <div className="flex justify-between items-baseline">
         <p className={`text-sm ${total > 0 ? 'text-white' : 'text-tc-disabled'}`}>
-          {pluralize(EntityLevel[entity], total)}
+          {pluralize(EntityLevel[sustainabilityAttribute.level], total)}
         </p>
         {total > 0 && (
           <p className="text-sm text-tc-disabled">

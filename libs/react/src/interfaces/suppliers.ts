@@ -43,6 +43,7 @@ export interface SuppliersWithAssurances {
   }[];
   materialSuppliers: {
     material: {
+      id: string;
       name: string;
       attributeAssurances: {
         id: string;
