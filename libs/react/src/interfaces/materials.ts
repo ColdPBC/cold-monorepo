@@ -1,6 +1,7 @@
 import { Suppliers } from './suppliers';
 import { Claims } from './claims';
 import { EntityLevel } from '@coldpbc/enums';
+import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
 
 export interface Materials {
   id: string;
@@ -42,34 +43,10 @@ export interface MaterialsWithRelations extends Materials {
       id: string;
       name: string;
       supplierTier: number | null;
-      attributeAssurances: {
-        id: string;
-        effectiveEndDate: string | null;
-        organizationFile: {
-          id: string;
-        } | null;
-        sustainabilityAttribute: {
-          id: string;
-          name: string;
-          level: EntityLevel;
-          logoUrl?: string;
-        };
-      }[]
+      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
     };
   }[];
-  attributeAssurances: {
-    id: string;
-    effectiveEndDate: string | null;
-    organizationFile: {
-      id: string;
-    } | null;
-    sustainabilityAttribute: {
-      id: string;
-      name: string;
-      level: EntityLevel;
-      logoUrl?: string;
-    };
-  }[];
+  attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
   productMaterials: {
     id: string,
     product: {
@@ -78,19 +55,7 @@ export interface MaterialsWithRelations extends Materials {
         id: string;
         name: string;
       };
-      attributeAssurances: {
-        id: string;
-        effectiveEndDate: string | null;
-        organizationFile: {
-          id: string;
-        } | null;
-        sustainabilityAttribute: {
-          id: string;
-          name: string;
-          level: EntityLevel;
-          logoUrl?: string;
-        };
-      }[]
+      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
     };
   }[];
 }

@@ -481,18 +481,21 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       materialSuppliers: [
         {
           material: {
+            id: 'a',
             name: "Material 10",
             attributeAssurances: [],
           },
         },
         {
           material: {
+            id: 'b',
             name: "Material 2",
             attributeAssurances: [],
           },
         },
         {
           material: {
+            id: 'c',
             name: "Material 8",
             attributeAssurances: [
               {

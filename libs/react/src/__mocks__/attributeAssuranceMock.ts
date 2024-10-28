@@ -12,42 +12,27 @@ export const AttributeAssuranceMock = ({
   status,
   index
 }: AttributeAssuranceMockParams) => {
-  let effectiveEndDate: string | null;
+  let effectiveEndDate: Date | null;
 
   switch (status) {
     case AttributeAssuranceStatus.ACTIVE:
-      effectiveEndDate = new Date('2027-12-31').toISOString();
+      effectiveEndDate = new Date('2027-12-31');
       break;
     case AttributeAssuranceStatus.EXPIRING:
-      effectiveEndDate = addDays(new Date(), 10).toISOString();
+      effectiveEndDate = addDays(new Date(), 10);
       break;
     case AttributeAssuranceStatus.EXPIRED:
-      effectiveEndDate = new Date('2024-10-24').toISOString();
+      effectiveEndDate = new Date('2024-10-24');
       break;
     default:
       effectiveEndDate = null;
   }
 
-  const baseObject = {
-    id: index.toString(),
+  return {
+    entity: {
+      id: index.toString(),
+    },
     effectiveEndDate: effectiveEndDate,
-    material: null,
-    organization: null,
-    organizationFacility: null,
-    organizationFile: status === AttributeAssuranceStatus.NOT_DOCUMENTED ? null : { id: '123' },
-    product: null,
+    status,
   };
-
-  switch (entity) {
-    case EntityLevel.MATERIAL:
-      return { ...baseObject, material: { id: `mat_${index}` } };
-    case EntityLevel.ORGANIZATION:
-      return { ...baseObject, organization: { id: `org_${index}` } };
-    case EntityLevel.PRODUCT:
-      return { ...baseObject, product: { id: `prod_${index}` } };
-    case EntityLevel.SUPPLIER:
-      return { ...baseObject, organizationFacility: { id: `sup_${index}` } };
-    default:
-      throw new Error(`Unsupported Entity Entity: ${entity}`);
-  }
 };
