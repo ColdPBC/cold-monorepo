@@ -1,7 +1,7 @@
 import { getAggregateStatusFromAttributeAssurances, toSentenceCase } from '@coldpbc/lib';
 import { ColdIcon, ErrorFallback } from '@coldpbc/components';
 import React from 'react';
-import { SustainabilityAttribute } from '@coldpbc/interfaces';
+import { SustainabilityAttribute, SustainabilityAttributeAssurance } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { differenceInDays, format } from 'date-fns';
 import { AttributeAssuranceStatus, IconNames } from '@coldpbc/enums';
@@ -11,32 +11,38 @@ interface AttributeAssuranceStatusProps {
 }
 
 const _AttributeAssuranceSingleStatus: React.FC<AttributeAssuranceStatusProps> = ({ sustainabilityAttribute }) => {
-  const {
-    assuranceStatus,
-    assuranceExpiration
-  } = getAggregateStatusFromAttributeAssurances(sustainabilityAttribute.attributeAssurances);
+  let attributeAssurance: SustainabilityAttributeAssurance;
+
+  // This component is intended for when there is 1 AttributeAssurance,
+  // e.g. when showing Product-level attributes on a Product details page,
+  // so we arbitrarily show the first assurance in the list.
+  if (sustainabilityAttribute.attributeAssurances.length === 0) {
+    return null;
+  } else {
+    attributeAssurance = sustainabilityAttribute.attributeAssurances[0];
+  }
 
   let iconName: IconNames;
-  let statusMessage = toSentenceCase(assuranceStatus);
+  let statusMessage = toSentenceCase(attributeAssurance.status);
   let statusColorClass: string;
   let subStatusMessage: string;
 
-  switch (assuranceStatus) {
+  switch (attributeAssurance.status) {
     case AttributeAssuranceStatus.ACTIVE:
       iconName = IconNames.ColdCheckIcon;
       statusColorClass = 'text-green-200';
-      subStatusMessage = !assuranceExpiration ? '' : `Expires ${format(assuranceExpiration, 'M/d/yy')}`;
+      subStatusMessage = !attributeAssurance.effectiveEndDate ? '' : `Expires ${format(attributeAssurance.effectiveEndDate, 'M/d/yy')}`;
       break;
     case AttributeAssuranceStatus.EXPIRING:
       iconName = IconNames.ColdExpiringIcon;
-      statusMessage = !assuranceExpiration ? 'Expiring' : `${differenceInDays(assuranceExpiration, new Date())} days`
+      statusMessage = !attributeAssurance.effectiveEndDate ? 'Expiring' : `${differenceInDays(attributeAssurance.effectiveEndDate, new Date())} days`
       statusColorClass = 'text-yellow-200';
-      subStatusMessage = !assuranceExpiration ? '' : `Expires ${format(assuranceExpiration, 'M/d/yy')}`;
+      subStatusMessage = !attributeAssurance.effectiveEndDate ? '' : `Expires ${format(attributeAssurance.effectiveEndDate, 'M/d/yy')}`;
       break;
     case AttributeAssuranceStatus.EXPIRED:
       iconName = IconNames.ColdCalendarCloseIcon;
       statusColorClass = 'text-gray-200';
-      subStatusMessage = !assuranceExpiration ? '' : `Expired on ${format(assuranceExpiration, 'M/d/yy')}`;
+      subStatusMessage = !attributeAssurance.effectiveEndDate ? '' : `Expired on ${format(attributeAssurance.effectiveEndDate, 'M/d/yy')}`;
       break;
     case AttributeAssuranceStatus.MISSING_DATE:
       iconName = IconNames.ColdUnknownIcon;
