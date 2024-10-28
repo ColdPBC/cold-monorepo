@@ -33,7 +33,7 @@ export const AttributeAssuranceMock = ({
     entity: {
       id: index.toString(),
       name: `${toSentenceCase(entity)} ${index}`,
-      supplierName: entity === EntityLevel.MATERIAL ? `Tier 2 Supplier ${index}` : undefined,
+      supplierName: entity === EntityLevel.MATERIAL ? `Tier 2 Supplier ${Math.floor(index / 2) + 1}` : undefined,
     },
     effectiveEndDate: effectiveEndDate,
     status,

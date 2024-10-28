@@ -13,17 +13,18 @@ interface AttributeAssuranceEntityDetailProps {
   onClick: () => void;
 }
 
-const getSupplierCounts = (attributeAssurances) => {
-  return attributeAssurances
-    // Filter out null/undefined supplierNames
+const getSupplierCounts = (attributeAssurances: Array<{ entity: { supplierName?: string | null } }>) => {
+  // First create the grouped object
+  const groupedSuppliers = attributeAssurances
     .filter(assurance => assurance.entity.supplierName != null)
-    // Group by supplierName and count
     .reduce((acc, assurance) => {
-      const supplierName = assurance.entity.supplierName;
+      const supplierName = assurance.entity.supplierName as string;
       acc[supplierName] = (acc[supplierName] || 0) + 1;
       return acc;
-    }, {})
-    // Convert to array of formatted strings
+    }, {} as Record<string, number>);
+
+  // Then convert to array and map to final format
+  return Object.entries(groupedSuppliers)
     .map(([supplierName, count]) => `${supplierName} (${count})`);
 };
 

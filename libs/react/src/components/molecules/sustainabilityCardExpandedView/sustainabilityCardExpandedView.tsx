@@ -62,7 +62,7 @@ const _SustainabilityCardExpandedView: React.FC<SustainabilityCardExpandedViewPr
       <div className="p-1 h-full flex items-center font-bold">{params.colDef.headerName}</div>
     ),
     renderCell: (params) => (
-      <div className="p-1 h-full flex items-center">{params.value.supplierName || ''}</div>
+      <div className="p-1 h-full flex items-center">{params.value || ''}</div>
     ),
   };
 
