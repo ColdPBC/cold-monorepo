@@ -226,7 +226,8 @@ export const processEntityLevelAssurances = (
       sustainabilityAttribute.attributeAssurances.push({
         effectiveEndDate: assuranceExpiration,
         entity: {
-          id: entity.id
+          id: entity.id,
+          name: attribute.name,
         },
         status: assuranceStatus
       });

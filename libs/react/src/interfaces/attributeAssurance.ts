@@ -7,6 +7,7 @@ export interface SustainabilityAttributeAssurance {
   effectiveEndDate?: Date | null;
   entity: {
     id: string;
+    name?: string;
   }
   status: AttributeAssuranceStatus;
 }
