@@ -26,6 +26,21 @@ export const Default: Story = {
       ],
       level: EntityLevel.MATERIAL,
     },
+    expanded: false,
+    onClick: () => {},
+  }
+};
+
+export const EmptyList: Story = {
+  args: {
+    sustainabilityAttribute: {
+      id: 'a',
+      name: 'Default Material Attribute',
+      attributeAssurances: [],
+      level: EntityLevel.MATERIAL,
+    },
+    expanded: false,
+    onClick: () => {},
   }
 };
 
@@ -37,5 +52,7 @@ export const OnlyNotDocumented: Story = {
       attributeAssurances: Array(10).fill(null).map((_, index) => AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index })),
       level: EntityLevel.SUPPLIER,
     },
+    expanded: false,
+    onClick: () => {},
   }
 };

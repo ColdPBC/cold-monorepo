@@ -4,7 +4,7 @@ import { ErrorFallback } from '../../application';
 import {
   AttributeAssuranceEntityDetail,
   AttributeAssuranceGraph,
-  AttributeAssuranceSingleStatus,
+  AttributeAssuranceSingleStatus, SustainabilityCardExpandedView,
 } from '@coldpbc/components';
 import { SustainabilityAttribute } from '@coldpbc/interfaces';
 
@@ -24,12 +24,17 @@ export const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazona
 const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> = ({ sustainabilityAttribute, cardStyle }) => {
 	// If we don't get a logo image from the backend, we'll use the default
 	const [imgSrc, setImgSrc] = useState<string>(sustainabilityAttribute.logoUrl || DEFAULT_ICON_URL);
+  const [expanded, setExpanded] = useState<boolean>(false);
 
   const renderContent = () => {
     switch (cardStyle) {
       case SustainabilityAttributeCardStyle.ENTITY_DETAIL:
         return (
-          <AttributeAssuranceEntityDetail sustainabilityAttribute={sustainabilityAttribute} />
+          <AttributeAssuranceEntityDetail
+            sustainabilityAttribute={sustainabilityAttribute}
+            expanded={expanded}
+            onClick={() => setExpanded(!expanded)}
+          />
         );
       case SustainabilityAttributeCardStyle.SINGLE_STATUS:
         return (
@@ -56,6 +61,9 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
 				</div>
 				{renderContent()}
 			</div>
+      {cardStyle === SustainabilityAttributeCardStyle.ENTITY_DETAIL && expanded && (
+        <SustainabilityCardExpandedView sustainabilityAttribute={sustainabilityAttribute} />
+      )}
 		</div>
 	);
 };

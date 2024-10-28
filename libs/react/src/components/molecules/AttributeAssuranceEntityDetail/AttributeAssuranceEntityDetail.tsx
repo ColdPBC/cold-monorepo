@@ -9,9 +9,11 @@ import { toLower } from 'lodash';
 
 interface AttributeAssuranceEntityDetailProps {
   sustainabilityAttribute: SustainabilityAttribute;
+  expanded: boolean;
+  onClick: () => void;
 }
 
-const _AttributeAssuranceEntityDetail: React.FC<AttributeAssuranceEntityDetailProps> = ({ sustainabilityAttribute }) => {
+const _AttributeAssuranceEntityDetail: React.FC<AttributeAssuranceEntityDetailProps> = ({ sustainabilityAttribute, expanded, onClick }) => {
 	const attributeAssurances = sustainabilityAttribute.attributeAssurances;
 	const totalEntities = attributeAssurances.length;
 	const pluralizedEntities = pluralize(toLower(EntityLevel[sustainabilityAttribute.level]), totalEntities);
@@ -37,7 +39,7 @@ const _AttributeAssuranceEntityDetail: React.FC<AttributeAssuranceEntityDetailPr
         <BubbleList values={attributeAssurances.map(attributeAssurance => attributeAssurance.entity.name)} />
       </div>
       <div className="absolute right-0 flex items-center h-full py-2 px-2">
-        <ColdIcon name={IconNames.ColdChevronDownIcon} color="white" />
+        <ColdIcon name={expanded ? IconNames.ColdChevronUpIcon : IconNames.ColdChevronDownIcon} onClick={onClick} />
       </div>
     </div>
 </>
