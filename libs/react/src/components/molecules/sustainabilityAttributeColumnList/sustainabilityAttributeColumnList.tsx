@@ -2,8 +2,7 @@ import React, { useRef, useEffect, useMemo, useState } from 'react';
 import { SustainabilityAttributeLogoWithStatus, SustainabilityAttributeLogoOverflow, ErrorFallback } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import { SustainabilityAttribute, SustainabilityAttributeWithStatus } from '@coldpbc/interfaces';
-import { getAggregateStatusFromAttributeAssurances } from '@coldpbc/lib';
-import { AttributeAssuranceStatus } from '@coldpbc/enums';
+import { getAggregateStatusFromAttributeAssurances, sustainabilityAttributeSortFn } from '@coldpbc/lib';
 
 interface SustainabilityAttributeColumnListProps {
   sustainabilityAttributes: SustainabilityAttribute[];
@@ -14,29 +13,6 @@ const CARD_GAP = 10; // Gap between cards
 const TOTAL_CARD_WIDTH = CARD_WIDTH + CARD_GAP; // Total width including gap
 const MIN_VISIBLE_CARDS = 2;
 const CONTAINER_PADDING_X = 32; // px-4
-
-const statusPriority: { [key in AttributeAssuranceStatus]: number } = {
-  [AttributeAssuranceStatus.ACTIVE]: 0,
-  [AttributeAssuranceStatus.EXPIRING]: 1,
-  [AttributeAssuranceStatus.EXPIRED]: 2,
-  [AttributeAssuranceStatus.MISSING_DATE]: 3,
-  [AttributeAssuranceStatus.NOT_DOCUMENTED]: 4,
-};
-
-export const sustainabilityAttributeSortFn = (
-  a: SustainabilityAttributeWithStatus,
-  b: SustainabilityAttributeWithStatus
-): number => {
-  // First, compare by status
-  const statusComparison = statusPriority[a.assuranceStatus] - statusPriority[b.assuranceStatus];
-
-  if (statusComparison !== 0) {
-    return statusComparison;
-  }
-
-  // If status is the same, compare by name
-  return a.name.localeCompare(b.name);
-};
 
 const _SustainabilityAttributeColumnList: React.FC<SustainabilityAttributeColumnListProps> = ({ sustainabilityAttributes }) => {
   const containerRef = useRef<HTMLDivElement>(null);

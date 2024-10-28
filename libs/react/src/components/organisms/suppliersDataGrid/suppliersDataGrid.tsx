@@ -18,12 +18,17 @@ import {
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
 import React, { useEffect, useState } from 'react';
-import { SuppliersWithAssurances, SustainabilityAttributeAssuranceGraphQL } from '@coldpbc/interfaces';
+import {
+  EntityWithAttributeAssurances,
+  SuppliersWithAssurances,
+  SustainabilityAttributeAssuranceGraphQL,
+} from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
 import { get, has, isEqual, uniqWith } from 'lodash';
-import {listFilterOperators, listSortComparator, mapAttributeAssurancesToSustainabilityAttributes} from "@coldpbc/lib";
+import { listFilterOperators, listSortComparator, processEntityLevelAssurances } from '@coldpbc/lib';
 import {useFlags} from "launchdarkly-react-client-sdk";
+import { AttributeAssuranceMock } from '@coldpbc/mocks';
 
 export const SuppliersDataGrid = (props: { tier: number }) => {
   const ldFlags = useFlags();
@@ -164,19 +169,14 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
   const newRows: GridValidRowModel[] = [];
 
   suppliers.forEach((supplier, index) => {
-    const extraAttributes: SustainabilityAttributeAssuranceGraphQL[] = [];
+    const entitiesWithAttributeAssurances: EntityWithAttributeAssurances[] = [supplier];
 
-    if(ldFlags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
-      extraAttributes.push(...supplier.products.map(product => product.attributeAssurances).flat());
-      extraAttributes.push(...supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.attributeAssurances).flat());
+    if(ldFlags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128 && tier === 2) {
+      const materials = supplier.materialSuppliers.map(materialSupplier => materialSupplier.material)
+      entitiesWithAttributeAssurances.push(...materials);
     }
 
-    const allAttributeAssurances = [
-      ...supplier.attributeAssurances,
-      ...extraAttributes,
-    ]
-
-    const sustainabilityAttributes = mapAttributeAssurancesToSustainabilityAttributes(allAttributeAssurances);
+    const sustainabilityAttributes = processEntityLevelAssurances(entitiesWithAttributeAssurances);
 
     const row = {
       id: supplier.id,
