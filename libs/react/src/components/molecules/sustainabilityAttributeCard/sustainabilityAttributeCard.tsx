@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import {
   AttributeAssuranceEntityDetail,
   AttributeAssuranceGraph,
-  AttributeAssuranceSingleStatus, SustainabilityCardExpandedView,
+  AttributeAssuranceSingleStatus,
+  SustainabilityCardExpandedView,
 } from '@coldpbc/components';
 import { SustainabilityAttribute } from '@coldpbc/interfaces';
 
@@ -24,7 +25,20 @@ export const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazona
 const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> = ({ sustainabilityAttribute, cardStyle }) => {
 	// If we don't get a logo image from the backend, we'll use the default
 	const [imgSrc, setImgSrc] = useState<string>(sustainabilityAttribute.logoUrl || DEFAULT_ICON_URL);
-  const [expanded, setExpanded] = useState<boolean>(false);
+  const [isExpanded, setExpanded] = useState<boolean>(false);
+  const expandedContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isExpanded && expandedContentRef.current) {
+      // Wait a frame for the DataGrid to render
+      requestAnimationFrame(() => {
+        expandedContentRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        });
+      });
+    }
+  }, [isExpanded]);
 
   const renderContent = () => {
     switch (cardStyle) {
@@ -32,8 +46,8 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
         return (
           <AttributeAssuranceEntityDetail
             sustainabilityAttribute={sustainabilityAttribute}
-            expanded={expanded}
-            onClick={() => setExpanded(!expanded)}
+            expanded={isExpanded}
+            onClick={() => setExpanded(!isExpanded)}
           />
         );
       case SustainabilityAttributeCardStyle.SINGLE_STATUS:
@@ -50,7 +64,7 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
 
 	return (
 		<div>
-      <div className={`w-full h-auto p-4 ${expanded ? 'rounded-t-2xl' : 'rounded-2xl'} border border-gray-90 flex flex-col`}>
+      <div className={`w-full h-auto p-4 ${isExpanded ? 'rounded-t-2xl' : 'rounded-2xl'} border border-gray-90 flex flex-col`}>
         <div className="flex">
           <div className="w-24 h-24 flex-shrink-0 mr-4">
             <img className="w-full h-full object-cover rounded-lg" src={imgSrc} alt={`Logo for ${sustainabilityAttribute.name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
@@ -65,8 +79,12 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
           </div>
         </div>
       </div>
-      {cardStyle === SustainabilityAttributeCardStyle.ENTITY_DETAIL && expanded && (
-        <SustainabilityCardExpandedView sustainabilityAttribute={sustainabilityAttribute} />
+      {cardStyle === SustainabilityAttributeCardStyle.ENTITY_DETAIL && isExpanded && (
+        <div ref={expandedContentRef}>
+          <SustainabilityCardExpandedView
+            sustainabilityAttribute={sustainabilityAttribute}
+          />
+        </div>
       )}
     </div>
 	);
