@@ -6,7 +6,13 @@ import {
   SustainabilityAttributeColumnList
 } from "@coldpbc/components";
 import {useAuth0Wrapper, useGraphQLSWR} from "@coldpbc/hooks";
-import { ProductsQuery, SustainabilityAttribute, SustainabilityAttributeAssuranceGraphQL } from "@coldpbc/interfaces";
+import {
+  EntityLevelAttributeAssuranceGraphQL,
+  EntityWithAttributeAssurances,
+  ProductsQuery,
+  SustainabilityAttribute, SustainabilityAttributeAssurance,
+  SustainabilityAttributeAssuranceGraphQL,
+} from '@coldpbc/interfaces';
 import {
   GridToolbarColumnsButton,
   GridToolbarContainer,
@@ -29,7 +35,7 @@ const getColumnRows = (
   return products.map(product => {
     const tier1Supplier = product.organizationFacility
 
-    const entitiesWithAttributeAssurances = [
+    const entitiesWithAttributeAssurances: EntityWithAttributeAssurances[] = [
       {
         id: product.id,
         name: product.name,
@@ -45,6 +51,18 @@ const getColumnRows = (
           attributeAssurances: prodMaterial.material.attributeAssurances
         }
       )));
+
+      const suppliers = new Set<EntityWithAttributeAssurances>;
+      if (tier1Supplier) {
+        suppliers.add(tier1Supplier);
+      }
+      product.productMaterials.forEach(productMaterial => {
+        const tier2supplier = productMaterial.material.materialSuppliers[0]?.organizationFacility;
+        if (tier2supplier) {
+          suppliers.add(tier2supplier);
+        }
+      });
+      entitiesWithAttributeAssurances.push(...Array.from(suppliers));
     }
 
     const sustainabilityAttributes = processEntityLevelAssurances(entitiesWithAttributeAssurances);
