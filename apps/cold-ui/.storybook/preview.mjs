@@ -106,7 +106,6 @@ export default {
         showNewComplianceManagerPreviewCold713: true,
         showSuppliersPageCold890: true,
         showNewDocumentsPage: true,
-        showMaterialsPageCold912: true,
         showProductDetailPageCold1140: true,
       },
     },
