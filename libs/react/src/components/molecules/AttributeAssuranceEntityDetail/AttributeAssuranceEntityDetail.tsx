@@ -57,8 +57,8 @@ const _AttributeAssuranceEntityDetail: React.FC<AttributeAssuranceEntityDetailPr
       <div className="w-[calc(100%-24px)]"> {/* Subtract space for chevron */}
         <BubbleList values={bubbleLabels} />
       </div>
-      <div className="absolute right-0 flex items-center h-full py-2 px-2">
-        <ColdIcon name={expanded ? IconNames.ColdChevronUpIcon : IconNames.ColdChevronDownIcon} onClick={onClick} />
+      <div className="h-full absolute right-0 flex items-center py-2 px-2 cursor-pointer" onClick={onClick}>
+        <ColdIcon name={expanded ? IconNames.ColdChevronUpIcon : IconNames.ColdChevronDownIcon} />
       </div>
     </div>
 </>
