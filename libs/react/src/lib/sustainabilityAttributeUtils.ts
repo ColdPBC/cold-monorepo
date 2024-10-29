@@ -237,7 +237,7 @@ export const processEntityLevelAssurances = (
         effectiveEndDate: assuranceExpiration,
         entity: {
           id: entity.id,
-          name: attribute.name,
+          name: entity.name,
           // For materials, we try to grab the Tier 2 supplier name
           supplierName: (entity.materialSuppliers || [])[0]?.organizationFacility?.name,
         },
