@@ -2,21 +2,17 @@ import { withErrorBoundary } from 'react-error-boundary';
 import {BaseButton, ErrorFallback, MainContent, SuppliersDataGrid, Tabs} from '@coldpbc/components';
 import React from 'react';
 import {useNavigate} from "react-router-dom";
-import {useFlags} from "launchdarkly-react-client-sdk";
 
 const _SuppliersPage = () => {
-  const ldFlags = useFlags();
   const navigate = useNavigate();
 
   const getPageButtons = () => {
     return <div>
-      {
-        ldFlags.showCreateSupplierPageCold1014 &&
-        <BaseButton
-          onClick={() => navigate('/suppliers/new')}
-          label={'Add New'}
-          className={'h-[40px]'}/>
-      }
+      <BaseButton
+        onClick={() => navigate('/suppliers/new')}
+        label={'Add New'}
+        className={'h-[40px]'}
+      />
     </div>
   };
 

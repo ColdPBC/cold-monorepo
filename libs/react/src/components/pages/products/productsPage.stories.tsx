@@ -22,20 +22,3 @@ export const Default: Story = {
     );
   },
 };
-
-export const WithoutAttributesFromRelatedEntitiesFlagEnabled: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider>
-        <ProductsPage />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showEntitySustainabilityAttributesForRelatedEntitiesCold1128: false,
-      },
-    },
-  }
-};

@@ -27,11 +27,8 @@ import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
 import { get, has, isEqual, uniqWith } from 'lodash';
 import { listFilterOperators, listSortComparator, processEntityLevelAssurances } from '@coldpbc/lib';
-import {useFlags} from "launchdarkly-react-client-sdk";
-import { AttributeAssuranceMock } from '@coldpbc/mocks';
 
 export const SuppliersDataGrid = (props: { tier: number }) => {
-  const ldFlags = useFlags();
   const { tier } = props;
   const navigate = useNavigate();
   const [suppliers, setSuppliers] = useState<SuppliersWithAssurances[]>([]);
@@ -171,7 +168,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
   suppliers.forEach((supplier, index) => {
     const entitiesWithAttributeAssurances: EntityWithAttributeAssurances[] = [supplier];
 
-    if(ldFlags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128 && tier === 2) {
+    if(tier === 2) {
       const materials = supplier.materialSuppliers.map(materialSupplier => materialSupplier.material)
       entitiesWithAttributeAssurances.push(...materials);
     }

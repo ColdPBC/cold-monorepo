@@ -7,9 +7,7 @@ export const ProductRoutes = () => {
   const ldFlags = useFlags();
   return (
     <>
-      {
-        ldFlags.showProductsPageCold1096 && <Route path={'/products'} element={<ProductsPage /> } />
-      }
+      <Route path={'/products'} element={<ProductsPage /> } />
       {
         ldFlags.showProductDetailPageCold1140 && <Route path={'/products/:id'} element={<ProductDetail /> } />
       }
