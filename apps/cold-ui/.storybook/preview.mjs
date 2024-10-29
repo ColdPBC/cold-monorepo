@@ -107,7 +107,6 @@ export default {
         showSuppliersPageCold890: true,
         showNewDocumentsPage: true,
         showMaterialsPageCold912: true,
-        showSustainabilityPageCold999: true,
         showCreateMaterialPageCold1015: true,
         showProductsPageCold1096: true,
         showEntitySustainabilityAttributesForRelatedEntitiesCold1128: true,

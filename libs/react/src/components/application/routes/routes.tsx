@@ -26,29 +26,30 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { QuestionnaireRoutes } from './questionnaireRoutes';
 import {ProductRoutes} from "./productRoutes";
 
+const DEFAULT_PAGE = '/sustainability';
+
 export const ColdRoutes = () => {
   const ldFlags = useFlags();
-  const defaultPage = ldFlags.showSustainabilityPageCold999 ? '/sustainability' : '/questionnaires';
 
   const getFilteredRoutes = () => {
 
     return (
       <>
-        <Route path={'/'} element={<Navigate to={defaultPage} replace={true} />} />
+        <Route path={'/'} element={<Navigate to={DEFAULT_PAGE} replace={true} />} />
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
         {ldFlags.showActions261 && <Route path={'/actions'} element={<ActionsOverview />} />}
-        <Route path={'/sustainability'} element={ldFlags.showSustainabilityPageCold999 ? <SustainabilityPage /> : <Navigate to={defaultPage} replace={true} />} />
+        <Route path={'/sustainability'} element={<SustainabilityPage />} />
         <Route path={'/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
         <Route path={'/documents'} element={ldFlags.showNewDocumentsPage ? <DocumentsPage /> : <DocumentUpload />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />
         <Route path={'/settings/users'} element={<UserSettingsPage />} />
-        <Route path="*" element={<Navigate to={defaultPage} replace={true} />} />
+        <Route path="*" element={<Navigate to={DEFAULT_PAGE} replace={true} />} />
         {WizardRoutes()}
         {MaterialRoutes()}
         {SupplierRoutes()}
         {ProductRoutes()}
-        <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={defaultPage} replace={true} />} />
+        <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
 
         // Temporary redirects from old route until we're certain that the seeds are updated to the new sidebar.
         <Route path={'/reports/carbon_footprint'} element={<Navigate to={'/carbon_footprint'} replace={true} />} />
