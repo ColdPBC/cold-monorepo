@@ -109,7 +109,6 @@ export default {
         showMaterialsPageCold912: true,
         showCreateMaterialPageCold1015: true,
         showProductsPageCold1096: true,
-        showEntitySustainabilityAttributesForRelatedEntitiesCold1128: true,
         showProductDetailPageCold1140: true,
       },
     },

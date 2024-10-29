@@ -43,27 +43,25 @@ const getColumnRows = (
       }
     ];
 
-    if (flags.showEntitySustainabilityAttributesForRelatedEntitiesCold1128){
-      entitiesWithAttributeAssurances.push(...product.productMaterials.map(prodMaterial => (
-        {
-          id: prodMaterial.material.id,
-          name: prodMaterial.material.name,
-          attributeAssurances: prodMaterial.material.attributeAssurances
-        }
-      )));
-
-      const suppliers = new Set<EntityWithAttributeAssurances>;
-      if (tier1Supplier) {
-        suppliers.add(tier1Supplier);
+    entitiesWithAttributeAssurances.push(...product.productMaterials.map(prodMaterial => (
+      {
+        id: prodMaterial.material.id,
+        name: prodMaterial.material.name,
+        attributeAssurances: prodMaterial.material.attributeAssurances
       }
-      product.productMaterials.forEach(productMaterial => {
-        const tier2supplier = productMaterial.material.materialSuppliers[0]?.organizationFacility;
-        if (tier2supplier) {
-          suppliers.add(tier2supplier);
-        }
-      });
-      entitiesWithAttributeAssurances.push(...Array.from(suppliers));
+    )));
+
+    const suppliers = new Set<EntityWithAttributeAssurances>;
+    if (tier1Supplier) {
+      suppliers.add(tier1Supplier);
     }
+    product.productMaterials.forEach(productMaterial => {
+      const tier2supplier = productMaterial.material.materialSuppliers[0]?.organizationFacility;
+      if (tier2supplier) {
+        suppliers.add(tier2supplier);
+      }
+    });
+    entitiesWithAttributeAssurances.push(...Array.from(suppliers));
 
     const sustainabilityAttributes = processEntityLevelAssurances(entitiesWithAttributeAssurances);
 
