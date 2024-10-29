@@ -8,7 +8,7 @@ export const MaterialRoutes = () => {
   return (
     <>
       {ldFlags.showMaterialsPageCold912 && <Route path={'/materials'} element={<MaterialsPage /> } />}
-      {ldFlags.showCreateMaterialPageCold1015 && <Route path={'/materials/new'} element={<CreateMaterialPage />} />}
+      <Route path={'/materials/new'} element={<CreateMaterialPage />} />
     </>
   );
 };
