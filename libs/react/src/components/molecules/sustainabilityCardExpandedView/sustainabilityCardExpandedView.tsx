@@ -2,9 +2,9 @@ import React from 'react';
 import { SustainabilityAttribute} from '@coldpbc/interfaces';
 import {
   AttributeAssuranceGraph,
-  AttributeAssuranceStatusLabel,
+  AttributeAssuranceStatusLabel, ColdIcon,
   ErrorFallback,
-  MuiDataGrid,
+  MuiDataGrid, Popover,
 } from '@coldpbc/components';
 import {
   GridColDef,
@@ -12,7 +12,7 @@ import {
 } from '@mui/x-data-grid';
 import { withErrorBoundary } from 'react-error-boundary';
 import { toSentenceCase } from '@coldpbc/lib';
-import { EntityLevel } from '@coldpbc/enums';
+import { EntityLevel, IconNames } from '@coldpbc/enums';
 
 interface SustainabilityCardExpandedViewProps {
   sustainabilityAttribute: SustainabilityAttribute;
@@ -81,22 +81,20 @@ const _SustainabilityCardExpandedView: React.FC<SustainabilityCardExpandedViewPr
   }));
 
   return (
-    <div className="w-full flex flex-col gap-2 p-4 rounded-b-2xl border-b border-l border-r border-gray-90 ">
-      <span className="text-h4 text-tc-primary">Documentation</span>
-      <AttributeAssuranceGraph sustainabilityAttribute={sustainabilityAttribute} showHeader={false} />
-      <div className="w-full rounded-xl overflow-hidden border border-gray-30">
-        <MuiDataGrid
-          rows={rows}
-          columns={columns}
-          columnHeaderHeight={32}
-          rowHeight={32}
-          hideFooter={true}
-          disableColumnMenu={true}
-          disableRowSelectionOnClick={true}
-        />
-      </div>
-    </div>
-  );
+		<div className="w-full flex flex-col gap-2 p-4 rounded-b-2xl border-b border-l border-r border-gray-90 ">
+			<div className="w-full flex gap-2 items-center">
+				<span className="text-h4 text-tc-primary">Documentation</span>
+				<Popover contentClassName="max-w-[260px]"
+					content={'This documentation report shows the status of assurance documents for each material or supplier. Assurance documents can be active, expired, or missing.'}>
+					<ColdIcon name={IconNames.ColdInfoIcon} />
+				</Popover>
+			</div>
+			<AttributeAssuranceGraph sustainabilityAttribute={sustainabilityAttribute} showHeader={false} />
+			<div className="w-full rounded-xl overflow-hidden border border-gray-30">
+				<MuiDataGrid rows={rows} columns={columns} columnHeaderHeight={32} rowHeight={32} hideFooter={true} disableColumnMenu={true} disableRowSelectionOnClick={true} />
+			</div>
+		</div>
+	);
 };
 
 export const SustainabilityCardExpandedView = withErrorBoundary(_SustainabilityCardExpandedView, {
