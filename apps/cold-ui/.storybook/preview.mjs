@@ -108,7 +108,6 @@ export default {
         showNewDocumentsPage: true,
         showMaterialsPageCold912: true,
         showCreateMaterialPageCold1015: true,
-        showProductsPageCold1096: true,
         showProductDetailPageCold1140: true,
       },
     },
