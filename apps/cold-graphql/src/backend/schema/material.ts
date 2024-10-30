@@ -36,14 +36,14 @@ export class Material {
 	@Field(() => String, { nullable: true })
 	materialSubcategory?: string;
 
-	@Field(() => String)
-	brandMaterialId!: string;
+	@Field(() => String, { nullable: true })
+	brandMaterialId?: string;
 
-	@Field(() => String)
-	desription!: string;
+	@Field(() => String, { nullable: true })
+	desription?: string;
 
-	@Field(() => String)
-	supplierMaterialId!: string;
+	@Field(() => String, { nullable: true })
+	supplierMaterialId?: string;
 
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'material' })
 	attributeAssurances!: AttributeAssurance[];
