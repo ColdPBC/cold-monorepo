@@ -1,5 +1,6 @@
 import { Claims } from './claims';
 import { EntityLevel } from '@coldpbc/enums';
+import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
 
 export interface Suppliers {
   id: string;
@@ -77,5 +78,26 @@ export interface SuppliersWithAssurances {
         logoUrl?: string;
       };
     }[];
+  }[]
+}
+
+export interface SupplierGraphQL {
+  id: string;
+  name: string;
+  addressLine1: string | null;
+  addressLine2: string | null;
+  city: string | null;
+  stateProvince: string | null;
+  postalCode: string | null;
+  country: string | null;
+  supplierTier: number | null;
+  attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
+  materialSuppliers: {
+    id: string;
+    material: {
+      id: string;
+      name: string;
+      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
+    }
   }[]
 }
