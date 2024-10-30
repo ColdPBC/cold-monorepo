@@ -1,3 +1,23 @@
+# [1.454.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.453.0...v1.454.0) (2024-10-30)
+
+
+### Bug Fixes
+
+* entity name, not attribute name! ([fa56fc7](https://github.com/ColdPBC/cold-monorepo/commit/fa56fc7836d8bd6ea03ae669b9ee0a5a202ffcf3))
+
+
+### Features
+
+* add basic expanded view ([0d7b25b](https://github.com/ColdPBC/cold-monorepo/commit/0d7b25b7f6fb93b2ffb34ceb2385235de1f47861))
+* add basic navigation to now empty MaterialDetail component behind FF ([b50ceb8](https://github.com/ColdPBC/cold-monorepo/commit/b50ceb8e05a2216b53f76de2625c2dde0190faa4))
+* add basic two-column expanded state ([01def45](https://github.com/ColdPBC/cold-monorepo/commit/01def45bde5142bea62636afad0fc197dbbf8a5e))
+* add details card ([4a3b188](https://github.com/ColdPBC/cold-monorepo/commit/4a3b188628098cfc85f401fc7f61eda36eacd50e))
+* add in supplier name to table ([fba3263](https://github.com/ColdPBC/cold-monorepo/commit/fba3263220e775cf81c6fdf1c4c157ebbc06bc1d))
+* add MaterialSustainabilityAttributesCard ([2b37f9a](https://github.com/ColdPBC/cold-monorepo/commit/2b37f9aed22f67e3fb540ceb16c0e8509c702ac4))
+* add scrolling to show expanded card ([24462fe](https://github.com/ColdPBC/cold-monorepo/commit/24462fe950ad131696d203cb963a8c8a3c67969d))
+* basic unexpanded cards with entity name as bubble ([98fe6b5](https://github.com/ColdPBC/cold-monorepo/commit/98fe6b5a3bffb7f5bc373968dcb74e79493f3f60))
+* query for material on MaterialPage and present breadcrumbs, name ([358e195](https://github.com/ColdPBC/cold-monorepo/commit/358e1954bc40ee8c3733c6eb7eabee4fd0a66ab6))
+
 # [1.453.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.452.1...v1.453.0) (2024-10-30)
 
 
