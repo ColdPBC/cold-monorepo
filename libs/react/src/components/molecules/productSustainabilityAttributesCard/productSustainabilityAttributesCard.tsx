@@ -65,7 +65,10 @@ const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttrib
 					<span className="text-body font-bold text-white">Material-level</span>
 					{materialSustainabilityAttributes.map(sustainabilityAttribute => (
 						<div className="w-full" key={sustainabilityAttribute.id}>
-							<SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />
+							<SustainabilityAttributeCard
+                sustainabilityAttribute={sustainabilityAttribute}
+                cardStyle={SustainabilityAttributeCardStyle.ENTITY_DETAIL}
+              />
 						</div>
 					))}
 				</div>
@@ -75,7 +78,10 @@ const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttrib
 					<span className="text-body font-bold text-white">Supplier-level</span>
 					{supplierSustainabilityAttributes.map(sustainabilityAttribute => (
 						<div className="w-full" key={sustainabilityAttribute.id}>
-							<SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />
+              <SustainabilityAttributeCard
+                sustainabilityAttribute={sustainabilityAttribute}
+                cardStyle={SustainabilityAttributeCardStyle.ENTITY_DETAIL}
+              />
 						</div>
 					))}
 				</div>

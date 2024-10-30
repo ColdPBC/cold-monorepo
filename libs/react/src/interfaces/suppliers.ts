@@ -42,6 +42,7 @@ export interface SuppliersWithAssurances {
     };
   }[];
   materialSuppliers: {
+    id: string;
     material: {
       id: string;
       name: string;

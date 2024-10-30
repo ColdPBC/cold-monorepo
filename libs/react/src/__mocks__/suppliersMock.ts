@@ -480,6 +480,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       ],
       materialSuppliers: [
         {
+          id: 'abc',
           material: {
             id: 'a',
             name: "Material 10",
@@ -487,6 +488,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         },
         {
+          id: 'def',
           material: {
             id: 'b',
             name: "Material 2",
@@ -494,6 +496,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         },
         {
+          id: 'ghi',
           material: {
             id: 'c',
             name: "Material 8",

@@ -169,10 +169,20 @@ export const processSustainabilityAttributeDataFromGraphQL = (
         const { assuranceStatus, assuranceExpiration } =
           getAggregateStatusFromAttributeAssurancesGraphQL(assurances);
 
+        // Get the entity name from the first assurance
+        // We can use the first one since all assurances in this group are for the same entity
+        const firstAssurance = assurances[0];
+        const entityName = firstAssurance.material?.name ??
+          firstAssurance.organization?.name ??
+          firstAssurance.organizationFacility?.name ??
+          firstAssurance.product?.name ??
+          entityId; // Fallback to ID if name is somehow not available
+
         return {
           effectiveEndDate: assuranceExpiration,
           entity: {
             id: entityId,
+            name: entityName,
           },
           status: assuranceStatus
         };
@@ -226,7 +236,10 @@ export const processEntityLevelAssurances = (
       sustainabilityAttribute.attributeAssurances.push({
         effectiveEndDate: assuranceExpiration,
         entity: {
-          id: entity.id
+          id: entity.id,
+          name: entity.name,
+          // For materials, we try to grab the Tier 2 supplier name
+          supplierName: (entity.materialSuppliers || [])[0]?.organizationFacility?.name,
         },
         status: assuranceStatus
       });

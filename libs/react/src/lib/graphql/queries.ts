@@ -34,6 +34,7 @@ export const GET_ALL_FILES = gql`
           country
           supplierTier
           materialSuppliers {
+            id
             material {
               id
               name
@@ -44,6 +45,7 @@ export const GET_ALL_FILES = gql`
           id
           name
           materialSuppliers {
+            id
             organizationFacility {
               id
               name
@@ -405,18 +407,22 @@ export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG = gql`
         effectiveEndDate
         material {
           id
+          name
         }
         organizationFile {
           id
         }
         organization {
           id
+          name
         }
         organizationFacility {
           id
+          name
         }
         product {
           id
+          name
         }
       }
       level
