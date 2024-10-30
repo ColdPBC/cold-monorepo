@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorFallback, ErrorPage, MainContent, Spinner } from '@coldpbc/components';
+import { ErrorFallback, ErrorPage, MainContent, MaterialDetailsCard, ProductDetailsCard, ProductSustainabilityAttributesCard, Spinner } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
@@ -37,11 +37,11 @@ const _MaterialDetail: React.FC = () => {
 	const subTitle = [material.materialCategory, material.materialSubcategory].filter(val => !!val).join(' | ');
 
 	return (
-		<MainContent
-			title={material.name}
-			subTitle={subTitle}
-			breadcrumbs={[{ label: 'Material', href: '/materials' }, { label: material.name }]}
-			className={'w-[calc(100%)]'}></MainContent>
+		<MainContent title={material.name} subTitle={subTitle} breadcrumbs={[{ label: 'Material', href: '/materials' }, { label: material.name }]} className={'w-[calc(100%)]'}>
+			<div className="w-full h-full flex gap-6 items-start mt-4 mb-20">
+				<MaterialDetailsCard material={material} />
+			</div>
+		</MainContent>
 	);
 };
 
