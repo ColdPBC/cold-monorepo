@@ -1,5 +1,12 @@
 import React from 'react';
-import { ErrorFallback, ErrorPage, MainContent, Spinner, SupplierDetailsCard } from '@coldpbc/components';
+import {
+  ErrorFallback,
+  ErrorPage,
+  MainContent,
+  Spinner,
+  SupplierDetailsCard,
+  SupplierSustainabilityAttributesCard,
+} from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
@@ -43,6 +50,7 @@ export const _SupplierDetail = () => {
     >
       <div className="w-full h-full flex gap-6 items-start mt-4 mb-20">
         <SupplierDetailsCard supplier={supplier} />
+        <SupplierSustainabilityAttributesCard supplier={supplier} />
       </div>
     </MainContent>
 );

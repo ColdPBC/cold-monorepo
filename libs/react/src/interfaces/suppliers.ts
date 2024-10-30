@@ -1,6 +1,8 @@
 import { Claims } from './claims';
 import { EntityLevel } from '@coldpbc/enums';
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
+import { MaterialGraphQL } from './materials';
+import { addDays, subDays } from 'date-fns';
 
 export interface Suppliers {
   id: string;
