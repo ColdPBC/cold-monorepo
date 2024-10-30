@@ -28,9 +28,11 @@ import {
 } from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import {useFlags} from "launchdarkly-react-client-sdk";
+import { useNavigate } from 'react-router-dom';
 
 const _MaterialsDataGrid = () => {
   const ldFlags = useFlags();
+  const navigate = useNavigate();
   const { orgId } = useAuth0Wrapper();
   const [materials, setMaterials] = useState<MaterialsWithRelations[]>([]);
   const materialsWithRelations = useGraphQLSWR<{
@@ -205,6 +207,11 @@ const _MaterialsDataGrid = () => {
     <div className={'w-full'}>
       <MuiDataGrid
         rows={rows}
+        onRowClick={(params) => {
+          if(ldFlags.materialDetailPageCold997){
+            navigate(`/materials/${params.id}`)
+          }
+        }}
         columns={columns}
         columnHeaderHeight={55}
         rowHeight={72}
