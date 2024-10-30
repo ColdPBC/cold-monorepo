@@ -8,10 +8,12 @@ import {
   SustainabilityCardExpandedView,
 } from '@coldpbc/components';
 import { SustainabilityAttribute } from '@coldpbc/interfaces';
+import { EntityLevel } from '@coldpbc/enums';
 
 interface SustainabilityAttributeCardProps {
   sustainabilityAttribute: SustainabilityAttribute;
   cardStyle?: SustainabilityAttributeCardStyle;
+  displayedOnEntityLevel?: EntityLevel;
 }
 
 export enum SustainabilityAttributeCardStyle {
@@ -22,7 +24,7 @@ export enum SustainabilityAttributeCardStyle {
 
 export const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
 
-const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> = ({ sustainabilityAttribute, cardStyle }) => {
+const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> = ({ sustainabilityAttribute, cardStyle, displayedOnEntityLevel }) => {
 	// If we don't get a logo image from the backend, we'll use the default
 	const [imgSrc, setImgSrc] = useState<string>(sustainabilityAttribute.logoUrl || DEFAULT_ICON_URL);
   const [isExpanded, setExpanded] = useState<boolean>(false);
@@ -46,6 +48,7 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
         return (
           <AttributeAssuranceEntityDetail
             sustainabilityAttribute={sustainabilityAttribute}
+            displayedOnEntityLevel={displayedOnEntityLevel || EntityLevel.PRODUCT}
             expanded={isExpanded}
             onClick={() => setExpanded(!isExpanded)}
           />
@@ -83,6 +86,7 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
         <div ref={expandedContentRef}>
           <SustainabilityCardExpandedView
             sustainabilityAttribute={sustainabilityAttribute}
+            displayedOnEntityLevel={displayedOnEntityLevel}
           />
         </div>
       )}

@@ -45,12 +45,14 @@ const _MaterialDetail: React.FC = () => {
 	const subTitle = [material.materialCategory, material.materialSubcategory, tier2SupplierName].filter(val => !!val).join(' | ');
 
 	return (
-		<MainContent title={material.name} subTitle={subTitle} breadcrumbs={[{ label: 'Material', href: '/materials' }, { label: material.name }]} className={'w-[calc(100%)]'}>
-			<div className="w-full h-full flex gap-6 items-start mt-4 mb-20">
-				<MaterialDetailsCard material={material} />
-        <MaterialSustainabilityAttributesCard material={material} />
-			</div>
-		</MainContent>
+		<div key={material.id}>
+      <MainContent title={material.name} subTitle={subTitle} breadcrumbs={[{ label: 'Material', href: '/materials' }, { label: material.name }]} className={'w-[calc(100%)]'}>
+        <div className="w-full h-full flex gap-6 items-start mt-4 mb-20">
+          <MaterialDetailsCard material={material} />
+          <MaterialSustainabilityAttributesCard material={material} />
+        </div>
+      </MainContent>
+    </div>
 	);
 };
 
