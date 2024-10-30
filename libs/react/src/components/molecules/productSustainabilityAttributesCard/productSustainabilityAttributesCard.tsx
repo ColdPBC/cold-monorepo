@@ -3,15 +3,11 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { EntityWithAttributeAssurances, ProductsQuery, SustainabilityAttribute } from '@coldpbc/interfaces';
 import { Card, SustainabilityAttributeCard, SustainabilityAttributeCardStyle } from '@coldpbc/components';
-import { processEntityLevelAssurances } from '@coldpbc/lib';
+import { filterAttributes, processEntityLevelAssurances } from '@coldpbc/lib';
 import { EntityLevel } from '@coldpbc/enums';
 
 interface ProductSustainabilityAttributesCardProps {
 	product: ProductsQuery;
-}
-
-const filterAttributes = (attributes: SustainabilityAttribute[], level: EntityLevel) => {
-  return attributes.filter(sustainabilityAttribute => sustainabilityAttribute.level === level)
 }
 
 const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttributesCardProps> = ({ product }) => {

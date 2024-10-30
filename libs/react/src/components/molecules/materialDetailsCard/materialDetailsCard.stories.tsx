@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { MaterialDetailsCard } from '@coldpbc/components';
+import { getMaterialMock } from '@coldpbc/mocks';
 
 const meta: Meta<typeof MaterialDetailsCard> = {
 	title: 'Molecules/MaterialDetailsCard',
@@ -14,22 +15,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		material: {
-			id: 'material_1',
-			name: 'Organic Wool',
-			materialSuppliers: [
-				{
-					id: 'material_supplier_1',
-					organizationFacility: {
-						id: 'tier_2_supplier_1',
-						name: 'Wool Factory',
-						country: 'New Zealand',
-					},
-				},
-			],
-			materialCategory: 'Fabrics',
-			materialSubcategory: 'Wools',
-			attributeAssurances: [],
-		},
+		material: getMaterialMock,
 	},
 };
