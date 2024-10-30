@@ -59,3 +59,17 @@ export interface MaterialsWithRelations extends Materials {
     };
   }[];
 }
+
+export interface MaterialGraphQL extends Materials {
+  materialCategory: string | null;
+  materialSubcategory: string | null;
+  materialSuppliers: {
+    id: string;
+    organizationFacility: {
+      id: string;
+      name: string;
+      country: string;
+    };
+  }[];
+  attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
+}

@@ -517,6 +517,38 @@ export const GET_PRODUCT = gql`
   }
 `;
 
+export const GET_MATERIAL = gql`
+  query GetMaterial($id: ID!) {
+    material(id: $id) {
+      id
+      name
+      materialCategory
+      materialSubcategory
+      attributeAssurances {
+        id
+        effectiveEndDate
+        organizationFile {
+          id
+        }
+        sustainabilityAttribute {
+          id
+          level
+          logoUrl
+          name
+        }
+      }
+      materialSuppliers {
+        id
+        organizationFacility {
+          id
+          name
+          country
+        }
+      }
+    }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -540,4 +572,5 @@ export const queries: {
   CREATE_SUPPLIER: CREATE_SUPPLIER,
   UPDATE_PRODUCT: UPDATE_PRODUCT,
   GET_PRODUCT: GET_PRODUCT,
+  GET_MATERIAL: GET_MATERIAL,
 };
