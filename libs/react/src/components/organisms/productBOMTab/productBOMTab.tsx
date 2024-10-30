@@ -5,13 +5,18 @@ import { processEntityLevelAssurances } from '@coldpbc/lib';
 import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
+import {useFlags} from "launchdarkly-react-client-sdk";
+import { useNavigate } from 'react-router-dom';
 
 export const DEFAULT_GRID_COL_DEF = {
 	headerClassName: 'bg-gray-30 text-body',
 };
 
 const _ProductBOMTab = (props: { product: ProductsQuery }) => {
-	const { product } = props;
+  const ldFlags = useFlags();
+  const navigate = useNavigate();
+
+  const { product } = props;
 
   const renderName = (params: any) => {
     const name = get(params, 'row.material', '')
@@ -107,7 +112,6 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 
 	const rows: {
 		id: string;
-		materialId: string;
 		material: string;
     materialCategory: string;
     materialSubcategory: string;
@@ -123,8 +127,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 			const susAttributes = processEntityLevelAssurances([material]);
 			const tier2Supplier = get(material.materialSuppliers, '[0].organizationFacility.name', '');
 			return {
-				id: productMaterial.id,
-				materialId: material.id,
+				id: material.id,
 				material: material.name,
         materialCategory: material.materialCategory || '',
         materialSubcategory: material.materialSubcategory || '',
@@ -139,6 +142,11 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 		<Card title={'Bill of Materials'} className={'w-full'} data-testid={'product-bom-tab-card'}>
 			<MuiDataGrid
 				rows={rows}
+        onRowClick={(params) => {
+          if(ldFlags.materialDetailPageCold997){
+            navigate(`/materials/${params.id}`)
+          }
+        }}
 				columns={columns}
 				showSearch
         showManageColumns
