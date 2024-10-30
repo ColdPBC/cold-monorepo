@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { AttributeAssuranceGraph, AttributeAssuranceSingleStatus } from '@coldpbc/components';
+import {
+  AttributeAssuranceEntityDetail,
+  AttributeAssuranceGraph,
+  AttributeAssuranceSingleStatus,
+  SustainabilityCardExpandedView,
+} from '@coldpbc/components';
 import { SustainabilityAttribute } from '@coldpbc/interfaces';
 
 interface SustainabilityAttributeCardProps {
@@ -10,8 +15,9 @@ interface SustainabilityAttributeCardProps {
 }
 
 export enum SustainabilityAttributeCardStyle {
+  ENTITY_DETAIL = 'ENTITY DETAIL',
   GRAPH = 'GRAPH',
-  SINGLE_STATUS = 'SINGLE_STATUS',
+  SINGLE_STATUS = 'SINGLE STATUS',
 }
 
 export const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
@@ -19,9 +25,31 @@ export const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazona
 const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> = ({ sustainabilityAttribute, cardStyle }) => {
 	// If we don't get a logo image from the backend, we'll use the default
 	const [imgSrc, setImgSrc] = useState<string>(sustainabilityAttribute.logoUrl || DEFAULT_ICON_URL);
+  const [isExpanded, setExpanded] = useState<boolean>(false);
+  const expandedContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isExpanded && expandedContentRef.current) {
+      // Wait a frame for the DataGrid to render
+      requestAnimationFrame(() => {
+        expandedContentRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        });
+      });
+    }
+  }, [isExpanded]);
 
   const renderContent = () => {
     switch (cardStyle) {
+      case SustainabilityAttributeCardStyle.ENTITY_DETAIL:
+        return (
+          <AttributeAssuranceEntityDetail
+            sustainabilityAttribute={sustainabilityAttribute}
+            expanded={isExpanded}
+            onClick={() => setExpanded(!isExpanded)}
+          />
+        );
       case SustainabilityAttributeCardStyle.SINGLE_STATUS:
         return (
           <AttributeAssuranceSingleStatus sustainabilityAttribute={sustainabilityAttribute} />
@@ -35,19 +63,30 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
   };
 
 	return (
-		<div className="w-full h-auto p-4 rounded-2xl border border-gray-90 flex">
-			<div className="w-24 h-24 flex-shrink-0 mr-4">
-				<img className="w-full h-full object-cover rounded-lg" src={imgSrc} alt={`Logo for ${sustainabilityAttribute.name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
-			</div>
-			<div className="flex-grow flex flex-col justify-between min-w-0 overflow-hidden">
-				<div className="w-full overflow-hidden">
-					<div className="text-tc-primary text-l font-bold truncate" title={sustainabilityAttribute.name}>
-						{sustainabilityAttribute.name}
-					</div>
-				</div>
-				{renderContent()}
-			</div>
-		</div>
+		<div>
+      <div className={`w-full h-auto p-4 ${isExpanded ? 'rounded-t-2xl' : 'rounded-2xl'} border border-gray-90 flex flex-col`}>
+        <div className="flex">
+          <div className="w-24 h-24 flex-shrink-0 mr-4">
+            <img className="w-full h-full object-cover rounded-lg" src={imgSrc} alt={`Logo for ${sustainabilityAttribute.name}`} onError={() => setImgSrc(DEFAULT_ICON_URL)} />
+          </div>
+          <div className="flex-grow flex flex-col justify-between min-w-0 overflow-hidden">
+            <div className="w-full overflow-hidden">
+              <div className="text-tc-primary text-l font-bold truncate" title={sustainabilityAttribute.name}>
+                {sustainabilityAttribute.name}
+              </div>
+            </div>
+            {renderContent()}
+          </div>
+        </div>
+      </div>
+      {cardStyle === SustainabilityAttributeCardStyle.ENTITY_DETAIL && isExpanded && (
+        <div ref={expandedContentRef}>
+          <SustainabilityCardExpandedView
+            sustainabilityAttribute={sustainabilityAttribute}
+          />
+        </div>
+      )}
+    </div>
 	);
 };
 

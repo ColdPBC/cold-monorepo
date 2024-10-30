@@ -36,6 +36,9 @@ export class MaterialSupplier {
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'material_suppliers_organization_id_idx1' })
 	organization!: Ref<Organization>;
 
+	@Property({ type: 'text', nullable: true })
+	supplierProductId?: string;
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof MaterialSupplier, OrgContext>) {
 		if(!this.sidecar) {

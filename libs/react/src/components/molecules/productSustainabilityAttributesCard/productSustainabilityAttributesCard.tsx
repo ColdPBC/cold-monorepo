@@ -3,17 +3,12 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { EntityWithAttributeAssurances, ProductsQuery, SustainabilityAttribute } from '@coldpbc/interfaces';
 import { Card, SustainabilityAttributeCard, SustainabilityAttributeCardStyle } from '@coldpbc/components';
-import { processEntityLevelAssurances } from '@coldpbc/lib';
+import { filterAttributes, processEntityLevelAssurances } from '@coldpbc/lib';
 import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
-import { useGraphQLSWR } from '@coldpbc/hooks';
 
 interface ProductSustainabilityAttributesCardProps {
 	product: ProductsQuery;
   setShowUpdateAttributesModal: (show: boolean) => void;
-}
-
-const filterAttributes = (attributes: SustainabilityAttribute[], level: EntityLevel) => {
-  return attributes.filter(sustainabilityAttribute => sustainabilityAttribute.level === level)
 }
 
 const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttributesCardProps> = ({ product, setShowUpdateAttributesModal }) => {
@@ -83,7 +78,10 @@ const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttrib
 					<span className="text-body font-bold text-white">Material-level</span>
 					{materialSustainabilityAttributes.map(sustainabilityAttribute => (
 						<div className="w-full" key={sustainabilityAttribute.id}>
-							<SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />
+							<SustainabilityAttributeCard
+                sustainabilityAttribute={sustainabilityAttribute}
+                cardStyle={SustainabilityAttributeCardStyle.ENTITY_DETAIL}
+              />
 						</div>
 					))}
 				</div>
@@ -93,7 +91,10 @@ const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttrib
 					<span className="text-body font-bold text-white">Supplier-level</span>
 					{supplierSustainabilityAttributes.map(sustainabilityAttribute => (
 						<div className="w-full" key={sustainabilityAttribute.id}>
-							<SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />
+              <SustainabilityAttributeCard
+                sustainabilityAttribute={sustainabilityAttribute}
+                cardStyle={SustainabilityAttributeCardStyle.ENTITY_DETAIL}
+              />
 						</div>
 					))}
 				</div>

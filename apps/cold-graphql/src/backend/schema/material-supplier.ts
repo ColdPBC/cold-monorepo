@@ -28,4 +28,7 @@ export class MaterialSupplier {
 
 	@RelationshipField<MaterialSupplier>(() => Organization, { id: (entity) => entity.organization?.id })
 	organization!: Organization;
+
+	@Field(() => String, { nullable: true })
+	supplierProductId?: string;
 }

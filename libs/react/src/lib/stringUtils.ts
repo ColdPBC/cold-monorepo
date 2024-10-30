@@ -5,6 +5,5 @@ export function toSentenceCase(str: string) {
 }
 
 export function pluralize(word: string, count: number) {
-  const sentenceCaseWord = toSentenceCase(word);
-  return `${count} ${sentenceCaseWord}${count !== 1 ? 's' : ''}`;
+  return `${count} ${word}${count !== 1 ? 's' : ''}`;
 }

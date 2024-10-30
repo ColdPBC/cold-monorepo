@@ -1,3 +1,98 @@
+# [1.454.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.453.0...v1.454.0) (2024-10-30)
+
+
+### Bug Fixes
+
+* entity name, not attribute name! ([fa56fc7](https://github.com/ColdPBC/cold-monorepo/commit/fa56fc7836d8bd6ea03ae669b9ee0a5a202ffcf3))
+
+
+### Features
+
+* add basic expanded view ([0d7b25b](https://github.com/ColdPBC/cold-monorepo/commit/0d7b25b7f6fb93b2ffb34ceb2385235de1f47861))
+* add basic navigation to now empty MaterialDetail component behind FF ([b50ceb8](https://github.com/ColdPBC/cold-monorepo/commit/b50ceb8e05a2216b53f76de2625c2dde0190faa4))
+* add basic two-column expanded state ([01def45](https://github.com/ColdPBC/cold-monorepo/commit/01def45bde5142bea62636afad0fc197dbbf8a5e))
+* add details card ([4a3b188](https://github.com/ColdPBC/cold-monorepo/commit/4a3b188628098cfc85f401fc7f61eda36eacd50e))
+* add in supplier name to table ([fba3263](https://github.com/ColdPBC/cold-monorepo/commit/fba3263220e775cf81c6fdf1c4c157ebbc06bc1d))
+* add MaterialSustainabilityAttributesCard ([2b37f9a](https://github.com/ColdPBC/cold-monorepo/commit/2b37f9aed22f67e3fb540ceb16c0e8509c702ac4))
+* add scrolling to show expanded card ([24462fe](https://github.com/ColdPBC/cold-monorepo/commit/24462fe950ad131696d203cb963a8c8a3c67969d))
+* basic unexpanded cards with entity name as bubble ([98fe6b5](https://github.com/ColdPBC/cold-monorepo/commit/98fe6b5a3bffb7f5bc373968dcb74e79493f3f60))
+* query for material on MaterialPage and present breadcrumbs, name ([358e195](https://github.com/ColdPBC/cold-monorepo/commit/358e1954bc40ee8c3733c6eb7eabee4fd0a66ab6))
+
+# [1.453.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.452.1...v1.453.0) (2024-10-30)
+
+
+### Bug Fixes
+
+* bump version to 1.453.1 ([201d5a1](https://github.com/ColdPBC/cold-monorepo/commit/201d5a115c9f1f8d58208f04cf8ae2483d5ce640))
+* expiring message updates from Liz ([e8f6724](https://github.com/ColdPBC/cold-monorepo/commit/e8f6724d8351ebdc9ee500857048ef9486a773a6))
+* improve color setting on new icons ([0440c38](https://github.com/ColdPBC/cold-monorepo/commit/0440c385d0a2748d2f521ed22d9b64b33acaa24b))
+* issues with dockerfiles ([3dc7d23](https://github.com/ColdPBC/cold-monorepo/commit/3dc7d23eecd30ba33b1ba2c74047207422d2dd52))
+* make material fields optional ([d3f06b3](https://github.com/ColdPBC/cold-monorepo/commit/d3f06b3ea56f963ecbab62c0fcdd3f9fe9a5f0e0))
+* make sure that enum value is 2 words ([982df2f](https://github.com/ColdPBC/cold-monorepo/commit/982df2f97be721b4119e37c75b204227fb2648de))
+* remove redundant renderCell properties in productsDataGrid ([69a6134](https://github.com/ColdPBC/cold-monorepo/commit/69a613424cfda5c81865c91a537a644bf58a91e8))
+* SustainabilityPage story needs ...GraphQL type ([aa558ac](https://github.com/ColdPBC/cold-monorepo/commit/aa558acead1a73451eb5fef8f86ae7878c65f371))
+* update Dockerfile RUN commands to list correct directories ([b55c6d2](https://github.com/ColdPBC/cold-monorepo/commit/b55c6d2a52feb5c211ea6f31a04a9bc02091208f))
+* update material name rendering ([e2799e9](https://github.com/ColdPBC/cold-monorepo/commit/e2799e9dc74cadfaa071b1e3b23007511dcb76ad))
+* update property names in productsDataGrid component ([c744408](https://github.com/ColdPBC/cold-monorepo/commit/c744408b372a6f1fba850f8dcdfb432225905ae5))
+
+
+### Features
+
+* clean up Sustainability Attribute lists on data grids (COLD-1186) ([8d03f6d](https://github.com/ColdPBC/cold-monorepo/commit/8d03f6d693d09165e04c0f641f0c9a9dbbf39393))
+* enhance product BOM tab with material category filtering ([24bb440](https://github.com/ColdPBC/cold-monorepo/commit/24bb440dd97d23761fd9155cfe05aa602b1de760))
+* new sustainability attribute select proof of concept ([1d6357d](https://github.com/ColdPBC/cold-monorepo/commit/1d6357d65fd72c8f887c1d3e1ddc585fcf8f88f9))
+* update productsDataGrid to include productCategory and productSubcategory fields ([684a6d3](https://github.com/ColdPBC/cold-monorepo/commit/684a6d3ca8ca4336bbdc01b7133cf5a745737ac4))
+* update sustainability attribute names and add material ID fields** ([b136500](https://github.com/ColdPBC/cold-monorepo/commit/b136500918dfe4c6bd0426b9299b532e62450f15))
+
+# [1.453.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.452.1...v1.453.0) (2024-10-30)
+
+
+### Bug Fixes
+
+* expiring message updates from Liz ([e8f6724](https://github.com/ColdPBC/cold-monorepo/commit/e8f6724d8351ebdc9ee500857048ef9486a773a6))
+* improve color setting on new icons ([0440c38](https://github.com/ColdPBC/cold-monorepo/commit/0440c385d0a2748d2f521ed22d9b64b33acaa24b))
+* issues with dockerfiles ([3dc7d23](https://github.com/ColdPBC/cold-monorepo/commit/3dc7d23eecd30ba33b1ba2c74047207422d2dd52))
+* make material fields optional ([d3f06b3](https://github.com/ColdPBC/cold-monorepo/commit/d3f06b3ea56f963ecbab62c0fcdd3f9fe9a5f0e0))
+* make sure that enum value is 2 words ([982df2f](https://github.com/ColdPBC/cold-monorepo/commit/982df2f97be721b4119e37c75b204227fb2648de))
+* remove redundant renderCell properties in productsDataGrid ([69a6134](https://github.com/ColdPBC/cold-monorepo/commit/69a613424cfda5c81865c91a537a644bf58a91e8))
+* SustainabilityPage story needs ...GraphQL type ([aa558ac](https://github.com/ColdPBC/cold-monorepo/commit/aa558acead1a73451eb5fef8f86ae7878c65f371))
+* update Dockerfile RUN commands to list correct directories ([b55c6d2](https://github.com/ColdPBC/cold-monorepo/commit/b55c6d2a52feb5c211ea6f31a04a9bc02091208f))
+* update material name rendering ([e2799e9](https://github.com/ColdPBC/cold-monorepo/commit/e2799e9dc74cadfaa071b1e3b23007511dcb76ad))
+* update property names in productsDataGrid component ([c744408](https://github.com/ColdPBC/cold-monorepo/commit/c744408b372a6f1fba850f8dcdfb432225905ae5))
+
+
+### Features
+
+* clean up Sustainability Attribute lists on data grids (COLD-1186) ([8d03f6d](https://github.com/ColdPBC/cold-monorepo/commit/8d03f6d693d09165e04c0f641f0c9a9dbbf39393))
+* enhance product BOM tab with material category filtering ([24bb440](https://github.com/ColdPBC/cold-monorepo/commit/24bb440dd97d23761fd9155cfe05aa602b1de760))
+* new sustainability attribute select proof of concept ([1d6357d](https://github.com/ColdPBC/cold-monorepo/commit/1d6357d65fd72c8f887c1d3e1ddc585fcf8f88f9))
+* update productsDataGrid to include productCategory and productSubcategory fields ([684a6d3](https://github.com/ColdPBC/cold-monorepo/commit/684a6d3ca8ca4336bbdc01b7133cf5a745737ac4))
+* update sustainability attribute names and add material ID fields** ([b136500](https://github.com/ColdPBC/cold-monorepo/commit/b136500918dfe4c6bd0426b9299b532e62450f15))
+
+# [1.453.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.452.1...v1.453.0) (2024-10-30)
+
+
+### Bug Fixes
+
+* expiring message updates from Liz ([e8f6724](https://github.com/ColdPBC/cold-monorepo/commit/e8f6724d8351ebdc9ee500857048ef9486a773a6))
+* improve color setting on new icons ([0440c38](https://github.com/ColdPBC/cold-monorepo/commit/0440c385d0a2748d2f521ed22d9b64b33acaa24b))
+* issues with dockerfiles ([3dc7d23](https://github.com/ColdPBC/cold-monorepo/commit/3dc7d23eecd30ba33b1ba2c74047207422d2dd52))
+* make sure that enum value is 2 words ([982df2f](https://github.com/ColdPBC/cold-monorepo/commit/982df2f97be721b4119e37c75b204227fb2648de))
+* remove redundant renderCell properties in productsDataGrid ([69a6134](https://github.com/ColdPBC/cold-monorepo/commit/69a613424cfda5c81865c91a537a644bf58a91e8))
+* SustainabilityPage story needs ...GraphQL type ([aa558ac](https://github.com/ColdPBC/cold-monorepo/commit/aa558acead1a73451eb5fef8f86ae7878c65f371))
+* update Dockerfile RUN commands to list correct directories ([b55c6d2](https://github.com/ColdPBC/cold-monorepo/commit/b55c6d2a52feb5c211ea6f31a04a9bc02091208f))
+* update material name rendering ([e2799e9](https://github.com/ColdPBC/cold-monorepo/commit/e2799e9dc74cadfaa071b1e3b23007511dcb76ad))
+* update property names in productsDataGrid component ([c744408](https://github.com/ColdPBC/cold-monorepo/commit/c744408b372a6f1fba850f8dcdfb432225905ae5))
+
+
+### Features
+
+* clean up Sustainability Attribute lists on data grids (COLD-1186) ([8d03f6d](https://github.com/ColdPBC/cold-monorepo/commit/8d03f6d693d09165e04c0f641f0c9a9dbbf39393))
+* enhance product BOM tab with material category filtering ([24bb440](https://github.com/ColdPBC/cold-monorepo/commit/24bb440dd97d23761fd9155cfe05aa602b1de760))
+* new sustainability attribute select proof of concept ([1d6357d](https://github.com/ColdPBC/cold-monorepo/commit/1d6357d65fd72c8f887c1d3e1ddc585fcf8f88f9))
+* update productsDataGrid to include productCategory and productSubcategory fields ([684a6d3](https://github.com/ColdPBC/cold-monorepo/commit/684a6d3ca8ca4336bbdc01b7133cf5a745737ac4))
+* update sustainability attribute names and add material ID fields** ([b136500](https://github.com/ColdPBC/cold-monorepo/commit/b136500918dfe4c6bd0426b9299b532e62450f15))
+
 # [1.453.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.452.1...v1.453.0) (2024-10-29)
 
 

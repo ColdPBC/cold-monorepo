@@ -154,3 +154,39 @@ export const SingleStatusNotDocumented: Story = {
     cardStyle: SustainabilityAttributeCardStyle.SINGLE_STATUS,
   }
 };
+
+export const EntityDetailMaterial: Story = {
+  args: {
+    sustainabilityAttribute: {
+      id: 'a',
+      name: 'Default Material Attribute',
+      attributeAssurances: [
+        AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: 1}),
+        AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.ACTIVE, index: 2}),
+        AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.EXPIRING, index: 3}),
+        AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.EXPIRED, index: 4}),
+        AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: 5}),
+      ],
+      level: EntityLevel.MATERIAL,
+    },
+    cardStyle: SustainabilityAttributeCardStyle.ENTITY_DETAIL,
+  }
+};
+
+export const EntityDetailSupplier: Story = {
+  args: {
+    sustainabilityAttribute: {
+      id: 'a',
+      name: 'Default Supplier Attribute',
+      attributeAssurances: [
+        AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: 1}),
+        AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.ACTIVE, index: 2}),
+        AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.EXPIRING, index: 3}),
+        AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.EXPIRED, index: 4}),
+        AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: 5}),
+      ],
+      level: EntityLevel.SUPPLIER,
+    },
+    cardStyle: SustainabilityAttributeCardStyle.ENTITY_DETAIL,
+  }
+};

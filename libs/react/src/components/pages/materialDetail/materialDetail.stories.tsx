@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { MaterialDetail } from '@coldpbc/components';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { getMaterialGraphQLMock, StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
 
 const meta: Meta<typeof MaterialDetail> = {
@@ -17,7 +17,10 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/materials/mat_qg9aabgn9a81mb90bijv9dtf'] }}>
+      <StoryMockProvider
+        memoryRouterProps={{ initialEntries: ['/materials/material_1'] }}
+        graphqlMocks={getMaterialGraphQLMock}
+      >
         <Routes>
           <Route path={'/materials/:id'} element={<MaterialDetail />} />
         </Routes>
