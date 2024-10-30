@@ -527,9 +527,12 @@ export const GET_MATERIAL = gql`
   query GetMaterial($id: ID!) {
     material(id: $id) {
       id
-      name
+      brandMaterialId
+      description
       materialCategory
       materialSubcategory
+      name
+      supplierMaterialId
       attributeAssurances {
         id
         effectiveEndDate
