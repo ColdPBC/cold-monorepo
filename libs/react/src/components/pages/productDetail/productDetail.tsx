@@ -57,7 +57,7 @@ const _ProductDetail = () => {
 	const subTitle = [product.productCategory, product.productSubcategory, product.seasonCode].filter(val => !!val).join(' | ');
 
 	return (
-		<MainContent title={product.name} subTitle={subTitle} breadcrumbs={[{ label: 'Products', href: '/products' }, { label: 'Product Detail' }]} className={'w-[calc(100%)]'}>
+		<MainContent title={product.name} subTitle={subTitle} breadcrumbs={[{ label: 'Products', href: '/products' }, { label: product.name }]} className={'w-[calc(100%)]'}>
 			<Tabs
 				tabs={[
 					{
