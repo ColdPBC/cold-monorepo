@@ -41,7 +41,8 @@ const _MaterialDetail: React.FC = () => {
 		return null;
 	}
 
-	const subTitle = [material.materialCategory, material.materialSubcategory].filter(val => !!val).join(' | ');
+  const tier2SupplierName = material.materialSuppliers[0]?.organizationFacility.name
+	const subTitle = [material.materialCategory, material.materialSubcategory, tier2SupplierName].filter(val => !!val).join(' | ');
 
 	return (
 		<MainContent title={material.name} subTitle={subTitle} breadcrumbs={[{ label: 'Material', href: '/materials' }, { label: material.name }]} className={'w-[calc(100%)]'}>
