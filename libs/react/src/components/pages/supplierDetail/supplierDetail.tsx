@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorFallback, ErrorPage, MainContent, Spinner } from '@coldpbc/components';
+import { ErrorFallback, ErrorPage, MainContent, Spinner, SupplierDetailsCard } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
@@ -35,12 +35,17 @@ export const _SupplierDetail = () => {
 	}
 
 	return (
-		<MainContent
-			title={supplier.name}
-			subTitle={`Tier ${supplier.supplierTier}`}
-			breadcrumbs={[{ label: 'Suppliers', href: '/suppliers' }, { label: supplier.name }]}
-			className={'w-[calc(100%)]'}></MainContent>
-	);
+    <MainContent
+      title={supplier.name}
+      subTitle={`Tier ${supplier.supplierTier}`}
+      breadcrumbs={[{ label: 'Suppliers', href: '/suppliers' }, { label: supplier.name }]}
+      className={'w-[calc(100%)]'}
+    >
+      <div className="w-full h-full flex gap-6 items-start mt-4 mb-20">
+        <SupplierDetailsCard supplier={supplier} />
+      </div>
+    </MainContent>
+);
 };
 
 export const SupplierDetail = withErrorBoundary(_SupplierDetail, {
