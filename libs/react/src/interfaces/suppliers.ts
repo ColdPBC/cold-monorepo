@@ -93,6 +93,9 @@ export interface SupplierGraphQL {
   postalCode: string | null;
   country: string | null;
   supplierTier: number | null;
+  brandFacilityId: string | null;
+  category: string | null;
+  subcategory: string | null;
   attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
   materialSuppliers: {
     id: string;

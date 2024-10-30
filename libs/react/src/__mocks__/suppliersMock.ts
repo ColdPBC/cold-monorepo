@@ -665,6 +665,9 @@ export const getSupplierMock: (tier: number) => SupplierGraphQL = (
     stateProvince: 'MN',
     postalCode: '55401',
     country: 'USA',
+    category: 'Tannery',
+    subcategory: null,
+    brandFacilityId: 'brand_supplier_id_1',
     materialSuppliers: tier !== 2 ? [] : [
       {
         id: 'material_supplier_1',

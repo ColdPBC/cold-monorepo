@@ -37,6 +37,10 @@ const _SupplierDetailsCard: React.FC<SupplierDetailsCardProps> = ({ supplier }) 
 			<DetailsItem category={'Name'} value={supplier.name} />
 			<DetailsItem category={'Country'} value={supplier.country} />
 			<DetailsItem category={'Address'} value={address} />
+      <DetailsItem category={'Supplier Tier'} value={`Tier ${supplier.supplierTier}`} />
+      <DetailsItem category={'Category'} value={supplier.category} />
+      <DetailsItem category={'Sub-Category'} value={supplier.subcategory} />
+      <DetailsItem category={'Brand’s Supplier ID'} value={supplier.brandFacilityId} />
 		</Card>
 	);
 };
