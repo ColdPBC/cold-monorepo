@@ -1,3 +1,10 @@
+# [1.455.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.454.0...v1.455.0) (2024-10-30)
+
+
+### Features
+
+* allow users to navigate to materials details page from Materials datagrid ([e2cbc5d](https://github.com/ColdPBC/cold-monorepo/commit/e2cbc5d9c9609e8e0c4408d60b620a996afd38aa))
+
 # [1.454.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.453.0...v1.454.0) (2024-10-30)
 
 
