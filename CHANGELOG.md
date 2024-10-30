@@ -1,3 +1,10 @@
+# [1.456.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.455.0...v1.456.0) (2024-10-30)
+
+
+### Features
+
+* add new fields to organization_facilities and related schema ([b35df51](https://github.com/ColdPBC/cold-monorepo/commit/b35df513de75f871b6ae64d4152c6545df579fcd))
+
 # [1.455.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.454.0...v1.455.0) (2024-10-30)
 
 
