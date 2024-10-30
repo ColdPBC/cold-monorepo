@@ -1,6 +1,12 @@
-import { MaterialsWithCertifications, MaterialsWithRelations } from '@coldpbc/interfaces';
+import {
+  MaterialGraphQL,
+  MaterialsWithCertifications,
+  MaterialsWithRelations,
+  ProductsQuery,
+} from '@coldpbc/interfaces';
 import { addDays, subDays } from 'date-fns';
 import { EntityLevel } from '@coldpbc/enums';
+import { getProductsMock } from './productsMock';
 
 export function getMaterialsMock(): MaterialsWithCertifications[] {
   return [
@@ -663,3 +669,65 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
     },
   ];
 }
+
+export const getMaterialMock: MaterialGraphQL = (
+  {
+    id: 'material_1',
+    name: 'Organic Wool',
+    materialSuppliers: [
+      {
+        id: 'material_supplier_1',
+        organizationFacility: {
+          id: 'tier_2_supplier_1',
+          name: 'Wool Factory',
+          country: 'New Zealand',
+        },
+      },
+    ],
+    materialCategory: 'Fabrics',
+    materialSubcategory: 'Wools',
+    attributeAssurances: [
+      // Not documented assurance
+      {
+        id: 'assurance_1',
+        effectiveEndDate: null,
+        organizationFile: null,
+        sustainabilityAttribute: {
+          id: 'attribute_1',
+          name: 'RWS (Responsible Wool Standard)',
+          level: EntityLevel.MATERIAL,
+          logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Responsible+Wool+Standard.png',
+        },
+      },
+      // Active assurance
+      {
+        id: 'assurance_2',
+        effectiveEndDate: addDays(new Date(), 100).toISOString(),
+        organizationFile: {
+          id: 'document_1',
+        },
+        sustainabilityAttribute: {
+          id: 'attribute_2',
+          name: 'Organic',
+          level: EntityLevel.MATERIAL,
+          logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/generics/Material+Composition.png',
+        },
+      },
+      // Expired assurance
+      {
+        id: 'assurance_2',
+        effectiveEndDate: subDays(new Date(), 100).toISOString(),
+        organizationFile: {
+          id: 'document_1',
+        },
+        sustainabilityAttribute: {
+          id: 'attribute_3',
+          name: 'Bluesign',
+          level: EntityLevel.MATERIAL,
+          logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Bluesign.png',
+        },
+      },
+    ],
+  }
+)
+

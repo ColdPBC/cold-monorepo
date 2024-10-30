@@ -1,5 +1,5 @@
-import { getMaterialsMocksWithAssurances } from '@coldpbc/mocks';
-import { GET_ALL_MATERIALS_FOR_ORG } from '@coldpbc/lib';
+import { getMaterialMock, getMaterialsMocksWithAssurances } from '@coldpbc/mocks';
+import { GET_ALL_MATERIALS_FOR_ORG, GET_MATERIAL } from '@coldpbc/lib';
 import { DocumentNode } from '@apollo/client';
 import { RequestHandler } from 'mock-apollo-client';
 
@@ -15,5 +15,21 @@ export const materialsGraphqlMock: {
 					materials: getMaterialsMocksWithAssurances(),
 				},
 			}),
+	},
+];
+
+export const getMaterialGraphQLMock: {
+	query: DocumentNode;
+	handler: RequestHandler;
+}[] = [
+	{
+		query: GET_MATERIAL,
+		handler: _variables => {
+			return Promise.resolve({
+				data: {
+					material: getMaterialMock,
+				},
+			});
+		},
 	},
 ];

@@ -7,7 +7,7 @@ import {
 	SustainabilityAttributeGraphQL,
 	SustainabilityAttributeWithStatus,
 } from '@coldpbc/interfaces';
-import { AttributeAssuranceStatus } from '@coldpbc/enums';
+import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 import { addDays } from 'date-fns';
 
 const statusPriority: { [key in AttributeAssuranceStatus]: number } = {
@@ -236,3 +236,7 @@ export const processEntityLevelAssurances = (
   // Return alphabetized Sustainability Attribute list
   return Array.from(attributesMap.values()).sort((a, b) => a.name.localeCompare(b.name));;
 };
+
+export const filterAttributes = (attributes: SustainabilityAttribute[], level: EntityLevel) => {
+  return attributes.filter(sustainabilityAttribute => sustainabilityAttribute.level === level)
+}
