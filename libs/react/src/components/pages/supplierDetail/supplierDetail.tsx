@@ -41,10 +41,13 @@ export const _SupplierDetail = () => {
 		return null;
 	}
 
+  const tierLabel = supplier.supplierTier ? `Tier ${supplier.supplierTier}` : null;
+  const subtitle = [tierLabel, supplier.category, supplier.subcategory, supplier.country].filter(val => !!val).join(' | ');
+
 	return (
     <MainContent
       title={supplier.name}
-      subTitle={`Tier ${supplier.supplierTier}`}
+      subTitle={subtitle}
       breadcrumbs={[{ label: 'Suppliers', href: '/suppliers' }, { label: supplier.name }]}
       className={'w-[calc(100%)]'}
     >
