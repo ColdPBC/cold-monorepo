@@ -1,4 +1,13 @@
-import { ErrorFallback, ErrorPage, MainContent, ProductDetailsTab, ProductDocumentsTab, Spinner, Tabs } from '@coldpbc/components';
+import {
+  EditSustainabilityAttributesForProduct,
+  ErrorFallback,
+  ErrorPage,
+  MainContent,
+  ProductDetailsTab,
+  ProductDocumentsTab,
+  Spinner,
+  Tabs,
+} from '@coldpbc/components';
 import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
 import {FilesWithAssurances, ProductsQuery} from '@coldpbc/interfaces';
@@ -12,6 +21,7 @@ const _ProductDetail = () => {
   const { orgId } = useAuth0Wrapper();
 	const { id } = useParams();
   const { logBrowser } = useColdContext();
+  const [showUpdateAttributesModal, setShowUpdateAttributesModal] = React.useState<boolean>(false);
 	const productQuery = useGraphQLSWR<{
 		product: ProductsQuery | null;
 	}>('GET_PRODUCT', {
@@ -57,24 +67,32 @@ const _ProductDetail = () => {
 	const subTitle = [product.productCategory, product.productSubcategory, product.seasonCode].filter(val => !!val).join(' | ');
 
 	return (
-		<MainContent title={product.name} subTitle={subTitle} breadcrumbs={[{ label: 'Products', href: '/products' }, { label: 'Product Detail' }]} className={'w-[calc(100%)]'}>
-			<Tabs
-				tabs={[
-					{
-						label: 'Summary',
-						content: <ProductDetailsTab product={product} />,
-					},
-					{
-						label: 'BOM',
-						content: <ProductBOMTab product={product} />,
-					},
-					{
+    <MainContent title={product.name} subTitle={subTitle} breadcrumbs={[{ label: 'Products', href: '/products' }, { label: 'Product Detail' }]} className={'w-[calc(100%)]'}>
+      {product && (
+        <EditSustainabilityAttributesForProduct
+          key={product.id}
+          isOpen={showUpdateAttributesModal}
+          onClose={() => setShowUpdateAttributesModal(false)}
+          product={product}
+        />
+      )}
+      <Tabs
+        tabs={[
+          {
+            label: 'Summary',
+            content: <ProductDetailsTab product={product} setShowUpdateAttributesModal={setShowUpdateAttributesModal} />,
+          },
+          {
+            label: 'BOM',
+            content: <ProductBOMTab product={product} />,
+          },
+          {
             label: 'Documents',
             content: <ProductDocumentsTab files={parseDocumentsForProductDetails(product, files)} />,
           },
-				]}
-			/>
-		</MainContent>
+        ]}
+      />
+    </MainContent>
 	);
 };
 
