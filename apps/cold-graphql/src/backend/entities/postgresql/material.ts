@@ -43,6 +43,15 @@ export class Material {
 	@Property({ type: 'text', nullable: true })
 	materialSubcategory?: string;
 
+	@Property({ type: 'text', nullable: true })
+	brandMaterialId?: string;
+
+	@Property({ type: 'text', nullable: true })
+	desription?: string;
+
+	@Property({ type: 'text', nullable: true })
+	supplierMaterialId?: string;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'material' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 

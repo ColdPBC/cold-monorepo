@@ -689,6 +689,9 @@ model materials {
   updated_at           DateTime?              @updatedAt @db.Timestamptz(6)
   deleted              Boolean?               @default(false)
   organization_id      String
+	brand_material_id		 String?
+	supplier_material_id String?
+	desription					 String?
   material_suppliers   material_suppliers[]
 	material_category			String?
 	material_subcategory	String?
