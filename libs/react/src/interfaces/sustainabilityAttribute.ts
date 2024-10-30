@@ -13,6 +13,9 @@ export interface SustainabilityAttributeGraphQL {
   name: string;
   logoUrl?: string;
   level: EntityLevel;
+  organization: {
+    id: string;
+  } | null;
   attributeAssurances: SustainabilityAttributeAssuranceGraphQL[];
 }
 
