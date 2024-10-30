@@ -1,3 +1,10 @@
+## [1.456.1](https://github.com/coldPBC/cold-monorepo/compare/v1.456.0...v1.456.1) (2024-10-30)
+
+
+### Bug Fixes
+
+* update package.json and pre-commit script ([6250a73](https://github.com/coldPBC/cold-monorepo/commit/6250a736ae6b436b13779e182ad2c84038750a06))
+
 # [1.456.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.455.0...v1.456.0) (2024-10-30)
 
 
