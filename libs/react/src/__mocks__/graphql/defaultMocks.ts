@@ -12,7 +12,7 @@ import {
   GET_ALL_SUPPLIERS_FOR_ORG,
   GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
   GET_ALL_SUS_ATTRIBUTES,
-  GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
+  GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG, GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS,
   GET_PRODUCT,
   UPDATE_DOCUMENT_ASSURANCE,
   UPDATE_DOCUMENT_FIELDS,
@@ -528,6 +528,54 @@ export const filesProcessedWithDatesMocks: {
       }),
   },
 ];
+
+export const sustainabilityAttributesForProductMocks = [
+  {
+    query: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          sustainabilityAttributes: [
+            // Not pre-selected
+            {
+              id: 'a',
+              name: 'Bluesign Product',
+              logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Bluesign+Product.png',
+              attributeAssurances: [],
+              level: 'PRODUCT',
+            },
+            // Pre-selected (includes Product AttributeAssurance)
+            {
+              id: 'b',
+              name: 'REACH Product (Registration, Evaluation, Authorisation and Restriction of Chemical)',
+              logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/REACH.png',
+              attributeAssurances: [
+                {
+                  id: 'abc',
+                  product: {
+                    id: 'product_1',
+                  },
+                  effectiveEndDate: null,
+                  organizationFile: null,
+                }
+              ],
+              level: 'PRODUCT',
+            },
+            // Excluded (for a different organization)
+            {
+              id: 'a',
+              name: 'Custom Sustainability Attribute For Another Company',
+              attributeAssurances: [],
+              level: 'PRODUCT',
+              organization: {
+                id: 'different_company_id',
+              }
+            },
+          ],
+        },
+      }),
+  }
+]
 
 export const sustainabilityAttributesMocks = [
   {
