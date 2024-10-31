@@ -6,7 +6,6 @@ import * as path from 'path';
 import { get, merge } from 'lodash';
 import { cpus, freemem, hostname, loadavg, NetworkInterfaceInfo, totalmem } from 'os';
 import { IWorkerDetails, Tags } from '../primitives';
-import { RedactorService } from '../redactor';
 import { WorkerLogger } from './worker.log.service';
 import { TraceService } from 'nestjs-ddtrace';
 import { ConfigService } from '@nestjs/config';
@@ -14,21 +13,19 @@ import process from 'process';
 
 @Injectable()
 @Global()
-export class BaseWorker extends RedactorService implements OnModuleInit {
+export class BaseWorker implements OnModuleInit {
 	public tags: Tags;
 	public details: IWorkerDetails;
 	protected logger: WorkerLogger;
 	public fs = fs;
 	protected metrics: StatsD;
-
 	tracer: TraceService;
 
 	constructor(readonly className: string) {
-		super();
 		const config = new ConfigService();
 
 		this.details = {
-			service: config.getOrThrow('DD_SERVICE'),
+			service: config.getOrThrow('DD_SERVICE') || process.env.NX_TASK_TARGET_PROJECT || BaseWorker.getProjectName(),
 			version: config.get('npm_package_version') || config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
 			home_dir: appRoot.toString(),
 			env: config.getOrThrow('NODE_ENV'),
@@ -42,10 +39,11 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
 				ips: this.getNetworkDetails(),
 			},
 		};
+
 		this.tags = {
 			service: this.details.service,
 			version: this.details.version,
-			app: this.details.app,
+			app: process.env.NX_TASK_TARGET_PROJECT,
 			//home_dir: this.details.home_dir,
 			env: this.details.env,
 			host_name: this.details.host_name,
@@ -114,46 +112,28 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
 	 * returns the service name defined in package.json
 	 * @returns {string}
 	 */
-	public static getServiceName(path = '../../../../../package.json'): string {
-		const parsed = JSON.parse(BaseWorker.getJSON(path));
-		const logger: WorkerLogger = new WorkerLogger('Static.BaseWorker', parsed);
 
-		const serviceName = get(parsed, 'workerOptions.serviceName');
-
-		if (!serviceName) {
-			logger.warn('Service name not defined in package.json.  This can be ignored for now.', null);
-		}
-
-		return get(parsed, 'workerOptions.definition.name');
-	}
-
-	public static getProjectName(projectPath?: string) {
-		let proj: any;
-
-		if (projectPath) {
-			proj = BaseWorker.getParsedJSON(`${projectPath}/project.json`);
-		} else {
-			proj = BaseWorker.getParsedJSON('project.json');
-		}
+	public static getProjectName() {
+		const proj = BaseWorker.getParsedJSON(`project.json`);
 
 		return proj.name;
 	}
 
-	public static getPkgVersion() {
+	public static getPkgVersion(): string {
 		const pkg = BaseWorker.getParsedJSON('package.json');
 		return pkg.version;
 	}
 
-	public static getParsedJSON(relativePath: string): any {
-		return JSON.parse(BaseWorker.getJSON(relativePath));
+	public static getParsedJSON(file: string): any {
+		return JSON.parse(BaseWorker.getJSON(file));
 	}
 
-	public static getJSON(relativePath: string): string {
-		const firstPath = path.resolve(appRoot.toString(), relativePath);
-		if (fs.existsSync(firstPath)) {
-			return fs.readFileSync(firstPath).toString();
+	public static getJSON(file: string): string {
+		const project_path = `${process.env.NX_WORKSPACE_ROOT}/apps/${process.env.NX_TASK_TARGET_PROJECT}`;
+		if (fs.existsSync(`${project_path}/${file}`)) {
+			return fs.readFileSync(`${project_path}/${file}`).toString();
 		} else {
-			throw new Error(`${relativePath} is not found in '${firstPath}'`);
+			throw new Error(`${file} is not found in ${project_path}`);
 		}
 	}
 

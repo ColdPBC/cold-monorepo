@@ -22,7 +22,7 @@ import { ComplianceDataModule } from './compliance';
 	imports: [MqttModule, GeneratorsModule],
 })
 export class NestModule {
-	static async forRootAsync() {
+	static async forRootAsync(): Promise<any> {
 		const logger = new WorkerLogger('NestModule');
 		const config = new ConfigService();
 

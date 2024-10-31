@@ -23,7 +23,7 @@ const tracer = Tracer.init({
 	tags: {
 		service: config.get('DD_SERVICE'),
 		env: config.getOrThrow('NODE_ENV'),
-		version: config.get('version', BaseWorker.getPkgVersion()),
+		version: config.get('VERSION', process.env.npm_package_version || BaseWorker.getPkgVersion()),
 		environment: config.getOrThrow('NODE_ENV'),
 		DD_GIT_COMMIT_SHA: config.get('FC_GIT_COMMIT_SHA'),
 	},

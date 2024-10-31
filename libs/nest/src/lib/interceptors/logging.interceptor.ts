@@ -8,6 +8,7 @@ import { DarklyService } from '../darkly';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
+import process from 'process';
 
 @Span()
 @Injectable()
@@ -16,8 +17,11 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
 	tracer: TraceService = new TraceService();
 	darkly: DarklyService;
 	enableHealthLogs = false;
-
+	project_path: string;
 	constructor(readonly config: ConfigService) {
+		if (process.env.NX_WORKSPACE_ROOT && process.env.LERNA_APP_NAME) {
+			this.project_path = `${process.env.NX_WORKSPACE_ROOT}/apps/${process.env.LERNA_APP_NAME}`;
+		}
 		this.logger = new WorkerLogger(LoggingInterceptor.name, { version: config.get('DD_VERSION') || BaseWorker.getPkgVersion() });
 		//this.logger = new WorkerLogger(LoggingInterceptor.name, { version: process.env['DD_VERSION'] });
 	}
@@ -58,7 +62,7 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
 						params: request.params,
 						url: request.url,
 						service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
-						version: this.config.get('npm_package_version', this.config.get('DD_VERSION', BaseWorker.getPkgVersion())),
+						version: this.config.get('npm_package_version', this.config.get('DD_VERSION')) || BaseWorker.getPkgVersion(),
 						status: request.statusCode,
 						method: request.method,
 					});

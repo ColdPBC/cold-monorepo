@@ -7,21 +7,26 @@ import { BaseWorker, WorkerLogger } from '../../worker';
 import { set } from 'lodash';
 import { ConfigService } from '@nestjs/config';
 import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
+import process from 'process';
 
 @Injectable()
 @Span()
 export class JwtAuthGuard extends AuthGuard('jwt') {
 	logger: WorkerLogger;
-
+	project_path: string;
 	constructor(readonly tracer: TraceService, readonly reflector: Reflector, readonly moduleRef: ModuleRef, readonly config: ConfigService) {
 		super({
 			passReqToCallback: true,
 		});
 
+		if (process.env.NX_WORKSPACE_ROOT && process.env.LERNA_APP_NAME) {
+			this.project_path = `${process.env.NX_WORKSPACE_ROOT}/apps/${process.env.LERNA_APP_NAME}`;
+		}
+
 		this.logger = new WorkerLogger('JwtAuthGuard', {
 			service: this.config.getOrThrow('DD_SERVICE') || BaseWorker.getProjectName(),
 			env: this.config.getOrThrow('NODE_ENV'),
-			version: this.config.get('npm_package_version', this.config.get('DD_VERSION', BaseWorker.getPkgVersion())),
+			version: this.config.get('npm_package_version', this.config.get('DD_VERSION')) || BaseWorker.getPkgVersion(),
 		});
 	}
 

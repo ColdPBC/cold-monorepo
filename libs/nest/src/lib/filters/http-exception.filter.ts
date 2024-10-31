@@ -53,7 +53,7 @@ export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
 		response.status(status).json({
 			statusCode: status,
 			error: exception.getResponse(),
-			version: this.config.get('npm_package_version', this.config.get('DD_VERSION', BaseWorker.getPkgVersion())),
+			version: this.config.get('npm_package_version', this.config.get('DD_VERSION')) || BaseWorker.getPkgVersion(),
 			timestamp: new Date().toISOString(),
 			path: request.url,
 		});
