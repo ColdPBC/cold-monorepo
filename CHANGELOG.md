@@ -1,3 +1,10 @@
+## [1.456.2](https://github.com/coldPBC/cold-monorepo/compare/v1.456.1...v1.456.2) (2024-10-31)
+
+
+### Bug Fixes
+
+* update dockerfile path and use dynamic service variable ([43ac413](https://github.com/coldPBC/cold-monorepo/commit/43ac413c9070121f4e0042397d934c1d90556e20))
+
 ## [1.456.1](https://github.com/coldPBC/cold-monorepo/compare/v1.456.0...v1.456.1) (2024-10-30)
 
 
