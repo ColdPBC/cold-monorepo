@@ -1,3 +1,10 @@
+## [1.459.3](https://github.com/coldPBC/cold-monorepo/compare/v1.459.2...v1.459.3) (2024-10-31)
+
+
+### Bug Fixes
+
+* update docker CMD and add file change grouping in updateVersion.mjs ([95b1aa6](https://github.com/coldPBC/cold-monorepo/commit/95b1aa64bb6a78f8b00ee57de3b7901d9edcabfe))
+
 ## [1.459.2](https://github.com/coldPBC/cold-monorepo/compare/v1.459.1...v1.459.2) (2024-10-31)
 
 
