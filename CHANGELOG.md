@@ -1,3 +1,10 @@
+## [1.459.2](https://github.com/coldPBC/cold-monorepo/compare/v1.459.1...v1.459.2) (2024-10-31)
+
+
+### Bug Fixes
+
+* stop querying for description ([54943af](https://github.com/coldPBC/cold-monorepo/commit/54943afffa28e98b43d8adf0200181257706f21b))
+
 ## [1.459.1](https://github.com/coldPBC/cold-monorepo/compare/v1.459.0...v1.459.1) (2024-10-31)
 
 
