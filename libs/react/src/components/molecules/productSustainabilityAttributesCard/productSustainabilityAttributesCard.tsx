@@ -4,13 +4,14 @@ import { ErrorFallback } from '../../application';
 import { EntityWithAttributeAssurances, ProductsQuery, SustainabilityAttribute } from '@coldpbc/interfaces';
 import { Card, SustainabilityAttributeCard, SustainabilityAttributeCardStyle } from '@coldpbc/components';
 import { filterAttributes, processEntityLevelAssurances } from '@coldpbc/lib';
-import { EntityLevel } from '@coldpbc/enums';
+import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
 
 interface ProductSustainabilityAttributesCardProps {
 	product: ProductsQuery;
+  setShowUpdateAttributesModal: (show: boolean) => void;
 }
 
-const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttributesCardProps> = ({ product }) => {
+const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttributesCardProps> = ({ product, setShowUpdateAttributesModal }) => {
   const materials = product.productMaterials.map(productMaterial => productMaterial.material);
   const suppliers = new Set<EntityWithAttributeAssurances>;
   // Tier 1 Supplier
@@ -41,11 +42,23 @@ const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttrib
     EntityLevel.SUPPLIER
   );
 
+  const ctas = [
+    {
+      text: 'Edit Attributes',
+      action: () => setShowUpdateAttributesModal(true),
+      variant: ButtonTypes.secondary,
+    },
+  ]
+
 	return (
-		<Card title={'Sustainability Attributes'} className={'w-full h-fit'} data-testid={'product-sustainability-attributes-card'}>
+		<Card
+      title={'Sustainability Attributes'}
+      className={'w-full h-fit'}
+      data-testid={'product-sustainability-attributes-card'}
+      ctas={ctas}
+    >
 			{productSustainabilityAttributes.length + materialSustainabilityAttributes.length + supplierSustainabilityAttributes.length === 0 && (
-				// TODO: Update this copy once we can add a new attribute manually
-				<span className="text-body text-cold-secondary">Upload documents to track sustainability attributes on this product.</span>
+				<span className="text-body text-cold-secondary">Add a new attribute manually or upload documents to track sustainability attributes on this product.</span>
 			)}
 			{productSustainabilityAttributes.length > 0 && (
 				<div className="w-full h-fit flex flex-col gap-2 justify-start items-start">
