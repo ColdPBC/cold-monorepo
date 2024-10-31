@@ -1,3 +1,10 @@
+# [1.459.0](https://github.com/coldPBC/cold-monorepo/compare/v1.458.0...v1.459.0) (2024-10-31)
+
+
+### Features
+
+* Refactor worker and logger classes to enhance functionality and readability ([83c6d31](https://github.com/coldPBC/cold-monorepo/commit/83c6d310300b8c8774c048c0aa51834f92493ad2))
+
 # [1.458.0](https://github.com/coldPBC/cold-monorepo/compare/v1.457.0...v1.458.0) (2024-10-31)
 
 
