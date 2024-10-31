@@ -1,3 +1,10 @@
+## [1.459.1](https://github.com/coldPBC/cold-monorepo/compare/v1.459.0...v1.459.1) (2024-10-31)
+
+
+### Bug Fixes
+
+* hide description until graphql backend is fixed ([50c2fb3](https://github.com/coldPBC/cold-monorepo/commit/50c2fb3dcb8d33f5c7aabff3478ca33ba1931bc4))
+
 # [1.459.0](https://github.com/coldPBC/cold-monorepo/compare/v1.458.0...v1.459.0) (2024-10-31)
 
 
