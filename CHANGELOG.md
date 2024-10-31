@@ -1,3 +1,15 @@
+# [1.458.0](https://github.com/coldPBC/cold-monorepo/compare/v1.457.0...v1.458.0) (2024-10-31)
+
+
+### Bug Fixes
+
+* sneak in a small piece of unrelated design feedback ([0617d3d](https://github.com/coldPBC/cold-monorepo/commit/0617d3dfaca454a980bf8d2983a363da63b00122))
+
+
+### Features
+
+* new component to edit/update the product-level attributes for a product ([ec74752](https://github.com/coldPBC/cold-monorepo/commit/ec74752d0768314d7b61a9cf2a923606df9576d1))
+
 # [1.457.0](https://github.com/coldPBC/cold-monorepo/compare/v1.456.2...v1.457.0) (2024-10-31)
 
 
