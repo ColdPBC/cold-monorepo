@@ -1,3 +1,10 @@
+# [1.457.0](https://github.com/coldPBC/cold-monorepo/compare/v1.456.2...v1.457.0) (2024-10-31)
+
+
+### Features
+
+* update nested services configuration and add OpenTelemetry dependency ([d2d8b87](https://github.com/coldPBC/cold-monorepo/commit/d2d8b87a0975cbae393a4cc0e3ecad83bd260332))
+
 ## [1.456.2](https://github.com/coldPBC/cold-monorepo/compare/v1.456.1...v1.456.2) (2024-10-31)
 
 
