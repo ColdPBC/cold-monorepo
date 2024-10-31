@@ -1,9 +1,10 @@
 import {
-  EditSustainabilityAttributesForProduct,
+  EditSustainabilityAttributesForEntity,
   ErrorFallback,
   ErrorPage,
   MainContent,
   ProductDetailsTab,
+  ProductBOMTab,
   ProductDocumentsTab,
   Spinner,
   Tabs,
@@ -12,10 +13,10 @@ import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
 import {FilesWithAssurances, ProductsQuery} from '@coldpbc/interfaces';
 import { get, isError } from 'lodash';
-import { ProductBOMTab } from '../../organisms/productBOMTab/productBOMTab';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import {parseDocumentsForProductDetails} from "@coldpbc/lib";
+import { EntityLevel } from '@coldpbc/enums';
 
 const _ProductDetail = () => {
   const { orgId } = useAuth0Wrapper();
@@ -69,11 +70,12 @@ const _ProductDetail = () => {
 	return (
     <MainContent title={product.name} subTitle={subTitle} breadcrumbs={[{ label: 'Products', href: '/products' }, { label: 'Product Detail' }]} className={'w-[calc(100%)]'}>
       {product && (
-        <EditSustainabilityAttributesForProduct
+        <EditSustainabilityAttributesForEntity
           key={product.id}
           isOpen={showUpdateAttributesModal}
           onClose={() => setShowUpdateAttributesModal(false)}
-          product={product}
+          entityLevel={EntityLevel.PRODUCT}
+          entity={product}
         />
       )}
       <Tabs

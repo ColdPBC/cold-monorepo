@@ -151,9 +151,9 @@ export const processSustainabilityAttributeDataFromGraphQL = (
       // Determine which entity this assurance belongs to
       const entity =
         assurance.material ??
-        assurance.organization ??
+        assurance.product ??
         assurance.organizationFacility ??
-        assurance.product;
+        assurance.organization;
 
       if (!entity) continue;
 
