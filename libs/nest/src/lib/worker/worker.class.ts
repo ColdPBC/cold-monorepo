@@ -29,7 +29,7 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
 
 		this.details = {
 			service: config.getOrThrow('DD_SERVICE'),
-			version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
+			version: config.get('npm_package_version') || config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
 			home_dir: appRoot.toString(),
 			env: config.getOrThrow('NODE_ENV'),
 			host_name: hostname(),

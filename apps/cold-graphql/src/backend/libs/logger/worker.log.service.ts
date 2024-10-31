@@ -2,8 +2,6 @@ import safeStringify from 'fast-safe-stringify';
 import winstonConfig from './winston.config';
 import winston, { createLogger } from 'winston';
 import { merge } from 'lodash';
-//import tracer from 'dd-trace';
-//import formats from 'dd-trace/ext/formats'; /// test
 
 /// test
 export class WorkerLogger {
@@ -30,9 +28,11 @@ export class WorkerLogger {
 
 		this.isDev = process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging';
 
+		process.env.DD_VERSION = process.env.npm_package_version;
+
 		this.tags = {
 			app: 'cold-graphql',
-			version: '1.0.0',
+			version: process.env.npm_package_version,
 			environment: process.env.NODE_ENV,
 			service: process.env.DD_SERVICE,
 		};

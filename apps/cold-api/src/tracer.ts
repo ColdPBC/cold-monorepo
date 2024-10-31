@@ -15,7 +15,7 @@ if (!config.get('FC_GIT_COMMIT_SHA')) {
 const tracer = Tracer.init({
 	service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
 	env: config.getOrThrow('NODE_ENV'),
-	version: config.get('VERSION', BaseWorker.getPkgVersion()),
+	version: config.get('VERSION', process.env.npm_package_version || BaseWorker.getPkgVersion()),
 	logInjection: true,
 	hostname: '127.0.0.1',
 	profiling: true,

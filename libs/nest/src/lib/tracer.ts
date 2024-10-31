@@ -15,16 +15,16 @@ if (!config.get('FC_GIT_COMMIT_SHA')) {
 const tracer = Tracer.init({
 	service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
 	env: config.getOrThrow('NODE_ENV'),
-	version: config.get('DD_VERSION', BaseWorker.getPkgVersion()),
+	version: config.get('npm_package_version') || config.get('DD_VERSION', BaseWorker.getPkgVersion()),
 	logInjection: true,
 	hostname: '127.0.0.1',
 	profiling: true,
 	runtimeMetrics: true,
 	tags: {
-		service: config.getOrThrow('DD_SERVICE') || BaseWorker.getProjectName(),
-		env: config.getOrThrow('NODE_ENV'),
-		version: config.get('DD_VERSION', BaseWorker.getPkgVersion()),
-		environment: config.getOrThrow('NODE_ENV'),
+		service: config.getOrThrow('DD_SERVICE', BaseWorker.getProjectName()),
+		env: config.getOrThrow('NODE_ENV', 'development'),
+		version: config.get('npm_package_version', config.get('DD_VERSION', BaseWorker.getPkgVersion())),
+		environment: config.getOrThrow('NODE_ENV', 'development'),
 	},
 	dogstatsd: {
 		hostname: '127.0.0.1',
