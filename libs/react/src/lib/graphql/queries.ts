@@ -506,6 +506,8 @@ export const GET_SUPPLIER = gql`
         material {
           id
           name
+          materialCategory
+          materialSubcategory
           attributeAssurances {
             id
             effectiveEndDate
