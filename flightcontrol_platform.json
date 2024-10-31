@@ -265,7 +265,7 @@
           "maxInstances": 2,
           "minInstances": 1,
           "buildType": "docker",
-          "dockerfilePath": "_platform.dockerfile",
+          "dockerfilePath": "_openai.dockerfile",
           "dockerContext": ".",
 	        "includeEnvVariablesInBuild": true,
 	        "injectEnvVariablesInDockerfile": true,

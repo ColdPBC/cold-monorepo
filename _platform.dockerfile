@@ -41,7 +41,7 @@ WORKDIR /repo
 RUN yarn dlx nx run cold-nest-library:prisma-generate
 RUN yarn prebuild
 
-RUN npx nx run --skip-nx-cache cold-api:build:production
+RUN npx nx run --skip-nx-cache ${DD_SERVICE}:build:production
 
 RUN ls -la /repo/dist/apps
 
