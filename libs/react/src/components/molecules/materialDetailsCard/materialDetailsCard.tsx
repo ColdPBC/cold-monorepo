@@ -11,7 +11,7 @@ interface MaterialDetailsCardProps {
 const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material }) => (
 	<Card title={'Details'} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'material-details-card'}>
 		<DetailsItem category={'Name'} value={material.name} />
-    <DetailsItem category={'Description'} value={material.description} />
+    {/*<DetailsItem category={'Description'} value={material.description} />*/}
 		<DetailsItem category={'Tier 2 Supplier'} value={material.materialSuppliers[0]?.organizationFacility.name} />
 		<DetailsItem category={'Tier 2 Supplier Country'} value={material.materialSuppliers[0]?.organizationFacility.country} />
 		<DetailsItem category={'Category'} value={material.materialCategory} />
