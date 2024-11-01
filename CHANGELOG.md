@@ -1,3 +1,10 @@
+# [1.460.0](https://github.com/coldPBC/cold-monorepo/compare/v1.459.4...v1.460.0) (2024-11-01)
+
+
+### Features
+
+* update Dockerfiles to use yarn dlx instead of npx for running nx commands and add global dependencies ([84eaf99](https://github.com/coldPBC/cold-monorepo/commit/84eaf99e8c3686fb14eba9fe73d6b407c33d9283))
+
 ## [1.459.4](https://github.com/coldPBC/cold-monorepo/compare/v1.459.3...v1.459.4) (2024-11-01)
 
 
