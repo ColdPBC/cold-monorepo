@@ -1,6 +1,6 @@
-import { getJestProjects } from '@nx/jest';
+import { getJestProjectsAsync } from '@nx/jest';
 
-export default {
+export default async () => ({
   codeCoverage: true,
   coverageReporters: ['text', 'lcov', 'clover'],
   detectOpenHandles: true,
@@ -11,5 +11,5 @@ export default {
   testTimeout: 30000,
   watchAll: true,
   watch: true,
-  projects: getJestProjects(),
-};
+  projects: await getJestProjectsAsync(),
+});

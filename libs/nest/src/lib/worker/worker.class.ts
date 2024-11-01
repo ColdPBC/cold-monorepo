@@ -26,7 +26,7 @@ export class BaseWorker implements OnModuleInit {
 
 		this.details = {
 			service: config.getOrThrow('DD_SERVICE') || process.env.NX_TASK_TARGET_PROJECT || BaseWorker.getProjectName(),
-			version: config.get('npm_package_version') || config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
+			version: process.env.npm_package_version || process.env.DD_VERSION || BaseWorker.getPkgVersion(),
 			home_dir: appRoot.toString(),
 			env: config.getOrThrow('NODE_ENV'),
 			host_name: hostname(),
@@ -39,6 +39,11 @@ export class BaseWorker implements OnModuleInit {
 				ips: this.getNetworkDetails(),
 			},
 		};
+
+		// Set the runtime version in the environment
+		if (this.details.version) {
+			process.env.DD_VERSION = this.details.version;
+		}
 
 		this.tags = {
 			service: this.details.service,
@@ -134,7 +139,10 @@ export class BaseWorker implements OnModuleInit {
 		if (process.env.NX_TASK_TARGET_PROJECT && process.env.NX_TASK_TARGET_PROJECT) {
 			project_path = `${process.env.NX_WORKSPACE_ROOT}/apps/${process.env.NX_TASK_TARGET_PROJECT}`;
 		} else {
-			project_path = appRoot.path;
+			if (!process.env.DD_SERVICE) {
+				throw new Error('required environment variable DD_SERVICE is not specified');
+			}
+			project_path = `${appRoot.path}/apps/${process.env.DD_SERVICE || ''}`;
 		}
 
 		if (fs.existsSync(`${project_path}/${file}`)) {

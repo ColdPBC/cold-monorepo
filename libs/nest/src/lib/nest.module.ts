@@ -26,6 +26,12 @@ export class NestModule {
 		const logger = new WorkerLogger('NestModule');
 		const config = new ConfigService();
 
+		if (!process.env.NX_TASK_TARGET_PROJECT && !process.env.NX_TASK_TARGET_PROJECT) {
+			if (!process.env.DD_SERVICE) {
+				throw new Error('DD_SERVICE is not set in this environment; It is required for the NestModule when not run via NX command to function properly.');
+			}
+		}
+
 		const ss = new SecretsService();
 		await ss.onModuleInit();
 		const service = config.getOrThrow('DD_SERVICE');

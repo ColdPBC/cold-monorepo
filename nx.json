@@ -1,110 +1,82 @@
 {
-  "$schema": "/node_modules/nx/schemas/nx-schema.json",
-  "tasksRunnerOptions": {
-    "default": {}
-  },
-  "pluginsConfig": {
-    "@nx/js": {
-      "analyzeSourceFiles": false
-    }
-  },
-  "targetDefaults": {
-    "build": {
-      "inputs": [
-        "production",
-        "^production"
-      ]
-    },
-    "e2e": {
-      "inputs": [
-        "default",
-        "^production"
-      ]
-    },
-    "test": {
-      "inputs": [
-        "default",
-        "^production"
-      ]
-    },
-    "lint": {
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore"
-      ]
-    },
-    "build-storybook": {
-      "inputs": [
-        "default",
-        "^production",
-        "!{projectRoot}/.storybook/**/*"
-      ]
-    },
-    "component-test": {
-      "inputs": [
-        "default",
-        "^production"
-      ]
-    },
-    "@nx/jest:jest": {
-      "cache": true,
-      "inputs": [
-        "default",
-        "^production",
-        "{workspaceRoot}/jest.preset.js"
-      ],
-      "options": {
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
-      }
-    }
-  },
-  "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals"
-    ],
-    "production": [
-      "default",
-      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
-      "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/.eslintrc.json",
-      "!{projectRoot}/**/*.stories.@(js|jsx|ts|tsx|mdx)",
-      "!{projectRoot}/.storybook/**/*",
-      "!{projectRoot}/cypress/**/*",
-      "!{projectRoot}/**/*.cy.[jt]s?(x)",
-      "!{projectRoot}/cypress.config.[jt]s",
-      "!{projectRoot}/jest.config.[jt]s",
-      "!{projectRoot}/src/test-setup.[jt]s",
-      "!{projectRoot}/test-setup.[jt]s"
-    ],
-    "sharedGlobals": [
-      "{workspaceRoot}/babel.config.json"
-    ]
-  },
-  "generators": {
-    "@nx/react": {
-      "application": {
-        "style": "css",
-        "linter": "eslint",
-        "bundler": "vite",
-        "babel": true
-      },
-      "component": {
-        "style": "css"
-      },
-      "library": {
-        "style": "css",
-        "linter": "eslint",
-        "unitTestRunner": "vitest"
-      }
-    }
-  },
-  "neverConnectToCloud": true
+	"$schema": "/node_modules/nx/schemas/nx-schema.json",
+	"tasksRunnerOptions": {
+		"default": {}
+	},
+	"pluginsConfig": {
+		"@nx/js": {
+			"analyzeSourceFiles": false
+		}
+	},
+	"targetDefaults": {
+		"build": {
+			"inputs": ["production", "^production"]
+		},
+		"e2e": {
+			"inputs": ["default", "^production"]
+		},
+		"test": {
+			"inputs": ["default", "^production"]
+		},
+		"lint": {
+			"inputs": ["default", "{workspaceRoot}/.eslintrc.json", "{workspaceRoot}/.eslintignore"]
+		},
+		"build-storybook": {
+			"inputs": ["default", "^production", "!{projectRoot}/.storybook/**/*"]
+		},
+		"component-test": {
+			"inputs": ["default", "^production"]
+		},
+		"@nx/jest:jest": {
+			"cache": true,
+			"inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
+			"options": {
+				"passWithNoTests": true
+			},
+			"configurations": {
+				"ci": {
+					"ci": true,
+					"codeCoverage": true
+				}
+			}
+		}
+	},
+	"namedInputs": {
+		"default": ["{projectRoot}/**/*", "sharedGlobals"],
+		"production": [
+			"default",
+			"!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+			"!{projectRoot}/tsconfig.spec.json",
+			"!{projectRoot}/.eslintrc.json",
+			"!{projectRoot}/**/*.stories.@(js|jsx|ts|tsx|mdx)",
+			"!{projectRoot}/.storybook/**/*",
+			"!{projectRoot}/cypress/**/*",
+			"!{projectRoot}/**/*.cy.[jt]s?(x)",
+			"!{projectRoot}/cypress.config.[jt]s",
+			"!{projectRoot}/jest.config.[jt]s",
+			"!{projectRoot}/src/test-setup.[jt]s",
+			"!{projectRoot}/test-setup.[jt]s"
+		],
+		"sharedGlobals": ["{workspaceRoot}/babel.config.json"]
+	},
+	"generators": {
+		"@nx/react": {
+			"application": {
+				"style": "css",
+				"linter": "eslint",
+				"bundler": "vite",
+				"babel": true
+			},
+			"component": {
+				"style": "css"
+			},
+			"library": {
+				"style": "css",
+				"linter": "eslint",
+				"unitTestRunner": "vitest"
+			}
+		}
+	},
+	"neverConnectToCloud": true,
+	"useLegacyCache": true
 }

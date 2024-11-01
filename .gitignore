@@ -67,3 +67,5 @@ package-lock.json
 /.run/build (staging).run.xml
 /.run/watch (staging).run.xml
 /.run/start (staging).run.xml
+
+vite.config.*.timestamp*
