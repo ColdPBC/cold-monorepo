@@ -1,3 +1,10 @@
+## [1.459.4](https://github.com/coldPBC/cold-monorepo/compare/v1.459.3...v1.459.4) (2024-11-01)
+
+
+### Bug Fixes
+
+* use npx for nx commands in Dockerfiles ([a769d53](https://github.com/coldPBC/cold-monorepo/commit/a769d53ff4c806ba10de2024a44087ca50c405e3))
+
 ## [1.459.3](https://github.com/coldPBC/cold-monorepo/compare/v1.459.2...v1.459.3) (2024-10-31)
 
 
