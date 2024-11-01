@@ -1,3 +1,11 @@
+# [1.462.0](https://github.com/coldPBC/cold-monorepo/compare/v1.461.1...v1.462.0) (2024-11-01)
+
+
+### Features
+
+* add ability to edit sustainability attributes on material page ([279b8b6](https://github.com/coldPBC/cold-monorepo/commit/279b8b61c3e90c53cb5d0a26c6ff33e257474671))
+* new materials supplied tab ([355bda3](https://github.com/coldPBC/cold-monorepo/commit/355bda375441a508e56dc99e1071fc1d932dfae9))
+
 ## [1.461.1](https://github.com/coldPBC/cold-monorepo/compare/v1.461.0...v1.461.1) (2024-11-01)
 
 
