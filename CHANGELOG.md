@@ -1,3 +1,10 @@
+## [1.460.2](https://github.com/coldPBC/cold-monorepo/compare/v1.460.1...v1.460.2) (2024-11-01)
+
+
+### Bug Fixes
+
+* update Dockerfile to use yarn and corepack for package management ([f220ca7](https://github.com/coldPBC/cold-monorepo/commit/f220ca7375bb176ff2eb304ca8a76fe5da8d5f3d))
+
 ## [1.460.1](https://github.com/coldPBC/cold-monorepo/compare/v1.460.0...v1.460.1) (2024-11-01)
 
 
