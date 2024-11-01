@@ -1,3 +1,20 @@
+# [1.461.0](https://github.com/coldPBC/cold-monorepo/compare/v1.460.2...v1.461.0) (2024-11-01)
+
+
+### Bug Fixes
+
+* replace 'Product Detail' with actual product name ([3604811](https://github.com/coldPBC/cold-monorepo/commit/3604811e93fae42b1c6d661c1301fb4f39665eee))
+* replace 'Product Detail' with actual product name ([#664](https://github.com/coldPBC/cold-monorepo/issues/664)) ([ed709b6](https://github.com/coldPBC/cold-monorepo/commit/ed709b60180b24a62e9da057346227e358ca6be0))
+
+
+### Features
+
+* add basic navigation to now empty SupplierDetail component behind FF ([5ddecd9](https://github.com/coldPBC/cold-monorepo/commit/5ddecd9c09d7200fb378035063b1954bc9b6308f))
+* add new details card ([7649acf](https://github.com/coldPBC/cold-monorepo/commit/7649acf2c4fcaaaee1c73f076b9655c6246b938c))
+* add SupplierSustainabilityAttributesCard ([d1c5bab](https://github.com/coldPBC/cold-monorepo/commit/d1c5bab564de62caa9f6b3a940b3ac591aad8ad6))
+* navigate to new SupplierDetail page from Suppliers data grid ([29a4538](https://github.com/coldPBC/cold-monorepo/commit/29a453834dc0e158a9fabbb099ef708aa5967a23))
+* query for supplier on SupplierDetail and present breadcrumbs, name ([619b38d](https://github.com/coldPBC/cold-monorepo/commit/619b38d0094e1065f270458233645d5ac7bd63f3))
+
 ## [1.460.2](https://github.com/coldPBC/cold-monorepo/compare/v1.460.1...v1.460.2) (2024-11-01)
 
 
