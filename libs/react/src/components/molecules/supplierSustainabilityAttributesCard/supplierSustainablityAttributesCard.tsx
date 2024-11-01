@@ -4,13 +4,14 @@ import { ErrorFallback } from '../../application';
 import { SupplierGraphQL } from '@coldpbc/interfaces';
 import { Card, SustainabilityAttributeCard, SustainabilityAttributeCardStyle } from '@coldpbc/components';
 import { filterAttributes, processEntityLevelAssurances } from '@coldpbc/lib';
-import { EntityLevel } from '@coldpbc/enums';
+import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
 
 interface SupplierSustainabilityAttributesCardProps {
 	supplier: SupplierGraphQL;
+  showUpdateAttributesModal: () => void;
 }
 
-const _SupplierSustainabilityAttributesCard: React.FC<SupplierSustainabilityAttributesCardProps> = ({ supplier }) => {
+const _SupplierSustainabilityAttributesCard: React.FC<SupplierSustainabilityAttributesCardProps> = ({ supplier, showUpdateAttributesModal }) => {
 	const materials = supplier.materialSuppliers.map(materialSupplier => materialSupplier.material);
 
 	// These filters reflect the current state of our data, but be unnecessary if we had better data validations
@@ -18,11 +19,18 @@ const _SupplierSustainabilityAttributesCard: React.FC<SupplierSustainabilityAttr
 
 	const materialSustainabilityAttributes = filterAttributes(processEntityLevelAssurances(materials), EntityLevel.MATERIAL);
 
+  const ctas = [
+    {
+      text: 'Edit Attributes',
+      action: () => showUpdateAttributesModal(),
+      variant: ButtonTypes.secondary,
+    },
+  ]
+
 	return (
-		<Card title={'Sustainability Attributes'} className={'w-full h-fit'} data-testid={'supplier-sustainability-attributes-card'}>
+		<Card title={'Sustainability Attributes'} ctas={ctas} className={'w-full h-fit'} data-testid={'supplier-sustainability-attributes-card'}>
 			{supplierSustainabilityAttributes.length + materialSustainabilityAttributes.length === 0 && (
-				// TODO: Update this copy once we can add a new attribute manually
-				<span className="text-body text-cold-secondary">Upload documents to track sustainability attributes on this supplier.</span>
+        <span className="text-body text-cold-secondary">Add a new attribute manually or upload documents to track sustainability attributes on this supplier.</span>
 			)}
 			{supplierSustainabilityAttributes.length > 0 && (
 				<div className="w-full h-fit flex flex-col gap-2 justify-start items-start">

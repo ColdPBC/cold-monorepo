@@ -16,6 +16,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		supplier: getSupplierMock(1),
+    showUpdateAttributesModal: () => {},
 	},
 };
 
@@ -25,12 +26,14 @@ export const NoAssurances: Story = {
 			...getSupplierMock(1),
 			attributeAssurances: [],
 		},
+    showUpdateAttributesModal: () => {},
 	},
 };
 
 export const Tier2Supplier: Story = {
 	args: {
 		supplier: getSupplierMock(2),
+    showUpdateAttributesModal: () => {},
 	},
 };
 
@@ -40,5 +43,6 @@ export const Tier2SupplierWithOnlyMaterialAttributeAssurances: Story = {
 			...getSupplierMock(2),
 			attributeAssurances: [],
 		},
+    showUpdateAttributesModal: () => {},
 	},
 };
