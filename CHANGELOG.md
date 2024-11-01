@@ -1,3 +1,10 @@
+## [1.462.1](https://github.com/coldPBC/cold-monorepo/compare/v1.462.0...v1.462.1) (2024-11-01)
+
+
+### Bug Fixes
+
+* update module-federation dependencies ([2a78402](https://github.com/coldPBC/cold-monorepo/commit/2a784028af8190cdc0d82ec3f749ee61c8279d32))
+
 # [1.462.0](https://github.com/coldPBC/cold-monorepo/compare/v1.461.1...v1.462.0) (2024-11-01)
 
 
