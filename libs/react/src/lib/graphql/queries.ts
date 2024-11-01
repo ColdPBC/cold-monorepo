@@ -125,15 +125,19 @@ export const DELETE_ATTRIBUTE_ASSURANCE = gql`
   }
 `;
 
-export const DELETE_ATTRIBUTE_ASSURANCES_FOR_PRODUCT_AND_SUSTAINABILITY_ATTRIBUTE = gql`
-  mutation DeleteAttributeAssurancesByProduct(
-    $productId: ID!,
+export const DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE = gql`
+  mutation DeleteAttributeAssurancesByEntity(
+    $materialId: ID,
+    $productId: ID,
+    $supplierId: ID,
     $sustainabilityAttributeId: ID!,
     $organizationId: ID!
   ) {
     deleteAttributeAssurances(
       filter: {
         product: { id: $productId },
+        material: { id: $materialId },
+        organizationFacility: { id: $supplierId },
         sustainabilityAttribute: { id: $sustainabilityAttributeId },
         organization: { id: $organizationId }
       }
@@ -661,7 +665,7 @@ export const queries: {
   UPDATE_DOCUMENT_FIELDS: UPDATE_DOCUMENT_FIELDS,
   UPDATE_DOCUMENT_ASSURANCE: UPDATE_DOCUMENT_ASSURANCE,
   DELETE_ATTRIBUTE_ASSURANCE: DELETE_ATTRIBUTE_ASSURANCE,
-  DELETE_ATTRIBUTE_ASSURANCES_FOR_PRODUCT_AND_SUSTAINABILITY_ATTRIBUTE: DELETE_ATTRIBUTE_ASSURANCES_FOR_PRODUCT_AND_SUSTAINABILITY_ATTRIBUTE,
+  DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE: DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE,
   GET_ALL_MATERIALS_FOR_ORG: GET_ALL_MATERIALS_FOR_ORG,
   GET_ALL_SCHEMA_ENUMS: GET_ALL_SCHEMA_ENUMS,
   GET_ALL_SUPPLIERS_FOR_ORG: GET_ALL_SUPPLIERS_FOR_ORG,

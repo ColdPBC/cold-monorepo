@@ -3,19 +3,20 @@ import { Modal as FBModal } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { GridCellParams, GridColDef, GridRowSelectionModel, GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import { ButtonTypes, EntityLevel, GlobalSizes } from '@coldpbc/enums';
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Checkbox } from '@mui/material';
 import { withErrorBoundary } from 'react-error-boundary';
 import { type SustainabilityAttributeGraphQL, ToastMessage } from '@coldpbc/interfaces';
 import { get, toLower } from 'lodash';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
-import { processSustainabilityAttributeDataFromGraphQL } from '@coldpbc/lib';
+import { DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE, processSustainabilityAttributeDataFromGraphQL } from '@coldpbc/lib';
 import { mutate } from 'swr';
 
 interface EditSustainabilityAttributesForProductProps {
 	isOpen: boolean;
 	onClose: () => void;
-	product: {
+	entityLevel: EntityLevel;
+	entity: {
 		id: string;
 		name: string;
 	};
@@ -37,9 +38,9 @@ const haveSameItems = (arr1: string[], arr2: string[]) => {
 	return arr2.every(item => set1.has(item));
 };
 
-const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttributesForProductProps> = ({ isOpen, onClose, product }) => {
+const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttributesForProductProps> = ({ isOpen, onClose, entityLevel, entity }) => {
 	const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
-	const { mutateGraphQL: deleteAttributeAssurances } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCES_FOR_PRODUCT_AND_SUSTAINABILITY_ATTRIBUTE');
+	const { mutateGraphQL: deleteAttributeAssurances } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE');
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
 	const { addToastMessage } = useAddToastMessage();
@@ -49,7 +50,7 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 
 	const sustainabilityAttributesQuery = useGraphQLSWR<{
 		sustainabilityAttributes: SustainabilityAttributeGraphQL[];
-	}>(orgId ? 'GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS' : null, {
+	}>(orgId ? 'GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG' : null, {
 		organizationId: orgId,
 	});
 
@@ -61,19 +62,19 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 		}
 
 		const sustainabilityAttributesGraphQL = get(sustainabilityAttributesQuery.data, 'data.sustainabilityAttributes', []).filter(
-			attr => !attr.organization || attr.organization.id === orgId,
+			attr => (!attr.organization || attr.organization.id === orgId) && attr.level === entityLevel,
 		);
 		const processedAttributes = processSustainabilityAttributeDataFromGraphQL(sustainabilityAttributesGraphQL);
 
 		const selectedAttributes = processedAttributes
-			.filter(attribute => attribute.attributeAssurances.some(assurance => assurance.entity.id === product.id))
+			.filter(attribute => attribute.attributeAssurances.some(assurance => assurance.entity.id === entity.id))
 			.map(attribute => attribute.id);
 
 		return {
 			sustainabilityAttributes: processedAttributes,
 			previouslySelectedAttributes: selectedAttributes,
 		};
-	}, [sustainabilityAttributesQuery.data, sustainabilityAttributesQuery.isLoading, orgId, product.id]);
+	}, [sustainabilityAttributesQuery.data, sustainabilityAttributesQuery.isLoading, orgId, entity.id]);
 
 	useEffect(() => {
 		if (isOpen) {
@@ -94,23 +95,27 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 						createAttributeAssurance({
 							input: {
 								organization: { id: orgId },
-								product: { id: product.id },
+								material: entityLevel === EntityLevel.MATERIAL ? { id: entity.id } : undefined,
+								organizationFacility: entityLevel === EntityLevel.SUPPLIER ? { id: entity.id } : undefined,
+								product: entityLevel === EntityLevel.PRODUCT ? { id: entity.id } : undefined,
 								sustainabilityAttribute: { id: attributeId },
 							},
 						}),
 					),
 					...toDelete.map(attributeId =>
 						deleteAttributeAssurances({
-							productId: product.id,
 							sustainabilityAttributeId: attributeId,
 							organizationId: orgId,
+							materialId: entityLevel === EntityLevel.MATERIAL ? entity.id : null,
+							productId: entityLevel === EntityLevel.PRODUCT ? entity.id : null,
+							supplierId: entityLevel === EntityLevel.SUPPLIER ? entity.id : null,
 						}),
 					),
 				]);
 
-				logBrowser('Updated sustainability attributes for product successfully', 'info', {
+				logBrowser(`Updated sustainability attributes for ${toLower(EntityLevel[entityLevel])} successfully`, 'info', {
 					orgId,
-					productId: product.id,
+					entityId: entity.id,
 					attributesCreated: toCreate.length,
 					attributesDeleted: toDelete.length,
 				});
@@ -118,8 +123,8 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 				// Add revalidation calls
 				await Promise.all([
 					sustainabilityAttributesQuery.mutate(), // Revalidate the modal's data
-					// Also revalidate the product query that shows the cards
-					mutate('GET_PRODUCT'),
+					// Also revalidate the query that shows the cards on the detail page
+					mutate(`GET_${EntityLevel[entityLevel]}`),
 				]);
 
 				onClose();
@@ -129,9 +134,9 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 					type: ToastMessage.SUCCESS,
 				});
 			} catch (e) {
-				logBrowser('Error updating sustainability attributes for product', 'error', {
+				logBrowser(`Error updating sustainability attributes for ${toLower(EntityLevel[entityLevel])}`, 'error', {
 					orgId,
-					productId: product.id,
+					entityId: entity.id,
 					error: e,
 				});
 				await addToastMessage({
@@ -142,7 +147,7 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 				setIsLoading(false);
 			}
 		},
-		[orgId, product.id, createAttributeAssurance, deleteAttributeAssurances, onClose, logBrowser, addToastMessage, sustainabilityAttributesQuery],
+		[orgId, entity.id, createAttributeAssurance, deleteAttributeAssurances, onClose, logBrowser, addToastMessage, sustainabilityAttributesQuery],
 	);
 
 	const error = sustainabilityAttributesQuery.error || get(sustainabilityAttributesQuery.data, 'errors');
@@ -241,7 +246,7 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 		);
 	}
 
-	const title = `Edit ${toLower(EntityLevel.PRODUCT)}-level attributes for ${product.name}`;
+	const title = `Edit ${toLower(EntityLevel[entityLevel])}-level attributes for ${entity.name}`;
 	const buttonText = 'Update attributes';
 
 	return (
@@ -285,6 +290,6 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 	);
 };
 
-export const EditSustainabilityAttributesForProduct = withErrorBoundary(_EditSustainabilityAttributesForProduct, {
+export const EditSustainabilityAttributesForEntity = withErrorBoundary(_EditSustainabilityAttributesForProduct, {
 	FallbackComponent: props => <ErrorFallback {...props} />,
 });

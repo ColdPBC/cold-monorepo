@@ -4,24 +4,32 @@ import { ErrorFallback } from '../../application';
 import { MaterialGraphQL } from '@coldpbc/interfaces';
 import { Card, SustainabilityAttributeCard, SustainabilityAttributeCardStyle } from '@coldpbc/components';
 import { filterAttributes, processEntityLevelAssurances } from '@coldpbc/lib';
-import { EntityLevel } from '@coldpbc/enums';
+import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
 
 interface MaterialSustainabilityAttributesCardProps {
   material: MaterialGraphQL;
+  setShowUpdateAttributesModal: (show: boolean) => void;
 }
 
-const _MaterialSustainabilityAttributesCard: React.FC<MaterialSustainabilityAttributesCardProps> = ({ material }) => {
+const _MaterialSustainabilityAttributesCard: React.FC<MaterialSustainabilityAttributesCardProps> = ({ material, setShowUpdateAttributesModal }) => {
   // This filter reflects the current state of our data, but be unnecessary if we had better data validations
   const materialSustainabilityAttributes = filterAttributes(
     processEntityLevelAssurances([material]),
     EntityLevel.MATERIAL
   );
 
+  const ctas = [
+    {
+      text: 'Edit Attributes',
+      action: () => setShowUpdateAttributesModal(true),
+      variant: ButtonTypes.secondary,
+    },
+  ]
+
   return (
-    <Card title={'Sustainability Attributes'} className={'w-full h-fit'} data-testid={'material-sustainability-attributes-card'}>
+    <Card title={'Sustainability Attributes'} ctas={ctas} className={'w-full h-fit'} data-testid={'material-sustainability-attributes-card'}>
       {materialSustainabilityAttributes.length === 0 ? (
-        // TODO: Update this copy once we can add a new attribute manually
-        <span className="text-body text-cold-secondary">Upload documents to track sustainability attributes on this material.</span>
+        <span className="text-body text-cold-secondary">Add a new attribute manually or upload documents to track sustainability attributes on this material.</span>
       ) : (
         <div className="w-full h-fit flex flex-col gap-2 justify-start items-start">
           {materialSustainabilityAttributes.map(sustainabilityAttribute => (

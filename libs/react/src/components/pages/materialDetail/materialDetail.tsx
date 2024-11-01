@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  EditSustainabilityAttributesForEntity,
   ErrorFallback,
   ErrorPage,
   MainContent,
@@ -12,10 +13,12 @@ import { useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
 import { MaterialGraphQL } from '@coldpbc/interfaces';
 import { get, isError } from 'lodash';
+import { EntityLevel } from '@coldpbc/enums';
 
 const _MaterialDetail: React.FC = () => {
 	const { id: materialId } = useParams();
 	const { logBrowser } = useColdContext();
+  const [showUpdateAttributesModal, setShowUpdateAttributesModal] = React.useState<boolean>(false);
 	const materialQuery = useGraphQLSWR<{
 		material: MaterialGraphQL | null;
 	}>('GET_MATERIAL', {
@@ -47,9 +50,18 @@ const _MaterialDetail: React.FC = () => {
 	return (
 		<div key={material.id}>
       <MainContent title={material.name} subTitle={subTitle} breadcrumbs={[{ label: 'Material', href: '/materials' }, { label: material.name }]} className={'w-[calc(100%)]'}>
+        {material && (
+          <EditSustainabilityAttributesForEntity
+            key={material.id}
+            isOpen={showUpdateAttributesModal}
+            onClose={() => setShowUpdateAttributesModal(false)}
+            entityLevel={EntityLevel.MATERIAL}
+            entity={material}
+          />
+        )}
         <div className="w-full h-full flex gap-6 items-start mt-4 mb-20">
           <MaterialDetailsCard material={material} />
-          <MaterialSustainabilityAttributesCard material={material} />
+          <MaterialSustainabilityAttributesCard material={material} setShowUpdateAttributesModal={setShowUpdateAttributesModal} />
         </div>
       </MainContent>
     </div>

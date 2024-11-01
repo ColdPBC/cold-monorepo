@@ -16,6 +16,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		material: getMaterialMock,
+    setShowUpdateAttributesModal: () => {},
 	},
 };
 
@@ -25,5 +26,6 @@ export const NoAssurances: Story = {
 			...getMaterialMock,
 			attributeAssurances: [],
 		},
+    setShowUpdateAttributesModal: () => {},
 	},
 };
