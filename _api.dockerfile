@@ -64,7 +64,9 @@ FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
 WORKDIR /home/node/app
 
-RUN yarn global add nx nx-cloud prisma
+RUN corepack enable
+RUN yarn set version stable
+RUN yarn install
 
 ADD --chown=node:node ./apps/cold-api/project.json /home/node/app/
 ADD --chown=node:node ./apps/cold-api/src/assets /home/node/app/

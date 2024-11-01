@@ -85,6 +85,10 @@ ADD --chown=node:node ./yarn.lock /home/node/yarn.lock
 COPY --from=build --chown=node:node /repo/dist/apps/${DD_SERVICE} /home/node/apps/${DD_SERVICE}/
 COPY --from=build --chown=node:node /repo/node_modules /home/node/node_modules
 
+RUN corepack enable
+RUN yarn set version stable
+RUN yarn install
+
 RUN npx puppeteer browsers install chrome@stable
 # Expose the port that the application listens on.
 EXPOSE ${PORT}
