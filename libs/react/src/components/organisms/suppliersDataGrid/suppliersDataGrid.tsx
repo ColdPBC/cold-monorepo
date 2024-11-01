@@ -198,8 +198,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
         rows={rows}
         columns={columns}
         onRowClick={params => {
-          // navigate(`/suppliers/${params.row.id}`);
-          // todo: add back in when the supplier detail page is ready
+          navigate(`/suppliers/${params.row.id}`);
         }}
         columnHeaderHeight={55}
         rowHeight={72}
