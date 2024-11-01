@@ -1,3 +1,10 @@
+## [1.461.1](https://github.com/coldPBC/cold-monorepo/compare/v1.461.0...v1.461.1) (2024-11-01)
+
+
+### Bug Fixes
+
+* remove attributes that aren't in GraphQL generated type ([101ff01](https://github.com/coldPBC/cold-monorepo/commit/101ff012a586af7d6bbe4e85d4257fe946d16a9d))
+
 # [1.461.0](https://github.com/coldPBC/cold-monorepo/compare/v1.460.2...v1.461.0) (2024-11-01)
 
 
