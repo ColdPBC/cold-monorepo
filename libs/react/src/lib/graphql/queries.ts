@@ -125,6 +125,22 @@ export const DELETE_ATTRIBUTE_ASSURANCE = gql`
   }
 `;
 
+export const DELETE_ATTRIBUTE_ASSURANCES_FOR_PRODUCT_AND_SUSTAINABILITY_ATTRIBUTE = gql`
+  mutation DeleteAttributeAssurancesByProduct(
+    $productId: ID!,
+    $sustainabilityAttributeId: ID!,
+    $organizationId: ID!
+  ) {
+    deleteAttributeAssurances(
+      filter: {
+        product: { id: $productId },
+        sustainabilityAttribute: { id: $sustainabilityAttributeId },
+        organization: { id: $organizationId }
+      }
+    )
+  }
+`;
+
 export const GET_ALL_MATERIALS_FOR_ORG = gql`
   query Materials($filter: MaterialsListFilter!) {
     materials(filter: $filter) {
@@ -432,6 +448,31 @@ export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG = gql`
   }
 `;
 
+export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS = gql`
+  query SustainabilityAttributes($organizationId: ID!) {
+    sustainabilityAttributes(filter: { level: PRODUCT }) {
+      id
+      attributeAssurances(
+        filter: {
+          organization: { id: $organizationId },
+        }
+      ) {
+        id
+        effectiveEndDate
+        organizationFile {
+          id
+        }
+        product {
+          id
+        }
+      }
+      level
+      logoUrl
+      name
+    }
+  }
+`;
+
 export const GET_PRODUCT = gql`
   query GetProduct($id: ID!) {
     product(id: $id) {
@@ -527,9 +568,11 @@ export const GET_MATERIAL = gql`
   query GetMaterial($id: ID!) {
     material(id: $id) {
       id
-      name
+      brandMaterialId
       materialCategory
       materialSubcategory
+      name
+      supplierMaterialId
       attributeAssurances {
         id
         effectiveEndDate
@@ -567,10 +610,12 @@ export const queries: {
   UPDATE_DOCUMENT_FIELDS: UPDATE_DOCUMENT_FIELDS,
   UPDATE_DOCUMENT_ASSURANCE: UPDATE_DOCUMENT_ASSURANCE,
   DELETE_ATTRIBUTE_ASSURANCE: DELETE_ATTRIBUTE_ASSURANCE,
+  DELETE_ATTRIBUTE_ASSURANCES_FOR_PRODUCT_AND_SUSTAINABILITY_ATTRIBUTE: DELETE_ATTRIBUTE_ASSURANCES_FOR_PRODUCT_AND_SUSTAINABILITY_ATTRIBUTE,
   GET_ALL_MATERIALS_FOR_ORG: GET_ALL_MATERIALS_FOR_ORG,
   GET_ALL_SCHEMA_ENUMS: GET_ALL_SCHEMA_ENUMS,
   GET_ALL_SUPPLIERS_FOR_ORG: GET_ALL_SUPPLIERS_FOR_ORG,
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
+  GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS,
   CREATE_MATERIAL: CREATE_MATERIAL,
   CREATE_MATERIAL_SUPPLIER: CREATE_MATERIAL_SUPPLIER,
   GET_ALL_PRODUCTS: GET_ALL_PRODUCTS,

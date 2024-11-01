@@ -34,6 +34,7 @@ async function bootstrap() {
         return 'http://localhost:4200';
     }
   };
+
   app.enableCors({ allowedHeaders: '*', exposedHeaders: '*', origin: `${getOrigin()}` });
   OpenapiModule.register(app);
   patchNestjsSwagger();

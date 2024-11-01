@@ -56,13 +56,17 @@ RUN yarn prebuild
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping migration" ; else prisma migrate deploy ; fi
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping seed" ; else prisma db seed ; fi
 
-RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-api:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-api:build:development ; fi
+RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache ${DD_SERVICE}:build:production ; else echo "building development..." && npx nx run --skip-nx-cache ${DD_SERVICE}:build:development ; fi
 
 RUN npx nx reset
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
 WORKDIR /home/node/app
+
+RUN corepack enable
+RUN yarn set version stable
+RUN yarn install
 
 ADD --chown=node:node ./apps/cold-api/project.json /home/node/app/
 ADD --chown=node:node ./apps/cold-api/src/assets /home/node/app/
@@ -76,5 +80,5 @@ COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_module
 EXPOSE 7001
 
 # Run the application.
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node /home/node/app/cold-api/main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && yarn dlx nx run ${DD_SERVICE}:serve:production"]
 

@@ -30,7 +30,6 @@
             "clusterInstanceSize": "t3.xlarge",
             "clusterMinInstances": 1,
             "clusterMaxInstances": 4
-
           },
           "cpu": 2,
           "memory": 4,
@@ -39,11 +38,11 @@
           "buildType": "docker",
           "dockerfilePath": "_openai.dockerfile",
           "dockerContext": ".",
-	        "includeEnvVariablesInBuild": true,
-	        "injectEnvVariablesInDockerfile": true,
-	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
-	        "startCommand": "nx run cold-platform-openai:serve:production",
-	        "watchPaths": [
+          "includeEnvVariablesInBuild": true,
+          "injectEnvVariablesInDockerfile": true,
+          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
+          "startCommand": "nx run cold-platform-openai:serve:production",
+          "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "libs/nest/src/**",
             "_platform.dockerfile"
@@ -74,7 +73,8 @@
           "envVariables": {
             "DD_SERVICE": "cold-platform-openai",
             "DD_ENV": "production",
-            "NODE_ENV": "production"
+            "NODE_ENV": "production",
+            "DD_VERSION": "1.456.1"
           },
           "sidecars": [
             {
@@ -142,11 +142,11 @@
           "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
-	        "includeEnvVariablesInBuild": true,
-	        "injectEnvVariablesInDockerfile": true,
-	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-stripe:build:production",
-	        "startCommand": "nx run cold-platform-stripe:serve:production",
-	        "watchPaths": [
+          "includeEnvVariablesInBuild": true,
+          "injectEnvVariablesInDockerfile": true,
+          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-stripe:build:production",
+          "startCommand": "nx run cold-platform-stripe:serve:production",
+          "watchPaths": [
             "apps/cold-platform-stripe/src/**",
             "libs/nest/src/**",
             "_platform.dockerfile"
@@ -178,7 +178,8 @@
             "DD_SERVICE": "cold-platform-stripe",
             "DD_ENV": "production",
             "NODE_ENV": "production",
-            "STRIPE_FRONTEND_URL": "https://app.coldclimate.com"
+            "STRIPE_FRONTEND_URL": "https://app.coldclimate.com",
+            "DD_VERSION": "1.456.1"
           },
           "sidecars": [
             {
@@ -227,7 +228,8 @@
       ],
       "envVariables": {
         "DD_ENV": "production",
-        "NODE_ENV": "production"
+        "NODE_ENV": "production",
+        "DD_VERSION": "1.456.1"
       }
     },
     {
@@ -257,21 +259,21 @@
           "target": {
             "type": "ecs-ec2",
             "clusterInstanceSize": "t3.xlarge",
-	          "clusterMinInstances": 1,
-	          "clusterMaxInstances": 4
+            "clusterMinInstances": 1,
+            "clusterMaxInstances": 4
           },
           "cpu": 2,
           "memory": 4,
           "maxInstances": 2,
           "minInstances": 1,
           "buildType": "docker",
-          "dockerfilePath": "_platform.dockerfile",
+          "dockerfilePath": "_openai.dockerfile",
           "dockerContext": ".",
-	        "includeEnvVariablesInBuild": true,
-	        "injectEnvVariablesInDockerfile": true,
-	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
-	        "startCommand": "nx run cold-platform-openai:serve:staging",
-	        "watchPaths": [
+          "includeEnvVariablesInBuild": true,
+          "injectEnvVariablesInDockerfile": true,
+          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
+          "startCommand": "nx run cold-platform-openai:serve:staging",
+          "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "libs/nest/src/**",
             "_platform.dockerfile"
@@ -301,7 +303,8 @@
           "envVariables": {
             "DD_SERVICE": "cold-platform-openai",
             "DD_ENV": "staging",
-            "NODE_ENV": "staging"
+            "NODE_ENV": "staging",
+            "DD_VERSION": "1.456.1"
           },
           "sidecars": [
             {
@@ -369,11 +372,10 @@
           "buildType": "docker",
           "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
-
-	        "includeEnvVariablesInBuild": true,
-	        "injectEnvVariablesInDockerfile": true,
-	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-stripe:build:production",
-	        "startCommand": "nx run cold-platform-stripe:serve:staging",
+          "includeEnvVariablesInBuild": true,
+          "injectEnvVariablesInDockerfile": true,
+          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-stripe:build:production",
+          "startCommand": "nx run cold-platform-stripe:serve:staging",
           "watchPaths": [
             "apps/cold-platform-stripe/src/**",
             "libs/nest/src/**",
@@ -405,7 +407,8 @@
             "DD_SERVICE": "cold-platform-stripe",
             "DD_ENV": "staging",
             "NODE_ENV": "staging",
-            "STRIPE_FRONTEND_URL": "https://app.coldclimate.online"
+            "STRIPE_FRONTEND_URL": "https://app.coldclimate.online",
+            "DD_VERSION": "1.456.1"
           },
           "sidecars": [
             {
@@ -454,7 +457,8 @@
       "envVariables": {
         "NODE_ENV": "staging",
         "DD_ENV": "staging",
-        "ENABLE_HEALTH_LOGS": false
+        "ENABLE_HEALTH_LOGS": false,
+        "DD_VERSION": "1.456.1"
       }
     },
     {
@@ -495,11 +499,11 @@
           "buildType": "docker",
           "dockerfilePath": "_openai.dockerfile",
           "dockerContext": ".",
-	        "includeEnvVariablesInBuild": true,
-	        "injectEnvVariablesInDockerfile": true,
-	        "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
-	        "startCommand": "nx run cold-platform-openai:serve:staging",
-	        "watchPaths": [
+          "includeEnvVariablesInBuild": true,
+          "injectEnvVariablesInDockerfile": true,
+          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
+          "startCommand": "nx run cold-platform-openai:serve:staging",
+          "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "apps/cold-platform-openai/test/**",
             "libs/nest/src/**",
@@ -532,7 +536,8 @@
           "envVariables": {
             "DD_SERVICE": "cold-platform-openai",
             "NODE_ENV": "test",
-            "DD_ENV": "test"
+            "DD_ENV": "test",
+            "DD_VERSION": "1.456.1"
           },
           "sidecars": [
             {
@@ -584,7 +589,8 @@
           "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
         },
         "NODE_ENV": "test",
-        "DD_ENV": "test"
+        "DD_ENV": "test",
+        "DD_VERSION": "1.456.1"
       }
     }
   ]

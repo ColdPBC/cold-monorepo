@@ -1,17 +1,22 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.4.1",
-  "version": "1.456.0",
+  "version": "1.460.2",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
     "yarn": ">=1.22.10"
   },
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/coldPBC/cold-monorepo"
+  },
   "scripts": {
     "seed": "prisma db seed",
     "docker": "docker compose build",
+    "prune:tags": "node ./tools/prune_git_tags/prune_git.js ",
     "postinstall": "yarn prebuild",
-    "migrate": "prisma migrate depprisloy",
+    "migrate": "prisma migrate deploy",
     "openApi": "yarn dlx -p swagger2openapi swagger2openapi --outfile openapi.json http://0.0.0.0:7001/v1/json",
     "openApiYml": "yarn dlx -p swagger2openapi swagger2openapi --outfile openapi.yml http://0.0.0.0:7001/v1/yml",
     "generate": "yarn dlx prisma generate --schema libs/nest/prisma/schema.prisma && yarn prebuild && yarn lint",

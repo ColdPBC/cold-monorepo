@@ -1,30 +1,32 @@
 import Tracer from 'dd-trace';
 import { ConfigService } from '@nestjs/config';
 import { BaseWorker } from './worker';
+import { execSync } from 'node:child_process';
+import process from 'process';
 
 console.log({ message: 'setting up tracer...' });
 const config = new ConfigService();
 
 if (!config.get('FC_GIT_COMMIT_SHA')) {
-	console.warn('FC_GIT_COMMIT_SHA is not set');
+	//console.warn('FC_GIT_COMMIT_SHA is not set');
 } else {
 	process.env.DD_GIT_COMMIT_SHA = config.get('FC_GIT_COMMIT_SHA');
 	process.env.DD_GIT_REPOSITORY_URL = config.get('FC_GIT_REPOSITORY_URL') || 'github.com/ColdPBC/cold-monorepo';
 }
 
 const tracer = Tracer.init({
-	service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
+	service: config.get('DD_SERVICE') || config.get('PROJECT_NAME') || BaseWorker.getProjectName(),
 	env: config.getOrThrow('NODE_ENV'),
-	version: config.get('DD_VERSION', BaseWorker.getPkgVersion()),
+	version: config.get('npm_package_version') || config.get('DD_VERSION', BaseWorker.getPkgVersion()),
 	logInjection: true,
 	hostname: '127.0.0.1',
 	profiling: true,
 	runtimeMetrics: true,
 	tags: {
-		service: config.getOrThrow('DD_SERVICE') || BaseWorker.getProjectName(),
-		env: config.getOrThrow('NODE_ENV'),
-		version: config.get('DD_VERSION', BaseWorker.getPkgVersion()),
-		environment: config.getOrThrow('NODE_ENV'),
+		service: config.getOrThrow('DD_SERVICE', process.env.NX_TASK_TARGET_PROJECT || BaseWorker.getProjectName()),
+		env: config.getOrThrow('NODE_ENV', 'development'),
+		version: config.get('npm_package_version', config.get('DD_VERSION')) || BaseWorker.getPkgVersion(),
+		environment: config.getOrThrow('NODE_ENV', 'development'),
 	},
 	dogstatsd: {
 		hostname: '127.0.0.1',

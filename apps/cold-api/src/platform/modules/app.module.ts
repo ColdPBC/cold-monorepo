@@ -16,39 +16,70 @@ import { EventsModule } from './utilities/events/events.module';
 import { OrganizationModule } from './resources/organizations/organization.module';
 import { ComplianceSetModule } from './resources/compliance/compliance-set.module';
 import { SustainabilityAttributesModule } from './resources/sustainability_attributes/sustainability_attributes.module';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 @Module({})
 export class AppModule {
-  static async forRootAsync() {
-    return {
-      module: AppModule,
-      imports: [
-        await NestModule.forRootAsync(),
-        await EventsModule.forRootAsync(),
-        ServeStaticModule.forRoot({
-          serveStaticOptions: {
-            index: false,
-            fallthrough: true,
-          },
-          serveRoot: '../../../assets',
-        }),
-        OrganizationModule,
-        Service_definitionsModule,
-        Auth0Module,
-        ComponentDefinitionsModule,
-        Policy_definitionsModule,
-        SurveysModule,
-        CategoriesModule,
-        NewsModule,
-        ActionsModule,
-        IntegrationsModule,
-        FacilitiesModule,
-        ComplianceDefinitionModule,
-        ComplianceSetModule,
-        SustainabilityAttributesModule,
-      ],
-      providers: [],
-      exports: [],
-    };
-  }
+	static async forRootAsync() {
+		const getWorkspace = () => {
+			let currentDir = process.cwd();
+
+			while (!fs.existsSync(path.join(currentDir, 'project.json'))) {
+				const parentDir = path.resolve(currentDir, '..');
+				if (parentDir === currentDir) {
+					throw new Error('Workspace root not found');
+				}
+				currentDir = parentDir;
+			}
+
+			let project;
+			fs.readFile(path.resolve(currentDir, 'project.json'), 'utf8', (err, data) => {
+				if (err) {
+					return console.log(err);
+				}
+
+				project = JSON.parse(data);
+			});
+
+			if (project) {
+				process.env.PROJECT_NAME = project.name;
+				process.env.PROJECT_PATH = currentDir;
+				return { name: project.name, path: currentDir };
+			}
+
+			return undefined;
+		};
+
+		return {
+			module: AppModule,
+			imports: [
+				await NestModule.forRootAsync(),
+				await EventsModule.forRootAsync(),
+				ServeStaticModule.forRoot({
+					serveStaticOptions: {
+						index: false,
+						fallthrough: true,
+					},
+					serveRoot: '../../../assets',
+				}),
+				OrganizationModule,
+				Service_definitionsModule,
+				Auth0Module,
+				ComponentDefinitionsModule,
+				Policy_definitionsModule,
+				SurveysModule,
+				CategoriesModule,
+				NewsModule,
+				ActionsModule,
+				IntegrationsModule,
+				FacilitiesModule,
+				ComplianceDefinitionModule,
+				ComplianceSetModule,
+				SustainabilityAttributesModule,
+			],
+			providers: [],
+			exports: [],
+		};
+	}
 }

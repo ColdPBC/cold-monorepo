@@ -1,3 +1,92 @@
+## [1.460.2](https://github.com/coldPBC/cold-monorepo/compare/v1.460.1...v1.460.2) (2024-11-01)
+
+
+### Bug Fixes
+
+* update Dockerfile to use yarn and corepack for package management ([f220ca7](https://github.com/coldPBC/cold-monorepo/commit/f220ca7375bb176ff2eb304ca8a76fe5da8d5f3d))
+
+## [1.460.1](https://github.com/coldPBC/cold-monorepo/compare/v1.460.0...v1.460.1) (2024-11-01)
+
+
+### Bug Fixes
+
+* **dockerfile:** correct source path for app files in Dockerfile ([731f77c](https://github.com/coldPBC/cold-monorepo/commit/731f77cee7c93cde41498990db808dc00b65c2d6))
+
+# [1.460.0](https://github.com/coldPBC/cold-monorepo/compare/v1.459.4...v1.460.0) (2024-11-01)
+
+
+### Features
+
+* update Dockerfiles to use yarn dlx instead of npx for running nx commands and add global dependencies ([84eaf99](https://github.com/coldPBC/cold-monorepo/commit/84eaf99e8c3686fb14eba9fe73d6b407c33d9283))
+
+## [1.459.4](https://github.com/coldPBC/cold-monorepo/compare/v1.459.3...v1.459.4) (2024-11-01)
+
+
+### Bug Fixes
+
+* use npx for nx commands in Dockerfiles ([a769d53](https://github.com/coldPBC/cold-monorepo/commit/a769d53ff4c806ba10de2024a44087ca50c405e3))
+
+## [1.459.3](https://github.com/coldPBC/cold-monorepo/compare/v1.459.2...v1.459.3) (2024-10-31)
+
+
+### Bug Fixes
+
+* update docker CMD and add file change grouping in updateVersion.mjs ([95b1aa6](https://github.com/coldPBC/cold-monorepo/commit/95b1aa64bb6a78f8b00ee57de3b7901d9edcabfe))
+
+## [1.459.2](https://github.com/coldPBC/cold-monorepo/compare/v1.459.1...v1.459.2) (2024-10-31)
+
+
+### Bug Fixes
+
+* stop querying for description ([54943af](https://github.com/coldPBC/cold-monorepo/commit/54943afffa28e98b43d8adf0200181257706f21b))
+
+## [1.459.1](https://github.com/coldPBC/cold-monorepo/compare/v1.459.0...v1.459.1) (2024-10-31)
+
+
+### Bug Fixes
+
+* hide description until graphql backend is fixed ([50c2fb3](https://github.com/coldPBC/cold-monorepo/commit/50c2fb3dcb8d33f5c7aabff3478ca33ba1931bc4))
+
+# [1.459.0](https://github.com/coldPBC/cold-monorepo/compare/v1.458.0...v1.459.0) (2024-10-31)
+
+
+### Features
+
+* Refactor worker and logger classes to enhance functionality and readability ([83c6d31](https://github.com/coldPBC/cold-monorepo/commit/83c6d310300b8c8774c048c0aa51834f92493ad2))
+
+# [1.458.0](https://github.com/coldPBC/cold-monorepo/compare/v1.457.0...v1.458.0) (2024-10-31)
+
+
+### Bug Fixes
+
+* sneak in a small piece of unrelated design feedback ([0617d3d](https://github.com/coldPBC/cold-monorepo/commit/0617d3dfaca454a980bf8d2983a363da63b00122))
+
+
+### Features
+
+* new component to edit/update the product-level attributes for a product ([ec74752](https://github.com/coldPBC/cold-monorepo/commit/ec74752d0768314d7b61a9cf2a923606df9576d1))
+
+# [1.457.0](https://github.com/coldPBC/cold-monorepo/compare/v1.456.2...v1.457.0) (2024-10-31)
+
+
+### Features
+
+* update nested services configuration and add OpenTelemetry dependency ([d2d8b87](https://github.com/coldPBC/cold-monorepo/commit/d2d8b87a0975cbae393a4cc0e3ecad83bd260332))
+
+## [1.456.2](https://github.com/coldPBC/cold-monorepo/compare/v1.456.1...v1.456.2) (2024-10-31)
+
+
+### Bug Fixes
+
+* update dockerfile path and use dynamic service variable ([43ac413](https://github.com/coldPBC/cold-monorepo/commit/43ac413c9070121f4e0042397d934c1d90556e20))
+
+## [1.456.1](https://github.com/coldPBC/cold-monorepo/compare/v1.456.0...v1.456.1) (2024-10-30)
+
+
+### Bug Fixes
+
+* update package.json and pre-commit script ([6250a73](https://github.com/coldPBC/cold-monorepo/commit/6250a736ae6b436b13779e182ad2c84038750a06))
+
 # [1.456.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.455.0...v1.456.0) (2024-10-30)
 
 

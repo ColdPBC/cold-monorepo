@@ -674,6 +674,9 @@ export const getMaterialMock: MaterialGraphQL = (
   {
     id: 'material_1',
     name: 'Organic Wool',
+    brandMaterialId: 'brand_id_1',
+    supplierMaterialId: 'supplier_id_1',
+    description: 'The softest organic wool made from adorable little lambs.',
     materialSuppliers: [
       {
         id: 'material_supplier_1',

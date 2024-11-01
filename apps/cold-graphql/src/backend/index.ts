@@ -16,6 +16,7 @@ export const authZero = new AuthZero();
 
 setAddUserToContext(addUserToContext);
 setAdministratorRoleName('cold:admin');
+
 export const graphweaver = new Graphweaver({
 	apolloServerOptions: {
 		introspection: true, //process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging',

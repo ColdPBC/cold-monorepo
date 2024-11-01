@@ -1,4 +1,5 @@
 {
+	"name": "cold-platform-stripe",
   "service": {
     "name": "cold-platform-stripe",
     "label": "Stripe",

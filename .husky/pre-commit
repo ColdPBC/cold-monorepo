@@ -1,9 +1,9 @@
-# This pre-push file
+# This pre-commit file
 
 #!/bin/sh
 
-#eslint --fix
 #prettier --write
+
 # Check if schema.prisma in libs/nest/prisma/ has been edited
 if git diff --cached --name-only | grep -q 'libs/nest/prisma/schema.prisma'; then
   echo "schema.prisma has been edited. Running pnpm sync in apps/cold-graphql..."
@@ -11,3 +11,5 @@ if git diff --cached --name-only | grep -q 'libs/nest/prisma/schema.prisma'; the
 else
   echo "schema.prisma has not been edited. Skipping pnpm sync."
 fi
+
+#eslint --fix
