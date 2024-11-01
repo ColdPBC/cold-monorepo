@@ -1,22 +1,26 @@
 import React from 'react';
 import {
-  ErrorFallback,
-  ErrorPage,
-  MainContent, MaterialsSuppliedTab, ProductBOMTab, ProductDetailsTab, ProductDocumentsTab,
-  Spinner,
-  SupplierDetailsCard,
-  SupplierSustainabilityAttributesCard, Tabs,
+	EditSustainabilityAttributesForEntity,
+	ErrorFallback,
+	ErrorPage,
+	MainContent,
+	MaterialsSuppliedTab,
+	Spinner,
+	SupplierDetailsCard,
+	SupplierSustainabilityAttributesCard,
+	Tabs,
 } from '@coldpbc/components';
+import { EntityLevel } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
 import { SupplierGraphQL } from '@coldpbc/interfaces';
 import { get, isError } from 'lodash';
-import { parseDocumentsForProductDetails } from '@coldpbc/lib';
 
 export const _SupplierDetail = () => {
 	const { id: supplierId } = useParams();
 	const { logBrowser } = useColdContext();
+	const [showUpdateAttributesModal, setShowUpdateAttributesModal] = React.useState<boolean>(false);
 	const supplierQuery = useGraphQLSWR<{
 		organizationFacility: SupplierGraphQL | null;
 	}>('GET_SUPPLIER', {
@@ -42,40 +46,47 @@ export const _SupplierDetail = () => {
 		return null;
 	}
 
-  const tierLabel = supplier.supplierTier ? `Tier ${supplier.supplierTier}` : null;
-  const subtitle = [tierLabel, supplier.category, supplier.subcategory, supplier.country].filter(val => !!val).join(' | ');
+	const tierLabel = supplier.supplierTier ? `Tier ${supplier.supplierTier}` : null;
+	const subtitle = [tierLabel, supplier.category, supplier.subcategory, supplier.country].filter(val => !!val).join(' | ');
 
-  const summaryContent = (
-		<div className="w-full h-full flex gap-6 items-start mt-4 mb-20">
-			<SupplierDetailsCard supplier={supplier} />
-			<SupplierSustainabilityAttributesCard supplier={supplier} />
-		</div>
+	const summaryContent = (
+		<>
+			{supplier && (
+				<EditSustainabilityAttributesForEntity
+					key={supplier.id}
+					isOpen={showUpdateAttributesModal}
+					onClose={() => setShowUpdateAttributesModal(false)}
+					entityLevel={EntityLevel.SUPPLIER}
+					entity={supplier}
+				/>
+			)}
+			<div className="w-full h-full flex gap-6 items-start mt-4 mb-20">
+				<SupplierDetailsCard supplier={supplier} />
+				<SupplierSustainabilityAttributesCard supplier={supplier} showUpdateAttributesModal={() => setShowUpdateAttributesModal(true)} />
+			</div>
+		</>
 	);
 
 	return (
-		<MainContent
-			title={supplier.name}
-			subTitle={subtitle}
-			breadcrumbs={[{ label: 'Suppliers', href: '/suppliers' }, { label: supplier.name }]}
-			className={'w-[calc(100%)]'}>
-      {/* If the supplier has materials, add a tab structure to include the Materials data grid */}
-      {supplier.materialSuppliers.length > 0 ? (
-        <Tabs
-          tabs={[
-            {
-              label: 'Summary',
-              content: summaryContent,
-            },
-            {
-              label: 'Materials',
-              content: <MaterialsSuppliedTab supplier={supplier} />,
-            },
-          ]}
-        />
-      ): (
-        summaryContent
-      )}
-    </MainContent>
+		<MainContent title={supplier.name} subTitle={subtitle} breadcrumbs={[{ label: 'Suppliers', href: '/suppliers' }, { label: supplier.name }]} className={'w-[calc(100%)]'}>
+			{/* If the supplier has materials, add a tab structure to include the Materials data grid */}
+			{supplier.materialSuppliers.length > 0 ? (
+				<Tabs
+					tabs={[
+						{
+							label: 'Summary',
+							content: summaryContent,
+						},
+						{
+							label: 'Materials',
+							content: <MaterialsSuppliedTab supplier={supplier} />,
+						},
+					]}
+				/>
+			) : (
+				summaryContent
+			)}
+		</MainContent>
 	);
 };
 
