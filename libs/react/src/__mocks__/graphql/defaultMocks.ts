@@ -14,6 +14,7 @@ import {
   GET_ALL_SUS_ATTRIBUTES,
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG, GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS,
   GET_PRODUCT,
+  GET_SUPPLIER,
   UPDATE_DOCUMENT_ASSURANCE,
   UPDATE_DOCUMENT_FIELDS,
 } from '@coldpbc/lib';
@@ -31,7 +32,7 @@ import { DocumentNode } from '@apollo/client';
 import { RequestHandler } from 'mock-apollo-client';
 import { get } from 'lodash';
 import { getSchemaMocks } from '../schemaMocks';
-import { getSupplierMocks } from '../suppliersMock';
+import { getSupplierMock, getSupplierMocks } from '../suppliersMock';
 import {getProductsMock, getProductsMockById} from '../productsMock';
 import { getMaterialsMocksWithAssurances } from '../materialsMock';
 import { AttributeAssuranceMock } from '../attributeAssuranceMock';
@@ -464,6 +465,16 @@ export const defaultGraphqlMocks: {
         data: {
           product: getProductsMockById(id),
         },
+      })
+    }
+  },
+  {
+    query: GET_SUPPLIER,
+    handler: (variables) => {
+      return Promise.resolve({
+        data: {
+          organizationFacility: getSupplierMock(2),
+        }
       })
     }
   }

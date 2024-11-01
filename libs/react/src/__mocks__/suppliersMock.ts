@@ -1,7 +1,13 @@
 import { addDays, subDays } from 'date-fns';
 import { getClaimsMock, getClaimsMockByName } from './claimsMock';
-import { SuppliersWithAssurances, SuppliersWithCertifications } from '@coldpbc/interfaces';
+import {
+  EntityLevelAttributeAssuranceGraphQL,
+  SupplierGraphQL,
+  SuppliersWithAssurances,
+  SuppliersWithCertifications,
+} from '@coldpbc/interfaces';
 import { EntityLevel } from '@coldpbc/enums';
+import { getMaterialMock } from './materialsMock';
 
 export const getSupplierWithCertificationClaimsMock = (): SuppliersWithCertifications[] => {
   const certifications = getClaimsMock();
@@ -645,3 +651,70 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
     },
   ];
 };
+
+export const getSupplierMock: (tier: number) => SupplierGraphQL = (
+  tier: number
+) => (
+  {
+    id: 'supplier_1',
+    name: `Tier ${tier} Supplier`,
+    supplierTier: tier,
+    addressLine1: '729 N Washington Ave',
+    addressLine2: '6th Floor',
+    city: 'Minneapolis',
+    stateProvince: 'MN',
+    postalCode: '55401',
+    country: 'USA',
+    category: 'Tannery',
+    subcategory: null,
+    brandFacilityId: 'brand_supplier_id_1',
+    materialSuppliers: tier !== 2 ? [] : [
+      {
+        id: 'material_supplier_1',
+        material: getMaterialMock,
+      }
+    ],
+    attributeAssurances: [
+      // Not documented assurance
+      {
+        id: 'assurance_1',
+        effectiveEndDate: null,
+        organizationFile: null,
+        sustainabilityAttribute: {
+          id: 'attribute_1',
+          name: 'Fair Wear',
+          level: EntityLevel.SUPPLIER,
+          logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
+        },
+      },
+      // Active assurance
+      {
+        id: 'assurance_2',
+        effectiveEndDate: addDays(new Date(), 100).toISOString(),
+        organizationFile: {
+          id: 'document_1',
+        },
+        sustainabilityAttribute: {
+          id: 'attribute_2',
+          name: 'Human Rights Policy',
+          level: EntityLevel.SUPPLIER,
+          logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/generics/Policy+or+Statement.png',
+        },
+      },
+      // Expired assurance
+      {
+        id: 'assurance_2',
+        effectiveEndDate: subDays(new Date(), 100).toISOString(),
+        organizationFile: {
+          id: 'document_1',
+        },
+        sustainabilityAttribute: {
+          id: 'attribute_3',
+          name: 'WRAP (Worldwide Responsible Accredited Production)',
+          level: EntityLevel.SUPPLIER,
+          logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png',
+        },
+      },
+    ],
+  }
+);

@@ -10,6 +10,27 @@ const updateFiles = (version) => {
     });
 }
 
+function getChangedFilesGroupedByDirectory() {
+	try {
+		const output = execSync('git diff --name-only').toString().trim();
+		const files = output.split('\n').filter(file => file);
+		
+		const groupedFiles = files.reduce((acc, file) => {
+			const dir = path.dirname(file);
+			if (!acc[dir]) {
+				acc[dir] = [];
+			}
+			acc[dir].push(file);
+			return acc;
+		}, {});
+		
+		return groupedFiles;
+	} catch (error) {
+		console.error('Error getting changed files:', error.message);
+		return {};
+	}
+}
+
 function getFromLatestCommit(basePath) {
   try {
     // Use git to get the latest commit hash
@@ -68,7 +89,33 @@ function updateVersions(updatedDirs, version) {
   }
 }
 
+function getChangedFilesSincePushGroupedByDirectory() {
+	try {
+		const output = execSync('git diff --name-only @{push}').toString().trim();
+		const files = output.split('\n').filter(file => file);
+		
+		const groupedFiles = files.map(file => {
+			return {
+				fileName: path.basename(file),
+				filePath: path.dirname(path.resolve(file))
+			};
+		});
+		
+		return groupedFiles;
+	} catch (error) {
+		console.error('Error getting changed files:', error.message);
+		return [];
+	}
+}
+
 const updateVersion = () => {
+	const changedSincePush = getChangedFilesSincePushGroupedByDirectory();
+	for(const change of changedSincePush) {
+		console.log(`File: ${change.fileName} in ${change.filePath} was changed`);
+		if(change.filePath.includes('apps') || change.filePath.includes('libs')) {
+			const packageJsonPath = path.join(change.filePath, 'package.json');
+		}
+	}
   const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
   updateVersions(getFromLatestCommit('./apps') , pkg.version);
 

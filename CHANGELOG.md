@@ -1,3 +1,62 @@
+# [1.461.0](https://github.com/coldPBC/cold-monorepo/compare/v1.460.2...v1.461.0) (2024-11-01)
+
+
+### Bug Fixes
+
+* replace 'Product Detail' with actual product name ([3604811](https://github.com/coldPBC/cold-monorepo/commit/3604811e93fae42b1c6d661c1301fb4f39665eee))
+* replace 'Product Detail' with actual product name ([#664](https://github.com/coldPBC/cold-monorepo/issues/664)) ([ed709b6](https://github.com/coldPBC/cold-monorepo/commit/ed709b60180b24a62e9da057346227e358ca6be0))
+
+
+### Features
+
+* add basic navigation to now empty SupplierDetail component behind FF ([5ddecd9](https://github.com/coldPBC/cold-monorepo/commit/5ddecd9c09d7200fb378035063b1954bc9b6308f))
+* add new details card ([7649acf](https://github.com/coldPBC/cold-monorepo/commit/7649acf2c4fcaaaee1c73f076b9655c6246b938c))
+* add SupplierSustainabilityAttributesCard ([d1c5bab](https://github.com/coldPBC/cold-monorepo/commit/d1c5bab564de62caa9f6b3a940b3ac591aad8ad6))
+* navigate to new SupplierDetail page from Suppliers data grid ([29a4538](https://github.com/coldPBC/cold-monorepo/commit/29a453834dc0e158a9fabbb099ef708aa5967a23))
+* query for supplier on SupplierDetail and present breadcrumbs, name ([619b38d](https://github.com/coldPBC/cold-monorepo/commit/619b38d0094e1065f270458233645d5ac7bd63f3))
+
+## [1.460.2](https://github.com/coldPBC/cold-monorepo/compare/v1.460.1...v1.460.2) (2024-11-01)
+
+
+### Bug Fixes
+
+* update Dockerfile to use yarn and corepack for package management ([f220ca7](https://github.com/coldPBC/cold-monorepo/commit/f220ca7375bb176ff2eb304ca8a76fe5da8d5f3d))
+
+## [1.460.1](https://github.com/coldPBC/cold-monorepo/compare/v1.460.0...v1.460.1) (2024-11-01)
+
+
+### Bug Fixes
+
+* **dockerfile:** correct source path for app files in Dockerfile ([731f77c](https://github.com/coldPBC/cold-monorepo/commit/731f77cee7c93cde41498990db808dc00b65c2d6))
+
+# [1.460.0](https://github.com/coldPBC/cold-monorepo/compare/v1.459.4...v1.460.0) (2024-11-01)
+
+
+### Features
+
+* update Dockerfiles to use yarn dlx instead of npx for running nx commands and add global dependencies ([84eaf99](https://github.com/coldPBC/cold-monorepo/commit/84eaf99e8c3686fb14eba9fe73d6b407c33d9283))
+
+## [1.459.4](https://github.com/coldPBC/cold-monorepo/compare/v1.459.3...v1.459.4) (2024-11-01)
+
+
+### Bug Fixes
+
+* use npx for nx commands in Dockerfiles ([a769d53](https://github.com/coldPBC/cold-monorepo/commit/a769d53ff4c806ba10de2024a44087ca50c405e3))
+
+## [1.459.3](https://github.com/coldPBC/cold-monorepo/compare/v1.459.2...v1.459.3) (2024-10-31)
+
+
+### Bug Fixes
+
+* update docker CMD and add file change grouping in updateVersion.mjs ([95b1aa6](https://github.com/coldPBC/cold-monorepo/commit/95b1aa64bb6a78f8b00ee57de3b7901d9edcabfe))
+
+## [1.459.2](https://github.com/coldPBC/cold-monorepo/compare/v1.459.1...v1.459.2) (2024-10-31)
+
+
+### Bug Fixes
+
+* stop querying for description ([54943af](https://github.com/coldPBC/cold-monorepo/commit/54943afffa28e98b43d8adf0200181257706f21b))
+
 ## [1.459.1](https://github.com/coldPBC/cold-monorepo/compare/v1.459.0...v1.459.1) (2024-10-31)
 
 

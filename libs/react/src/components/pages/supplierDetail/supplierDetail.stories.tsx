@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { SupplierDetail } from '@coldpbc/components';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { defaultGraphqlMocks, StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
 
 const meta: Meta<typeof SupplierDetail> = {
@@ -17,7 +17,10 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/suppliers/1'] }}>
+      <StoryMockProvider
+        memoryRouterProps={{ initialEntries: ['/suppliers/1']}}
+        graphqlMocks={defaultGraphqlMocks}
+      >
         <Routes>
           <Route path={'/suppliers/:id'} element={<SupplierDetail />} />
         </Routes>

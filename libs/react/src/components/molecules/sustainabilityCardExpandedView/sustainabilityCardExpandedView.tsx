@@ -16,10 +16,12 @@ import { EntityLevel, IconNames } from '@coldpbc/enums';
 
 interface SustainabilityCardExpandedViewProps {
   sustainabilityAttribute: SustainabilityAttribute;
+  displayedOnEntityLevel?: EntityLevel;
 }
 
 const _SustainabilityCardExpandedView: React.FC<SustainabilityCardExpandedViewProps> = ({
-  sustainabilityAttribute
+  sustainabilityAttribute,
+  displayedOnEntityLevel,
 }) => {
   const nameColumn: GridColDef = {
     field: 'name',
@@ -66,7 +68,12 @@ const _SustainabilityCardExpandedView: React.FC<SustainabilityCardExpandedViewPr
     ),
   };
 
-  const columns = sustainabilityAttribute.level === EntityLevel.MATERIAL
+  const showTier2SupplierColumn = (
+    sustainabilityAttribute.level === EntityLevel.MATERIAL &&
+      displayedOnEntityLevel !== EntityLevel.SUPPLIER
+  )
+
+  const columns = showTier2SupplierColumn
     ? [nameColumn, tier2SupplierColumn, statusColumn]
     : [nameColumn, statusColumn];
 

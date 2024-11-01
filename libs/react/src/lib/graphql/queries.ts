@@ -477,6 +477,58 @@ export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS = gql`
   }
 `;
 
+export const GET_SUPPLIER = gql`
+  query GetOrganizationFacility($id: ID!) {
+    organizationFacility(id: $id) {
+      id
+      name
+      supplierTier
+      addressLine1
+      addressLine2
+      city
+      stateProvince
+      postalCode
+      country
+      brandFacilityId
+      category
+      subcategory
+      attributeAssurances {
+        id
+        effectiveEndDate
+        organizationFile {
+          id
+        }
+        sustainabilityAttribute {
+          id
+          level
+          logoUrl
+          name
+        }
+      }
+      materialSuppliers {
+        id
+        material {
+          id
+          name
+          attributeAssurances {
+            id
+            effectiveEndDate
+            organizationFile {
+              id
+            }
+            sustainabilityAttribute {
+              id
+              level
+              logoUrl
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const GET_PRODUCT = gql`
   query GetProduct($id: ID!) {
     product(id: $id) {
@@ -626,6 +678,7 @@ export const queries: {
   CREATE_PRODUCT_MATERIAL: CREATE_PRODUCT_MATERIAL,
   CREATE_SUPPLIER: CREATE_SUPPLIER,
   UPDATE_PRODUCT: UPDATE_PRODUCT,
+  GET_SUPPLIER: GET_SUPPLIER,
   GET_PRODUCT: GET_PRODUCT,
   GET_MATERIAL: GET_MATERIAL,
 };

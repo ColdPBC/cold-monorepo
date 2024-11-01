@@ -90,6 +90,6 @@ COPY --from=build --chown=node:node /repo/node_modules /home/node/node_modules
 # Expose the port that the application listens on.
 EXPOSE ${PORT}
 
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && yarn dlx nx run ${DD_SERVICE}:serve:production"]
 
 # Run the application.

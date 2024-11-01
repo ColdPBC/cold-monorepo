@@ -9,6 +9,7 @@ import { toLower } from 'lodash';
 
 interface AttributeAssuranceEntityDetailProps {
   sustainabilityAttribute: SustainabilityAttribute;
+  displayedOnEntityLevel: EntityLevel;
   expanded: boolean;
   onClick: () => void;
 }
@@ -28,7 +29,7 @@ const getSupplierCounts = (attributeAssurances: Array<{ entity: { supplierName?:
     .map(([supplierName, count]) => `${supplierName} (${count})`);
 };
 
-const _AttributeAssuranceEntityDetail: React.FC<AttributeAssuranceEntityDetailProps> = ({ sustainabilityAttribute, expanded, onClick }) => {
+const _AttributeAssuranceEntityDetail: React.FC<AttributeAssuranceEntityDetailProps> = ({ sustainabilityAttribute, displayedOnEntityLevel, expanded, onClick }) => {
 	const attributeAssurances = sustainabilityAttribute.attributeAssurances;
 	const totalEntities = attributeAssurances.length;
 	const pluralizedEntities = pluralize(toLower(EntityLevel[sustainabilityAttribute.level]), totalEntities);
@@ -42,8 +43,13 @@ const _AttributeAssuranceEntityDetail: React.FC<AttributeAssuranceEntityDetailPr
       bubbleLabels = attributeAssurances.map(attributeAssurance => attributeAssurance.entity.name)
 			break;
 		case EntityLevel.MATERIAL:
-			subheader = `Associated with ${pluralizedEntities} used in this product.`;
-      bubbleLabels = getSupplierCounts(sustainabilityAttribute.attributeAssurances);
+			if (displayedOnEntityLevel === EntityLevel.PRODUCT) {
+        subheader = `Associated with ${pluralizedEntities} used in this product.`;
+        bubbleLabels = getSupplierCounts(sustainabilityAttribute.attributeAssurances);
+      } else {
+        subheader = `Associated with ${pluralizedEntities} made by this supplier.`;
+        bubbleLabels = attributeAssurances.map(attributeAssurance => attributeAssurance.entity.name)
+      }
 			break;
 		default:
 			subheader = null;
