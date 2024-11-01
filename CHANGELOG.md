@@ -1,3 +1,10 @@
+# [1.464.0](https://github.com/coldPBC/cold-monorepo/compare/v1.463.0...v1.464.0) (2024-11-01)
+
+
+### Features
+
+* add ability to edit sustainability attributes for supplier ([b481076](https://github.com/coldPBC/cold-monorepo/commit/b48107660f27508f2e0ffde95415912540efeaaf))
+
 # [1.463.0](https://github.com/coldPBC/cold-monorepo/compare/v1.462.1...v1.463.0) (2024-11-01)
 
 
