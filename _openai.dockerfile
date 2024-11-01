@@ -82,12 +82,12 @@ ADD --chown=node:node ./apps/${DD_SERVICE}/package.json /home/node/apps/${DD_SER
 ADD --chown=node:node ./package.json /home/node/package.json
 ADD --chown=node:node ./yarn.lock /home/node/yarn.lock
 
-COPY --from=build --chown=node:node /repo/dist/apps/${DD_SERVICE} /home/node/apps/${DD_SERVICE}/
+COPY --from=build --chown=node:node /repo/dist/apps/${DD_SERVICE}/src /home/node/apps/${DD_SERVICE}/src
 COPY --from=build --chown=node:node /repo/node_modules /home/node/node_modules
 
 RUN npx puppeteer browsers install chrome@stable
 # Expose the port that the application listens on.
 EXPOSE ${PORT}
 
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && npx nx run ${DD_SERVICE}:serve:production"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && yarn dlx nx run ${DD_SERVICE}:serve:production"]
 # Run the application.

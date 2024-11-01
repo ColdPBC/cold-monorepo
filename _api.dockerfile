@@ -64,6 +64,8 @@ FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
 WORKDIR /home/node/app
 
+RUN yarn global add nx nx-cloud prisma
+
 ADD --chown=node:node ./apps/cold-api/project.json /home/node/app/
 ADD --chown=node:node ./apps/cold-api/src/assets /home/node/app/
 ADD --chown=node:node ./package.json /home/node/app/
@@ -76,5 +78,5 @@ COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_module
 EXPOSE 7001
 
 # Run the application.
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && npx nx run ${DD_SERVICE}:serve:production"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && yarn dlx nx run ${DD_SERVICE}:serve:production"]
 
