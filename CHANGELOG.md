@@ -1,3 +1,10 @@
+# [1.463.0](https://github.com/coldPBC/cold-monorepo/compare/v1.462.1...v1.463.0) (2024-11-01)
+
+
+### Features
+
+* add support for setting runtime environment for DD to pick up ([2e0b3c7](https://github.com/coldPBC/cold-monorepo/commit/2e0b3c7a400b6b8f849e1ae39e7093be5dda2a68))
+
 ## [1.462.1](https://github.com/coldPBC/cold-monorepo/compare/v1.462.0...v1.462.1) (2024-11-01)
 
 
