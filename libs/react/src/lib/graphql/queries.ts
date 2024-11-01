@@ -485,9 +485,6 @@ export const GET_SUPPLIER = gql`
       stateProvince
       postalCode
       country
-      brandFacilityId
-      category
-      subcategory
       attributeAssurances {
         id
         effectiveEndDate
