@@ -40,9 +40,14 @@ export class BaseWorker implements OnModuleInit {
 			},
 		};
 
-		// Set the runtime version in the environment
+		// Set the runtime version in the environment for DD to pick up
 		if (this.details.version) {
 			process.env.DD_VERSION = this.details.version;
+		}
+
+		// set the runtime environment for DD to pick up
+		if (this.details.env) {
+			process.env.DD_ENV = this.details.env;
 		}
 
 		this.tags = {
