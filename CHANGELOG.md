@@ -1,3 +1,10 @@
+## [1.460.1](https://github.com/coldPBC/cold-monorepo/compare/v1.460.0...v1.460.1) (2024-11-01)
+
+
+### Bug Fixes
+
+* **dockerfile:** correct source path for app files in Dockerfile ([731f77c](https://github.com/coldPBC/cold-monorepo/commit/731f77cee7c93cde41498990db808dc00b65c2d6))
+
 # [1.460.0](https://github.com/coldPBC/cold-monorepo/compare/v1.459.4...v1.460.0) (2024-11-01)
 
 
