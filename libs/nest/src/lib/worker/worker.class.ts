@@ -129,7 +129,14 @@ export class BaseWorker implements OnModuleInit {
 	}
 
 	public static getJSON(file: string): string {
-		const project_path = `${process.env.NX_WORKSPACE_ROOT}/apps/${process.env.NX_TASK_TARGET_PROJECT}`;
+		let project_path = '';
+
+		if (process.env.NX_TASK_TARGET_PROJECT && process.env.NX_TASK_TARGET_PROJECT) {
+			project_path = `${process.env.NX_WORKSPACE_ROOT}/apps/${process.env.NX_TASK_TARGET_PROJECT}`;
+		} else {
+			project_path = appRoot.path;
+		}
+
 		if (fs.existsSync(`${project_path}/${file}`)) {
 			return fs.readFileSync(`${project_path}/${file}`).toString();
 		} else {
