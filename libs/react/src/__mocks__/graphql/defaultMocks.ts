@@ -468,17 +468,22 @@ export const defaultGraphqlMocks: {
       })
     }
   },
-  {
-    query: GET_SUPPLIER,
-    handler: (variables) => {
-      return Promise.resolve({
-        data: {
-          organizationFacility: getSupplierMock(2),
-        }
-      })
-    }
-  }
 ];
+
+export const getSupplierGraphQLMock = (tier: number) => (
+  [
+    {
+      query: GET_SUPPLIER,
+      handler: (_variables) => {
+        return Promise.resolve({
+          data: {
+            organizationFacility: getSupplierMock(tier),
+          },
+        })
+      },
+    },
+  ]
+);
 
 export const filesWithAssurancesMocks: {
 	query: DocumentNode;

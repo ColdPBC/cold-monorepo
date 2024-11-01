@@ -102,6 +102,8 @@ export interface SupplierGraphQL {
     material: {
       id: string;
       name: string;
+      materialCategory: string | null;
+      materialSubcategory: string | null;
       attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
     }
   }[]
