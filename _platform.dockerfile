@@ -48,6 +48,8 @@ RUN ls -la /repo/dist/apps
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
 
+RUN npm uninstall -g yarn pnpm
+
 RUN apt-get update
 RUN apt-get install graphicsmagick -y
 

@@ -97,6 +97,8 @@ FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
 WORKDIR /home/node/app
 
+RUN npm uninstall -g yarn pnpm
+
 RUN corepack enable
 RUN yarn set version latest
 
@@ -124,7 +126,7 @@ LABEL com.datadoghq.tags.env=${NODE_ENV}
 RUN echo "DD_SERVICE: ${DD_SERVICE}"
 
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json /home/node/app/${DD_SERVICE}/
-ADD --chown=node:node apps/${DD_SERVICE}/package.json /home/node/app/apps/${DD_SERVICE}/
+ADD --chown=node:node ./apps/${DD_SERVICE}/package.json /home/node/app/apps/${DD_SERVICE}/
 ADD --chown=node:node ./apps/${DD_SERVICE}/src/assets /home/node/app/apps/${DD_SERVICE}/src/assets
 ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js /home/node/app/apps/${DD_SERVICE}/
 ADD --chown=node:node ./package.json /home/node/app/
@@ -133,9 +135,11 @@ ADD --chown=node:node ./yarn.lock /home/node/app/
 COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} home/node/app/${DD_SERVICE}
 COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_modules
 
+RUN yarn dlx nx@latest reset
+
 # Expose the port that the application listens on.
 EXPOSE 7001
 
 # Run the application.
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && yarn dlx nx@latest run ${DD_SERVICE}:serve:${NODE_ENV}"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && yarn dlx nx@latest run ${DD_SERVICE}:serve:${NODE_ENV}"]
 
