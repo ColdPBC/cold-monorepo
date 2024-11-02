@@ -1,3 +1,10 @@
+## [1.467.17](https://github.com/coldPBC/cold-monorepo/compare/v1.467.16...v1.467.17) (2024-11-02)
+
+
+### Bug Fixes
+
+* **dockerfile:** update directories listing paths for DD_SERVICE ([b52b9a1](https://github.com/coldPBC/cold-monorepo/commit/b52b9a1bb47da3d9f92184ee261caeb056305cdd))
+
 ## [1.467.16](https://github.com/coldPBC/cold-monorepo/compare/v1.467.15...v1.467.16) (2024-11-02)
 
 
