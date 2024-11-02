@@ -1,3 +1,10 @@
+## [1.467.13](https://github.com/coldPBC/cold-monorepo/compare/v1.467.12...v1.467.13) (2024-11-02)
+
+
+### Bug Fixes
+
+* update directory listing commands in Dockerfiles ([553e92b](https://github.com/coldPBC/cold-monorepo/commit/553e92b939e6dee0ebb921606d646b948373fa5e))
+
 ## [1.467.12](https://github.com/coldPBC/cold-monorepo/compare/v1.467.11...v1.467.12) (2024-11-02)
 
 
