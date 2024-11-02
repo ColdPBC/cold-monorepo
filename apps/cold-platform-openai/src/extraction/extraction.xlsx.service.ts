@@ -29,7 +29,7 @@ export class ExtractionXlsxService extends BaseWorker {
 				}
 
 				const trimmedTable = await this.parseTable(table);
-				htmlTables.push(trimmedTable);
+				htmlTables.push(trimmedTable || '');
 			}
 
 			const joinedHtmlTables = htmlTables.join('<br />');
@@ -133,7 +133,7 @@ export class ExtractionXlsxService extends BaseWorker {
 
 		rowsToStrip.forEach(row => row.remove());
 
-		return document.querySelector('table').outerHTML;
+		return document?.querySelector('table')?.outerHTML;
 	}
 
 	toHTMLTable = async (workbook: XLSX.WorkBook, sheetName) => {
