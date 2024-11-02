@@ -1,3 +1,10 @@
+## [1.467.8](https://github.com/coldPBC/cold-monorepo/compare/v1.467.7...v1.467.8) (2024-11-02)
+
+
+### Bug Fixes
+
+* add directory listing for debugging in Dockerfiles ([0a974c1](https://github.com/coldPBC/cold-monorepo/commit/0a974c17f6f6eb2efb0baaca938e1897dabfe154))
+
 ## [1.467.7](https://github.com/coldPBC/cold-monorepo/compare/v1.467.6...v1.467.7) (2024-11-02)
 
 
