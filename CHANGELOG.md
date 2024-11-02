@@ -1,3 +1,10 @@
+## [1.467.1](https://github.com/coldPBC/cold-monorepo/compare/v1.467.0...v1.467.1) (2024-11-02)
+
+
+### Bug Fixes
+
+* update Docker CMD to use env-specific serve command ([97cbd42](https://github.com/coldPBC/cold-monorepo/commit/97cbd4257a7a7af08ac34823368b877cbd951550))
+
 # [1.467.0](https://github.com/coldPBC/cold-monorepo/compare/v1.466.2...v1.467.0) (2024-11-02)
 
 
