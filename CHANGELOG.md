@@ -1,3 +1,10 @@
+## [1.467.6](https://github.com/coldPBC/cold-monorepo/compare/v1.467.5...v1.467.6) (2024-11-02)
+
+
+### Bug Fixes
+
+* update Dockerfiles with package uninstalls and repository URL updates ([537a63f](https://github.com/coldPBC/cold-monorepo/commit/537a63fa14efef38555ae0fa5279bd74d6c8424c))
+
 ## [1.467.5](https://github.com/coldPBC/cold-monorepo/compare/v1.467.4...v1.467.5) (2024-11-02)
 
 
