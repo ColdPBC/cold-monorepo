@@ -2,7 +2,6 @@
   "name": "cold-graphql",
   "version": "1.456.1",
   "description": "Cold GraphQL API",
-  "packageManager": "pnpm@9.12.2+sha256.2ef6e547b0b07d841d605240dce4d635677831148cd30f6d564b8f4f928f73d2",
   "scripts": {
     "build": "graphweaver build",
     "start": "graphweaver start backend",
@@ -41,7 +40,6 @@
     "graphweaver": "^2.7.1",
     "lodash": "^4.17.21",
     "mqtt": "^5.10.1",
-    "nest-winston": "^1.9.7",
     "pg": "8.12.0",
     "source-map-support": "^0.5.21",
     "winston": "^3.14.2",
