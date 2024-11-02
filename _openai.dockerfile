@@ -163,7 +163,7 @@ ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js /home/node/apps/${D
 ADD --chown=node:node ./package.json /home/node/app/
 ADD --chown=node:node ./yarn.lock /home/node/app/apps/${DD_SERVICE}/
 
-COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} home/node/apps/${DD_SERVICE}/src
+COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} /home/node/apps/${DD_SERVICE}/src
 COPY --from=build --chown=node:node /app/node_modules /home/node/apps/${DD_SERVICE}/node_modules
 
 #RUN yarn add puppeteer
