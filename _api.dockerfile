@@ -135,5 +135,5 @@ COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_module
 EXPOSE 7001
 
 # Run the application.
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && yarn dlx nx@latest run ${DD_SERVICE}:start"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && yarn dlx nx@latest run ${DD_SERVICE}:serve:${NODE_ENV}"]
 
