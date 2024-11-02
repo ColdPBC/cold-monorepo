@@ -1,3 +1,10 @@
+## [1.467.5](https://github.com/coldPBC/cold-monorepo/compare/v1.467.4...v1.467.5) (2024-11-02)
+
+
+### Bug Fixes
+
+* unify Dockerfile ADD paths across different services ([d7d416d](https://github.com/coldPBC/cold-monorepo/commit/d7d416d7346c99e850c263e1b137d741379389b5))
+
 ## [1.467.4](https://github.com/coldPBC/cold-monorepo/compare/v1.467.3...v1.467.4) (2024-11-02)
 
 
