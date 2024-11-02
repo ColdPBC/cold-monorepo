@@ -157,6 +157,10 @@ VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json .
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json .
+
+RUN mkdir ./apps
+RUN mkdir ./apps/${DD_SERVICE}
+
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json ./apps/${DD_SERVICE}
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json ./apps/${DD_SERVICE}
 
