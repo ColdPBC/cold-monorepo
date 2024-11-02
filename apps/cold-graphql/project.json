@@ -1,19 +1,20 @@
 {
   "name": "cold-graphql",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/cold-graphql/src",
+  "sourceRoot": "apps/cold-graphql/src/backend",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/esbuild:esbuild",
+      "executor": "@coldpbc/graphweaver:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
+	      "application": "all",
         "platform": "node",
-        "outputPath": "dist/apps/cold-graphql",
+        "outputPath": "apps/cold-graphql/dist",
         "format": ["cjs"],
         "bundle": false,
-        "main": "apps/cold-graphql/src/main.ts",
+        "main": "apps/cold-graphql/src/backend/index.ts",
         "tsConfig": "apps/cold-graphql/tsconfig.app.json",
         "assets": ["apps/cold-graphql/src/assets"],
         "generatePackageJson": true,
@@ -25,8 +26,15 @@
         }
       },
       "configurations": {
-        "development": {},
+        "development": {
+	        "options": {
+		        "application": "all"
+	        }
+        },
         "production": {
+	        "options": {
+		        "application": "backend"
+	        },
           "esbuildOptions": {
             "sourcemap": false,
             "outExtension": {
@@ -37,16 +45,22 @@
       }
     },
     "serve": {
-      "executor": "@nx/js:node",
+      "executor": "@coldpbc/graphweaver:serve",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "cold-graphql:build"
+	      "action": "start"
       },
       "configurations": {
         "development": {
+	        "options": {
+		        "application": "all"
+	        },
           "buildTarget": "cold-graphql:build:development"
         },
         "production": {
+	        "options": {
+		        "application": "backend"
+	        },
           "buildTarget": "cold-graphql:build:production"
         }
       }
