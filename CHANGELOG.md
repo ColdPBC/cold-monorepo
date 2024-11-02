@@ -1,3 +1,10 @@
+## [1.466.2](https://github.com/coldPBC/cold-monorepo/compare/v1.466.1...v1.466.2) (2024-11-02)
+
+
+### Bug Fixes
+
+* remove configuration for cold-graphql-ui in production and staging ([9bd4c48](https://github.com/coldPBC/cold-monorepo/commit/9bd4c48ce2f36dfdf4af8b63a95f68e3836025ff))
+
 ## [1.466.1](https://github.com/coldPBC/cold-monorepo/compare/v1.466.0...v1.466.1) (2024-11-02)
 
 
