@@ -1,3 +1,20 @@
+# [1.465.0](https://github.com/coldPBC/cold-monorepo/compare/v1.464.0...v1.465.0) (2024-11-02)
+
+
+### Bug Fixes
+
+* add missing newline at end of flightcontrol.json file ([3cb925d](https://github.com/coldPBC/cold-monorepo/commit/3cb925dec3df396ce4b107c16b1061855384ce89))
+* add missing newline at end of package.json ([73bdb1b](https://github.com/coldPBC/cold-monorepo/commit/73bdb1b15d2cf048d691ca9091b4ae8143d0a014))
+* add missing workspaces property and update some dependencies versions ([7ad9e27](https://github.com/coldPBC/cold-monorepo/commit/7ad9e2716c1e2f2a652f82a4917acb9d583cecd0))
+* add newline at end of package.json ([6a7c737](https://github.com/coldPBC/cold-monorepo/commit/6a7c7378b926d667c11932db6fd583eaefaa311d))
+* normalize indentation in package.json ([5a4cf93](https://github.com/coldPBC/cold-monorepo/commit/5a4cf93f07eb614547dff7932604af3c9232724d))
+* remove unused Rollup alias plugin in Vite configs ([cf0a20f](https://github.com/coldPBC/cold-monorepo/commit/cf0a20fa660c9f6ece58f9122ed07fe53475f9ae))
+
+
+### Features
+
+* extend tsconfig and update nx settings ([37b72dc](https://github.com/coldPBC/cold-monorepo/commit/37b72dc42731cc1c7824b5e10bcdafcf9536e199))
+
 # [1.464.0](https://github.com/coldPBC/cold-monorepo/compare/v1.463.0...v1.464.0) (2024-11-01)
 
 
