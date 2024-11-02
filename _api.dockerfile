@@ -1,5 +1,5 @@
 ARG NODE_VERSION=20.9
-FROM node:${NODE_VERSION}-bullseye-slim as base
+FROM node:${NODE_VERSION} as base
 ARG NODE_ENV
 ARG DATABASE_URL
 ARG DD_SERVICE
@@ -24,11 +24,14 @@ LABEL com.datadoghq.tags.env=${NODE_ENV}
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 WORKDIR /app
-# uninstall old yarn or pnpm
-#RUN npm uninstall -g yarn pnpm
 
-# install global dependencies
-RUN yarn global add nx nx-cloud prisma zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto ts-node eslint
+RUN apt-get update && apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+
+# uninstall old yarn or pnpm
+RUN npm uninstall -g yarn pnpm
+
+RUN corepack enable
+RUN yarn set version latest
 
 ADD . /app/
 
@@ -36,29 +39,30 @@ ADD . /app/
 
 FROM base as dependencies
 WORKDIR /app
+USER root
+VOLUME /tmp:/tmp
+
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.yarn to speed up subsequent builds.
 # Leverage a bind mounts to package.json and yarn.lock to avoid having to copy them into
 # into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=yarn.lock,target=yarn.lock,readwrite \
-    --mount=type=cache,target=/root/.yarn \
-    if [ "${NODE_ENV}" = "production" ] ; then echo "installing production dependencies..." && yarn workspaces focus --all --production ; else echo "installing dev dependencies..." && yarn ; fi
-#RUN chown -R node:node /home/node/build
-RUN echo  "****NODE ENV**** ${NODE_ENV}"
-RUN yarn add -D @typescript-eslint/eslint-plugin
+RUN yarn install
+#RUN yarn dedupe --strategy highest
 
 FROM dependencies as build
 WORKDIR /app
-RUN yarn dlx nx run cold-nest-library:prisma-generate
+USER root
+
+RUN corepack enable
+RUN yarn set version latest
+
+RUN yarn dlx nx@latest run cold-nest-library:prisma-generate
 RUN yarn prebuild
 
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping migration" ; else prisma migrate deploy ; fi
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping seed" ; else prisma db seed ; fi
 
-RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-api:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-api:build:development ; fi
-
-RUN npx nx reset
+RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && yarn dlx nx@latest run --skip-nx-cache cold-api:build:production ; else echo "building development..." && yarn dlx nx@latest run --skip-nx-cache cold-api:build:development ; fi
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
