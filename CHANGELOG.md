@@ -1,3 +1,10 @@
+# [1.467.0](https://github.com/coldPBC/cold-monorepo/compare/v1.466.2...v1.467.0) (2024-11-02)
+
+
+### Features
+
+* update Dockerfile to uninstall yarn and pnpm, and change app start command ([2f159be](https://github.com/coldPBC/cold-monorepo/commit/2f159bec05ab90d3386340f103995c9f9d15169f))
+
 ## [1.466.2](https://github.com/coldPBC/cold-monorepo/compare/v1.466.1...v1.466.2) (2024-11-02)
 
 
