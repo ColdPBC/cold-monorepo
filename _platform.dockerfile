@@ -94,7 +94,8 @@ COPY --from=build --chown=node:node /repo/node_modules /home/node/app/${DD_SERVI
 EXPOSE ${PORT}
 
 RUN ls -la /home/node/app/${DD_SERVICE}
+RUN ls -la /home/node/app/${DD_SERVICE}/src
 
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./src/main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node /home/node/app/${DD_SERVICE}/src/main.js"]
 
 # Run the application.
