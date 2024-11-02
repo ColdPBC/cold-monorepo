@@ -1,3 +1,10 @@
+## [1.467.16](https://github.com/coldPBC/cold-monorepo/compare/v1.467.15...v1.467.16) (2024-11-02)
+
+
+### Bug Fixes
+
+* ensure apps directory exists before copying files ([e0c8df2](https://github.com/coldPBC/cold-monorepo/commit/e0c8df2e5d3d023e5b1c0ce96fe7d6ec0f9d5bfc))
+
 ## [1.467.15](https://github.com/coldPBC/cold-monorepo/compare/v1.467.14...v1.467.15) (2024-11-02)
 
 
