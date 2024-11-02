@@ -124,7 +124,7 @@ LABEL com.datadoghq.tags.env=${NODE_ENV}
 RUN echo "DD_SERVICE: ${DD_SERVICE}"
 
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json /home/node/app/
-ADD --chown=node:node ./apps/${DD_SERVICE}/src/assets /home/node/app/
+ADD --chown=node:node ./apps/${DD_SERVICE}/src/assets /home/node/app/apps/${DD_SERVICE}/src/assets
 ADD --chown=node:node ./package.json /home/node/app/
 ADD --chown=node:node ./yarn.lock /home/node/app/
 
