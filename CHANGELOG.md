@@ -1,3 +1,10 @@
+## [1.465.2](https://github.com/coldPBC/cold-monorepo/compare/v1.465.1...v1.465.2) (2024-11-02)
+
+
+### Bug Fixes
+
+* update database migration and seeding commands in Dockerfiles ([63f8478](https://github.com/coldPBC/cold-monorepo/commit/63f847898aac252d3f8a5d9e37b42011a79ee51e))
+
 ## [1.465.1](https://github.com/coldPBC/cold-monorepo/compare/v1.465.0...v1.465.1) (2024-11-02)
 
 
