@@ -1,3 +1,10 @@
+## [1.467.12](https://github.com/coldPBC/cold-monorepo/compare/v1.467.11...v1.467.12) (2024-11-02)
+
+
+### Bug Fixes
+
+* correct destination paths in Dockerfiles ([0747832](https://github.com/coldPBC/cold-monorepo/commit/0747832f1a3e8e79b2779382f976207ef8b52869))
+
 ## [1.467.11](https://github.com/coldPBC/cold-monorepo/compare/v1.467.10...v1.467.11) (2024-11-02)
 
 
