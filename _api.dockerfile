@@ -88,8 +88,8 @@ RUN yarn set version latest
 RUN yarn dlx nx@latest run cold-nest-library:prisma-generate
 RUN yarn prebuild
 
-RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping migration" ; else prisma migrate deploy ; fi
-RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping seed" ; else prisma db seed ; fi
+RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping migration" ; else yarn prisma migrate deploy ; fi
+RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping seed" ; else yarn prisma db seed ; fi
 
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && yarn dlx nx@latest run --skip-nx-cache ${DD_SERVICE}:build:production ; else echo "building development..." && yarn dlx nx@latest run --skip-nx-cache ${DD_SERVICE}:build:development ; fi
 
