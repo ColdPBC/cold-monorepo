@@ -1,3 +1,10 @@
+## [1.467.7](https://github.com/coldPBC/cold-monorepo/compare/v1.467.6...v1.467.7) (2024-11-02)
+
+
+### Bug Fixes
+
+* replace yarn dlx nx@latest run with node main.js in docker CMD ([0e1eacc](https://github.com/coldPBC/cold-monorepo/commit/0e1eacca6a5a2c0d003b97ca1d5a5c1c27cf7078))
+
 ## [1.467.6](https://github.com/coldPBC/cold-monorepo/compare/v1.467.5...v1.467.6) (2024-11-02)
 
 
