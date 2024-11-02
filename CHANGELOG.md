@@ -1,3 +1,10 @@
+## [1.467.14](https://github.com/coldPBC/cold-monorepo/compare/v1.467.13...v1.467.14) (2024-11-02)
+
+
+### Bug Fixes
+
+* **dockerfile:** correct node_modules copy path in Dockerfiles ([efa6175](https://github.com/coldPBC/cold-monorepo/commit/efa61759f1f92b7febfb0c9a59f7179a079a59cc))
+
 ## [1.467.13](https://github.com/coldPBC/cold-monorepo/compare/v1.467.12...v1.467.13) (2024-11-02)
 
 
