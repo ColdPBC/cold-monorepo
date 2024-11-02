@@ -210,7 +210,9 @@
           "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
           "watchPaths": [
-            "apps/cold-graphql/src/backend/**"
+            "apps/cold-graphql/src/backend/**",
+	          "libs/nest/prisma/schema.prisma",
+	          "_graphql.dockerfile"
           ],
           "maxInstances": 2,
           "minInstances": 1,
@@ -521,9 +523,11 @@
           "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
           "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
-          "watchPaths": [
-            "apps/cold-graphql/src/backend/**"
-          ],
+	        "watchPaths": [
+		        "apps/cold-graphql/src/backend/**",
+		        "libs/nest/prisma/schema.prisma",
+		        "_graphql.dockerfile"
+	        ],
           "maxInstances": 2,
           "minInstances": 1,
           "healthCheckPath": "/health",
