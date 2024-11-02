@@ -140,6 +140,8 @@ RUN yarn dlx nx@latest reset
 # Expose the port that the application listens on.
 EXPOSE 7001
 
+RUN ls -la /repo/dist/apps/${DD_SERVICE}
+
 # Run the application.
 CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node main.js"]
 

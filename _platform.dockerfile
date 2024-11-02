@@ -43,7 +43,6 @@ RUN yarn prebuild
 
 RUN npx nx run --skip-nx-cache ${DD_SERVICE}:build:production
 
-RUN ls -la /repo/dist/apps
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
@@ -93,6 +92,8 @@ COPY --from=build --chown=node:node /repo/node_modules /home/node/node_modules
 
 # Expose the port that the application listens on.
 EXPOSE ${PORT}
+
+RUN ls -la /repo/dist/apps/${DD_SERVICE}
 
 CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node main.js"]
 
