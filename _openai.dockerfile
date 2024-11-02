@@ -159,7 +159,7 @@ COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} home/node/app/$
 COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_modules
 
 #RUN yarn add puppeteer
-RUN yarn workspaces focus ${DD_SERVICE} --production
+#RUN yarn workspaces focus ${DD_SERVICE} --production
 RUN yarn dedupe --strategy highest
 
 # Expose the port that the application listens on.
