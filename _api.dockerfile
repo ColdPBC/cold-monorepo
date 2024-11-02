@@ -95,7 +95,7 @@ RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..."
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
-WORKDIR /home/node/apps/${DD_SERVICE}
+WORKDIR /home/node
 
 RUN npm uninstall -g yarn pnpm
 
@@ -125,10 +125,13 @@ LABEL com.datadoghq.tags.env=${NODE_ENV}
 
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json .
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json .
+ADD --chown=node:node ./apps/${DD_SERVICE}/project.json ./apps/${DD_SERVICE}
+ADD --chown=node:node ./apps/${DD_SERVICE}/package.json ./apps/${DD_SERVICE}
+
 ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js .
 ADD --chown=node:node ./yarn.lock .
 
-COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} ./src
+COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} ./apps/${DD_SERVICE}/src
 COPY --from=build --chown=node:node /app/node_modules ./node_modules
 
 # Expose the port that the application listens on.
@@ -138,5 +141,5 @@ RUN ls -la .
 RUN ls -la ./src
 
 # Run the application.
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./src/main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./apps/${DD_SERVICE}/src/main.js"]
 

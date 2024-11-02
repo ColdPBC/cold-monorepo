@@ -157,10 +157,13 @@ VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json .
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json .
+ADD --chown=node:node ./apps/${DD_SERVICE}/project.json ./apps/${DD_SERVICE}
+ADD --chown=node:node ./apps/${DD_SERVICE}/package.json ./apps/${DD_SERVICE}
+
 ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js .
 ADD --chown=node:node ./yarn.lock .
 
-COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} ./src
+COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} ./apps/${DD_SERVICE}/src
 COPY --from=build --chown=node:node /app/node_modules ./node_modules
 
 #RUN yarn add puppeteer
@@ -174,4 +177,4 @@ RUN ls -la .
 RUN ls -la ./src
 
 # Run the application.
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./src/main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./apps/${DD_SERVICE}/src/main.js"]
