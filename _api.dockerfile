@@ -97,6 +97,9 @@ FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
 WORKDIR /home/node/app
 
+RUN corepack enable
+RUN yarn set version latest
+
 ARG NODE_ENV
 ARG DATABASE_URL
 ARG DD_SERVICE
