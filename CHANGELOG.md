@@ -1,3 +1,10 @@
+## [1.467.11](https://github.com/coldPBC/cold-monorepo/compare/v1.467.10...v1.467.11) (2024-11-02)
+
+
+### Bug Fixes
+
+* update Dockerfiles to use absolute path for node app ([225e2b5](https://github.com/coldPBC/cold-monorepo/commit/225e2b5e51dc4a738cda94c055f01d8429c5b338))
+
 ## [1.467.10](https://github.com/coldPBC/cold-monorepo/compare/v1.467.9...v1.467.10) (2024-11-02)
 
 
