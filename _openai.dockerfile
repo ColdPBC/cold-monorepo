@@ -61,6 +61,8 @@ FROM dependencies as build
 WORKDIR /app
 USER root
 
+RUN npm uninstall -g yarn pnpm
+
 ARG NODE_ENV
 ARG DATABASE_URL
 ARG DD_SERVICE
@@ -160,10 +162,10 @@ COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_module
 
 #RUN yarn add puppeteer
 #RUN yarn workspaces focus ${DD_SERVICE} --production
-RUN yarn dedupe --strategy highest
+#RUN yarn dedupe --strategy highest
 
 # Expose the port that the application listens on.
 EXPOSE 7001
 
 # Run the application.
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node /home/node/app/${DD_SERVICE}/main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && yarn dlx nx@latest run ${DD_SERVICE}:start"]
