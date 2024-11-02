@@ -170,8 +170,8 @@ COPY --from=build --chown=node:node /app/node_modules .
 # Expose the port that the application listens on.
 EXPOSE 7001
 
-RUN ls -la /home/node/apps/${DD_SERVICE}
-RUN ls -la /home/node/apps/${DD_SERVICE}/src
+RUN ls -la .
+RUN ls -la ./src
 
 # Run the application.
 CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./src/main.js"]
