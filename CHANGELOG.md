@@ -1,3 +1,10 @@
+## [1.465.1](https://github.com/coldPBC/cold-monorepo/compare/v1.465.0...v1.465.1) (2024-11-02)
+
+
+### Bug Fixes
+
+* update Dockerfiles and code for consistency and enhancements ([907ae82](https://github.com/coldPBC/cold-monorepo/commit/907ae82e20372ec5b732c858040c0b104a69c78b))
+
 # [1.465.0](https://github.com/coldPBC/cold-monorepo/compare/v1.464.0...v1.465.0) (2024-11-02)
 
 
