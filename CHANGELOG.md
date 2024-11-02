@@ -1,3 +1,10 @@
+## [1.467.4](https://github.com/coldPBC/cold-monorepo/compare/v1.467.3...v1.467.4) (2024-11-02)
+
+
+### Bug Fixes
+
+* update Dockerfiles to include webpack.config.js ([ee8234a](https://github.com/coldPBC/cold-monorepo/commit/ee8234a9ff0648700c43924ce9321cda50ac9ea6))
+
 ## [1.467.3](https://github.com/coldPBC/cold-monorepo/compare/v1.467.2...v1.467.3) (2024-11-02)
 
 
