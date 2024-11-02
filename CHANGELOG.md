@@ -1,3 +1,10 @@
+## [1.467.9](https://github.com/coldPBC/cold-monorepo/compare/v1.467.8...v1.467.9) (2024-11-02)
+
+
+### Bug Fixes
+
+* update Dockerfile paths to correct directory structure ([1ff959a](https://github.com/coldPBC/cold-monorepo/commit/1ff959a5d7b819129b58cd9a01a80f3edd119d21))
+
 ## [1.467.8](https://github.com/coldPBC/cold-monorepo/compare/v1.467.7...v1.467.8) (2024-11-02)
 
 
