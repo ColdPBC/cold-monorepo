@@ -152,12 +152,13 @@ LABEL com.datadoghq.tags.env=${NODE_ENV}
 
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
-ADD --chown=node:node ./apps/${DD_SERVICE}/project.json /home/node/app/
+ADD --chown=node:node ./apps/${DD_SERVICE}/project.json /home/node/app/apps/${DD_SERVICE}/
+ADD --chown=node:node ./apps/${DD_SERVICE}/package.json /home/node/app/apps/${DD_SERVICE}/
 ADD --chown=node:node ./apps/${DD_SERVICE}/src/assets /home/node/app/apps/${DD_SERVICE}/src/assets
 ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js /home/node/app/apps/${DD_SERVICE}/
 
 ADD --chown=node:node ./package.json /home/node/app/
-ADD --chown=node:node ./yarn.lock /home/node/app/
+ADD --chown=node:node ./yarn.lock /home/node/app/apps/${DD_SERVICE}/
 
 COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} home/node/app/${DD_SERVICE}
 COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_modules

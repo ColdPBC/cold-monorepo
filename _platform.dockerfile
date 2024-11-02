@@ -78,8 +78,10 @@ LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
 
-ADD --chown=node:node apps/${DD_SERVICE}/project.json /home/node/apps/${DD_SERVICE}/project.json
-ADD --chown=node:node apps/${DD_SERVICE}/package.json /home/node/apps/${DD_SERVICE}/package.json
+ADD --chown=node:node apps/${DD_SERVICE}/project.json /home/node/apps/${DD_SERVICE}/
+ADD --chown=node:node apps/${DD_SERVICE}/package.json /home/node/apps/${DD_SERVICE}/
+ADD --chown=node:node ./apps/${DD_SERVICE}/src/assets /home/node/app/apps/${DD_SERVICE}/src/assets
+ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js /home/node/app/apps/${DD_SERVICE}/
 
 ADD --chown=node:node ./package.json /home/node/package.json
 ADD --chown=node:node ./yarn.lock /home/node/yarn.lock
