@@ -73,28 +73,28 @@ ENV DD_API_KEY=${DD_API_KEY}
 ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_VERSION=${DD_VERSION}
 
-WORKDIR /home/node/apps/${DD_SERVICE}
+WORKDIR /home/node/app/${DD_SERVICE}
 
 LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
 
-ADD --chown=node:node apps/${DD_SERVICE}/project.json /home/node/apps/${DD_SERVICE}/
-ADD --chown=node:node apps/${DD_SERVICE}/package.json /home/node/apps/${DD_SERVICE}/
-ADD --chown=node:node ./apps/${DD_SERVICE}/src/assets /home/node/app/apps/${DD_SERVICE}/src/assets
-ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js /home/node/app/apps/${DD_SERVICE}/
+ADD --chown=node:node ./apps/${DD_SERVICE}/project.json /home/node/app/${DD_SERVICE}/
+ADD --chown=node:node ./apps/${DD_SERVICE}/package.json /home/node/app/${DD_SERVICE}/
+ADD --chown=node:node ./apps/${DD_SERVICE}/src/assets /home/node/app/${DD_SERVICE}/src/assets
+ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js /home/node/app/${DD_SERVICE}
 
-ADD --chown=node:node ./package.json /home/node/package.json
-ADD --chown=node:node ./yarn.lock /home/node/yarn.lock
+ADD --chown=node:node ./package.json /home/node/app/${DD_SERVICE}/package.json
+ADD --chown=node:node ./yarn.lock /home/node/app/${DD_SERVICE}/yarn.lock
 
-COPY --from=build --chown=node:node /repo/dist/apps/${DD_SERVICE} /home/node/apps/${DD_SERVICE}/
-COPY --from=build --chown=node:node /repo/node_modules /home/node/node_modules
+COPY --from=build --chown=node:node /repo/dist/apps/${DD_SERVICE} /home/node/app/${DD_SERVICE}/src
+COPY --from=build --chown=node:node /repo/node_modules /home/node/app/${DD_SERVICE}/node_modules
 
 # Expose the port that the application listens on.
 EXPOSE ${PORT}
 
-RUN ls -la /repo/dist/apps/${DD_SERVICE}
+RUN ls -la /home/node/app/${DD_SERVICE}
 
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./src/main.js"]
 
 # Run the application.
