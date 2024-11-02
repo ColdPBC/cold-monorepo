@@ -133,7 +133,7 @@ ADD --chown=node:node ./yarn.lock /home/node/app/
 COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} home/node/app/${DD_SERVICE}
 COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_modules
 
-RUN yarn add puppeteer
+#RUN yarn add puppeteer
 RUN yarn workspaces focus ${DD_SERVICE} --production
 RUN yarn dedupe --strategy highest
 
