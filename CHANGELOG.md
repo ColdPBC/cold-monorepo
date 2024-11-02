@@ -1,3 +1,10 @@
+## [1.467.2](https://github.com/coldPBC/cold-monorepo/compare/v1.467.1...v1.467.2) (2024-11-02)
+
+
+### Bug Fixes
+
+* **dockerfile:** correct assets directory path ([4d52a6e](https://github.com/coldPBC/cold-monorepo/commit/4d52a6e4028ae72ade656f0389d2d3acca615713))
+
 ## [1.467.1](https://github.com/coldPBC/cold-monorepo/compare/v1.467.0...v1.467.1) (2024-11-02)
 
 
