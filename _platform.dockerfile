@@ -85,7 +85,7 @@ ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js .
 ADD --chown=node:node ./yarn.lock .
 
 COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} ./src
-COPY --from=build --chown=node:node /app/node_modules .
+COPY --from=build --chown=node:node /app/node_modules ./node_modules
 
 # Expose the port that the application listens on.
 EXPOSE ${PORT}
