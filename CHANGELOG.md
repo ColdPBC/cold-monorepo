@@ -1,3 +1,10 @@
+## [1.468.1](https://github.com/coldPBC/cold-monorepo/compare/v1.468.0...v1.468.1) (2024-11-03)
+
+
+### Bug Fixes
+
+* correct log message and uncomment build command in dockerfile ([f3598db](https://github.com/coldPBC/cold-monorepo/commit/f3598db81b0806534ad2a97576cca7712d1555e6))
+
 # [1.468.0](https://github.com/coldPBC/cold-monorepo/compare/v1.467.20...v1.468.0) (2024-11-03)
 
 
