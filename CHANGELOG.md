@@ -1,3 +1,10 @@
+## [1.467.18](https://github.com/coldPBC/cold-monorepo/compare/v1.467.17...v1.467.18) (2024-11-03)
+
+
+### Bug Fixes
+
+* migrate graphql to use YARN ([57d87c0](https://github.com/coldPBC/cold-monorepo/commit/57d87c0615bc4f05c6d0095254c9c96d6123713b))
+
 ## [1.467.17](https://github.com/coldPBC/cold-monorepo/compare/v1.467.16...v1.467.17) (2024-11-02)
 
 
