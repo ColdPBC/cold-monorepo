@@ -89,7 +89,7 @@ export class SecretsService {
 
 			const result: GetSecretValueResponse | undefined = await this.client?.getSecretValue({ SecretId: secretName });
 			if (!result) {
-				this.logger.error(`Secret ${result} not found`);
+				this.logger.error(`Secret ${secretName} not found`);
 				return null;
 			}
 			let secret: any = {};

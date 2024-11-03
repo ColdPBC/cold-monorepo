@@ -4,7 +4,7 @@
   "description": "Cold GraphQL API",
   "scripts": {
     "build": "graphweaver build backend",
-	  "build:ui": "graphweaver build frontend",
+    "build:ui": "graphweaver build frontend",
     "start": "graphweaver start backend",
     "start:ui": "graphweaver start frontend",
     "watch": "graphweaver watch",

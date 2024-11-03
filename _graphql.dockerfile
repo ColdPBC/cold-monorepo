@@ -68,7 +68,7 @@ WORKDIR /home/node/apps/${DD_SERVICE}
 RUN yarn install
 
 # Build the app
-#RUN yarn build
+RUN yarn build
 
 # Sync the DB
 #RUN yarn sync
