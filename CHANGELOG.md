@@ -1,3 +1,10 @@
+## [1.467.20](https://github.com/coldPBC/cold-monorepo/compare/v1.467.19...v1.467.20) (2024-11-03)
+
+
+### Bug Fixes
+
+* correct yarn sync command and update Dockerfile for Datadog and Yarn support ([27c221e](https://github.com/coldPBC/cold-monorepo/commit/27c221e3057eaf7d122faadcf81cfd121d142cfe))
+
 ## [1.467.19](https://github.com/coldPBC/cold-monorepo/compare/v1.467.18...v1.467.19) (2024-11-03)
 
 
