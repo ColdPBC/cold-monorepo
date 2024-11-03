@@ -44,18 +44,35 @@ RUN yarn prebuild
 RUN npx nx run --skip-nx-cache ${DD_SERVICE}:build:production
 
 
-FROM node:${NODE_VERSION}-bullseye-slim as final
+FROM node:${NODE_VERSION} as final
 USER root
 
 RUN npm uninstall -g yarn pnpm
 
 RUN apt-get update
 RUN apt-get install graphicsmagick -y
-
-RUN apt-get update && \
-    apt-get install -y git && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  fonts-liberation \
+  libasound2 \
+  libatk-bridge2.0-0 \
+  libatk1.0-0 \
+  libcups2 \
+  libdrm2 \
+  libgbm1 \
+  libgtk-3-0 \
+  libnspr4 \
+  libnss3 \
+  libx11-xcb1 \
+  libxcomposite1 \
+  libxdamage1 \
+  libxrandr2 \
+  xdg-utils \
+  libu2f-udev \
+  libxshmfence1 \
+  libglu1-mesa \
+  chromium \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
 
 USER node
 
