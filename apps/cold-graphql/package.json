@@ -12,7 +12,7 @@
     "apply:acl": "ts-node ./custom_generators/apply_acls.ts",
     "apply:hooks": "ts-node ./custom_generators/apply_hooks.ts",
     "create:sidecar": "ts-node ./custom_generators/create_sidecar.ts",
-    "sync": "yarn import && yarn apply:acl && yarn apply:hooks && yarn create:sidecar"
+    "sync": "yarn run import && yarn apply:acl && yarn apply:hooks && yarn create:sidecar"
   },
   "resolutions": {
     "graphql": "^16.9.0"

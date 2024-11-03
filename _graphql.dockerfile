@@ -26,39 +26,53 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
+# Install the Datadog Agent
 LABEL com.datadoghq.ad.check_names='["postgres"]'
 LABEL com.datadoghq.ad.init_configs='[{}]'
 LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
 
+# Add Datadog tags
 LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
 
-RUN echo "DD_SERVICE: ${DD_SERVICE}"
-
+# Add socket to communicate with the host's Docker daemon
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
+# Enable Yarn
 RUN corepack enable
 RUN yarn set version latest
 
+# Add the root project.json and package.json files to the root directory
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json .
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json .
 
+# Create the apps directory
 RUN mkdir ./apps
 RUN mkdir ./apps/${DD_SERVICE}
 
+# Add the app's project.json and package.json files to the app's directory
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json ./apps/${DD_SERVICE}
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json ./apps/${DD_SERVICE}
 
+# Add the root yarn.lock file to the root directory
 ADD --chown=node:node ./yarn.lock .
 
-COPY --from=base --chown=node:node /home/node/repo/apps/${DD_SERVICE} ./apps/${DD_SERVICE}
+# Set the working directory to the app's directory
+WORKDIR /home/node/apps/${DD_SERVICE}
 
-RUN cd ./apps/${DD_SERVICE}
-RUN yarn
-RUN yarn build
-RUN yarn sync
+# Install the app's dependencies
+RUN yarn install
+
+# Build the app
+#RUN yarn build
+
+# Sync the DB
+#RUN yarn sync
 
 EXPOSE 9001
 
+# Start the app
 CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && yarn start"]
+
+
