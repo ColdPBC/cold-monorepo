@@ -3,22 +3,26 @@ FROM node:${NODE_VERSION} as base
 USER root
 WORKDIR /home/node
 
+# Install libraries for building canvas
 RUN apt-get update
 RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake
 RUN rm -rf /var/lib/apt/lists/*
 
+# Add the root project to the repo directory
 ADD . ./repo
 
 FROM node:20.9-bullseye-slim as final
 USER root
 WORKDIR /home/node
 
+# Capture the build arguments
 ARG NODE_ENV
 ARG DATABASE_URL
 ARG DD_SERVICE
 ARG DD_VERSION
 ARG DD_API_KEY
 
+# Set the environment variables
 ENV NODE_ENV=${NODE_ENV}
 ENV DD_ENV=${NODE_ENV}
 ENV DD_API_KEY=${DD_API_KEY}
@@ -68,11 +72,17 @@ WORKDIR /home/node/apps/${DD_SERVICE}
 RUN yarn install
 
 # Build the app
-RUN yarn build
+#RUN yarn build
 
 # Sync the DB
 #RUN yarn sync
 
+# Log the contents of the directories
+RUN ls -la .
+RUN ls -la ./src
+RUN ls -la ./src/backend
+
+# Expose the port that the application listens ons
 EXPOSE 9001
 
 # Start the app
