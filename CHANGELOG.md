@@ -1,3 +1,10 @@
+# [1.468.0](https://github.com/coldPBC/cold-monorepo/compare/v1.467.20...v1.468.0) (2024-11-03)
+
+
+### Features
+
+* include app's src directory in Dockerfile ([eaaaf5e](https://github.com/coldPBC/cold-monorepo/commit/eaaaf5e849193a3031cce4244485f88a23375161))
+
 ## [1.467.20](https://github.com/coldPBC/cold-monorepo/compare/v1.467.19...v1.467.20) (2024-11-03)
 
 
