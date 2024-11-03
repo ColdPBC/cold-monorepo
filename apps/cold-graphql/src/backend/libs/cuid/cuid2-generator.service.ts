@@ -51,7 +51,6 @@ export class Cuid2Generator {
 		let isColdScoped = false;
 
 		for (const guidPrefixesKey in GuidPrefixes) {
-			// @ts-expect-error it's fine...
 			isColdScoped = id.startsWith(`${GuidPrefixes[guidPrefixesKey]}_`);
 			if (isColdScoped) {
 				break;

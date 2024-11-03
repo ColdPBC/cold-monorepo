@@ -115,6 +115,10 @@ services:
     build:
       context: .
       dockerfile: _graphql.dockerfile
+      args:
+        NODE_ENV: development
+        DD_SERVICE: cold-graphql
+        DATABASE_URL: postgres://postgres:postgres@postgres:5432/colddb
     container_name: cold-graphql
     labels:
       - "traefik.enable=true"
@@ -132,6 +136,7 @@ services:
     ports:
       - '9001:9001'
     environment:
+      DD_SERVICE: cold-graphql
       AUTH_BASE_URI: http://localhost:9001
       AUTH_JWKS_URI: https://dev-6qt527e13qyo4ls6.us.auth0.com/.well-known/jwks.json
       AUTH_JWT_ALGORITHM: RS256

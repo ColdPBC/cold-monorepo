@@ -1,16 +1,13 @@
-# Use the official Node.js image as the base
-FROM node:20.9-bullseye-slim as base
+ARG NODE_VERSION=20
+FROM node:${NODE_VERSION} as base
 USER root
 WORKDIR /home/node
 
-RUN corepack enable
-RUN yarn set version latest
+RUN apt-get update
+RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake
+RUN rm -rf /var/lib/apt/lists/*
 
-COPY . .
-
-RUN yarn
-RUN yarn sync
-RUN yarn build
+ADD . ./repo
 
 FROM node:20.9-bullseye-slim as final
 USER root
@@ -44,16 +41,24 @@ VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 RUN corepack enable
 RUN yarn set version latest
 
-# Set the working directory within the container
-COPY ./apps/cold-graphql/src ./src
-COPY ./apps/cold-graphql/tsconfig.json .
-COPY ./apps/cold-graphql/package.json .
-#COPY ./apps/cold-graphql/pnpm-lock.yaml .
+ADD --chown=node:node ./apps/${DD_SERVICE}/project.json .
+ADD --chown=node:node ./apps/${DD_SERVICE}/package.json .
 
+RUN mkdir ./apps
+RUN mkdir ./apps/${DD_SERVICE}
 
+ADD --chown=node:node ./apps/${DD_SERVICE}/project.json ./apps/${DD_SERVICE}
+ADD --chown=node:node ./apps/${DD_SERVICE}/package.json ./apps/${DD_SERVICE}
 
-# Expose the port your app will run on (e.g., 9001)
+ADD --chown=node:node ./yarn.lock .
+
+COPY --from=base --chown=node:node /home/node/repo/apps/${DD_SERVICE} ./apps/${DD_SERVICE}
+
+RUN cd ./apps/${DD_SERVICE}
+RUN yarn
+RUN yarn build
+RUN yarn sync
+
 EXPOSE 9001
 
-# Run the application (replace with your actual command)
 CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && yarn start"]
