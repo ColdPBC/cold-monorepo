@@ -55,6 +55,9 @@ RUN mkdir ./apps/${DD_SERVICE}
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json ./apps/${DD_SERVICE}
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json ./apps/${DD_SERVICE}
 
+# Add the app's src directory to the app's directory
+ADD --chown=node:node ./apps/${DD_SERVICE}/src ./apps/${DD_SERVICE}/src
+
 # Add the root yarn.lock file to the root directory
 ADD --chown=node:node ./yarn.lock .
 
