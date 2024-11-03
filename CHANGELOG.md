@@ -1,3 +1,10 @@
+## [1.467.19](https://github.com/coldPBC/cold-monorepo/compare/v1.467.18...v1.467.19) (2024-11-03)
+
+
+### Bug Fixes
+
+* update build configuration for cold-graphql ([947a5f4](https://github.com/coldPBC/cold-monorepo/commit/947a5f48fb3b32f035496abbeb458e8630927f60))
+
 ## [1.467.18](https://github.com/coldPBC/cold-monorepo/compare/v1.467.17...v1.467.18) (2024-11-03)
 
 
