@@ -20,7 +20,7 @@ import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation } from '@coldpbc/hooks';
 import { useSWRConfig } from 'swr';
-import { isSameDay } from 'date-fns';
+import { format, isSameDay, parseISO } from 'date-fns';
 import { isApolloError } from '@apollo/client';
 import {
   addTZOffset,
@@ -33,6 +33,7 @@ export interface DocumentDetailsSidebarFileState {
   id: string;
   type: string;
   originalName: string;
+  createdAt: string;
   metadata: any;
   startDate: Date | null;
   endDate: Date | null;
@@ -104,6 +105,7 @@ const _DocumentDetailsSidebar = (props: {
 				id: file.id,
 				type: file.type,
 				originalName: file.originalName,
+        createdAt: file.createdAt,
 				metadata: file.metadata,
 				startDate: null,
 				endDate: null,
@@ -636,6 +638,7 @@ const _DocumentDetailsSidebar = (props: {
 						<Spinner />
 					) : (
 						<div className={'w-full flex flex-col gap-[20px]'}>
+              <DetailsItem category={'Uploaded'} value={format(parseISO(fileState.createdAt), 'M/d/yyyy h:mm a')} />
               {fileState.metadata?.summary && (
 								<DetailsItem category={'Cold AI Summary'} value={fileState.metadata.summary} />
 							)}
