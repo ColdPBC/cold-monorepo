@@ -644,7 +644,7 @@ const _DocumentDetailsSidebar = (props: {
 							)}
 							{getSustainabilityAttributeDropdown(fileState)}
 							<div className={'w-full flex flex-col gap-[8px]'}>
-								<div className={'w-full text-tc-primary text-eyebrow'}>Type</div>
+								<div className={'w-full text-tc-primary text-eyebrow'}>Document Category</div>
 								<Select
 									options={documentTypeOptions}
 									name={'type'}
