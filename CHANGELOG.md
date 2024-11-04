@@ -1,3 +1,10 @@
+## [1.468.2](https://github.com/coldPBC/cold-monorepo/compare/v1.468.1...v1.468.2) (2024-11-04)
+
+
+### Bug Fixes
+
+* dockerfile ([42f60d9](https://github.com/coldPBC/cold-monorepo/commit/42f60d9706e99ca99abbd0d89fa9bc5f6822dadb))
+
 ## [1.468.1](https://github.com/coldPBC/cold-monorepo/compare/v1.468.0...v1.468.1) (2024-11-03)
 
 
