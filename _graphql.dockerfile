@@ -30,6 +30,7 @@ COPY ./apps/cold-graphql/src ./src
 COPY ./apps/cold-graphql/tsconfig.json .
 COPY ./apps/cold-graphql/package.json .
 
+RUN ls -la ./src
 RUN corepack enable
 RUN corepack use pnpm@9.12.2
 
