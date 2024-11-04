@@ -1,3 +1,11 @@
+## [1.468.3](https://github.com/coldPBC/cold-monorepo/compare/v1.468.2...v1.468.3) (2024-11-04)
+
+
+### Bug Fixes
+
+* remove package.lock ([8124c8f](https://github.com/coldPBC/cold-monorepo/commit/8124c8ffa88d85c05663853166e371a8370c9f76))
+* show dir listing ([5290b0d](https://github.com/coldPBC/cold-monorepo/commit/5290b0d5d76b9fec7ae512c48f543a2ab0cae929))
+
 ## [1.468.2](https://github.com/coldPBC/cold-monorepo/compare/v1.468.1...v1.468.2) (2024-11-04)
 
 
