@@ -1783,7 +1783,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/credential-provider-sso@npm:3.682.0, @aws-sdk/credential-provider-sso@npm:^3.645.0":
+"@aws-sdk/credential-provider-sso@npm:3.682.0, @aws-sdk/credential-provider-sso@npm:^3.645.0, @aws-sdk/credential-provider-sso@npm:^3.666.0":
   version: 3.682.0
   resolution: "@aws-sdk/credential-provider-sso@npm:3.682.0"
   dependencies:
@@ -26412,6 +26412,7 @@ __metadata:
     "@as-integrations/aws-lambda": "npm:3.1.0"
     "@auth0/auth0-spa-js": "npm:^2.1.3"
     "@aws-sdk/client-secrets-manager": "npm:^3.666.0"
+    "@aws-sdk/credential-provider-sso": "npm:^3.666.0"
     "@exogee/graphweaver": "npm:^2.7.1"
     "@exogee/graphweaver-admin-ui-components": "npm:^2.7.1"
     "@exogee/graphweaver-auth": "npm:^2.6.0"
