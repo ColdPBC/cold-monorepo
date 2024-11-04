@@ -1,3 +1,10 @@
+# [1.469.0](https://github.com/coldPBC/cold-monorepo/compare/v1.468.3...v1.469.0) (2024-11-04)
+
+
+### Features
+
+* add AWS SSO credential provider to dependencies ([079a65a](https://github.com/coldPBC/cold-monorepo/commit/079a65a62a7df1a0c1399433599d179f5a68c9ed))
+
 ## [1.468.3](https://github.com/coldPBC/cold-monorepo/compare/v1.468.2...v1.468.3) (2024-11-04)
 
 
