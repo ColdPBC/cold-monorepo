@@ -2,14 +2,16 @@ import React, { ReactNode, useEffect } from 'react';
 import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
 import {
   BaseButton,
-  ColdIcon, ComboBox,
+  ColdIcon,
+  ComboBox,
+  DetailsItem,
   DocumentDetailsMenu,
   DocumentMaterialsTable,
   DocumentSuppliersTable,
   ErrorFallback,
   Input,
   Select,
-  Spinner
+  Spinner,
 } from '@coldpbc/components';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import {forEach, get, has, lowerCase, startCase} from 'lodash';
@@ -634,10 +636,8 @@ const _DocumentDetailsSidebar = (props: {
 						<Spinner />
 					) : (
 						<div className={'w-full flex flex-col gap-[20px]'}>
-							{fileState.metadata?.summary && (
-								<div className={'w-full p-[16px] mb-[40px] border-[1px] rounded-[8px] border-yellow-500'}>
-									<div className={'w-full text-tc-primary text-body'}>{fileState.metadata.summary}</div>
-								</div>
+              {fileState.metadata?.summary && (
+								<DetailsItem category={'Cold AI Summary'} value={fileState.metadata.summary} />
 							)}
 							{getSustainabilityAttributeDropdown(fileState)}
 							<div className={'w-full flex flex-col gap-[8px]'}>
