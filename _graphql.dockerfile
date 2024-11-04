@@ -29,7 +29,6 @@ VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 COPY ./apps/cold-graphql/src ./src
 COPY ./apps/cold-graphql/tsconfig.json .
 COPY ./apps/cold-graphql/package.json .
-COPY ./apps/cold-graphql/pnpm-lock.yaml .
 
 RUN corepack enable
 RUN corepack use pnpm@9.12.2
