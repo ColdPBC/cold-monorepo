@@ -1,3 +1,10 @@
+## [1.469.2](https://github.com/coldPBC/cold-monorepo/compare/v1.469.1...v1.469.2) (2024-11-04)
+
+
+### Bug Fixes
+
+* **worker:** ensure DD_ENV is set only if not already defined ([9de87d8](https://github.com/coldPBC/cold-monorepo/commit/9de87d8f2370f3c0288b8af3a221a9f036aeb3ca))
+
 ## [1.469.1](https://github.com/coldPBC/cold-monorepo/compare/v1.469.0...v1.469.1) (2024-11-04)
 
 
