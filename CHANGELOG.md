@@ -1,3 +1,11 @@
+## [1.469.1](https://github.com/coldPBC/cold-monorepo/compare/v1.469.0...v1.469.1) (2024-11-04)
+
+
+### Bug Fixes
+
+* update yarn.lock to avoid chromatic build failures ([29a4b44](https://github.com/coldPBC/cold-monorepo/commit/29a4b44700d8fbd146f124aaaee794442d00facf))
+* update yarn.lock to avoid chromatic build failures ([#669](https://github.com/coldPBC/cold-monorepo/issues/669)) ([943de71](https://github.com/coldPBC/cold-monorepo/commit/943de71d56869f6ba4330c2caeffc13292c02154))
+
 # [1.469.0](https://github.com/coldPBC/cold-monorepo/compare/v1.468.3...v1.469.0) (2024-11-04)
 
 
