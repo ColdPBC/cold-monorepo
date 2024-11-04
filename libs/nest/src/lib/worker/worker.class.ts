@@ -46,7 +46,7 @@ export class BaseWorker implements OnModuleInit {
 		}
 
 		// set the runtime environment for DD to pick up
-		if (this.details.env) {
+		if (!process.env.DD_ENV && this.details.env) {
 			process.env.DD_ENV = this.details.env;
 		}
 
