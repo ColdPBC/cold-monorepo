@@ -22,7 +22,7 @@
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
 		"moduleResolution": "node",
-		"importHelpers": true,
+		"importHelpers": false,
 		"target": "es2022",
 		"module": "esnext",
 		"lib": ["es2021", "dom"],
