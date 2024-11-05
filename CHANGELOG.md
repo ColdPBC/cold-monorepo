@@ -1,3 +1,10 @@
+## [1.469.14](https://github.com/coldPBC/cold-monorepo/compare/v1.469.13...v1.469.14) (2024-11-05)
+
+
+### Bug Fixes
+
+* circular dependencies between nest library and API and openAI ([09ae18b](https://github.com/coldPBC/cold-monorepo/commit/09ae18bf06fdfac609667e35714c78d4e2fdb37c))
+
 ## [1.469.13](https://github.com/coldPBC/cold-monorepo/compare/v1.469.12...v1.469.13) (2024-11-05)
 
 
