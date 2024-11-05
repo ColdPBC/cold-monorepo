@@ -1,3 +1,10 @@
+## [1.470.1](https://github.com/coldPBC/cold-monorepo/compare/v1.470.0...v1.470.1) (2024-11-05)
+
+
+### Reverts
+
+* Revert "fix: circular dependencies between nest library and API and openAI" ([583bbae](https://github.com/coldPBC/cold-monorepo/commit/583bbae7c37a9549223eef6a195bd2595290f2f2))
+
 # [1.470.0](https://github.com/coldPBC/cold-monorepo/compare/v1.469.14...v1.470.0) (2024-11-05)
 
 
