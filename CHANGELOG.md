@@ -1,3 +1,10 @@
+## [1.469.4](https://github.com/coldPBC/cold-monorepo/compare/v1.469.3...v1.469.4) (2024-11-05)
+
+
+### Bug Fixes
+
+* **docker:** reorganize list commands to initial build stage ([462af12](https://github.com/coldPBC/cold-monorepo/commit/462af128144c90b178aee9690ecaf8d6c693562a))
+
 ## [1.469.3](https://github.com/coldPBC/cold-monorepo/compare/v1.469.2...v1.469.3) (2024-11-05)
 
 
