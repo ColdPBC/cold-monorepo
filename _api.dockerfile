@@ -78,8 +78,6 @@ LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
 
-RUN echo "DD_SERVICE: ${DD_SERVICE}"
-
 RUN corepack enable
 RUN yarn set version latest
 
