@@ -1,3 +1,10 @@
+## [1.469.7](https://github.com/coldPBC/cold-monorepo/compare/v1.469.6...v1.469.7) (2024-11-05)
+
+
+### Bug Fixes
+
+* update Dockerfile to run yarn without workspaces focus ([b4c1fba](https://github.com/coldPBC/cold-monorepo/commit/b4c1fbaf1b79f184609f5dd2b75d92bf27dbb070))
+
 ## [1.469.6](https://github.com/coldPBC/cold-monorepo/compare/v1.469.5...v1.469.6) (2024-11-05)
 
 
