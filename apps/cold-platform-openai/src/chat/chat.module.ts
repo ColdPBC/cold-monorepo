@@ -12,12 +12,11 @@ import {
 	ComplianceSectionsRepository,
 	MqttModule,
 	MqttService,
-	ScoringModule,
-	ScoringService,
 } from '@coldpbc/nest';
 import { FreeplayModule } from '../freeplay/freeplay.module';
 import { FreeplayService } from '../freeplay/freeplay.service';
 import { ChatController } from './chat.controller';
+import { ScoringModule } from '../../../cold-api/src/platform/modules/resources/surveys/scoring/scoring.module';
 
 @Module({
 	imports: [
@@ -40,7 +39,6 @@ import { ChatController } from './chat.controller';
 		LangchainService,
 		FreeplayService,
 		MqttService,
-		ScoringService,
 		ComplianceSectionsRepository,
 		ComplianceAiResponsesRepository,
 		ComplianceResponsesRepository,
