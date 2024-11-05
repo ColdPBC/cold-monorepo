@@ -1,10 +1,20 @@
 import { BadRequestException, Global, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, CacheService, ComplianceDefinitionsRepository, Cuid2Generator, DarklyService, GuidPrefixes, IRequest, MqttService, PrismaService } from '@coldpbc/nest';
+import {
+	BaseWorker,
+	EventService,
+	CacheService,
+	ComplianceDefinitionsRepository,
+	Cuid2Generator,
+	DarklyService,
+	GuidPrefixes,
+	IRequest,
+	MqttService,
+	PrismaService,
+} from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance-definitions.schema';
 import { compliance_definitions } from '@prisma/client';
 import { omit, pick } from 'lodash';
-import { EventService } from '../../../utilities/events/event.service';
 
 @Span()
 @Global()

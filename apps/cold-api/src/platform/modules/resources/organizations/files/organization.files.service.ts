@@ -3,9 +3,8 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { Span } from 'nestjs-ddtrace';
 import * as z from 'zod';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IRequest, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
+import { EventService, BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IRequest, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import { IntegrationsService } from '../../integrations/integrations.service';
-import { EventService } from '../../../utilities/events/event.service';
 import { pick } from 'lodash';
 import { OrganizationHelper } from '../helpers/organization.helper';
 

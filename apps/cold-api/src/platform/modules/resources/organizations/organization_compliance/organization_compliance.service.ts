@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BaseWorker, DarklyService, IRequest, MqttService, OrganizationComplianceRepository, PrismaService } from '@coldpbc/nest';
+import { EventService, BaseWorker, DarklyService, IRequest, MqttService, OrganizationComplianceRepository, PrismaService } from '@coldpbc/nest';
 import { organization_compliance } from '@prisma/client';
-import { EventService } from '../../../utilities/events/event.service';
 import { set } from 'lodash';
 
 @Injectable()

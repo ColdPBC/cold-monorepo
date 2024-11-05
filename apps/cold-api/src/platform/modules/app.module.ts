@@ -12,7 +12,6 @@ import { ActionsModule } from './resources/actions/actions.module';
 import { IntegrationsModule } from './resources/integrations/integrations.module';
 import { FacilitiesModule } from './resources/organizations/facilities/facilities.module';
 import { ComplianceDefinitionModule } from './resources/compliance/compliance-definitions/compliance-definitions.module';
-import { EventsModule } from './utilities/events/events.module';
 import { OrganizationModule } from './resources/organizations/organization.module';
 import { ComplianceSetModule } from './resources/compliance/compliance-set.module';
 import { SustainabilityAttributesModule } from './resources/sustainability_attributes/sustainability_attributes.module';
@@ -55,7 +54,6 @@ export class AppModule {
 			module: AppModule,
 			imports: [
 				await NestModule.forRootAsync(),
-				await EventsModule.forRootAsync(),
 				ServeStaticModule.forRoot({
 					serveStaticOptions: {
 						index: false,
