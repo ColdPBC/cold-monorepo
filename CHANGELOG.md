@@ -1,3 +1,11 @@
+## [1.469.10](https://github.com/coldPBC/cold-monorepo/compare/v1.469.9...v1.469.10) (2024-11-05)
+
+
+### Bug Fixes
+
+* disable importHelpers in TypeScript configuration ([e450533](https://github.com/coldPBC/cold-monorepo/commit/e4505334591991b13777998726f2992a99a9194b))
+* **dockerfile:** remove debug echo statement ([506a056](https://github.com/coldPBC/cold-monorepo/commit/506a056607c75ce6a535c466d7721c72bf6e2995))
+
 ## [1.469.9](https://github.com/coldPBC/cold-monorepo/compare/v1.469.8...v1.469.9) (2024-11-05)
 
 
