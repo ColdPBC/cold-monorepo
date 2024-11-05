@@ -1,3 +1,10 @@
+## [1.469.3](https://github.com/coldPBC/cold-monorepo/compare/v1.469.2...v1.469.3) (2024-11-05)
+
+
+### Bug Fixes
+
+* update Dockerfiles with essential build steps and environment configurations ([764688f](https://github.com/coldPBC/cold-monorepo/commit/764688fbb950330d9622e31b702d060d5df155d7))
+
 ## [1.469.2](https://github.com/coldPBC/cold-monorepo/compare/v1.469.1...v1.469.2) (2024-11-04)
 
 
