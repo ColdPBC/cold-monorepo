@@ -1,3 +1,10 @@
+## [1.469.5](https://github.com/coldPBC/cold-monorepo/compare/v1.469.4...v1.469.5) (2024-11-05)
+
+
+### Bug Fixes
+
+* correct paths in Dockerfiles for listing built files ([87c95a2](https://github.com/coldPBC/cold-monorepo/commit/87c95a2b243a416ca4c8be3d52ff3c84e893618c))
+
 ## [1.469.4](https://github.com/coldPBC/cold-monorepo/compare/v1.469.3...v1.469.4) (2024-11-05)
 
 
