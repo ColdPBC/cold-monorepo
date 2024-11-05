@@ -49,7 +49,7 @@ RUN  --mount=type=cache,target=/root/.yarn
 
 COPY package.json package.json ./
 
-RUN yarn workspaces focus ${DD_SERVICE}
+RUN yarn
 
 #RUN yarn dedupe --strategy highest
 
