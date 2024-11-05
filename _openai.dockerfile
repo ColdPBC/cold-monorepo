@@ -155,6 +155,11 @@ LABEL com.datadoghq.tags.env=${NODE_ENV}
 
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
+RUN ls -la /app
+RUN ls -la ./app/dist
+RUN ls -la ./app/dist/${DD_SERVICE}
+RUN ls -la ./app/dist/${DD_SERVICE}/src
+
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json .
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json .
 
@@ -174,13 +179,13 @@ COPY --from=build --chown=node:node /app/node_modules ./node_modules
 #RUN yarn workspaces focus ${DD_SERVICE} --production
 #RUN yarn dedupe --strategy highest
 
-# Expose the port that the application listens on.
-EXPOSE 7001
-
 RUN ls -la .
 RUN ls -la ./apps
 RUN ls -la ./apps/${DD_SERVICE}
 RUN ls -la ./apps/${DD_SERVICE}/src
+
+# Expose the port that the application listens on.
+EXPOSE 7001
 
 # Run the application.
 CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./apps/${DD_SERVICE}/src/main.js"]
