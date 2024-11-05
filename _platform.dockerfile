@@ -132,11 +132,6 @@ LABEL com.datadoghq.tags.env=${NODE_ENV}
 
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
-RUN ls -la /app
-RUN ls -la ./app/dist
-RUN ls -la ./app/dist/${DD_SERVICE}
-RUN ls -la ./app/dist/${DD_SERVICE}/src
-
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json .
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json .
 
