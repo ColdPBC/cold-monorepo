@@ -1,3 +1,10 @@
+## [1.469.8](https://github.com/coldPBC/cold-monorepo/compare/v1.469.7...v1.469.8) (2024-11-05)
+
+
+### Bug Fixes
+
+* add tslib dependency to package.json ([2b2204f](https://github.com/coldPBC/cold-monorepo/commit/2b2204f87ff09e10452063ccb3b229319f7cc11c))
+
 ## [1.469.7](https://github.com/coldPBC/cold-monorepo/compare/v1.469.6...v1.469.7) (2024-11-05)
 
 
