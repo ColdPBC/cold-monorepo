@@ -1,3 +1,10 @@
+## [1.469.13](https://github.com/coldPBC/cold-monorepo/compare/v1.469.12...v1.469.13) (2024-11-05)
+
+
+### Bug Fixes
+
+* remove redundant workspace focus in docker build ([03e23ea](https://github.com/coldPBC/cold-monorepo/commit/03e23ea214cef9688c21046536c69273896796f9))
+
 ## [1.469.12](https://github.com/coldPBC/cold-monorepo/compare/v1.469.11...v1.469.12) (2024-11-05)
 
 
