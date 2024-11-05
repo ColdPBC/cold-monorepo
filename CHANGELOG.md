@@ -1,3 +1,10 @@
+## [1.469.9](https://github.com/coldPBC/cold-monorepo/compare/v1.469.8...v1.469.9) (2024-11-05)
+
+
+### Bug Fixes
+
+* update instance storage size and yarn version ([3b7841a](https://github.com/coldPBC/cold-monorepo/commit/3b7841a46c10f41f438891831212339163f7ef7c))
+
 ## [1.469.8](https://github.com/coldPBC/cold-monorepo/compare/v1.469.7...v1.469.8) (2024-11-05)
 
 
