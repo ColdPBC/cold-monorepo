@@ -1,3 +1,10 @@
+# [1.470.0](https://github.com/coldPBC/cold-monorepo/compare/v1.469.14...v1.470.0) (2024-11-05)
+
+
+### Features
+
+* integrate OpenTelemetry and update dependencies ([50eeed0](https://github.com/coldPBC/cold-monorepo/commit/50eeed025898b39a4ac4a590cb6bb9665a3f2c4c))
+
 ## [1.469.14](https://github.com/coldPBC/cold-monorepo/compare/v1.469.13...v1.469.14) (2024-11-05)
 
 
