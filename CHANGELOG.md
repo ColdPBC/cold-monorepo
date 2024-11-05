@@ -1,3 +1,10 @@
+## [1.469.12](https://github.com/coldPBC/cold-monorepo/compare/v1.469.11...v1.469.12) (2024-11-05)
+
+
+### Bug Fixes
+
+* remove production flag from yarn workspaces focus ([8b7dd67](https://github.com/coldPBC/cold-monorepo/commit/8b7dd678a67209aa283ff0af8e2a9fca46e4a845))
+
 ## [1.469.11](https://github.com/coldPBC/cold-monorepo/compare/v1.469.10...v1.469.11) (2024-11-05)
 
 
