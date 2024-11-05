@@ -123,6 +123,11 @@ LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
 
+RUN ls -la /app
+RUN ls -la ./app/dist
+RUN ls -la ./app/dist/${DD_SERVICE}
+RUN ls -la ./app/dist/${DD_SERVICE}/src
+
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json .
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json .
 
