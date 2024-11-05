@@ -69,8 +69,8 @@ RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..."
 
 RUN ls -la /app
 RUN ls -la /app/dist
-RUN ls -la /app/dist/${DD_SERVICE}
-RUN ls -la /app/dist/${DD_SERVICE}/src
+RUN ls -la /app/dist/apps/${DD_SERVICE}
+RUN ls -la /app/dist/apps/${DD_SERVICE}/src
 
 
 FROM node:${NODE_VERSION} as final
