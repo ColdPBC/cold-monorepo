@@ -26844,6 +26844,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"cold-ui@workspace:apps/cold-ui":
+  version: 0.0.0-use.local
+  resolution: "cold-ui@workspace:apps/cold-ui"
+  languageName: unknown
+  linkType: soft
+
 "collapse-white-space@npm:^1.0.2":
   version: 1.0.6
   resolution: "collapse-white-space@npm:1.0.6"

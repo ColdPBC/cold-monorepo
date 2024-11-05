@@ -1,3 +1,4 @@
+import './libs/tracer';
 import Graphweaver from '@exogee/graphweaver-server';
 import './schema';
 
@@ -18,6 +19,9 @@ setAddUserToContext(addUserToContext);
 setAdministratorRoleName('cold:admin');
 
 export const graphweaver = new Graphweaver({
+	openTelemetry: {
+		instrumentations: [],
+	},
 	apolloServerOptions: {
 		introspection: true, //process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging',
 		hideSchemaDetailsFromClientErrors: false, //process.env.NODE_ENV !== 'development',
