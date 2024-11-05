@@ -21,8 +21,6 @@ LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
 
-RUN echo "DD_SERVICE: ${DD_SERVICE}"
-
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 #RUN npm uninstall -g yarn pnpm
@@ -51,7 +49,7 @@ RUN  --mount=type=cache,target=/root/.yarn
 
 COPY package.json package.json ./
 
-RUN yarn
+RUN yarn workspaces focus ${DD_SERVICE}
 
 #RUN yarn dedupe --strategy highest
 
@@ -88,10 +86,21 @@ RUN yarn set version latest
 RUN yarn dlx nx@latest run cold-nest-library:prisma-generate
 RUN yarn prebuild
 
+# Migrate the DB
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping migration" ; else yarn prisma migrate deploy ; fi
+
+# Seed the DB
 RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping seed" ; else yarn prisma db seed ; fi
 
+# Build the app
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && yarn dlx nx@latest run --skip-nx-cache ${DD_SERVICE}:build:production ; else echo "building development..." && yarn dlx nx@latest run --skip-nx-cache ${DD_SERVICE}:build:development ; fi
+
+# Prune the production dependencies
+RUN yarn workspaces focus ${DD_SERVICE} --production
+
+RUN ls -la /app
+RUN ls -la /app/dist
+RUN ls -la /app/dist/apps/${DD_SERVICE}
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER root
@@ -122,11 +131,6 @@ LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"c
 LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
-
-RUN ls -la /app
-RUN ls -la ./app/dist
-RUN ls -la ./app/dist/${DD_SERVICE}
-RUN ls -la ./app/dist/${DD_SERVICE}/src
 
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json .
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json .
