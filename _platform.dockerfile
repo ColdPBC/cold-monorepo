@@ -67,6 +67,12 @@ RUN yarn prebuild
 
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && yarn dlx nx@latest run --skip-nx-cache ${DD_SERVICE}:build:production ; else echo "building development..." && yarn dlx nx@latest run --skip-nx-cache ${DD_SERVICE}:build:development ; fi
 
+RUN ls -la /app
+RUN ls -la ./app/dist
+RUN ls -la ./app/dist/${DD_SERVICE}
+RUN ls -la ./app/dist/${DD_SERVICE}/src
+
+
 FROM node:${NODE_VERSION} as final
 USER root
 WORKDIR /home/node/apps/${DD_SERVICE}
