@@ -94,7 +94,7 @@ RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping s
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && yarn dlx nx@latest run --skip-nx-cache ${DD_SERVICE}:build:production ; else echo "building development..." && yarn dlx nx@latest run --skip-nx-cache ${DD_SERVICE}:build:development ; fi
 
 # Prune the production dependencies
-RUN yarn workspaces focus ${DD_SERVICE}
+# RUN yarn workspaces focus --production
 
 RUN ls -la /app
 RUN ls -la /app/dist
