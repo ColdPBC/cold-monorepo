@@ -1,4 +1,3 @@
-import './libs/tracer';
 import Graphweaver from '@exogee/graphweaver-server';
 import './schema';
 
