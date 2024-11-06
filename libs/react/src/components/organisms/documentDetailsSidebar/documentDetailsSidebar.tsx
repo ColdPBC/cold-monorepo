@@ -2,14 +2,16 @@ import React, { ReactNode, useEffect } from 'react';
 import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
 import {
   BaseButton,
-  ColdIcon, ComboBox,
+  ColdIcon,
+  ComboBox,
+  DetailsItem,
   DocumentDetailsMenu,
   DocumentMaterialsTable,
   DocumentSuppliersTable,
   ErrorFallback,
   Input,
   Select,
-  Spinner
+  Spinner,
 } from '@coldpbc/components';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import {forEach, get, has, lowerCase, startCase} from 'lodash';
@@ -18,7 +20,7 @@ import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation } from '@coldpbc/hooks';
 import { useSWRConfig } from 'swr';
-import { isSameDay } from 'date-fns';
+import { format, isSameDay, parseISO } from 'date-fns';
 import { isApolloError } from '@apollo/client';
 import {
   addTZOffset,
@@ -31,6 +33,7 @@ export interface DocumentDetailsSidebarFileState {
   id: string;
   type: string;
   originalName: string;
+  createdAt: string;
   metadata: any;
   startDate: Date | null;
   endDate: Date | null;
@@ -102,6 +105,7 @@ const _DocumentDetailsSidebar = (props: {
 				id: file.id,
 				type: file.type,
 				originalName: file.originalName,
+        createdAt: file.createdAt,
 				metadata: file.metadata,
 				startDate: null,
 				endDate: null,
@@ -217,9 +221,9 @@ const _DocumentDetailsSidebar = (props: {
 
 	const getDatePickers = (fileState: DocumentDetailsSidebarFileState) => {
 		return (
-			<>
+			<div className={'w-full flex gap-4'}>
 				<div className={'w-full flex flex-col gap-[8px]'} data-chromatic={'ignore'}>
-					<div className={'w-full text-tc-primary text-eyebrow'}>Start Date</div>
+					<div className={'w-full text-tc-primary text-eyebrow'}>Valid From</div>
 					<DesktopDatePicker
 						// @ts-ignore
 						value={fileState.startDate}
@@ -328,7 +332,7 @@ const _DocumentDetailsSidebar = (props: {
 						}}
 					/>
 				</div>
-			</>
+			</div>
 		);
 	};
 
@@ -634,14 +638,13 @@ const _DocumentDetailsSidebar = (props: {
 						<Spinner />
 					) : (
 						<div className={'w-full flex flex-col gap-[20px]'}>
-							{fileState.metadata?.summary && (
-								<div className={'w-full p-[16px] mb-[40px] border-[1px] rounded-[8px] border-yellow-500'}>
-									<div className={'w-full text-tc-primary text-body'}>{fileState.metadata.summary}</div>
-								</div>
+              <DetailsItem category={'Uploaded'} value={format(parseISO(fileState.createdAt), 'M/d/yyyy h:mm a')} />
+              {fileState.metadata?.summary && (
+								<DetailsItem category={'Cold AI Summary'} value={fileState.metadata.summary} />
 							)}
 							{getSustainabilityAttributeDropdown(fileState)}
 							<div className={'w-full flex flex-col gap-[8px]'}>
-								<div className={'w-full text-tc-primary text-eyebrow'}>Type</div>
+								<div className={'w-full text-tc-primary text-eyebrow'}>Document Category</div>
 								<Select
 									options={documentTypeOptions}
 									name={'type'}
