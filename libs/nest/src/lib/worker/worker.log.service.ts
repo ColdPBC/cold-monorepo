@@ -31,13 +31,6 @@ export class WorkerLogger implements LoggerService {
 		});
 
 		this.isDev = this.config.get('NODE_ENV') !== 'production' && this.config.get('NODE_ENV') !== 'staging';
-
-		this.tags = {
-			app: process.env.DD_SERVICE || BaseWorker.getParsedJSON('package.json').name,
-			version: process.env.DD_VERSION || BaseWorker.getParsedJSON('package.json').version,
-			environment: this.config.get('NODE_ENV'),
-			service: this.config.get('DD_SERVICE'),
-		};
 	}
 
 	public setTags(tags: Tags) {

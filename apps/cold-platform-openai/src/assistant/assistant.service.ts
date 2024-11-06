@@ -36,7 +36,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 	}
 
 	async onModuleInit(): Promise<void> {
-		const pkg = await BaseWorker.getParsedJSON('package.json');
+		const pkg = await BaseWorker.getParsedJSON('package.json', false);
 
 		try {
 			this.topic = `${get(this.service, 'definition.mqtt.publish_options.base_topic', `/platform/openai`)}/${this.config.getOrThrow('NODE_ENV')}/#`;

@@ -1,18 +1,9 @@
 import Tracer from 'dd-trace';
 import { ConfigService } from '@nestjs/config';
-import { BaseWorker } from './worker';
-import { execSync } from 'node:child_process';
+import { BaseWorker } from './worker.class';
 import process from 'process';
 
-console.log({ message: 'setting up tracer...' });
 const config = new ConfigService();
-
-if (!config.get('FC_GIT_COMMIT_SHA')) {
-	//console.warn('FC_GIT_COMMIT_SHA is not set');
-} else {
-	process.env.DD_GIT_COMMIT_SHA = config.get('FC_GIT_COMMIT_SHA');
-	process.env.DD_GIT_REPOSITORY_URL = config.get('FC_GIT_REPOSITORY_URL') || 'github.com/ColdPBC/cold-monorepo';
-}
 
 const tracer = Tracer.init({
 	service: config.get('DD_SERVICE') || config.get('PROJECT_NAME') || BaseWorker.getProjectName(),
@@ -46,15 +37,16 @@ const tracer = Tracer.init({
 tracer.use('express');
 tracer.use('amqplib');
 tracer.use('amqp10');
-tracer.use('redis');
+tracer.use('redis', { blocklist: ['BRPOPLPUSH'] });
 tracer.use('memcached');
 tracer.use('openai');
 tracer.use('aws-sdk');
-tracer.use('ioredis');
+tracer.use('ioredis', { blocklist: ['BRPOPLPUSH'] });
 tracer.use('pg');
 tracer.use('winston');
 tracer.use('http');
 tracer.use('jest');
 tracer.use('fetch');
+tracer.use('aws-sdk');
 
 export default Tracer;

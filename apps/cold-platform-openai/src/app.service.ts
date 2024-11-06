@@ -28,7 +28,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
 	}
 
 	async onModuleInit(): Promise<void> {
-		const pkg = await BaseWorker.getParsedJSON('package.json');
+		const pkg = await BaseWorker.getParsedJSON('package.json', false);
 
 		try {
 			this.service = (await this.rabbit.register_service(pkg.service)) as service_definitions;

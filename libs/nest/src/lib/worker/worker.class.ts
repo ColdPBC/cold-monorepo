@@ -1,15 +1,16 @@
+import './tracer';
 import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import * as appRoot from 'app-root-path';
 import * as fs from 'fs';
 import { StatsD } from 'hot-shots';
 import * as path from 'path';
-import { get, merge } from 'lodash';
+import { merge } from 'lodash';
 import { cpus, freemem, hostname, loadavg, NetworkInterfaceInfo, totalmem } from 'os';
 import { IWorkerDetails, Tags } from '../primitives';
 import { WorkerLogger } from './worker.log.service';
 import { TraceService } from 'nestjs-ddtrace';
-import { ConfigService } from '@nestjs/config';
 import process from 'process';
+import Tracer from 'dd-trace';
 
 @Injectable()
 @Global()
@@ -18,17 +19,20 @@ export class BaseWorker implements OnModuleInit {
 	public details: IWorkerDetails;
 	protected logger: WorkerLogger;
 	public fs = fs;
+	public appPackage: any;
+	public repoPackage: any;
 	protected metrics: StatsD;
-	tracer: TraceService;
+	tracer: Tracer.Tracer;
 
 	constructor(readonly className: string) {
-		const config = new ConfigService();
+		this.repoPackage = JSON.parse(BaseWorker.getJSON('package.json'));
+		this.appPackage = JSON.parse(BaseWorker.getJSON('package.json', false));
 
 		this.details = {
-			service: config.getOrThrow('DD_SERVICE') || process.env.NX_TASK_TARGET_PROJECT || BaseWorker.getProjectName(),
-			version: process.env.npm_package_version || process.env.DD_VERSION || BaseWorker.getPkgVersion(),
+			service: process.env.DD_SERVICE || process.env.NX_TASK_TARGET_PROJECT || this.appPackage?.name,
+			version: process.env.npm_package_version || this.repoPackage.version,
 			home_dir: appRoot.toString(),
-			env: config.getOrThrow('NODE_ENV'),
+			env: process.env.NODE_ENV || 'development',
 			host_name: hostname(),
 			system_details: {
 				load_avg: loadavg(),
@@ -53,21 +57,14 @@ export class BaseWorker implements OnModuleInit {
 		this.tags = {
 			service: this.details.service,
 			version: this.details.version,
-			app: process.env.NX_TASK_TARGET_PROJECT,
+			app: this.repoPackage.name,
 			//home_dir: this.details.home_dir,
 			env: this.details.env,
 			host_name: this.details.host_name,
 			//system_details: this.details.system_details,
 		};
 
-		this.tracer = new TraceService();
-		this.metrics = new StatsD({
-			host: '127.0.0.1',
-			port: 8125,
-			globalize: true,
-			globalTags: this.tags,
-		});
-		this.tracer.getTracer().init({
+		this.tracer = new TraceService().getTracer().init({
 			service: this.details.service,
 			version: this.details.version,
 			env: this.details.env,
@@ -89,24 +86,32 @@ export class BaseWorker implements OnModuleInit {
 			},
 			clientIpEnabled: true,
 			port: 8126,
+		}).tracer;
+
+		this.metrics = new StatsD({
+			host: '127.0.0.1',
+			port: 8125,
+			globalize: true,
+			globalTags: this.tags,
 		});
+
+		this.tracer.use('express');
+		this.tracer.use('amqplib');
+		this.tracer.use('amqp10');
+		this.tracer.use('redis', { blocklist: ['BRPOPLPUSH'] });
+		this.tracer.use('memcached');
+		this.tracer.use('openai');
+		this.tracer.use('aws-sdk');
+		this.tracer.use('ioredis', { blocklist: ['BRPOPLPUSH'] });
+		this.tracer.use('pg');
+		this.tracer.use('winston');
+		this.tracer.use('http');
+		this.tracer.use('jest');
+		this.tracer.use('fetch');
 
 		this.logger = new WorkerLogger(this.className);
 
-		const pkg = JSON.parse(BaseWorker.getJSON('package.json'));
-		if (pkg) {
-			if (!pkg.name) {
-				this.logger.warn('Package name not defined in package.json.  This can be ignored for now.', pkg);
-			}
-			if (!pkg.version) {
-				this.logger.warn('Package version not defined in package.json.  This can be ignored for now.', pkg);
-			}
-
-			process.env['npm_package_name'] || pkg.name;
-			//process.env['DD_VERSION'] = process.env['npm_package_version'] || get(pkg, 'version');
-		} else {
-			this.logger.warn('Package.json not found.  This can be ignored for now.', null);
-		}
+		this.logger.setTags(this.tags);
 	}
 
 	async onModuleInit() {
@@ -134,20 +139,19 @@ export class BaseWorker implements OnModuleInit {
 		return pkg.version;
 	}
 
-	public static getParsedJSON(file: string): any {
-		return JSON.parse(BaseWorker.getJSON(file));
+	public static getParsedJSON(file: string, root = true): any {
+		return JSON.parse(BaseWorker.getJSON(file, root));
 	}
 
-	public static getJSON(file: string): string {
+	public static getJSON(file: string, root = true): string {
 		let project_path = '';
 
 		if (process.env.NX_TASK_TARGET_PROJECT && process.env.NX_TASK_TARGET_PROJECT) {
-			project_path = `${process.env.NX_WORKSPACE_ROOT}/apps/${process.env.NX_TASK_TARGET_PROJECT}`;
+			if (root && file === 'package.json') project_path = `${process.env.NX_WORKSPACE_ROOT}`;
+			else project_path = `${process.env.NX_WORKSPACE_ROOT}/apps/${process.env.NX_TASK_TARGET_PROJECT}`;
 		} else {
-			if (!process.env.DD_SERVICE) {
-				throw new Error('required environment variable DD_SERVICE is not specified');
-			}
-			project_path = `${appRoot.path}/apps/${process.env.DD_SERVICE || ''}`;
+			if (root && file === 'package.json') project_path = `${appRoot.path}`;
+			else project_path = `${appRoot.path}/apps/${process.env.DD_SERVICE || ''}`;
 		}
 
 		if (fs.existsSync(`${project_path}/${file}`)) {
@@ -203,9 +207,6 @@ export class BaseWorker implements OnModuleInit {
 		}
 	}
 	// Instance Functions
-	public getJSON(name = 'package.json') {
-		return BaseWorker.getJSON(name);
-	}
 
 	private getNetworkDetails(): NodeJS.Dict<NetworkInterfaceInfo[]> {
 		//const nets = networkInterfaces();
