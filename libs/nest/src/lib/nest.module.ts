@@ -149,12 +149,7 @@ export class NestModule {
 				}),
 			);
 
-			exports.push(
-				DatadogTraceModule.forRoot({
-					controllers: true,
-					providers: true,
-				}),
-			);
+			exports.push(DatadogTraceModule);
 		}
 
 		/**
