@@ -3,7 +3,6 @@ import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc
 import {
   BaseButton,
   ColdIcon,
-  ComboBox,
   DetailsItem,
   DocumentDetailsMenu,
   DocumentMaterialsTable,
@@ -12,6 +11,7 @@ import {
   Input,
   Select,
   Spinner,
+  SustainabilityAttributeSelect,
 } from '@coldpbc/components';
 import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import {forEach, get, has, lowerCase, startCase} from 'lodash';
@@ -37,7 +37,7 @@ export interface DocumentDetailsSidebarFileState {
   metadata: any;
   startDate: Date | null;
   endDate: Date | null;
-  sustainabilityAttribute: string;
+  sustainabilityAttributeId: string | null;
   certificate_number: string | null;
 }
 
@@ -63,7 +63,6 @@ const _DocumentDetailsSidebar = (props: {
 	const { orgId } = useAuth0Wrapper();
 	const [saveButtonLoading, setSaveButtonLoading] = React.useState(false);
 	const hasAssurances = get(file, 'attributeAssurances', []).length > 0;
-	const hasSustainabilityAttribute = get(file, 'attributeAssurances[0].sustainabilityAttribute.name', '').length > 0;
 	const { mutateGraphQL: updateAssurance } = useGraphQLMutation('UPDATE_DOCUMENT_ASSURANCE');
 	const { mutateGraphQL: updateDocument } = useGraphQLMutation('UPDATE_DOCUMENT_FIELDS');
 	const { mutateGraphQL: deleteAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
@@ -109,7 +108,7 @@ const _DocumentDetailsSidebar = (props: {
 				metadata: file.metadata,
 				startDate: null,
 				endDate: null,
-				sustainabilityAttribute: '-1',
+				sustainabilityAttributeId: file.attributeAssurances[0]?.sustainabilityAttribute?.id,
         certificate_number: null
 			};
 
@@ -118,10 +117,6 @@ const _DocumentDetailsSidebar = (props: {
 
 			fileState['startDate'] = startDate ? addTZOffset(startDate) : null;
 			fileState['endDate'] = endDate ? addTZOffset(endDate) : null;
-
-			if (hasSustainabilityAttribute) {
-				fileState['sustainabilityAttribute'] = file.attributeAssurances[0]?.sustainabilityAttribute?.id || '-1';
-			}
 
       if(file.type === 'CERTIFICATE' || file.type === 'SCOPE_CERTIFICATE') {
         fileState['certificate_number'] = get(file.metadata, 'certificate_number', null);
@@ -153,33 +148,17 @@ const _DocumentDetailsSidebar = (props: {
 	}).sort((a, b) => a.name.localeCompare(b.name));
 
 	const getSustainabilityAttributeDropdown = (fileState: DocumentDetailsSidebarFileState) => {
-		const defaultSustainabilityAttributeOption = {
-			id: -1,
-			name: 'None',
-			value: '-1',
-		};
-
-		const susAttributes: InputOption[] = [
-      defaultSustainabilityAttributeOption,
-      ...sustainabilityAttributes.map((attribute, index) => ({
-        id: index,
-        name: attribute.name,
-        value: attribute.id,
-      })),
-    ];
-
 		return (
 			<div className={'w-full flex flex-col gap-[8px]'}>
 				<div className={'w-full text-tc-primary text-eyebrow'}>Sustainability Attribute</div>
-				<ComboBox
-					options={susAttributes}
-					name={'sustainabilityAttribute'}
-					value={susAttributes.find(attr => attr.value === fileState.sustainabilityAttribute) || defaultSustainabilityAttributeOption}
-					onChange={(e: InputOption) => {
+				<SustainabilityAttributeSelect
+          sustainabilityAttributes={sustainabilityAttributes}
+          allowNone={true}
+					selectedValueId={fileState.sustainabilityAttributeId}
+					setSelectedValueId={(value: string | null) => {
 						if (fileState === undefined) return;
-						setFileState({ ...fileState, sustainabilityAttribute: e.value });
+						setFileState({ ...fileState, sustainabilityAttributeId: value });
 					}}
-					buttonClassName={'w-full border-[1.5px] border-gray-90 rounded-[8px]'}
 				/>
 			</div>
 		);
@@ -339,26 +318,22 @@ const _DocumentDetailsSidebar = (props: {
 	const getAssociatedRecordsTables = (fileState: DocumentDetailsSidebarFileState) => {
 		// get the claim level of the sustainability attribute
 		let element: ReactNode | null = null;
-		if (hasSustainabilityAttribute) {
-			const attribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttribute);
-			if (attribute === undefined) {
-				return null;
-			}
-			const claimLevel = attribute.level;
-			switch (claimLevel) {
-				case 'MATERIAL':
-					element = <DocumentMaterialsTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={file?.attributeAssurances || []} />;
-					break;
-				case 'SUPPLIER':
-					element = <DocumentSuppliersTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={file?.attributeAssurances || []} />;
-					break;
-				default:
-					element = <DocumentSuppliersTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={[]} />;
-					break;
-			}
-		} else {
-			return null;
-		}
+    const attribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttributeId);
+    if (attribute === undefined) {
+      return null;
+    }
+    const claimLevel = attribute.level;
+    switch (claimLevel) {
+      case 'MATERIAL':
+        element = <DocumentMaterialsTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={file?.attributeAssurances || []} />;
+        break;
+      case 'SUPPLIER':
+        element = <DocumentSuppliersTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={file?.attributeAssurances || []} />;
+        break;
+      default:
+        element = <DocumentSuppliersTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={[]} />;
+        break;
+    }
 		const addButtonDisabled = !hasAssurances || hasFileStateChanged(fileState);
 		return (
 			<div className={'flex-col flex gap-[16px]'}>
@@ -448,7 +423,7 @@ const _DocumentDetailsSidebar = (props: {
 				return;
 			}
 
-			const sustainabilityAttribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttribute);
+			const sustainabilityAttribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttributeId);
 
       // update assurances if sustainability attribute is not undefined
 			if (sustainabilityAttribute !== undefined) {
@@ -470,7 +445,7 @@ const _DocumentDetailsSidebar = (props: {
                   effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
                   effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
                   sustainabilityAttribute: {
-                    id: fileState.sustainabilityAttribute,
+                    id: fileState.sustainabilityAttributeId,
                   },
                   updatedAt: new Date().toISOString(),
                 },
@@ -488,7 +463,7 @@ const _DocumentDetailsSidebar = (props: {
                   id: fileState.id,
                 },
                 sustainabilityAttribute: {
-                  id: fileState.sustainabilityAttribute
+                  id: fileState.sustainabilityAttributeId
                 },
                 organization: {
                   id: orgId,
@@ -501,7 +476,7 @@ const _DocumentDetailsSidebar = (props: {
         }
       } else {
         // if the sustainability attribute is not defined, delete all assurances
-        if(fileState.sustainabilityAttribute === '-1') {
+        if(!fileState.sustainabilityAttributeId) {
           const deleteCals = deleteAllAssurances();
           promises.push(...deleteCals);
         }
@@ -577,7 +552,7 @@ const _DocumentDetailsSidebar = (props: {
 		if (fileState === undefined || compareFileState === undefined) return false;
 		const startDatesAreSame = isSameDay(compareFileState.startDate || 0, fileState.startDate || 0);
 		const endDatesAreSame = isSameDay(compareFileState.endDate || 0, fileState.endDate || 0);
-		const compareFileStateSustainabilityAttribute = compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute;
+		const compareFileStateSustainabilityAttribute = compareFileState.sustainabilityAttributeId === fileState.sustainabilityAttributeId;
 		const isFileTypeSame = compareFileState.type === fileState.type;
     let certificateNumberSame = true;
     if(fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
@@ -597,14 +572,14 @@ const _DocumentDetailsSidebar = (props: {
       fileState.startDate !== null &&
       isSameDay(compareFileState.startDate, fileState.startDate) &&
       isSameDay(compareFileState.endDate, fileState.endDate) &&
-      compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute &&
+      compareFileState.sustainabilityAttributeId === fileState.sustainabilityAttributeId &&
       (compareFileState.type !== fileState.type || compareFileState.certificate_number !== fileState.certificate_number) &&
       hasAssurances
     )
 
   }
 
-	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasSustainabilityAttribute, hasAssurances });
+	logBrowser('DocumentDetailsSidebar', 'info', { file, fileState, sustainabilityAttributes, isLoading, signedUrl, hasAssurances });
 
 	return (
 		<div

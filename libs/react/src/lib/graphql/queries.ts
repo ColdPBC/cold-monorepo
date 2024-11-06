@@ -68,6 +68,7 @@ export const GET_ALL_SUS_ATTRIBUTES = gql`
       id
       name
       level
+      logoUrl
       type
     }
   }
