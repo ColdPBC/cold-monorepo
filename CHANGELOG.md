@@ -1,3 +1,11 @@
+## [1.470.2](https://github.com/coldPBC/cold-monorepo/compare/v1.470.1...v1.470.2) (2024-11-06)
+
+
+### Bug Fixes
+
+* resolve circular dependency by adding EventService to library for handling platform and integration events ([5b04441](https://github.com/coldPBC/cold-monorepo/commit/5b04441f6caf268678496e2adf6ee15929083a79))
+* resolve circular dependency by adding EventService to library for handling platform and integration events ([b4cbd21](https://github.com/coldPBC/cold-monorepo/commit/b4cbd21c48351cf95bf05d7d3332cc6a0a21fced))
+
 ## [1.470.1](https://github.com/coldPBC/cold-monorepo/compare/v1.470.0...v1.470.1) (2024-11-05)
 
 
