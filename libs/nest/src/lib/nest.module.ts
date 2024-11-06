@@ -63,6 +63,7 @@ export class NestModule {
 		 */
 		const imports: any = [
 			configModule, //ConfigurationModule.forRootAsync(),
+			S3Module,
 			SecretsModule,
 			BullModule.forRoot(await new RedisServiceConfig(secrets).getQueueConfig(type, project)),
 			HttpModule,
@@ -84,11 +85,18 @@ export class NestModule {
 		/**
 		 * Exports Array
 		 */
-		const exports: any = [HttpModule, ConfigService, ComplianceDataModule];
+		const exports: any = [
+			ConfigModule,
+			S3Module,
+			SecretsModule,
+			BullModule.forRoot(await new RedisServiceConfig(secrets).getQueueConfig(type, project)),
+			HttpModule,
+			MqttModule,
+			ComplianceDataModule,
+			GeneratorsModule,
+		];
 
 		logger.info('Configuring Nest Module...');
-
-		imports.push(S3Module);
 
 		//configure-enable-hot-shots-module
 		const enableHotShots = await darkly.getBooleanFlag('static-enable-hot-shots-module');
@@ -115,6 +123,8 @@ export class NestModule {
 					},
 				}),
 			);
+
+			exports.push(HotShotsModule);
 		}
 
 		/**
@@ -138,6 +148,13 @@ export class NestModule {
 					providers: true,
 				}),
 			);
+
+			exports.push(
+				DatadogTraceModule.forRoot({
+					controllers: true,
+					providers: true,
+				}),
+			);
 		}
 
 		/**
@@ -146,6 +163,7 @@ export class NestModule {
 		const enableHealthModule = await darkly.getBooleanFlag('static-enable-health-module');
 		if (enableHealthModule) {
 			imports.push(HealthModule);
+			exports.push(HealthModule);
 		}
 
 		/**
@@ -157,7 +175,8 @@ export class NestModule {
 				throw new Error('REDISCLOUD_URL is not set in this environment; It is required for the authorization module to function properly.');
 			}
 
-			imports.push(ColdCacheModule.forRootAsync(secrets), await AuthorizationModule.forFeatureAsync());
+			imports.push(await ColdCacheModule.forRootAsync(secrets), await AuthorizationModule.forFeatureAsync());
+			exports.push(await ColdCacheModule.forRootAsync(secrets), await AuthorizationModule.forFeatureAsync());
 		}
 
 		/**
@@ -166,6 +185,7 @@ export class NestModule {
 		const enablePrismaModule = await darkly.getBooleanFlag('static-enable-prisma-module');
 		if (enablePrismaModule) {
 			imports.push(PrismaModule);
+			exports.push(PrismaModule);
 		}
 
 		/**
@@ -174,6 +194,7 @@ export class NestModule {
 		const enableInterceptorModule = await darkly.getBooleanFlag('static-enable-interceptors-module');
 		if (enableInterceptorModule) {
 			imports.push(InterceptorModule);
+			exports.push(InterceptorModule);
 		}
 
 		/**
@@ -181,7 +202,8 @@ export class NestModule {
 		 */
 		const enableRabbitModule = await darkly.getBooleanFlag('static-enable-rabbit-module');
 		if (enableRabbitModule) {
-			imports.push(ColdRabbitModule.forRootAsync());
+			imports.push(await ColdRabbitModule.forRootAsync());
+			exports.push(await ColdRabbitModule.forRootAsync());
 		}
 
 		return {
