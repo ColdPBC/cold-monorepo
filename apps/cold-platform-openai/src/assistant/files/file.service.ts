@@ -26,7 +26,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
 
 	async onModuleInit(): Promise<void> {
 		this.package = await BaseWorker.getParsedJSON('package.json', false);
-		this.service = this.appService.service;
+		this.service = this.package.service;
 		await this.mqtt.onModuleInit();
 	}
 

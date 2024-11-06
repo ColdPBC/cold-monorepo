@@ -2,13 +2,14 @@ import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import * as appRoot from 'app-root-path';
 import * as fs from 'fs';
 import { StatsD } from 'hot-shots';
-import { merge } from 'lodash';
+import * as path from 'path';
+import { get, merge } from 'lodash';
 import { cpus, freemem, hostname, loadavg, NetworkInterfaceInfo, totalmem } from 'os';
 import { IWorkerDetails, Tags } from '../primitives';
 import { WorkerLogger } from './worker.log.service';
 import { TraceService } from 'nestjs-ddtrace';
+import { ConfigService } from '@nestjs/config';
 import process from 'process';
-import Tracer from 'dd-trace';
 
 @Injectable()
 @Global()
@@ -17,10 +18,10 @@ export class BaseWorker implements OnModuleInit {
 	public details: IWorkerDetails;
 	protected logger: WorkerLogger;
 	public fs = fs;
-	public appPackage: any;
-	public repoPackage: any;
 	protected metrics: StatsD;
 	tracer: TraceService;
+	public appPackage: any;
+	public repoPackage: any;
 
 	constructor(readonly className: string) {
 		this.repoPackage = JSON.parse(BaseWorker.getJSON('package.json'));
@@ -62,16 +63,67 @@ export class BaseWorker implements OnModuleInit {
 			//system_details: this.details.system_details,
 		};
 
+		this.tracer = new TraceService();
 		this.metrics = new StatsD({
 			host: '127.0.0.1',
 			port: 8125,
 			globalize: true,
 			globalTags: this.tags,
 		});
+		this.tracer.getTracer().init({
+			service: this.details.service,
+			version: this.details.version,
+			env: this.details.env,
+			logInjection: true,
+			hostname: '127.0.0.1',
+			profiling: true,
+			runtimeMetrics: true,
+			dogstatsd: {
+				hostname: '127.0.0.1',
+				port: 8125,
+			},
+			logLevel: 'debug',
+			plugins: true,
+			dbmPropagationMode: 'full',
+			experimental: { iast: true, runtimeId: true },
+			appsec: { enabled: true, eventTracking: { mode: 'extended' } },
+			remoteConfig: {
+				pollInterval: 5,
+			},
+			clientIpEnabled: true,
+			port: 8126,
+		});
+
+		this.tracer.getTracer().use('express');
+		this.tracer.getTracer().use('amqplib');
+		this.tracer.getTracer().use('amqp10');
+		this.tracer.getTracer().use('redis', { blocklist: ['BRPOPLPUSH'] });
+		this.tracer.getTracer().use('memcached');
+		this.tracer.getTracer().use('openai');
+		this.tracer.getTracer().use('aws-sdk');
+		this.tracer.getTracer().use('ioredis', { blocklist: ['BRPOPLPUSH'] });
+		this.tracer.getTracer().use('pg');
+		this.tracer.getTracer().use('winston');
+		this.tracer.getTracer().use('http');
+		this.tracer.getTracer().use('jest');
+		this.tracer.getTracer().use('fetch');
 
 		this.logger = new WorkerLogger(this.className);
 
-		this.logger.setTags(this.tags);
+		const pkg = JSON.parse(BaseWorker.getJSON('package.json'));
+		if (pkg) {
+			if (!pkg.name) {
+				this.logger.warn('Package name not defined in package.json.  This can be ignored for now.', pkg);
+			}
+			if (!pkg.version) {
+				this.logger.warn('Package version not defined in package.json.  This can be ignored for now.', pkg);
+			}
+
+			process.env['npm_package_name'] || pkg.name;
+			//process.env['DD_VERSION'] = process.env['npm_package_version'] || get(pkg, 'version');
+		} else {
+			this.logger.warn('Package.json not found.  This can be ignored for now.', null);
+		}
 	}
 
 	async onModuleInit() {
@@ -100,7 +152,7 @@ export class BaseWorker implements OnModuleInit {
 	}
 
 	public static getParsedJSON(file: string, root = true): any {
-		return JSON.parse(BaseWorker.getJSON(file, root));
+		return JSON.parse(BaseWorker.getJSON(file));
 	}
 
 	public static getJSON(file: string, root = true): string {
