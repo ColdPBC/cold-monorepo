@@ -3,13 +3,14 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Claims, SustainabilityAttributeGraphQL } from '@coldpbc/interfaces';
-import { DEFAULT_ICON_URL } from '@coldpbc/components';
+import { ColdIcon, DEFAULT_ICON_URL } from '@coldpbc/components';
+import { IconNames } from '@coldpbc/enums';
 import { toSentenceCase } from '@coldpbc/lib';
 import { HexColors } from '@coldpbc/themes';
 
 const SustainabilityAttributeListItem = (option: SustainabilityAttributeGraphQL | Claims | NoneOption) => (
 	<>
-		<img loading="lazy" width="48" src={option.logoUrl || DEFAULT_ICON_URL} alt="" />
+		<img className="rounded-lg" loading="lazy" width="48" src={option.logoUrl || DEFAULT_ICON_URL} alt="" />
 		<div className="flex flex-col gap-1">
 			<span className="text-body text-tc-primary">{option.name}</span>
 			{'level' in option && <span className="text-body text-tc-disabled">{toSentenceCase(option.level || '')}</span>}
@@ -57,6 +58,9 @@ export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSele
 				'& .MuiAutocomplete-input': {
 					paddingLeft: showLogoInSelectedState ? '40px !important' : '14px',
 				},
+				'& .MuiAutocomplete-popupIndicator': {
+					padding: '8px',
+				},
 			}}
 			options={options}
 			value={selectedOption}
@@ -68,6 +72,7 @@ export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSele
 				setSelectedValueId(newValue ? newValue.id : null);
 				setInputValue(newValue ? newValue.name : '');
 			}}
+			popupIcon={<ColdIcon name={IconNames.ColdChevronDownIcon} className="h-[10px] w-[10px]" />}
 			autoHighlight
 			getOptionLabel={option => option.name}
 			isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -88,14 +93,14 @@ export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSele
 							<Box
 								sx={{
 									position: 'absolute',
-									left: 8,
+									left: 10,
 									top: '50%',
 									transform: 'translateY(-50%)',
 									pointerEvents: 'none',
 									display: 'flex',
 									alignItems: 'center',
 								}}>
-								<img loading="lazy" width="32" src={selectedOption.logoUrl!} alt="" style={{ objectFit: 'contain' }} />
+								<img className="rounded-sm" loading="lazy" width="32" src={selectedOption.logoUrl!} alt="" style={{ objectFit: 'contain' }} />
 							</Box>
 						),
 					}}
