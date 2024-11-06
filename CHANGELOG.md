@@ -1,3 +1,10 @@
+## [1.470.3](https://github.com/coldPBC/cold-monorepo/compare/v1.470.2...v1.470.3) (2024-11-06)
+
+
+### Bug Fixes
+
+* update traceService reference to use base class ([e33e301](https://github.com/coldPBC/cold-monorepo/commit/e33e30196a8fe9f33d1d124240e22cd13cd518ec))
+
 ## [1.470.2](https://github.com/coldPBC/cold-monorepo/compare/v1.470.1...v1.470.2) (2024-11-06)
 
 
