@@ -1,3 +1,10 @@
+## [1.470.4](https://github.com/coldPBC/cold-monorepo/compare/v1.470.3...v1.470.4) (2024-11-06)
+
+
+### Bug Fixes
+
+* issue with tracer.ts ([4eb5c0c](https://github.com/coldPBC/cold-monorepo/commit/4eb5c0c8ee122135903fba754228854b078c8ef9))
+
 ## [1.470.3](https://github.com/coldPBC/cold-monorepo/compare/v1.470.2...v1.470.3) (2024-11-06)
 
 
