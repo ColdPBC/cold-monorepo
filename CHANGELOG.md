@@ -1,3 +1,10 @@
+## [1.470.5](https://github.com/coldPBC/cold-monorepo/compare/v1.470.4...v1.470.5) (2024-11-06)
+
+
+### Bug Fixes
+
+* major bug throwing 500s without logs ([1ce0442](https://github.com/coldPBC/cold-monorepo/commit/1ce04421e20661cae9485b5203bd5c988f6d7d3e))
+
 ## [1.470.4](https://github.com/coldPBC/cold-monorepo/compare/v1.470.3...v1.470.4) (2024-11-06)
 
 
