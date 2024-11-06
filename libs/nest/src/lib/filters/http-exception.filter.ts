@@ -8,7 +8,6 @@ import { ConfigService } from '@nestjs/config';
 @Span()
 @Catch(HttpException)
 export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
-	private readonly traceService: TraceService = new TraceService();
 	private readonly config: ConfigService = new ConfigService();
 
 	catch(exception: HttpException, host: ArgumentsHost) {
@@ -18,7 +17,7 @@ export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
 		const status = exception.getStatus();
 
 		const user: { coldclimate_claims?: any } = get(request, 'user', { coldclimate_claims: {} });
-		this.traceService.getTracer().appsec.setUser({ ...user.coldclimate_claims });
+		this.tracer.appsec.setUser({ ...user.coldclimate_claims });
 
 		if (status >= 400) {
 			if (status !== 404) {
