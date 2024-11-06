@@ -1,23 +1,23 @@
 import Tracer from 'dd-trace';
-import { ConfigService } from '@nestjs/config';
 import { BaseWorker } from './worker.class';
 import process from 'process';
 
-const config = new ConfigService();
+const repoPkg = BaseWorker.getParsedJSON('package.json');
+const appPkg = BaseWorker.getParsedJSON('package.json', false);
 
 const tracer = Tracer.init({
-	service: config.get('DD_SERVICE') || config.get('PROJECT_NAME') || BaseWorker.getProjectName(),
-	env: config.getOrThrow('NODE_ENV'),
-	version: config.get('npm_package_version') || config.get('DD_VERSION', BaseWorker.getPkgVersion()),
+	service: process.env.DD_SERVICE || BaseWorker.getProjectName(),
+	env: process.env.NODE_ENV,
+	version: process.env.npm_package_version || BaseWorker.getPkgVersion(),
 	logInjection: true,
 	hostname: '127.0.0.1',
 	profiling: true,
 	runtimeMetrics: true,
 	tags: {
-		service: config.getOrThrow('DD_SERVICE', process.env.NX_TASK_TARGET_PROJECT || BaseWorker.getProjectName()),
-		env: config.getOrThrow('NODE_ENV', 'development'),
-		version: config.get('npm_package_version', config.get('DD_VERSION')) || BaseWorker.getPkgVersion(),
-		environment: config.getOrThrow('NODE_ENV', 'development'),
+		service: appPkg.name || process.env.NX_TASK_TARGET_PROJECT || BaseWorker.getProjectName(),
+		env: process.env.NODE_ENV,
+		version: repoPkg.version || process.env.npm_package_version || BaseWorker.getPkgVersion(),
+		environment: process.env.NODE_ENV,
 	},
 	dogstatsd: {
 		hostname: '127.0.0.1',

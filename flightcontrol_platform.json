@@ -74,7 +74,22 @@
             "DD_SERVICE": "cold-platform-openai",
             "DD_ENV": "production",
             "NODE_ENV": "production",
-            "DD_VERSION": "1.456.1"
+	          "DD_APM_ENABLED": true,
+	          "DD_PROFILING_ENABLED": true,
+	          "DD_PROCESS_AGENT_ENABLED": true,
+	          "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	          "DD_APPSEC_ENABLED": true,
+	          "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	          "DD_DYNO_HOST": true,
+	          "DD_ENABLE_DBM": true,
+	          "DD_IAST_ENABLED": true,
+	          "DD_LISTENERS": 2,
+	          "DD_LOGS_INJECTION": true,
+	          "DD_LOGS_ENABLED": true,
+	          "DD_METRICS_ENABLED": true,
+	          "DD_PROCESS_AGENT": true,
+	          "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	          "DD_USE_DOGSTATSD": true
           },
           "sidecars": [
             {
@@ -179,7 +194,22 @@
             "DD_ENV": "production",
             "NODE_ENV": "production",
             "STRIPE_FRONTEND_URL": "https://app.coldclimate.com",
-            "DD_VERSION": "1.456.1"
+	          "DD_APM_ENABLED": true,
+	          "DD_PROFILING_ENABLED": true,
+	          "DD_PROCESS_AGENT_ENABLED": true,
+	          "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	          "DD_APPSEC_ENABLED": true,
+	          "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	          "DD_DYNO_HOST": true,
+	          "DD_ENABLE_DBM": true,
+	          "DD_IAST_ENABLED": true,
+	          "DD_LISTENERS": 2,
+	          "DD_LOGS_INJECTION": true,
+	          "DD_LOGS_ENABLED": true,
+	          "DD_METRICS_ENABLED": true,
+	          "DD_PROCESS_AGENT": true,
+	          "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	          "DD_USE_DOGSTATSD": true
           },
           "sidecars": [
             {
@@ -229,7 +259,22 @@
       "envVariables": {
         "DD_ENV": "production",
         "NODE_ENV": "production",
-        "DD_VERSION": "1.456.1"
+	      "DD_APM_ENABLED": true,
+	      "DD_PROFILING_ENABLED": true,
+	      "DD_PROCESS_AGENT_ENABLED": true,
+	      "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	      "DD_APPSEC_ENABLED": true,
+	      "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	      "DD_DYNO_HOST": true,
+	      "DD_ENABLE_DBM": true,
+	      "DD_IAST_ENABLED": true,
+	      "DD_LISTENERS": 2,
+	      "DD_LOGS_INJECTION": true,
+	      "DD_LOGS_ENABLED": true,
+	      "DD_METRICS_ENABLED": true,
+	      "DD_PROCESS_AGENT": true,
+	      "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	      "DD_USE_DOGSTATSD": true
       }
     },
     {
@@ -304,7 +349,22 @@
             "DD_SERVICE": "cold-platform-openai",
             "DD_ENV": "staging",
             "NODE_ENV": "staging",
-            "DD_VERSION": "1.456.1"
+	          "DD_APM_ENABLED": true,
+	          "DD_PROFILING_ENABLED": true,
+	          "DD_PROCESS_AGENT_ENABLED": true,
+	          "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	          "DD_APPSEC_ENABLED": true,
+	          "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	          "DD_DYNO_HOST": true,
+	          "DD_ENABLE_DBM": true,
+	          "DD_IAST_ENABLED": true,
+	          "DD_LISTENERS": 2,
+	          "DD_LOGS_INJECTION": true,
+	          "DD_LOGS_ENABLED": true,
+	          "DD_METRICS_ENABLED": true,
+	          "DD_PROCESS_AGENT": true,
+	          "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	          "DD_USE_DOGSTATSD": true
           },
           "sidecars": [
             {
@@ -408,7 +468,22 @@
             "DD_ENV": "staging",
             "NODE_ENV": "staging",
             "STRIPE_FRONTEND_URL": "https://app.coldclimate.online",
-            "DD_VERSION": "1.456.1"
+	          "DD_APM_ENABLED": true,
+	          "DD_PROFILING_ENABLED": true,
+	          "DD_PROCESS_AGENT_ENABLED": true,
+	          "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	          "DD_APPSEC_ENABLED": true,
+	          "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	          "DD_DYNO_HOST": true,
+	          "DD_ENABLE_DBM": true,
+	          "DD_IAST_ENABLED": true,
+	          "DD_LISTENERS": 2,
+	          "DD_LOGS_INJECTION": true,
+	          "DD_LOGS_ENABLED": true,
+	          "DD_METRICS_ENABLED": true,
+	          "DD_PROCESS_AGENT": true,
+	          "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	          "DD_USE_DOGSTATSD": true
           },
           "sidecars": [
             {
@@ -458,7 +533,22 @@
         "NODE_ENV": "staging",
         "DD_ENV": "staging",
         "ENABLE_HEALTH_LOGS": false,
-        "DD_VERSION": "1.456.1"
+	      "DD_APM_ENABLED": true,
+	      "DD_PROFILING_ENABLED": true,
+	      "DD_PROCESS_AGENT_ENABLED": true,
+	      "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	      "DD_APPSEC_ENABLED": true,
+	      "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	      "DD_DYNO_HOST": true,
+	      "DD_ENABLE_DBM": true,
+	      "DD_IAST_ENABLED": true,
+	      "DD_LISTENERS": 2,
+	      "DD_LOGS_INJECTION": true,
+	      "DD_LOGS_ENABLED": true,
+	      "DD_METRICS_ENABLED": true,
+	      "DD_PROCESS_AGENT": true,
+	      "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	      "DD_USE_DOGSTATSD": true
       }
     },
     {
@@ -590,7 +680,22 @@
         },
         "NODE_ENV": "test",
         "DD_ENV": "test",
-        "DD_VERSION": "1.456.1"
+	      "DD_APM_ENABLED": true,
+	      "DD_PROFILING_ENABLED": true,
+	      "DD_PROCESS_AGENT_ENABLED": true,
+	      "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	      "DD_APPSEC_ENABLED": true,
+	      "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	      "DD_DYNO_HOST": true,
+	      "DD_ENABLE_DBM": true,
+	      "DD_IAST_ENABLED": true,
+	      "DD_LISTENERS": 2,
+	      "DD_LOGS_INJECTION": true,
+	      "DD_LOGS_ENABLED": true,
+	      "DD_METRICS_ENABLED": true,
+	      "DD_PROCESS_AGENT": true,
+	      "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	      "DD_USE_DOGSTATSD": true
       }
     }
   ]

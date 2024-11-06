@@ -244,7 +244,7 @@ export class CategoriesService extends BaseWorker {
 
 					this.metrics.event(`New ${submission.name} category data submitted`, `${org.display_name} submitted new category data for ${submission.name}`, tags);
 
-					this.tracer.dogstatsd.increment('cold.api.categories.submission', 1, tags);
+					this.tracer.getTracer().dogstatsd.increment('cold.api.categories.submission', 1, tags);
 				}
 
 				this.logger.info('saved category submission', response);
@@ -269,7 +269,7 @@ export class CategoriesService extends BaseWorker {
 
 			this.metrics.event(`${submission.name} category data submission failed`, `${org.display_name} new category data submission for ${submission.name} failed`, tags);
 
-			this.tracer.dogstatsd.increment('cold.api.categories.submission', 1, tags);
+			this.tracer.getTracer().dogstatsd.increment('cold.api.categories.submission', 1, tags);
 
 			this.mqtt.publishMQTT('ui', {
 				org_id: user.coldclimate_claims.org_id,
@@ -343,7 +343,7 @@ export class CategoriesService extends BaseWorker {
 				tags,
 			);
 
-			this.tracer.dogstatsd.increment('cold.api.categories.create', 1, tags);
+			this.tracer.getTracer().dogstatsd.increment('cold.api.categories.create', 1, tags);
 
 			this.mqtt.publishMQTT('public', {
 				swr_key: url,
@@ -364,7 +364,7 @@ export class CategoriesService extends BaseWorker {
 
 			this.metrics.event(`New category definition: ${createCategoryDefinitionDto?.name} failed `, `New category definition: ${createCategoryDefinitionDto?.name} failed`, tags);
 
-			this.tracer.dogstatsd.increment('cold.api.categories.create', 1, tags);
+			this.tracer.getTracer().dogstatsd.increment('cold.api.categories.create', 1, tags);
 
 			this.mqtt.publishMQTT('public', {
 				swr_key: url,
@@ -425,7 +425,7 @@ export class CategoriesService extends BaseWorker {
 				tags,
 			);
 
-			this.tracer.dogstatsd.increment('cold.api.categories.update', 1, tags);
+			this.tracer.getTracer().dogstatsd.increment('cold.api.categories.update', 1, tags);
 
 			this.mqtt.publishMQTT('public', {
 				swr_key: url,
@@ -442,7 +442,7 @@ export class CategoriesService extends BaseWorker {
 
 			this.metrics.event(`Update category definition: ${updateSurveyDefinitionDto?.name} failed `, `New category definition: ${updateSurveyDefinitionDto?.name} failed`, tags);
 
-			this.tracer.dogstatsd.increment('cold.api.categories.update', 1, tags);
+			this.tracer.getTracer().dogstatsd.increment('cold.api.categories.update', 1, tags);
 
 			this.mqtt.publishMQTT('public', {
 				swr_key: url,

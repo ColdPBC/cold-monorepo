@@ -27,7 +27,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
 			org_id: user?.coldclimate_claims?.org_id,
 		};
 
-		this.tracer.setUser(dd_user);
+		this.tracer.getTracer().setUser(dd_user);
 		const tags = {
 			action: 'resolveRequest',
 			user: user.coldclimate_claims,
@@ -40,7 +40,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
 
 		this.logger.setTags(tags);
 
-		this.tracer.scope().active()?.addTags(tags);
+		this.tracer.getTracer().scope().active()?.addTags(tags);
 
 		// check if user's role is allowed
 		for (const role of roles) {
@@ -96,7 +96,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
 			} else {
 				// User is not allowed to query data related to this org
 				this.logger.error(`User: ${user?.coldclimate_claims?.email} attempted to impersonate a user in another org: ${orgId}`);
-				this.tracer.appsec.trackCustomEvent('invalid-impersonation-attempt', dd_user);
+				this.tracer.getTracer().appsec.trackCustomEvent('invalid-impersonation-attempt', dd_user);
 
 				throw new UnauthorizedException(`User: ${user?.coldclimate_claims?.email} attempted to impersonate a user in another org: ${orgId}`);
 			}
@@ -104,7 +104,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
 
 		// after all checks have completed render the final verdict
 		if (!isValid) {
-			this.tracer.appsec.trackCustomEvent('missing-role', dd_user);
+			this.tracer.getTracer().appsec.trackCustomEvent('missing-role', dd_user);
 			throw new UnauthorizedException('You do not have the correct role to access this resources');
 		}
 
@@ -121,19 +121,19 @@ export class RolesGuard extends BaseWorker implements CanActivate {
 		const request = context.switchToHttp().getRequest();
 		const user = request.user;
 
-		this.tracer.setUser({
+		this.tracer.getTracer().setUser({
 			id: user?.sub,
 			email: user?.coldclimate_claims?.email,
 			org_id: user?.coldclimate_claims?.org_id,
 		});
 
-		this.tracer.appsec.setUser({
+		this.tracer.getTracer().appsec.setUser({
 			id: user?.sub,
 			email: user?.coldclimate_claims?.email,
 			org_id: user?.coldclimate_claims?.org_id,
 		});
 
-		this.tracer.setUser({
+		this.tracer.getTracer().setUser({
 			id: user?.sub,
 			email: user?.coldclimate_claims?.email,
 			org_id: user?.coldclimate_claims?.org_id,

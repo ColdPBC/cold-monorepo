@@ -1,9 +1,7 @@
-import './tracer';
 import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import * as appRoot from 'app-root-path';
 import * as fs from 'fs';
 import { StatsD } from 'hot-shots';
-import * as path from 'path';
 import { merge } from 'lodash';
 import { cpus, freemem, hostname, loadavg, NetworkInterfaceInfo, totalmem } from 'os';
 import { IWorkerDetails, Tags } from '../primitives';
@@ -22,7 +20,7 @@ export class BaseWorker implements OnModuleInit {
 	public appPackage: any;
 	public repoPackage: any;
 	protected metrics: StatsD;
-	tracer: Tracer.Tracer;
+	tracer: TraceService;
 
 	constructor(readonly className: string) {
 		this.repoPackage = JSON.parse(BaseWorker.getJSON('package.json'));
@@ -64,50 +62,12 @@ export class BaseWorker implements OnModuleInit {
 			//system_details: this.details.system_details,
 		};
 
-		this.tracer = new TraceService().getTracer().init({
-			service: this.details.service,
-			version: this.details.version,
-			env: this.details.env,
-			logInjection: true,
-			hostname: '127.0.0.1',
-			profiling: true,
-			runtimeMetrics: true,
-			dogstatsd: {
-				hostname: '127.0.0.1',
-				port: 8125,
-			},
-			logLevel: 'debug',
-			plugins: true,
-			dbmPropagationMode: 'full',
-			experimental: { iast: true, runtimeId: true },
-			appsec: { enabled: true, eventTracking: { mode: 'extended' } },
-			remoteConfig: {
-				pollInterval: 5,
-			},
-			clientIpEnabled: true,
-			port: 8126,
-		}).tracer;
-
 		this.metrics = new StatsD({
 			host: '127.0.0.1',
 			port: 8125,
 			globalize: true,
 			globalTags: this.tags,
 		});
-
-		this.tracer.use('express');
-		this.tracer.use('amqplib');
-		this.tracer.use('amqp10');
-		this.tracer.use('redis', { blocklist: ['BRPOPLPUSH'] });
-		this.tracer.use('memcached');
-		this.tracer.use('openai');
-		this.tracer.use('aws-sdk');
-		this.tracer.use('ioredis', { blocklist: ['BRPOPLPUSH'] });
-		this.tracer.use('pg');
-		this.tracer.use('winston');
-		this.tracer.use('http');
-		this.tracer.use('jest');
-		this.tracer.use('fetch');
 
 		this.logger = new WorkerLogger(this.className);
 

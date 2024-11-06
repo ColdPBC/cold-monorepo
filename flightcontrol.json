@@ -132,9 +132,23 @@
             "DD_SERVICE": "cold-api",
             "DD_ENV": "production",
             "NODE_ENV": "production",
-            "DD_PROCESS_AGENT_ENABLED": true,
             "NIXPACKS_VERSION": "1.26.1",
-            "DD_VERSION": "1.456.1"
+	          "DD_APM_ENABLED": true,
+	          "DD_PROFILING_ENABLED": true,
+	          "DD_PROCESS_AGENT_ENABLED": true,
+	          "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	          "DD_APPSEC_ENABLED": true,
+	          "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	          "DD_DYNO_HOST": true,
+	          "DD_ENABLE_DBM": true,
+	          "DD_IAST_ENABLED": true,
+	          "DD_LISTENERS": 2,
+	          "DD_LOGS_INJECTION": true,
+	          "DD_LOGS_ENABLED": true,
+	          "DD_METRICS_ENABLED": true,
+	          "DD_PROCESS_AGENT": true,
+	          "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	          "DD_USE_DOGSTATSD": true
           },
           "sidecars": [
             {
@@ -245,7 +259,22 @@
             "NODE_ENV": "production",
             "GRAPHWEAVER_API_PORT": 9001,
             "NIXPACKS_VERSION": "1.26.1",
-            "DD_VERSION": "1.456.1"
+	          "DD_APM_ENABLED": true,
+	          "DD_PROFILING_ENABLED": true,
+	          "DD_PROCESS_AGENT_ENABLED": true,
+	          "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	          "DD_APPSEC_ENABLED": true,
+	          "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	          "DD_DYNO_HOST": true,
+	          "DD_ENABLE_DBM": true,
+	          "DD_IAST_ENABLED": true,
+	          "DD_LISTENERS": 2,
+	          "DD_LOGS_INJECTION": true,
+	          "DD_LOGS_ENABLED": true,
+	          "DD_METRICS_ENABLED": true,
+	          "DD_PROCESS_AGENT": true,
+	          "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	          "DD_USE_DOGSTATSD": true
           },
           "sidecars": [
             {
@@ -313,7 +342,22 @@
         "DD_SERVICE": "cold-api",
         "DD_ENV": "production",
         "NODE_ENV": "production",
-        "DD_VERSION": "1.456.1"
+	      "DD_APM_ENABLED": true,
+	      "DD_PROFILING_ENABLED": true,
+	      "DD_PROCESS_AGENT_ENABLED": true,
+	      "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	      "DD_APPSEC_ENABLED": true,
+	      "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	      "DD_DYNO_HOST": true,
+	      "DD_ENABLE_DBM": true,
+	      "DD_IAST_ENABLED": true,
+	      "DD_LISTENERS": 2,
+	      "DD_LOGS_INJECTION": true,
+	      "DD_LOGS_ENABLED": true,
+	      "DD_METRICS_ENABLED": true,
+	      "DD_PROCESS_AGENT": true,
+	      "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	      "DD_USE_DOGSTATSD": true
       }
     },
     {
@@ -493,7 +537,22 @@
             "DD_SERVICE": "cold-api",
             "DD_ENV": "staging",
             "NODE_ENV": "staging",
-            "DD_VERSION": "1.456.1"
+	          "DD_APM_ENABLED": true,
+	          "DD_PROFILING_ENABLED": true,
+	          "DD_PROCESS_AGENT_ENABLED": true,
+	          "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	          "DD_APPSEC_ENABLED": true,
+	          "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	          "DD_DYNO_HOST": true,
+	          "DD_ENABLE_DBM": true,
+	          "DD_IAST_ENABLED": true,
+	          "DD_LISTENERS": 2,
+	          "DD_LOGS_INJECTION": true,
+	          "DD_LOGS_ENABLED": true,
+	          "DD_METRICS_ENABLED": true,
+	          "DD_PROCESS_AGENT": true,
+	          "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	          "DD_USE_DOGSTATSD": true
           }
         },
         {
@@ -559,7 +618,22 @@
             "NODE_ENV": "staging",
             "GRAPHWEAVER_API_PORT": 9001,
             "NIXPACKS_VERSION": "1.26.1",
-            "DD_VERSION": "1.456.1"
+	          "DD_APM_ENABLED": true,
+	          "DD_PROFILING_ENABLED": true,
+	          "DD_PROCESS_AGENT_ENABLED": true,
+	          "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	          "DD_APPSEC_ENABLED": true,
+	          "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	          "DD_DYNO_HOST": true,
+	          "DD_ENABLE_DBM": true,
+	          "DD_IAST_ENABLED": true,
+	          "DD_LISTENERS": 2,
+	          "DD_LOGS_INJECTION": true,
+	          "DD_LOGS_ENABLED": true,
+	          "DD_METRICS_ENABLED": true,
+	          "DD_PROCESS_AGENT": true,
+	          "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	          "DD_USE_DOGSTATSD": true
           },
           "sidecars": [
             {
@@ -627,7 +701,22 @@
         "DD_SERVICE": "cold-api",
         "DD_ENV": "staging",
         "NODE_ENV": "staging",
-        "DD_VERSION": "1.456.1"
+	      "DD_APM_ENABLED": true,
+	      "DD_PROFILING_ENABLED": true,
+	      "DD_PROCESS_AGENT_ENABLED": true,
+	      "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+	      "DD_APPSEC_ENABLED": true,
+	      "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+	      "DD_DYNO_HOST": true,
+	      "DD_ENABLE_DBM": true,
+	      "DD_IAST_ENABLED": true,
+	      "DD_LISTENERS": 2,
+	      "DD_LOGS_INJECTION": true,
+	      "DD_LOGS_ENABLED": true,
+	      "DD_METRICS_ENABLED": true,
+	      "DD_PROCESS_AGENT": true,
+	      "DD_REMOTE_CONFIGURATION_ENABLED": true,
+	      "DD_USE_DOGSTATSD": true
       }
     },
     {

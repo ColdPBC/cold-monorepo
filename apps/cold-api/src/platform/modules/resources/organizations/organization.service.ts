@@ -490,7 +490,7 @@ export class OrganizationService extends BaseWorker {
 
 			this.metrics.event(`New organization creation failed`, `${user.coldclimate_claims.email}'s request to create a new organization for ${org.display_name} failed`, tags);
 
-			this.tracer.dogstatsd.increment('cold.api.organizations.create', 1, tags);
+			this.tracer.getTracer().dogstatsd.increment('cold.api.organizations.create', 1, tags);
 
 			this.logger.error(e, { org, e });
 
