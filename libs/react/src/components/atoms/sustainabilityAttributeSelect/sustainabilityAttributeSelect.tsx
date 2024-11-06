@@ -27,22 +27,25 @@ type NoneOption = {
 interface SustainabilityAttributeSelectProps {
 	sustainabilityAttributes: Claims[] | SustainabilityAttributeGraphQL[];
 	allowNone: boolean;
-	selectedValueId: string | null; // This is the ID of the selected attribute
-	setSelectedValueId: (value: string | null) => void; // Callback with the selected ID
+	selectedValueId: string | null;
+	setSelectedValueId: (value: string | null) => void;
 }
 
 export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSelectProps> = ({ sustainabilityAttributes, allowNone, selectedValueId, setSelectedValueId }) => {
-  const noneOption: NoneOption = { id: '', name: 'None' }
-  const options: (SustainabilityAttributeGraphQL | Claims | NoneOption)[] = React.useMemo(() => {
-		const allOptions: (SustainabilityAttributeGraphQL | Claims | NoneOption)[] = [...sustainabilityAttributes.sort((a,b) => a.name.localeCompare(b.name))];
+	const [inputValue, setInputValue] = React.useState('');
+	const noneOption: NoneOption = { id: '', name: 'None' };
+
+	const options: (SustainabilityAttributeGraphQL | Claims | NoneOption)[] = React.useMemo(() => {
+		const allOptions: (SustainabilityAttributeGraphQL | Claims | NoneOption)[] = [...sustainabilityAttributes.sort((a, b) => a.name.localeCompare(b.name))];
 		if (allowNone) {
 			allOptions.unshift(noneOption);
 		}
 		return allOptions;
 	}, [allowNone, sustainabilityAttributes]);
 
-	// Find the currently selected option object based on the selectedValue ID
 	const selectedOption = React.useMemo(() => options.find(option => option.id === selectedValueId) || noneOption, [options, selectedValueId]);
+
+	const showLogoInSelectedState = selectedOption?.logoUrl && inputValue === selectedOption.name;
 
 	return (
 		<Autocomplete
@@ -52,13 +55,18 @@ export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSele
 					backgroundColor: 'transparent',
 				},
 				'& .MuiAutocomplete-input': {
-					paddingLeft: selectedOption?.logoUrl ? '40px !important' : '14px',
+					paddingLeft: showLogoInSelectedState ? '40px !important' : '14px',
 				},
 			}}
 			options={options}
 			value={selectedOption}
+			inputValue={inputValue}
+			onInputChange={(event, newInputValue) => {
+				setInputValue(newInputValue);
+			}}
 			onChange={(event, newValue) => {
 				setSelectedValueId(newValue ? newValue.id : null);
+				setInputValue(newValue ? newValue.name : '');
 			}}
 			autoHighlight
 			getOptionLabel={option => option.name}
@@ -66,7 +74,7 @@ export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSele
 			renderOption={(props, option) => {
 				const { key, ...optionProps } = props;
 				return (
-					<Box key={key} component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 }, borderRadius: '8px', }} {...optionProps}>
+					<Box key={key} component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 }, borderRadius: '8px' }} {...optionProps}>
 						{SustainabilityAttributeListItem(option)}
 					</Box>
 				);
@@ -76,7 +84,7 @@ export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSele
 					{...params}
 					InputProps={{
 						...params.InputProps,
-						startAdornment: selectedOption?.logoUrl && (
+						startAdornment: showLogoInSelectedState && (
 							<Box
 								sx={{
 									position: 'absolute',
@@ -87,40 +95,40 @@ export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSele
 									display: 'flex',
 									alignItems: 'center',
 								}}>
-								<img loading="lazy" width="32" src={selectedOption.logoUrl} alt="" style={{ objectFit: 'contain' }} />
+								<img loading="lazy" width="32" src={selectedOption.logoUrl!} alt="" style={{ objectFit: 'contain' }} />
 							</Box>
 						),
 					}}
-          sx={{
-            '& .MuiInputBase-input': {
-              backgroundColor: 'transparent',
-              fontFamily: 'Inter',
-              fontSize: '14px',
-              padding: '16px',
-              borderBottomLeftRadius: '8px',
-              borderTopLeftRadius: '8px',
-            },
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderRadius: '8px',
-              borderColor: HexColors.gray['90'],
-              borderWidth: '1.5px',
-            },
-            '&  .MuiOutlinedInput-root': {
-              borderRadius: '8px',
-              '&:hover fieldset': {
-                borderColor: HexColors.gray['90'],
-                borderWidth: '1.5px',
-              },
-              '&:focus-within fieldset': {
-                borderColor: HexColors.gray['90'],
-                borderWidth: '1.5px',
-              },
-            },
-            '& .MuiOutlinedInput-input:focus': {
-              outline: 'none',
-              boxShadow: 'none',
-            },
-          }}
+					sx={{
+						'& .MuiInputBase-input': {
+							backgroundColor: 'transparent',
+							fontFamily: 'Inter',
+							fontSize: '14px',
+							padding: '16px',
+							borderBottomLeftRadius: '8px',
+							borderTopLeftRadius: '8px',
+						},
+						'& .MuiOutlinedInput-notchedOutline': {
+							borderRadius: '8px',
+							borderColor: HexColors.gray['90'],
+							borderWidth: '1.5px',
+						},
+						'&  .MuiOutlinedInput-root': {
+							borderRadius: '8px',
+							'&:hover fieldset': {
+								borderColor: HexColors.gray['90'],
+								borderWidth: '1.5px',
+							},
+							'&:focus-within fieldset': {
+								borderColor: HexColors.gray['90'],
+								borderWidth: '1.5px',
+							},
+						},
+						'& .MuiOutlinedInput-input:focus': {
+							outline: 'none',
+							boxShadow: 'none',
+						},
+					}}
 				/>
 			)}
 		/>
