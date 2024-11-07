@@ -1,3 +1,11 @@
+## [1.470.6](https://github.com/coldPBC/cold-monorepo/compare/v1.470.5...v1.470.6) (2024-11-07)
+
+
+### Bug Fixes
+
+* design feedback ([cb67f13](https://github.com/coldPBC/cold-monorepo/commit/cb67f132cd9036cdbc15064c217fdd19093c375a))
+* make sure DocumentsTableColumn updates when Sustainability Attribute changes ([1cbf708](https://github.com/coldPBC/cold-monorepo/commit/1cbf708635a9e7b18d4923153c005ed89782d965))
+
 ## [1.470.5](https://github.com/coldPBC/cold-monorepo/compare/v1.470.4...v1.470.5) (2024-11-06)
 
 
