@@ -3,6 +3,7 @@ export interface Claims {
   name: string;
   level: string;
   type: string;
+  logoUrl: string | null;
 }
 
 export interface SuppliersClaimNamesPayload {

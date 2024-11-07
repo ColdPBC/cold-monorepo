@@ -1,6 +1,6 @@
 import {SustainabilityAttributeWithoutAssurances} from "@coldpbc/interfaces";
 import {DEFAULT_ICON_URL} from "@coldpbc/components";
-import React, {useState} from "react";
+import React, { useEffect, useState } from 'react';
 
 
 export const SustainabilityAttributeColumn = (props: {
@@ -8,6 +8,10 @@ export const SustainabilityAttributeColumn = (props: {
 }) => {
   const {sustainabilityAttribute} = props;
   const [imgSrc, setImgSrc] = useState<string>(sustainabilityAttribute?.logoUrl || DEFAULT_ICON_URL);
+
+  useEffect(() => {
+    setImgSrc(sustainabilityAttribute?.logoUrl || DEFAULT_ICON_URL);
+  }, [sustainabilityAttribute]);
 
   if(!sustainabilityAttribute) {
     return null;
