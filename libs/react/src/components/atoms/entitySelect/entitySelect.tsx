@@ -9,22 +9,9 @@ import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { get, toLower } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 
-// Types
 interface BaseEntity {
 	id: string;
 	name: string;
-}
-
-interface ProductQuery extends BaseEntity {
-	productCategory: string | null;
-	productSubcategory: string | null;
-	seasonCode: string | null;
-}
-
-interface SupplierQuery extends BaseEntity {
-	category: string | null;
-	subcategory: string | null;
-	country: string | null;
 }
 
 type NoneOption = {
@@ -45,36 +32,25 @@ function useEntityData(entityLevel: EntityLevel, orgId: string | undefined) {
 		[EntityLevel.PRODUCT]: {
 			queryKey: 'GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT',
 			dataPath: 'data.products',
-			subtitleFields: ['productCategory', 'productSubcategory', 'seasonCode'],
 		},
 		[EntityLevel.SUPPLIER]: {
 			queryKey: 'GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT',
 			dataPath: 'data.organizationFacilities',
-			subtitleFields: ['category', 'subcategory', 'country'],
 		},
 	};
 
 	const queryConfig = queryMap[entityLevel];
 	const query = useGraphQLSWR<{
-		products?: ProductQuery[];
-		organizationFacilities?: SupplierQuery[];
+		products?: BaseEntity[];
+		organizationFacilities?: BaseEntity[];
 	}>(orgId ? queryConfig.queryKey : null, {
 		organizationId: orgId,
 	});
 
 	return React.useMemo(() => {
 		const rawData = get(query.data, queryConfig.dataPath, []);
-		return rawData
-			.sort((a: BaseEntity, b: BaseEntity) => a.name.localeCompare(b.name))
-			.map((entity: ProductQuery | SupplierQuery) => ({
-				id: entity.id,
-				name: entity.name,
-				subtitle: queryConfig.subtitleFields
-					.map(field => (entity as any)[field])
-					.filter(Boolean)
-					.join(' | '),
-			}));
-	}, [query.data, queryConfig.dataPath, queryConfig.subtitleFields]);
+		return rawData.sort((a: BaseEntity, b: BaseEntity) => a.name.localeCompare(b.name))
+	}, [query.data, queryConfig.dataPath]);
 }
 
 const _EntitySelect: React.FC<EntitySelectProps> = ({ entityLevel, selectedValueId, setSelectedValueId }) => {
@@ -99,6 +75,7 @@ const _EntitySelect: React.FC<EntitySelectProps> = ({ entityLevel, selectedValue
 				},
 			}}
 			options={options}
+      disabled={entities.length === 0}
 			value={selectedOption}
 			onChange={(event, newValue) => {
 				setSelectedValueId(newValue ? newValue.id : null);
@@ -111,16 +88,14 @@ const _EntitySelect: React.FC<EntitySelectProps> = ({ entityLevel, selectedValue
 				const { key, ...optionProps } = props;
 				return (
 					<Box key={key} component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 }, borderRadius: '8px' }} {...optionProps}>
-						<div key={option.id} className="flex flex-col gap-1">
-							<span className="text-body text-tc-primary">{option.name}</span>
-							{option.subtitle && <span className="text-eyebrow text-tc-primary">{option.subtitle}</span>}
-						</div>
+            <span className="text-body text-tc-primary">{option.name}</span>
 					</Box>
 				);
 			}}
 			renderInput={params => (
 				<TextField
 					{...params}
+          helperText={entities.length === 0 ? `No ${toLower(EntityLevel[entityLevel])}s in Cold. Add a ${toLower(EntityLevel[entityLevel])} to associate it with this document.` : ''}
 					sx={{
 						'& .MuiInputBase-input': {
 							backgroundColor: 'transparent',

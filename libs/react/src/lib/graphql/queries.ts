@@ -79,9 +79,6 @@ export const GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
     products(filter: { organization: { id: $organizationId } }) {
       id
       name
-      productCategory
-      productSubcategory
-      seasonCode
     }
   }
 `;
@@ -91,9 +88,6 @@ export const GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
     organizationFacilities(filter: { organization: { id: $organizationId } }) {
       id
       name
-      category
-      subcategory
-      country
     }
   }
 `;
