@@ -28,8 +28,8 @@ export class BaseWorker implements OnModuleInit {
 		this.appPackage = JSON.parse(BaseWorker.getJSON('package.json', false));
 
 		this.details = {
-			service: process.env.DD_SERVICE || process.env.NX_TASK_TARGET_PROJECT || this.appPackage?.name,
-			version: process.env.npm_package_version || this.repoPackage.version,
+			service: this.appPackage?.name || process.env.NX_TASK_TARGET_PROJECT || process.env.DD_SERVICE,
+			version: this.repoPackage.version || process.env.npm_package_version,
 			home_dir: appRoot.toString(),
 			env: process.env.NODE_ENV || 'development',
 			host_name: hostname(),
@@ -109,21 +109,6 @@ export class BaseWorker implements OnModuleInit {
 		this.tracer.getTracer().use('fetch');
 
 		this.logger = new WorkerLogger(this.className);
-
-		const pkg = JSON.parse(BaseWorker.getJSON('package.json'));
-		if (pkg) {
-			if (!pkg.name) {
-				this.logger.warn('Package name not defined in package.json.  This can be ignored for now.', pkg);
-			}
-			if (!pkg.version) {
-				this.logger.warn('Package version not defined in package.json.  This can be ignored for now.', pkg);
-			}
-
-			process.env['npm_package_name'] || pkg.name;
-			//process.env['DD_VERSION'] = process.env['npm_package_version'] || get(pkg, 'version');
-		} else {
-			this.logger.warn('Package.json not found.  This can be ignored for now.', null);
-		}
 	}
 
 	async onModuleInit() {
@@ -143,16 +128,22 @@ export class BaseWorker implements OnModuleInit {
 	public static getProjectName() {
 		const proj = BaseWorker.getParsedJSON(`project.json`);
 
-		return proj.name;
+		return proj?.name;
 	}
 
 	public static getPkgVersion(): string {
 		const pkg = BaseWorker.getParsedJSON('package.json');
-		return pkg.version;
+
+		return pkg?.version;
 	}
 
-	public static getParsedJSON(file: string, root = true): any {
-		return JSON.parse(BaseWorker.getJSON(file));
+	public static getParsedJSON(file: string, root = true) {
+		const json = BaseWorker.getJSON(file, root);
+		if (json) {
+			return JSON.parse(json);
+		} else {
+			return undefined;
+		}
 	}
 
 	public static getJSON(file: string, root = true): string {
@@ -169,7 +160,7 @@ export class BaseWorker implements OnModuleInit {
 		if (fs.existsSync(`${project_path}/${file}`)) {
 			return fs.readFileSync(`${project_path}/${file}`).toString();
 		} else {
-			throw new Error(`${file} is not found in ${project_path}`);
+			return '';
 		}
 	}
 

@@ -12,33 +12,21 @@ import process from 'process';
 
 @Span()
 @Injectable()
-export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
+export class LoggingInterceptor implements NestInterceptor {
 	logger: WorkerLogger;
 	tracer: TraceService = new TraceService();
 	darkly: DarklyService;
 	enableHealthLogs = false;
 	project_path: string;
 	constructor(readonly config: ConfigService) {
-		if (process.env.NX_WORKSPACE_ROOT && process.env.LERNA_APP_NAME) {
-			this.project_path = `${process.env.NX_WORKSPACE_ROOT}/apps/${process.env.LERNA_APP_NAME}`;
-		}
-		this.logger = new WorkerLogger(LoggingInterceptor.name, { version: config.get('DD_VERSION') || BaseWorker.getPkgVersion() });
+		this.logger = new WorkerLogger(LoggingInterceptor.name);
 		//this.logger = new WorkerLogger(LoggingInterceptor.name, { version: process.env['DD_VERSION'] });
-	}
-
-	async onModuleInit() {
-		this.darkly = new DarklyService(this.config);
-		await this.darkly.onModuleInit();
-
-		this.darkly.subscribeToBooleanFlagChanges('dynamic-enable-health-check-logs', value => {
-			this.enableHealthLogs = value;
-		});
 	}
 
 	intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
 		const isRabbit = isRabbitContext(context);
+		const now = Date.now();
 		if (!isRabbit) {
-			const now = Date.now();
 			const ctx = context.switchToHttp();
 			const request = ctx.getRequest<Request>();
 
@@ -55,17 +43,15 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
 						roles: user?.coldclimate_claims?.roles,
 					};
 
-					this.logger.setTags({
+					const tags = {
 						user: user?.coldclimate_claims,
 						query: request.query,
 						body: request.body,
 						params: request.params,
 						url: request.url,
-						service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
-						version: this.config.get('npm_package_version', this.config.get('DD_VERSION')) || BaseWorker.getPkgVersion(),
 						status: request.statusCode,
 						method: request.method,
-					});
+					};
 
 					if (request.query['impersonateOrg']) {
 						if (!user.isColdAdmin) {
@@ -83,10 +69,7 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
 
 					this.tracer.getTracer().appsec.setUser(dd_user);
 					this.tracer.getTracer().setUser(dd_user);
-
-					if (this.enableHealthLogs) {
-						this.logger.info(`${request.method} ${request.url}`, { duration: `${Date.now() - now}ms` });
-					}
+					this.logger.info(`${request.method} ${request.url}`, { duration: Date.now() - now, ...tags });
 				}),
 			);
 		} else {
@@ -97,12 +80,10 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
 						fields: context.getArgs()[1].fields,
 						properties: context.getArgs()[1].properties,
 						content: pick(JSON.parse(Buffer.from(context.getArgs()[1].content).toString()), ['event', 'from', 'user', 'metadata']),
-						service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
-						version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
 						method: context.getArgs()[1].properties?.replyTo ? 'REQUEST' : 'PUBLISH',
 					};
 					this.logger = new WorkerLogger(LoggingInterceptor.name);
-					this.logger.log(`Processed ${data.content.event} message from ${data.content.from}`, data);
+					this.logger.log(`Processed ${data.content.event} message from ${data.content.from}`, { duration: Date.now() - now, ...data });
 				}),
 			);
 		}
