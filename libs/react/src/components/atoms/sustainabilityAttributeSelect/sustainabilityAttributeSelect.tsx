@@ -27,24 +27,19 @@ type NoneOption = {
 
 interface SustainabilityAttributeSelectProps {
 	sustainabilityAttributes: Claims[] | SustainabilityAttributeGraphQL[];
-	allowNone: boolean;
 	selectedValueId: string | null;
 	setSelectedValueId: (value: string | null) => void;
 }
 
-export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSelectProps> = ({ sustainabilityAttributes, allowNone, selectedValueId, setSelectedValueId }) => {
+export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSelectProps> = ({ sustainabilityAttributes, selectedValueId, setSelectedValueId }) => {
 	const [inputValue, setInputValue] = React.useState('');
-	const noneOption: NoneOption = { id: '', name: 'None' };
+	const noneOption: NoneOption = React.useMemo(() => ({ id: '', name: 'None' }), []);
 
-	const options: (SustainabilityAttributeGraphQL | Claims | NoneOption)[] = React.useMemo(() => {
-		const allOptions: (SustainabilityAttributeGraphQL | Claims | NoneOption)[] = [...sustainabilityAttributes.sort((a, b) => a.name.localeCompare(b.name))];
-		if (allowNone) {
-			allOptions.unshift(noneOption);
-		}
-		return allOptions;
-	}, [allowNone, sustainabilityAttributes]);
+	const options: (SustainabilityAttributeGraphQL | Claims | NoneOption)[] = React.useMemo(() => (
+    [noneOption, ...sustainabilityAttributes.sort((a, b) => a.name.localeCompare(b.name))]
+  ), [noneOption, sustainabilityAttributes]);
 
-	const selectedOption = React.useMemo(() => options.find(option => option.id === selectedValueId) || noneOption, [options, selectedValueId]);
+	const selectedOption = React.useMemo(() => options.find(option => option.id === selectedValueId) || noneOption, [options, selectedValueId, noneOption]);
 
 	const showLogoInSelectedState = selectedOption?.logoUrl && inputValue === selectedOption.name;
 

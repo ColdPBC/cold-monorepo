@@ -153,7 +153,6 @@ const _DocumentDetailsSidebar = (props: {
 				<div className={'w-full text-tc-primary text-eyebrow'}>Sustainability Attribute</div>
 				<SustainabilityAttributeSelect
           sustainabilityAttributes={sustainabilityAttributes}
-          allowNone={true}
 					selectedValueId={fileState.sustainabilityAttributeId}
 					setSelectedValueId={(value: string | null) => {
 						if (fileState === undefined) return;

@@ -19,7 +19,6 @@ const SelectWrapper = () => {
   return (
     <SustainabilityAttributeSelect
       sustainabilityAttributes={getClaimsMock()}
-      allowNone={true}
       selectedValueId={selectedValueId}
       setSelectedValueId={setSelectedValueId}
     />
