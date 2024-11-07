@@ -74,18 +74,33 @@ export const GET_ALL_SUS_ATTRIBUTES = gql`
   }
 `;
 
-export const GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
-  query Materials($filter: MaterialsListFilter) {
-    materials(filter: $filter) {
+export const GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
+  query Products($organizationId: ID!) {
+    products(filter: { organization: { id: $organizationId } }) {
       id
       name
+      productCategory
+      productSubcategory
+      seasonCode
     }
   }
 `;
 
 export const GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
-  query OrganizationFacilities($filter: OrganizationFacilitiesListFilter) {
-    organizationFacilities(filter: $filter) {
+  query OrganizationFacilities($organizationId: ID!) {
+    organizationFacilities(filter: { organization: { id: $organizationId } }) {
+      id
+      name
+      category
+      subcategory
+      country
+    }
+  }
+`;
+
+export const GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
+  query Materials($filter: MaterialsListFilter) {
+    materials(filter: $filter) {
       id
       name
     }
@@ -661,6 +676,7 @@ export const queries: {
   GET_ALL_FILES: GET_ALL_FILES,
   GET_ALL_SUS_ATTRIBUTES: GET_ALL_SUS_ATTRIBUTES,
   GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT: GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+  GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT: GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT,
   GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT: GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
   CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE: CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
   UPDATE_DOCUMENT_FIELDS: UPDATE_DOCUMENT_FIELDS,

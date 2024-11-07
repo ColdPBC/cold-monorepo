@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
 import {
 	BaseButton,
@@ -6,14 +6,14 @@ import {
 	DetailsItem,
 	DocumentDetailsMenu,
 	DocumentMaterialsTable,
-	DocumentSuppliersTable,
+  EntitySelect,
 	ErrorFallback,
 	Input,
 	Select,
 	Spinner,
 	SustainabilityAttributeSelect,
 } from '@coldpbc/components';
-import { ButtonTypes, IconNames } from '@coldpbc/enums';
+import { ButtonTypes, EntityLevel, IconNames } from '@coldpbc/enums';
 import { forEach, get, has, lowerCase, startCase } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
@@ -22,7 +22,7 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation
 import { useSWRConfig } from 'swr';
 import { format, isSameDay, parseISO } from 'date-fns';
 import { isApolloError } from '@apollo/client';
-import { addTZOffset, getEffectiveEndDate, getEffectiveStartDate, removeTZOffset } from '@coldpbc/lib';
+import { addTZOffset, getEffectiveEndDate, getEffectiveStartDate, removeTZOffset, toSentenceCase } from '@coldpbc/lib';
 
 export interface DocumentDetailsSidebarFileState {
 	id: string;
@@ -32,6 +32,8 @@ export interface DocumentDetailsSidebarFileState {
 	metadata: any;
 	startDate: Date | null;
 	endDate: Date | null;
+	supplierId: string | null;
+	productId: string | null;
 	sustainabilityAttributeId: string | null;
 	certificate_number: string | null;
 }
@@ -98,6 +100,8 @@ const _DocumentDetailsSidebar = (props: {
 				endDate: null,
 				sustainabilityAttributeId: file.attributeAssurances[0]?.sustainabilityAttribute?.id,
 				certificate_number: null,
+        productId: file.attributeAssurances[0]?.product?.id || null,
+        supplierId: file.attributeAssurances[0]?.organizationFacility?.id || null,
 			};
 
 			const startDate = getEffectiveStartDate(file);
@@ -190,7 +194,6 @@ const _DocumentDetailsSidebar = (props: {
 				<div className={'w-full flex flex-col gap-[8px]'} data-chromatic={'ignore'}>
 					<div className={'w-full text-tc-primary text-eyebrow'}>Valid From</div>
 					<DesktopDatePicker
-						// @ts-ignore
 						value={fileState.startDate}
 						onChange={(date: Date | null) => {
 							if (date) {
@@ -245,7 +248,6 @@ const _DocumentDetailsSidebar = (props: {
 				<div className={'w-full flex flex-col gap-[8px]'} data-chromatic={'ignore'}>
 					<div className={'w-full text-tc-primary text-eyebrow'}>Expiration Date</div>
 					<DesktopDatePicker
-						// @ts-ignore
 						value={fileState.endDate}
 						onChange={(date: Date | null) => {
 							if (date) {
@@ -301,25 +303,38 @@ const _DocumentDetailsSidebar = (props: {
 		);
 	};
 
+  const getEntityDropdown = (fileState: DocumentDetailsSidebarFileState) => {
+    const attribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttributeId);
+    const attributeLevel = attribute?.level
+    if (!attributeLevel || ![EntityLevel.PRODUCT, EntityLevel.SUPPLIER].includes(attributeLevel)) {
+      return null;
+    }
+
+    return (
+      <div className={'w-full flex flex-col gap-[8px]'}>
+        <div className={'w-full text-tc-primary text-eyebrow'}>{toSentenceCase(EntityLevel[attributeLevel])}</div>
+        <EntitySelect
+          entityLevel={attributeLevel}
+          selectedValueId={attributeLevel === EntityLevel.PRODUCT ? fileState.productId : fileState.supplierId}
+          setSelectedValueId={(valueId: string | null) => {
+            if (attributeLevel === EntityLevel.PRODUCT) {
+              setFileState({ ...fileState, productId: valueId });
+            } else {
+              setFileState({ ...fileState, supplierId: valueId });
+            }
+          }}
+        />
+      </div>
+    )
+
+  }
+
 	const getAssociatedRecordsTables = (fileState: DocumentDetailsSidebarFileState) => {
-		// get the claim level of the sustainability attribute
-		let element: ReactNode | null = null;
 		const attribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttributeId);
-		if (attribute === undefined) {
+		if (attribute === undefined || attribute.level !== EntityLevel.MATERIAL) {
 			return null;
 		}
-		const claimLevel = attribute.level;
-		switch (claimLevel) {
-			case 'MATERIAL':
-				element = <DocumentMaterialsTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={file?.attributeAssurances || []} />;
-				break;
-			case 'SUPPLIER':
-				element = <DocumentSuppliersTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={file?.attributeAssurances || []} />;
-				break;
-			default:
-				element = <DocumentSuppliersTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={[]} />;
-				break;
-		}
+		const element = <DocumentMaterialsTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={file?.attributeAssurances || []} />;
 		const addButtonDisabled = !hasAssurances || hasFileStateChanged(fileState);
 		return (
 			<div className={'flex-col flex gap-[16px]'}>
@@ -414,16 +429,10 @@ const _DocumentDetailsSidebar = (props: {
 			// update assurances if sustainability attribute is not undefined
 			if (sustainabilityAttribute !== undefined) {
 				if (hasAssurances) {
-					// delete existing assurances
-					const deleteCals = getDeleteAttributeAssuranceCalls(sustainabilityAttribute);
+					const deleteCals = getDeleteAttributeAssuranceForWrongLevelCalls(sustainabilityAttribute.level);
 					promises.push(...deleteCals);
 					// update each assurance
 					forEach(file.attributeAssurances, assurance => {
-						if (assurance.organizationFacility !== null && sustainabilityAttribute.level === 'MATERIAL') {
-							return;
-						} else if (assurance.material !== null && sustainabilityAttribute.level === 'SUPPLIER') {
-							return;
-						}
 						promises.push(
 							updateAssurance({
 								input: {
@@ -454,6 +463,8 @@ const _DocumentDetailsSidebar = (props: {
 								organization: {
 									id: orgId,
 								},
+								organizationFacility: fileState.supplierId ? { id: fileState.supplierId } : undefined,
+								product: fileState.productId ? { id: fileState.productId } : undefined,
 								createdAt: new Date().toISOString(),
 								updatedAt: new Date().toISOString(),
 							},
@@ -490,31 +501,24 @@ const _DocumentDetailsSidebar = (props: {
 		}
 	};
 
-	const getDeleteAttributeAssuranceCalls = (newSustainabilityAttribute: Claims): Promise<any>[] => {
+	const getDeleteAttributeAssuranceForWrongLevelCalls = (entityLevel: EntityLevel): Promise<any>[] => {
 		const deleteCalls: Promise<any>[] = [];
 		file?.attributeAssurances.forEach(assurance => {
-			if (newSustainabilityAttribute.level === 'MATERIAL') {
-				if (assurance.organizationFacility !== null) {
-					deleteCalls.push(
-						deleteAssurance({
-							filter: {
-								id: assurance.id,
-							},
-						}),
-					);
-				}
-			} else if (newSustainabilityAttribute.level === 'SUPPLIER') {
-				if (assurance.material !== null) {
-					deleteCalls.push(
-						deleteAssurance({
-							filter: {
-								id: assurance.id,
-							},
-						}),
-					);
-				}
+			if (
+				(entityLevel === EntityLevel.MATERIAL && (assurance.organizationFacility !== null || assurance.product !== null)) ||
+				(entityLevel === EntityLevel.SUPPLIER && (assurance.material !== null || assurance.product !== null)) ||
+				(entityLevel === EntityLevel.PRODUCT && (assurance.material !== null || assurance.organizationFacility !== null))
+			) {
+				deleteCalls.push(
+					deleteAssurance({
+						filter: {
+							id: assurance.id,
+						},
+					}),
+				);
 			}
 		});
+
 		return deleteCalls;
 	};
 
@@ -612,6 +616,7 @@ const _DocumentDetailsSidebar = (props: {
 							</div>
 							{getCertificateNumberInput(fileState)}
 							{getDatePickers(fileState)}
+              {getEntityDropdown(fileState)}
 							{getSaveButton(fileState)}
 							{getAssociatedRecordsTables(fileState)}
 						</div>

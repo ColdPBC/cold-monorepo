@@ -54,7 +54,7 @@ export function getMaterialsMock(): MaterialsWithCertifications[] {
           claim: {
             id: 'cert_b4guvd418edqrrye04cgrcx5',
             name: 'Greensign',
-            level: 'Material',
+            level: EntityLevel.MATERIAL,
             logoUrl: null,
             type: 'TEST',
           },
@@ -122,7 +122,7 @@ export function getMaterialsMock(): MaterialsWithCertifications[] {
           claim: {
             id: 'cert_b4guvd418edqrrye04cgrcx5',
             name: 'Greensign',
-            level: 'Material',
+            level: EntityLevel.MATERIAL,
             logoUrl: null,
             type: 'TEST',
           },
@@ -678,7 +678,7 @@ export const getMaterialMock: MaterialGraphQL = (
     name: 'Organic Wool',
     brandMaterialId: 'brand_id_1',
     supplierMaterialId: 'supplier_id_1',
-    description: 'The softest organic wool made from adorable little lambs.',
+    // description: 'The softest organic wool made from adorable little lambs.',
     materialSuppliers: [
       {
         id: 'material_supplier_1',

@@ -52,9 +52,7 @@ export const _DocumentsAddAssuranceModal = (props: {
 		if (sustainabilityAttribute) {
 			// get the sustainability attribute level
 			const level = sustainabilityAttribute.level;
-			if (level === 'SUPPLIER') {
-				return 'GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT';
-			} else if (level === 'MATERIAL') {
+			if (level === 'MATERIAL') {
 				return 'GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT';
 			} else {
 				return null;
