@@ -491,6 +491,7 @@ const _DocumentDetailsSidebar = (props: {
 					logBrowser('File and assurances updated successfully', 'info', {
 						responses,
 					});
+          closeSidebar();
 					addToastMessage({
 						message: 'File and assurances updated successfully',
 						type: ToastMessage.SUCCESS,
