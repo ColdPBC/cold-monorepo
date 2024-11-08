@@ -111,4 +111,42 @@ services:
       AWS_REGION: us-east-1
     volumes:
       - ~/.aws:/root/.aws
+  api:
+    build:
+      context: .
+      dockerfile: _api.dockerfile
+      args:
+        NODE_ENV: development
+        DD_SERVICE: cold-api
+        DD_VERSION: 99.99.99
+        DD_POSTGRES_PASSWORD: emanate-rail-pliable-brindled-plea-PADDOCK
+        DD_API_KEY: ${DD_API_KEY}
+        FC_GIT_COMMIT_SHA: cdc3b19
+    container_name: cold-api
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`api.coldclimate.wtf`)"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.entryPoints.web.address=:80"
+    restart: always
+    networks:
+      - cold
+    external_links:
+      - postgres
+      - rabbit
+      - cache
+    depends_on:
+      - proxy
+      - cache
+      - rabbit
+      - postgres
+    ports:
+      - '7001:7001'
+    environment:
+      PORT: 7001
+      NODE_ENV: development
+      DD_SERVICE: cold-api
+      LOG_FORMAT: pretty
+    volumes:
+      - /usr/src/app/node_modules
 

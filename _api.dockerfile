@@ -1,5 +1,6 @@
 ARG NODE_VERSION=20
 FROM node:${NODE_VERSION} as base
+USER root
 ARG NODE_ENV
 ARG DATABASE_URL
 ARG DD_SERVICE
@@ -25,8 +26,9 @@ VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 #RUN npm uninstall -g yarn pnpm
 RUN apt-get update
-RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake
+RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake zlib1g-dev libicu-dev libpng-dev libjpeg-dev libtiff-dev libgif-dev python3 python3-pip python3-setuptools python3-wheel
 RUN rm -rf /var/lib/apt/lists/*
+
 
 WORKDIR /app
 # uninstall old yarn or pnpm
