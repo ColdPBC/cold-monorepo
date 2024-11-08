@@ -428,7 +428,10 @@ const _DocumentDetailsSidebar = (props: {
 
 			// update assurances if sustainability attribute is not undefined
 			if (sustainabilityAttribute !== undefined) {
-				if (hasAssurances) {
+        // We can't unset the supplierId or productId, so we can only use the "update" call if these values are newly set or unchanged.
+        // To get around this, we otherwise delete the AttributeAssurance and recreate it.
+        // TODO: Clean this up if/when the backend allows us to unset the supplierId or productId.
+				if (hasAssurances && (fileState.supplierId || !compareFileState.supplierId) && (fileState.productId || !compareFileState.productId)) {
 					const deleteCals = getDeleteAttributeAssuranceForWrongLevelCalls(sustainabilityAttribute.level);
 					promises.push(...deleteCals);
 					// update each assurance
@@ -442,13 +445,17 @@ const _DocumentDetailsSidebar = (props: {
 									sustainabilityAttribute: {
 										id: fileState.sustainabilityAttributeId,
 									},
+                  organizationFacility: fileState.supplierId ? { id: fileState.supplierId } : undefined,
+                  product: fileState.productId ? { id: fileState.productId } : undefined,
 									updatedAt: new Date().toISOString(),
 								},
 							}),
 						);
 					});
 				} else {
-					// create new assurance
+					// Delete any pre-existing assurances (should be only the case where unsetting the product or supplier ID).
+         promises.push(...deleteAllAssurances())
+          // create new assurance
 					promises.push(
 						createAttributeAssurance({
 							input: {
@@ -544,11 +551,12 @@ const _DocumentDetailsSidebar = (props: {
 		const endDatesAreSame = isSameDay(compareFileState.endDate || 0, fileState.endDate || 0);
 		const compareFileStateSustainabilityAttribute = compareFileState.sustainabilityAttributeId === fileState.sustainabilityAttributeId;
 		const isFileTypeSame = compareFileState.type === fileState.type;
-		let certificateNumberSame = true;
+    const sameProductAndSupplierEntityRelationship = compareFileState.productId === fileState.productId && compareFileState.supplierId === fileState.supplierId
+    let certificateNumberSame = true;
 		if (fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
 			certificateNumberSame = compareFileState.certificate_number === fileState.certificate_number;
 		}
-		return !(startDatesAreSame && endDatesAreSame && compareFileStateSustainabilityAttribute && isFileTypeSame && certificateNumberSame);
+		return !(startDatesAreSame && endDatesAreSame && compareFileStateSustainabilityAttribute && isFileTypeSame && sameProductAndSupplierEntityRelationship && certificateNumberSame);
 	};
 
 	const ifOnlyTypeOrCertIdChanged = (fileState: DocumentDetailsSidebarFileState, compareFileState: DocumentDetailsSidebarFileState) => {
