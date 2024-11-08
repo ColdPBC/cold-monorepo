@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Tooltip } from '@mui/material';
 import {HexColors} from "@coldpbc/themes";
 import {BubbleWithPopover} from "./bubbleWithPopover";
@@ -14,7 +14,7 @@ export const BubbleList: React.FC<BubbleListProps> = ({
   values,
   color = HexColors.primary.DEFAULT,
 }) => {
-  const sortedValues = values.sort();
+  const sortedValues = useMemo(() => [...values].sort(), [values]);
   const [valuesToDisplay, setValuesToDisplay] = React.useState<string[]>(
     sortedValues
   );
@@ -77,6 +77,12 @@ export const BubbleList: React.FC<BubbleListProps> = ({
 		return <BubbleWithPopover key={index} text={value} color={color} width={MAX_WIDTH} />;
 	};
 
+  // Effect for prop changes
+  useEffect(() => {
+    setValuesToDisplay(sortedValues);
+  }, [sortedValues]);
+
+  // Effect for resize
 	useEffect(() => {
 		const handleResize = () => {
 			let observer: ResizeObserver | null = null;
@@ -117,14 +123,6 @@ export const BubbleList: React.FC<BubbleListProps> = ({
 		};
 		handleResize();
 	}, [containerRef, divRef, values, valuesToDisplay, setValuesToDisplay]);
-
-  useEffect(() => {
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, []);
 
   return (
     <div className={'h-full w-full flex items-center justify-start text-body text-tc-primary gap-[10px]'} ref={containerRef}>
