@@ -84,7 +84,7 @@ RUN ls -la /app
 RUN ls -la /app/dist
 RUN ls -la /app/dist/apps/${DD_SERVICE}
 
-FROM node:${NODE_VERSION}-bullseye-slim as final
+FROM node:${NODE_VERSION} as final
 USER root
 WORKDIR /home/node
 
@@ -114,17 +114,17 @@ LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
 
-ADD --chown=node:node ./apps/${DD_SERVICE}/project.json .
-ADD --chown=node:node ./apps/${DD_SERVICE}/package.json .
+ADD --chown=node:node ./nx.json .
+ADD --chown=node:node ./package.json .
+ADD --chown=node:node ./yarn.lock .
+ADD --chown=node:node ./tsconfig.base.json ./tsconfig.base.json
 
-RUN mkdir ./apps
-RUN mkdir ./apps/${DD_SERVICE}
+ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js ./apps/${DD_SERVICE}/
+ADD --chown=node:node ./apps/${DD_SERVICE}/tsconfig.json ./apps/${DD_SERVICE}/tsconfig.json
+ADD --chown=node:node ./apps/${DD_SERVICE}/tsconfig.app.json ./apps/${DD_SERVICE}/tsconfig.app.json
 
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json ./apps/${DD_SERVICE}
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json ./apps/${DD_SERVICE}
-
-ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js .
-ADD --chown=node:node ./yarn.lock .
 
 COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} ./apps/${DD_SERVICE}/src
 COPY --from=build --chown=node:node /app/node_modules ./node_modules

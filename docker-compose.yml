@@ -112,13 +112,17 @@ services:
     volumes:
       - ~/.aws:/root/.aws
   api:
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
     build:
       context: .
       dockerfile: _api.dockerfile
       args:
         NODE_ENV: development
+        DD_ENV: development
         DD_SERVICE: cold-api
         DD_VERSION: 99.99.99
+        DATABASE_URL: postgres://postgres:postgres@host.docker.internal:5432/colddb
         DD_POSTGRES_PASSWORD: emanate-rail-pliable-brindled-plea-PADDOCK
         DD_API_KEY: ${DD_API_KEY}
         FC_GIT_COMMIT_SHA: cdc3b19
@@ -145,7 +149,9 @@ services:
     environment:
       PORT: 7001
       NODE_ENV: development
+      DD_ENV: development
       DD_SERVICE: cold-api
+      DATABASE_URL: postgres://postgres:postgres@host.docker.internal:5432/colddb
       LOG_FORMAT: pretty
     volumes:
       - /usr/src/app/node_modules
