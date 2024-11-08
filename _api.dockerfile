@@ -14,16 +14,6 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
-LABEL com.datadoghq.ad.check_names='["postgres"]'
-LABEL com.datadoghq.ad.init_configs='[{}]'
-LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
-
-LABEL com.datadoghq.tags.service=${DD_SERVICE}
-LABEL com.datadoghq.tags.version=${DD_VERSION}
-LABEL com.datadoghq.tags.env=${NODE_ENV}
-
-VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
-
 #RUN npm uninstall -g yarn pnpm
 RUN apt-get update
 RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake zlib1g-dev libicu-dev libpng-dev libjpeg-dev libtiff-dev libgif-dev python3 python3-pip python3-setuptools python3-wheel
@@ -71,14 +61,6 @@ ENV DD_API_KEY=${DD_API_KEY}
 ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
-
-LABEL com.datadoghq.ad.check_names='["postgres"]'
-LABEL com.datadoghq.ad.init_configs='[{}]'
-LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
-
-LABEL com.datadoghq.tags.service=${DD_SERVICE}
-LABEL com.datadoghq.tags.version=${DD_VERSION}
-LABEL com.datadoghq.tags.env=${NODE_ENV}
 
 RUN corepack enable
 RUN yarn set version latest
