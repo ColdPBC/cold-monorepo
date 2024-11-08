@@ -1,5 +1,6 @@
 ARG NODE_VERSION=20
 FROM node:${NODE_VERSION} as base
+USER root
 ARG NODE_ENV
 ARG DATABASE_URL
 ARG DD_SERVICE
@@ -13,20 +14,11 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
-LABEL com.datadoghq.ad.check_names='["postgres"]'
-LABEL com.datadoghq.ad.init_configs='[{}]'
-LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
-
-LABEL com.datadoghq.tags.service=${DD_SERVICE}
-LABEL com.datadoghq.tags.version=${DD_VERSION}
-LABEL com.datadoghq.tags.env=${NODE_ENV}
-
-VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
-
 #RUN npm uninstall -g yarn pnpm
 RUN apt-get update
-RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake
+RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake zlib1g-dev libicu-dev libpng-dev libjpeg-dev libtiff-dev libgif-dev python3 python3-pip python3-setuptools python3-wheel
 RUN rm -rf /var/lib/apt/lists/*
+
 
 WORKDIR /app
 # uninstall old yarn or pnpm
@@ -70,14 +62,6 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
-LABEL com.datadoghq.ad.check_names='["postgres"]'
-LABEL com.datadoghq.ad.init_configs='[{}]'
-LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
-
-LABEL com.datadoghq.tags.service=${DD_SERVICE}
-LABEL com.datadoghq.tags.version=${DD_VERSION}
-LABEL com.datadoghq.tags.env=${NODE_ENV}
-
 RUN corepack enable
 RUN yarn set version latest
 
@@ -100,7 +84,7 @@ RUN ls -la /app
 RUN ls -la /app/dist
 RUN ls -la /app/dist/apps/${DD_SERVICE}
 
-FROM node:${NODE_VERSION}-bullseye-slim as final
+FROM node:${NODE_VERSION} as final
 USER root
 WORKDIR /home/node
 
@@ -130,17 +114,17 @@ LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
 
-ADD --chown=node:node ./apps/${DD_SERVICE}/project.json .
-ADD --chown=node:node ./apps/${DD_SERVICE}/package.json .
+ADD --chown=node:node ./nx.json .
+ADD --chown=node:node ./package.json .
+ADD --chown=node:node ./yarn.lock .
+ADD --chown=node:node ./tsconfig.base.json ./tsconfig.base.json
 
-RUN mkdir ./apps
-RUN mkdir ./apps/${DD_SERVICE}
+ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js ./apps/${DD_SERVICE}/
+ADD --chown=node:node ./apps/${DD_SERVICE}/tsconfig.json ./apps/${DD_SERVICE}/tsconfig.json
+ADD --chown=node:node ./apps/${DD_SERVICE}/tsconfig.app.json ./apps/${DD_SERVICE}/tsconfig.app.json
 
 ADD --chown=node:node ./apps/${DD_SERVICE}/project.json ./apps/${DD_SERVICE}
 ADD --chown=node:node ./apps/${DD_SERVICE}/package.json ./apps/${DD_SERVICE}
-
-ADD --chown=node:node ./apps/${DD_SERVICE}/webpack.config.js .
-ADD --chown=node:node ./yarn.lock .
 
 COPY --from=build --chown=node:node /app/dist/apps/${DD_SERVICE} ./apps/${DD_SERVICE}/src
 COPY --from=build --chown=node:node /app/node_modules ./node_modules

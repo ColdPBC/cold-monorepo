@@ -1,7 +1,7 @@
 # Use the official Node.js image as the base
 FROM node:20.9-bullseye-slim as base
 USER root
-WORKDIR /home/node/app
+WORKDIR /home/node/repo
 # Capture the build arguments
 ARG NODE_ENV
 ARG DATABASE_URL
@@ -25,12 +25,23 @@ LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"c
 # Add socket to communicate with the host's Docker daemon
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
-# Set the working directory within the container
-COPY ./apps/cold-graphql/src ./src
-COPY ./apps/cold-graphql/tsconfig.json .
+# Copy the repo package.json
 COPY ./apps/cold-graphql/package.json .
 
-RUN ls -la ./src
+RUN mkdir apps
+RUN mkdir apps/cold-graphql
+
+COPY ./apps/cold-graphql/src ./apps/cold-graphql/src
+COPY ./apps/cold-graphql/tsconfig.json ./apps/cold-graphql/tsconfig.json
+COPY ./apps/cold-graphql/package.json ./apps/cold-graphql/package.json
+COPY ./apps/cold-graphql/project.json ./apps/cold-graphql/project.json
+
+RUN ls -la ./
+RUN ls -la ./apps
+RUN ls -la ./apps/cold-graphql
+RUN ls -la ./apps/cold-graphql/src
+
+WORKDIR /home/node/repo/apps/cold-graphql
 RUN corepack enable
 RUN corepack use pnpm@9.12.2
 

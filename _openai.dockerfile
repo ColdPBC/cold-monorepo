@@ -13,17 +13,6 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
-LABEL com.datadoghq.ad.check_names='["postgres"]'
-LABEL com.datadoghq.ad.init_configs='[{}]'
-LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
-
-LABEL com.datadoghq.tags.service=${DD_SERVICE}
-LABEL com.datadoghq.tags.version=${DD_VERSION}
-LABEL com.datadoghq.tags.env=${NODE_ENV}
-
-RUN echo "DD_SERVICE: ${DD_SERVICE}"
-
-VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 #RUN npm uninstall -g yarn pnpm
 RUN apt-get update
@@ -45,9 +34,9 @@ USER root
 # Leverage a cache mount to /root/.yarn to speed up subsequent builds.
 # Leverage a bind mounts to package.json and yarn.lock to avoid having to copy them into
 # into this layer.
-#RUN #--mount=type=bind,source=package.json,target=package.json \
-    #--mount=type=bind,source=yarn.lock,target=yarn.lock,readwrite \
-RUN  --mount=type=cache,target=/root/.yarn
+RUN #--mount=type=bind,source=package.json,target=package.json \
+ #   --mount=type=bind,source=yarn.lock,target=yarn.lock,readwrite \
+     --mount=type=cache,target=/root/.yarn
 
 COPY package.json package.json ./
 
@@ -70,21 +59,8 @@ ARG DD_VERSION
 ARG DD_API_KEY
 
 ENV NODE_ENV=${NODE_ENV}
-ENV DD_ENV=${NODE_ENV}
-ENV DD_API_KEY=${DD_API_KEY}
 ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
-ENV DD_VERSION=${DD_VERSION}
-
-LABEL com.datadoghq.ad.check_names='["postgres"]'
-LABEL com.datadoghq.ad.init_configs='[{}]'
-LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
-
-LABEL com.datadoghq.tags.service=${DD_SERVICE}
-LABEL com.datadoghq.tags.version=${DD_VERSION}
-LABEL com.datadoghq.tags.env=${NODE_ENV}
-
-RUN echo "DD_SERVICE: ${DD_SERVICE}"
 
 RUN corepack enable
 RUN yarn set version latest
