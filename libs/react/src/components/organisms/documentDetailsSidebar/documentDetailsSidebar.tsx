@@ -6,7 +6,7 @@ import {
 	DetailsItem,
 	DocumentDetailsMenu,
 	DocumentMaterialsTable,
-  EntitySelect,
+	EntitySelect,
 	ErrorFallback,
 	Input,
 	Select,
@@ -100,8 +100,8 @@ const _DocumentDetailsSidebar = (props: {
 				endDate: null,
 				sustainabilityAttributeId: file.attributeAssurances[0]?.sustainabilityAttribute?.id,
 				certificate_number: null,
-        productId: file.attributeAssurances[0]?.product?.id || null,
-        supplierId: file.attributeAssurances[0]?.organizationFacility?.id || null,
+				productId: file.attributeAssurances[0]?.product?.id || null,
+				supplierId: file.attributeAssurances[0]?.organizationFacility?.id || null,
 			};
 
 			const startDate = getEffectiveStartDate(file);
@@ -303,31 +303,30 @@ const _DocumentDetailsSidebar = (props: {
 		);
 	};
 
-  const getEntityDropdown = (fileState: DocumentDetailsSidebarFileState) => {
-    const attribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttributeId);
-    const attributeLevel = attribute?.level
-    if (!attributeLevel || ![EntityLevel.PRODUCT, EntityLevel.SUPPLIER].includes(attributeLevel)) {
-      return null;
-    }
+	const getEntityDropdown = (fileState: DocumentDetailsSidebarFileState) => {
+		const attribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttributeId);
+		const attributeLevel = attribute?.level;
+		if (!attributeLevel || ![EntityLevel.PRODUCT, EntityLevel.SUPPLIER].includes(attributeLevel)) {
+			return null;
+		}
 
-    return (
-      <div className={'w-full flex flex-col gap-[8px]'}>
-        <div className={'w-full text-tc-primary text-eyebrow'}>{toSentenceCase(EntityLevel[attributeLevel])}</div>
-        <EntitySelect
-          entityLevel={attributeLevel}
-          selectedValueId={attributeLevel === EntityLevel.PRODUCT ? fileState.productId : fileState.supplierId}
-          setSelectedValueId={(valueId: string | null) => {
-            if (attributeLevel === EntityLevel.PRODUCT) {
-              setFileState({ ...fileState, productId: valueId });
-            } else {
-              setFileState({ ...fileState, supplierId: valueId });
-            }
-          }}
-        />
-      </div>
-    )
-
-  }
+		return (
+			<div className={'w-full flex flex-col gap-[8px]'}>
+				<div className={'w-full text-tc-primary text-eyebrow'}>{toSentenceCase(EntityLevel[attributeLevel])}</div>
+				<EntitySelect
+					entityLevel={attributeLevel}
+					selectedValueId={attributeLevel === EntityLevel.PRODUCT ? fileState.productId : fileState.supplierId}
+					setSelectedValueId={(valueId: string | null) => {
+						if (attributeLevel === EntityLevel.PRODUCT) {
+							setFileState({ ...fileState, productId: valueId });
+						} else {
+							setFileState({ ...fileState, supplierId: valueId });
+						}
+					}}
+				/>
+			</div>
+		);
+	};
 
 	const getAssociatedRecordsTables = (fileState: DocumentDetailsSidebarFileState) => {
 		const attribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttributeId);
@@ -360,7 +359,7 @@ const _DocumentDetailsSidebar = (props: {
 		const disabled = saveButtonLoading || !hasFileChanged;
 
 		return (
-			<div className={'w-auto'}>
+			<div className={'w-auto flex justify-end'}>
 				<BaseButton
 					label={'Save'}
 					onClick={() => {
@@ -428,9 +427,9 @@ const _DocumentDetailsSidebar = (props: {
 
 			// update assurances if sustainability attribute is not undefined
 			if (sustainabilityAttribute !== undefined) {
-        // We can't unset the supplierId or productId, so we can only use the "update" call if these values are newly set or unchanged.
-        // To get around this, we otherwise delete the AttributeAssurance and recreate it.
-        // TODO: Clean this up if/when the backend allows us to unset the supplierId or productId.
+				// We can't unset the supplierId or productId, so we can only use the "update" call if these values are newly set or unchanged.
+				// To get around this, we otherwise delete the AttributeAssurance and recreate it.
+				// TODO: Clean this up if/when the backend allows us to unset the supplierId or productId.
 				if (hasAssurances && (fileState.supplierId || !compareFileState.supplierId) && (fileState.productId || !compareFileState.productId)) {
 					const deleteCals = getDeleteAttributeAssuranceForWrongLevelCalls(sustainabilityAttribute.level);
 					promises.push(...deleteCals);
@@ -445,8 +444,8 @@ const _DocumentDetailsSidebar = (props: {
 									sustainabilityAttribute: {
 										id: fileState.sustainabilityAttributeId,
 									},
-                  organizationFacility: fileState.supplierId ? { id: fileState.supplierId } : undefined,
-                  product: fileState.productId ? { id: fileState.productId } : undefined,
+									organizationFacility: fileState.supplierId ? { id: fileState.supplierId } : undefined,
+									product: fileState.productId ? { id: fileState.productId } : undefined,
 									updatedAt: new Date().toISOString(),
 								},
 							}),
@@ -454,8 +453,8 @@ const _DocumentDetailsSidebar = (props: {
 					});
 				} else {
 					// Delete any pre-existing assurances (should be only the case where unsetting the product or supplier ID).
-         promises.push(...deleteAllAssurances())
-          // create new assurance
+					promises.push(...deleteAllAssurances());
+					// create new assurance
 					promises.push(
 						createAttributeAssurance({
 							input: {
@@ -551,12 +550,19 @@ const _DocumentDetailsSidebar = (props: {
 		const endDatesAreSame = isSameDay(compareFileState.endDate || 0, fileState.endDate || 0);
 		const compareFileStateSustainabilityAttribute = compareFileState.sustainabilityAttributeId === fileState.sustainabilityAttributeId;
 		const isFileTypeSame = compareFileState.type === fileState.type;
-    const sameProductAndSupplierEntityRelationship = compareFileState.productId === fileState.productId && compareFileState.supplierId === fileState.supplierId
-    let certificateNumberSame = true;
+		const sameProductAndSupplierEntityRelationship = compareFileState.productId === fileState.productId && compareFileState.supplierId === fileState.supplierId;
+		let certificateNumberSame = true;
 		if (fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
 			certificateNumberSame = compareFileState.certificate_number === fileState.certificate_number;
 		}
-		return !(startDatesAreSame && endDatesAreSame && compareFileStateSustainabilityAttribute && isFileTypeSame && sameProductAndSupplierEntityRelationship && certificateNumberSame);
+		return !(
+			startDatesAreSame &&
+			endDatesAreSame &&
+			compareFileStateSustainabilityAttribute &&
+			isFileTypeSame &&
+			sameProductAndSupplierEntityRelationship &&
+			certificateNumberSame
+		);
 	};
 
 	const ifOnlyTypeOrCertIdChanged = (fileState: DocumentDetailsSidebarFileState, compareFileState: DocumentDetailsSidebarFileState) => {
@@ -587,7 +593,8 @@ const _DocumentDetailsSidebar = (props: {
 			}}
 			ref={innerRef}>
 			{fileState !== undefined && (
-				<div className={'w-full h-full flex flex-col gap-[24px] pb-[40px]'}>
+				<div className={'w-full h-full flex flex-col'}>
+					{/* Header */}
 					<div className={'w-full flex flex-row mb-[16px] gap-[16px] justify-between items-start'}>
 						<div className={'cursor-pointer w-[16px] mt-[4px]'} onClick={() => closeSidebar()}>
 							<ColdIcon name={IconNames.CloseModalIcon} width={16} height={16} />
@@ -603,32 +610,38 @@ const _DocumentDetailsSidebar = (props: {
 							}}
 						/>
 					</div>
-					{isLoading ? (
-						<Spinner />
-					) : (
-						<div className={'w-full flex flex-col gap-[20px]'}>
-							<DetailsItem category={'Uploaded'} value={format(parseISO(fileState.createdAt), 'M/d/yyyy h:mm a')} />
-							{fileState.metadata?.summary && <DetailsItem category={'Cold AI Summary'} value={fileState.metadata.summary} />}
-							{getSustainabilityAttributeDropdown(fileState)}
-							<div className={'w-full flex flex-col gap-[8px]'}>
-								<div className={'w-full text-tc-primary text-eyebrow'}>Document Category</div>
-								<Select
-									options={documentTypeOptions}
-									name={'type'}
-									value={startCase(lowerCase(fileState.type.replace(/_/g, ' ')))}
-									onChange={(e: InputOption) => {
-										setFileState({ ...fileState, type: e.value });
-									}}
-									buttonClassName={'w-full border-[1.5px] border-gray-90 rounded-[8px]'}
-								/>
+
+					{/* Scrollable Content Area */}
+					<div className={'flex-1 overflow-y-auto pb-20'}>
+						{isLoading ? (
+							<Spinner />
+						) : (
+							<div className={'w-full flex flex-col gap-[20px]'}>
+								<DetailsItem category={'Uploaded'} value={format(parseISO(fileState.createdAt), 'M/d/yyyy h:mm a')} />
+								{fileState.metadata?.summary && <DetailsItem category={'Cold AI Summary'} value={fileState.metadata.summary} />}
+								{getSustainabilityAttributeDropdown(fileState)}
+								<div className={'w-full flex flex-col gap-[8px]'}>
+									<div className={'w-full text-tc-primary text-eyebrow'}>Document Category</div>
+									<Select
+										options={documentTypeOptions}
+										name={'type'}
+										value={startCase(lowerCase(fileState.type.replace(/_/g, ' ')))}
+										onChange={(e: InputOption) => {
+											setFileState({ ...fileState, type: e.value });
+										}}
+										buttonClassName={'w-full border-[1.5px] border-gray-90 rounded-[8px]'}
+									/>
+								</div>
+								{getCertificateNumberInput(fileState)}
+								{getDatePickers(fileState)}
+								{getEntityDropdown(fileState)}
+								{getAssociatedRecordsTables(fileState)}
 							</div>
-							{getCertificateNumberInput(fileState)}
-							{getDatePickers(fileState)}
-              {getEntityDropdown(fileState)}
-							{getSaveButton(fileState)}
-							{getAssociatedRecordsTables(fileState)}
-						</div>
-					)}
+						)}
+					</div>
+
+					{/* Sticky Save Button */}
+					<div className={'absolute bottom-0 left-0 right-0 bg-gray-30 p-4'}>{getSaveButton(fileState)}</div>
 				</div>
 			)}
 		</div>
