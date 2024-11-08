@@ -39,6 +39,7 @@
 		"build:prod": "yarn prebuild && nx run cold-ui:build:production --resolveJsonModule",
 		"test": "nx run cold-api:test:ci",
 		"chromatic": "yarn dlx chromatic --project-token=chpt_8c97d5f04267902 --exit-once-uploaded --onlyChanged --exit-zero-on-changes",
+		"start:api": "yarn dlx nx@latest serve cold-api",
 		"start:graph": "cd apps/cold-graphql && graphweaver start",
 		"watch:graph": "cd apps/cold-graphql && graphweaver watch",
 		"sync:graph": "cd apps/cold-graphql && graphweaver import postgresql --host 127.0.0.1 --password postgres --user postgres --database colddb --port 5432"
