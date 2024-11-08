@@ -1,3 +1,10 @@
+# [1.471.0](https://github.com/coldPBC/cold-monorepo/compare/v1.470.6...v1.471.0) (2024-11-08)
+
+
+### Features
+
+* optimize docker build and configuration ([8aae9de](https://github.com/coldPBC/cold-monorepo/commit/8aae9de72e8926d9977a457684946d82e33759db))
+
 ## [1.470.6](https://github.com/coldPBC/cold-monorepo/compare/v1.470.5...v1.470.6) (2024-11-07)
 
 
