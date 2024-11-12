@@ -1,11 +1,12 @@
 import {
-	EntityLevelAttributeAssuranceGraphQL,
-	EntityWithAttributeAssurances,
-	SustainabilityAttribute,
-	SustainabilityAttributeAssurance,
-	SustainabilityAttributeAssuranceGraphQL,
-	SustainabilityAttributeGraphQL,
-	SustainabilityAttributeWithStatus,
+  AttributeAssurance,
+  EntityLevelAttributeAssuranceGraphQL,
+  EntityWithAttributeAssurances,
+  SustainabilityAttribute,
+  SustainabilityAttributeAssurance,
+  SustainabilityAttributeAssuranceGraphQL,
+  SustainabilityAttributeGraphQL,
+  SustainabilityAttributeWithStatus,
 } from '@coldpbc/interfaces';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 import { addDays } from 'date-fns';
@@ -252,4 +253,16 @@ export const processEntityLevelAssurances = (
 
 export const filterAttributes = (attributes: SustainabilityAttribute[], level: EntityLevel) => {
   return attributes.filter(sustainabilityAttribute => sustainabilityAttribute.level === level)
+}
+
+
+export const getEntityId = (entityLevel: EntityLevel, attributeAssurance: SustainabilityAttributeAssuranceGraphQL | AttributeAssurance) => {
+  const entityMap = {
+    [EntityLevel.MATERIAL]: attributeAssurance.material?.id,
+    [EntityLevel.PRODUCT]: attributeAssurance.product?.id,
+    [EntityLevel.SUPPLIER]: attributeAssurance.organizationFacility?.id,
+    [EntityLevel.ORGANIZATION]: attributeAssurance.organization?.id,
+  };
+
+  return entityMap[entityLevel];
 }

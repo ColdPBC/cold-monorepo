@@ -38,6 +38,9 @@ export interface AttributeAssurance {
   id: string;
   effectiveStartDate: string | null;
   effectiveEndDate: string | null;
+  organization: null | {
+    id: string;
+  }
   organizationFacility: null | {
     id: string;
     name: string;
