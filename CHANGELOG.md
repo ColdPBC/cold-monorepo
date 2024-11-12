@@ -1,3 +1,10 @@
+# [1.472.0](https://github.com/coldPBC/cold-monorepo/compare/v1.471.0...v1.472.0) (2024-11-12)
+
+
+### Features
+
+* integrate new EntitySelect into component ([5b5a93d](https://github.com/coldPBC/cold-monorepo/commit/5b5a93da6de968758bee79f0d744fcb4c11be38d))
+
 # [1.471.0](https://github.com/coldPBC/cold-monorepo/compare/v1.470.6...v1.471.0) (2024-11-08)
 
 
