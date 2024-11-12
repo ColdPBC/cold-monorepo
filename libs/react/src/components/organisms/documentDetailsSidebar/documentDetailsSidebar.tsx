@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react';
-import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
+import {
+  Claims,
+  FilesWithAssurances,
+  InputOption,
+  ToastMessage,
+} from '@coldpbc/interfaces';
 import {
 	BaseButton,
 	ColdIcon,
@@ -22,7 +27,14 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation
 import { useSWRConfig } from 'swr';
 import { format, isSameDay, parseISO } from 'date-fns';
 import { isApolloError } from '@apollo/client';
-import { addTZOffset, getEffectiveEndDate, getEffectiveStartDate, removeTZOffset, toSentenceCase } from '@coldpbc/lib';
+import {
+  addTZOffset,
+  areArraysEqual,
+  getEffectiveEndDate,
+  getEffectiveStartDate, getEntityId,
+  removeTZOffset,
+  toSentenceCase,
+} from '@coldpbc/lib';
 
 export interface DocumentDetailsSidebarFileState {
 	id: string;
@@ -32,11 +44,38 @@ export interface DocumentDetailsSidebarFileState {
 	metadata: any;
 	startDate: Date | null;
 	endDate: Date | null;
-	supplierId: string | null;
-	productId: string | null;
-	sustainabilityAttributeId: string | null;
+	entityIds: string[];
+	sustainabilityAttribute: {
+    id: string;
+    level: EntityLevel;
+  } | null;
 	certificate_number: string | null;
 }
+
+const getUpdatedEntities = (file: FilesWithAssurances, fileState: DocumentDetailsSidebarFileState) => {
+  if (!fileState.sustainabilityAttribute) {
+    return { assuranceIdsToUpdate: [], assuranceIdsToDelete: file.attributeAssurances.map(assurance => assurance.id), entityIdsToCreate: [] };
+  } else {
+    const entityLevel = fileState.sustainabilityAttribute.level
+    let intendedEntities: string[] = fileState.entityIds;
+    const assuranceIdsToUpdate: string[] = [];
+    const assuranceIdsToDelete: string[] = [];
+
+    file.attributeAssurances.forEach(attributeAssurance => {
+      const entityId = getEntityId(entityLevel, attributeAssurance);
+
+      if (entityId && intendedEntities.includes(entityId)) {
+        assuranceIdsToUpdate.push(attributeAssurance.id);
+        // Remove processed entity to avoid duplicates
+        intendedEntities = intendedEntities.filter(id => id !== entityId);
+      } else {
+        assuranceIdsToDelete.push(attributeAssurance.id);
+      }
+    });
+
+    return { assuranceIdsToUpdate, assuranceIdsToDelete, entityIdsToCreate: intendedEntities };
+  }
+};
 
 const _DocumentDetailsSidebar = (props: {
 	file: FilesWithAssurances | undefined;
@@ -51,17 +90,65 @@ const _DocumentDetailsSidebar = (props: {
 	signedUrl: string | undefined;
 	addAssurance: (fileState: DocumentDetailsSidebarFileState, isAdding: boolean) => void;
 }) => {
-	const { mutate } = useSWRConfig();
-	const { logBrowser } = useColdContext();
-	const { file, fileTypes, sustainabilityAttributes, closeSidebar, innerRef, deleteFile, isLoading, downloadFile, signedUrl, addAssurance } = props;
-	const { orgId } = useAuth0Wrapper();
-	const [saveButtonLoading, setSaveButtonLoading] = React.useState(false);
-	const hasAssurances = get(file, 'attributeAssurances', []).length > 0;
-	const { mutateGraphQL: updateAssurance } = useGraphQLMutation('UPDATE_DOCUMENT_ASSURANCE');
-	const { mutateGraphQL: updateDocument } = useGraphQLMutation('UPDATE_DOCUMENT_FIELDS');
-	const { mutateGraphQL: deleteAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
-	const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
-	const { addToastMessage } = useAddToastMessage();
+  const { mutate } = useSWRConfig();
+  const { logBrowser } = useColdContext();
+  const {
+    file,
+    fileTypes,
+    sustainabilityAttributes,
+    closeSidebar,
+    innerRef,
+    deleteFile,
+    isLoading,
+    downloadFile,
+    signedUrl,
+    addAssurance
+  } = props;
+  const { orgId } = useAuth0Wrapper();
+  const [saveButtonLoading, setSaveButtonLoading] = React.useState(false);
+  const hasAssurances = get(file, 'attributeAssurances', []).length > 0;
+  const { mutateGraphQL: updateAssurance } = useGraphQLMutation('UPDATE_DOCUMENT_ASSURANCE');
+  const { mutateGraphQL: updateDocument } = useGraphQLMutation('UPDATE_DOCUMENT_FIELDS');
+  const { mutateGraphQL: deleteAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
+  const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
+  const { addToastMessage } = useAddToastMessage();
+
+  const updateAssuranceHelper = (assuranceId: string, fileState: DocumentDetailsSidebarFileState) => (
+    updateAssurance({
+      input: {
+        id: assuranceId,
+        effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+        effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+        sustainabilityAttribute: fileState.sustainabilityAttribute ? {
+          id: fileState.sustainabilityAttribute.id,
+        } : null,
+        updatedAt: new Date().toISOString(),
+      },
+    })
+  );
+
+	const createAssuranceHelper = (entityId: string | null, fileState: DocumentDetailsSidebarFileState) => (
+		createAttributeAssurance({
+      input: {
+        effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+        effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+        organizationFile: {
+          id: fileState.id,
+        },
+        sustainabilityAttribute: fileState.sustainabilityAttribute ? {
+          id: fileState.sustainabilityAttribute.id,
+        } : null,
+        organization: {
+          id: orgId,
+        },
+        material: entityId && fileState.sustainabilityAttribute?.level === EntityLevel.MATERIAL ? { id: entityId } : undefined,
+        organizationFacility: entityId && fileState.sustainabilityAttribute?.level === EntityLevel.SUPPLIER ? { id: entityId } : undefined,
+        product: entityId && fileState.sustainabilityAttribute?.level === EntityLevel.PRODUCT ? { id: entityId } : undefined,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    })
+  );
 
 	const deleteAttributeAssurance = async (id: string) => {
 		const response = await deleteAssurance({
@@ -74,13 +161,13 @@ const _DocumentDetailsSidebar = (props: {
 
 		if (has(response, 'errors') || isApolloError(response)) {
 			logBrowser('Error deleting assurance', 'error', { response });
-			addToastMessage({
+			await addToastMessage({
 				message: 'Error deleting assurance',
 				type: ToastMessage.FAILURE,
 			});
 		} else {
 			logBrowser('Assurance deleted successfully', 'info', { response });
-			addToastMessage({
+			await addToastMessage({
 				message: 'Assurance deleted successfully',
 				type: ToastMessage.SUCCESS,
 			});
@@ -90,7 +177,10 @@ const _DocumentDetailsSidebar = (props: {
 
 	const getInitialFileState = (file: FilesWithAssurances | undefined): DocumentDetailsSidebarFileState | undefined => {
 		if (file) {
-			const fileState: DocumentDetailsSidebarFileState = {
+			const sustainabilityAttribute = file.attributeAssurances[0]?.sustainabilityAttribute;
+      const entityIds = sustainabilityAttribute ? file.attributeAssurances.map(assurance => getEntityId(sustainabilityAttribute.level, assurance)).filter(id => typeof id === 'string') : [];
+
+      const fileState: DocumentDetailsSidebarFileState = {
 				id: file.id,
 				type: file.type,
 				originalName: file.originalName,
@@ -98,10 +188,9 @@ const _DocumentDetailsSidebar = (props: {
 				metadata: file.metadata,
 				startDate: null,
 				endDate: null,
-				sustainabilityAttributeId: file.attributeAssurances[0]?.sustainabilityAttribute?.id,
+        entityIds: entityIds,
+				sustainabilityAttribute: sustainabilityAttribute,
 				certificate_number: null,
-				productId: file.attributeAssurances[0]?.product?.id || null,
-				supplierId: file.attributeAssurances[0]?.organizationFacility?.id || null,
 			};
 
 			const startDate = getEffectiveStartDate(file);
@@ -144,10 +233,10 @@ const _DocumentDetailsSidebar = (props: {
 				<div className={'w-full text-tc-primary text-eyebrow'}>Sustainability Attribute</div>
 				<SustainabilityAttributeSelect
 					sustainabilityAttributes={sustainabilityAttributes}
-					selectedValueId={fileState.sustainabilityAttributeId}
-					setSelectedValueId={(value: string | null) => {
+					selectedValue={fileState.sustainabilityAttribute || null}
+					setSelectedValue={(value: { id: string, level: EntityLevel } | null) => {
 						if (fileState === undefined) return;
-						setFileState({ ...fileState, sustainabilityAttributeId: value });
+						setFileState({ ...fileState, sustainabilityAttribute: value });
 					}}
 				/>
 			</div>
@@ -304,8 +393,7 @@ const _DocumentDetailsSidebar = (props: {
 	};
 
 	const getEntityDropdown = (fileState: DocumentDetailsSidebarFileState) => {
-		const attribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttributeId);
-		const attributeLevel = attribute?.level;
+		const attributeLevel = fileState.sustainabilityAttribute?.level;
 		if (!attributeLevel || ![EntityLevel.PRODUCT, EntityLevel.SUPPLIER].includes(attributeLevel)) {
 			return null;
 		}
@@ -315,13 +403,9 @@ const _DocumentDetailsSidebar = (props: {
 				<div className={'w-full text-tc-primary text-eyebrow'}>{toSentenceCase(EntityLevel[attributeLevel])}</div>
 				<EntitySelect
 					entityLevel={attributeLevel}
-					selectedValueId={attributeLevel === EntityLevel.PRODUCT ? fileState.productId : fileState.supplierId}
+					selectedValueId={fileState.entityIds[0] || null}
 					setSelectedValueId={(valueId: string | null) => {
-						if (attributeLevel === EntityLevel.PRODUCT) {
-							setFileState({ ...fileState, productId: valueId });
-						} else {
-							setFileState({ ...fileState, supplierId: valueId });
-						}
+            setFileState({ ...fileState, entityIds: valueId ? [valueId] : [] });
 					}}
 				/>
 			</div>
@@ -329,8 +413,8 @@ const _DocumentDetailsSidebar = (props: {
 	};
 
 	const getAssociatedRecordsTables = (fileState: DocumentDetailsSidebarFileState) => {
-		const attribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttributeId);
-		if (attribute === undefined || attribute.level !== EntityLevel.MATERIAL) {
+    const attribute = fileState.sustainabilityAttribute;
+		if (!attribute || attribute.level !== EntityLevel.MATERIAL) {
 			return null;
 		}
 		const element = <DocumentMaterialsTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={file?.attributeAssurances || []} />;
@@ -423,66 +507,34 @@ const _DocumentDetailsSidebar = (props: {
 				return;
 			}
 
-			const sustainabilityAttribute = sustainabilityAttributes.find(attribute => attribute.id === fileState.sustainabilityAttributeId);
+			// update assurances if sustainability attribute is defined
+			if (fileState.sustainabilityAttribute) {
+				const { assuranceIdsToUpdate, assuranceIdsToDelete, entityIdsToCreate } = getUpdatedEntities(file, fileState);
 
-			// update assurances if sustainability attribute is not undefined
-			if (sustainabilityAttribute !== undefined) {
-				// We can't unset the supplierId or productId, so we can only use the "update" call if these values are newly set or unchanged.
-				// To get around this, we otherwise delete the AttributeAssurance and recreate it.
-				// TODO: Clean this up if/when the backend allows us to unset the supplierId or productId.
-				if (hasAssurances && (fileState.supplierId || !compareFileState.supplierId) && (fileState.productId || !compareFileState.productId)) {
-					const deleteCals = getDeleteAttributeAssuranceForWrongLevelCalls(sustainabilityAttribute.level);
-					promises.push(...deleteCals);
-					// update each assurance
-					forEach(file.attributeAssurances, assurance => {
-						promises.push(
-							updateAssurance({
-								input: {
-									id: assurance.id,
-									effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-									effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
-									sustainabilityAttribute: {
-										id: fileState.sustainabilityAttributeId,
-									},
-									organizationFacility: fileState.supplierId ? { id: fileState.supplierId } : undefined,
-									product: fileState.productId ? { id: fileState.productId } : undefined,
-									updatedAt: new Date().toISOString(),
-								},
-							}),
-						);
-					});
-				} else {
-					// Delete any pre-existing assurances (should be only the case where unsetting the product or supplier ID).
-					promises.push(...deleteAllAssurances());
-					// create new assurance
-					promises.push(
-						createAttributeAssurance({
-							input: {
-								effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-								effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
-								organizationFile: {
-									id: fileState.id,
-								},
-								sustainabilityAttribute: {
-									id: fileState.sustainabilityAttributeId,
-								},
-								organization: {
-									id: orgId,
-								},
-								organizationFacility: fileState.supplierId ? { id: fileState.supplierId } : undefined,
-								product: fileState.productId ? { id: fileState.productId } : undefined,
-								createdAt: new Date().toISOString(),
-								updatedAt: new Date().toISOString(),
-							},
-						}),
-					);
+				// Delete assurances for removed entities
+				forEach(assuranceIdsToDelete, assuranceId => {
+					promises.push(deleteAssurance({ filter: { id: assuranceId } }));
+				});
+
+				// Update the effective date or sustainability attribute on any existing assurances
+				// (i.e. where the entity already aligned)
+				forEach(assuranceIdsToUpdate, assuranceId => {
+					promises.push(updateAssuranceHelper(assuranceId, fileState));
+				});
+
+				// Create new assurances for each newly added entity
+				forEach(entityIdsToCreate, entityId => {
+					promises.push(createAssuranceHelper(entityId, fileState));
+				});
+
+				// If there are no entities, create an assurance with no relation to connect the document and attribute
+				if (entityIdsToCreate.length === 0) {
+					promises.push(createAssuranceHelper(null, fileState));
 				}
 			} else {
 				// if the sustainability attribute is not defined, delete all assurances
-				if (!fileState.sustainabilityAttributeId) {
-					const deleteCals = deleteAllAssurances();
-					promises.push(...deleteCals);
-				}
+        const deleteCals = deleteAllAssurances();
+        promises.push(...deleteCals);
 			}
 
 			await Promise.all(promises)
@@ -491,7 +543,7 @@ const _DocumentDetailsSidebar = (props: {
 					logBrowser('File and assurances updated successfully', 'info', {
 						responses,
 					});
-          closeSidebar();
+					closeSidebar();
 					addToastMessage({
 						message: 'File and assurances updated successfully',
 						type: ToastMessage.SUCCESS,
@@ -506,27 +558,6 @@ const _DocumentDetailsSidebar = (props: {
 				});
 			setSaveButtonLoading(false);
 		}
-	};
-
-	const getDeleteAttributeAssuranceForWrongLevelCalls = (entityLevel: EntityLevel): Promise<any>[] => {
-		const deleteCalls: Promise<any>[] = [];
-		file?.attributeAssurances.forEach(assurance => {
-			if (
-				(entityLevel === EntityLevel.MATERIAL && (assurance.organizationFacility !== null || assurance.product !== null)) ||
-				(entityLevel === EntityLevel.SUPPLIER && (assurance.material !== null || assurance.product !== null)) ||
-				(entityLevel === EntityLevel.PRODUCT && (assurance.material !== null || assurance.organizationFacility !== null))
-			) {
-				deleteCalls.push(
-					deleteAssurance({
-						filter: {
-							id: assurance.id,
-						},
-					}),
-				);
-			}
-		});
-
-		return deleteCalls;
 	};
 
 	const deleteAllAssurances = (): Promise<any>[] => {
@@ -549,9 +580,9 @@ const _DocumentDetailsSidebar = (props: {
 		if (fileState === undefined || compareFileState === undefined) return false;
 		const startDatesAreSame = isSameDay(compareFileState.startDate || 0, fileState.startDate || 0);
 		const endDatesAreSame = isSameDay(compareFileState.endDate || 0, fileState.endDate || 0);
-		const compareFileStateSustainabilityAttribute = compareFileState.sustainabilityAttributeId === fileState.sustainabilityAttributeId;
+		const compareFileStateSustainabilityAttribute = compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute;
 		const isFileTypeSame = compareFileState.type === fileState.type;
-		const sameProductAndSupplierEntityRelationship = compareFileState.productId === fileState.productId && compareFileState.supplierId === fileState.supplierId;
+		const sameEntities = areArraysEqual(compareFileState.entityIds, fileState.entityIds);
 		let certificateNumberSame = true;
 		if (fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
 			certificateNumberSame = compareFileState.certificate_number === fileState.certificate_number;
@@ -561,7 +592,7 @@ const _DocumentDetailsSidebar = (props: {
 			endDatesAreSame &&
 			compareFileStateSustainabilityAttribute &&
 			isFileTypeSame &&
-			sameProductAndSupplierEntityRelationship &&
+      sameEntities &&
 			certificateNumberSame
 		);
 	};
@@ -574,7 +605,7 @@ const _DocumentDetailsSidebar = (props: {
 			fileState.startDate !== null &&
 			isSameDay(compareFileState.startDate, fileState.startDate) &&
 			isSameDay(compareFileState.endDate, fileState.endDate) &&
-			compareFileState.sustainabilityAttributeId === fileState.sustainabilityAttributeId &&
+			compareFileState.sustainabilityAttribute === fileState.sustainabilityAttribute &&
 			(compareFileState.type !== fileState.type || compareFileState.certificate_number !== fileState.certificate_number) &&
 			hasAssurances
 		);
