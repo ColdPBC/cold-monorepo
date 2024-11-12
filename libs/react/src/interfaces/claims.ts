@@ -1,7 +1,9 @@
+import { EntityLevel } from '@coldpbc/enums';
+
 export interface Claims {
   id: string;
   name: string;
-  level: string;
+  level: EntityLevel;
   type: string;
   logoUrl: string | null;
 }

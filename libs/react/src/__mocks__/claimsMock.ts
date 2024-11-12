@@ -1,9 +1,10 @@
 import { Claims, SuppliersClaimNamesPayload } from '@coldpbc/interfaces';
+import { EntityLevel } from '@coldpbc/enums';
 
 export const getSupplierClaimsMock = (): SuppliersClaimNamesPayload[] => {
 	return getClaimsMock()
 		.filter(cert => {
-			return cert.level === 'Supplier';
+			return cert.level === EntityLevel.SUPPLIER;
 		})
 		.map(certification => {
 			return {
@@ -17,42 +18,42 @@ export const getClaimsMock = (): Claims[] => {
 		{
 			id: '1',
 			name: 'PFAS-Test',
-			level: 'SUPPLIER',
+			level: EntityLevel.SUPPLIER,
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/generics/RSL.png',
 			type: 'TEST',
 		},
 		{
 			id: '2',
 			name: 'Lead-Test',
-			level: 'SUPPLIER',
+			level: EntityLevel.SUPPLIER,
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/generics/RSL.png',
       type: 'TEST',
 		},
 		{
 			id: '3',
 			name: 'phthalate',
-			level: 'SUPPLIER',
+			level: EntityLevel.SUPPLIER,
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/generics/RSL.png',
       type: 'TEST',
 		},
 		{
 			id: '4',
 			name: 'bluesign',
-			level: 'MATERIAL',
+			level: EntityLevel.MATERIAL,
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Bluesign.png',
       type: 'TEST',
 		},
 		{
 			id: '5',
 			name: 'WRAP',
-			level: 'SUPPLIER',
+			level: EntityLevel.SUPPLIER,
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png',
       type: 'TEST',
 		},
 		{
 			id: '6',
 			name: 'PFAS',
-			level: 'SUPPLIER',
+			level: EntityLevel.SUPPLIER,
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/generics/RSL.png',
       type: 'TEST',
 		},
