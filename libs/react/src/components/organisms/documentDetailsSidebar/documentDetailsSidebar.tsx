@@ -6,24 +6,24 @@ import {
   ToastMessage,
 } from '@coldpbc/interfaces';
 import {
-	BaseButton,
-	ColdIcon,
-	DetailsItem,
-	DocumentDetailsMenu,
-	DocumentMaterialsTable,
-	EntitySelect,
-	ErrorFallback,
-	Input,
-	Select,
-	Spinner,
-	SustainabilityAttributeSelect,
+  BaseButton,
+  ColdIcon,
+  DetailsItem,
+  DocumentDetailsMenu,
+  DocumentMaterialsTable,
+  EntitySelect,
+  ErrorFallback,
+  Input, MaterialWithTier2Supplier,
+  Select,
+  Spinner,
+  SustainabilityAttributeSelect,
 } from '@coldpbc/components';
 import { ButtonTypes, EntityLevel, IconNames } from '@coldpbc/enums';
 import { forEach, get, has, lowerCase, startCase } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation } from '@coldpbc/hooks';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
 import { useSWRConfig } from 'swr';
 import { format, isSameDay, parseISO } from 'date-fns';
 import { isApolloError } from '@apollo/client';
@@ -79,6 +79,8 @@ const getUpdatedEntities = (file: FilesWithAssurances, fileState: DocumentDetail
 
 const _DocumentDetailsSidebar = (props: {
 	file: FilesWithAssurances | undefined;
+  fileState: DocumentDetailsSidebarFileState | undefined;
+  setFileState: (fileState: DocumentDetailsSidebarFileState | undefined) => void;
 	sustainabilityAttributes: Claims[];
 	fileTypes: string[];
 	refreshFiles: () => void;
@@ -88,12 +90,15 @@ const _DocumentDetailsSidebar = (props: {
 	isLoading: boolean;
 	downloadFile: (url: string | undefined) => void;
 	signedUrl: string | undefined;
-	addAssurance: (fileState: DocumentDetailsSidebarFileState, isAdding: boolean) => void;
+  openEditMaterials: (fileState: DocumentDetailsSidebarFileState) => void;
+  allMaterials: MaterialWithTier2Supplier[];
 }) => {
   const { mutate } = useSWRConfig();
   const { logBrowser } = useColdContext();
   const {
     file,
+    fileState,
+    setFileState,
     fileTypes,
     sustainabilityAttributes,
     closeSidebar,
@@ -102,7 +107,8 @@ const _DocumentDetailsSidebar = (props: {
     isLoading,
     downloadFile,
     signedUrl,
-    addAssurance
+    openEditMaterials,
+    allMaterials,
   } = props;
   const { orgId } = useAuth0Wrapper();
   const [saveButtonLoading, setSaveButtonLoading] = React.useState(false);
@@ -167,10 +173,6 @@ const _DocumentDetailsSidebar = (props: {
 			});
 		} else {
 			logBrowser('Assurance deleted successfully', 'info', { response });
-			await addToastMessage({
-				message: 'Assurance deleted successfully',
-				type: ToastMessage.SUCCESS,
-			});
 		}
 		await mutate('GET_ALL_FILES');
 	};
@@ -209,12 +211,10 @@ const _DocumentDetailsSidebar = (props: {
 		}
 	};
 
-	const [fileState, setFileState] = React.useState<DocumentDetailsSidebarFileState | undefined>(undefined);
-
 	useEffect(() => {
 		// listen to file changes and update the file state
 		setFileState(getInitialFileState(file));
-	}, [file]);
+	}, [setFileState, file]);
 
 	const documentTypeOptions: InputOption[] = fileTypes
 		.map((type, index) => {
@@ -235,8 +235,11 @@ const _DocumentDetailsSidebar = (props: {
 					sustainabilityAttributes={sustainabilityAttributes}
 					selectedValue={fileState.sustainabilityAttribute || null}
 					setSelectedValue={(value: { id: string, level: EntityLevel } | null) => {
-						if (fileState === undefined) return;
-						setFileState({ ...fileState, sustainabilityAttribute: value });
+            if (fileState === undefined) return;
+            const previousEntityLevel = fileState.sustainabilityAttribute?.level;
+            // Reset entity IDs if changing sustainability attribute level
+            const entityIds = previousEntityLevel === value?.level ? fileState.entityIds : [];
+						setFileState({ ...fileState, sustainabilityAttribute: value, entityIds });
 					}}
 				/>
 			</div>
@@ -417,20 +420,18 @@ const _DocumentDetailsSidebar = (props: {
 		if (!attribute || attribute.level !== EntityLevel.MATERIAL) {
 			return null;
 		}
-		const element = <DocumentMaterialsTable deleteAttributeAssurance={deleteAttributeAssurance} assurances={file?.attributeAssurances || []} />;
-		const addButtonDisabled = !hasAssurances || hasFileStateChanged(fileState);
+
+		const element = <DocumentMaterialsTable materials={allMaterials.filter(material => fileState.entityIds.includes(material.id))} />;
 		return (
 			<div className={'flex-col flex gap-[16px]'}>
 				<div className={'flex flex-row justify-between'}>
-					<div className={'text-h5'}>Associated Records</div>
+					<div className={'text-h5'}>Materials</div>
 					<BaseButton
-						label={'Add'}
+						label={'Edit'}
 						onClick={() => {
-							addAssurance(fileState, true);
+							openEditMaterials(fileState);
 						}}
-						iconLeft={IconNames.PlusIcon}
 						variant={ButtonTypes.secondary}
-						disabled={addButtonDisabled}
 					/>
 				</div>
 				<div className={'w-full'}>{element}</div>
@@ -513,7 +514,7 @@ const _DocumentDetailsSidebar = (props: {
 
 				// Delete assurances for removed entities
 				forEach(assuranceIdsToDelete, assuranceId => {
-					promises.push(deleteAssurance({ filter: { id: assuranceId } }));
+					promises.push(deleteAttributeAssurance(assuranceId));
 				});
 
 				// Update the effective date or sustainability attribute on any existing assurances
@@ -563,13 +564,7 @@ const _DocumentDetailsSidebar = (props: {
 	const deleteAllAssurances = (): Promise<any>[] => {
 		const deleteCalls: Promise<any>[] = [];
 		file?.attributeAssurances.forEach(assurance => {
-			deleteCalls.push(
-				deleteAssurance({
-					filter: {
-						id: assurance.id,
-					},
-				}),
-			);
+			deleteCalls.push(deleteAttributeAssurance(assurance.id));
 		});
 		return deleteCalls;
 	};

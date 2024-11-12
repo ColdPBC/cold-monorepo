@@ -8,7 +8,11 @@ import {
   getFileTypesMock,
   StoryMockProvider
 } from '@coldpbc/mocks';
-import {DocumentDetailsSidebar, DocumentDetailsSidebarFileState, DocumentsAddAssuranceModal} from '@coldpbc/components';
+import {
+  DocumentDetailsSidebar,
+  DocumentDetailsSidebarFileState,
+  DocumentsEditMaterialsModal,
+} from '@coldpbc/components';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
 
 const meta = {
@@ -91,18 +95,15 @@ const SidebarStory = (props: {
 }) => {
 	const { file, fileTypes, innerRef, sustainabilityAttributes } = props;
 	const [selectedFile, setSelectedFile] = React.useState<FilesWithAssurances | undefined>(file);
-	const [addAssuranceFile, setAddAssuranceFile] = React.useState<
-		| {
-				fileState: DocumentDetailsSidebarFileState;
-				isAdding: boolean;
-		  }
-		| undefined
-	>(undefined);
+  const [ editDocumentFileState, setEditDocumentFileState ] = React.useState<DocumentDetailsSidebarFileState | undefined>(undefined);
+  const [ editMaterialsModalIsOpen, setEditMaterialsModalIsOpen ] = React.useState(false);
 
 	return (
 		<StoryMockProvider>
 			<DocumentDetailsSidebar
 				file={selectedFile}
+        fileState={editDocumentFileState}
+        setFileState={setEditDocumentFileState}
 				sustainabilityAttributes={sustainabilityAttributes}
         fileTypes={fileTypes}
 				refreshFiles={() => {}}
@@ -114,23 +115,22 @@ const SidebarStory = (props: {
 				downloadFile={() => {}}
 				signedUrl={''}
 				isLoading={false}
-				addAssurance={(
-					fileState: DocumentDetailsSidebarFileState,
-					isAdding: boolean,
-				) => {
-					setAddAssuranceFile({ fileState, isAdding });
-				}}
+        openEditMaterials={(fileState: DocumentDetailsSidebarFileState) => {
+          setEditDocumentFileState(fileState);
+          setEditMaterialsModalIsOpen(true);
+        }}
 			/>
-			{addAssuranceFile && (
-				<DocumentsAddAssuranceModal
-					documentToAddAssurance={addAssuranceFile}
-					close={() => {
-						setAddAssuranceFile(undefined);
-					}}
-					files={getFilesWithAssurances()}
-					allSustainabilityAttributes={sustainabilityAttributes}
-				/>
-			)}
+      {editDocumentFileState && (
+        <DocumentsEditMaterialsModal
+          allMaterials={[]} // TODO: Add materials mocks
+          fileState={editDocumentFileState}
+          setSelectedValueIds={(entityIds: string[]) => (
+            setEditDocumentFileState({ ...editDocumentFileState, entityIds: entityIds })
+          )}
+          isOpen={editMaterialsModalIsOpen}
+          onClose={() => setEditMaterialsModalIsOpen(false)}
+        />
+      )}
 		</StoryMockProvider>
 	);
 };
