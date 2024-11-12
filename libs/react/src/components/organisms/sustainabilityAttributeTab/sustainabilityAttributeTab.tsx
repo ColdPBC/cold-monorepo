@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { EmptyState, SustainabilityAttributeCard } from '@coldpbc/components';
 import type { SustainabilityAttribute } from '@coldpbc/interfaces';
+import { useFlags } from 'launchdarkly-react-client-sdk';
+import { useNavigate } from 'react-router-dom';
 
 interface SustainabilityAttributeTabProps {
   tab: 'My Attributes' | 'Other Attributes';
@@ -41,6 +43,8 @@ const OTHER_ATTRIBUTES_EMPTY_STATE_PROPS = {
 export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProps> = ({ tab, sustainabilityAttributes }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [columnCount, setColumnCount] = useState(1);
+  const ldFlags = useFlags();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const updateColumnCount = () => {
@@ -81,7 +85,14 @@ export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProp
 		<div ref={containerRef} className="w-full">
 			<div className={`py-6 grid ${gridClassName} gap-4`}>
 				{sustainabilityAttributes.map(sustainabilityAttribute => (
-					<div key={sustainabilityAttribute.id} className="w-full">
+					<div
+            key={sustainabilityAttribute.id}
+            className="w-full"
+            onClick={() => {
+              if(ldFlags.materialDetailPageCold997) {
+                navigate(`/sustainability/${sustainabilityAttribute.id}`);
+              }
+            }}>
 						<SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />
 					</div>
 				))}
