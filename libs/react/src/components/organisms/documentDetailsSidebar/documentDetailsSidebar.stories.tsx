@@ -5,8 +5,8 @@ import {
   getClaimsMock,
   getFilesWithAssurances,
   getFilesWithoutAssurances,
-  getFileTypesMock,
-  StoryMockProvider
+  getFileTypesMock, getMaterialsMock, getMaterialsMocksWithAssurances,
+  StoryMockProvider,
 } from '@coldpbc/mocks';
 import {
   DocumentDetailsSidebar,
@@ -97,11 +97,16 @@ const SidebarStory = (props: {
 	const [selectedFile, setSelectedFile] = React.useState<FilesWithAssurances | undefined>(file);
   const [ editDocumentFileState, setEditDocumentFileState ] = React.useState<DocumentDetailsSidebarFileState | undefined>(undefined);
   const [ editMaterialsModalIsOpen, setEditMaterialsModalIsOpen ] = React.useState(false);
+  const allMaterials = getMaterialsMocksWithAssurances().map(material => {
+    const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
+    return { id: material.id, name: material.name, tier2SupplierName: tier2Supplier?.name, tier2SupplierId: tier2Supplier?.id };
+  })
 
 	return (
 		<StoryMockProvider>
 			<DocumentDetailsSidebar
-				file={selectedFile}
+				allMaterials={allMaterials}
+        file={selectedFile}
         fileState={editDocumentFileState}
         setFileState={setEditDocumentFileState}
 				sustainabilityAttributes={sustainabilityAttributes}
@@ -122,7 +127,7 @@ const SidebarStory = (props: {
 			/>
       {editDocumentFileState && (
         <DocumentsEditMaterialsModal
-          allMaterials={[]} // TODO: Add materials mocks
+          allMaterials={allMaterials}
           fileState={editDocumentFileState}
           setSelectedValueIds={(entityIds: string[]) => (
             setEditDocumentFileState({ ...editDocumentFileState, entityIds: entityIds })
