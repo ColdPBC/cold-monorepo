@@ -3,7 +3,6 @@ import { SustainabilityPage } from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryMockProvider, sustainabilityAttributesMocks } from '@coldpbc/mocks';
 import { fireEvent, within } from '@storybook/testing-library';
-import { GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG } from '@coldpbc/lib';
 
 const meta: Meta<typeof SustainabilityPage> = {
   title: 'Pages/SustainabilityPage',

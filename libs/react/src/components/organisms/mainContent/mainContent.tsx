@@ -7,6 +7,7 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 export interface MainContentProps {
   title?: string;
   subTitle?: string;
+  imageUrl?: string;
   headerElement?: ReactNode;
   isLoading?: boolean;
   className?: string;
@@ -22,21 +23,24 @@ export function MainContent(props: PropsWithChildren<MainContentProps>) {
 
   const getTitle = () => {
     return (
-      <div className={'flex flex-col gap-[4px]'}>
-        {
-          props.title && (
-            <div data-testid={'main-content-title'} className="text-h1 self-stretch text-tc-primary">
-              {props.title}
-            </div>
-          )
-        }
-        {
-          props.subTitle && (
-            <div data-testid={'main-content-subtitle'} className="text-body self-stretch text-tc-primary">
-              {props.subTitle}
-            </div>
-          )
-        }
+      <div className={'flex gap-4'}>
+        {props.imageUrl && <img className="w-[82px] h-[82px] object-cover rounded-lg" src={props.imageUrl} alt={`Logo for ${props.title}`} onError={() => null} />}
+        <div className={`flex flex-col ${!props.imageUrl && 'gap-[4px]'}`}>
+          {
+            props.title && (
+              <div data-testid={'main-content-title'} className="text-h1 self-stretch text-tc-primary">
+                {props.title}
+              </div>
+            )
+          }
+          {
+            props.subTitle && (
+              <div data-testid={'main-content-subtitle'} className="text-body self-stretch text-tc-primary">
+                {props.subTitle}
+              </div>
+            )
+          }
+        </div>
       </div>
     )
   }
