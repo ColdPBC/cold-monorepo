@@ -150,17 +150,12 @@ export const processSustainabilityAttributeDataFromGraphQL = (
 
     for (const assurance of attribute.attributeAssurances) {
       // Determine which entity this assurance belongs to
-      const entity =
-        assurance.material ??
-        assurance.product ??
-        assurance.organizationFacility ??
-        assurance.organization;
+      const entity = getEntity(attribute.level, assurance);
 
       if (!entity) continue;
 
-      const entityId = entity.id;
-      const existingAssurances = assurancesByEntity.get(entityId) ?? [];
-      assurancesByEntity.set(entityId, [...existingAssurances, assurance]);
+      const existingAssurances = assurancesByEntity.get(entity.id) ?? [];
+      assurancesByEntity.set(entity.id, [...existingAssurances, assurance]);
     }
 
     // Transform each entity group into a single assurance
@@ -173,11 +168,7 @@ export const processSustainabilityAttributeDataFromGraphQL = (
         // Get the entity name from the first assurance
         // We can use the first one since all assurances in this group are for the same entity
         const firstAssurance = assurances[0];
-        const entityName = firstAssurance.material?.name ??
-          firstAssurance.organization?.name ??
-          firstAssurance.organizationFacility?.name ??
-          firstAssurance.product?.name ??
-          entityId; // Fallback to ID if name is somehow not available
+        const entityName = getEntity(attribute.level, firstAssurance)?.name || '';
 
         return {
           effectiveEndDate: assuranceExpiration,
