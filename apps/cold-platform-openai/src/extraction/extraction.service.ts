@@ -1,11 +1,10 @@
-import { Injectable, Scope, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { toUTCDate, BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service, Cuid2Generator, GuidPrefixes } from '@coldpbc/nest';
 import z from 'zod';
 import { attribute_assurances, file_types, organization_facilities, organization_files, organizations, sustainability_attributes } from '@prisma/client';
 import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
-import { ClassificationService } from '../classification/classification.service';
 import { get, omit, snakeCase } from 'lodash';
 import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
 import { PDFDocument } from 'pdf-lib';
@@ -15,6 +14,7 @@ import {
 	address_line_1,
 	address_line_2,
 	baseCertificateSchema,
+	baseSupplierSchema,
 	BillOfMaterialsSchema,
 	bluesignProductSchema,
 	bluesignSchema,
@@ -30,20 +30,25 @@ import {
 	postal_code,
 	sgs,
 	state_province,
+	suppliersSchema,
 	tuv_rhineland,
 	wrap,
 } from '../schemas';
+import { supplierAgreementExtractionPrompt } from './prompts/supplier_aggreement_extraction_prompt';
+import { supplierStatementExtractionPrompt } from './prompts/supplier_statement_extraction_prompt';
 
 @Injectable()
 export class ExtractionService extends BaseWorker {
 	private openAi;
 
+	//redactor: RedactorService;
 	constructor(readonly config: ConfigService, private readonly prisma: PrismaService, readonly s3: S3Service, readonly mqtt: MqttService) {
 		super(ExtractionService.name);
 		this.openAi = new OpenAI({
 			organization: this.config.getOrThrow('OPENAI_ORG_ID'),
 			apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
 		});
+		//this.redactor = new RedactorService();
 	}
 
 	contentIsUrl(content: any[] | string) {
@@ -149,43 +154,43 @@ export class ExtractionService extends BaseWorker {
 				throw new Error('Classification not found');
 			}
 
-			const images: OpenAiBase64ImageUrl[] = [
-				{
-					type: 'text',
-					text: classification.extraction_prompt,
-				},
-			];
+			classification = await this.resolveExtractionSchema(classification, organization);
+
+			classification.images.unshift({
+				type: 'text',
+				text: classification.extraction_prompt,
+			});
 
 			if (!filePayload?.key || !filePayload?.bucket) {
 				throw new Error('File key, or bucket not found in file payload');
 			}
 
-			const file = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
-			const fileBytes = await file.Body?.transformToByteArray();
+			if (classification.images?.length < 2) {
+				const file = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
+				const fileBytes = await file.Body?.transformToByteArray();
 
-			if (!fileBytes) {
-				throw new Error('Failed to read file from S3');
+				if (!fileBytes) {
+					throw new Error('Failed to read file from S3');
+				}
+
+				// If original file was an image, convert it to base64
+				if (isImage) {
+					const binaryString = String.fromCharCode(...fileBytes);
+
+					// Convert binary string to base64
+					classification.images.push({
+						type: 'image_url',
+						image_url: { url: `data:image/${extension};base64,${btoa(binaryString)}` },
+					});
+				}
 			}
-
-			// If original file was an image, convert it to base64
-			if (isImage) {
-				const binaryString = String.fromCharCode(...fileBytes);
-
-				// Convert binary string to base64
-				images.push({
-					type: 'image_url',
-					image_url: { url: `data:image/${extension};base64,${btoa(binaryString)}` },
-				});
-			}
-
-			classification = await this.resolveExtractionSchema(classification);
 
 			const response = await this.openAi.beta.chat.completions.parse({
 				model: 'gpt-4o-2024-08-06',
 				messages: [
 					{
 						role: 'user',
-						content: images,
+						content: classification.images,
 					},
 				],
 				response_format: zodResponseFormat(classification.extraction_schema, classification.extraction_name),
@@ -294,7 +299,13 @@ export class ExtractionService extends BaseWorker {
 
 			return parsedResponse;
 		} catch (e) {
-			this.logger.error(`Error extracting data from content: ${e.message}`, { error: { ...e }, classification, file: filePayload, user, organization });
+			this.logger.error(`Error extracting data from content: ${e.message}`, {
+				error: { ...e },
+				classification,
+				file: filePayload,
+				user,
+				organization,
+			});
 
 			this.sendMetrics('organization.files', 'cold-openai', 'extraction', 'completed', {
 				start,
@@ -368,10 +379,10 @@ export class ExtractionService extends BaseWorker {
 				throw new Error('Classification not found');
 			}
 
-			classification = await this.resolveExtractionSchema(classification);
+			classification = await this.resolveExtractionSchema(classification, organization);
 
 			// map over content to extract pageContent if content is an array of langchain documents
-			content = Array.isArray(content) ? content.map(c => c.pageContent) : content;
+			content = Array.isArray(content) ? content.map(c => c.pageContent) : content.replace(/(\r*\n*)/gm, ' ');
 
 			const prompt = `${classification?.extraction_prompt} Please use the response_format to properly extract the content ${Array.isArray(content) ? content.join(' ') : content}`;
 
@@ -405,7 +416,7 @@ export class ExtractionService extends BaseWorker {
 						content: this.contentIsUrl(content) ? imageContent : messageContent,
 					},
 				],
-				response_format: zodResponseFormat(classification.extraction_schema, classification.extraction_name),
+				response_format: zodResponseFormat(await classification.extraction_schema, classification.extraction_name),
 			});
 
 			const parsedResponse = response.choices[0].message.parsed;
@@ -496,7 +507,7 @@ export class ExtractionService extends BaseWorker {
 				return typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse);
 			}
 
-			if (parsedResponse.supplier?.name && parsedResponse.matched_name) {
+			if ((parsedResponse.supplier?.name && parsedResponse.matched_name) || parsedResponse.supplier === true) {
 				await this.setSupplierId(parsedResponse, organization);
 			}
 			await this.setSupplierId(parsedResponse, organization);
@@ -569,23 +580,57 @@ export class ExtractionService extends BaseWorker {
 	}
 
 	private async setSupplierId(parsedResponse: any, organization: organizations) {
-		if (parsedResponse.matched_name && !parsedResponse.matched_name.includes('NOT FOUND')) {
+		const name = parsedResponse.supplier?.name || parsedResponse.matched_name || parsedResponse.name;
+
+		if ((parsedResponse.name && parsedResponse.supplier) || (parsedResponse.matched_name && !parsedResponse.matched_name.includes('NOT FOUND'))) {
 			const matchedSupplier = await this.prisma.organization_facilities.findUnique({
 				where: {
 					orgFacilityName: {
 						organization_id: organization.id,
-						name: parsedResponse.matched_name,
+						name: name,
 					},
 				},
 			});
 
 			if (matchedSupplier?.id) {
 				parsedResponse.supplier_id = matchedSupplier.id;
+			} else {
+				const suppliers = (await this.prisma.organization_facilities.findMany({
+					where: {
+						organization_id: organization.id,
+					},
+					select: {
+						id: true,
+						name: true,
+					},
+					orderBy: {
+						created_at: 'asc',
+					},
+				})) as organization_facilities[];
+
+				// find the best matching supplier from the list using partial string matching
+				const matched = suppliers.filter(supplier => {
+					const matchedName = name.slice(0, 7).toLowerCase().replace(/[,.]/g, '');
+					const supplierName = supplier.name.slice(0, matchedName.length).toLowerCase().replace(/[,.]/g, '');
+
+					return matchedName === supplierName;
+				});
+
+				if (matched.length > 0) {
+					if (matched.length > 1) {
+						this.logger.warn(`Multiple suppliers found for ${name}.  Selecting the first one in the list`, { matched, organization });
+					}
+					parsedResponse.supplier_id = matched[0].id;
+					parsedResponse.matched_name = matched[0].name;
+				}
 			}
 		}
 
 		if (!parsedResponse.supplier_id) {
-			if (!parsedResponse.supplier?.name || parsedResponse.supplier?.name === 'NOT FOUND') {
+			const hasRootSupplier = parsedResponse.name && parsedResponse.supplier;
+			const hasMatchedSupplier = parsedResponse.matched_name && !parsedResponse.matched_name.includes('NOT FOUND');
+
+			if (!hasRootSupplier && !hasMatchedSupplier) {
 				throw new UnprocessableEntityException('Supplier name not found in classification');
 			}
 
@@ -593,13 +638,13 @@ export class ExtractionService extends BaseWorker {
 				where: {
 					orgFacilityName: {
 						organization_id: organization.id,
-						name: parsedResponse.supplier.name,
+						name: parsedResponse.supplier.name || parsedResponse.matched_name || parsedResponse.name,
 					},
 				},
 				create: {
 					id: new Cuid2Generator(GuidPrefixes.OrganizationFacility).scopedId,
 					organization_id: organization.id,
-					...parsedResponse.supplier,
+					name: parsedResponse.supplier.name || parsedResponse.matched_name || parsedResponse.name,
 					supplier: true,
 					supplier_tier: parsedResponse.supplier.supplier_tier || 2,
 				},
@@ -610,7 +655,7 @@ export class ExtractionService extends BaseWorker {
 		}
 	}
 
-	private async resolveExtractionSchema(classification: any) {
+	private async resolveExtractionSchema(classification: any, organization: organizations) {
 		if (typeof classification === 'string') {
 			classification = JSON.parse(classification);
 		}
@@ -620,7 +665,7 @@ export class ExtractionService extends BaseWorker {
 		// determine the extraction schema and extraction name to use based on the classification
 		switch (classification.type) {
 			case file_types.TEST_REPORT:
-				classification.extraction_name = snakeCase(`test_${classification.testing_company}`);
+				classification.extraction_name = snakeCase(classification.type.toLowerCase());
 				switch (classification.testing_company) {
 					case 'tuvRheinland':
 						classification.extraction_schema = tuv_rhineland;
@@ -666,7 +711,7 @@ export class ExtractionService extends BaseWorker {
 						}),
 					});
 
-					classification.extraction_name = snakeCase(`certificate ${classification.sustainability_attribute}`);
+					classification.extraction_name = snakeCase(classification.type.toLowerCase());
 					switch (classification.sustainability_attribute) {
 						case 'Bluesign Product': {
 							classification.extraction_schema = certSchema.extend({
@@ -695,19 +740,39 @@ export class ExtractionService extends BaseWorker {
 				break;
 			}
 			case file_types.POLICY:
-				classification.extraction_name = snakeCase(`policy extraction`);
+				classification.extraction_name = file_types;
 				classification.extraction_schema = defaultPolicySchema;
 				break;
+			case file_types.SUPPLIER_AGREEMENT:
+				classification.extraction_name = snakeCase(classification.type.toLowerCase());
+				classification.extraction_prompt = supplierAgreementExtractionPrompt(organization);
+				classification.extraction_schema = baseSupplierSchema.extend({
+					supplier_signatory: z.object({
+						name: z.string().nullable().optional(),
+						title: z.string().nullable().optional(),
+					}),
+				});
+				break;
+			case file_types.SUPPLIER_STATEMENT:
+				classification.extraction_name = snakeCase(classification.type.toLowerCase());
+				classification.extraction_prompt = supplierStatementExtractionPrompt(organization);
+				classification.extraction_schema = baseSupplierSchema.extend({
+					supplier_signatory: z.object({
+						name: z.string().nullable().optional(),
+						title: z.string().nullable().optional(),
+					}),
+				});
+				break;
 			case file_types.STATEMENT:
-				classification.extraction_name = snakeCase('statement_extraction');
+				classification.extraction_name = snakeCase(classification.type.toLowerCase());
 				classification.extraction_schema = defaultStatementSchema;
 				break;
 			case file_types.BILL_OF_MATERIALS:
-				classification.extraction_name = snakeCase('bill_of_materials_extraction');
+				classification.extraction_name = snakeCase(classification.type.toLowerCase());
 				classification.extraction_schema = BillOfMaterialsSchema;
 				break;
 			case file_types.PURCHASE_ORDER:
-				classification.extraction_name = snakeCase('purchase_order_extraction');
+				classification.extraction_name = snakeCase(classification.type.toLowerCase());
 				classification.extraction_schema = PoProductsSchema;
 				break;
 			default:
