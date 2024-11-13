@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { location } from './global.schema';
 
 export const baseSupplierSchema = location.extend({
-	name: z.string().describe('The name of the supplier'),
+	name: z.string().describe('The company name of the supplier'),
 	supplier: z.boolean().describe('Indicates if the entity is a supplier'),
 	supplier_tier: z
 		.number()
