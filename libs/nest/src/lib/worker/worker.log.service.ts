@@ -2,12 +2,12 @@ import { LoggerService } from '@nestjs/common';
 import safeStringify from 'fast-safe-stringify';
 import winstonConfig from './winston.config';
 import winston, { createLogger } from 'winston';
-import { BaseWorker } from './worker.class';
 import { Tags } from '../primitives';
-import { merge } from 'lodash';
+import { cloneDeep, merge } from 'lodash';
 import { ConfigService } from '@nestjs/config'; /// test
 import tracer from 'dd-trace';
-import formats from 'dd-trace/ext/formats'; /// test
+import formats from 'dd-trace/ext/formats';
+import { RedactorService } from '../redactor'; /// test
 
 /// test
 export class WorkerLogger implements LoggerService {
@@ -16,6 +16,7 @@ export class WorkerLogger implements LoggerService {
 	context: string;
 	config: ConfigService;
 	isDev: boolean;
+	redactor: RedactorService;
 
 	/**
 	 * Creates an instance of WorkerLogger.
@@ -30,6 +31,7 @@ export class WorkerLogger implements LoggerService {
 			meta,
 		});
 
+		this.redactor = new RedactorService();
 		this.isDev = this.config.get('NODE_ENV') !== 'production' && this.config.get('NODE_ENV') !== 'staging';
 	}
 
@@ -53,13 +55,13 @@ export class WorkerLogger implements LoggerService {
 				error.response?.data?.message,
 				safeStringify({
 					error: error?.response?.data,
-					meta: optionalParams,
+					meta: this.redactor.redact(cloneDeep(optionalParams)),
 					...this.tags,
 				}),
 			);
 		} else {
 			if (error?.message) {
-				this.logger.error(error?.message, { error, meta: optionalParams, ...this.tags });
+				this.logger.error(error?.message, { error, meta: this.redactor.redact(cloneDeep(optionalParams)), ...this.tags });
 			} else if (!error) {
 				this.logger.error(optionalParams.error);
 			}
@@ -79,7 +81,7 @@ export class WorkerLogger implements LoggerService {
 			this.logger.warn(message, this.context, { ...this.tags });
 		}
 
-		this.logger.warn(message, this.isDev ? null : { meta: optionalParams, ...this.tags });
+		this.logger.warn(message, this.isDev ? null : { meta: this.redactor.redact(cloneDeep(optionalParams)), ...this.tags });
 	}
 
 	info(message: string, optionalParams?: any | any[]): void {
@@ -95,7 +97,7 @@ export class WorkerLogger implements LoggerService {
 			this.logger.info(message, this.context, { ...this.tags });
 		}
 
-		this.logger.info(message, { meta: optionalParams, ...this.tags });
+		this.logger.info(message, { meta: this.redactor.redact(cloneDeep(optionalParams)), ...this.tags });
 	}
 
 	verbose(message: string, optionalParams?: any | any[]): void {
@@ -111,7 +113,7 @@ export class WorkerLogger implements LoggerService {
 			this.logger.verbose(message, this.context, { ...this.tags });
 		}
 
-		this.logger.verbose(message, { meta: optionalParams, ...this.tags });
+		this.logger.verbose(message, { meta: this.redactor.redact(cloneDeep(optionalParams)), ...this.tags });
 	}
 
 	debug(message: any, optionalParams?: any | any[]): void {
@@ -127,7 +129,7 @@ export class WorkerLogger implements LoggerService {
 			this.logger.debug(message, this.context, { ...this.tags });
 		}
 
-		this.logger.debug(message, { meta: optionalParams, ...this.tags });
+		this.logger.debug(message, { meta: this.redactor.redact(cloneDeep(optionalParams)), ...this.tags });
 	}
 
 	log(message: any, optionalParams?: any | any[]): void {
@@ -143,7 +145,7 @@ export class WorkerLogger implements LoggerService {
 			this.logger.info(message, this.context, { ...this.tags });
 		}
 
-		this.logger.info(message, { meta: optionalParams, ...this.tags });
+		this.logger.info(message, { meta: this.redactor.redact(cloneDeep(optionalParams)), ...this.tags });
 	}
 
 	trace(message: any, optionalParams?: any | any[]): void {
@@ -157,8 +159,10 @@ export class WorkerLogger implements LoggerService {
 
 		if (!optionalParams) {
 			this.logger.data(message, this.context, { ...this.tags });
+
+			optionalParams = {};
 		}
 
-		this.logger.data(message, { meta: optionalParams, ...this.tags });
+		this.logger.data(message, { meta: this.redactor.redact(cloneDeep(optionalParams)), ...this.tags });
 	}
 }
