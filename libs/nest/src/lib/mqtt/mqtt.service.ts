@@ -2,9 +2,10 @@ import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as mqtt from 'mqtt';
 import { BaseWorker } from '../worker';
-import { get } from 'lodash';
+import { get, omit } from 'lodash';
 import { Cuid2Generator } from '../utility';
 import { MqttSystemPayload, MqttUIPayload, MqttValidatorService } from './validator';
+import { RedactorService } from '../redactor';
 
 export type MqttStatus = 'complete' | 'failed';
 export type MqttAction = 'create' | 'update' | 'delete';
@@ -15,7 +16,8 @@ export class MqttService extends BaseWorker implements OnModuleInit {
 	private readonly iotEndpoint: string;
 	private readonly clientId: string;
 	mqttClient: mqtt.MqttClient | undefined;
-
+	redactor: RedactorService;
+	private readonly omitFields = ['images', 'password', 'token', 'refresh_token', 'access_token'];
 	constructor(readonly config: ConfigService) {
 		super(MqttService.name);
 		const parts = config.getOrThrow('DD_SERVICE').split('-');
@@ -24,6 +26,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
 		const prefix = parts[pfxIdx].length < 7 ? parts[pfxIdx] : `${parts[pfxIdx].substring(0, 2)}${parts[pfxIdx].substring(parts[pfxIdx].length - 2, parts[pfxIdx].length)}`;
 		this.iotEndpoint = this.config.get('IOT_ENDPOINT', 'a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com');
 		this.clientId = new Cuid2Generator(prefix).scopedId;
+		this.redactor = new RedactorService();
 	}
 
 	override async onModuleInit(): Promise<void> {
@@ -137,7 +140,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
 			if (responseTopic) {
 				this.mqttClient?.publish(responseTopic, JSON.stringify(payload), { qos: 0, retain: false });
 
-				this.logger.log(`Published to topic: ${responseTopic}`, { ...payload });
+				this.logger.log(`Published to topic: ${responseTopic}`, { payload });
 			}
 		} catch (e: any) {
 			this.logger.error(e.message, e);
