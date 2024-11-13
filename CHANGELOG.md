@@ -1,3 +1,11 @@
+# [1.473.0](https://github.com/coldPBC/cold-monorepo/compare/v1.472.0...v1.473.0) (2024-11-13)
+
+
+### Features
+
+* made header/save button sticky while interior content is scrollable ([23b20de](https://github.com/coldPBC/cold-monorepo/commit/23b20de0f2f44d83563beaa4eccf92e48ab1132d))
+* new selector for materials ([c0760d6](https://github.com/coldPBC/cold-monorepo/commit/c0760d6cb2085ef37cf487381f8a4f87003ded08))
+
 # [1.472.0](https://github.com/coldPBC/cold-monorepo/compare/v1.471.0...v1.472.0) (2024-11-12)
 
 
