@@ -24,7 +24,6 @@ import {
 	getFilesProcessingMock,
 	getFilesWithAssurances,
 	getFilesWithoutAssurances,
-	materialsForAssurancesMock,
 	suppliersForAssurancesMock,
 } from '../filesMock';
 import { getClaimsMock } from '../claimsMock';
@@ -325,7 +324,7 @@ export const defaultGraphqlMocks: {
 		handler: () =>
 			Promise.resolve({
 				data: {
-					materials: materialsForAssurancesMock,
+					materials: getMaterialsMocksWithAssurances(),
 				},
 			}),
 	},

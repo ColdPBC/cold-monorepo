@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Claims, SustainabilityAttributeGraphQL } from '@coldpbc/interfaces';
 import { ColdIcon, DEFAULT_ICON_URL } from '@coldpbc/components';
-import { IconNames } from '@coldpbc/enums';
+import { EntityLevel, IconNames } from '@coldpbc/enums';
 import { toSentenceCase } from '@coldpbc/lib';
 import { HexColors } from '@coldpbc/themes';
 
@@ -27,11 +27,11 @@ type NoneOption = {
 
 interface SustainabilityAttributeSelectProps {
 	sustainabilityAttributes: Claims[] | SustainabilityAttributeGraphQL[];
-	selectedValueId: string | null;
-	setSelectedValueId: (value: string | null) => void;
+	selectedValue: { id: string, level: EntityLevel } | null;
+	setSelectedValue: (value: { id: string, level: EntityLevel } | null) => void;
 }
 
-export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSelectProps> = ({ sustainabilityAttributes, selectedValueId, setSelectedValueId }) => {
+export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSelectProps> = ({ sustainabilityAttributes, selectedValue, setSelectedValue }) => {
 	const [inputValue, setInputValue] = React.useState('');
 	const noneOption: NoneOption = React.useMemo(() => ({ id: '', name: 'None' }), []);
 
@@ -39,7 +39,7 @@ export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSele
     [noneOption, ...sustainabilityAttributes.sort((a, b) => a.name.localeCompare(b.name))]
   ), [noneOption, sustainabilityAttributes]);
 
-	const selectedOption = React.useMemo(() => options.find(option => option.id === selectedValueId) || noneOption, [options, selectedValueId, noneOption]);
+	const selectedOption = React.useMemo(() => options.find(option => option.id === selectedValue?.id) || noneOption, [options, selectedValue?.id, noneOption]);
 
 	const showLogoInSelectedState = selectedOption?.logoUrl && inputValue === selectedOption.name;
 
@@ -64,7 +64,11 @@ export const SustainabilityAttributeSelect: React.FC<SustainabilityAttributeSele
 				setInputValue(newInputValue);
 			}}
 			onChange={(event, newValue) => {
-				setSelectedValueId(newValue ? newValue.id : null);
+				if (newValue?.id && newValue?.level) {
+          setSelectedValue({ id: newValue.id, level: newValue.level });
+        } else {
+          setSelectedValue(null);
+        }
 				setInputValue(newValue ? newValue.name : '');
 			}}
 			popupIcon={<ColdIcon name={IconNames.ColdChevronDownIcon} className="h-[10px] w-[10px]" />}

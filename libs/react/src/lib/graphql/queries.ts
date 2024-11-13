@@ -28,6 +28,9 @@ export const GET_ALL_FILES = gql`
           level
           logoUrl
         }
+        organization {
+          id
+        }
         organizationFacility {
           id
           name
@@ -93,10 +96,16 @@ export const GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
 `;
 
 export const GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
-  query Materials($filter: MaterialsListFilter) {
-    materials(filter: $filter) {
+  query Materials($organizationId: ID!) {
+    materials(filter: { organization: { id: $organizationId } }) {
       id
       name
+      materialSuppliers {
+        organizationFacility {
+          id
+          name
+        }
+      }
     }
   }
 `;

@@ -247,24 +247,6 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 	];
 }
 
-export const materialsForAssurancesMock: {
-	id: string;
-	name: string;
-}[] = [
-	{
-		id: '1',
-		name: 'Material 1',
-	},
-	{
-		id: '2',
-		name: 'Material 2',
-	},
-	{
-		id: '3',
-		name: 'Material 3',
-	},
-];
-
 export const suppliersForAssurancesMock: {
 	id: string;
 	name: string;

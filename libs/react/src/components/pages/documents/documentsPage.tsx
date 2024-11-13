@@ -8,8 +8,8 @@ import {
   MainContent,
   Modal,
   Spinner,
-  DocumentsAddAssuranceModal,
-  DocumentDetailsSidebarFileState
+  DocumentDetailsSidebarFileState,
+  DocumentsEditMaterialsModal,
 } from '@coldpbc/components';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
@@ -19,16 +19,23 @@ import {AxiosError, isAxiosError} from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
 import {get} from 'lodash';
 
+export interface MaterialWithTier2Supplier {
+  id: string;
+  name: string;
+  tier2SupplierId: string;
+  tier2SupplierName: string;
+}
+
+const getTier2SupplierData = (material) => {
+  const tier2Supplier = material.materialSuppliers[0]?.organizationFacility
+  return { tier2SupplierId: tier2Supplier?.id || '', tier2SupplierName: tier2Supplier?.name || '' }
+}
+
 const _DocumentsPage = () => {
 	const [selectedDocument, setSelectedDocument] = React.useState<string | undefined>(undefined);
 	const [documentToDelete, setDocumentToDelete] = React.useState<FilesWithAssurances | undefined>(undefined);
-	const [documentToAddAssurance, setDocumentToAddAssurance] = React.useState<
-		{
-        fileState: DocumentDetailsSidebarFileState;
-        isAdding: boolean;
-    }
-		| undefined
-	>(undefined);
+  const [ editDocumentFileState, setEditDocumentFileState ] = React.useState<DocumentDetailsSidebarFileState | undefined>(undefined);
+	const [ editMaterialsModalIsOpen, setEditMaterialsModalIsOpen ] = React.useState(false);
 	const [deleteButtonLoading, setDeleteButtonLoading] = React.useState(false);
 	const [files, setFiles] = React.useState<FilesWithAssurances[]>([]);
   const [fileTypes, setFileTypes] = React.useState<string[]>([]);
@@ -54,6 +61,25 @@ const _DocumentsPage = () => {
 		},
 	});
   const allFileTypes = useGraphQLSWR('GET_ALL_SCHEMA_ENUMS');
+
+  const materialsQuery = useGraphQLSWR<{
+    materials: { id: string, name: string, materialSuppliers: { organizationFacility: { id: string } }[]; }[];
+  }>(orgId ? 'GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT' : null, {
+    organizationId: orgId,
+  });
+
+  const allMaterials: MaterialWithTier2Supplier[] = React.useMemo(() => {
+    if (!materialsQuery.isLoading && !get(materialsQuery.data, 'errors', undefined)) {
+      const data = get(materialsQuery.data, 'data.materials', []);
+      return data.map(rawMaterial => ({
+        id: rawMaterial.id,
+        name: rawMaterial.name,
+        ...getTier2SupplierData(rawMaterial),
+      }));
+    } else {
+      return [];
+    }
+  }, [materialsQuery.isLoading, materialsQuery.data]);
 
 	useEffect(() => {
 		const files = get(allFiles.data, 'data.organizationFiles', []);
@@ -207,6 +233,7 @@ const _DocumentsPage = () => {
 
 	const onSidebarClose = () => {
 		setSelectedDocument(undefined);
+    setEditDocumentFileState(undefined);
 	};
 
 	const getDeleteModal = () => {
@@ -249,17 +276,7 @@ const _DocumentsPage = () => {
 		);
 	};
 
-	const onAddAssuranceClick = (
-		fileState: DocumentDetailsSidebarFileState,
-		isAdding: boolean,
-	) => {
-		setDocumentToAddAssurance({
-			fileState,
-			isAdding,
-		});
-	};
-
-	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, documentToDelete, documentToAddAssurance, files, allSustainabilityAttributes, fileTypes });
+	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, documentToDelete, editDocumentFileState, files, allSustainabilityAttributes, fileTypes });
 
 	return (
 		<div className="relative overflow-y-auto h-full w-full">
@@ -269,6 +286,8 @@ const _DocumentsPage = () => {
 			</MainContent>
 			<DocumentDetailsSidebar
 				file={files.find(file => file.id === selectedDocument)}
+        fileState={editDocumentFileState}
+        setFileState={setEditDocumentFileState}
 				sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
         fileTypes={fileTypes}
 				refreshFiles={updateFile}
@@ -278,19 +297,24 @@ const _DocumentsPage = () => {
 				isLoading={selectedFileURLSWR.isLoading}
 				downloadFile={onDocumentDownload}
 				signedUrl={selectedDocumentURL}
-				addAssurance={onAddAssuranceClick}
+        openEditMaterials={(fileState: DocumentDetailsSidebarFileState) => {
+          setEditDocumentFileState(fileState);
+          setEditMaterialsModalIsOpen(true);
+        }}
+        allMaterials={allMaterials}
 			/>
 			{getDeleteModal()}
-			{documentToAddAssurance && (
-				<DocumentsAddAssuranceModal
-					files={files}
-					allSustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
-					documentToAddAssurance={documentToAddAssurance}
-					close={() => {
-						setDocumentToAddAssurance(undefined);
-					}}
-				/>
-			)}
+      {editDocumentFileState && (
+        <DocumentsEditMaterialsModal
+          allMaterials={allMaterials}
+          fileState={editDocumentFileState}
+          setSelectedValueIds={(entityIds: string[]) => (
+            setEditDocumentFileState({ ...editDocumentFileState, entityIds: entityIds })
+          )}
+          isOpen={editMaterialsModalIsOpen}
+          onClose={() => setEditMaterialsModalIsOpen(false)}
+        />
+      )}
 		</div>
 	);
 };

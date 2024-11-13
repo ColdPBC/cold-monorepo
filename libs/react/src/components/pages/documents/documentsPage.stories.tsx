@@ -2,11 +2,12 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { DocumentsPage } from '@coldpbc/components';
 import {
+  defaultGraphqlMocks,
   filesProcessedWithDatesMocks,
   filesProcessingMocks,
   filesWithAssurancesMocks,
   filesWithOutAssurancesMocks, filesWithTooManyRecordsMocks,
-  StoryMockProvider
+  StoryMockProvider,
 } from '@coldpbc/mocks';
 
 const meta: Meta<typeof DocumentsPage> = {
@@ -22,7 +23,7 @@ type Story = StoryObj<typeof meta>;
 export const FilesWithNoAssurancesNoDates: Story = {
   render: () => {
     return (
-      <StoryMockProvider graphqlMocks={filesWithOutAssurancesMocks}>
+      <StoryMockProvider graphqlMocks={[...filesWithOutAssurancesMocks, ...defaultGraphqlMocks]}>
         <DocumentsPage />
       </StoryMockProvider>
     );
