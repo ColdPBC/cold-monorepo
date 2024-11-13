@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { SustainabilityAttributeTab } from '@coldpbc/components';
-import { AttributeAssuranceMock } from '@coldpbc/mocks';
+import { AttributeAssuranceMock, StoryMockProvider } from '@coldpbc/mocks';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
 const meta: Meta<typeof SustainabilityAttributeTab> = {
@@ -47,14 +47,28 @@ export const Default: Story = {
         level: EntityLevel.SUPPLIER,
       }
     ]
-  }
+  },
+  render: (args) => {
+    return (
+      <StoryMockProvider>
+        <SustainabilityAttributeTab {...args} />
+      </StoryMockProvider>
+    );
+  },
 };
 
 export const MyAttributesEmpty: Story = {
   args: {
     tab: 'My Attributes',
     sustainabilityAttributes: []
-  }
+  },
+  render: (args) => {
+    return (
+      <StoryMockProvider>
+        <SustainabilityAttributeTab {...args} />
+      </StoryMockProvider>
+    );
+  },
 };
 
 export const OtherAttributes: Story = {
@@ -82,12 +96,26 @@ export const OtherAttributes: Story = {
         level: EntityLevel.SUPPLIER,
       }
     ]
-  }
+  },
+  render: (args) => {
+    return (
+      <StoryMockProvider>
+        <SustainabilityAttributeTab {...args} />
+      </StoryMockProvider>
+    );
+  },
 };
 
 export const OtherAttributesEmpty: Story = {
   args: {
     tab: 'Other Attributes',
     sustainabilityAttributes: []
-  }
+  },
+  render: (args) => {
+    return (
+      <StoryMockProvider>
+        <SustainabilityAttributeTab {...args} />
+      </StoryMockProvider>
+    );
+  },
 };
