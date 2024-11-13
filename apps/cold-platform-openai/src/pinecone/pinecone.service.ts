@@ -509,7 +509,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 				// set extension to PDF since it's now been converted
 				extension = 'pdf';
 			} else {
-				// Process PDF
+				// Process document
 				const bucket = `cold-api-uploaded-files`;
 				const s3File = await this.s3.getObject(user, bucket, filePayload?.key);
 
@@ -531,7 +531,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 			// Load the document content from the file and split it into chunks
 			const content = await this.lc.getDocContent(extension, bytes, user);
 
-			if (Array.isArray(content) && content.length > 0) {
+			if (Array.isArray(content) && content.length > 256) {
 				// Store the vector embeddings for the document
 				await this.persistEmbeddings(index, content, filePayload, organization);
 
