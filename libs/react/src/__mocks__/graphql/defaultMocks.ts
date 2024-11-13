@@ -628,6 +628,14 @@ export const sustainabilityAttributesMocks = [
               logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
               attributeAssurances: [],
               level: 'SUPPLIER',
+            },
+            // Filtered from either view
+            {
+              id: 'c',
+              name: 'B-Corp Certification',
+              logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/B-Corp+Certification.png',
+              attributeAssurances: [],
+              level: 'ORGANIZATION',
             }
           ],
         },
