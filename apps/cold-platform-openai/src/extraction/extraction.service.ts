@@ -510,7 +510,7 @@ export class ExtractionService extends BaseWorker {
 			if ((parsedResponse.supplier?.name && parsedResponse.matched_name) || parsedResponse.supplier === true) {
 				await this.setSupplierId(parsedResponse, organization);
 			}
-			await this.setSupplierId(parsedResponse, organization);
+			//await this.setSupplierId(parsedResponse, organization);
 
 			await this.createAttributeAssurances(classification, organization, orgFile, updateData, orgFile, user, attributes, parsedResponse.supplier_id);
 
@@ -582,7 +582,7 @@ export class ExtractionService extends BaseWorker {
 	private async setSupplierId(parsedResponse: any, organization: organizations) {
 		const name = parsedResponse.supplier?.name || parsedResponse.matched_name || parsedResponse.name;
 
-		if ((parsedResponse.name && parsedResponse.supplier) || (parsedResponse.matched_name && !parsedResponse.matched_name.includes('NOT FOUND'))) {
+		if (name && !name.includes('NOT FOUND')) {
 			const matchedSupplier = await this.prisma.organization_facilities.findUnique({
 				where: {
 					orgFacilityName: {
