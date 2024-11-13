@@ -654,7 +654,8 @@ export const sustainabilityAttributesMocks = [
                 id: 'a',
                 effectiveEndDate: addDays(new Date(), 100),
                 material: {
-                  id: 'mat_1',
+                  id: getMaterialsMocksWithAssurances()[0].id,
+                  name: getMaterialsMocksWithAssurances()[0].name,
                 },
                 organizationFile: {
                   id: 'doc_1',
@@ -665,6 +666,87 @@ export const sustainabilityAttributesMocks = [
           },
         },
       }),
+  },
+  {
+    query: GET_ALL_MATERIALS_FOR_ORG,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          materials: getMaterialsMocksWithAssurances(),
+        }
+      })
+  }
+];
+
+export const productLevelSustainabilityAttributeMocks = [
+  {
+    query: GET_SUSTAINABILITY_ATTRIBUTE,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          sustainabilityAttribute: {
+            id: 'a',
+            name: 'Bluesign Product',
+            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Bluesign+Product.png',
+            attributeAssurances: [
+              {
+                id: 'a',
+                effectiveEndDate: null,
+                product: {
+                  id: getProductsMock()[0].id,
+                  name: getProductsMock()[0].name,
+                }
+              }
+            ],
+            level: 'PRODUCT',
+          },
+        },
+      }),
+  },
+  {
+    query: GET_ALL_PRODUCTS,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          products: getProductsMock(),
+        },
+      }),
+  }
+];
+
+export const supplierLevelSustainabilityAttributeMocks = [
+  {
+    query: GET_SUSTAINABILITY_ATTRIBUTE,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          sustainabilityAttribute: {
+            id: 'b',
+            name: 'Fair Wear',
+            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
+            attributeAssurances: [
+              {
+                id: 'a',
+                effectiveEndDate: null,
+                organizationFacility: {
+                  id: getSupplierMocks()[0].id,
+                  name: getSupplierMocks()[0].name,
+                }
+              }
+            ],
+            level: 'SUPPLIER',
+          },
+        },
+      }),
+  },
+  {
+    query: GET_ALL_SUPPLIERS_FOR_ORG,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          organizationFacilities: getSupplierMocks()
+        }
+      })
   }
 ];
 
