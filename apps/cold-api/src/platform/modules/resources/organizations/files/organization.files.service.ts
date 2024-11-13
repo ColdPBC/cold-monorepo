@@ -3,11 +3,24 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { Span } from 'nestjs-ddtrace';
 import * as z from 'zod';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IRequest, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
+import {
+	BaseWorker,
+	CacheService,
+	Cuid2Generator,
+	DarklyService,
+	GuidPrefixes,
+	IRequest,
+	MqttService,
+	organization_facilities,
+	PrismaService,
+	S3Service,
+	SuppliersRepository,
+} from '@coldpbc/nest';
 import { IntegrationsService } from '../../integrations/integrations.service';
 import { EventService } from '../../../utilities/events/event.service';
 import { pick } from 'lodash';
 import { OrganizationHelper } from '../helpers/organization.helper';
+import helper from 'csvtojson';
 
 @Span()
 @Injectable()
@@ -24,6 +37,7 @@ export class OrganizationFilesService extends BaseWorker {
 		readonly s3: S3Service,
 		readonly mqtt: MqttService,
 		readonly helper: OrganizationHelper,
+		readonly suppliers: SuppliersRepository,
 		readonly prisma: PrismaService,
 	) {
 		super('OrganizationFilesService');
@@ -44,6 +58,289 @@ export class OrganizationFilesService extends BaseWorker {
 		if (!this.openAI) {
 			this.logger.error('OpenAI service definition not found; file uploads to openAI will not work');
 		}
+	}
+
+	async importData(req: IRequest, orgId: string, files: Array<Express.Multer.File>) {
+		const { user, url, organization } = req;
+		const existingFiles: any = [];
+
+		const errors: any[] = [];
+		for (const file of files) {
+			try {
+				if (!organization.id) {
+					throw new NotFoundException(`Organization ${orgId} not found`);
+				}
+
+				if (!req.headers['postman-token']) {
+					file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf-8');
+				}
+
+				// Create readable stream of file body
+				const items = await helper({
+					noheader: false,
+					trim: true,
+					ignoreEmpty: true,
+					delimiter: ',',
+				}).fromString(file.buffer.toString('utf-8'));
+
+				for (const item of items) {
+					// Suppliers
+					let supplier: organization_facilities = {} as organization_facilities;
+					const supplierName = item.tier2SupplierName;
+					if (supplierName) {
+						try {
+							try {
+								supplier = (await this.prisma.organization_facilities.findUnique({
+									where: {
+										orgFacilityName: {
+											organization_id: organization.id,
+											name: supplierName,
+										},
+									},
+								})) as unknown as organization_facilities;
+							} catch (e) {
+								this.logger.warn(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
+							}
+
+							if (!supplier) {
+								const matchedSuppliers = (supplierName
+									? await this.suppliers.findByPartialName(organization, user, supplierName.slice(0, 7))
+									: []) as unknown as organization_facilities[];
+
+								if (matchedSuppliers.length < 1) {
+									supplier = (await this.suppliers.createSupplier(organization, user, {
+										name: item.tier2SupplierName,
+										supplier: true,
+										supplier_tier: 2,
+									})) as unknown as organization_facilities;
+								} else {
+									supplier = matchedSuppliers[0];
+								}
+							}
+
+							this.logger.info(`Supplier ${supplier.name} processed`, { organization, user, supplier });
+						} catch (e) {
+							this.logger.error(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
+							errors.push(e);
+						}
+					}
+
+					// Product
+
+					let product;
+
+					try {
+						product = await this.prisma.products.findFirst({
+							where: {
+								organization_id: organization.id,
+								name: item.product_name,
+							},
+						});
+
+						if (!product) {
+							product = await this.prisma.products.create({
+								data: {
+									id: new Cuid2Generator(GuidPrefixes.OrganizationProduct).scopedId,
+									organization_id: organization.id,
+									name: item.productName,
+									created_at: new Date(),
+									updated_at: new Date(),
+									metadata: {},
+								},
+							});
+						}
+
+						if (product) {
+							this.logger.info(`Product ${product.name} processed`, { organization, user, product });
+						}
+					} catch (e) {
+						this.logger.error(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
+						errors.push(e);
+					}
+
+					// Materials
+					if (item.materialName) {
+						let material;
+
+						try {
+							material = await this.prisma.materials.findFirst({
+								where: {
+									organization_id: organization.id,
+									name: item.materialName,
+								},
+							});
+
+							if (!material) {
+								material = await this.prisma.materials.create({
+									data: {
+										id: new Cuid2Generator(GuidPrefixes.Material).scopedId,
+										organization_id: organization.id,
+										name: item.materialName,
+										brand_material_id: item.brandMaterialId,
+										material_category: item.materialCategory,
+										material_subcategory: item.materialSubcategory,
+										created_at: new Date(),
+										updated_at: new Date(),
+									},
+								});
+							}
+
+							if (material) {
+								this.logger.info(`Material ${material.name} processed`, { organization, user, material });
+							}
+						} catch (e) {
+							this.logger.error(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
+							errors.push(e);
+						}
+
+						// Material Suppliers
+						let materialSupplier;
+						if (supplier?.id) {
+							try {
+								materialSupplier = await this.prisma.material_suppliers.findFirst({
+									where: {
+										organization_id: organization.id,
+										material_id: material.id,
+										supplier_id: supplier.id,
+									},
+								});
+
+								if (!materialSupplier) {
+									materialSupplier = await this.prisma.material_suppliers.create({
+										data: {
+											id: new Cuid2Generator(GuidPrefixes.MaterialSupplier).scopedId,
+											organization_id: organization.id,
+											material_id: material.id,
+											supplier_id: supplier.id,
+											created_at: new Date(),
+											updated_at: new Date(),
+										},
+									});
+								}
+
+								if (materialSupplier) {
+									this.logger.info(`Material Supplier ${materialSupplier.id} processed`, { organization, user, materialSupplier });
+								}
+							} catch (e) {
+								this.logger.error(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
+								errors.push(e);
+							}
+						}
+
+						// Product Materials
+						let productMaterial;
+
+						try {
+							productMaterial = await this.prisma.product_materials.findFirst({
+								where: {
+									organization_id: organization.id,
+									product_id: product.id,
+									material_id: material.id,
+								},
+							});
+
+							if (!productMaterial) {
+								productMaterial = await this.prisma.product_materials.create({
+									data: {
+										id: new Cuid2Generator(GuidPrefixes.OrganizationProductMaterial).scopedId,
+										organization_id: organization.id,
+										product_id: product.id,
+										material_id: material.id,
+										material_supplier_id: materialSupplier?.id,
+										unit_of_measure: item.unitOfMeasure,
+										yield: +item.yield,
+										created_at: new Date(),
+										updated_at: new Date(),
+									},
+								});
+							}
+
+							if (productMaterial) {
+								this.logger.info(`Product Material ${productMaterial.id} processed`, { organization, user, productMaterial });
+							}
+						} catch (e) {
+							this.logger.error(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
+						}
+					}
+
+					//await this.events.sendIntegrationEvent(false, 'file.uploaded', { file, organization }, user);
+
+					this.metrics.increment('cold.file.import.items', 1, {
+						status: 'complete',
+						organization_id: organization.id,
+						organization_name: organization.name,
+						user_email: user.coldclimate_claims.email,
+						isTestOrg: organization.isTest.toString(),
+					});
+				}
+
+				this.metrics.increment('cold.file.import', 1, {
+					status: 'complete',
+					organization_id: organization.id,
+					organization_name: organization.name,
+					user_email: user.coldclimate_claims.email,
+					isTestOrg: organization.isTest.toString(),
+				});
+				this.metrics.event(
+					'Import File Uploaded',
+					`A file was uploaded by ${user.coldclimate_claims.email} for ${organization.name}`,
+					{
+						alert_type: 'success',
+						date_happened: new Date(),
+						priority: 'normal',
+					},
+					{
+						isTest: organization.isTest.toString(),
+						status: 'complete',
+						organization_id: organization.id,
+						organization_name: organization.name,
+						email: user.coldclimate_claims.email,
+					},
+				);
+			} catch (e) {
+				this.logger.error(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
+
+				this.metrics.increment('cold.file.import.uploaded', 1, {
+					status: 'failed',
+					organization_id: organization.id,
+					organization_name: organization.name,
+					user_email: user.coldclimate_claims.email,
+					isTestOrg: organization.isTest.toString(),
+				});
+
+				/*	this.mqtt.publishMQTT('ui', {
+					resource: 'import_files',
+					org_id: orgId,
+					user: user,
+					swr_key: url,
+					action: 'create',
+					status: 'failed',
+					data: {
+						error: e.message,
+						file: pick(file, ['id', 'original_name', 'mimetype', 'size']),
+					},
+				});*/
+
+				this.metrics.event(
+					'Import File Upload Failed',
+					`A file upload attempt by ${user.coldclimate_claims.email} for ${organization.name} failed`,
+					{
+						alert_type: 'error',
+						date_happened: new Date(),
+						priority: 'normal',
+					},
+					{
+						isTest: organization.isTest.toString(),
+						organization_id: organization.id,
+						organization_name: organization.name,
+						email: user.coldclimate_claims.email,
+					},
+				);
+				throw e;
+			}
+		}
+
+		return { errors };
 	}
 
 	async getFiles(req: IRequest, orgId: string, bpc?: boolean): Promise<any> {
