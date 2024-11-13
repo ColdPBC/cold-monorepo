@@ -35,6 +35,7 @@ export const MqttResourceSchema = z.enum([
 	'organization_compliance_statuses',
 	'organization_facilities',
 	'organization_files',
+	'import_files',
 	'organizations',
 	'policy_data',
 	'policy_definitions',
