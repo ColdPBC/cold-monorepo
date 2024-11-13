@@ -1,9 +1,10 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Global, Module } from '@nestjs/common';
 import { ColdRabbitService } from './rabbit.service';
 import { ConfigModule } from '@nestjs/config';
 import { EventService } from './event.service';
 
+@Global()
 @Module({})
 export class ColdRabbitModule {
 	static async forRootAsync(): Promise<DynamicModule> {
