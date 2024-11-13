@@ -672,6 +672,40 @@ export const GET_MATERIAL = gql`
   }
 `;
 
+export const GET_SUSTAINABILITY_ATTRIBUTE = gql`
+  query GetSustainabilityAttribute($id: ID!, $organizationId: ID!) {
+    sustainabilityAttribute(id: $id) {
+      id
+      level
+      logoUrl
+      name
+      attributeAssurances(filter: { organization: { id: $organizationId } }) {
+        id
+        effectiveEndDate
+        material {
+          id
+          name
+        }
+        organizationFile {
+          id
+        }
+        organization {
+          id
+          name
+        }
+        organizationFacility {
+          id
+          name
+        }
+        product {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -700,4 +734,5 @@ export const queries: {
   GET_SUPPLIER: GET_SUPPLIER,
   GET_PRODUCT: GET_PRODUCT,
   GET_MATERIAL: GET_MATERIAL,
+  GET_SUSTAINABILITY_ATTRIBUTE: GET_SUSTAINABILITY_ATTRIBUTE,
 };

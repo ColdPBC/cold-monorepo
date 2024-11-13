@@ -18,6 +18,7 @@ import {
   SupplierDetail, SupplierRoutes,
   SuppliersPage,
   SustainabilityPage,
+  SustainabilityAttributeDetail,
   Terms,
   UserSettingsPage,
   WizardRoutes,
@@ -40,6 +41,7 @@ export const ColdRoutes = () => {
         {QuestionnaireRoutes()}
         {ldFlags.showActions261 && <Route path={'/actions'} element={<ActionsOverview />} />}
         <Route path={'/sustainability'} element={<SustainabilityPage />} />
+        {ldFlags.cold1220SustainabilityAttributePage && <Route path={'/sustainability/:id'} element={<SustainabilityAttributeDetail />} />}
         <Route path={'/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
         <Route path={'/documents'} element={ldFlags.showNewDocumentsPage ? <DocumentsPage /> : <DocumentUpload />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />

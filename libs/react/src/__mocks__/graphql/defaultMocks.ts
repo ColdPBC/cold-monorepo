@@ -14,7 +14,7 @@ import {
   GET_ALL_SUS_ATTRIBUTES,
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG, GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS,
   GET_PRODUCT,
-  GET_SUPPLIER,
+  GET_SUPPLIER, GET_SUSTAINABILITY_ATTRIBUTE,
   UPDATE_DOCUMENT_ASSURANCE,
   UPDATE_DOCUMENT_FIELDS,
 } from '@coldpbc/lib';
@@ -629,6 +629,32 @@ export const sustainabilityAttributesMocks = [
               level: 'SUPPLIER',
             }
           ],
+        },
+      }),
+  },
+  {
+    query: GET_SUSTAINABILITY_ATTRIBUTE,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          sustainabilityAttribute: {
+            id: 'a',
+            name: 'Global Recycled Standard',
+            logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
+            attributeAssurances: [
+              {
+                id: 'a',
+                effectiveEndDate: addDays(new Date(), 100),
+                material: {
+                  id: 'mat_1',
+                },
+                organizationFile: {
+                  id: 'doc_1',
+                },
+              }
+            ],
+            level: 'MATERIAL',
+          },
         },
       }),
   }
