@@ -1,3 +1,10 @@
+# [1.474.0](https://github.com/coldPBC/cold-monorepo/compare/v1.473.0...v1.474.0) (2024-11-13)
+
+
+### Features
+
+* new (very basic) sustainability attribute page ([e64b318](https://github.com/coldPBC/cold-monorepo/commit/e64b318946979b30e4f3071fa062388a594b3116))
+
 # [1.473.0](https://github.com/coldPBC/cold-monorepo/compare/v1.472.0...v1.473.0) (2024-11-13)
 
 
