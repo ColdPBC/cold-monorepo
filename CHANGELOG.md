@@ -1,3 +1,23 @@
+# [1.475.0](https://github.com/coldPBC/cold-monorepo/compare/v1.474.0...v1.475.0) (2024-11-13)
+
+
+### Bug Fixes
+
+* enhance classification logic and schema ([b281c88](https://github.com/coldPBC/cold-monorepo/commit/b281c88d5cac18c3a0f638527bc6b2bbccd1316e))
+* **pinecone.service:** handle document processing and adjust content length validation ([a29c2f2](https://github.com/coldPBC/cold-monorepo/commit/a29c2f2a439905abdb4021f9a5af595e71ac248e))
+* update description for supplier name field ([dbf438f](https://github.com/coldPBC/cold-monorepo/commit/dbf438fcc3eea32424fafa8083b5889d1a703d4f))
+
+
+### Features
+
+* add content length check for PDF extraction fallback to image conversion ([60e4348](https://github.com/coldPBC/cold-monorepo/commit/60e4348bc6da58d8a56ce8e8b8998083eaee635d))
+* add supplier agreement and statement extraction prompts ([1d88573](https://github.com/coldPBC/cold-monorepo/commit/1d8857380c690fa37bc9619c156253893662a545))
+* add SUPPLIER_STATEMENT and SUPPLIER_AGREEMENT to file_types enum ([93da2d8](https://github.com/coldPBC/cold-monorepo/commit/93da2d85a55207c7dd6a0feb98e599e4546eab78))
+* designate ColdRabbitModule as a global module ([033100b](https://github.com/coldPBC/cold-monorepo/commit/033100b6623f28a2b8665e878ee521f1536dbf4c))
+* enhance ExtractionService with new schemas and improved matching logic ([8da8400](https://github.com/coldPBC/cold-monorepo/commit/8da8400a3f30ab47ac47675e4df3a4df6c0dbd31))
+* enhance module exports ([4259d78](https://github.com/coldPBC/cold-monorepo/commit/4259d78ee65094d453e34352a26028a55c66b66c))
+* integrate redactor service into worker logger for improved logging security ([c63d27b](https://github.com/coldPBC/cold-monorepo/commit/c63d27b0bf921a3d18605472a16daac2244a469f))
+
 # [1.474.0](https://github.com/coldPBC/cold-monorepo/compare/v1.473.0...v1.474.0) (2024-11-13)
 
 
