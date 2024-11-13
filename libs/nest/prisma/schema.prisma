@@ -1168,6 +1168,8 @@ enum claim_levels {
 }
 
 enum file_types {
+	SUPPLIER_STATEMENT
+	SUPPLIER_AGREEMENT
   AUDIT_REPORT
   CERTIFICATE
   TEST_REPORT

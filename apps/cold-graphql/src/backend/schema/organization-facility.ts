@@ -60,6 +60,15 @@ export class OrganizationFacility {
 	@Field(() => Number, { nullable: true })
 	supplierTier?: number;
 
+	@Field(() => String, { nullable: true })
+	brandFacilityId?: string;
+
+	@Field(() => String, { nullable: true })
+	category?: string;
+
+	@Field(() => String, { nullable: true })
+	subcategory?: string;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'organizationFacility' })
 	attributeAssurances!: AttributeAssurance[];
 

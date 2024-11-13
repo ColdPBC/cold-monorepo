@@ -67,6 +67,15 @@ export class OrganizationFacility {
 	@Property({ type: 'integer', nullable: true })
 	supplierTier?: number;
 
+	@Property({ type: 'text', nullable: true })
+	brandFacilityId?: string;
+
+	@Property({ type: 'text', nullable: true })
+	category?: string;
+
+	@Property({ type: 'text', nullable: true })
+	subcategory?: string;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'organizationFacility' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 
