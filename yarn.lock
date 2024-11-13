@@ -24864,7 +24864,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bluebird@npm:^3.5.5, bluebird@npm:^3.7.2":
+"bluebird@npm:^3.5.1, bluebird@npm:^3.5.5, bluebird@npm:^3.7.2":
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
   checksum: 10/007c7bad22c5d799c8dd49c85b47d012a1fe3045be57447721e6afbd1d5be43237af1db62e26cb9b0d9ba812d2e4ca3bac82f6d7e016b6b88de06ee25ceb96e7
@@ -26910,6 +26910,7 @@ __metadata:
     class-validator: "npm:^0.14.0"
     clsx: "npm:^2.0.0"
     concurrently: "npm:^8.2.2"
+    csvtojson: "npm:^2.0.10"
     cz-conventional-changelog: "npm:^3.3.0"
     d3-dsv: "npm:2"
     date-fns: "npm:^2.30.0"
@@ -27056,6 +27057,7 @@ __metadata:
     web-vitals: "npm:^2.1.4"
     winston: "npm:^3.14.2"
     xlsx: "npm:^0.18.5"
+    yargs: "npm:^17.7.2"
     yarn: "npm:^1.22.22"
     zod: "npm:^3.23.8"
     zod-prisma-types: "npm:^2.7.9"
@@ -28646,6 +28648,19 @@ __metadata:
   version: 5.5.6
   resolution: "csv-parse@npm:5.5.6"
   checksum: 10/8682bd3846d8159eb6f686423d16493fffeceeef742d947e39ea3a3fb9b4a243b41a4cfbac56d721a2f7825b01335ba9b993bf68c4817e7abee0bd20754ee78d
+  languageName: node
+  linkType: hard
+
+"csvtojson@npm:^2.0.10":
+  version: 2.0.10
+  resolution: "csvtojson@npm:2.0.10"
+  dependencies:
+    bluebird: "npm:^3.5.1"
+    lodash: "npm:^4.17.3"
+    strip-bom: "npm:^2.0.0"
+  bin:
+    csvtojson: ./bin/csvtojson
+  checksum: 10/253ba22c85b8aeb844896468be702949f515b7c5f76aa675a3a8b5eff965445c9c567951f2e6813e7cc173db71ce25e070523a4fc05e36c428d6cb7f3dc34e04
   languageName: node
   linkType: hard
 
@@ -40609,7 +40624,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:~4.17.0, lodash@npm:~4.17.15":
+"lodash@npm:4.17.21, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.3, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:~4.17.0, lodash@npm:~4.17.15":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10/c08619c038846ea6ac754abd6dd29d2568aa705feb69339e836dfa8d8b09abbb2f859371e86863eda41848221f9af43714491467b5b0299122431e202bb0c532
