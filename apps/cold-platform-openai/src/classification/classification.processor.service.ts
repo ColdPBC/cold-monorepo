@@ -59,7 +59,7 @@ export class ClassificationProcessorService extends BaseWorker {
 				// Extract raw content from the document for classification
 				content = await this.extraction.extractTextFromPDF(fileBytes, filePayload, user, organization);
 
-				if (!content) {
+				if (!content || content.length < 256) {
 					// attempt to convert pdf pages to array of OpenAI content objects which contain base64 image urls
 					openAiImageUrlContent = await this.extraction.convertPDFPagesToImages(fileBytes, filePayload, user, organization);
 				}
@@ -72,7 +72,7 @@ export class ClassificationProcessorService extends BaseWorker {
 			let classification: any;
 			let extractionJobData = {} as ExtractionJobPayload;
 
-			if (content) {
+			if (content && content.length > 256) {
 				// classify text content and add to extraction queue
 				classification = await this.classification.classifyContent(content, user, filePayload, organization);
 				extractionJobData = { content, extension, classification, filePayload, user, organization, attributes: this.classification.sus_attributes };
