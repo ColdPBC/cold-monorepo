@@ -31,7 +31,8 @@ import {
   addTZOffset,
   areArraysEqual,
   getEffectiveEndDate,
-  getEffectiveStartDate, getEntityId,
+  getEffectiveStartDate,
+  getEntity,
   removeTZOffset,
   toSentenceCase,
 } from '@coldpbc/lib';
@@ -62,7 +63,7 @@ const getUpdatedEntities = (file: FilesWithAssurances, fileState: DocumentDetail
     const assuranceIdsToDelete: string[] = [];
 
     file.attributeAssurances.forEach(attributeAssurance => {
-      const entityId = getEntityId(entityLevel, attributeAssurance);
+      const entityId = getEntity(entityLevel, attributeAssurance)?.id;
 
       if (entityId && intendedEntities.includes(entityId)) {
         assuranceIdsToUpdate.push(attributeAssurance.id);
@@ -180,7 +181,7 @@ const _DocumentDetailsSidebar = (props: {
 	const getInitialFileState = (file: FilesWithAssurances | undefined): DocumentDetailsSidebarFileState | undefined => {
 		if (file) {
 			const sustainabilityAttribute = file.attributeAssurances[0]?.sustainabilityAttribute;
-      const entityIds = sustainabilityAttribute ? file.attributeAssurances.map(assurance => getEntityId(sustainabilityAttribute.level, assurance)).filter(id => typeof id === 'string') : [];
+      const entityIds = sustainabilityAttribute ? file.attributeAssurances.map(assurance => getEntity(sustainabilityAttribute.level, assurance)?.id).filter(id => typeof id === 'string') : [];
 
       const fileState: DocumentDetailsSidebarFileState = {
 				id: file.id,

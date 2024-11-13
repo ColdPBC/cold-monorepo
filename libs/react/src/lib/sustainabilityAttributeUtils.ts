@@ -256,12 +256,12 @@ export const filterAttributes = (attributes: SustainabilityAttribute[], level: E
 }
 
 
-export const getEntityId = (entityLevel: EntityLevel, attributeAssurance: SustainabilityAttributeAssuranceGraphQL | AttributeAssurance) => {
+export const getEntity = (entityLevel: EntityLevel, attributeAssurance: SustainabilityAttributeAssuranceGraphQL | AttributeAssurance) => {
   const entityMap = {
-    [EntityLevel.MATERIAL]: attributeAssurance.material?.id,
-    [EntityLevel.PRODUCT]: attributeAssurance.product?.id,
-    [EntityLevel.SUPPLIER]: attributeAssurance.organizationFacility?.id,
-    [EntityLevel.ORGANIZATION]: attributeAssurance.organization?.id,
+    [EntityLevel.MATERIAL]: attributeAssurance.material,
+    [EntityLevel.PRODUCT]: attributeAssurance.product,
+    [EntityLevel.SUPPLIER]: attributeAssurance.organizationFacility,
+    [EntityLevel.ORGANIZATION]: attributeAssurance.organization,
   };
 
   return entityMap[entityLevel];
