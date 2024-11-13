@@ -87,6 +87,25 @@ export class OrganizationFilesController implements OnModuleInit {
 		}
 	}
 
+	@Post('import')
+	@Roles(...allRoles)
+	@UseInterceptors(AnyFilesInterceptor())
+	async import(
+		@Param('orgId') orgId: string,
+		@Query('bpc') bpc: boolean,
+		@UploadedFiles()
+		file: Array<Express.Multer.File>,
+		@Req()
+		req: IRequest,
+	) {
+		try {
+			return this.orgFiles.importData(req, orgId, file);
+		} catch (error) {
+			console.error('Error uploading file:', error.message);
+			throw new Error('Failed to process the uploaded file.');
+		}
+	}
+
 	@Patch(`:id`)
 	@Roles(...allRoles)
 	@UseInterceptors(AnyFilesInterceptor())
