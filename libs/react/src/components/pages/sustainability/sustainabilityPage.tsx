@@ -5,6 +5,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { get } from 'lodash';
+import { EntityLevel } from '@coldpbc/enums';
 
 const _SustainabilityPage = () => {
   const { logBrowser } = useColdContext();
@@ -35,9 +36,9 @@ const _SustainabilityPage = () => {
   }
 
   const sustainabilityAttributesGraphQL: SustainabilityAttributeGraphQL[] = get(sustainabilityAttributesQuery.data, 'data.sustainabilityAttributes', [])
-  const sustainabilityAttributes: SustainabilityAttribute[] = processSustainabilityAttributeDataFromGraphQL(sustainabilityAttributesGraphQL).sort(
-    (a, b) => a.name.localeCompare(b.name)
-  );
+  const sustainabilityAttributes: SustainabilityAttribute[] = processSustainabilityAttributeDataFromGraphQL(sustainabilityAttributesGraphQL)
+    .filter(attribute => attribute.level !== EntityLevel.ORGANIZATION)
+    .sort((a, b) => a.name.localeCompare(b.name));
   const myAttributes = sustainabilityAttributes.filter(attribute => (attribute.attributeAssurances?.length || 0) > 0);
   const otherAttributes = sustainabilityAttributes.filter(attribute => (attribute.attributeAssurances?.length || 0) === 0);
 
