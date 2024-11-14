@@ -40,4 +40,10 @@ export class ProductMaterial {
 
 	@Field(() => Number, { nullable: true })
 	yield?: number;
+
+	@Field(() => String, { nullable: true })
+	bomSection?: string;
+
+	@Field(() => String, { nullable: true })
+	placement?: string;
 }
