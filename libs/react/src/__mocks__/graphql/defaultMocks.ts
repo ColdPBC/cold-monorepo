@@ -660,6 +660,15 @@ export const sustainabilityAttributesMocks = [
                 organizationFile: {
                   id: 'doc_1',
                 },
+              },
+              {
+                id: 'b',
+                effectiveEndDate: null,
+                material: {
+                  id: getMaterialsMocksWithAssurances()[1].id,
+                  name: getMaterialsMocksWithAssurances()[1].name,
+                },
+                organizationFile: null,
               }
             ],
             level: 'MATERIAL',
