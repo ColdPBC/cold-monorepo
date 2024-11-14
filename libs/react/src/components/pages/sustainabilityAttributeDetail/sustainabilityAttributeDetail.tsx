@@ -50,7 +50,13 @@ export const _SustainabilityAttributeDetail = () => {
   const subtitle = [levelLabel].filter(val => !!val).join(' | ');
 
   return (
-    <MainContent title={sustainabilityAttribute.name} subTitle={subtitle} breadcrumbs={[{ label: 'Sustainability', href: '/sustainability' }, { label: sustainabilityAttribute.name }]} className={'w-[calc(100%)]'}>
+    <MainContent
+      title={sustainabilityAttribute.name}
+      subTitle={subtitle}
+      imageUrl={sustainabilityAttribute.logoUrl}
+      breadcrumbs={[{ label: 'Sustainability', href: '/sustainability' }, { label: sustainabilityAttribute.name }]}
+      className={'w-[calc(100%)]'}
+    >
     </MainContent>
   );
 };
