@@ -2,6 +2,7 @@ import {
   AttributeAssurance,
   EntityLevelAttributeAssuranceGraphQL,
   EntityWithAttributeAssurances,
+  AttributeAssuranceGraphData,
   SustainabilityAttribute,
   SustainabilityAttributeAssurance,
   SustainabilityAttributeAssuranceGraphQL,
@@ -256,4 +257,29 @@ export const getEntity = (entityLevel: EntityLevel, attributeAssurance: Sustaina
   };
 
   return entityMap[entityLevel];
+}
+
+export function processSustainabilityAttributeForGraph(attribute: SustainabilityAttribute): AttributeAssuranceGraphData {
+  const result: AttributeAssuranceGraphData = {
+    activeCount: 0,
+    inactiveCount: 0,
+    notDocumentedCount: 0,
+  };
+
+  attribute.attributeAssurances.forEach((assurance) => {
+    switch(assurance.status) {
+      case AttributeAssuranceStatus.ACTIVE:
+      case AttributeAssuranceStatus.EXPIRING:
+        result.activeCount++;
+        break;
+      case AttributeAssuranceStatus.EXPIRED:
+      case AttributeAssuranceStatus.MISSING_DATE:
+        result.inactiveCount++;
+        break;
+      default:
+        result.notDocumentedCount++;
+    }
+  });
+
+  return result;
 }

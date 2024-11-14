@@ -5,13 +5,15 @@ import { toSentenceCase } from '@coldpbc/lib';
 interface AttributeAssuranceMockParams {
 	entity: EntityLevel;
 	status: AttributeAssuranceStatus;
-	index: number;
+  index: number;
+  id?: string;
 }
 
 export const AttributeAssuranceMock = ({
   entity,
   status,
-  index
+  index,
+  id
 }: AttributeAssuranceMockParams) => {
   let effectiveEndDate: Date | null;
 
@@ -31,7 +33,7 @@ export const AttributeAssuranceMock = ({
 
   return {
     entity: {
-      id: index.toString(),
+      id: id || index.toString(),
       name: `${toSentenceCase(entity)} ${index}`,
       supplierName: entity === EntityLevel.MATERIAL ? `Tier 2 Supplier ${Math.floor(index / 2) + 1}` : undefined,
     },

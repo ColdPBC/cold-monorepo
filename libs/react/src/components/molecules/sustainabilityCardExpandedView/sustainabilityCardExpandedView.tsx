@@ -1,7 +1,7 @@
 import React from 'react';
 import { SustainabilityAttribute} from '@coldpbc/interfaces';
 import {
-  AttributeAssuranceGraph,
+  AttributeAssuranceStatusGraph,
   AttributeAssuranceStatusLabel, ColdIcon,
   ErrorFallback,
   MuiDataGrid, Popover,
@@ -96,7 +96,7 @@ const _SustainabilityCardExpandedView: React.FC<SustainabilityCardExpandedViewPr
 					<ColdIcon name={IconNames.ColdInfoIcon} />
 				</Popover>
 			</div>
-			<AttributeAssuranceGraph sustainabilityAttribute={sustainabilityAttribute} showHeader={false} />
+			<AttributeAssuranceStatusGraph sustainabilityAttribute={sustainabilityAttribute} showHeader={false} />
 			<div className="w-full rounded-xl overflow-hidden border border-gray-30">
 				<MuiDataGrid rows={rows} columns={columns} columnHeaderHeight={32} rowHeight={32} hideFooter={true} disableColumnMenu={true} disableRowSelectionOnClick={true} />
 			</div>

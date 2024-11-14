@@ -1,12 +1,12 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { AttributeAssuranceGraph } from '@coldpbc/components';
+import { AttributeAssuranceStatusGraph } from '@coldpbc/components';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 import { AttributeAssuranceMock } from '@coldpbc/mocks';
 
-const meta: Meta<typeof AttributeAssuranceGraph> = {
-	title: 'Molecules/AttributeAssuranceGraph',
-	component: AttributeAssuranceGraph,
+const meta: Meta<typeof AttributeAssuranceStatusGraph> = {
+	title: 'Molecules/AttributeAssuranceStatusGraph',
+	component: AttributeAssuranceStatusGraph,
 	tags: ['autodocs'],
 	decorators: [],
 };
