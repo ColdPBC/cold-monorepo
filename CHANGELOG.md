@@ -1,3 +1,10 @@
+# [1.478.0](https://github.com/coldPBC/cold-monorepo/compare/v1.477.0...v1.478.0) (2024-11-14)
+
+
+### Features
+
+* new graph component ([5bbd4dd](https://github.com/coldPBC/cold-monorepo/commit/5bbd4ddf68d2e46e4df3cc5e0f92db983cf7191f))
+
 # [1.477.0](https://github.com/coldPBC/cold-monorepo/compare/v1.476.0...v1.477.0) (2024-11-14)
 
 
