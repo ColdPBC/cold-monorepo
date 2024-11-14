@@ -1,3 +1,11 @@
+## [1.478.1](https://github.com/coldPBC/cold-monorepo/compare/v1.478.0...v1.478.1) (2024-11-14)
+
+
+### Bug Fixes
+
+* allow tier 1 supplier to be null ([2ae3443](https://github.com/coldPBC/cold-monorepo/commit/2ae34438cfb93c443752771a2031fb4fc6792537))
+* allow tier 1 supplier to be null ([#685](https://github.com/coldPBC/cold-monorepo/issues/685)) ([5876bb5](https://github.com/coldPBC/cold-monorepo/commit/5876bb5f2a138ad10bd1857b39e842cea969cd93))
+
 # [1.478.0](https://github.com/coldPBC/cold-monorepo/compare/v1.477.0...v1.478.0) (2024-11-14)
 
 
