@@ -46,7 +46,7 @@ export const AttributeAssuranceCountGraph: React.FC<AttributeAssuranceCountGraph
 				<div>
 					<div className="h-1 w-full flex rounded-full overflow-hidden">
 						<div className={accentColor} style={{ width: `${hasAttributePercentage}%` }} />
-						<div className="bg-gray-400" style={{ width: `${doesNotHavePercentage}%` }} />
+						<div className="bg-gray-90" style={{ width: `${doesNotHavePercentage}%` }} />
 					</div>
 
 					<div className="flex items-start justify-items-center text-label text-cold-secondary mt-1 gap-4">
