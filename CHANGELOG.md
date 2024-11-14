@@ -1,3 +1,10 @@
+# [1.476.0](https://github.com/coldPBC/cold-monorepo/compare/v1.475.1...v1.476.0) (2024-11-14)
+
+
+### Features
+
+* add image to sustainability attribute detail page ([bc82581](https://github.com/coldPBC/cold-monorepo/commit/bc825810eb59913d145e6986bafd0d7982d13228))
+
 ## [1.475.1](https://github.com/coldPBC/cold-monorepo/compare/v1.475.0...v1.475.1) (2024-11-14)
 
 
