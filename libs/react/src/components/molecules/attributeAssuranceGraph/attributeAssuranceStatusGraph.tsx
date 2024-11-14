@@ -1,50 +1,19 @@
 import React from 'react';
-import { AttributeAssuranceStatus, EntityLevel, IconNames } from '@coldpbc/enums';
+import { EntityLevel, IconNames } from '@coldpbc/enums';
 import { ColdIcon, Popover } from '@coldpbc/components';
-import { pluralize, toSentenceCase } from '@coldpbc/lib';
+import { pluralize, toSentenceCase, processSustainabilityAttributeForGraph } from '@coldpbc/lib';
 import { SustainabilityAttribute } from '@coldpbc/interfaces';
 
-interface AttributeAssuranceGraphProps {
+interface AttributeAssuranceStatusGraphProps {
   sustainabilityAttribute: SustainabilityAttribute;
   showHeader?: boolean;
 }
 
-interface GraphData {
-  activeCount: number;
-  inactiveCount: number;
-  notDocumentedCount: number;
-}
-
-function processSustainabilityAttribute(attribute: SustainabilityAttribute): GraphData {
-  const result: GraphData = {
-    activeCount: 0,
-    inactiveCount: 0,
-    notDocumentedCount: 0,
-  };
-
-  attribute.attributeAssurances.forEach((assurance) => {
-    switch(assurance.status) {
-      case AttributeAssuranceStatus.ACTIVE:
-      case AttributeAssuranceStatus.EXPIRING:
-        result.activeCount++;
-        break;
-      case AttributeAssuranceStatus.EXPIRED:
-      case AttributeAssuranceStatus.MISSING_DATE:
-        result.inactiveCount++;
-        break;
-      default:
-        result.notDocumentedCount++;
-    }
-  });
-
-  return result;
-}
-
-export const AttributeAssuranceGraph: React.FC<AttributeAssuranceGraphProps> = ({
+export const AttributeAssuranceStatusGraph: React.FC<AttributeAssuranceStatusGraphProps> = ({
   sustainabilityAttribute,
   showHeader = true,
 }) => {
-  const { activeCount, inactiveCount, notDocumentedCount } = processSustainabilityAttribute(sustainabilityAttribute)
+  const { activeCount, inactiveCount, notDocumentedCount } = processSustainabilityAttributeForGraph(sustainabilityAttribute)
 
   const total = activeCount + inactiveCount + notDocumentedCount;
   const documentedCount = activeCount + inactiveCount;

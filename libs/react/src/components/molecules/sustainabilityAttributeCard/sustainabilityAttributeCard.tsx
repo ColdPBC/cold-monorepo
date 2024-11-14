@@ -3,7 +3,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import {
   AttributeAssuranceEntityDetail,
-  AttributeAssuranceGraph,
+  AttributeAssuranceStatusGraph,
   AttributeAssuranceSingleStatus,
   SustainabilityCardExpandedView,
 } from '@coldpbc/components';
@@ -60,7 +60,7 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
       case SustainabilityAttributeCardStyle.GRAPH:
       default:
         return (
-          <AttributeAssuranceGraph sustainabilityAttribute={sustainabilityAttribute} />
+          <AttributeAssuranceStatusGraph sustainabilityAttribute={sustainabilityAttribute} />
         );
     }
   };

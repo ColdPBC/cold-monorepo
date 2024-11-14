@@ -72,3 +72,10 @@ export interface SustainabilityAttributeAssuranceGraphQL {
     name: string;
   } | null;
 }
+
+// Used for attribute assurance graphs
+export interface AttributeAssuranceGraphData {
+  activeCount: number;
+  inactiveCount: number;
+  notDocumentedCount: number;
+}
