@@ -54,7 +54,7 @@ export interface MaterialsWithRelations extends Materials {
       organizationFacility: {
         id: string;
         name: string;
-      };
+      } | null;
       attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
     };
   }[];
