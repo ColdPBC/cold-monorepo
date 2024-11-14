@@ -21,6 +21,7 @@ import { EventService } from '../../../utilities/events/event.service';
 import { omit, pick } from 'lodash';
 import { OrganizationHelper } from '../helpers/organization.helper';
 import helper from 'csvtojson';
+import { material_suppliers, materials, products } from '@prisma/client';
 
 @Span()
 @Injectable()
@@ -127,15 +128,15 @@ export class OrganizationFilesService extends BaseWorker {
 
 					// Product
 
-					let product;
+					let product: products;
 
 					try {
-						product = await this.prisma.products.findFirst({
+						product = (await this.prisma.products.findFirst({
 							where: {
 								organization_id: organization.id,
-								name: item.product_name,
+								name: item.productName,
 							},
-						});
+						})) as products;
 
 						if (!product) {
 							product = await this.prisma.products.create({
@@ -146,126 +147,185 @@ export class OrganizationFilesService extends BaseWorker {
 									created_at: new Date(),
 									updated_at: new Date(),
 									metadata: {},
+									season_code: item.seasonCode,
+									style_code: item.seasonYear,
+									supplier_id: item.tier1SupplierId,
+									upc_code: item.upcCode,
+									brand_product_id: item.brandProductId,
+									supplier_product_id: item.supplierProductId,
+									product_category: item.productCategory,
+									product_subcategory: item.productSubcategory,
+									brand_product_sku: item.brandProductSku,
+								},
+							});
+						} else {
+							product = await this.prisma.products.update({
+								where: {
+									id: product.id,
+								},
+								data: {
+									updated_at: new Date(),
+									season_code: item.seasonCode || product.season_code,
+									style_code: item.seasonYear || product.season_code,
+									supplier_id: item.tier1SupplierId || product.supplier_id,
+									upc_code: item.upcCode || product.upc_code,
+									brand_product_id: item.brandProductId || product.brand_product_id,
+									supplier_product_id: item.supplierProductId || product.supplier_product_id,
+									product_category: item.productCategory || product.product_category,
+									product_subcategory: item.productSubcategory || product.product_subcategory,
+									brand_product_sku: item.brandProductSku || product.brand_product_sku,
 								},
 							});
 						}
 
 						if (product) {
 							this.logger.info(`Product ${product.name} processed`, { organization, user, product });
+
+							// Materials
+							if (item.materialName) {
+								let material: materials;
+
+								try {
+									material = (await this.prisma.materials.findFirst({
+										where: {
+											organization_id: organization.id,
+											name: item.materialName,
+										},
+									})) as materials;
+
+									if (!material) {
+										material = await this.prisma.materials.create({
+											data: {
+												id: new Cuid2Generator(GuidPrefixes.Material).scopedId,
+												organization_id: organization.id,
+												name: item.materialName,
+												brand_material_id: item.brandMaterialId,
+												material_category: item.materialCategory,
+												supplier_material_id: item.supplierMaterialId,
+												material_subcategory: item.materialSubcategory,
+												created_at: new Date(),
+												updated_at: new Date(),
+											},
+										});
+									} else {
+										material = await this.prisma.materials.update({
+											where: {
+												id: material.id,
+											},
+											data: {
+												updated_at: new Date(),
+												brand_material_id: item.brandMaterialId || material.brand_material_id,
+												material_category: item.materialCategory || material.material_category,
+												material_subcategory: item.materialSubcategory || material.material_subcategory,
+												supplier_material_id: item.supplierMaterialId || material.supplier_material_id,
+											},
+										});
+									}
+
+									if (material) {
+										this.logger.info(`Material ${material.name} processed`, { organization, user, material });
+									}
+
+									// Material Suppliers
+									let materialSupplier: material_suppliers;
+
+									if (supplier?.id) {
+										try {
+											materialSupplier = (await this.prisma.material_suppliers.findFirst({
+												where: {
+													organization_id: organization.id,
+													material_id: material.id,
+													supplier_id: supplier.id,
+												},
+											})) as material_suppliers;
+
+											if (!materialSupplier) {
+												materialSupplier = await this.prisma.material_suppliers.create({
+													data: {
+														id: new Cuid2Generator(GuidPrefixes.MaterialSupplier).scopedId,
+														organization_id: organization.id,
+														material_id: material.id,
+														supplier_id: supplier.id,
+														supplier_product_id: item.supplierProductId,
+														created_at: new Date(),
+														updated_at: new Date(),
+													},
+												});
+											}
+
+											if (materialSupplier) {
+												this.logger.info(`Material Supplier ${materialSupplier.id} processed`, { organization, user, materialSupplier });
+
+												// Product Materials
+												let productMaterial;
+
+												try {
+													productMaterial = await this.prisma.product_materials.findFirst({
+														where: {
+															organization_id: organization.id,
+															product_id: product.id,
+															material_id: material.id,
+														},
+													});
+
+													if (!productMaterial) {
+														productMaterial = await this.prisma.product_materials.create({
+															data: {
+																id: new Cuid2Generator(GuidPrefixes.OrganizationProductMaterial).scopedId,
+																organization_id: organization.id,
+																product_id: product.id,
+																material_id: material.id,
+																placement: item.placement,
+																bom_section: item.bomSection,
+																material_supplier_id: materialSupplier?.id,
+																unit_of_measure: item.unitOfMeasure,
+																yield: +item.yield,
+																created_at: new Date(),
+																updated_at: new Date(),
+															},
+														});
+													} else {
+														productMaterial = await this.prisma.product_materials.update({
+															where: {
+																id: productMaterial.id,
+															},
+															data: {
+																updated_at: new Date(),
+																placement: item.placement,
+																bom_section: item.bomSection,
+																material_supplier_id: materialSupplier?.id,
+																unit_of_measure: item.unitOfMeasure,
+																yield: +item.yield,
+															},
+														});
+													}
+
+													if (productMaterial) {
+														this.logger.info(`Product Material ${productMaterial.id} processed`, { organization, user, productMaterial });
+													}
+												} catch (e) {
+													const context = { resource: 'product_material', e, row: item };
+													this.logger.error(e.message, context);
+													errors.push(context);
+												}
+											}
+										} catch (e) {
+											const context = { resource: 'material_supplier', e, row: item };
+											this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
+											errors.push(context);
+										}
+									}
+								} catch (e) {
+									const context = { resource: 'material', e, row: item };
+									this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
+									errors.push(context);
+								}
+							}
 						}
 					} catch (e) {
 						const context = { resource: 'product', e, row: item };
 						this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
 						errors.push(context);
-					}
-
-					// Materials
-					if (item.materialName) {
-						let material;
-
-						try {
-							material = await this.prisma.materials.findFirst({
-								where: {
-									organization_id: organization.id,
-									name: item.materialName,
-								},
-							});
-
-							if (!material) {
-								material = await this.prisma.materials.create({
-									data: {
-										id: new Cuid2Generator(GuidPrefixes.Material).scopedId,
-										organization_id: organization.id,
-										name: item.materialName,
-										brand_material_id: item.brandMaterialId,
-										material_category: item.materialCategory,
-										material_subcategory: item.materialSubcategory,
-										created_at: new Date(),
-										updated_at: new Date(),
-									},
-								});
-							}
-
-							if (material) {
-								this.logger.info(`Material ${material.name} processed`, { organization, user, material });
-							}
-						} catch (e) {
-							const context = { resource: 'material', e, row: item };
-							this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
-							errors.push(context);
-						}
-
-						// Material Suppliers
-						let materialSupplier;
-						if (supplier?.id) {
-							try {
-								materialSupplier = await this.prisma.material_suppliers.findFirst({
-									where: {
-										organization_id: organization.id,
-										material_id: material.id,
-										supplier_id: supplier.id,
-									},
-								});
-
-								if (!materialSupplier) {
-									materialSupplier = await this.prisma.material_suppliers.create({
-										data: {
-											id: new Cuid2Generator(GuidPrefixes.MaterialSupplier).scopedId,
-											organization_id: organization.id,
-											material_id: material.id,
-											supplier_id: supplier.id,
-											created_at: new Date(),
-											updated_at: new Date(),
-										},
-									});
-								}
-
-								if (materialSupplier) {
-									this.logger.info(`Material Supplier ${materialSupplier.id} processed`, { organization, user, materialSupplier });
-								}
-							} catch (e) {
-								const context = { resource: 'material_supplier', e, row: item };
-								this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
-								errors.push(context);
-							}
-						}
-
-						// Product Materials
-						let productMaterial;
-
-						try {
-							productMaterial = await this.prisma.product_materials.findFirst({
-								where: {
-									organization_id: organization.id,
-									product_id: product.id,
-									material_id: material.id,
-								},
-							});
-
-							if (!productMaterial) {
-								productMaterial = await this.prisma.product_materials.create({
-									data: {
-										id: new Cuid2Generator(GuidPrefixes.OrganizationProductMaterial).scopedId,
-										organization_id: organization.id,
-										product_id: product.id,
-										material_id: material.id,
-										material_supplier_id: materialSupplier?.id,
-										unit_of_measure: item.unitOfMeasure,
-										yield: +item.yield,
-										created_at: new Date(),
-										updated_at: new Date(),
-									},
-								});
-							}
-
-							if (productMaterial) {
-								this.logger.info(`Product Material ${productMaterial.id} processed`, { organization, user, productMaterial });
-							}
-						} catch (e) {
-							const context = { resource: 'product_material', e, row: item };
-							this.logger.error(e.message, context);
-							errors.push(context);
-						}
 					}
 
 					//await this.events.sendIntegrationEvent(false, 'file.uploaded', { file, organization }, user);
