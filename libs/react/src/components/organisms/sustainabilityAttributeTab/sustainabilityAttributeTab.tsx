@@ -89,7 +89,7 @@ export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProp
             key={sustainabilityAttribute.id}
             className="w-full"
             onClick={() => {
-              if(ldFlags.materialDetailPageCold997) {
+              if(ldFlags.cold1220SustainabilityAttributePage) {
                 navigate(`/sustainability/${sustainabilityAttribute.id}`);
               }
             }}>
