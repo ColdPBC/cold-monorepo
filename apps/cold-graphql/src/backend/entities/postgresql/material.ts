@@ -52,6 +52,9 @@ export class Material {
 	@Property({ type: 'text', nullable: true })
 	supplierMaterialId?: string;
 
+	@Property({ type: 'text', nullable: true })
+	organizationFacilityId?: string;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'material' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 

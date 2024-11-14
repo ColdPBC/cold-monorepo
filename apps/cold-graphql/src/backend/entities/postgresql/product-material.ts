@@ -48,6 +48,12 @@ export class ProductMaterial {
 	@Property({ type: 'double', nullable: true })
 	yield?: number;
 
+	@Property({ type: 'text', nullable: true })
+	bomSection?: string;
+
+	@Property({ type: 'text', nullable: true })
+	placement?: string;
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof ProductMaterial, OrgContext>) {
 		if(!this.sidecar) {
