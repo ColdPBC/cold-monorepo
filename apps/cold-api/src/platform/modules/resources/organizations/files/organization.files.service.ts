@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 import * as z from 'zod';
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -18,7 +18,7 @@ import {
 } from '@coldpbc/nest';
 import { IntegrationsService } from '../../integrations/integrations.service';
 import { EventService } from '../../../utilities/events/event.service';
-import { pick } from 'lodash';
+import { omit, pick } from 'lodash';
 import { OrganizationHelper } from '../helpers/organization.helper';
 import helper from 'csvtojson';
 
@@ -64,8 +64,9 @@ export class OrganizationFilesService extends BaseWorker {
 		const { user, url, organization } = req;
 		const existingFiles: any = [];
 
-		const errors: any[] = [];
 		for (const file of files) {
+			const errors: any[] = [];
+
 			try {
 				if (!organization.id) {
 					throw new NotFoundException(`Organization ${orgId} not found`);
@@ -75,11 +76,9 @@ export class OrganizationFilesService extends BaseWorker {
 					file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf-8');
 				}
 
-				// Create readable stream of file body
+				// Convert to JSON
 				const items = await helper({
 					noheader: false,
-					trim: true,
-					ignoreEmpty: true,
 					delimiter: ',',
 				}).fromString(file.buffer.toString('utf-8'));
 
@@ -99,7 +98,7 @@ export class OrganizationFilesService extends BaseWorker {
 									},
 								})) as unknown as organization_facilities;
 							} catch (e) {
-								this.logger.warn(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
+								this.logger.warn(e.message, { user, orgId });
 							}
 
 							if (!supplier) {
@@ -120,8 +119,8 @@ export class OrganizationFilesService extends BaseWorker {
 
 							this.logger.info(`Supplier ${supplier.name} processed`, { organization, user, supplier });
 						} catch (e) {
-							const context = { resource: 'supplier', e, row: item, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) };
-							this.logger.error(e.message, context);
+							const context = { resource: 'supplier', e, row: item };
+							this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
 							errors.push(context);
 						}
 					}
@@ -155,8 +154,8 @@ export class OrganizationFilesService extends BaseWorker {
 							this.logger.info(`Product ${product.name} processed`, { organization, user, product });
 						}
 					} catch (e) {
-						const context = { resource: 'product', e, row: item, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) };
-						this.logger.error(e.message, context);
+						const context = { resource: 'product', e, row: item };
+						this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
 						errors.push(context);
 					}
 
@@ -191,8 +190,8 @@ export class OrganizationFilesService extends BaseWorker {
 								this.logger.info(`Material ${material.name} processed`, { organization, user, material });
 							}
 						} catch (e) {
-							const context = { resource: 'material', e, row: item, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) };
-							this.logger.error(e.message, context);
+							const context = { resource: 'material', e, row: item };
+							this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
 							errors.push(context);
 						}
 
@@ -225,8 +224,8 @@ export class OrganizationFilesService extends BaseWorker {
 									this.logger.info(`Material Supplier ${materialSupplier.id} processed`, { organization, user, materialSupplier });
 								}
 							} catch (e) {
-								const context = { resource: 'material_supplier', e, row: item, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) };
-								this.logger.error(e.message, context);
+								const context = { resource: 'material_supplier', e, row: item };
+								this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
 								errors.push(context);
 							}
 						}
@@ -263,7 +262,7 @@ export class OrganizationFilesService extends BaseWorker {
 								this.logger.info(`Product Material ${productMaterial.id} processed`, { organization, user, productMaterial });
 							}
 						} catch (e) {
-							const context = { resource: 'product_material', e, row: item, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) };
+							const context = { resource: 'product_material', e, row: item };
 							this.logger.error(e.message, context);
 							errors.push(context);
 						}
@@ -304,8 +303,10 @@ export class OrganizationFilesService extends BaseWorker {
 						email: user.coldclimate_claims.email,
 					},
 				);
+
+				existingFiles.push({ file: omit(file, ['buffer']), errors });
 			} catch (e) {
-				const context = { resource: 'file', e, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) };
+				const context = { resource: 'file', e, file: omit(file, ['buffer']) };
 				this.logger.error(e.message, context);
 				errors.push(context);
 
@@ -345,11 +346,12 @@ export class OrganizationFilesService extends BaseWorker {
 						email: user.coldclimate_claims.email,
 					},
 				);
-				throw e;
+
+				existingFiles.push({ file: omit(file, ['buffer']), errors });
 			}
 		}
 
-		return { errors };
+		return { files: existingFiles };
 	}
 
 	async getFiles(req: IRequest, orgId: string, bpc?: boolean): Promise<any> {
@@ -417,8 +419,8 @@ export class OrganizationFilesService extends BaseWorker {
 	async uploadFile(req: IRequest, orgId: string, files: Array<Express.Multer.File>, bpc?: boolean) {
 		const { user, url, organization } = req;
 		const org = await this.helper.getOrganizationById(orgId, req.user, bpc);
-		const existingFiles: any = [];
-		const uploadedFiles: any = [];
+		const failed: any = [];
+		const uploaded: any = [];
 
 		for (const file of files) {
 			try {
@@ -446,8 +448,8 @@ export class OrganizationFilesService extends BaseWorker {
 
 				if (existing) {
 					if (existing?.checksum === hash) {
-						this.logger.warn(`file ${file.originalname} already exists in db`, pick(file, ['id', 'original_name', 'mimetype', 'size']));
-						existingFiles.push(existing);
+						this.logger.warn(`file ${file.originalname} already exists in db`, pick(file, ['id', 'originalname', 'mimetype', 'size']));
+						failed.push({ error: new ConflictException(`${existing.original_name} already exists`), file: pick(file, ['id', 'originalname', 'mimetype', 'size']) });
 					}
 
 					existing.metadata = existing.metadata ? { status: 'uploaded', ...(existing.metadata as any) } : { status: 'uploaded' };
@@ -503,7 +505,9 @@ export class OrganizationFilesService extends BaseWorker {
 
 				await this.events.sendIntegrationEvent(false, 'file.uploaded', { ...existing, organization }, user);
 
-				uploadedFiles.push(existing);
+				if (!failed.find(f => f.file.originalname === existing.original_name)) {
+					uploaded.push(existing);
+				}
 
 				this.metrics.increment('cold.file.uploaded', 1, {
 					status: 'complete',
@@ -529,7 +533,7 @@ export class OrganizationFilesService extends BaseWorker {
 					},
 				);
 			} catch (e) {
-				this.logger.error(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
+				this.logger.error(e.message, { user, orgId, file: pick(file, ['id', 'originalname', 'mimetype', 'size']) });
 
 				this.metrics.increment('cold.file.uploaded', 1, {
 					status: 'failed',
@@ -548,7 +552,7 @@ export class OrganizationFilesService extends BaseWorker {
 					status: 'failed',
 					data: {
 						error: e.message,
-						file: pick(file, ['id', 'original_name', 'mimetype', 'size']),
+						file: pick(file, ['id', 'originalname', 'mimetype', 'size']),
 					},
 				});
 
@@ -571,7 +575,7 @@ export class OrganizationFilesService extends BaseWorker {
 			}
 		}
 
-		return { existingFiles, uploadedFiles };
+		return { failed, uploaded };
 	}
 
 	async deleteFile(req: IRequest, orgId: string, fileIds: string[]) {
