@@ -59,7 +59,7 @@ export class SuppliersRepository extends BaseWorker {
 		const suppliers = await this.prisma.organization_facilities.findMany(queryOptions);
 
 		if (!suppliers || suppliers.length === 0) {
-			throw new NotFoundException(`No suppliers found`);
+			return [];
 		}
 
 		const matched = suppliers.filter(supplier => {
