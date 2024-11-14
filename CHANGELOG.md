@@ -1,3 +1,10 @@
+## [1.475.1](https://github.com/coldPBC/cold-monorepo/compare/v1.475.0...v1.475.1) (2024-11-14)
+
+
+### Bug Fixes
+
+* make sure we always get the entity for the right level (and not just a random related entity) ([7327f63](https://github.com/coldPBC/cold-monorepo/commit/7327f639b5ab24764c5631473e8b5a8702148cb5))
+
 # [1.475.0](https://github.com/coldPBC/cold-monorepo/compare/v1.474.0...v1.475.0) (2024-11-13)
 
 
