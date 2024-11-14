@@ -90,7 +90,8 @@ const _MaterialsDataGrid = () => {
   );
   const uniqTier1Suppliers = uniq(
     materials
-      .map(material => material.productMaterials.map(productMaterial => productMaterial.product.organizationFacility.name)),
+      .flatMap(material => material.productMaterials.map(productMaterial => productMaterial.product.organizationFacility?.name))
+      .filter(name => name !== undefined),
   );
 
   const uniqTier2Suppliers = uniq(
@@ -183,7 +184,7 @@ const _MaterialsDataGrid = () => {
 
   materials.forEach(material => {
     // For now, we just grab the tier 1 supplier of the first product that uses the material
-    const tier1Suppliers = material.productMaterials.map(pm => pm.product.organizationFacility);
+    const tier1Suppliers = material.productMaterials.map(pm => pm.product.organizationFacility).filter(supplier => supplier !== null);
     // While the database schema allows for multiple MaterialSuppliers, we insist on 1 per Material
     const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
 
