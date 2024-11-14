@@ -1,7 +1,12 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { SustainabilityAttributeCard, SustainabilityAttributeCardStyle } from '@coldpbc/components';
-import { AttributeAssuranceMock, StoryMockProvider } from '@coldpbc/mocks';
+import {
+  AttributeAssuranceMock,
+  defaultGraphqlMocks,
+  getMaterialsMocksWithAssurances, getProductsMock, getSupplierMocks,
+  StoryMockProvider,
+} from '@coldpbc/mocks';
 import React from 'react';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 
@@ -33,11 +38,16 @@ export const MaterialAttributeWithLogoAndOneAssurance: Story = {
       name: 'Global Recycled Standard',
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
       attributeAssurances: [
-        AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.ACTIVE, index: 1}),
+        AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.ACTIVE, index: 1, id: getMaterialsMocksWithAssurances()[0].id}),
       ],
       level: EntityLevel.MATERIAL,
     }
-  }
+  },
+  render: args => (
+    <StoryMockProvider graphqlMocks={defaultGraphqlMocks}>
+      <SustainabilityAttributeCard {...args} />
+    </StoryMockProvider>
+  )
 };
 
 export const SupplierAttributeWithLogoAndManyAssurances: Story = {
@@ -46,16 +56,15 @@ export const SupplierAttributeWithLogoAndManyAssurances: Story = {
       id: 'a',
       name: 'Fair Wear',
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
-      attributeAssurances: [
-        AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.ACTIVE, index: 1}),
-        AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.EXPIRING, index: 2}),
-        AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.EXPIRED, index: 3}),
-        AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.MISSING_DATE, index: 4}),
-        AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: 5}),
-      ],
+      attributeAssurances: getSupplierMocks().slice(0, 5).map((supplier, index) => AttributeAssuranceMock({ entity: EntityLevel.SUPPLIER, status: index === 0 ? AttributeAssuranceStatus.NOT_DOCUMENTED : AttributeAssuranceStatus.ACTIVE, index, id: supplier.id})),
       level: EntityLevel.SUPPLIER,
     }
-  }
+  },
+  render: args => (
+    <StoryMockProvider graphqlMocks={defaultGraphqlMocks}>
+      <SustainabilityAttributeCard {...args} />
+    </StoryMockProvider>
+  )
 };
 
 export const LongNameThatTruncatesInsideOfASmallBox: Story = {
@@ -64,13 +73,7 @@ export const LongNameThatTruncatesInsideOfASmallBox: Story = {
       id: 'a',
       name: 'REACH (Registration, Evaluation, Authorisation and Restriction of Chemical)',
       logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/No+Image.png',
-      attributeAssurances: [
-        AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.ACTIVE, index: 1}),
-        AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.EXPIRING, index: 2}),
-        AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.EXPIRED, index: 3}),
-        AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.MISSING_DATE, index: 4}),
-        AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: 5}),
-      ],
+      attributeAssurances: getProductsMock().map((product, index) => AttributeAssuranceMock({ entity: EntityLevel.PRODUCT, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index, id: product.id})),
       level: EntityLevel.PRODUCT,
     }
   },
