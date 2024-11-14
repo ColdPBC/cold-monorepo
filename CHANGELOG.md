@@ -1,3 +1,10 @@
+# [1.477.0](https://github.com/coldPBC/cold-monorepo/compare/v1.476.0...v1.477.0) (2024-11-14)
+
+
+### Features
+
+* new hook to fetch and process entities ([be309b6](https://github.com/coldPBC/cold-monorepo/commit/be309b66ee9b56498fb7e9c982496805e24ff427))
+
 # [1.476.0](https://github.com/coldPBC/cold-monorepo/compare/v1.475.1...v1.476.0) (2024-11-14)
 
 
