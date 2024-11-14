@@ -30,6 +30,7 @@ export const GET_ALL_FILES = gql`
         }
         organization {
           id
+          name
         }
         organizationFacility {
           id
