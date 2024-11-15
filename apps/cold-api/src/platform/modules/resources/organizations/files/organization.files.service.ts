@@ -84,11 +84,12 @@ export class OrganizationFilesService extends BaseWorker {
 				}).fromString(file.buffer.toString('utf-8'));
 
 				for (const item of items) {
-					// Suppliers
+					// Process Supplier Information
 					let supplier: organization_facilities = {} as organization_facilities;
 					const supplierName = item.tier2SupplierName;
 					if (supplierName) {
 						try {
+							// Try to find exact match for supplier by name
 							try {
 								supplier = (await this.prisma.organization_facilities.findUnique({
 									where: {
@@ -103,10 +104,12 @@ export class OrganizationFilesService extends BaseWorker {
 							}
 
 							if (!supplier) {
+								// Try to find supplier via partial matching on name
 								const matchedSuppliers = (supplierName
 									? await this.suppliers.findByPartialName(organization, user, supplierName.slice(0, 7))
 									: []) as unknown as organization_facilities[];
 
+								// If no matches, create a new supplier
 								if (matchedSuppliers.length < 1) {
 									supplier = (await this.suppliers.createSupplier(organization, user, {
 										name: item.tier2SupplierName,
@@ -114,6 +117,7 @@ export class OrganizationFilesService extends BaseWorker {
 										supplier_tier: 2,
 									})) as unknown as organization_facilities;
 								} else {
+									// If multiple matches, select the first one
 									supplier = matchedSuppliers[0];
 								}
 							}
@@ -126,9 +130,8 @@ export class OrganizationFilesService extends BaseWorker {
 						}
 					}
 
-					// Product
-
-					let product: products;
+					// Process Product Information
+					let product: products = {} as products;
 
 					try {
 						product = (await this.prisma.products.findFirst({
@@ -180,152 +183,155 @@ export class OrganizationFilesService extends BaseWorker {
 
 						if (product) {
 							this.logger.info(`Product ${product.name} processed`, { organization, user, product });
-
-							// Materials
-							if (item.materialName) {
-								let material: materials;
-
-								try {
-									material = (await this.prisma.materials.findFirst({
-										where: {
-											organization_id: organization.id,
-											name: item.materialName,
-										},
-									})) as materials;
-
-									if (!material) {
-										material = await this.prisma.materials.create({
-											data: {
-												id: new Cuid2Generator(GuidPrefixes.Material).scopedId,
-												organization_id: organization.id,
-												name: item.materialName,
-												brand_material_id: item.brandMaterialId,
-												material_category: item.materialCategory,
-												supplier_material_id: item.supplierMaterialId,
-												material_subcategory: item.materialSubcategory,
-												created_at: new Date(),
-												updated_at: new Date(),
-											},
-										});
-									} else {
-										material = await this.prisma.materials.update({
-											where: {
-												id: material.id,
-											},
-											data: {
-												updated_at: new Date(),
-												brand_material_id: item.brandMaterialId || material.brand_material_id,
-												material_category: item.materialCategory || material.material_category,
-												material_subcategory: item.materialSubcategory || material.material_subcategory,
-												supplier_material_id: item.supplierMaterialId || material.supplier_material_id,
-											},
-										});
-									}
-
-									if (material) {
-										this.logger.info(`Material ${material.name} processed`, { organization, user, material });
-									}
-
-									// Material Suppliers
-									let materialSupplier: material_suppliers;
-
-									if (supplier?.id) {
-										try {
-											materialSupplier = (await this.prisma.material_suppliers.findFirst({
-												where: {
-													organization_id: organization.id,
-													material_id: material.id,
-													supplier_id: supplier.id,
-												},
-											})) as material_suppliers;
-
-											if (!materialSupplier) {
-												materialSupplier = await this.prisma.material_suppliers.create({
-													data: {
-														id: new Cuid2Generator(GuidPrefixes.MaterialSupplier).scopedId,
-														organization_id: organization.id,
-														material_id: material.id,
-														supplier_id: supplier.id,
-														supplier_product_id: item.supplierProductId,
-														created_at: new Date(),
-														updated_at: new Date(),
-													},
-												});
-											}
-
-											if (materialSupplier) {
-												this.logger.info(`Material Supplier ${materialSupplier.id} processed`, { organization, user, materialSupplier });
-
-												// Product Materials
-												let productMaterial;
-
-												try {
-													productMaterial = await this.prisma.product_materials.findFirst({
-														where: {
-															organization_id: organization.id,
-															product_id: product.id,
-															material_id: material.id,
-														},
-													});
-
-													if (!productMaterial) {
-														productMaterial = await this.prisma.product_materials.create({
-															data: {
-																id: new Cuid2Generator(GuidPrefixes.OrganizationProductMaterial).scopedId,
-																organization_id: organization.id,
-																product_id: product.id,
-																material_id: material.id,
-																placement: item.placement,
-																bom_section: item.bomSection,
-																material_supplier_id: materialSupplier?.id,
-																unit_of_measure: item.unitOfMeasure,
-																yield: +item.yield,
-																created_at: new Date(),
-																updated_at: new Date(),
-															},
-														});
-													} else {
-														productMaterial = await this.prisma.product_materials.update({
-															where: {
-																id: productMaterial.id,
-															},
-															data: {
-																updated_at: new Date(),
-																placement: item.placement,
-																bom_section: item.bomSection,
-																material_supplier_id: materialSupplier?.id,
-																unit_of_measure: item.unitOfMeasure,
-																yield: +item.yield,
-															},
-														});
-													}
-
-													if (productMaterial) {
-														this.logger.info(`Product Material ${productMaterial.id} processed`, { organization, user, productMaterial });
-													}
-												} catch (e) {
-													const context = { resource: 'product_material', e, row: item };
-													this.logger.error(e.message, context);
-													errors.push(context);
-												}
-											}
-										} catch (e) {
-											const context = { resource: 'material_supplier', e, row: item };
-											this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
-											errors.push(context);
-										}
-									}
-								} catch (e) {
-									const context = { resource: 'material', e, row: item };
-									this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
-									errors.push(context);
-								}
-							}
 						}
 					} catch (e) {
 						const context = { resource: 'product', e, row: item };
 						this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
 						errors.push(context);
+					}
+
+					let material = {} as materials;
+
+					// Materials
+					if (item.materialName) {
+						try {
+							material = (await this.prisma.materials.findFirst({
+								where: {
+									organization_id: organization.id,
+									name: item.materialName,
+								},
+							})) as materials;
+
+							if (!material) {
+								material = await this.prisma.materials.create({
+									data: {
+										id: new Cuid2Generator(GuidPrefixes.Material).scopedId,
+										organization_id: organization.id,
+										name: item.materialName,
+										brand_material_id: item.brandMaterialId,
+										material_category: item.materialCategory,
+										supplier_material_id: item.supplierMaterialId,
+										material_subcategory: item.materialSubcategory,
+										organization_facility_id: supplier.id,
+										created_at: new Date(),
+										updated_at: new Date(),
+									},
+								});
+							} else {
+								material = await this.prisma.materials.update({
+									where: {
+										id: material.id,
+									},
+									data: {
+										updated_at: new Date(),
+										brand_material_id: item.brandMaterialId || material.brand_material_id,
+										material_category: item.materialCategory || material.material_category,
+										material_subcategory: item.materialSubcategory || material.material_subcategory,
+										supplier_material_id: item.supplierMaterialId || material.supplier_material_id,
+									},
+								});
+							}
+
+							if (material) {
+								this.logger.info(`Material ${material.name} processed`, { organization, user, material });
+							}
+
+							// Material Suppliers
+							let materialSupplier = {} as material_suppliers;
+
+							if (material.id && supplier?.id) {
+								try {
+									materialSupplier = (await this.prisma.material_suppliers.findFirst({
+										where: {
+											organization_id: organization.id,
+											material_id: material.id,
+											supplier_id: supplier.id,
+										},
+									})) as material_suppliers;
+
+									if (!materialSupplier) {
+										materialSupplier = await this.prisma.material_suppliers.create({
+											data: {
+												id: new Cuid2Generator(GuidPrefixes.MaterialSupplier).scopedId,
+												organization_id: organization.id,
+												material_id: material.id,
+												supplier_id: supplier.id,
+												supplier_product_id: item.supplierProductId,
+												created_at: new Date(),
+												updated_at: new Date(),
+											},
+										});
+									}
+
+									if (materialSupplier) {
+										this.logger.info(`Material Supplier ${materialSupplier.id} processed`, { organization, user, materialSupplier });
+
+										if (product?.id && material.id && materialSupplier.id) {
+											// Product Materials
+											let productMaterial;
+
+											try {
+												productMaterial = await this.prisma.product_materials.findFirst({
+													where: {
+														organization_id: organization.id,
+														product_id: product.id,
+														material_id: material.id,
+													},
+												});
+
+												if (!productMaterial) {
+													productMaterial = await this.prisma.product_materials.create({
+														data: {
+															id: new Cuid2Generator(GuidPrefixes.OrganizationProductMaterial).scopedId,
+															organization_id: organization.id,
+															product_id: product.id,
+															material_id: material.id,
+															placement: item.placement,
+															bom_section: item.bomSection,
+															material_supplier_id: materialSupplier?.id,
+															unit_of_measure: item.unitOfMeasure,
+															yield: +item.yield,
+															created_at: new Date(),
+															updated_at: new Date(),
+														},
+													});
+												} else {
+													productMaterial = await this.prisma.product_materials.update({
+														where: {
+															id: productMaterial.id,
+														},
+														data: {
+															updated_at: new Date(),
+															placement: item.placement,
+															bom_section: item.bomSection,
+															material_supplier_id: materialSupplier?.id,
+															unit_of_measure: item.unitOfMeasure,
+															yield: +item.yield,
+														},
+													});
+												}
+
+												if (productMaterial) {
+													this.logger.info(`Product Material ${productMaterial.id} processed`, { organization, user, productMaterial });
+												}
+											} catch (e) {
+												const context = { resource: 'product_material', e, row: item };
+												this.logger.error(e.message, context);
+												errors.push(context);
+											}
+										}
+									}
+								} catch (e) {
+									const context = { resource: 'material_supplier', e, row: item };
+									this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
+									errors.push(context);
+								}
+							}
+						} catch (e) {
+							const context = { resource: 'material', e, row: item };
+							this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
+							errors.push(context);
+						}
 					}
 
 					//await this.events.sendIntegrationEvent(false, 'file.uploaded', { file, organization }, user);
