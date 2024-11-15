@@ -1,3 +1,10 @@
+# [1.480.0](https://github.com/coldPBC/cold-monorepo/compare/v1.479.0...v1.480.0) (2024-11-15)
+
+
+### Features
+
+* new graphs for sustainability reporting page ([940cfa0](https://github.com/coldPBC/cold-monorepo/commit/940cfa00fc62c0bc8b4b3b11183fa55dcdaeb019))
+
 # [1.479.0](https://github.com/coldPBC/cold-monorepo/compare/v1.478.1...v1.479.0) (2024-11-15)
 
 
