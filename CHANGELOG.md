@@ -1,3 +1,59 @@
+## [1.478.1](https://github.com/coldPBC/cold-monorepo/compare/v1.478.0...v1.478.1) (2024-11-14)
+
+
+### Bug Fixes
+
+* allow tier 1 supplier to be null ([2ae3443](https://github.com/coldPBC/cold-monorepo/commit/2ae34438cfb93c443752771a2031fb4fc6792537))
+* allow tier 1 supplier to be null ([#685](https://github.com/coldPBC/cold-monorepo/issues/685)) ([5876bb5](https://github.com/coldPBC/cold-monorepo/commit/5876bb5f2a138ad10bd1857b39e842cea969cd93))
+
+# [1.478.0](https://github.com/coldPBC/cold-monorepo/compare/v1.477.0...v1.478.0) (2024-11-14)
+
+
+### Features
+
+* new graph component ([5bbd4dd](https://github.com/coldPBC/cold-monorepo/commit/5bbd4ddf68d2e46e4df3cc5e0f92db983cf7191f))
+
+# [1.477.0](https://github.com/coldPBC/cold-monorepo/compare/v1.476.0...v1.477.0) (2024-11-14)
+
+
+### Features
+
+* new hook to fetch and process entities ([be309b6](https://github.com/coldPBC/cold-monorepo/commit/be309b66ee9b56498fb7e9c982496805e24ff427))
+
+# [1.476.0](https://github.com/coldPBC/cold-monorepo/compare/v1.475.1...v1.476.0) (2024-11-14)
+
+
+### Features
+
+* add image to sustainability attribute detail page ([bc82581](https://github.com/coldPBC/cold-monorepo/commit/bc825810eb59913d145e6986bafd0d7982d13228))
+
+## [1.475.1](https://github.com/coldPBC/cold-monorepo/compare/v1.475.0...v1.475.1) (2024-11-14)
+
+
+### Bug Fixes
+
+* make sure we always get the entity for the right level (and not just a random related entity) ([7327f63](https://github.com/coldPBC/cold-monorepo/commit/7327f639b5ab24764c5631473e8b5a8702148cb5))
+
+# [1.475.0](https://github.com/coldPBC/cold-monorepo/compare/v1.474.0...v1.475.0) (2024-11-13)
+
+
+### Bug Fixes
+
+* enhance classification logic and schema ([b281c88](https://github.com/coldPBC/cold-monorepo/commit/b281c88d5cac18c3a0f638527bc6b2bbccd1316e))
+* **pinecone.service:** handle document processing and adjust content length validation ([a29c2f2](https://github.com/coldPBC/cold-monorepo/commit/a29c2f2a439905abdb4021f9a5af595e71ac248e))
+* update description for supplier name field ([dbf438f](https://github.com/coldPBC/cold-monorepo/commit/dbf438fcc3eea32424fafa8083b5889d1a703d4f))
+
+
+### Features
+
+* add content length check for PDF extraction fallback to image conversion ([60e4348](https://github.com/coldPBC/cold-monorepo/commit/60e4348bc6da58d8a56ce8e8b8998083eaee635d))
+* add supplier agreement and statement extraction prompts ([1d88573](https://github.com/coldPBC/cold-monorepo/commit/1d8857380c690fa37bc9619c156253893662a545))
+* add SUPPLIER_STATEMENT and SUPPLIER_AGREEMENT to file_types enum ([93da2d8](https://github.com/coldPBC/cold-monorepo/commit/93da2d85a55207c7dd6a0feb98e599e4546eab78))
+* designate ColdRabbitModule as a global module ([033100b](https://github.com/coldPBC/cold-monorepo/commit/033100b6623f28a2b8665e878ee521f1536dbf4c))
+* enhance ExtractionService with new schemas and improved matching logic ([8da8400](https://github.com/coldPBC/cold-monorepo/commit/8da8400a3f30ab47ac47675e4df3a4df6c0dbd31))
+* enhance module exports ([4259d78](https://github.com/coldPBC/cold-monorepo/commit/4259d78ee65094d453e34352a26028a55c66b66c))
+* integrate redactor service into worker logger for improved logging security ([c63d27b](https://github.com/coldPBC/cold-monorepo/commit/c63d27b0bf921a3d18605472a16daac2244a469f))
+
 # [1.474.0](https://github.com/coldPBC/cold-monorepo/compare/v1.473.0...v1.474.0) (2024-11-13)
 
 

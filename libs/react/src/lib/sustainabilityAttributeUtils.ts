@@ -2,6 +2,7 @@ import {
   AttributeAssurance,
   EntityLevelAttributeAssuranceGraphQL,
   EntityWithAttributeAssurances,
+  AttributeAssuranceGraphData,
   SustainabilityAttribute,
   SustainabilityAttributeAssurance,
   SustainabilityAttributeAssuranceGraphQL,
@@ -150,17 +151,12 @@ export const processSustainabilityAttributeDataFromGraphQL = (
 
     for (const assurance of attribute.attributeAssurances) {
       // Determine which entity this assurance belongs to
-      const entity =
-        assurance.material ??
-        assurance.product ??
-        assurance.organizationFacility ??
-        assurance.organization;
+      const entity = getEntity(attribute.level, assurance);
 
       if (!entity) continue;
 
-      const entityId = entity.id;
-      const existingAssurances = assurancesByEntity.get(entityId) ?? [];
-      assurancesByEntity.set(entityId, [...existingAssurances, assurance]);
+      const existingAssurances = assurancesByEntity.get(entity.id) ?? [];
+      assurancesByEntity.set(entity.id, [...existingAssurances, assurance]);
     }
 
     // Transform each entity group into a single assurance
@@ -173,11 +169,7 @@ export const processSustainabilityAttributeDataFromGraphQL = (
         // Get the entity name from the first assurance
         // We can use the first one since all assurances in this group are for the same entity
         const firstAssurance = assurances[0];
-        const entityName = firstAssurance.material?.name ??
-          firstAssurance.organization?.name ??
-          firstAssurance.organizationFacility?.name ??
-          firstAssurance.product?.name ??
-          entityId; // Fallback to ID if name is somehow not available
+        const entityName = getEntity(attribute.level, firstAssurance)?.name || '';
 
         return {
           effectiveEndDate: assuranceExpiration,
@@ -256,13 +248,38 @@ export const filterAttributes = (attributes: SustainabilityAttribute[], level: E
 }
 
 
-export const getEntityId = (entityLevel: EntityLevel, attributeAssurance: SustainabilityAttributeAssuranceGraphQL | AttributeAssurance) => {
+export const getEntity = (entityLevel: EntityLevel, attributeAssurance: SustainabilityAttributeAssuranceGraphQL | AttributeAssurance) => {
   const entityMap = {
-    [EntityLevel.MATERIAL]: attributeAssurance.material?.id,
-    [EntityLevel.PRODUCT]: attributeAssurance.product?.id,
-    [EntityLevel.SUPPLIER]: attributeAssurance.organizationFacility?.id,
-    [EntityLevel.ORGANIZATION]: attributeAssurance.organization?.id,
+    [EntityLevel.MATERIAL]: attributeAssurance.material,
+    [EntityLevel.PRODUCT]: attributeAssurance.product,
+    [EntityLevel.SUPPLIER]: attributeAssurance.organizationFacility,
+    [EntityLevel.ORGANIZATION]: attributeAssurance.organization,
   };
 
   return entityMap[entityLevel];
+}
+
+export function processSustainabilityAttributeForGraph(attribute: SustainabilityAttribute): AttributeAssuranceGraphData {
+  const result: AttributeAssuranceGraphData = {
+    activeCount: 0,
+    inactiveCount: 0,
+    notDocumentedCount: 0,
+  };
+
+  attribute.attributeAssurances.forEach((assurance) => {
+    switch(assurance.status) {
+      case AttributeAssuranceStatus.ACTIVE:
+      case AttributeAssuranceStatus.EXPIRING:
+        result.activeCount++;
+        break;
+      case AttributeAssuranceStatus.EXPIRED:
+      case AttributeAssuranceStatus.MISSING_DATE:
+        result.inactiveCount++;
+        break;
+      default:
+        result.notDocumentedCount++;
+    }
+  });
+
+  return result;
 }

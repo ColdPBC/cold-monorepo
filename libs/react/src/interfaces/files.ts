@@ -40,6 +40,7 @@ export interface AttributeAssurance {
   effectiveEndDate: string | null;
   organization: null | {
     id: string;
+    name: string;
   }
   organizationFacility: null | {
     id: string;

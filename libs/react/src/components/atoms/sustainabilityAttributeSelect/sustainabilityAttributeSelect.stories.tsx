@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { SustainabilityAttributeSelect } from '@coldpbc/components';
 import { getClaimsMock } from '@coldpbc/mocks';
 import React from 'react';
+import { EntityLevel } from '@coldpbc/enums';
 
 const meta: Meta<typeof SustainabilityAttributeSelect> = {
   title: 'Atoms/SustainabilityAttributeSelect',
@@ -14,13 +15,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const SelectWrapper = () => {
-  const [selectedValueId, setSelectedValueId] = React.useState<string | null>(null);
+  const [selectedValue, setSelectedValue] = React.useState<{ id: string, level: EntityLevel } | null>(null);
 
   return (
     <SustainabilityAttributeSelect
       sustainabilityAttributes={getClaimsMock()}
-      selectedValueId={selectedValueId}
-      setSelectedValueId={setSelectedValueId}
+      selectedValue={selectedValue}
+      setSelectedValue={setSelectedValue}
     />
   );
 };
