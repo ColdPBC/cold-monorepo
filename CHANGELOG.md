@@ -1,3 +1,22 @@
+# [1.479.0](https://github.com/coldPBC/cold-monorepo/compare/v1.478.1...v1.479.0) (2024-11-15)
+
+
+### Bug Fixes
+
+* enhance error logging and fix file categorization in upload process ([8b5a37d](https://github.com/coldPBC/cold-monorepo/commit/8b5a37d1886cce219c9ff929bc53227fccbc32f7))
+* improve file upload error handling and logging ([2db1f97](https://github.com/coldPBC/cold-monorepo/commit/2db1f9776c556d579e3cbff456503145eca8b1a5))
+* streamline material and supplier processing in organization service ([01d434e](https://github.com/coldPBC/cold-monorepo/commit/01d434e91ecb740537147b5824aa2730d9f6bb32))
+
+
+### Features
+
+* add CSV support to PLM import tool and improve file handling ([b6561dc](https://github.com/coldPBC/cold-monorepo/commit/b6561dc6c1962a280d96095985eab3e83612f436))
+* add file import functionality to OrganizationFiles ([0720e50](https://github.com/coldPBC/cold-monorepo/commit/0720e508e6ab2002d2a5cdb5a53d90148c1f5cf5))
+* add Keen PLM schema and reorganize schema files ([0afbff8](https://github.com/coldPBC/cold-monorepo/commit/0afbff82ad771e6e02372a508601da28b6ba4592))
+* add new fields to materials and product_materials tables ([525af66](https://github.com/coldPBC/cold-monorepo/commit/525af66d6faff119d264c5893ad7ab5ab4f4d924))
+* add supplier creation and partial name search in SuppliersRepository ([4749978](https://github.com/coldPBC/cold-monorepo/commit/4749978e9fdae67f6785d1d98864d5bfdba3bc0f))
+* enhance product and material processing logic ([c4cdc37](https://github.com/coldPBC/cold-monorepo/commit/c4cdc3728367d9d4f9906e51a4b5d8f2672f2b3e))
+
 ## [1.478.1](https://github.com/coldPBC/cold-monorepo/compare/v1.478.0...v1.478.1) (2024-11-14)
 
 
