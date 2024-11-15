@@ -1,3 +1,10 @@
+## [1.480.1](https://github.com/coldPBC/cold-monorepo/compare/v1.480.0...v1.480.1) (2024-11-15)
+
+
+### Bug Fixes
+
+* graphql needs to have variables in key to know new page is new query ([2446f8c](https://github.com/coldPBC/cold-monorepo/commit/2446f8cbdc845a3e78cc62ffff403a4c3a7923be))
+
 # [1.480.0](https://github.com/coldPBC/cold-monorepo/compare/v1.479.0...v1.480.0) (2024-11-15)
 
 
