@@ -1,3 +1,10 @@
+# [1.481.0](https://github.com/coldPBC/cold-monorepo/compare/v1.480.1...v1.481.0) (2024-11-18)
+
+
+### Features
+
+* add keen material schema and enhance product logging ([1422c8a](https://github.com/coldPBC/cold-monorepo/commit/1422c8a634d0229b5c3f99751340feb9b3d4be0b))
+
 ## [1.480.1](https://github.com/coldPBC/cold-monorepo/compare/v1.480.0...v1.480.1) (2024-11-15)
 
 
