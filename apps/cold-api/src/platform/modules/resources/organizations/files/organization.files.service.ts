@@ -133,61 +133,63 @@ export class OrganizationFilesService extends BaseWorker {
 					// Process Product Information
 					let product: products = {} as products;
 
-					try {
-						product = (await this.prisma.products.findFirst({
-							where: {
-								organization_id: organization.id,
-								name: item.productName,
-							},
-						})) as products;
-
-						if (!product) {
-							product = await this.prisma.products.create({
-								data: {
-									id: new Cuid2Generator(GuidPrefixes.OrganizationProduct).scopedId,
+					if (item.productName) {
+						try {
+							product = (await this.prisma.products.findFirst({
+								where: {
 									organization_id: organization.id,
 									name: item.productName,
-									created_at: new Date(),
-									updated_at: new Date(),
-									metadata: {},
-									season_code: item.seasonCode,
-									style_code: item.seasonYear,
-									supplier_id: item.tier1SupplierId,
-									upc_code: item.upcCode,
-									brand_product_id: item.brandProductId,
-									supplier_product_id: item.supplierProductId,
-									product_category: item.productCategory,
-									product_subcategory: item.productSubcategory,
-									brand_product_sku: item.brandProductSku,
 								},
-							});
-						} else {
-							product = await this.prisma.products.update({
-								where: {
-									id: product.id,
-								},
-								data: {
-									updated_at: new Date(),
-									season_code: item.seasonCode || product.season_code,
-									style_code: item.seasonYear || product.season_code,
-									supplier_id: item.tier1SupplierId || product.supplier_id,
-									upc_code: item.upcCode || product.upc_code,
-									brand_product_id: item.brandProductId || product.brand_product_id,
-									supplier_product_id: item.supplierProductId || product.supplier_product_id,
-									product_category: item.productCategory || product.product_category,
-									product_subcategory: item.productSubcategory || product.product_subcategory,
-									brand_product_sku: item.brandProductSku || product.brand_product_sku,
-								},
-							});
-						}
+							})) as products;
 
-						if (product) {
-							this.logger.info(`Product ${product.name} processed`, { organization, user, product });
+							if (!product) {
+								product = await this.prisma.products.create({
+									data: {
+										id: new Cuid2Generator(GuidPrefixes.OrganizationProduct).scopedId,
+										organization_id: organization.id,
+										name: item.productName,
+										created_at: new Date(),
+										updated_at: new Date(),
+										metadata: {},
+										season_code: item.seasonCode,
+										style_code: item.seasonYear,
+										supplier_id: item.tier1SupplierId,
+										upc_code: item.upcCode,
+										brand_product_id: item.brandProductId,
+										supplier_product_id: item.supplierProductId,
+										product_category: item.productCategory,
+										product_subcategory: item.productSubcategory,
+										brand_product_sku: item.brandProductSku,
+									},
+								});
+							} else {
+								product = await this.prisma.products.update({
+									where: {
+										id: product.id,
+									},
+									data: {
+										updated_at: new Date(),
+										season_code: item.seasonCode || product.season_code,
+										style_code: item.seasonYear || product.season_code,
+										supplier_id: item.tier1SupplierId || product.supplier_id,
+										upc_code: item.upcCode || product.upc_code,
+										brand_product_id: item.brandProductId || product.brand_product_id,
+										supplier_product_id: item.supplierProductId || product.supplier_product_id,
+										product_category: item.productCategory || product.product_category,
+										product_subcategory: item.productSubcategory || product.product_subcategory,
+										brand_product_sku: item.brandProductSku || product.brand_product_sku,
+									},
+								});
+							}
+
+							if (product) {
+								this.logger.info(`Product ${product.name} processed`, { organization, user, product });
+							}
+						} catch (e) {
+							const context = { resource: 'product', e, row: item };
+							this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
+							errors.push(context);
 						}
-					} catch (e) {
-						const context = { resource: 'product', e, row: item };
-						this.logger.error(e.message, { context, file: omit(file, ['buffer']) });
-						errors.push(context);
 					}
 
 					let material = {} as materials;

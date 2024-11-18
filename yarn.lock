@@ -26910,6 +26910,7 @@ __metadata:
     class-validator: "npm:^0.14.0"
     clsx: "npm:^2.0.0"
     concurrently: "npm:^8.2.2"
+    csv-parser: "npm:^3.0.0"
     csvtojson: "npm:^2.0.10"
     cz-conventional-changelog: "npm:^3.3.0"
     d3-dsv: "npm:2"
@@ -28648,6 +28649,17 @@ __metadata:
   version: 5.5.6
   resolution: "csv-parse@npm:5.5.6"
   checksum: 10/8682bd3846d8159eb6f686423d16493fffeceeef742d947e39ea3a3fb9b4a243b41a4cfbac56d721a2f7825b01335ba9b993bf68c4817e7abee0bd20754ee78d
+  languageName: node
+  linkType: hard
+
+"csv-parser@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "csv-parser@npm:3.0.0"
+  dependencies:
+    minimist: "npm:^1.2.0"
+  bin:
+    csv-parser: bin/csv-parser
+  checksum: 10/2f003d15d8361a94359d6715a8f05feac1252ab4d1d4e2908ea1baa0454c7e00fb99c53cdc86336635c5fd04f17b510291338df93da1e54944695f0c3b4a6bc1
   languageName: node
   linkType: hard
 

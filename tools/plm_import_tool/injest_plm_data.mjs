@@ -26,6 +26,11 @@ const argv = yargs(hideBin(process.argv))
 		description: "Path to the import Zod schema (as a JS/TS file)",
 		demandOption: true,
 	})
+	.option("product",{
+		alias: "p",
+		type: "boolean",
+		description: "Get Product Name From FileName"
+	})
 	.option("output", {
 		alias: "o",
 		type: "string",
@@ -39,13 +44,6 @@ console.log('Injesting from Schema:', path.resolve(argv.schema));
 const { InputSchema } = await import(path.resolve(argv.schema));
 
 console.log('Starting transformation...', path.resolve(argv.input));
-// Read the Excel file provided as input
-//const workbook = XLSX.readFile(Path.resolve(argv.input));
-//const sheetName = workbook.SheetNames[0]; // Assuming the data is in the first sheet
-//const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-
-
-
 // Function to read and parse CSV or Excel files
 const parseFile = async (filePath) => {
 	if (filePath.endsWith('.csv')) {
@@ -99,11 +97,13 @@ const transformAndSave = async (inputDirectory, outputDirectory = inputDirectory
 			// remove null rows from transformed data
 			transformedData = transformedData.filter(row => row !== null);
 			
-			// add product_name to each row
-			transformedData = transformedData.map(row => {
-				row.productName = path.basename(filePath, path.extname(filePath));
-				return row;
-			});
+			if(argv.product) {
+				// add product_name to each row
+				transformedData = transformedData.map(row => {
+					row.productName = path.basename(filePath, path.extname(filePath));
+					return row;
+				});
+			}
 			
 			// Write transformed data to a new CSV
 			fs.mkdirSync(`${outputDirectory}/transformed`, { recursive: true });

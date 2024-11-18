@@ -12,7 +12,11 @@ import { patchNestjsSwagger } from '@anatine/zod-nestjs';
 import { OpenapiModule } from '@coldpbc/nest';
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule.forRootAsync());
+	const app = await NestFactory.create(AppModule.forRootAsync(), {
+		logger: false,
+		bufferLogs: true,
+		autoFlushLogs: true,
+	});
 	const port = process.env.PORT || 3000;
 	const httpAdapter = app.getHttpAdapter();
 	const server = httpAdapter.getHttpServer();

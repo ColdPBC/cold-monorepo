@@ -13,6 +13,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule.forRootAsync(), {
     logger: false,
     bufferLogs: true,
+	  autoFlushLogs: true
   });
   const httpAdapter = app.getHttpAdapter();
   const server = httpAdapter.getHttpServer();

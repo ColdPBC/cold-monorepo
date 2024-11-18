@@ -6,7 +6,11 @@ import { AppModule } from './app.module';
 dotenv.config();
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule.forRootAsync());
+	const app = await NestFactory.create(AppModule.forRootAsync(), {
+		logger: false,
+		bufferLogs: true,
+		autoFlushLogs: true,
+	});
 
 	//app.useGlobalPipes(new ResourceValidationPipe());
 	app.enableCors();
