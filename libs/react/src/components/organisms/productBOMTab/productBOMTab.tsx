@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const DEFAULT_GRID_COL_DEF = {
 	headerClassName: 'bg-gray-30 text-body',
+  flex: 1,
 };
 
 const _ProductBOMTab = (props: { product: ProductsQuery }) => {
@@ -50,12 +51,36 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
     product.productMaterials.map(productMaterial => productMaterial.material?.materialSubcategory || ''),
   ).filter(Boolean).sort( (a, b) => a.localeCompare(b));
 
+  const productCarbonFootprintColumns: GridColDef[] = ldFlags.productCarbonFootprintMvp ? (
+    [
+      {
+        ...DEFAULT_GRID_COL_DEF,
+        field: 'weight',
+        headerName: 'Weight',
+        minWidth: 70,
+      },
+      {
+        ...DEFAULT_GRID_COL_DEF,
+        field: 'factor',
+        headerName: 'Factor',
+        minWidth: 70,
+      },
+      {
+        ...DEFAULT_GRID_COL_DEF,
+        field: 'emissions',
+        headerName: 'Emissions',
+        minWidth: 70,
+      },
+    ]
+  ) : (
+    []
+  );
+
 	const columns: GridColDef[] = [
 		{
 			...DEFAULT_GRID_COL_DEF,
 			field: 'material',
 			headerName: 'Material',
-			flex: 1,
 			minWidth: 230,
       renderCell: renderName,
 		},
@@ -63,28 +88,25 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 			...DEFAULT_GRID_COL_DEF,
 			field: 'tier2Supplier',
 			headerName: 'Tier 2 Supplier',
-			flex: 1,
 			minWidth: 230,
 		},
     {
       ...DEFAULT_GRID_COL_DEF,
       field: 'yield',
       headerName: 'Yield',
-      flex: 1,
       minWidth: 70,
     },
     {
       ...DEFAULT_GRID_COL_DEF,
       field: 'unitOfMeasure',
       headerName: 'UoM',
-      flex: 1,
       minWidth: 70,
     },
+    ...productCarbonFootprintColumns,
 		{
 			...DEFAULT_GRID_COL_DEF,
 			field: 'sustainabilityAttributes',
 			headerName: 'Sustainability Attributes',
-			flex: 1,
 			minWidth: 300,
 			renderCell: params => {
 				return <SustainabilityAttributeColumnList sustainabilityAttributes={params.value as SustainabilityAttribute[]} />;
@@ -94,7 +116,6 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
       ...DEFAULT_GRID_COL_DEF,
       field: 'materialCategory',
       headerName: 'Category',
-      flex: 1,
       minWidth: 230,
       type: 'singleSelect',
       valueOptions: uniqCategories,
@@ -103,7 +124,6 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
       ...DEFAULT_GRID_COL_DEF,
       field: 'materialSubcategory',
       headerName: 'Sub Category',
-      flex: 1,
       minWidth: 230,
       type: 'singleSelect',
       valueOptions: uniqSubCategories
@@ -134,6 +154,9 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 				tier2Supplier: tier2Supplier,
         yield: productMaterial.yield ? productMaterial.yield.toString() : '',
         unitOfMeasure: productMaterial.unitOfMeasure || '',
+        weight: productMaterial.weight,
+        factor: material.factor,
+        emissions: productMaterial.weight && material.factor ? (productMaterial.weight * material.factor).toFixed(2) : null,
 				sustainabilityAttributes: susAttributes,
 			};
 		});
