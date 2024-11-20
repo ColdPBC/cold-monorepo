@@ -202,7 +202,7 @@ const _ProductCarbonFootprintDonut: React.FC<ProductDetailsCardProps> = ({ produ
                   <Table.Row
                     key={`${row.name}-${index}`}
                     theme={darkTableTheme.table?.row}
-                    className={'cursor-pointer w-full'}
+                    className={'w-full'}
                     onMouseEnter={() => {
                       setHoveredRow(index);
                       animateSegmentThickness(index, 'segment', 105);
