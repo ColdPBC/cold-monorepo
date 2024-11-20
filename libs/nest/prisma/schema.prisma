@@ -698,6 +698,7 @@ model materials {
   material_category    String?
   material_subcategory String?
 	organization_facility_id String?
+	emissions_factor		 Float?
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   attribute_assurances attribute_assurances[]
   product_materials    product_materials[]
@@ -731,9 +732,10 @@ model product_materials {
   material_supplier_id String?
   organization_id      String
   yield                Float?
+	weight						 	 Float?
   unit_of_measure      String?
-  placement						String?
-	bom_section					String?
+  placement						 String?
+	bom_section					 String?
 	metadata             Json?
   created_at           DateTime?     @default(now()) @db.Timestamptz(6)
   updated_at           DateTime?     @updatedAt @db.Timestamptz(6)
