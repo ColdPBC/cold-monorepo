@@ -34,14 +34,14 @@ const COLORS = [
 ];
 
 interface ProductMaterial {
-  weight?: number | null,
+  weight: number | null,
   material: {
-    factor?: number | null,
+    emissionsFactor: number | null,
   },
 }
 
 const emissionsForProductMaterial = (productMaterial: ProductMaterial) => {
-  return ((productMaterial.weight || 0) * (productMaterial.material.factor || 0))
+  return ((productMaterial.weight || 0) * (productMaterial.material.emissionsFactor || 0))
 };
 
 const _ProductCarbonFootprintDonut: React.FC<ProductDetailsCardProps> = ({ product }) => {

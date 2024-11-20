@@ -61,7 +61,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
       },
       {
         ...DEFAULT_GRID_COL_DEF,
-        field: 'factor',
+        field: 'emissionsFactor',
         headerName: 'Factor',
         minWidth: 70,
       },
@@ -155,8 +155,8 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
         yield: productMaterial.yield ? productMaterial.yield.toString() : '',
         unitOfMeasure: productMaterial.unitOfMeasure || '',
         weight: productMaterial.weight,
-        factor: material.factor,
-        emissions: productMaterial.weight && material.factor ? (productMaterial.weight * material.factor).toFixed(2) : null,
+        emissionsFactor: material.emissionsFactor,
+        emissions: productMaterial.weight && material.emissionsFactor ? (productMaterial.weight * material.emissionsFactor).toFixed(2) : null,
 				sustainabilityAttributes: susAttributes,
 			};
 		});

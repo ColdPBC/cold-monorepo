@@ -17,13 +17,13 @@ export interface ProductsQuery {
     id: string
     yield: number | null;
     unitOfMeasure: string | null;
-    weight?: number | null;
+    weight: number | null;
     material: {
       id: string
       name: string
       materialCategory: string | null;
       materialSubcategory: string | null;
-      factor?: number | null;
+      emissionsFactor: number | null;
       attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
       materialSuppliers: {
         id: string;
