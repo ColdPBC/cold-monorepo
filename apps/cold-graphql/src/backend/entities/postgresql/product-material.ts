@@ -54,6 +54,9 @@ export class ProductMaterial {
 	@Property({ type: 'text', nullable: true })
 	placement?: string;
 
+	@Property({ type: 'double', nullable: true })
+	weight?: number;
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof ProductMaterial, OrgContext>) {
 		if(!this.sidecar) {
