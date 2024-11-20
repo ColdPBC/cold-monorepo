@@ -124,7 +124,7 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 				await Promise.all([
 					sustainabilityAttributesQuery.mutate(), // Revalidate the modal's data
 					// Also revalidate the query that shows the cards on the detail page
-					mutate(`GET_${EntityLevel[entityLevel]}`),
+          mutate([`GET_${EntityLevel[entityLevel]}`, JSON.stringify({ id: entity.id })]),
 				]);
 
 				onClose();
