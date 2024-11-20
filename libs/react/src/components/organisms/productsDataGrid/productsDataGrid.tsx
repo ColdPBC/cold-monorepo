@@ -265,6 +265,11 @@ export const _ProductsDataGrid = () => {
         showManageColumns
         showExport
         showSearch
+        initialState={{
+          sorting: {
+            sortModel: [{ field: 'name', sort: 'asc' }],
+          },
+        }}
       />
     </div>
   )
