@@ -175,7 +175,12 @@ const _DocumentDetailsSidebar = (props: {
 		} else {
 			logBrowser('Assurance deleted successfully', 'info', { response });
 		}
-		await mutate('GET_ALL_FILES');
+    await mutate(['GET_ALL_FILES', JSON.stringify({
+      filter: {
+        organization: { id: orgId },
+        visible: true
+      }
+    })]);
 	};
 
 	const getInitialFileState = (file: FilesWithAssurances | undefined): DocumentDetailsSidebarFileState | undefined => {
@@ -489,7 +494,12 @@ const _DocumentDetailsSidebar = (props: {
 			if (ifOnlyTypeOrCertIdChanged(fileState, compareFileState)) {
 				await Promise.all(promises)
 					.then(responses => {
-						mutate('GET_ALL_FILES');
+            mutate(['GET_ALL_FILES', JSON.stringify({
+              filter: {
+                organization: { id: orgId },
+                visible: true
+              }
+            })]);
 						logBrowser('File updated successfully', 'info', {
 							responses,
 						});
@@ -541,7 +551,12 @@ const _DocumentDetailsSidebar = (props: {
 
 			await Promise.all(promises)
 				.then(responses => {
-					mutate('GET_ALL_FILES');
+          mutate(['GET_ALL_FILES', JSON.stringify({
+            filter: {
+              organization: { id: orgId },
+              visible: true
+            }
+          })]);
 					logBrowser('File and assurances updated successfully', 'info', {
 						responses,
 					});
