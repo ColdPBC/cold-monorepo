@@ -568,11 +568,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_rrnqxqbnp2vlmb8278q0x29f',
           yield: null,
           unitOfMeasure: null,
+          weight: 52,
 					material: {
 						id: '5926bb4c-5cbc-4b14-970f-968249444415',
 						name: 'Material 1',
             materialCategory: 'Material Category 1',
             materialSubcategory: 'Material Subcategory 1',
+            factor: 2.3,
 						materialSuppliers: [
 							{
 								id: 'matsup_ccwa08m14j91q4tjuzgz4zsv',
@@ -590,11 +592,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_ynpia336jl34ar26ikpje5sj',
           yield: null,
           unitOfMeasure: null,
+          weight: 2,
 					material: {
 						id: 'mat_beq7hd4e7efg5vzrzpp1xcb9',
 						name: 'Material 7',
             materialCategory: 'Material Category 1',
             materialSubcategory: 'Material Subcategory 2',
+            factor: 3.5,
 						materialSuppliers: [
 							{
 								id: 'msup_mvldtl3a1y1y27i6dpuz7qs2',
@@ -652,11 +656,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_an0ygchf305yo1b2faro7au6',
           yield: null,
           unitOfMeasure: null,
+          weight: 5.2,
 					material: {
 						id: 'mat_u9lckkyqyii41q3by2wdt86i',
 						name: 'Material 8',
             materialCategory: 'Material Category 2',
             materialSubcategory: 'Material Subcategory 1',
+            factor: 4.5,
 						materialSuppliers: [
 							{
 								id: 'msup_sn673pues18vmk8l1d9jrehp',
@@ -716,11 +722,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_btmrnz0tujog6nq1lf86voyj',
           yield: null,
           unitOfMeasure: null,
+          weight: 1.1,
 					material: {
 						id: 'mat_x0x7th2m41zdgahmrbt9t58c',
 						name: 'Material 9',
             materialCategory: 'Material Category 1',
             materialSubcategory: 'Material Subcategory 2',
+            factor: 20.1,
 						materialSuppliers: [
 							{
 								id: 'msup_v1092i9nodjiixmgf1ze4zfm',
@@ -772,11 +780,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_eppxah0jo1qm1pcl1ipctlty',
           yield: null,
           unitOfMeasure: null,
+          weight: 3.4,
 					material: {
 						id: 'mat_vctuajyeyeuwow0djuxwzb9g',
 						name: 'Material 11',
             materialCategory: 'Material Category 2',
             materialSubcategory: 'Material Subcategory 2',
+            factor: 14.5,
 						materialSuppliers: [
 							{
 								id: 'matsup_v2uj0x6hlvhqvmv2wqyszpd2',
