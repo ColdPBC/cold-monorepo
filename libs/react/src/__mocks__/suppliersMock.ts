@@ -436,7 +436,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       id: "ofac_ziiewcq7wmehkgcnt6jhb6re",
       name: "Supplier 6",
       supplierTier: 2,
-      country: "US",
+      country: "Japan",
       attributeAssurances: [
         {
           id: "8ce77def-b624-4ce4-8b1b-f3ed0d6bd74e",
@@ -603,7 +603,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       id: "ofac_ij8qfc31mhiz4l5ku7khi4e2",
       name: "Example Supplier 1234",
       supplierTier: 1,
-      country: "USA",
+      country: "Germany",
       attributeAssurances: [
         {
           id: "4e764c02-9545-47fc-a93e-c8f7872fd632",
@@ -635,7 +635,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       id: "ofac_xim58848n1fgxinkl3qzur71",
       name: "Supplier Zeta",
       supplierTier: 2,
-      country: "US",
+      country: "Germany",
       attributeAssurances: [],
       materialSuppliers: [],
       products: [],
