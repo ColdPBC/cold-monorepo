@@ -229,7 +229,7 @@ const _ProductCarbonFootprintDonut: React.FC<ProductDetailsCardProps> = ({ produ
                             }}
                             className="mr-2 h-[10px] w-[10px] min-w-[10px] rounded-full"
                           />
-                          <div className="w-full truncate text-tc-primary">{capitalize(row.name)}</div>
+                          <div className="w-full truncate text-tc-primary">{row.name}</div>
                         </div>
                       </div>
                     </Table.Cell>
