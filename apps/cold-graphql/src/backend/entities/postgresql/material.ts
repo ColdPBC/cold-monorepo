@@ -55,6 +55,9 @@ export class Material {
 	@Property({ type: 'text', nullable: true })
 	organizationFacilityId?: string;
 
+	@Property({ type: 'double', nullable: true })
+	emissionsFactor?: number;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'material' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 

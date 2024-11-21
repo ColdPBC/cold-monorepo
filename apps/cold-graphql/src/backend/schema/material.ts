@@ -48,6 +48,9 @@ export class Material {
 	@Field(() => String, { nullable: true })
 	organizationFacilityId?: string;
 
+	@Field(() => Number, { nullable: true })
+	emissionsFactor?: number;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'material' })
 	attributeAssurances!: AttributeAssurance[];
 

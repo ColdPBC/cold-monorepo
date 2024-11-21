@@ -46,4 +46,7 @@ export class ProductMaterial {
 
 	@Field(() => String, { nullable: true })
 	placement?: string;
+
+	@Field(() => Number, { nullable: true })
+	weight?: number;
 }

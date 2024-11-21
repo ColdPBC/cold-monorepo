@@ -238,7 +238,7 @@ const _CreateSupplierPage = () => {
           message: 'Supplier created successfully',
           type: ToastMessage.SUCCESS,
         })
-        await mutate('GET_ALL_SUPPLIERS_FOR_ORG');
+        await mutate(['GET_ALL_SUPPLIERS_FOR_ORG', JSON.stringify({ filter: { organization: { id: orgId }}})]);
         navigate('/suppliers');
       } else {
         logBrowser(

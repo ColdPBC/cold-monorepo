@@ -20,11 +20,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_qf5x197buxezns68tbgbs37h',
           yield: null,
           unitOfMeasure: null,
+          weight: null,
 					material: {
 						id: 'mat_xyqmz0hdf1p8p26wg3d5ju97',
 						name: 'Material 15',
             materialCategory: null,
             materialSubcategory: null,
+            emissionsFactor: null,
 						materialSuppliers: [
 							{
 								id: 'matsup_ty7un10erbcr9ruvuwye02e6',
@@ -42,11 +44,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_zt3p4bfsa3ub3rxfe8witshb',
           yield: null,
           unitOfMeasure: null,
+          weight: null,
 					material: {
 						id: 'mat_beq7hd4e7efg5vzrzpp1xcb9',
 						name: 'Material 7',
             materialCategory: null,
             materialSubcategory: null,
+            emissionsFactor: null,
 						materialSuppliers: [
 							{
 								id: 'msup_mvldtl3a1y1y27i6dpuz7qs2',
@@ -98,11 +102,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_pwrhpxj9xkrxprxol7k54gr4',
           yield: null,
           unitOfMeasure: null,
+          weight: null,
 					material: {
 						id: 'mat_x0x7th2m41zdgahmrbt9t58c',
 						name: 'Material 9',
             materialCategory: null,
             materialSubcategory: null,
+            emissionsFactor: null,
 						materialSuppliers: [
 							{
 								id: 'msup_v1092i9nodjiixmgf1ze4zfm',
@@ -156,11 +162,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_lg4rlg979blgkw6k5pezltj3',
           yield: null,
           unitOfMeasure: null,
+          weight: null,
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
             materialCategory: null,
             materialSubcategory: null,
+            emissionsFactor: null,
 						materialSuppliers: [
 							{
 								id: 'msup_i3819gq1c53fygmlcn4qyz8w',
@@ -289,11 +297,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_kk834waglx0r6cxrb6kjd1lh',
           yield: null,
           unitOfMeasure: null,
+          weight: null,
 					material: {
 						id: 'mat_xyqmz0hdf1p8p26wg3d5ju97',
 						name: 'Material 15',
             materialCategory: null,
             materialSubcategory: null,
+            emissionsFactor: null,
 						materialSuppliers: [
 							{
 								id: 'matsup_ty7un10erbcr9ruvuwye02e6',
@@ -311,11 +321,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_kmubboc9e9q5v003p7xyu9k9',
           yield: null,
           unitOfMeasure: null,
+          weight: null,
 					material: {
 						id: 'mat_u9lckkyqyii41q3by2wdt86i',
 						name: 'Material 8',
             materialCategory: null,
             materialSubcategory: null,
+            emissionsFactor: null,
 						materialSuppliers: [
 							{
 								id: 'msup_sn673pues18vmk8l1d9jrehp',
@@ -375,11 +387,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_w02oqu9ex65qodbglczh0c2e',
           yield: null,
           unitOfMeasure: null,
+          weight: null,
 					material: {
 						id: 'mat_vctuajyeyeuwow0djuxwzb9g',
 						name: 'Material 11',
             materialCategory: null,
             materialSubcategory: null,
+            emissionsFactor: null,
 						materialSuppliers: [
 							{
 								id: 'matsup_v2uj0x6hlvhqvmv2wqyszpd2',
@@ -436,11 +450,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_j39ropi5u7x0y1qzbme0tygf',
           yield: null,
           unitOfMeasure: null,
+          weight: null,
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
             materialCategory: null,
             materialSubcategory: null,
+            emissionsFactor: null,
 						materialSuppliers: [
 							{
 								id: 'msup_i3819gq1c53fygmlcn4qyz8w',
@@ -568,11 +584,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_rrnqxqbnp2vlmb8278q0x29f',
           yield: null,
           unitOfMeasure: null,
+          weight: 52,
 					material: {
 						id: '5926bb4c-5cbc-4b14-970f-968249444415',
 						name: 'Material 1',
             materialCategory: 'Material Category 1',
             materialSubcategory: 'Material Subcategory 1',
+            emissionsFactor: 2.3,
 						materialSuppliers: [
 							{
 								id: 'matsup_ccwa08m14j91q4tjuzgz4zsv',
@@ -590,11 +608,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_ynpia336jl34ar26ikpje5sj',
           yield: null,
           unitOfMeasure: null,
+          weight: 2,
 					material: {
 						id: 'mat_beq7hd4e7efg5vzrzpp1xcb9',
 						name: 'Material 7',
             materialCategory: 'Material Category 1',
             materialSubcategory: 'Material Subcategory 2',
+            emissionsFactor: 3.5,
 						materialSuppliers: [
 							{
 								id: 'msup_mvldtl3a1y1y27i6dpuz7qs2',
@@ -652,11 +672,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_an0ygchf305yo1b2faro7au6',
           yield: null,
           unitOfMeasure: null,
+          weight: 5.2,
 					material: {
 						id: 'mat_u9lckkyqyii41q3by2wdt86i',
 						name: 'Material 8',
             materialCategory: 'Material Category 2',
             materialSubcategory: 'Material Subcategory 1',
+            emissionsFactor: 4.5,
 						materialSuppliers: [
 							{
 								id: 'msup_sn673pues18vmk8l1d9jrehp',
@@ -716,11 +738,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_btmrnz0tujog6nq1lf86voyj',
           yield: null,
           unitOfMeasure: null,
+          weight: 1.1,
 					material: {
 						id: 'mat_x0x7th2m41zdgahmrbt9t58c',
 						name: 'Material 9',
             materialCategory: 'Material Category 1',
             materialSubcategory: 'Material Subcategory 2',
+            emissionsFactor: 20.1,
 						materialSuppliers: [
 							{
 								id: 'msup_v1092i9nodjiixmgf1ze4zfm',
@@ -772,11 +796,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_eppxah0jo1qm1pcl1ipctlty',
           yield: null,
           unitOfMeasure: null,
+          weight: 3.4,
 					material: {
 						id: 'mat_vctuajyeyeuwow0djuxwzb9g',
 						name: 'Material 11',
             materialCategory: 'Material Category 2',
             materialSubcategory: 'Material Subcategory 2',
+            emissionsFactor: 14.5,
 						materialSuppliers: [
 							{
 								id: 'matsup_v2uj0x6hlvhqvmv2wqyszpd2',
@@ -833,11 +859,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_l30omtgvn91n7bt8jm2aiu57',
           yield: null,
           unitOfMeasure: null,
+          weight: null,
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
             materialCategory: 'Material Category 3',
             materialSubcategory: 'Material Subcategory 1',
+            emissionsFactor: null,
 						materialSuppliers: [
 							{
 								id: 'msup_i3819gq1c53fygmlcn4qyz8w',

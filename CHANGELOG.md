@@ -1,3 +1,12 @@
+# [1.482.0](https://github.com/coldPBC/cold-monorepo/compare/v1.481.0...v1.482.0) (2024-11-20)
+
+
+### Features
+
+* add emissions factor to materials and weight to product materials ([bc5e828](https://github.com/coldPBC/cold-monorepo/commit/bc5e828d3630a64f7501cbd6f1564ba7d83f3617))
+* add emissionsFactor to Material entity and schema ([992b220](https://github.com/coldPBC/cold-monorepo/commit/992b22021e78f05767705b1732d5119895c33d0f))
+* add weight property to ProductMaterial entity and schema ([918a02d](https://github.com/coldPBC/cold-monorepo/commit/918a02df194a4332bc9b66a7201ef3256e9b1d0c))
+
 # [1.481.0](https://github.com/coldPBC/cold-monorepo/compare/v1.480.1...v1.481.0) (2024-11-18)
 
 

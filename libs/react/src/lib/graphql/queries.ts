@@ -340,11 +340,13 @@ export const GET_ALL_PRODUCTS= gql`
         id
         yield
         unitOfMeasure
+        weight
         material {
           id
           name
           materialCategory
           materialSubcategory
+          emissionsFactor
           materialSuppliers {
             id
             organizationFacility {
@@ -565,11 +567,13 @@ export const GET_PRODUCT = gql`
         id
         yield
         unitOfMeasure
+        weight
         material {
           id
           name
           materialCategory
           materialSubcategory
+          emissionsFactor
           materialSuppliers {
             id
             organizationFacility {
