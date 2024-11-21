@@ -219,7 +219,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
             <Table.Row
               key={`${row.activity}-${i}`}
               theme={darkTableTheme.table?.row}
-              className={`cursor-pointer w-[742px]`}
+              className={'w-[742px]'}
               onMouseEnter={() => {
                 setSelectedActivity({ scope: scope_category, activity: row.activity });
               }}
