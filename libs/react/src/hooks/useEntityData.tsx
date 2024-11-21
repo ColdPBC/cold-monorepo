@@ -39,8 +39,9 @@ const ENTITY_MAP = {
     transform: (item: SupplierGraphQL, assurances: Array<{ entity: { id: string }}>): BaseEntity => ({
       id: item.id,
       name: item.name,
-      category: item.category || '',
-      subcategory: item.subcategory || '',
+      // Use country in lieu of category for suppliers
+      category: item.country || '',
+      subcategory: '',
       hasAttribute: assurances.some(assurance => assurance.entity.id === item.id)
     })
   },

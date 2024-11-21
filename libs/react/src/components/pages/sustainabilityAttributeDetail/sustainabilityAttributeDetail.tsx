@@ -55,7 +55,7 @@ export const _SustainabilityAttributeDetail = () => {
 			const totalCount = items.length;
 
 			return {
-				category: category || 'No Category',
+				category: category || (validLevel === EntityLevel.SUPPLIER ? 'No Country' : 'No Category'),
 				hasAttributeCount,
 				totalCount,
 				percentage: (hasAttributeCount / totalCount) * 100,
@@ -108,6 +108,37 @@ export const _SustainabilityAttributeDetail = () => {
 		.filter(Boolean)
 		.sort((a, b) => a.localeCompare(b));
 
+  const categoryFields: GridColDef[] = validLevel === EntityLevel.SUPPLIER ? [
+    {
+      field: 'category',
+      headerName: 'Country',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      flex: 1,
+      minWidth: 230,
+      type: 'singleSelect',
+      valueOptions: uniqCategories,
+    },
+  ] : [
+    {
+      field: 'category',
+      headerName: 'Category',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      flex: 1,
+      minWidth: 230,
+      type: 'singleSelect',
+      valueOptions: uniqCategories,
+    },
+    {
+      field: 'subcategory',
+      headerName: 'Sub Category',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      flex: 1,
+      minWidth: 230,
+      type: 'singleSelect',
+      valueOptions: uniqSubCategories,
+    },
+  ]
+
 	const columns: GridColDef[] = [
 		{
 			field: 'name',
@@ -132,24 +163,7 @@ export const _SustainabilityAttributeDetail = () => {
 				);
 			},
 		},
-		{
-			field: 'category',
-			headerName: 'Category',
-			headerClassName: 'bg-gray-30 h-[37px] text-body',
-			flex: 1,
-			minWidth: 230,
-			type: 'singleSelect',
-			valueOptions: uniqCategories,
-		},
-		{
-			field: 'subcategory',
-			headerName: 'Sub Category',
-			headerClassName: 'bg-gray-30 h-[37px] text-body',
-			flex: 1,
-			minWidth: 230,
-			type: 'singleSelect',
-			valueOptions: uniqSubCategories,
-		},
+    ...categoryFields
 	];
 
 	const onRowClick = (entity: BaseEntity) => {
