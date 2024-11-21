@@ -219,6 +219,11 @@ const _MaterialsDataGrid = () => {
         showManageColumns
         showExport
         showSearch
+        initialState={{
+          sorting: {
+            sortModel: [{ field: 'name', sort: 'asc' }],
+          },
+        }}
       />
     </div>
   );

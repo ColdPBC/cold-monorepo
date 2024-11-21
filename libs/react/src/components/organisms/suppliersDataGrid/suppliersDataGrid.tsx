@@ -205,6 +205,11 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
         showManageColumns
         showExport
         showSearch
+        initialState={{
+          sorting: {
+            sortModel: [{ field: 'name', sort: 'asc' }],
+          },
+        }}
       />
     </div>
   );
