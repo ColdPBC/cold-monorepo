@@ -1,3 +1,10 @@
+# [1.483.0](https://github.com/coldPBC/cold-monorepo/compare/v1.482.0...v1.483.0) (2024-11-21)
+
+
+### Features
+
+* new product carbon footprint graphs ([8794498](https://github.com/coldPBC/cold-monorepo/commit/879449892cf29912aaf78396f8cd78273b79754b))
+
 # [1.482.0](https://github.com/coldPBC/cold-monorepo/compare/v1.481.0...v1.482.0) (2024-11-20)
 
 
