@@ -208,6 +208,7 @@ export const _ProductsDataGrid = () => {
       headerName: 'Tier 1 Supplier',
       minWidth: 200,
       flex: 1,
+      sortable: false,
     },
     {
       ...defaultColumnProperties,
@@ -227,6 +228,7 @@ export const _ProductsDataGrid = () => {
           <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />
         )
       },
+      sortable: false,
     },
     {
       ...defaultColumnProperties,
@@ -259,6 +261,7 @@ export const _ProductsDataGrid = () => {
           <BubbleList values={params.value} />
         )
       },
+      sortable: false,
     },
     {
       ...defaultColumnProperties,
