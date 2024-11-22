@@ -15,6 +15,7 @@ import {
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS,
   GET_PAGINATED_PRODUCTS_FOR_ORG,
+  GET_PAGINATED_MATERIALS_FOR_ORG,
   GET_PRODUCT,
   GET_SUPPLIER,
   GET_SUSTAINABILITY_ATTRIBUTE,
@@ -471,7 +472,21 @@ export const defaultGraphqlMocks: {
 					materials: getMaterialsMocksWithAssurances(),
 				},
 			}),
-	}, {
+	},
+  {
+    query: GET_PAGINATED_MATERIALS_FOR_ORG,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          // Sort like the server should
+          materials: getMaterialsMocksWithAssurances().sort((a,b) => a.name.localeCompare(b.name)),
+          materials_aggregate: {
+            count: getMaterialsMocksWithAssurances().length,
+          }
+        },
+      }),
+  },
+  {
     query: GET_PRODUCT,
     handler: (variables) => {
       const {id} = variables as {id: string};

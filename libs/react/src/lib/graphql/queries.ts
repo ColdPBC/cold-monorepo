@@ -165,6 +165,77 @@ export const DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE
   }
 `;
 
+export const GET_PAGINATED_MATERIALS_FOR_ORG = gql`
+query GET_PAGINATED_MATERIALS_FOR_ORG($filter: MaterialsListFilter!, $pagination: MaterialsPaginationInput!) {
+  materials(filter: $filter, pagination: $pagination) {
+    id
+    name
+    materialCategory
+    materialSubcategory
+    materialSuppliers {
+      id
+      organizationFacility {
+        id
+        name
+        supplierTier
+        attributeAssurances {
+          id
+          effectiveEndDate
+          sustainabilityAttribute {
+            id
+            name
+            level
+            logoUrl
+          }
+          organizationFile {
+            id
+          }
+        }
+      }
+    }
+    attributeAssurances {
+      id
+      effectiveEndDate
+      sustainabilityAttribute {
+        id
+        name
+        level
+        logoUrl
+      }
+      organizationFile {
+        id
+      }
+    }
+    productMaterials {
+      id
+      product {
+        id
+        organizationFacility {
+          id
+          name
+        }
+        attributeAssurances {
+          id
+          effectiveEndDate
+          sustainabilityAttribute {
+            id
+            name
+            level
+            logoUrl
+          }
+          organizationFile {
+            id
+          }
+        }
+      }
+    }
+  }
+  materials_aggregate(filter: $filter) {
+    count
+  }
+}
+`;
+
 export const GET_ALL_MATERIALS_FOR_ORG = gql`
   query Materials($filter: MaterialsListFilter!) {
     materials(filter: $filter) {
@@ -822,6 +893,7 @@ export const queries: {
   DELETE_ATTRIBUTE_ASSURANCE: DELETE_ATTRIBUTE_ASSURANCE,
   DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE: DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE,
   GET_ALL_MATERIALS_FOR_ORG: GET_ALL_MATERIALS_FOR_ORG,
+  GET_PAGINATED_MATERIALS_FOR_ORG: GET_PAGINATED_MATERIALS_FOR_ORG,
   GET_ALL_SCHEMA_ENUMS: GET_ALL_SCHEMA_ENUMS,
   GET_ALL_SUPPLIERS_FOR_ORG: GET_ALL_SUPPLIERS_FOR_ORG,
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,

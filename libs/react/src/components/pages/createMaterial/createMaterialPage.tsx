@@ -192,17 +192,17 @@ const _CreateMaterialPage = () => {
           orgId,
           materialId,
         });
-        addToastMessage({
+        await addToastMessage({
           message: 'Material created successfully',
           type: ToastMessage.SUCCESS,
         })
-        navigate('/materials');
+        navigate(`/materials/${materialId}`);
       } else {
         logBrowser('Error creating material', 'error', {
           orgId,
           response: createMaterialResponse,
         });
-        addToastMessage({
+        await addToastMessage({
           message: 'Error creating material',
           type: ToastMessage.FAILURE,
         })
@@ -391,7 +391,6 @@ const _CreateMaterialPage = () => {
             label: 'Cancel Without Saving',
             onClick: () => {
               setShowCancelModal(false);
-              navigate('/materials');
             },
             variant: ButtonTypes.warning,
           }
