@@ -17,7 +17,6 @@ import {
 import { get, has, uniq } from 'lodash';
 import {
   listFilterOperators,
-  listSortComparator,
   processEntityLevelAssurances,
 } from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -161,6 +160,7 @@ const _MaterialsDataGrid = () => {
       minWidth: 230,
       type: 'singleSelect',
       valueOptions: uniqTier2Suppliers,
+      sortable: false,
     },
     {
       field: 'usedBy',
@@ -174,7 +174,7 @@ const _MaterialsDataGrid = () => {
       },
       minWidth: 350,
       flex: 1,
-      sortComparator: listSortComparator,
+      sortable: false,
       filterOperators: listFilterOperators,
     },
     {
@@ -189,8 +189,8 @@ const _MaterialsDataGrid = () => {
       },
       minWidth: 206,
       flex: 1,
-      sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
+      sortable: false,
     },
     {
       field: 'materialCategory',
