@@ -5,26 +5,19 @@ import {
   Spinner,
   SustainabilityAttributeColumnList
 } from "@coldpbc/components";
-import {useAuth0Wrapper, useGraphQLSWR} from "@coldpbc/hooks";
+import { useAuth0Wrapper, useGraphQLSWR } from "@coldpbc/hooks";
 import {
-  EntityLevelAttributeAssuranceGraphQL,
   EntityWithAttributeAssurances,
   ProductsQuery,
-  SustainabilityAttribute, SustainabilityAttributeAssurance,
-  SustainabilityAttributeAssuranceGraphQL,
+  SustainabilityAttribute,
 } from '@coldpbc/interfaces';
-import {
-  GridToolbarColumnsButton,
-  GridToolbarContainer,
-  GridToolbarExport,
-  GridToolbarQuickFilter
-} from "@mui/x-data-grid";
-import React from "react";
-import {get, uniq} from "lodash";
-import {withErrorBoundary} from "react-error-boundary";
+import React, { useEffect, useState } from 'react';
+import { get, has } from 'lodash';
+import { withErrorBoundary } from "react-error-boundary";
 import { processEntityLevelAssurances } from '@coldpbc/lib';
-import {useFlags} from "launchdarkly-react-client-sdk";
-import {useNavigate} from "react-router-dom";
+import { useFlags } from "launchdarkly-react-client-sdk";
+import { useNavigate } from "react-router-dom";
+import { GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 
 
 const getColumnRows = (
@@ -86,15 +79,74 @@ export const _ProductsDataGrid = () => {
   const ldFlags = useFlags();
   const navigate = useNavigate();
   const {orgId} = useAuth0Wrapper()
+
+  // Add pagination state
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: 25,
+  });
+
+  // Add sorting state
+  const [sortModel, setSortModel] = useState<GridSortModel>([
+    { field: 'name', sort: 'asc' }
+  ]);
+
+  // Convert MUI sort model to GraphQL ordering
+  const getOrderByInput = (sortModel: GridSortModel) => {
+    if (!sortModel.length) return undefined;
+
+    const [{ field, sort }] = sortModel;
+    return {
+      [field]: sort === 'asc' ? 'ASC' : 'DESC'
+    };
+  };
+
   const productsQuery = useGraphQLSWR<{
-    products: ProductsQuery[]
-  }>(orgId ? 'GET_ALL_PRODUCTS' : null, {
+    products: ProductsQuery[];
+    products_aggregate: { count: number };
+  }>(orgId ? 'GET_PAGINATED_PRODUCTS_FOR_ORG' : null, {
     filter: {
       organization: {
         id: orgId
       }
     },
+    pagination: {
+      offset: paginationModel.page * paginationModel.pageSize,
+      limit: paginationModel.pageSize,
+      orderBy: getOrderByInput(sortModel)
+    }
   });
+
+  const [rows, setRows] = useState<{
+    id: string;
+    name: string;
+    description: string;
+    sustainabilityAttributes: SustainabilityAttribute[];
+    tier1Supplier: string;
+    seasonCode: string;
+    upcCode: string;
+    brandProductId: string;
+    supplierProductId: string;
+    materials: string[];
+    productCategory: string;
+    productSubcategory: string;
+  }[]>([]);
+  const [totalRows, setTotalRows] = useState<number>(0);
+
+  useEffect(() => {
+    if (productsQuery.data) {
+      if (has(productsQuery.data, 'errors')) {
+        setRows([]);
+        setTotalRows(0);
+      } else {
+        const products = get(productsQuery.data, 'data.products', []);
+        const rows = getColumnRows(products, ldFlags)
+        const total = get(productsQuery.data, 'data.products_aggregate.count', 0);
+        setRows(rows);
+        setTotalRows(total);
+      }
+    }
+  }, [productsQuery.data]);
 
   const defaultColumnProperties = {
     headerClassName: 'bg-gray-30 h-[37px] text-body',
@@ -228,29 +280,6 @@ export const _ProductsDataGrid = () => {
     return <Spinner />
   }
 
-  let rows: {
-    id: string;
-    name: string;
-    description: string;
-    sustainabilityAttributes: SustainabilityAttribute[];
-    tier1Supplier: string;
-    seasonCode: string;
-    upcCode: string;
-    brandProductId: string;
-    supplierProductId: string;
-    materials: string[];
-    productCategory: string;
-    productSubcategory: string;
-  }[] = []
-
-  if(get(productsQuery.data, 'errors')) {
-    rows = []
-  }
-
-  if(productsQuery.data && get(productsQuery.data, 'data.products', []).length > 0) {
-    rows = getColumnRows(productsQuery.data.data.products, ldFlags)
-  }
-
   return (
     <div className={'w-full'}>
       <MuiDataGrid
@@ -265,11 +294,16 @@ export const _ProductsDataGrid = () => {
         showManageColumns
         showExport
         showSearch
-        initialState={{
-          sorting: {
-            sortModel: [{ field: 'name', sort: 'asc' }],
-          },
-        }}
+        // Pagination props
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        pageSizeOptions={[25, 50, 100]}
+        paginationMode="server"
+        rowCount={totalRows}
+        // Sorting props
+        sortModel={sortModel}
+        onSortModelChange={setSortModel}
+        sortingMode="server"
       />
     </div>
   )

@@ -321,7 +321,103 @@ export const CREATE_MATERIAL_SUPPLIER = gql`
       id
     }
   }
-`
+`;
+
+export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
+  query Products($filter: ProductsListFilter, $pagination: ProductsPaginationInput){
+    products(filter: $filter, pagination: $pagination){
+      id
+      name
+      productCategory
+      productSubcategory
+      description
+      metadata
+      seasonCode
+      upcCode
+      brandProductId
+      supplierProductId
+      productMaterials {
+        id
+        yield
+        unitOfMeasure
+        weight
+        material {
+          id
+          name
+          materialCategory
+          materialSubcategory
+          emissionsFactor
+          materialSuppliers {
+            id
+            organizationFacility {
+              id
+              name
+              attributeAssurances {
+                id
+                effectiveEndDate
+                organizationFile {
+                  id
+                }
+                sustainabilityAttribute {
+                  id
+                  level
+                  logoUrl
+                  name
+                }
+              }
+            }
+          }
+          attributeAssurances {
+            id
+            effectiveEndDate
+            organizationFile {
+              id
+            }
+            sustainabilityAttribute {
+              id
+              level
+              logoUrl
+              name
+            }
+          }
+        }
+      }
+      attributeAssurances {
+        id
+        effectiveEndDate
+        organizationFile {
+          id
+        }
+        sustainabilityAttribute {
+          id
+          level
+          logoUrl
+          name
+        }
+      }
+      organizationFacility {
+        id
+        name
+        attributeAssurances {
+          id
+          effectiveEndDate
+          organizationFile {
+            id
+          }
+          sustainabilityAttribute {
+            id
+            level
+            logoUrl
+            name
+          }
+        }
+      }
+    }
+    products_aggregate(filter: $filter) {
+      count
+    }
+  }
+`;
 
 export const GET_ALL_PRODUCTS= gql`
   query Products($filter: ProductsListFilter){
@@ -733,6 +829,7 @@ export const queries: {
   CREATE_MATERIAL: CREATE_MATERIAL,
   CREATE_MATERIAL_SUPPLIER: CREATE_MATERIAL_SUPPLIER,
   GET_ALL_PRODUCTS: GET_ALL_PRODUCTS,
+  GET_PAGINATED_PRODUCTS_FOR_ORG: GET_PAGINATED_PRODUCTS_FOR_ORG,
   CREATE_PRODUCT_MATERIAL: CREATE_PRODUCT_MATERIAL,
   CREATE_SUPPLIER: CREATE_SUPPLIER,
   UPDATE_PRODUCT: UPDATE_PRODUCT,
