@@ -465,7 +465,8 @@ export const defaultGraphqlMocks: {
     handler: () =>
       Promise.resolve({
         data: {
-          materials: getMaterialsMocksWithAssurances(),
+          // Sort like the server should
+          materials: getMaterialsMocksWithAssurances().sort((a,b) => a.name.localeCompare(b.name)),
           materials_aggregate: {
             count: getMaterialsMocksWithAssurances().length,
           }
