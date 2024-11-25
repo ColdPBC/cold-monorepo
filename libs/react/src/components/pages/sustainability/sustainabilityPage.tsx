@@ -16,6 +16,17 @@ const _SustainabilityPage = () => {
     organizationId: orgId,
   });
 
+  const { myAttributes, otherAttributes } = React.useMemo(() => {
+    const sustainabilityAttributesGraphQL: SustainabilityAttributeGraphQL[] = get(sustainabilityAttributesQuery.data, 'data.sustainabilityAttributes', [])
+    const sustainabilityAttributes: SustainabilityAttribute[] = processSustainabilityAttributeDataFromGraphQL(sustainabilityAttributesGraphQL)
+      .filter(attribute => attribute.level !== EntityLevel.ORGANIZATION)
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const myAttributes = sustainabilityAttributes.filter(attribute => (attribute.attributeAssurances?.length || 0) > 0);
+    const otherAttributes = sustainabilityAttributes.filter(attribute => (attribute.attributeAssurances?.length || 0) === 0);
+
+    return { myAttributes, otherAttributes };
+  }, [sustainabilityAttributesQuery.data]);
+
   if (sustainabilityAttributesQuery.isLoading) {
     return (
       <MainContent title="Sustainability Attributes" className={'w-[calc(100%-100px)]'}>
@@ -34,13 +45,6 @@ const _SustainabilityPage = () => {
       />
     )
   }
-
-  const sustainabilityAttributesGraphQL: SustainabilityAttributeGraphQL[] = get(sustainabilityAttributesQuery.data, 'data.sustainabilityAttributes', [])
-  const sustainabilityAttributes: SustainabilityAttribute[] = processSustainabilityAttributeDataFromGraphQL(sustainabilityAttributesGraphQL)
-    .filter(attribute => attribute.level !== EntityLevel.ORGANIZATION)
-    .sort((a, b) => a.name.localeCompare(b.name));
-  const myAttributes = sustainabilityAttributes.filter(attribute => (attribute.attributeAssurances?.length || 0) > 0);
-  const otherAttributes = sustainabilityAttributes.filter(attribute => (attribute.attributeAssurances?.length || 0) === 0);
 
   return (
 		<MainContent title="Sustainability Attributes" className={'w-[calc(100%-100px)]'}>
