@@ -21,6 +21,9 @@ import {
   GET_SUSTAINABILITY_ATTRIBUTE,
   UPDATE_DOCUMENT_ASSURANCE,
   UPDATE_DOCUMENT_FIELDS,
+  GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY,
+  GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY,
+  GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY,
 } from '@coldpbc/lib';
 import {
 	filesProcessedWithDatesMock,
@@ -497,6 +500,47 @@ export const defaultGraphqlMocks: {
       })
     }
   },
+  {
+    query: GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          materials: getMaterialsMocksWithAssurances().map(material => ({
+            id: material.id,
+            name: material.name,
+            materialCategory: material.materialCategory,
+            materialSubcategory: material.materialSubcategory,
+          })),
+        }
+      })
+  },
+  {
+    query: GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          products: getProductsMock().map(product => ({
+            id: product.id,
+            name: product.name,
+            productCategory: product.productCategory,
+            productSubcategory: product.productSubcategory,
+          })),
+        },
+      }),
+  },
+  {
+    query: GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          organizationFacilities: getSupplierMocks().map(supplier => ({
+            id: supplier.id,
+            name: supplier.name,
+            country: supplier.country
+          })),
+        }
+      })
+  },
 ];
 
 export const getSupplierGraphQLMock = (tier: number) => (
@@ -707,11 +751,16 @@ export const sustainabilityAttributesMocks = [
       }),
   },
   {
-    query: GET_ALL_MATERIALS_FOR_ORG,
+    query: GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY,
     handler: () =>
       Promise.resolve({
         data: {
-          materials: getMaterialsMocksWithAssurances(),
+          materials: getMaterialsMocksWithAssurances().map(material => ({
+            id: material.id,
+            name: material.name,
+            materialCategory: material.materialCategory,
+            materialSubcategory: material.materialSubcategory,
+          })),
         }
       })
   }
@@ -743,11 +792,16 @@ export const productLevelSustainabilityAttributeMocks = [
       }),
   },
   {
-    query: GET_ALL_PRODUCTS,
+    query: GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY,
     handler: () =>
       Promise.resolve({
         data: {
-          products: getProductsMock(),
+          products: getProductsMock().map(product => ({
+            id: product.id,
+            name: product.name,
+            productCategory: product.productCategory,
+            productSubcategory: product.productSubcategory,
+          })),
         },
       }),
   }
@@ -779,11 +833,15 @@ export const supplierLevelSustainabilityAttributeMocks = [
       }),
   },
   {
-    query: GET_ALL_SUPPLIERS_FOR_ORG,
+    query: GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY,
     handler: () =>
       Promise.resolve({
         data: {
-          organizationFacilities: getSupplierMocks()
+          organizationFacilities: getSupplierMocks().map(supplier => ({
+            id: supplier.id,
+            name: supplier.name,
+            country: supplier.country
+          })),
         }
       })
   }

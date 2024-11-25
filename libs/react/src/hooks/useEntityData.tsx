@@ -1,5 +1,10 @@
 import { EntityLevel } from '@coldpbc/enums';
-import { BaseEntity, MaterialsWithRelations, ProductsQuery, SupplierGraphQL } from '@coldpbc/interfaces';
+import {
+  BaseEntity,
+  MaterialBaseEntity,
+  ProductBaseEntity,
+  SupplierBaseEntity,
+} from '@coldpbc/interfaces';
 import { useGraphQLSWR } from '@coldpbc/hooks';
 import { get } from 'lodash';
 import React from 'react';
@@ -9,10 +14,10 @@ type SupportedEntityLevel = Exclude<EntityLevel, EntityLevel.ORGANIZATION>;
 // Define stable config object outside of hook to prevent unnecessary re-renders
 const ENTITY_MAP = {
   [EntityLevel.MATERIAL]: {
-    queryKey: 'GET_ALL_MATERIALS_FOR_ORG',
+    queryKey: 'GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY',
     dataPath: 'data.materials',
     categoryNames: ['materialCategory', 'materialSubcategory'],
-    transform: (item: MaterialsWithRelations, assurances: Array<{ entity: { id: string }}>): BaseEntity => ({
+    transform: (item: MaterialBaseEntity, assurances: Array<{ entity: { id: string }}>): BaseEntity => ({
       id: item.id,
       name: item.name,
       category: item.materialCategory || '',
@@ -21,10 +26,10 @@ const ENTITY_MAP = {
     })
   },
   [EntityLevel.PRODUCT]: {
-    queryKey: 'GET_ALL_PRODUCTS',
+    queryKey: 'GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY',
     dataPath: 'data.products',
     categoryNames: ['productCategory', 'productSubcategory'],
-    transform: (item: ProductsQuery, assurances: Array<{ entity: { id: string }}>): BaseEntity => ({
+    transform: (item: ProductBaseEntity, assurances: Array<{ entity: { id: string }}>): BaseEntity => ({
       id: item.id,
       name: item.name,
       category: item.productCategory || '',
@@ -33,10 +38,10 @@ const ENTITY_MAP = {
     })
   },
   [EntityLevel.SUPPLIER]: {
-    queryKey: 'GET_ALL_SUPPLIERS_FOR_ORG',
+    queryKey: 'GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY',
     dataPath: 'data.organizationFacilities',
     categoryNames: ['category', 'subcategory'],
-    transform: (item: SupplierGraphQL, assurances: Array<{ entity: { id: string }}>): BaseEntity => ({
+    transform: (item: SupplierBaseEntity, assurances: Array<{ entity: { id: string }}>): BaseEntity => ({
       id: item.id,
       name: item.name,
       // Use country in lieu of category for suppliers
@@ -48,9 +53,9 @@ const ENTITY_MAP = {
 } as const;
 
 interface EntityQueryResult {
-  materials?: MaterialsWithRelations[];
-  organizationFacilities?: SupplierGraphQL[];
-  products?: ProductsQuery[];
+  materials?: MaterialBaseEntity[];
+  organizationFacilities?: SupplierBaseEntity[];
+  products?: ProductBaseEntity[];
 }
 
 // Memoize the query config to prevent unnecessary re-renders
@@ -60,8 +65,8 @@ function useQueryConfig(entityLevel: SupportedEntityLevel | undefined, orgId: st
 
     return {
       key: ENTITY_MAP[entityLevel].queryKey,
-      filter: {
-        organization: { id: orgId }
+      variables: {
+        organizationId: orgId
       }
     };
   }, [entityLevel, orgId]);
@@ -81,7 +86,7 @@ export function useEntityData(
   // Execute the query with memoized config
   const query = useGraphQLSWR<EntityQueryResult>(
     queryConfig?.key ?? null,
-    { filter: queryConfig?.filter }
+    queryConfig?.variables,
   );
 
   // Get the raw data from the query result
