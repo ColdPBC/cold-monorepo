@@ -79,22 +79,14 @@ const _CreateSupplierPage = () => {
 
   const productsQuery = useGraphQLSWR<{
     products: Products[];
-  }>(orgId ? 'GET_ALL_PRODUCTS' : null, {
-    filter: {
-      organization: {
-        id: orgId,
-      },
-    },
+  }>(orgId ? 'GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY' : null, {
+    organizationId: orgId,
   });
 
   const materialsQuery = useGraphQLSWR<{
     materials: Materials[];
-  }>(orgId ? 'GET_ALL_MATERIALS_FOR_ORG' : null, {
-    filter: {
-      organization: {
-        id: orgId,
-      },
-    },
+  }>(orgId ? 'GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY' : null, {
+    organizationId: orgId,
   });
 
   useEffect(() => {
