@@ -23,43 +23,45 @@ export interface MUIDataGridProps extends DataGridProps {
 }
 
 export const MuiDataGrid = (props: MUIDataGridProps) => {
-	const { showSearch, showExport, showManageColumns } = props;
+  const { showSearch, showExport, showManageColumns, slotProps } = props;
 
-	const toolbar = () => {
-		if (showSearch || showExport || showManageColumns)
-			return (
-				<GridToolbarContainer>
+  const toolbar = () => {
+    if (showSearch || showExport || showManageColumns)
+      return (
+        <GridToolbarContainer>
           {showSearch &&
             <>
-              <GridToolbarQuickFilter />
+              <GridToolbarQuickFilter
+                placeholder={slotProps?.toolbar?.quickFilterProps?.placeholder || 'Search...'}
+              />
               <Box sx={{ flexGrow: 1 }} />
             </>
           }
-					{showManageColumns && (
-						<GridToolbarColumnsButton
-							slotProps={{
-								tooltip: {
-									sx: {
-										'& .MuiInput-input': {
-											backgroundColor: 'transparent',
-											fontFamily: 'Inter',
-											fontSize: '14px',
-											padding: '4px 0px 5px',
-											height: '32px',
-										},
-										'& .MuiDataGrid-filterFormColumnInput': {
-											backgroundColor: 'transparent',
-										},
-									},
-								},
-							}}
-						/>
-					)}
-					{showExport && <GridToolbarExport />}
-				</GridToolbarContainer>
-			);
-		else return null;
-	};
+          {showManageColumns && (
+            <GridToolbarColumnsButton
+              slotProps={{
+                tooltip: {
+                  sx: {
+                    '& .MuiInput-input': {
+                      backgroundColor: 'transparent',
+                      fontFamily: 'Inter',
+                      fontSize: '14px',
+                      padding: '4px 0px 5px',
+                      height: '32px',
+                    },
+                    '& .MuiDataGrid-filterFormColumnInput': {
+                      backgroundColor: 'transparent',
+                    },
+                  },
+                },
+              }}
+            />
+          )}
+          {showExport && <GridToolbarExport />}
+        </GridToolbarContainer>
+      );
+    else return null;
+  };
 
 	return (
 		<DataGrid

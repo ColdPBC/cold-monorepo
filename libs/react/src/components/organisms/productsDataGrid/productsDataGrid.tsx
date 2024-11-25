@@ -2,7 +2,6 @@ import {
   BubbleList,
   ErrorFallback,
   MuiDataGrid,
-  Spinner,
   SustainabilityAttributeColumnList
 } from "@coldpbc/components";
 import { useAuth0Wrapper, useGraphQLSWR } from "@coldpbc/hooks";
@@ -17,7 +16,7 @@ import { withErrorBoundary } from "react-error-boundary";
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
-import { GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
+import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 
 
 const getColumnRows = (
@@ -80,16 +79,26 @@ export const _ProductsDataGrid = () => {
   const navigate = useNavigate();
   const {orgId} = useAuth0Wrapper()
 
-  // Add pagination state
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
     page: 0,
     pageSize: 25,
   });
 
-  // Add sorting state
   const [sortModel, setSortModel] = useState<GridSortModel>([
     { field: 'name', sort: 'asc' }
   ]);
+
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Handle search input changes
+  const handleFilterChange = (filterModel: GridFilterModel) => {
+    const searchValue = filterModel.quickFilterValues?.[0] || '';
+    setSearchQuery(searchValue);
+    setPaginationModel(prev => ({
+      ...prev,
+      page: 0,
+    }));
+  };
 
   // Convert MUI sort model to GraphQL ordering
   const getOrderByInput = (sortModel: GridSortModel) => {
@@ -101,15 +110,29 @@ export const _ProductsDataGrid = () => {
     };
   };
 
+  // Build search filter
+  const getSearchFilter = (searchQuery: string) => {
+    const baseFilter = {
+      organization: {
+        id: orgId
+      }
+    };
+
+    if (!searchQuery) {
+      return baseFilter;
+    }
+
+    return {
+      ...baseFilter,
+      name_ilike: `%${searchQuery}%`,
+    };
+  };
+
   const productsQuery = useGraphQLSWR<{
     products: ProductsQuery[];
     products_aggregate: { count: number };
   }>(orgId ? 'GET_PAGINATED_PRODUCTS_FOR_ORG' : null, {
-    filter: {
-      organization: {
-        id: orgId
-      }
-    },
+    filter: getSearchFilter(searchQuery),
     pagination: {
       offset: paginationModel.page * paginationModel.pageSize,
       limit: paginationModel.pageSize,
@@ -151,6 +174,7 @@ export const _ProductsDataGrid = () => {
   const defaultColumnProperties = {
     headerClassName: 'bg-gray-30 h-[37px] text-body',
     flex: 1,
+    filterable: false,
   }
 
   const renderName = (params: any) => {
@@ -279,13 +303,10 @@ export const _ProductsDataGrid = () => {
     },
   ]
 
-  if(productsQuery.isLoading) {
-    return <Spinner />
-  }
-
   return (
     <div className={'w-full'}>
       <MuiDataGrid
+        loading={productsQuery.isLoading}
         columns={columns}
         rows={rows}
         rowHeight={72}
@@ -307,6 +328,17 @@ export const _ProductsDataGrid = () => {
         sortModel={sortModel}
         onSortModelChange={setSortModel}
         sortingMode="server"
+        // Search props
+        filterMode="server"
+        onFilterModelChange={handleFilterChange}
+        filterDebounceMs={500}
+        slotProps={{
+          toolbar: {
+            quickFilterProps: {
+              placeholder: 'Search by name...',
+            }
+          }
+        }}
       />
     </div>
   )
