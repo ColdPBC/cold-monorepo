@@ -126,7 +126,7 @@ export const CoverageSpreadBar: React.FC<CoverageSpreadBarProps> = ({
   return (
     // Height is the same as the totalCoverageDonut for consistency
     <div className="relative h-80 w-full min-w-80">
-      <Bar data={chartData} options={options} />
+      <Bar data={chartData} options={options} data-chromatic="ignore" />
     </div>
   );
 };
