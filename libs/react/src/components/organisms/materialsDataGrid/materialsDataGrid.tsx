@@ -5,20 +5,16 @@ import {
   BubbleList,
   ErrorFallback,
   MuiDataGrid,
-  Spinner,
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
 import {
-  GridColDef,
+  GridColDef, GridFilterModel,
   GridPaginationModel,
   GridSortModel,
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import { get, has, uniq } from 'lodash';
-import {
-  listFilterOperators,
-  processEntityLevelAssurances,
-} from '@coldpbc/lib';
+import { processEntityLevelAssurances } from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from 'react-router-dom';
@@ -38,6 +34,37 @@ const _MaterialsDataGrid = () => {
   const [sortModel, setSortModel] = useState<GridSortModel>([
     { field: 'name', sort: 'asc' }
   ]);
+
+
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Handle search input changes
+  const handleFilterChange = (filterModel: GridFilterModel) => {
+    const searchValue = filterModel.quickFilterValues?.[0] || '';
+    setSearchQuery(searchValue);
+    setPaginationModel(prev => ({
+      ...prev,
+      page: 0,
+    }));
+  };
+
+  // Build search filter
+  const getSearchFilter = (searchQuery: string) => {
+    const baseFilter = {
+      organization: {
+        id: orgId
+      }
+    };
+
+    if (!searchQuery) {
+      return baseFilter;
+    }
+
+    return {
+      ...baseFilter,
+      name_ilike: `%${searchQuery}%`,
+    };
+  };
 
   // Total count state
   const [totalRows, setTotalRows] = useState<number>(0);
@@ -63,11 +90,7 @@ const _MaterialsDataGrid = () => {
     materials: MaterialsWithRelations[];
     totalCount: number;
   }>(orgId ? 'GET_PAGINATED_MATERIALS_FOR_ORG' : null, {
-    filter: {
-      organization: {
-        id: orgId,
-      },
-    },
+    filter: getSearchFilter(searchQuery),
     pagination: paginationInput
   });
 
@@ -131,10 +154,6 @@ const _MaterialsDataGrid = () => {
       .flat(),
   );
 
-  if (materialsQuery.isLoading) {
-    return <Spinner />;
-  }
-
   const uniqCategories = uniq(
 		materials.map(material =>  material.materialCategory || ''),
   ).filter(Boolean).sort( (a, b) => a.localeCompare(b));
@@ -151,6 +170,7 @@ const _MaterialsDataGrid = () => {
       flex: 1,
       minWidth: 230,
       renderCell: renderName,
+      filterable: false,
     },
     {
       field: 'tier2Supplier',
@@ -160,6 +180,7 @@ const _MaterialsDataGrid = () => {
       minWidth: 230,
       type: 'singleSelect',
       valueOptions: uniqTier2Suppliers,
+      filterable: false,
       sortable: false,
     },
     {
@@ -174,8 +195,8 @@ const _MaterialsDataGrid = () => {
       },
       minWidth: 350,
       flex: 1,
+      filterable: false,
       sortable: false,
-      filterOperators: listFilterOperators,
     },
     {
       field: 'sustainabilityAttributes',
@@ -189,7 +210,7 @@ const _MaterialsDataGrid = () => {
       },
       minWidth: 206,
       flex: 1,
-      filterOperators: listFilterOperators,
+      filterable: false,
       sortable: false,
     },
     {
@@ -200,6 +221,7 @@ const _MaterialsDataGrid = () => {
       minWidth: 230,
       type: 'singleSelect',
       valueOptions: uniqCategories,
+      filterable: false,
     },
     {
       field: 'materialSubcategory',
@@ -209,6 +231,7 @@ const _MaterialsDataGrid = () => {
       minWidth: 230,
       type: 'singleSelect',
       valueOptions: uniqSubCategories,
+      filterable: false,
     },
   ];
 
@@ -228,6 +251,7 @@ const _MaterialsDataGrid = () => {
   return (
     <div className={'w-full'}>
       <MuiDataGrid
+        loading={materialsQuery.isLoading}
         rows={rows}
         columns={columns}
         columnHeaderHeight={55}
@@ -246,6 +270,17 @@ const _MaterialsDataGrid = () => {
         onRowClick={(params) => {
           if(ldFlags.materialDetailPageCold997){
             navigate(`/materials/${params.id}`)
+          }
+        }}
+        // Search props
+        filterMode="server"
+        onFilterModelChange={handleFilterChange}
+        filterDebounceMs={500}
+        slotProps={{
+          toolbar: {
+            quickFilterProps: {
+              placeholder: 'Search by name...',
+            }
           }
         }}
       />
