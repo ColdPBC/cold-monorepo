@@ -4,10 +4,8 @@ import {
   CREATE_MATERIAL_SUPPLIER,
   CREATE_PRODUCT_MATERIAL,
   GET_ALL_FILES,
-  GET_ALL_MATERIALS_FOR_ORG,
   GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
   GET_ALL_ORGS,
-  GET_ALL_PRODUCTS,
   GET_ALL_SCHEMA_ENUMS,
   GET_ALL_SUPPLIERS_FOR_ORG,
   GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT,
@@ -435,15 +433,6 @@ export const defaultGraphqlMocks: {
 				},
 			}),
 	},
-	{
-		query: GET_ALL_PRODUCTS,
-		handler: () =>
-			Promise.resolve({
-				data: {
-					products: getProductsMock(),
-				},
-			}),
-	},
   {
     query: GET_PAGINATED_PRODUCTS_FOR_ORG,
     handler: () =>
@@ -464,15 +453,6 @@ export const defaultGraphqlMocks: {
 					createProductMaterial: {
 						id: 'product_material_1',
 					},
-				},
-			}),
-	},
-	{
-		query: GET_ALL_MATERIALS_FOR_ORG,
-		handler: () =>
-			Promise.resolve({
-				data: {
-					materials: getMaterialsMocksWithAssurances(),
 				},
 			}),
 	},

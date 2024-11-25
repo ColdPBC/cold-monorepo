@@ -66,12 +66,8 @@ const _CreateMaterialPage = () => {
 
   const productsQuery = useGraphQLSWR<{
     products: {id: string, name: string}[];
-  }>(orgId ? 'GET_ALL_PRODUCTS' : null, {
-    filter: {
-      organization: {
-        id: orgId,
-      },
-    },
+  }>(orgId ? 'GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY' : null, {
+    organizationId: orgId,
   });
 
   useEffect(() => {
