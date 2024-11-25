@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { MaterialsPage } from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
-import { materialsGraphqlMock, StoryMockProvider } from '@coldpbc/mocks';
+import { defaultGraphqlMocks, StoryMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof MaterialsPage> = {
   title: 'Pages/MaterialsPage',
@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => {
     return (
-      <StoryMockProvider graphqlMocks={materialsGraphqlMock}>
+      <StoryMockProvider graphqlMocks={defaultGraphqlMocks}>
         <MaterialsPage />
       </StoryMockProvider>
     );

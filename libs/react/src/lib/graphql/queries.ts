@@ -236,74 +236,6 @@ query GET_PAGINATED_MATERIALS_FOR_ORG($filter: MaterialsListFilter!, $pagination
 }
 `;
 
-export const GET_ALL_MATERIALS_FOR_ORG = gql`
-  query Materials($filter: MaterialsListFilter!) {
-    materials(filter: $filter) {
-      id
-      name
-      materialCategory
-      materialSubcategory
-      materialSuppliers {
-        id
-        organizationFacility {
-          id
-          name
-          supplierTier
-          attributeAssurances {
-            id
-            effectiveEndDate
-            sustainabilityAttribute {
-              id
-              name
-              level
-              logoUrl
-            }
-            organizationFile {
-              id
-            }
-          }
-        }
-      }
-      attributeAssurances {
-        id
-        effectiveEndDate
-        sustainabilityAttribute {
-          id
-          name
-          level
-          logoUrl
-        }
-        organizationFile {
-          id
-        }
-      }
-      productMaterials {
-        id
-        product {
-          id
-          organizationFacility {
-            id
-            name
-          }
-          attributeAssurances {
-            id
-            effectiveEndDate
-            sustainabilityAttribute {
-              id
-              name
-              level
-              logoUrl
-            }
-            organizationFile {
-              id
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
 export const GET_ALL_SCHEMA_ENUMS = gql`
   query QueryTypes {
     _graphweaver {
@@ -486,99 +418,6 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
     }
     products_aggregate(filter: $filter) {
       count
-    }
-  }
-`;
-
-export const GET_ALL_PRODUCTS= gql`
-  query Products($filter: ProductsListFilter){
-    products(filter: $filter){
-      id
-      name
-      productCategory
-      productSubcategory
-      description
-      metadata
-      seasonCode
-      upcCode
-      brandProductId
-      supplierProductId
-      productMaterials {
-        id
-        yield
-        unitOfMeasure
-        weight
-        material {
-          id
-          name
-          materialCategory
-          materialSubcategory
-          emissionsFactor
-          materialSuppliers {
-            id
-            organizationFacility {
-              id
-              name
-              attributeAssurances {
-                id
-                effectiveEndDate
-                organizationFile {
-                  id
-                }
-                sustainabilityAttribute {
-                  id
-                  level
-                  logoUrl
-                  name
-                }
-              }
-            }
-          }
-          attributeAssurances {
-            id
-            effectiveEndDate
-            organizationFile {
-              id
-            }
-            sustainabilityAttribute {
-              id
-              level
-              logoUrl
-              name
-            }
-          }
-        }
-      }
-      attributeAssurances {
-        id
-        effectiveEndDate
-        organizationFile {
-          id
-        }
-        sustainabilityAttribute {
-          id
-          level
-          logoUrl
-          name
-        }
-      }
-      organizationFacility {
-        id
-        name
-        attributeAssurances {
-          id
-          effectiveEndDate
-          organizationFile {
-            id
-          }
-          sustainabilityAttribute {
-            id
-            level
-            logoUrl
-            name
-          }
-        }
-      }
     }
   }
 `;
@@ -924,7 +763,6 @@ export const queries: {
   UPDATE_DOCUMENT_ASSURANCE: UPDATE_DOCUMENT_ASSURANCE,
   DELETE_ATTRIBUTE_ASSURANCE: DELETE_ATTRIBUTE_ASSURANCE,
   DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE: DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE,
-  GET_ALL_MATERIALS_FOR_ORG: GET_ALL_MATERIALS_FOR_ORG,
   GET_PAGINATED_MATERIALS_FOR_ORG: GET_PAGINATED_MATERIALS_FOR_ORG,
   GET_ALL_SCHEMA_ENUMS: GET_ALL_SCHEMA_ENUMS,
   GET_ALL_SUPPLIERS_FOR_ORG: GET_ALL_SUPPLIERS_FOR_ORG,
@@ -932,7 +770,6 @@ export const queries: {
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS,
   CREATE_MATERIAL: CREATE_MATERIAL,
   CREATE_MATERIAL_SUPPLIER: CREATE_MATERIAL_SUPPLIER,
-  GET_ALL_PRODUCTS: GET_ALL_PRODUCTS,
   GET_PAGINATED_PRODUCTS_FOR_ORG: GET_PAGINATED_PRODUCTS_FOR_ORG,
   CREATE_PRODUCT_MATERIAL: CREATE_PRODUCT_MATERIAL,
   CREATE_SUPPLIER: CREATE_SUPPLIER,
