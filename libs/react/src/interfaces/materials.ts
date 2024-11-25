@@ -1,11 +1,15 @@
 import { Suppliers } from './suppliers';
 import { Claims } from './claims';
-import { EntityLevel } from '@coldpbc/enums';
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
 
 export interface Materials {
   id: string;
   name: string;
+}
+
+export interface MaterialBaseEntity extends Materials {
+  materialCategory: string | null;
+  materialSubcategory: string | null;
 }
 
 export interface MaterialsWithCertifications extends Materials {

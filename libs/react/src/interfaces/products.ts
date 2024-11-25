@@ -1,9 +1,13 @@
-import {EntityLevel} from "@coldpbc/enums";
-import { EntityLevelAttributeAssuranceGraphQL, SustainabilityAttributeAssuranceGraphQL } from './attributeAssurance';
+import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
 
 export interface Products {
   id: string;
   name: string;
+}
+
+export interface ProductBaseEntity extends Products {
+  productCategory: string | null;
+  productSubcategory: string | null;
 }
 
 

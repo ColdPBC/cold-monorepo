@@ -878,6 +878,38 @@ export const GET_SUSTAINABILITY_ATTRIBUTE = gql`
   }
 `;
 
+export const GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY = gql`
+  query Materials($organizationId: ID!) {
+    materials(filter: { organization: { id: $organizationId } }) {
+      id
+      name
+      materialCategory
+      materialSubcategory
+    }
+  }
+`;
+
+export const GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY = gql`
+  query Products($organizationId: ID!) {
+    products(filter: { organization: { id: $organizationId } }) {
+      id
+      name
+      productCategory
+      productSubcategory
+    }
+  }
+`;
+
+export const GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY = gql`
+  query OrganizationFacilities($organizationId: ID!) {
+    organizationFacilities(filter: { organization: { id: $organizationId }, supplier: true }) {
+      id
+      name
+      country
+    }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -909,4 +941,7 @@ export const queries: {
   GET_PRODUCT: GET_PRODUCT,
   GET_MATERIAL: GET_MATERIAL,
   GET_SUSTAINABILITY_ATTRIBUTE: GET_SUSTAINABILITY_ATTRIBUTE,
+  GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY: GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY,
+  GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY: GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY,
+  GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY: GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY,
 };
