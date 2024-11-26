@@ -58,7 +58,7 @@ export const TotalCoverageDonut: React.FC<TotalCoverageDonutProps> = ({ totalEnt
 			{/* Entity count in center */}
 			<div className="absolute inset-0 flex flex-col items-center justify-center text-tc-primary">
 				<div className="text-4xl font-bold">{entitiesWithAttribute}</div>
-				<div className="text-body">{`${toSentenceCase(EntityLevel[entityLevel])}${entitiesWithAttribute !== 1 ? 's' : ''}`}</div>
+				<div className="text-body">{`${toSentenceCase(EntityLevel[entityLevel])}${entitiesWithAttribute !== 1 ? 's' : ''} with Attribute`}</div>
 			</div>
 			{/* "Has Attribute" Label in Top-Left */}
 			<div className="absolute w-40 top-4 right-4 text-tc-primary flex gap-2 justify-start">
