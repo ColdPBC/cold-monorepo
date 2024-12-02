@@ -1,5 +1,17 @@
 import React from 'react';
-import { Card, CoverageSpreadBar, ErrorFallback, ErrorPage, MainContent, MuiDataGrid, Spinner, TotalCoverageDonut } from '@coldpbc/components';
+import {
+  Card,
+  CoverageSpreadBar,
+  ErrorFallback,
+  ErrorPage,
+  MainContent,
+  MaterialsSuppliedTab,
+  MuiDataGrid,
+  Spinner,
+  SustainabilityAttributeByProductTab,
+  Tabs,
+  TotalCoverageDonut,
+} from '@coldpbc/components';
 import { EntityLevel } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useAuth0Wrapper, useColdContext, useEntityData, useGraphQLSWR } from '@coldpbc/hooks';
@@ -172,47 +184,67 @@ export const _SustainabilityAttributeDetail = () => {
 		return navigate(navigationUrl);
 	};
 
-	return (
-		<MainContent
-			title={sustainabilityAttribute.name}
-			subTitle={subtitle}
-			imageUrl={sustainabilityAttribute.logoUrl}
-			breadcrumbs={[{ label: 'Sustainability', href: '/sustainability' }, { label: sustainabilityAttribute.name }]}
-			className="w-[calc(100%)]">
-			<div className={'flex flex-col items-center gap-10'}>
-				<div className={'w-full flex justify-items-start gap-4'}>
-					<Card title={'Total Coverage'} className={'w-full min-w-[600px] h-full'}>
-						<TotalCoverageDonut {...donutData} accentColor={accentColor} entityLevel={sustainabilityAttribute.level} />
-					</Card>
-					<Card title={'Coverage Spread'} className={'w-full h-full min-w-[352px]'}>
-						<CoverageSpreadBar data={barData} accentColor={accentColor} />
-					</Card>
-				</div>
-				<div className={'w-full'}>
-					<MuiDataGrid
-						rows={entities}
-						onRowClick={params => onRowClick(params.row)}
-						columns={columns}
-						columnHeaderHeight={55}
-						rowHeight={48}
-						showManageColumns
-						showExport
-						showSearch
-						initialState={{
-							sorting: {
-								sortModel: [{ field: 'hasAttribute', sort: 'desc' }],
-							},
-						}}
-					/>
-				</div>
-			</div>
-		</MainContent>
-	);
+  const defaultTab = (
+    <div className={'flex flex-col items-center gap-10'}>
+      <div className={'w-full flex justify-items-start gap-4'}>
+        <Card title={'Total Coverage'} className={'w-full min-w-[600px] h-full'}>
+          <TotalCoverageDonut {...donutData} accentColor={accentColor} entityLevel={sustainabilityAttribute.level} />
+        </Card>
+        <Card title={'Coverage Spread'} className={'w-full h-full min-w-[352px]'}>
+          <CoverageSpreadBar data={barData} accentColor={accentColor} />
+        </Card>
+      </div>
+      <div className={'w-full'}>
+        <MuiDataGrid
+          rows={entities}
+          onRowClick={params => onRowClick(params.row)}
+          columns={columns}
+          columnHeaderHeight={55}
+          rowHeight={48}
+          showManageColumns
+          showExport
+          showSearch
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'hasAttribute', sort: 'desc' }],
+            },
+          }}
+        />
+      </div>
+    </div>
+  );
+
+  return (
+    <MainContent
+      title={sustainabilityAttribute.name}
+      subTitle={subtitle}
+      imageUrl={sustainabilityAttribute.logoUrl}
+      breadcrumbs={[{ label: 'Sustainability', href: '/sustainability' }, { label: sustainabilityAttribute.name }]}
+      className="w-[calc(100%)]">
+      {/* If the sustainability attribute is material-level, add a tab structure to include the By Product view */}
+      {sustainabilityAttribute.level === EntityLevel.MATERIAL ? (
+        <Tabs
+          tabs={[
+            {
+              label: 'By Product',
+              content: <SustainabilityAttributeByProductTab sustainabilityAttribute={sustainabilityAttribute} />,
+            },
+            {
+              label: 'By Material',
+              content: defaultTab,
+            },
+          ]}
+        />
+      ) : (
+        defaultTab
+      )}
+    </MainContent>
+  );
 };
 
 export const SustainabilityAttributeDetail = withErrorBoundary(_SustainabilityAttributeDetail, {
-	FallbackComponent: props => <ErrorFallback {...props} />,
-	onError: (error, info) => {
-		console.error('Error occurred in SustainabilityAttributeDetail: ', error);
-	},
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SustainabilityAttributeDetail: ', error);
+  },
 });
