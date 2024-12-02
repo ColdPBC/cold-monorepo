@@ -1,3 +1,15 @@
+# [1.484.0](https://github.com/coldPBC/cold-monorepo/compare/v1.483.0...v1.484.0) (2024-12-02)
+
+
+### Bug Fixes
+
+* missing _or and _and filters in GraphQL ([0f86db3](https://github.com/coldPBC/cold-monorepo/commit/0f86db30a94f9ba0120f0c0c9756ad39a4bc4a34))
+
+
+### Features
+
+* add gender to products and introduce climatiq_actvities model ([36ee259](https://github.com/coldPBC/cold-monorepo/commit/36ee259237d863e590712bee8d8e05628dce7a4d))
+
 # [1.483.0](https://github.com/coldPBC/cold-monorepo/compare/v1.482.0...v1.483.0) (2024-11-21)
 
 
