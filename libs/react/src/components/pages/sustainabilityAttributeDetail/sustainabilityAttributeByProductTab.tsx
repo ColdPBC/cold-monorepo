@@ -1,0 +1,228 @@
+import React from 'react';
+import { AverageCoverageDonut, BubbleList, Card, CoverageSpreadBar, ErrorFallback, ErrorPage, MainContent, MuiDataGrid, Spinner } from '@coldpbc/components';
+import { EntityLevel } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
+import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
+import { useNavigate } from 'react-router-dom';
+import {
+  ProductForMaterialLevelSustainabilityReport,
+  ProductForMaterialLevelSustainabilityReportGraphQL,
+  SustainabilityAttribute,
+} from '@coldpbc/interfaces';
+import { get, groupBy, isError } from 'lodash';
+import { GridColDef } from '@mui/x-data-grid';
+import { HexColors } from '@coldpbc/themes';
+
+const ACCENT_COLOR = HexColors.lightblue['300'];
+
+interface SustainabilityAttributeByProductTabProps {
+  sustainabilityAttribute: SustainabilityAttribute;
+}
+
+const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByProductTabProps> = ({ sustainabilityAttribute }) => {
+	const { orgId } = useAuth0Wrapper();
+	const { logBrowser } = useColdContext();
+	const navigate = useNavigate();
+
+	// The page is only valid for Material-level attributes (otherwise, this page will return null)
+	const validLevel = sustainabilityAttribute.level === EntityLevel.MATERIAL;
+
+	const productQuery = useGraphQLSWR<{
+		products: ProductForMaterialLevelSustainabilityReportGraphQL[] | null;
+	}>('GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT', {
+		organizationId: orgId,
+	});
+
+	// Get the level from the query result, if available
+	const products: ProductForMaterialLevelSustainabilityReport[] | undefined = React.useMemo(() => {
+		if (!productQuery.data?.data?.products || !validLevel) {
+			return undefined;
+		}
+
+		const uniqueMaterialIds = new Set(sustainabilityAttribute.attributeAssurances.map(assurance => assurance.entity.id));
+
+		return productQuery.data.data.products.map(productGraphQL => {
+			let materialCount = 0;
+			let totalWeight = 0;
+			let weightWithAttribute = 0;
+			const materialNamesWithAttribute: string[] = [];
+
+			productGraphQL.productMaterials.forEach(productMaterial => {
+				totalWeight += productMaterial.weight || 0;
+				if (uniqueMaterialIds.has(productMaterial.material.id)) {
+					materialCount += 1;
+					weightWithAttribute += productMaterial.weight || 0;
+					materialNamesWithAttribute.push(productMaterial.material.name);
+				}
+			});
+
+			const materialPercentByWeight = totalWeight > 0 ? (weightWithAttribute / totalWeight) * 100 : null;
+
+			return {
+				id: productGraphQL.id,
+				name: productGraphQL.name,
+				description: productGraphQL.description,
+				seasonCode: productGraphQL.seasonCode,
+				productCategory: productGraphQL.productCategory,
+				productSubcategory: productGraphQL.productSubcategory,
+				materialCount,
+				materialPercentByWeight,
+				materialList: materialNamesWithAttribute,
+				tier1SupplierName: productGraphQL.organizationFacility?.name || '',
+			};
+		});
+	}, [productQuery.data, sustainabilityAttribute]);
+
+	// Donut chart setup
+	const donutData = React.useMemo(() => {
+		const rawAverage = products ? products.reduce((sumHasAttribute, product) => sumHasAttribute + (product.materialPercentByWeight || 0), 0) / products.length : 0;
+
+		return {
+			percentMaterialHasAttribute: Math.round(rawAverage),
+		};
+	}, [products]);
+
+	// Coverage chart setup
+	const barData = React.useMemo(() => {
+		const categoryGroups = groupBy(products, 'productCategory');
+		const rawData = Object.entries(categoryGroups).map(([category, items]) => {
+			const hasAttributeAggregatePercent = items.filter(item => item.materialPercentByWeight != null).reduce((total, item) => total + item.materialPercentByWeight!, 0);
+			const totalCount = items.length;
+
+			return {
+				category: category || 'No Category',
+				hasAttributeAggregatePercent,
+				totalCount,
+				percentage: hasAttributeAggregatePercent / totalCount,
+			};
+		});
+
+		// Sort data by percentage in descending order
+		const sortedData = [...rawData].sort((a, b) => b.percentage - a.percentage);
+
+		// We only want to display up to 7 categories
+		if (sortedData.length <= 7) {
+			return sortedData;
+		} else {
+			const otherWithAttribute = sortedData.slice(6).reduce((count, item) => count + item.hasAttributeAggregatePercent, 0);
+			const otherTotal = sortedData.slice(6).reduce((count, item) => count + item.totalCount, 0);
+			return [
+				...sortedData.slice(0, 6),
+				{ category: 'Other', hasAttributeAggregatePercent: otherWithAttribute, totalCount: otherTotal, percentage: (otherWithAttribute / otherTotal) * 100 },
+			];
+		}
+	}, [products]);
+
+	// Handle loading state
+	if (productQuery.isLoading) {
+		return <Spinner />;
+	}
+
+	// Handle error state
+	if (isError(productQuery.data)) {
+		const error = get(productQuery.data, 'error', null);
+		if (error) {
+			logBrowser('Error fetching product data', 'error', { error }, error);
+		}
+		return <ErrorPage error={'An error occurred'} showLogout={false} />;
+	}
+
+	if (!validLevel || !products) {
+		return null;
+	}
+
+	// Data Grid setup
+	const columns: GridColDef[] = [
+		{
+			field: 'name',
+			headerName: 'Product Name',
+			headerClassName: 'bg-gray-30 h-[37px] text-body',
+			flex: 1,
+			minWidth: 230,
+		},
+		{
+			field: 'materialCount',
+			headerName: 'Count',
+			headerClassName: 'bg-gray-30 h-[37px] text-body',
+			flex: 1,
+			minWidth: 50,
+		},
+		{
+			field: 'materialPercentByWeight',
+			headerName: 'Percent by Weight',
+			headerClassName: 'bg-gray-30 h-[37px] text-body',
+			flex: 1,
+			minWidth: 50,
+			renderCell: params => {
+				return params.value != null ? `${params.value.toFixed(0)}%` : null;
+			},
+		},
+		{
+			field: 'materialList',
+			headerName: 'List',
+			headerClassName: 'bg-gray-30 h-[37px] text-body',
+			flex: 1,
+			minWidth: 400,
+			renderCell: params => {
+				return <BubbleList values={params.value} />;
+			},
+		},
+		{
+			field: 'tier1SupplierName',
+			headerName: 'Tier 1 Supplier',
+			headerClassName: 'bg-gray-30 h-[37px] text-body',
+			flex: 1,
+			minWidth: 230,
+		},
+	];
+
+	const onRowClick = (product: ProductForMaterialLevelSustainabilityReport) => {
+		const navigationUrl = `/products/${product.id}`;
+		return navigate(navigationUrl);
+	};
+
+	return (
+    <div className={'flex flex-col items-center gap-10'}>
+      <div className={'w-full flex justify-items-start gap-4'}>
+        <Card title={'Average Coverage By Weight Across All Products'} className={'w-full min-w-[600px] h-full'}>
+          <AverageCoverageDonut {...donutData} accentColor={ACCENT_COLOR} />
+        </Card>
+        <Card title={'Average Coverage By Weight Per Category'} className={'w-full h-full min-w-[352px]'}>
+          <CoverageSpreadBar data={barData} accentColor={ACCENT_COLOR} />
+        </Card>
+      </div>
+      <div className={'w-full'}>
+        <MuiDataGrid
+          rows={products}
+          onRowClick={params => onRowClick(params.row)}
+          columns={columns}
+          columnHeaderHeight={55}
+          columnGroupingModel={[
+            {
+              groupId: 'materials',
+              headerName: 'Materials with Attribute',
+              headerClassName: 'bg-gray-30 h-[37px] text-body',
+              children: [{ field: 'materialCount' }, { field: 'materialPercentByWeight' }, { field: 'materialList' }],
+            },
+          ]}
+          rowHeight={48}
+          showManageColumns
+          showExport
+          showSearch
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'materialPercentByWeight', sort: 'desc' }],
+            },
+          }}
+        />
+      </div>
+    </div>
+	);
+};
+
+export const SustainabilityAttributeByProductTab = withErrorBoundary(_SustainabilityAttributeByProductTab, {
+	FallbackComponent: props => <ErrorFallback {...props} />,
+	onError: (error, info) => {
+		console.error('Error occurred in SustainabilityAttributeByProductTab: ', error);
+	},
+});

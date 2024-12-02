@@ -1,4 +1,5 @@
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
+import { gql } from '@apollo/client';
 
 export interface Products {
   id: string;
@@ -10,6 +11,35 @@ export interface ProductBaseEntity extends Products {
   productSubcategory: string | null;
 }
 
+export interface ProductForMaterialLevelSustainabilityReportGraphQL extends ProductBaseEntity {
+  description: string | null;
+  seasonCode: string | null;
+  productCategory: string | null;
+  productSubcategory: string | null;
+  organizationFacility: {
+    id: string;
+    name: string;
+  } | null;
+  productMaterials: {
+    id: string;
+    weight: number | null;
+    material: {
+      id: string;
+      name: string;
+    }
+  }[];
+}
+
+export interface ProductForMaterialLevelSustainabilityReport extends ProductBaseEntity {
+  description: string | null;
+  seasonCode: string | null;
+  productCategory: string | null;
+  productSubcategory: string | null;
+  materialCount: number;
+  materialPercentByWeight: number | null;
+  materialList: string[];
+  tier1SupplierName: string | null;
+}
 
 export interface ProductsQuery {
   id: string;

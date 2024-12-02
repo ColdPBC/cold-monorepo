@@ -739,6 +739,30 @@ export const GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY = gql`
   }
 `;
 
+export const GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT = gql`
+  query Products($organizationId: ID!) {
+    products(filter: { organization: { id: $organizationId } }) {
+      id
+      name
+      productCategory
+      productSubcategory
+      seasonCode
+      organizationFacility {
+        id
+        name
+      }
+      productMaterials {
+        id
+        weight
+        material {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
 export const GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY = gql`
   query OrganizationFacilities($organizationId: ID!) {
     organizationFacilities(filter: { organization: { id: $organizationId }, supplier: true }) {
@@ -781,4 +805,5 @@ export const queries: {
   GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY: GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY,
   GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY: GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY,
   GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY: GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY,
+  GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT: GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
 };
