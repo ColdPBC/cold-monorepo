@@ -21,7 +21,7 @@ import {
   UPDATE_DOCUMENT_FIELDS,
   GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY,
   GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY,
-  GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY,
+  GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY, GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
 } from '@coldpbc/lib';
 import {
 	filesProcessedWithDatesMock,
@@ -741,6 +741,32 @@ export const sustainabilityAttributesMocks = [
             materialCategory: material.materialCategory,
             materialSubcategory: material.materialSubcategory,
           })),
+        }
+      })
+  },
+  {
+    query: GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          products: [
+            {
+              id: '1',
+              productCategory: 'Pants',
+              productSubcategory: 'Chinos',
+              seasonCode: 'Winter 2024',
+              organizationFacility: {
+                id: 'supplier_1',
+                name: 'Example Supplier',
+              },
+              name: 'Example Product',
+              productMaterials: getMaterialsMocksWithAssurances().map((material, index) => ({
+                id: `pm_${material.id}`,
+                weight: index / 100, // measured in KG, so will be 10+ grams
+                material,
+              }))
+            }
+          ],
         }
       })
   }
