@@ -185,7 +185,7 @@ export const _SustainabilityAttributeDetail = () => {
 	};
 
   const defaultTab = (
-    <div className={'flex flex-col items-center gap-10'}>
+    <div className={'w-full flex flex-col items-center gap-10'}>
       <div className={'w-full flex justify-items-start gap-4'}>
         <Card title={'Total Coverage'} className={'w-full min-w-[600px] h-full'}>
           <TotalCoverageDonut {...donutData} accentColor={accentColor} entityLevel={sustainabilityAttribute.level} />
