@@ -1,0 +1,31 @@
+-- CreateTable
+CREATE TABLE "climatiq_actvities" (
+    "id" TEXT NOT NULL,
+    "activity_id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "category" TEXT NOT NULL,
+    "sector" TEXT NOT NULL,
+    "source" TEXT NOT NULL,
+    "source_link" TEXT NOT NULL,
+    "source_dataset" TEXT NOT NULL,
+    "uncertainty" TEXT,
+    "year" INTEGER NOT NULL,
+    "year_released" INTEGER NOT NULL,
+    "region" TEXT NOT NULL,
+    "region_name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "unit_type" TEXT NOT NULL,
+    "unit" TEXT NOT NULL,
+    "source_lca_activity" TEXT NOT NULL,
+    "data_quality_flags" JSONB NOT NULL,
+    "access_type" TEXT NOT NULL,
+    "supported_calculation_methods" JSONB NOT NULL,
+    "factor" TEXT,
+    "factor_calculation_method" TEXT,
+    "factor_calculation_orgin" TEXT,
+    "constituent_gases" JSONB,
+    "data_version" JSONB NOT NULL,
+    "data_version_information" JSONB NOT NULL,
+
+    CONSTRAINT "climatiq_actvities_pkey" PRIMARY KEY ("id")
+);

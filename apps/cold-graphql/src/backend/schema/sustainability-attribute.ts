@@ -1,10 +1,11 @@
-import { Entity, Field, ID, RelationshipField, graphweaverMetadata } from '@exogee/graphweaver';
+import { Entity, Field, ID, RelationshipField, graphweaverMetadata, Source } from '@exogee/graphweaver';
 import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AttributeAssurance } from './attribute-assurance';
 import { Organization } from './organization';
 import { SustainabilityAttributesLevel, SustainabilityAttributesType, SustainabilityAttribute as OrmSustainabilityAttribute } from '../entities';
 import { connection } from '../database';
+import '../resolvers/sustainability-attribute';
 
 graphweaverMetadata.collectEnumInformation({ target: SustainabilityAttributesLevel, name: 'SustainabilityAttributesLevel' });
 graphweaverMetadata.collectEnumInformation({ target: SustainabilityAttributesType, name: 'SustainabilityAttributesType' });
@@ -16,10 +17,10 @@ export class SustainabilityAttribute {
 	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
-	@RelationshipField<SustainabilityAttribute>(() => Organization, { id: (entity) => entity.organization?.id, nullable: true })
+	@RelationshipField<SustainabilityAttribute>(() => Organization, { id: entity => entity.organization?.id, nullable: true })
 	organization?: Organization;
 
-	@Field(() => String, { adminUIOptions: {summaryField:true} })
+	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	name!: string;
 
 	@Field(() => ISODateStringScalar, { nullable: true })

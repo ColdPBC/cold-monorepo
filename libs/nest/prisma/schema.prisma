@@ -662,6 +662,7 @@ model products {
   product_category     String?
   product_subcategory  String?
   metadata             Json?
+	gender							 String?
   season_code          String?
   upc_code             String?
   brand_product_sku    String?
@@ -1053,6 +1054,35 @@ model organization_compliance_ai_response_files {
   @@index([organization_compliance_ai_response_id], map: "organization_compliance_ai_re_organization_compliance_ai_r_idx1")
   @@index([organization_files_id], map: "organization_compliance_ai_response__organization_files_id_idx1")
   @@index([organization_id], map: "organization_compliance_ai_response_files_organization_id_idx1")
+}
+
+model climatiq_actvities {
+	id String @id
+	activity_id String
+	name String
+	category String
+	sector String
+	source String
+	source_link String
+	source_dataset String
+	uncertainty String?
+	year Int
+	year_released Int
+	region String
+	region_name String
+	description String
+	unit_type String
+	unit String
+	source_lca_activity String
+	data_quality_flags Json
+	access_type String
+	supported_calculation_methods Json
+	factor String?
+	factor_calculation_method String?
+	factor_calculation_orgin String?
+	constituent_gases Json?
+	data_version Json
+	data_version_information Json
 }
 
 view compliance_responses {
