@@ -1,3 +1,11 @@
+## [1.484.2](https://github.com/coldPBC/cold-monorepo/compare/v1.484.1...v1.484.2) (2024-12-02)
+
+
+### Bug Fixes
+
+* aws sso bug causing hourly login requests ([025c9a0](https://github.com/coldPBC/cold-monorepo/commit/025c9a07a71e7bcd78e73e03199f3cfc1a6396a3))
+* remove deprecated search query fields from GraphQL types ([cd07e17](https://github.com/coldPBC/cold-monorepo/commit/cd07e177244013b31d62cc624ad788c1d26691d1))
+
 ## [1.484.1](https://github.com/coldPBC/cold-monorepo/compare/v1.484.0...v1.484.1) (2024-12-02)
 
 
