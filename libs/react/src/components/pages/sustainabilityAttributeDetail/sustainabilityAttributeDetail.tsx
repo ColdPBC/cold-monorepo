@@ -5,7 +5,6 @@ import {
   ErrorFallback,
   ErrorPage,
   MainContent,
-  MaterialsSuppliedTab,
   MuiDataGrid,
   Spinner,
   SustainabilityAttributeByProductTab,

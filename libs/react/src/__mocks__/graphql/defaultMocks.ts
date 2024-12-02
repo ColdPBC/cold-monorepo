@@ -646,7 +646,7 @@ export const sustainabilityAttributesForProductMocks = [
   }
 ]
 
-export const sustainabilityAttributesMocks = [
+export const sustainabilityAttributesMocks = ({includeProducts, includeWeights}) => ([
   {
     query: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
     handler: () =>
@@ -749,7 +749,7 @@ export const sustainabilityAttributesMocks = [
     handler: () =>
       Promise.resolve({
         data: {
-          products: [
+          products: includeProducts ? [
             {
               id: '1',
               productCategory: 'Pants',
@@ -762,15 +762,15 @@ export const sustainabilityAttributesMocks = [
               name: 'Example Product',
               productMaterials: getMaterialsMocksWithAssurances().map((material, index) => ({
                 id: `pm_${material.id}`,
-                weight: index / 100, // measured in KG, so will be 10+ grams
+                weight: includeWeights ? index / 100 : null,
                 material,
               }))
             }
-          ],
+          ] : [],
         }
       })
   }
-];
+]);
 
 export const productLevelSustainabilityAttributeMocks = [
   {
