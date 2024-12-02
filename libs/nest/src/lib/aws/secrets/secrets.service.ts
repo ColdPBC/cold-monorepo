@@ -3,11 +3,11 @@ import { get, map } from 'lodash';
 import { GetSecretValueResponse, SecretsManager } from '@aws-sdk/client-secrets-manager';
 import { BaseWorker } from '../../worker';
 import process from 'process';
-import { fromSSO } from '@aws-sdk/credential-provider-sso';
 
 @Injectable()
 export class SecretsService extends BaseWorker implements OnModuleInit {
 	client: SecretsManager;
+	awsCreds: any = {};
 
 	constructor() {
 		super(SecretsService.name);
@@ -18,11 +18,9 @@ export class SecretsService extends BaseWorker implements OnModuleInit {
 	}
 
 	override async onModuleInit() {
-		let awsCreds: any = {};
-
 		// if running in Flight Control environment
 		if (process.env['FLIGHTCONTROL'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
-			awsCreds = {
+			this.awsCreds = {
 				region: process.env['AWS_REGION'] || 'us-east-1',
 				credentials: {
 					accessKeyId: process.env['AWS_ACCESS_KEY_ID'],
@@ -30,13 +28,10 @@ export class SecretsService extends BaseWorker implements OnModuleInit {
 				},
 			};
 
-			return { ...awsCreds };
+			this.client = new SecretsManager(this.awsCreds);
+		} else {
+			this.client = new SecretsManager({ region: process.env['AWS_REGION'] || 'us-east-1' });
 		}
-
-		const profile = process.env['AWS_PROFILE'] || 'SSO-SYSADMIN';
-		const ssoCreds = await fromSSO({ profile: profile })();
-
-		this.client = new SecretsManager({ region: process.env['AWS_REGION'] || 'us-east-1', ...ssoCreds });
 
 		this.logger.info('SecretsService initialized');
 	}

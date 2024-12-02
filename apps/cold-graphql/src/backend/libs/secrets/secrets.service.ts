@@ -1,7 +1,6 @@
 import { get, map } from 'lodash';
 import { GetSecretValueResponse, SecretsManager } from '@aws-sdk/client-secrets-manager';
 import process from 'process';
-import { fromSSO } from '@aws-sdk/credential-provider-sso';
 import { WorkerLogger } from '../logger';
 
 export class SecretsService {
@@ -15,11 +14,9 @@ export class SecretsService {
 	}
 
 	async init() {
-		let awsCreds: any = {};
-
 		// FC_ENV should only be set in the Flight Control environment, not in SM
 		if (process.env['FLIGHTCONTROL'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
-			awsCreds = {
+			const creds = {
 				region: process.env['AWS_REGION'] || 'us-east-1',
 				credentials: {
 					accessKeyId: process.env['AWS_ACCESS_KEY_ID'],
@@ -27,14 +24,13 @@ export class SecretsService {
 				},
 			};
 
-			return { ...awsCreds };
+			this.client = new SecretsManager(creds);
+		} else {
+			this.client = new SecretsManager({ region: process.env['AWS_REGION'] || 'us-east-1' });
 		}
 
-		const profile = process.env['AWS_PROFILE'] || 'SSO-SYSADMIN';
-		const ssoCreds = await fromSSO({ profile: profile })();
-		this.client = new SecretsManager({ region: process.env['AWS_REGION'] || 'us-east-1', ...ssoCreds });
-
 		this.logger.log('SecretsService initialized');
+
 		this.ready = true;
 	}
 
