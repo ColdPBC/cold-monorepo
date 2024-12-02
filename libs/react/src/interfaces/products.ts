@@ -35,6 +35,7 @@ export interface ProductForMaterialLevelSustainabilityReport extends ProductBase
   seasonCode: string | null;
   productCategory: string | null;
   productSubcategory: string | null;
+  totalWeight: number;
   materialCount: number;
   materialPercentByWeight: number | null;
   materialList: string[];

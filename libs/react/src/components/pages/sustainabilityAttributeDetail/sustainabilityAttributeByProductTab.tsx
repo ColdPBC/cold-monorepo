@@ -65,6 +65,7 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 				seasonCode: productGraphQL.seasonCode,
 				productCategory: productGraphQL.productCategory,
 				productSubcategory: productGraphQL.productSubcategory,
+        totalWeight,
 				materialCount,
 				materialPercentByWeight,
 				materialList: materialNamesWithAttribute,
@@ -75,7 +76,9 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 
 	// Donut chart setup
 	const donutData = React.useMemo(() => {
-		const rawAverage = products ? products.reduce((sumHasAttribute, product) => sumHasAttribute + (product.materialPercentByWeight || 0), 0) / products.length : 0;
+		// Only consider products that have a non-null average.
+    const productsWithMaterialWeight = products?.filter(product => product.materialPercentByWeight) || [];
+    const rawAverage = productsWithMaterialWeight.length > 0 ? productsWithMaterialWeight.reduce((sumHasAttribute, product) => sumHasAttribute + product.materialPercentByWeight!, 0) / productsWithMaterialWeight.length : 0;
 
 		return {
 			percentMaterialHasAttribute: Math.round(rawAverage),
@@ -130,6 +133,12 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 	if (!validLevel || !products) {
 		return null;
 	}
+
+  // Empty state when no weights are available for any product
+  if (products.reduce((total, product) => total + product.totalWeight, 0) === 0) {
+    // TODO: Return component once Liz has designs
+    return null;
+  }
 
 	// Data Grid setup
 	const columns: GridColDef[] = [
