@@ -7,6 +7,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import {useFlags} from "launchdarkly-react-client-sdk";
 import { useNavigate } from 'react-router-dom';
+import numeral from 'numeral';
 
 export const DEFAULT_GRID_COL_DEF = {
 	headerClassName: 'bg-gray-30 text-body',
@@ -42,6 +43,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
     )
   }
 
+  const totalWeight = product.productMaterials.reduce((total, pm) => total + (pm.weight || 0), 0);
 
   const uniqCategories = uniq(
     product.productMaterials.map(productMaterial => productMaterial.material?.materialCategory || ''),
@@ -55,12 +57,6 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
     [
       {
         ...DEFAULT_GRID_COL_DEF,
-        field: 'weight',
-        headerName: 'Weight',
-        minWidth: 70,
-      },
-      {
-        ...DEFAULT_GRID_COL_DEF,
         field: 'emissionsFactor',
         headerName: 'Factor',
         minWidth: 70,
@@ -69,7 +65,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
         ...DEFAULT_GRID_COL_DEF,
         field: 'emissions',
         headerName: 'Emissions',
-        minWidth: 70,
+        minWidth: 100,
       },
     ]
   ) : (
@@ -101,6 +97,18 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
       field: 'unitOfMeasure',
       headerName: 'UoM',
       minWidth: 70,
+    },
+    {
+      ...DEFAULT_GRID_COL_DEF,
+      field: 'weight',
+      headerName: 'Weight (g)',
+      minWidth: 100,
+    },
+    {
+      ...DEFAULT_GRID_COL_DEF,
+      field: 'percent_weight',
+      headerName: 'Weight (%)',
+      minWidth: 100,
     },
     ...productCarbonFootprintColumns,
 		{
@@ -154,7 +162,8 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 				tier2Supplier: tier2Supplier,
         yield: productMaterial.yield ? productMaterial.yield.toString() : '',
         unitOfMeasure: productMaterial.unitOfMeasure || '',
-        weight: productMaterial.weight,
+        weight: productMaterial.weight ? `${numeral(productMaterial.weight * 1_000).format('0,0')} g` : null, // convert from kg to g for display
+        percent_weight: productMaterial.weight && totalWeight > 0 ? `${(productMaterial.weight / totalWeight * 100).toFixed(0)}%` : null,
         emissionsFactor: material.emissionsFactor,
         emissions: productMaterial.weight && material.emissionsFactor ? (productMaterial.weight * material.emissionsFactor).toFixed(2) : null,
 				sustainabilityAttributes: susAttributes,
@@ -175,6 +184,11 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
         showManageColumns
 				columnHeaderHeight={55}
 				rowHeight={72}
+        initialState={{
+          sorting: {
+            sortModel: [{ field: 'name', sort: 'asc' }],
+          },
+        }}
 			/>
 		</Card>
 	);
