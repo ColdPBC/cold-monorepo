@@ -1,3 +1,10 @@
+## [1.484.1](https://github.com/coldPBC/cold-monorepo/compare/v1.484.0...v1.484.1) (2024-12-02)
+
+
+### Bug Fixes
+
+* remove unnecessary import in sustainability-attribute schema file ([f03eee7](https://github.com/coldPBC/cold-monorepo/commit/f03eee7f580223a4ef2dbbd36a485e7870f9f6db))
+
 # [1.484.0](https://github.com/coldPBC/cold-monorepo/compare/v1.483.0...v1.484.0) (2024-12-02)
 
 
