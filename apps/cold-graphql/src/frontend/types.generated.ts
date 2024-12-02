@@ -120,6 +120,8 @@ export type ActionTemplateUpdateInput = {
 };
 
 export type ActionTemplatesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ActionTemplatesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ActionTemplatesListFilter>>>;
   actions?: InputMaybe<ActionsListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -184,6 +186,8 @@ export type ActionUpdateInput = {
 };
 
 export type ActionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ActionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ActionsListFilter>>>;
   action?: InputMaybe<Scalars['JSON']['input']>;
   actionTemplate?: InputMaybe<ActionTemplatesListFilter>;
   action_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
@@ -330,60 +334,6 @@ export enum AggregationType {
   Count = 'COUNT'
 }
 
-export type ApiKey = {
-  __typename?: 'ApiKey';
-  id: Scalars['ID']['output'];
-  key: Scalars['String']['output'];
-  revoked?: Maybe<Scalars['Boolean']['output']>;
-  roles?: Maybe<Array<Scalars['String']['output']>>;
-};
-
-export type ApiKeyInsertInput = {
-  key: Scalars['String']['input'];
-  revoked?: InputMaybe<Scalars['Boolean']['input']>;
-  roles?: InputMaybe<Array<Scalars['String']['input']>>;
-  secret: Scalars['String']['input'];
-};
-
-export type ApiKeyUpdateInput = {
-  id: Scalars['ID']['input'];
-  key?: InputMaybe<Scalars['String']['input']>;
-  revoked?: InputMaybe<Scalars['Boolean']['input']>;
-  roles?: InputMaybe<Array<Scalars['String']['input']>>;
-  secret?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type ApiKeysListFilter = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  key?: InputMaybe<Scalars['String']['input']>;
-  key_gt?: InputMaybe<Scalars['String']['input']>;
-  key_gte?: InputMaybe<Scalars['String']['input']>;
-  key_ilike?: InputMaybe<Scalars['String']['input']>;
-  key_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  key_like?: InputMaybe<Scalars['String']['input']>;
-  key_lt?: InputMaybe<Scalars['String']['input']>;
-  key_lte?: InputMaybe<Scalars['String']['input']>;
-  key_ne?: InputMaybe<Scalars['String']['input']>;
-  key_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  key_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  key_null?: InputMaybe<Scalars['Boolean']['input']>;
-  revoked?: InputMaybe<Scalars['Boolean']['input']>;
-  revoked_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
-  revoked_ne?: InputMaybe<Scalars['Boolean']['input']>;
-  revoked_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
-  revoked_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  revoked_null?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
 export type AttributeAssurance = {
   __typename?: 'AttributeAssurance';
   createdAt?: Maybe<Scalars['ISOString']['output']>;
@@ -510,6 +460,8 @@ export type AttributeAssuranceUpdateInput = {
 };
 
 export type AttributeAssurancesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<AttributeAssurancesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<AttributeAssurancesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -584,6 +536,8 @@ export type AttributeAssurancesPaginationInput = {
 };
 
 export type CategoryDataListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<CategoryDataListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<CategoryDataListFilter>>>;
   categoryDefinition?: InputMaybe<CategoryDefinitionsListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -754,6 +708,8 @@ export type CategoryDefinitionUpdateInput = {
 };
 
 export type CategoryDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<CategoryDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<CategoryDefinitionsListFilter>>>;
   categoryData?: InputMaybe<CategoryDataListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -976,6 +932,8 @@ export type ComplianceDefinitionUpdateInput = {
 };
 
 export type ComplianceDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceDefinitionsListFilter>>>;
   complianceQuestions?: InputMaybe<ComplianceQuestionsListFilter>;
   complianceSectionGroups?: InputMaybe<ComplianceSectionGroupsListFilter>;
   complianceSections?: InputMaybe<ComplianceSectionsListFilter>;
@@ -1334,6 +1292,8 @@ export type ComplianceQuestionDependencyChainUpdateInput = {
 };
 
 export type ComplianceQuestionDependencyChainsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceQuestionDependencyChainsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceQuestionDependencyChainsListFilter>>>;
   complianceDefinitionName?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gt?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gte?: InputMaybe<Scalars['String']['input']>;
@@ -1543,6 +1503,8 @@ export type ComplianceQuestionUpdateInput = {
 };
 
 export type ComplianceQuestionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceQuestionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceQuestionsListFilter>>>;
   additionalContext?: InputMaybe<Scalars['JSON']['input']>;
   additionalContext_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   additionalContext_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -1905,6 +1867,8 @@ export type ComplianceSectionDependencyChainUpdateInput = {
 };
 
 export type ComplianceSectionDependencyChainsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceSectionDependencyChainsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceSectionDependencyChainsListFilter>>>;
   complianceDefinitionName?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gt?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gte?: InputMaybe<Scalars['String']['input']>;
@@ -2108,6 +2072,8 @@ export type ComplianceSectionGroupUpdateInput = {
 };
 
 export type ComplianceSectionGroupsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceSectionGroupsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceSectionGroupsListFilter>>>;
   complianceDefinition?: InputMaybe<ComplianceDefinitionsListFilter>;
   complianceDefinitionName?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gt?: InputMaybe<Scalars['String']['input']>;
@@ -2238,6 +2204,8 @@ export type ComplianceSectionUpdateInput = {
 };
 
 export type ComplianceSectionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceSectionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceSectionsListFilter>>>;
   complianceDefinition?: InputMaybe<ComplianceDefinitionsListFilter>;
   complianceDefinitionName?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gt?: InputMaybe<Scalars['String']['input']>;
@@ -2404,6 +2372,8 @@ export type ComponentDefinitionUpdateInput = {
 };
 
 export type ComponentDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComponentDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComponentDefinitionsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -2495,50 +2465,6 @@ export enum ComponentDefinitionsType {
   Test = 'TEST',
   Unknown = 'UNKNOWN'
 }
-
-export type Credential = {
-  __typename?: 'Credential';
-  id: Scalars['ID']['output'];
-  username: Scalars['String']['output'];
-};
-
-export type CredentialInsertInput = {
-  confirm: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-  username: Scalars['String']['input'];
-};
-
-export type CredentialUpdateInput = {
-  confirm?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
-  password?: InputMaybe<Scalars['String']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CredentialsListFilter = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
-  username_gt?: InputMaybe<Scalars['String']['input']>;
-  username_gte?: InputMaybe<Scalars['String']['input']>;
-  username_ilike?: InputMaybe<Scalars['String']['input']>;
-  username_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  username_like?: InputMaybe<Scalars['String']['input']>;
-  username_lt?: InputMaybe<Scalars['String']['input']>;
-  username_lte?: InputMaybe<Scalars['String']['input']>;
-  username_ne?: InputMaybe<Scalars['String']['input']>;
-  username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  username_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  username_null?: InputMaybe<Scalars['Boolean']['input']>;
-};
 
 export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
@@ -2680,6 +2606,8 @@ export type EmissionScopeUpdateInput = {
 };
 
 export type EmissionScopesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<EmissionScopesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<EmissionScopesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -2807,6 +2735,8 @@ export type EmissionUpdateInput = {
 };
 
 export type EmissionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<EmissionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<EmissionsListFilter>>>;
   activityData?: InputMaybe<Scalars['JSON']['input']>;
   activityData_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   activityData_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -3037,6 +2967,8 @@ export type FacilityFootprintUpdateInput = {
 };
 
 export type FacilityFootprintsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<FacilityFootprintsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<FacilityFootprintsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -3256,6 +3188,8 @@ export type IntegrationUpdateInput = {
 };
 
 export type IntegrationsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<IntegrationsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<IntegrationsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -3329,6 +3263,7 @@ export type Material = {
   createdAt?: Maybe<Scalars['ISOString']['output']>;
   deleted?: Maybe<Scalars['Boolean']['output']>;
   desription?: Maybe<Scalars['String']['output']>;
+  emissionsFactor?: Maybe<Scalars['Float']['output']>;
   id: Scalars['ID']['output'];
   materialCategory?: Maybe<Scalars['String']['output']>;
   materialSubcategory?: Maybe<Scalars['String']['output']>;
@@ -3336,6 +3271,7 @@ export type Material = {
   materialSuppliers_aggregate?: Maybe<AggregationResult>;
   name: Scalars['String']['output'];
   organization: Organization;
+  organizationFacilityId?: Maybe<Scalars['String']['output']>;
   organization_aggregate?: Maybe<AggregationResult>;
   productMaterials: Array<ProductMaterial>;
   productMaterials_aggregate?: Maybe<AggregationResult>;
@@ -3390,12 +3326,14 @@ export type MaterialCreateOrUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   desription?: InputMaybe<Scalars['String']['input']>;
+  emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   materialCategory?: InputMaybe<Scalars['String']['input']>;
   materialSubcategory?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  organizationFacilityId?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   supplierMaterialId?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -3408,11 +3346,13 @@ export type MaterialInsertInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   desription?: InputMaybe<Scalars['String']['input']>;
+  emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
   materialCategory?: InputMaybe<Scalars['String']['input']>;
   materialSubcategory?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  organizationFacilityId?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   supplierMaterialId?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -3495,6 +3435,8 @@ export type MaterialSupplierUpdateInput = {
 };
 
 export type MaterialSuppliersListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<MaterialSuppliersListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<MaterialSuppliersListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -3563,18 +3505,22 @@ export type MaterialUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   desription?: InputMaybe<Scalars['String']['input']>;
+  emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
   id: Scalars['ID']['input'];
   materialCategory?: InputMaybe<Scalars['String']['input']>;
   materialSubcategory?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  organizationFacilityId?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   supplierMaterialId?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
 export type MaterialsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<MaterialsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<MaterialsListFilter>>>;
   attributeAssurances?: InputMaybe<AttributeAssurancesListFilter>;
   brandMaterialId?: InputMaybe<Scalars['String']['input']>;
   brandMaterialId_gt?: InputMaybe<Scalars['String']['input']>;
@@ -3616,6 +3562,12 @@ export type MaterialsListFilter = {
   desription_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   desription_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   desription_null?: InputMaybe<Scalars['Boolean']['input']>;
+  emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
+  emissionsFactor_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  emissionsFactor_ne?: InputMaybe<Scalars['Float']['input']>;
+  emissionsFactor_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  emissionsFactor_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  emissionsFactor_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -3664,6 +3616,18 @@ export type MaterialsListFilter = {
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
   organization?: InputMaybe<OrganizationsListFilter>;
+  organizationFacilityId?: InputMaybe<Scalars['String']['input']>;
+  organizationFacilityId_gt?: InputMaybe<Scalars['String']['input']>;
+  organizationFacilityId_gte?: InputMaybe<Scalars['String']['input']>;
+  organizationFacilityId_ilike?: InputMaybe<Scalars['String']['input']>;
+  organizationFacilityId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  organizationFacilityId_like?: InputMaybe<Scalars['String']['input']>;
+  organizationFacilityId_lt?: InputMaybe<Scalars['String']['input']>;
+  organizationFacilityId_lte?: InputMaybe<Scalars['String']['input']>;
+  organizationFacilityId_ne?: InputMaybe<Scalars['String']['input']>;
+  organizationFacilityId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  organizationFacilityId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  organizationFacilityId_null?: InputMaybe<Scalars['Boolean']['input']>;
   productMaterials?: InputMaybe<ProductMaterialsListFilter>;
   supplierMaterialId?: InputMaybe<Scalars['String']['input']>;
   supplierMaterialId_gt?: InputMaybe<Scalars['String']['input']>;
@@ -3694,10 +3658,12 @@ export type MaterialsOrderByInput = {
   createdAt?: InputMaybe<Sort>;
   deleted?: InputMaybe<Sort>;
   desription?: InputMaybe<Sort>;
+  emissionsFactor?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   materialCategory?: InputMaybe<Sort>;
   materialSubcategory?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
+  organizationFacilityId?: InputMaybe<Sort>;
   supplierMaterialId?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
 };
@@ -3710,6 +3676,8 @@ export type MaterialsPaginationInput = {
 };
 
 export type MultipleNewsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<MultipleNewsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<MultipleNewsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -6620,6 +6588,8 @@ export type OrganizationComplianceAiResponseFileUpdateInput = {
 };
 
 export type OrganizationComplianceAiResponseFilesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceAiResponseFilesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceAiResponseFilesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -6710,6 +6680,8 @@ export type OrganizationComplianceAiResponseUpdateInput = {
 };
 
 export type OrganizationComplianceAiResponsesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceAiResponsesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceAiResponsesListFilter>>>;
   additionalContext?: InputMaybe<Scalars['JSON']['input']>;
   additionalContext_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   additionalContext_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -6980,6 +6952,8 @@ export type OrganizationComplianceNoteFileUpdateInput = {
 };
 
 export type OrganizationComplianceNoteFilesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceNoteFilesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceNoteFilesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -7098,6 +7072,8 @@ export type OrganizationComplianceNoteLinkUpdateInput = {
 };
 
 export type OrganizationComplianceNoteLinksListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceNoteLinksListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceNoteLinksListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -7179,6 +7155,8 @@ export type OrganizationComplianceNoteUpdateInput = {
 };
 
 export type OrganizationComplianceNotesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceNotesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceNotesListFilter>>>;
   complianceQuestion?: InputMaybe<ComplianceQuestionsListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -7321,6 +7299,8 @@ export type OrganizationComplianceQuestionBookmarkUpdateInput = {
 };
 
 export type OrganizationComplianceQuestionBookmarksListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceQuestionBookmarksListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceQuestionBookmarksListFilter>>>;
   complianceQuestion?: InputMaybe<ComplianceQuestionsListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -7458,6 +7438,8 @@ export type OrganizationComplianceResponseUpdateInput = {
 };
 
 export type OrganizationComplianceResponsesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceResponsesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceResponsesListFilter>>>;
   additionalContext?: InputMaybe<Scalars['JSON']['input']>;
   additionalContext_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   additionalContext_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -7581,6 +7563,8 @@ export type OrganizationComplianceStatusUpdateInput = {
 };
 
 export type OrganizationComplianceStatusesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceStatusesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceStatusesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -7681,6 +7665,8 @@ export type OrganizationComplianceUpdateInput = {
 };
 
 export type OrganizationCompliancesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationCompliancesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationCompliancesListFilter>>>;
   complianceDefinition?: InputMaybe<ComplianceDefinitionsListFilter>;
   complianceDefinitionName?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gt?: InputMaybe<Scalars['String']['input']>;
@@ -7829,6 +7815,8 @@ export type OrganizationCompliancesOldUpdateInput = {
 };
 
 export type OrganizationCompliancesOldsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationCompliancesOldsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationCompliancesOldsListFilter>>>;
   complianceDefinition?: InputMaybe<ComplianceDefinitionsListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -7946,6 +7934,8 @@ export type OrganizationCreateOrUpdateInput = {
 };
 
 export type OrganizationFacilitiesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationFacilitiesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationFacilitiesListFilter>>>;
   addressLine1?: InputMaybe<Scalars['String']['input']>;
   addressLine1_gt?: InputMaybe<Scalars['String']['input']>;
   addressLine1_gte?: InputMaybe<Scalars['String']['input']>;
@@ -7971,6 +7961,30 @@ export type OrganizationFacilitiesListFilter = {
   addressLine2_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   addressLine2_null?: InputMaybe<Scalars['Boolean']['input']>;
   attributeAssurances?: InputMaybe<AttributeAssurancesListFilter>;
+  brandFacilityId?: InputMaybe<Scalars['String']['input']>;
+  brandFacilityId_gt?: InputMaybe<Scalars['String']['input']>;
+  brandFacilityId_gte?: InputMaybe<Scalars['String']['input']>;
+  brandFacilityId_ilike?: InputMaybe<Scalars['String']['input']>;
+  brandFacilityId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  brandFacilityId_like?: InputMaybe<Scalars['String']['input']>;
+  brandFacilityId_lt?: InputMaybe<Scalars['String']['input']>;
+  brandFacilityId_lte?: InputMaybe<Scalars['String']['input']>;
+  brandFacilityId_ne?: InputMaybe<Scalars['String']['input']>;
+  brandFacilityId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  brandFacilityId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  brandFacilityId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  category?: InputMaybe<Scalars['String']['input']>;
+  category_gt?: InputMaybe<Scalars['String']['input']>;
+  category_gte?: InputMaybe<Scalars['String']['input']>;
+  category_ilike?: InputMaybe<Scalars['String']['input']>;
+  category_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  category_like?: InputMaybe<Scalars['String']['input']>;
+  category_lt?: InputMaybe<Scalars['String']['input']>;
+  category_lte?: InputMaybe<Scalars['String']['input']>;
+  category_ne?: InputMaybe<Scalars['String']['input']>;
+  category_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  category_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  category_null?: InputMaybe<Scalars['Boolean']['input']>;
   city?: InputMaybe<Scalars['String']['input']>;
   city_gt?: InputMaybe<Scalars['String']['input']>;
   city_gte?: InputMaybe<Scalars['String']['input']>;
@@ -8068,6 +8082,18 @@ export type OrganizationFacilitiesListFilter = {
   stateProvince_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   stateProvince_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   stateProvince_null?: InputMaybe<Scalars['Boolean']['input']>;
+  subcategory?: InputMaybe<Scalars['String']['input']>;
+  subcategory_gt?: InputMaybe<Scalars['String']['input']>;
+  subcategory_gte?: InputMaybe<Scalars['String']['input']>;
+  subcategory_ilike?: InputMaybe<Scalars['String']['input']>;
+  subcategory_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  subcategory_like?: InputMaybe<Scalars['String']['input']>;
+  subcategory_lt?: InputMaybe<Scalars['String']['input']>;
+  subcategory_lte?: InputMaybe<Scalars['String']['input']>;
+  subcategory_ne?: InputMaybe<Scalars['String']['input']>;
+  subcategory_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  subcategory_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  subcategory_null?: InputMaybe<Scalars['Boolean']['input']>;
   supplier?: InputMaybe<Scalars['Boolean']['input']>;
   supplierTier?: InputMaybe<Scalars['Float']['input']>;
   supplierTier_in?: InputMaybe<Array<Scalars['Float']['input']>>;
@@ -8096,6 +8122,8 @@ export type OrganizationFacilitiesListFilter = {
 export type OrganizationFacilitiesOrderByInput = {
   addressLine1?: InputMaybe<Sort>;
   addressLine2?: InputMaybe<Sort>;
+  brandFacilityId?: InputMaybe<Sort>;
+  category?: InputMaybe<Sort>;
   city?: InputMaybe<Sort>;
   country?: InputMaybe<Sort>;
   createdAt?: InputMaybe<Sort>;
@@ -8105,6 +8133,7 @@ export type OrganizationFacilitiesOrderByInput = {
   name?: InputMaybe<Sort>;
   postalCode?: InputMaybe<Sort>;
   stateProvince?: InputMaybe<Sort>;
+  subcategory?: InputMaybe<Sort>;
   supplier?: InputMaybe<Sort>;
   supplierTier?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
@@ -8123,6 +8152,8 @@ export type OrganizationFacility = {
   addressLine2?: Maybe<Scalars['String']['output']>;
   attributeAssurances: Array<AttributeAssurance>;
   attributeAssurances_aggregate?: Maybe<AggregationResult>;
+  brandFacilityId?: Maybe<Scalars['String']['output']>;
+  category?: Maybe<Scalars['String']['output']>;
   city?: Maybe<Scalars['String']['output']>;
   country?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['ISOString']['output']>;
@@ -8142,6 +8173,7 @@ export type OrganizationFacility = {
   products: Array<Product>;
   products_aggregate?: Maybe<AggregationResult>;
   stateProvince?: Maybe<Scalars['String']['output']>;
+  subcategory?: Maybe<Scalars['String']['output']>;
   supplier?: Maybe<Scalars['Boolean']['output']>;
   supplierTier?: Maybe<Scalars['Float']['output']>;
   updatedAt?: Maybe<Scalars['ISOString']['output']>;
@@ -8224,6 +8256,8 @@ export type OrganizationFacilityCreateOrUpdateInput = {
   addressLine1?: InputMaybe<Scalars['String']['input']>;
   addressLine2?: InputMaybe<Scalars['String']['input']>;
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
+  brandFacilityId?: InputMaybe<Scalars['String']['input']>;
+  category?: InputMaybe<Scalars['String']['input']>;
   city?: InputMaybe<Scalars['String']['input']>;
   country?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -8238,6 +8272,7 @@ export type OrganizationFacilityCreateOrUpdateInput = {
   postalCode?: InputMaybe<Scalars['String']['input']>;
   products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
   stateProvince?: InputMaybe<Scalars['String']['input']>;
+  subcategory?: InputMaybe<Scalars['String']['input']>;
   supplier?: InputMaybe<Scalars['Boolean']['input']>;
   supplierTier?: InputMaybe<Scalars['Float']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -8249,6 +8284,8 @@ export type OrganizationFacilityInsertInput = {
   addressLine1?: InputMaybe<Scalars['String']['input']>;
   addressLine2?: InputMaybe<Scalars['String']['input']>;
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
+  brandFacilityId?: InputMaybe<Scalars['String']['input']>;
+  category?: InputMaybe<Scalars['String']['input']>;
   city?: InputMaybe<Scalars['String']['input']>;
   country?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -8262,6 +8299,7 @@ export type OrganizationFacilityInsertInput = {
   postalCode?: InputMaybe<Scalars['String']['input']>;
   products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
   stateProvince?: InputMaybe<Scalars['String']['input']>;
+  subcategory?: InputMaybe<Scalars['String']['input']>;
   supplier?: InputMaybe<Scalars['Boolean']['input']>;
   supplierTier?: InputMaybe<Scalars['Float']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -8273,6 +8311,8 @@ export type OrganizationFacilityUpdateInput = {
   addressLine1?: InputMaybe<Scalars['String']['input']>;
   addressLine2?: InputMaybe<Scalars['String']['input']>;
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
+  brandFacilityId?: InputMaybe<Scalars['String']['input']>;
+  category?: InputMaybe<Scalars['String']['input']>;
   city?: InputMaybe<Scalars['String']['input']>;
   country?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -8287,6 +8327,7 @@ export type OrganizationFacilityUpdateInput = {
   postalCode?: InputMaybe<Scalars['String']['input']>;
   products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
   stateProvince?: InputMaybe<Scalars['String']['input']>;
+  subcategory?: InputMaybe<Scalars['String']['input']>;
   supplier?: InputMaybe<Scalars['Boolean']['input']>;
   supplierTier?: InputMaybe<Scalars['Float']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -8503,6 +8544,8 @@ export type OrganizationFileUpdateInput = {
 };
 
 export type OrganizationFilesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationFilesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationFilesListFilter>>>;
   acl?: InputMaybe<Scalars['String']['input']>;
   acl_gt?: InputMaybe<Scalars['String']['input']>;
   acl_gte?: InputMaybe<Scalars['String']['input']>;
@@ -8824,6 +8867,8 @@ export enum OrganizationFilesType {
   PurchaseOrder = 'PURCHASE_ORDER',
   ScopeCertificate = 'SCOPE_CERTIFICATE',
   Statement = 'STATEMENT',
+  SupplierAgreement = 'SUPPLIER_AGREEMENT',
+  SupplierStatement = 'SUPPLIER_STATEMENT',
   TestReport = 'TEST_REPORT',
   TransactionCertificate = 'TRANSACTION_CERTIFICATE'
 }
@@ -8902,6 +8947,8 @@ export type OrganizationUpdateInput = {
 };
 
 export type OrganizationsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationsListFilter>>>;
   actions?: InputMaybe<ActionsListFilter>;
   attributeAssurances?: InputMaybe<AttributeAssurancesListFilter>;
   branding?: InputMaybe<Scalars['JSON']['input']>;
@@ -9067,25 +9114,9 @@ export type OrganizationsPaginationInput = {
   orderBy?: InputMaybe<OrganizationsOrderByInput>;
 };
 
-export type PasskeyAuthenticationResponse = {
-  authenticatorAttachment?: InputMaybe<Scalars['String']['input']>;
-  clientExtensionResults: Scalars['JSON']['input'];
-  id: Scalars['ID']['input'];
-  rawId: Scalars['String']['input'];
-  response: Scalars['JSON']['input'];
-  type: Scalars['String']['input'];
-};
-
-export type PasskeyRegistrationResponse = {
-  authenticatorAttachment?: InputMaybe<Scalars['String']['input']>;
-  clientExtensionResults: Scalars['JSON']['input'];
-  id: Scalars['ID']['input'];
-  rawId: Scalars['String']['input'];
-  response: Scalars['JSON']['input'];
-  type: Scalars['String']['input'];
-};
-
 export type PolicyDataListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<PolicyDataListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<PolicyDataListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -9242,6 +9273,8 @@ export type PolicyDefinitionUpdateInput = {
 };
 
 export type PolicyDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<PolicyDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<PolicyDefinitionsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -9362,6 +9395,8 @@ export type PrismaMigrationUpdateInput = {
 };
 
 export type PrismaMigrationsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<PrismaMigrationsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<PrismaMigrationsListFilter>>>;
   appliedStepsCount?: InputMaybe<Scalars['Float']['input']>;
   appliedStepsCount_in?: InputMaybe<Array<Scalars['Float']['input']>>;
   appliedStepsCount_ne?: InputMaybe<Scalars['Float']['input']>;
@@ -9578,6 +9613,7 @@ export type ProductInsertInput = {
 
 export type ProductMaterial = {
   __typename?: 'ProductMaterial';
+  bomSection?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['ISOString']['output']>;
   id: Scalars['ID']['output'];
   material?: Maybe<Material>;
@@ -9586,10 +9622,12 @@ export type ProductMaterial = {
   metadata?: Maybe<Scalars['JSON']['output']>;
   organization: Organization;
   organization_aggregate?: Maybe<AggregationResult>;
+  placement?: Maybe<Scalars['String']['output']>;
   product: Product;
   product_aggregate?: Maybe<AggregationResult>;
   unitOfMeasure?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['ISOString']['output']>;
+  weight?: Maybe<Scalars['Float']['output']>;
   yield?: Maybe<Scalars['Float']['output']>;
 };
 
@@ -9625,46 +9663,69 @@ export type ProductMaterialProduct_AggregateArgs = {
 
 /** Data needed to create or update ProductMaterials. If an ID is passed, this is an update, otherwise it's an insert. */
 export type ProductMaterialCreateOrUpdateInput = {
+  bomSection?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
   materialSupplierId?: InputMaybe<Scalars['String']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  placement?: InputMaybe<Scalars['String']['input']>;
   product?: InputMaybe<ProductCreateOrUpdateInput>;
   unitOfMeasure?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
   yield?: InputMaybe<Scalars['Float']['input']>;
 };
 
 /** Data needed to create ProductMaterials. */
 export type ProductMaterialInsertInput = {
+  bomSection?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
   materialSupplierId?: InputMaybe<Scalars['String']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  placement?: InputMaybe<Scalars['String']['input']>;
   product?: InputMaybe<ProductCreateOrUpdateInput>;
   unitOfMeasure?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
   yield?: InputMaybe<Scalars['Float']['input']>;
 };
 
 /** Data needed to update ProductMaterials. An ID must be passed. */
 export type ProductMaterialUpdateInput = {
+  bomSection?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   id: Scalars['ID']['input'];
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
   materialSupplierId?: InputMaybe<Scalars['String']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  placement?: InputMaybe<Scalars['String']['input']>;
   product?: InputMaybe<ProductCreateOrUpdateInput>;
   unitOfMeasure?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
   yield?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type ProductMaterialsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ProductMaterialsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ProductMaterialsListFilter>>>;
+  bomSection?: InputMaybe<Scalars['String']['input']>;
+  bomSection_gt?: InputMaybe<Scalars['String']['input']>;
+  bomSection_gte?: InputMaybe<Scalars['String']['input']>;
+  bomSection_ilike?: InputMaybe<Scalars['String']['input']>;
+  bomSection_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  bomSection_like?: InputMaybe<Scalars['String']['input']>;
+  bomSection_lt?: InputMaybe<Scalars['String']['input']>;
+  bomSection_lte?: InputMaybe<Scalars['String']['input']>;
+  bomSection_ne?: InputMaybe<Scalars['String']['input']>;
+  bomSection_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  bomSection_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  bomSection_null?: InputMaybe<Scalars['Boolean']['input']>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -9705,6 +9766,18 @@ export type ProductMaterialsListFilter = {
   metadata_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   metadata_null?: InputMaybe<Scalars['Boolean']['input']>;
   organization?: InputMaybe<OrganizationsListFilter>;
+  placement?: InputMaybe<Scalars['String']['input']>;
+  placement_gt?: InputMaybe<Scalars['String']['input']>;
+  placement_gte?: InputMaybe<Scalars['String']['input']>;
+  placement_ilike?: InputMaybe<Scalars['String']['input']>;
+  placement_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  placement_like?: InputMaybe<Scalars['String']['input']>;
+  placement_lt?: InputMaybe<Scalars['String']['input']>;
+  placement_lte?: InputMaybe<Scalars['String']['input']>;
+  placement_ne?: InputMaybe<Scalars['String']['input']>;
+  placement_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  placement_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  placement_null?: InputMaybe<Scalars['Boolean']['input']>;
   product?: InputMaybe<ProductsListFilter>;
   unitOfMeasure?: InputMaybe<Scalars['String']['input']>;
   unitOfMeasure_gt?: InputMaybe<Scalars['String']['input']>;
@@ -9728,6 +9801,12 @@ export type ProductMaterialsListFilter = {
   updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
   updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
+  weight_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  weight_ne?: InputMaybe<Scalars['Float']['input']>;
+  weight_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  weight_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  weight_null?: InputMaybe<Scalars['Boolean']['input']>;
   yield?: InputMaybe<Scalars['Float']['input']>;
   yield_in?: InputMaybe<Array<Scalars['Float']['input']>>;
   yield_ne?: InputMaybe<Scalars['Float']['input']>;
@@ -9737,12 +9816,15 @@ export type ProductMaterialsListFilter = {
 };
 
 export type ProductMaterialsOrderByInput = {
+  bomSection?: InputMaybe<Sort>;
   createdAt?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   materialSupplierId?: InputMaybe<Sort>;
   metadata?: InputMaybe<Sort>;
+  placement?: InputMaybe<Sort>;
   unitOfMeasure?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
+  weight?: InputMaybe<Sort>;
   yield?: InputMaybe<Sort>;
 };
 
@@ -9777,6 +9859,8 @@ export type ProductUpdateInput = {
 };
 
 export type ProductsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ProductsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ProductsListFilter>>>;
   attributeAssurances?: InputMaybe<AttributeAssurancesListFilter>;
   brandProductId?: InputMaybe<Scalars['String']['input']>;
   brandProductId_gt?: InputMaybe<Scalars['String']['input']>;
@@ -10196,6 +10280,7 @@ export type Query = {
   products?: Maybe<Array<Maybe<Product>>>;
   /** Get aggregated data for Products. */
   products_aggregate?: Maybe<AggregationResult>;
+  search?: Maybe<SustainabilityAttribute>;
   /** Get a single ServiceDefinition. */
   serviceDefinition?: Maybe<ServiceDefinition>;
   /** Get multiple ServiceDefinitions. */
@@ -10839,6 +10924,12 @@ export type QueryProducts_AggregateArgs = {
 };
 
 
+export type QuerySearchArgs = {
+  filter?: InputMaybe<Scalars['String']['input']>;
+  searchTerm: Scalars['String']['input'];
+};
+
+
 export type QueryServiceDefinitionArgs = {
   id: Scalars['ID']['input'];
 };
@@ -11040,6 +11131,8 @@ export type ServiceDefinitionUpdateInput = {
 };
 
 export type ServiceDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ServiceDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ServiceDefinitionsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -11136,6 +11229,8 @@ export enum Sort {
 }
 
 export type SupportedUtilitiesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<SupportedUtilitiesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<SupportedUtilitiesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -11270,6 +11365,8 @@ export type SupportedUtilityUpdateInput = {
 };
 
 export type SurveyDataListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<SurveyDataListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<SurveyDataListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -11475,6 +11572,8 @@ export type SurveyDefinitionUpdateInput = {
 };
 
 export type SurveyDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<SurveyDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<SurveyDefinitionsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -11659,6 +11758,8 @@ export type SurveyStatusUpdateInput = {
 };
 
 export type SurveyStatusesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<SurveyStatusesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<SurveyStatusesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -11826,6 +11927,8 @@ export enum SustainabilityAttributesLevel {
 }
 
 export type SustainabilityAttributesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<SustainabilityAttributesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<SustainabilityAttributesListFilter>>>;
   attributeAssurances?: InputMaybe<AttributeAssurancesListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -11927,11 +12030,6 @@ export enum SustainabilityAttributesType {
   ThirdParty = 'THIRD_PARTY'
 }
 
-export type Token = {
-  __typename?: 'Token';
-  authToken: Scalars['String']['output'];
-};
-
 export type UtilityBill = {
   __typename?: 'UtilityBill';
   createdAt: Scalars['ISOString']['output'];
@@ -12021,6 +12119,8 @@ export type UtilityBillUpdateInput = {
 };
 
 export type UtilityBillsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<UtilityBillsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<UtilityBillsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -12183,6 +12283,8 @@ export type VectorRecordUpdateInput = {
 };
 
 export type VectorRecordsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<VectorRecordsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<VectorRecordsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
