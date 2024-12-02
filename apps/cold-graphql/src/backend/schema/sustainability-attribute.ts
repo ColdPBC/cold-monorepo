@@ -5,7 +5,6 @@ import { AttributeAssurance } from './attribute-assurance';
 import { Organization } from './organization';
 import { SustainabilityAttributesLevel, SustainabilityAttributesType, SustainabilityAttribute as OrmSustainabilityAttribute } from '../entities';
 import { connection } from '../database';
-import '../resolvers/sustainability-attribute';
 
 graphweaverMetadata.collectEnumInformation({ target: SustainabilityAttributesLevel, name: 'SustainabilityAttributesLevel' });
 graphweaverMetadata.collectEnumInformation({ target: SustainabilityAttributesType, name: 'SustainabilityAttributesType' });
