@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => {
     return (
-      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks({includeProducts: true, includeWeights: true})}>
+      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks()}>
         <SustainabilityAttributeDetail />
       </StoryMockProvider>
     );
@@ -31,7 +31,7 @@ export const Default: Story = {
 export const ByMaterialTab: Story = {
   render: () => {
     return (
-      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks({includeProducts: true, includeWeights: true})}>
+      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks()}>
         <SustainabilityAttributeDetail />
       </StoryMockProvider>
     );
@@ -45,7 +45,7 @@ export const ByMaterialTab: Story = {
 export const MaterialLevelWithoutProducts: Story = {
   render: () => {
     return (
-      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks({includeProducts: false, includeWeights: false})}>
+      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks({includeProducts: false})}>
         <SustainabilityAttributeDetail />
       </StoryMockProvider>
     );
@@ -55,7 +55,7 @@ export const MaterialLevelWithoutProducts: Story = {
 export const MaterialLevelWithoutWeights: Story = {
   render: () => {
     return (
-      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks({includeProducts: true, includeWeights: false})}>
+      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks({includeWeights: false})}>
         <SustainabilityAttributeDetail />
       </StoryMockProvider>
     );

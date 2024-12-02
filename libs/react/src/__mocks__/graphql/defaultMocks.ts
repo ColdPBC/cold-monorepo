@@ -646,7 +646,10 @@ export const sustainabilityAttributesForProductMocks = [
   }
 ]
 
-export const sustainabilityAttributesMocks = ({includeProducts, includeWeights}) => ([
+export const sustainabilityAttributesMocks = ({
+  includeProducts = true,
+  includeWeights = true,
+} = {}) => ([
   {
     query: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
     handler: () =>
