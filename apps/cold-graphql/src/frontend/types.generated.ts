@@ -10280,7 +10280,6 @@ export type Query = {
   products?: Maybe<Array<Maybe<Product>>>;
   /** Get aggregated data for Products. */
   products_aggregate?: Maybe<AggregationResult>;
-  search?: Maybe<SustainabilityAttribute>;
   /** Get a single ServiceDefinition. */
   serviceDefinition?: Maybe<ServiceDefinition>;
   /** Get multiple ServiceDefinitions. */
@@ -10921,12 +10920,6 @@ export type QueryProductsArgs = {
 
 export type QueryProducts_AggregateArgs = {
   filter?: InputMaybe<ProductsListFilter>;
-};
-
-
-export type QuerySearchArgs = {
-  filter?: InputMaybe<Scalars['String']['input']>;
-  searchTerm: Scalars['String']['input'];
 };
 
 
