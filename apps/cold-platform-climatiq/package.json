@@ -1,32 +1,39 @@
 {
+  "name": "cold-platform-climatiq",
   "service": {
     "name": "cold-platform-climatiq",
-    "label": "Climatiq",
+    "label": "OpenAI",
     "service_type": "platform",
     "definition": {
-      "version": "1.83.5",
-      "show": false,
+      "logo_url": "./assets/black_logo.png",
+      "platform_url": "https://www.open.ai",
+      "show": true,
       "facilities": false,
-      "logo_url": "./assets/climatiq.png",
-      "platform_url": "https://www.climatiq.io",
       "mqtt": {
-        "publish_options": {
-          "base_topic": "/platform/climatiq",
+        "publishes_to": {
+          "user": "ui/:ENVIRONMENT:/:ORG_ID:/:EMAIL:",
+          "org": "ui/:ENVIRONMENT:/:ORG_ID:/#",
+          "public": "system/:ENVIRONMENT:/public",
+          "cold": "system/:ENVIRONMENT:/cold"
+        },
+        "subscribes_to": {
+          "base_topic": "/platform/openai",
           "qos": 0
         }
       },
       "rabbitMQ": {
         "rpcOptions": {
-          "queue": "cold.platform.climatiq",
-          "routing_key": "cold.platform.climatiq.rpc",
+          "queue": "cold.platform.openai",
+          "routing_key": "cold.platform.openai.rpc",
           "exchange": "amq.direct"
         },
         "publishOptions": {
-          "queue": "cold.platform.climatiq.rpc",
-          "routing_key": "cold.platform.climatiq",
+          "queue": "cold.platform.openai",
+          "routing_key": "cold.platform.openai",
           "exchange": "amq.direct"
         }
       }
     }
-  }
+  },
+  "version": "1.456.2"
 }

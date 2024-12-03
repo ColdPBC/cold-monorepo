@@ -1,18 +1,25 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "declaration": true,
+    "esModuleInterop": true,
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
     "types": ["node"],
     "emitDecoratorMetadata": true,
-    "esModuleInterop": true,
+    "target": "es2022",
     "removeComments": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "incremental": true,
-    "skipLibCheck": true,
-    "target": "es2021"
+    "noImplicitReturns": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true
   },
   "exclude": [
     "jest.config.ts",
@@ -29,8 +36,8 @@
     "**/apps/cold-ui/**",
     "**/apps/cold-platform-bayou/**",
     "**/apps/cold-platform-bayou-e2e/**",
-    "**/apps/cold-platform-openai/**",
-    "**/apps/cold-platform-openai-e2e/**"
+    "**/apps/cold-platform-climatiq-e2e/**",
+    "**/apps/cold-platform-climatiq/**",
   ],
   "include": ["src/**/*.ts"]
 }

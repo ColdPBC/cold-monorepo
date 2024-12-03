@@ -1,11 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "files": [],
-  "include": [],
   "exclude": [
-    "jest.config.ts",
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts",
     "**/node_modules/**",
     "**/lib/**",
     "**/dist/**",
@@ -17,8 +13,8 @@
     "**/apps/cold-ui/**",
     "**/apps/cold-platform-bayou/**",
     "**/apps/cold-platform-bayou-e2e/**",
-    "**/apps/cold-platform-openai/**",
-    "**/apps/cold-platform-openai-e2e/**"
+    "**/apps/cold-platform-climatiq-e2e/**",
+    "**/apps/cold-platform-climatiq/**"
   ],
   "references": [
     {
@@ -29,6 +25,10 @@
     }
   ],
   "compilerOptions": {
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "target": "es2022",
+
+    "noImplicitReturns": true,
+    "noImplicitAny": false
   }
 }
