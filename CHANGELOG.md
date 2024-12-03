@@ -1,3 +1,11 @@
+# [1.485.0](https://github.com/coldPBC/cold-monorepo/compare/v1.484.2...v1.485.0) (2024-12-03)
+
+
+### Features
+
+* create new By Product tab component for SustainabilityAttributePage ([ab153ce](https://github.com/coldPBC/cold-monorepo/commit/ab153ce3923cb4d3d968a40800f5f3fee66e9c21))
+* new donut chart for averages ([893c491](https://github.com/coldPBC/cold-monorepo/commit/893c491b4781cf40b9d39336d64b038082bdf46c))
+
 ## [1.484.2](https://github.com/coldPBC/cold-monorepo/compare/v1.484.1...v1.484.2) (2024-12-02)
 
 
