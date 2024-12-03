@@ -248,11 +248,13 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 					onRowClick={params => onRowClick(params.row)}
 					columns={columns}
 					columnHeaderHeight={55}
+          columnGroupHeaderHeight={40}
 					columnGroupingModel={[
 						{
 							groupId: 'materials',
 							headerName: 'Materials with Attribute',
-							headerClassName: 'bg-gray-30 h-[37px] text-body',
+							headerClassName: 'bg-gray-50 text-eyebrow rounded-t-lg',
+              headerAlign: 'center',
 							children: [{ field: 'materialCount' }, { field: 'materialPercentByWeight' }, { field: 'materialList' }],
 						},
 					]}
