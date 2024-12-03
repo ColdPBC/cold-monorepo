@@ -1,5 +1,6 @@
+ARG NODE_VERSION=22.8
 # Use the official Node.js image as the base
-FROM node:20.9-bullseye-slim as base
+FROM node:${NODE_VERSION}-bullseye-slim AS base
 USER root
 WORKDIR /home/node/repo
 # Capture the build arguments
