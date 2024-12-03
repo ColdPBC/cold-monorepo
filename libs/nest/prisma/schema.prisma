@@ -1065,21 +1065,21 @@ model climatiq_actvities {
 	source String
 	source_link String
 	source_dataset String
-	uncertainty String?
+	uncertainty Int?
 	year Int
 	year_released Int
 	region String
 	region_name String
 	description String
 	unit_type String
-	unit String
+	unit String?
 	source_lca_activity String
 	data_quality_flags Json
 	access_type String
 	supported_calculation_methods Json
 	factor String?
 	factor_calculation_method String?
-	factor_calculation_orgin String?
+	factor_calculation_origin String?
 	constituent_gases Json?
 	data_version Json
 	data_version_information Json
