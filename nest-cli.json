@@ -1,23 +1,75 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": ".",
   "compilerOptions": {
     "assets": [
       "public/**/*"
     ],
     "deleteOutDir": true,
-    "plugins": [{
-      "name": "@nestjs/swagger",
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
         "options": {
           "setDefaults": true,
           "classValidatorShim": false,
           "introspectComments": true,
-            "swaggerOptions": {
-              "tagsSorter": "alpha"
-            }
+          "swaggerOptions": {
+            "tagsSorter": "alpha"
+          }
         }
-
-    }]
+      }
+    ],
+    "webpack": true,
+    "tsConfigPath": "apps/main/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": ".",
+  "projects": {
+    "cold-api": {
+      "type": "application",
+      "root": "apps/cold-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/cold-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cold-api/tsconfig.app.json"
+      }
+    },
+	  "cold-graphql": {
+		  "type": "application",
+		  "root": "apps/cold-graphql",
+		  "entryFile": "main",
+		  "sourceRoot": "apps/cold-graphql/src",
+		  "compilerOptions": {
+			  "tsConfigPath": "apps/cold-graphql/tsconfig.app.json"
+		  }
+	  },
+	  "cold-platform-bayou": {
+		  "type": "application",
+		  "root": "apps/cold-platform-bayou",
+		  "entryFile": "main",
+		  "sourceRoot": "apps/cold-platform-bayou/src",
+		  "compilerOptions": {
+			  "tsConfigPath": "apps/cold-platform-bayou/tsconfig.app.json"
+		  }
+	  },
+    "cold-platform-climatiq": {
+      "type": "application",
+      "root": "apps/cold-platform-climatiq",
+      "entryFile": "main",
+      "sourceRoot": "apps/cold-platform-climatiq/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cold-platform-climatiq/tsconfig.app.json"
+      }
+    },
+	  "cold-platform-stripe": {
+		  "type": "application",
+		  "root": "apps/cold-platform-stripe",
+		  "entryFile": "main",
+		  "sourceRoot": "apps/cold-platform-stripe/src",
+		  "compilerOptions": {
+			  "tsConfigPath": "apps/cold-platform-stripe/tsconfig.app.json"
+		  }
+	  }
   }
 }
