@@ -21,7 +21,7 @@ import {
   UPDATE_DOCUMENT_FIELDS,
   GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY,
   GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY,
-  GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY,
+  GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY, GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
 } from '@coldpbc/lib';
 import {
 	filesProcessedWithDatesMock,
@@ -646,7 +646,10 @@ export const sustainabilityAttributesForProductMocks = [
   }
 ]
 
-export const sustainabilityAttributesMocks = [
+export const sustainabilityAttributesMocks = ({
+  includeProducts = true,
+  includeWeights = true,
+} = {}) => ([
   {
     query: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
     handler: () =>
@@ -743,8 +746,34 @@ export const sustainabilityAttributesMocks = [
           })),
         }
       })
+  },
+  {
+    query: GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
+    handler: () =>
+      Promise.resolve({
+        data: {
+          products: includeProducts ? [
+            {
+              id: '1',
+              productCategory: 'Pants',
+              productSubcategory: 'Chinos',
+              seasonCode: 'Winter 2024',
+              organizationFacility: {
+                id: 'supplier_1',
+                name: 'Example Supplier',
+              },
+              name: 'Example Product',
+              productMaterials: getMaterialsMocksWithAssurances().map((material, index) => ({
+                id: `pm_${material.id}`,
+                weight: includeWeights ? index / 100 : null,
+                material,
+              }))
+            }
+          ] : [],
+        }
+      })
   }
-];
+]);
 
 export const productLevelSustainabilityAttributeMocks = [
   {

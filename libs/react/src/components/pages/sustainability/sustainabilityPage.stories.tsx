@@ -41,7 +41,7 @@ export const OtherAttributesTab: Story = {
 export const MyAttributesWithMockData: Story = {
   render: () => {
     return (
-      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks}>
+      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks()}>
         <SustainabilityPage />
       </StoryMockProvider>
     );
@@ -51,7 +51,7 @@ export const MyAttributesWithMockData: Story = {
 export const OtherAttributesWithMockData: Story = {
   render: () => {
     return (
-      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks}>
+      <StoryMockProvider graphqlMocks={sustainabilityAttributesMocks()}>
         <SustainabilityPage />
       </StoryMockProvider>
     );
