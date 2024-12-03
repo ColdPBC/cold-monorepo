@@ -1,3 +1,18 @@
+# [1.486.0](https://github.com/coldPBC/cold-monorepo/compare/v1.485.0...v1.486.0) (2024-12-03)
+
+
+### Bug Fixes
+
+* **cold-platform-climatiq:** add tracer initialization and update logger configuration ([9c1f42a](https://github.com/coldPBC/cold-monorepo/commit/9c1f42ab87c74bbb6aaa8b0f227624a215d89e4b))
+* enhance error handling in AppService initialization ([5001abb](https://github.com/coldPBC/cold-monorepo/commit/5001abb3c166be609fff3fbf2dc6bf174c880c52))
+* update climatiq_activities to fix typos and modify column types ([835aa94](https://github.com/coldPBC/cold-monorepo/commit/835aa946593c169c0e494ecb81b0166022a74559))
+
+
+### Features
+
+* add ClimatiqController and sync sector categories functionality ([e702ba8](https://github.com/coldPBC/cold-monorepo/commit/e702ba8be2546ca9d9b711440774634d42c626ab))
+* add CountriesService with province, region, and country lookup functionalities ([29f4dc7](https://github.com/coldPBC/cold-monorepo/commit/29f4dc71f14fea115c64cd72e5aac8277ed379a1))
+
 # [1.485.0](https://github.com/coldPBC/cold-monorepo/compare/v1.484.2...v1.485.0) (2024-12-03)
 
 
