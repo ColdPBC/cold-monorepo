@@ -208,7 +208,7 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 		<div className={'w-full flex flex-col items-center gap-10'}>
 			{hasAnyProductWithWeights ? (
 				<div className={'w-full flex justify-items-start gap-4'}>
-					<Card title={'Average Coverage By Weight Across All Products'} className={'w-full min-w-[600px] h-full'}>
+					<Card title={'Percent by Weight, Averaged Across All Products'} className={'w-full min-w-[600px] h-full'}>
 						<AverageCoverageDonut {...donutData} accentColor={ACCENT_COLOR} />
 					</Card>
 					<Card title={'Average Coverage By Weight Per Category'} className={'w-full h-full min-w-[352px]'}>
