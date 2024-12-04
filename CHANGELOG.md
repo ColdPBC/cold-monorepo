@@ -1,3 +1,11 @@
+# [1.487.0](https://github.com/coldPBC/cold-monorepo/compare/v1.486.0...v1.487.0) (2024-12-04)
+
+
+### Features
+
+* add dropdown as option on card ([4e40df9](https://github.com/coldPBC/cold-monorepo/commit/4e40df9e97c9dd0608cec623972b3f5cf1dc532c))
+* allow graphs to pivot between category and subcategory ([9aa8103](https://github.com/coldPBC/cold-monorepo/commit/9aa8103b1792e68c6e5e426dd706da9d5297c214))
+
 # [1.486.0](https://github.com/coldPBC/cold-monorepo/compare/v1.485.0...v1.486.0) (2024-12-03)
 
 
