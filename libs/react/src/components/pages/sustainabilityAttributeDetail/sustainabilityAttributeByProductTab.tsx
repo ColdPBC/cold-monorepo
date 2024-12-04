@@ -19,6 +19,7 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
 	const navigate = useNavigate();
+  const [selectedView, setSelectedView] = React.useState('category');
 
 	// The page is only valid for Material-level attributes (otherwise, this page will return null)
 	const validLevel = sustainabilityAttribute.level === EntityLevel.MATERIAL;
@@ -93,7 +94,8 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 
 	// Coverage chart setup
 	const barData = React.useMemo(() => {
-		const categoryGroups = groupBy(products, 'productCategory');
+		const groupByKey = selectedView === 'category' ? 'productCategory' : 'productSubcategory';
+		const categoryGroups = groupBy(products, groupByKey);
 		const rawData = Object.entries(categoryGroups).map(([category, items]) => {
 			const hasAttributeAggregatePercent = items.filter(item => item.materialPercentByWeight != null).reduce((total, item) => total + item.materialPercentByWeight!, 0);
 			const totalCount = items.length;
@@ -117,10 +119,15 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 			const otherTotal = sortedData.slice(6).reduce((count, item) => count + item.totalCount, 0);
 			return [
 				...sortedData.slice(0, 6),
-				{ category: 'Other', hasAttributeAggregatePercent: otherWithAttribute, totalCount: otherTotal, percentage: (otherWithAttribute / otherTotal) * 100 },
+				{
+					category: 'Other',
+					hasAttributeAggregatePercent: otherWithAttribute,
+					totalCount: otherTotal,
+					percentage: otherWithAttribute / otherTotal,
+				},
 			];
 		}
-	}, [products]);
+	}, [products, selectedView]);
 
 	// Handle loading state
 	if (productQuery.isLoading) {
@@ -211,7 +218,15 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 					<Card title={'Percent by Weight, Averaged Across All Products'} className={'w-full min-w-[600px] h-full'}>
 						<AverageCoverageDonut {...donutData} accentColor={ACCENT_COLOR} />
 					</Card>
-					<Card title={'Average Coverage By Weight Per Category'} className={'w-full h-full min-w-[352px]'}>
+					<Card
+						title={'Average Coverage By Weight Per Category'}
+						className={'w-full h-full min-w-[352px]'}
+						dropdownOptions={[
+							{ value: 'category', label: 'By category' },
+							{ value: 'subcategory', label: 'By subcategory' },
+						]}
+						selectedDropdownValue={(selectedView)}
+						onDropdownSelect={setSelectedView}>
 						<CoverageSpreadBar data={barData} accentColor={ACCENT_COLOR} />
 					</Card>
 				</div>

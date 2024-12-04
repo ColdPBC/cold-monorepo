@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
-import { BaseButton } from '../../atoms/button/button';
-import { ButtonTypes } from '../../../enums/buttons';
+import { BaseButton, Dropdown } from '@coldpbc/components';
+import { ButtonTypes } from '@coldpbc/enums';
 import { twMerge } from 'tailwind-merge';
 import { snakeCase } from 'lodash';
 
@@ -18,11 +18,14 @@ export interface CardProps {
   onClick?: () => void;
   glowColor?: string;
   innerRef?: React.Ref<HTMLDivElement>;
+  dropdownOptions?: Array<{ value: string; label: string }>;
+  selectedDropdownValue?: string;
+  onDropdownSelect?: (value: string) => void;
 }
 
 export function Card(props: PropsWithChildren<CardProps>) {
-  const showHeader = props.title || props.ctas;
-  const glow = props.glow !== undefined ? props.glow : true; // default glow to true
+	const showHeader = props.title || props.ctas || props.dropdownOptions;
+	const glow = props.glow !== undefined ? props.glow : true;
 
   return (
     <div
@@ -43,12 +46,17 @@ export function Card(props: PropsWithChildren<CardProps>) {
         </div>
       )}
       {showHeader && (
-        <div className="flex justify-end items-center gap-2 self-stretch min-h-[40px] h-fit">
-          {
-            // show title if we have one
-            props.title && <div className="text-h4 flex-1">{props.title}</div>
-          }
-          <div className={'flex space-x-4'}>
+        <div className="flex justify-between items-start gap-2 self-stretch relative">
+          <div className="flex items-center text-h4 h-fit flex-1 min-h-[40px]">{props.title}</div>
+          <div className="flex items-center space-x-4 min-h-[40px]">
+            {props.dropdownOptions && props.onDropdownSelect && (
+              <Dropdown
+                options={props.dropdownOptions}
+                selected={props.selectedDropdownValue}
+                onSelect={props.onDropdownSelect}
+                containerClassName="min-w-[160px]"
+              />
+            )}
             {props.ctas?.map((cta, index) => {
               if (cta.child) {
                 return <div key={`card_child_${index}`}>{cta.child}</div>;
@@ -56,7 +64,12 @@ export function Card(props: PropsWithChildren<CardProps>) {
                 return (
                   cta.text &&
                   cta.action !== undefined && (
-                    <BaseButton key={'button_' + snakeCase(cta.text) + `_${index}`} label={cta.text} onClick={cta.action} variant={cta.variant || ButtonTypes.secondary} />
+                    <BaseButton
+                      key={'button_' + snakeCase(cta.text) + `_${index}`}
+                      label={cta.text}
+                      onClick={cta.action}
+                      variant={cta.variant || ButtonTypes.secondary}
+                    />
                   )
                 );
               }

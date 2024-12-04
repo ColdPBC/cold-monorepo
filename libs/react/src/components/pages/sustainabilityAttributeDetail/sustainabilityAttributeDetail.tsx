@@ -32,6 +32,7 @@ export const _SustainabilityAttributeDetail = () => {
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
 	const navigate = useNavigate();
+	const [selectedView, setSelectedView] = React.useState('category');
 
 	const sustainabilityAttributeQuery = useGraphQLSWR<{
 		sustainabilityAttribute: SustainabilityAttributeGraphQL | null;
@@ -60,7 +61,7 @@ export const _SustainabilityAttributeDetail = () => {
 
 	// Coverage chart setup
 	const barData = React.useMemo(() => {
-		const categoryGroups = groupBy(entities, 'category');
+    const categoryGroups = groupBy(entities, selectedView);
 		const rawData = Object.entries(categoryGroups).map(([category, items]) => {
 			const hasAttributeCount = items.filter(item => item.hasAttribute).length;
 			const totalCount = items.length;
@@ -84,7 +85,7 @@ export const _SustainabilityAttributeDetail = () => {
 			const otherTotal = sortedData.slice(6).reduce((count, item) => count + item.totalCount, 0);
 			return [...sortedData.slice(0, 6), { category: 'Other', hasAttributeCount: otherWithAttribute, totalCount: otherTotal, percentage: (otherWithAttribute / otherTotal) * 100 }];
 		}
-	}, [entities]);
+	}, [entities, selectedView]);
 
 	// Handle loading state
 	if (sustainabilityAttributeQuery.isLoading) {
@@ -183,13 +184,25 @@ export const _SustainabilityAttributeDetail = () => {
 		return navigate(navigationUrl);
 	};
 
+  const dropdownOptions =
+    validLevel === EntityLevel.SUPPLIER
+      ? {}
+      : {
+        dropdownOptions: [
+          { value: 'category', label: 'By Category' },
+          { value: 'subcategory', label: 'By Sub Category' },
+        ],
+        selectedDropdownValue: selectedView,
+        onDropdownSelect: setSelectedView,
+      };
+
   const defaultTab = (
     <div className={'w-full flex flex-col items-center gap-10'}>
       <div className={'w-full flex justify-items-start gap-4'}>
         <Card title={'Total Coverage'} className={'w-full min-w-[600px] h-full'}>
           <TotalCoverageDonut {...donutData} accentColor={accentColor} entityLevel={sustainabilityAttribute.level} />
         </Card>
-        <Card title={'Coverage Spread'} className={'w-full h-full min-w-[352px]'}>
+        <Card title={'Coverage Spread'} className={'w-full h-full min-w-[352px]'} {...dropdownOptions}>
           <CoverageSpreadBar data={barData} accentColor={accentColor} />
         </Card>
       </div>
@@ -213,37 +226,37 @@ export const _SustainabilityAttributeDetail = () => {
     </div>
   );
 
-  return (
-    <MainContent
-      title={sustainabilityAttribute.name}
-      subTitle={subtitle}
-      imageUrl={sustainabilityAttribute.logoUrl}
-      breadcrumbs={[{ label: 'Sustainability', href: '/sustainability' }, { label: sustainabilityAttribute.name }]}
-      className="w-[calc(100%)]">
-      {/* If the sustainability attribute is material-level, add a tab structure to include the By Product view */}
-      {sustainabilityAttribute.level === EntityLevel.MATERIAL ? (
-        <Tabs
-          tabs={[
-            {
-              label: 'By Product',
-              content: <SustainabilityAttributeByProductTab sustainabilityAttribute={sustainabilityAttribute} />,
-            },
-            {
-              label: 'By Material',
-              content: defaultTab,
-            },
-          ]}
-        />
-      ) : (
-        defaultTab
-      )}
-    </MainContent>
-  );
+	return (
+		<MainContent
+			title={sustainabilityAttribute.name}
+			subTitle={subtitle}
+			imageUrl={sustainabilityAttribute.logoUrl}
+			breadcrumbs={[{ label: 'Sustainability', href: '/sustainability' }, { label: sustainabilityAttribute.name }]}
+			className="w-[calc(100%)]">
+			{/* If the sustainability attribute is material-level, add a tab structure to include the By Product view */}
+			{sustainabilityAttribute.level === EntityLevel.MATERIAL ? (
+				<Tabs
+					tabs={[
+						{
+							label: 'By Product',
+							content: <SustainabilityAttributeByProductTab sustainabilityAttribute={sustainabilityAttribute} />,
+						},
+						{
+							label: 'By Material',
+							content: defaultTab,
+						},
+					]}
+				/>
+			) : (
+				defaultTab
+			)}
+		</MainContent>
+	);
 };
 
 export const SustainabilityAttributeDetail = withErrorBoundary(_SustainabilityAttributeDetail, {
-  FallbackComponent: props => <ErrorFallback {...props} />,
-  onError: (error, info) => {
-    console.error('Error occurred in SustainabilityAttributeDetail: ', error);
-  },
+	FallbackComponent: props => <ErrorFallback {...props} />,
+	onError: (error, info) => {
+		console.error('Error occurred in SustainabilityAttributeDetail: ', error);
+	},
 });
