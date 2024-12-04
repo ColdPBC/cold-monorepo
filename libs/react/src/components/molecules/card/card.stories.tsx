@@ -185,3 +185,29 @@ export const PrimaryButton: Story = {
     ],
   },
 };
+
+export const Dropdown: Story = {
+  render: (args) => {
+    const [selectedView, setSelectedView] = React.useState('category');
+
+    return (
+      <div className="w-[1097px]">
+        <Card
+          {...args}
+          selectedDropdownValue={selectedView}
+          onDropdownSelect={setSelectedView}
+        >
+          <div>Lots of great content in this card!</div>
+        </Card>
+      </div>
+    );
+  },
+  args: {
+    glow: true,
+    title: 'Team Members',
+    dropdownOptions: [
+      { value: 'category', label: 'Category' },
+      { value: 'subcategory', label: 'Subcategory' }
+    ],
+  },
+};
