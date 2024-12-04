@@ -24,8 +24,8 @@ export interface CardProps {
 }
 
 export function Card(props: PropsWithChildren<CardProps>) {
-  const showHeader = props.title || props.ctas || props.dropdownOptions;
-  const glow = props.glow !== undefined ? props.glow : true;
+	const showHeader = props.title || props.ctas || props.dropdownOptions;
+	const glow = props.glow !== undefined ? props.glow : true;
 
   return (
     <div
@@ -46,9 +46,9 @@ export function Card(props: PropsWithChildren<CardProps>) {
         </div>
       )}
       {showHeader && (
-        <div className="flex justify-end items-start gap-2 self-stretch min-h-[40px] h-fit">
-          {props.title && <div className="text-h4 flex-1">{props.title}</div>}
-          <div className="flex items-center space-x-4">
+        <div className="flex justify-between items-start gap-2 self-stretch relative">
+          <div className="flex items-center text-h4 h-fit flex-1 min-h-[40px]">{props.title}</div>
+          <div className="flex items-center space-x-4 min-h-[40px]">
             {props.dropdownOptions && props.onDropdownSelect && (
               <Dropdown
                 options={props.dropdownOptions}
