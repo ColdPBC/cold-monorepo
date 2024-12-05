@@ -15,7 +15,7 @@ export class Material {
 	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
-	@Field(() => String, { adminUIOptions: {summaryField:true} })
+	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	name!: string;
 
 	@Field(() => ISODateStringScalar, { nullable: true })
@@ -27,7 +27,7 @@ export class Material {
 	@Field(() => Boolean, { nullable: true })
 	deleted = false;
 
-	@RelationshipField<Material>(() => Organization, { id: (entity) => entity.organization?.id })
+	@RelationshipField<Material>(() => Organization, { id: entity => entity.organization?.id })
 	organization!: Organization;
 
 	@Field(() => String, { nullable: true })
@@ -40,7 +40,7 @@ export class Material {
 	brandMaterialId?: string;
 
 	@Field(() => String, { nullable: true })
-	desription?: string;
+	description?: string;
 
 	@Field(() => String, { nullable: true })
 	supplierMaterialId?: string;
