@@ -21,7 +21,7 @@ export const getConnection = () => ({
 	connectionManagerId: 'postgresql',
 	mikroOrmConfig: {
 		driverOptions: {
-			connection: process.env.NODE_ENV === 'development' ? {} : { ssl: { rejectUnauthorized: false } },
+			connection: process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'docker' ? {} : { ssl: { rejectUnauthorized: false } },
 		},
 		entities: [...entities],
 		...connectionValues(),
