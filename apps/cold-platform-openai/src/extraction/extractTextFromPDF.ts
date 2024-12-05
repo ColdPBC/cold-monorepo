@@ -1,6 +1,3 @@
-import { getDocument } from 'pdfjs-dist/build/pdf.js';
-import { PDFPageProxy, TextItem, TextMarkedContent } from 'pdfjs-dist/build/pdf.js';
-
 /**
  * Given a PDF, extract and return its text content.
  *
@@ -31,6 +28,8 @@ export type PageType = {
  */
 export async function pdfToPages(pdf: Buffer | Uint8Array, options?: { nodeSep?: string }): Promise<PageType[]> {
 	pdf = normalizeBuffer(pdf);
+	const { getDocument } = await import('pdfjs-dist');
+
 	const document = await getDocument({
 		data: pdf,
 		useWorkerFetch: false,
@@ -66,15 +65,15 @@ export async function pdfToPages(pdf: Buffer | Uint8Array, options?: { nodeSep?:
 	return pages;
 }
 
-async function extractTextFromPage(page: PDFPageProxy, sep: string) {
+async function extractTextFromPage(page: any, sep: string) {
 	const content = await page.getTextContent();
 	return getTextItems(content.items)
 		.map(item => item.str)
 		.join(sep);
 }
 
-function getTextItems(items: Array<TextItem | TextMarkedContent>): TextItem[] {
-	return items.filter((item: any) => typeof (item as TextItem).str === 'string') as TextItem[];
+function getTextItems(items: Array<any>): any[] {
+	return items.filter((item: any) => typeof (item as any).str === 'string') as any[];
 }
 
 function getStringOptionOrDefault(option: string | undefined, optionDefault: string) {
