@@ -1,3 +1,10 @@
+# [1.488.0](https://github.com/coldPBC/cold-monorepo/compare/v1.487.0...v1.488.0) (2024-12-05)
+
+
+### Features
+
+* update materials table schema and fix description typo ([d34a2bd](https://github.com/coldPBC/cold-monorepo/commit/d34a2bdee128f849069c113f1311c8e99ac1be8f))
+
 # [1.487.0](https://github.com/coldPBC/cold-monorepo/compare/v1.486.0...v1.487.0) (2024-12-04)
 
 
