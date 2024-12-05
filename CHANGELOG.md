@@ -1,3 +1,10 @@
+## [1.488.1](https://github.com/coldPBC/cold-monorepo/compare/v1.488.0...v1.488.1) (2024-12-05)
+
+
+### Bug Fixes
+
+* implement changes required by latest version of langchain ([eb9bd2f](https://github.com/coldPBC/cold-monorepo/commit/eb9bd2f2505bd73d8cb516147b86cf87993d6a16))
+
 # [1.488.0](https://github.com/coldPBC/cold-monorepo/compare/v1.487.0...v1.488.0) (2024-12-05)
 
 
