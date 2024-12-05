@@ -21,6 +21,7 @@ export class OrganizationFilesController implements OnModuleInit {
 	async onModuleInit() {
 		this.multerConfig = {
 			storage: multerS3({
+				// @ts-expect-error - This is a valid configuration
 				s3: this.s3.client,
 				bucket: 'cold-api-uploaded-files',
 				contentType: multerS3.AUTO_CONTENT_TYPE,
