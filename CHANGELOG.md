@@ -1,3 +1,10 @@
+## [1.488.2](https://github.com/coldPBC/cold-monorepo/compare/v1.488.1...v1.488.2) (2024-12-05)
+
+
+### Bug Fixes
+
+* address TypeScript error in organization files controller ([1551603](https://github.com/coldPBC/cold-monorepo/commit/15516032f809dd6da3eee4848ab485aa43a2fae8))
+
 ## [1.488.1](https://github.com/coldPBC/cold-monorepo/compare/v1.488.0...v1.488.1) (2024-12-05)
 
 
