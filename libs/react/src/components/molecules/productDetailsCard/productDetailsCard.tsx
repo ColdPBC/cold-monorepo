@@ -12,7 +12,11 @@ const _ProductDetailsCard: React.FC<ProductDetailsCardProps> = ({ product }) => 
   <Card title={'Details'} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'product-details-card'}>
 		<DetailsItem category={'Name'} value={product.name} />
 		<DetailsItem category={'Description'} value={product.description} />
-    <DetailsItem category={'Tier 1 Supplier'} value={product.organizationFacility?.name} />
+    <DetailsItem
+      category={'Tier 1 Supplier'}
+      value={product.organizationFacility?.name}
+      href={product.organizationFacility ? `/suppliers/${product.organizationFacility.id}` : undefined}
+    />
     <DetailsItem category={'Season'} value={product.seasonCode} />
     <DetailsItem category={'UPC'} value={product.upcCode} />
     <DetailsItem category={'Category'} value={product.productCategory} />

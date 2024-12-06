@@ -8,18 +8,26 @@ interface MaterialDetailsCardProps {
 	material: MaterialGraphQL;
 }
 
-const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material }) => (
-	<Card title={'Details'} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'material-details-card'}>
-		<DetailsItem category={'Name'} value={material.name} />
-    {/*<DetailsItem category={'Description'} value={material.description} />*/}
-		<DetailsItem category={'Tier 2 Supplier'} value={material.materialSuppliers[0]?.organizationFacility.name} />
-		<DetailsItem category={'Tier 2 Supplier Country'} value={material.materialSuppliers[0]?.organizationFacility.country} />
-		<DetailsItem category={'Category'} value={material.materialCategory} />
-		<DetailsItem category={'Sub-Category'} value={material.materialSubcategory} />
-    <DetailsItem category={'Brand Material ID'} value={material.brandMaterialId} />
-    <DetailsItem category={'Supplier Material ID'} value={material.supplierMaterialId} />
-	</Card>
-);
+const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material }) => {
+  const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
+
+  return (
+    <Card title={'Details'} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'material-details-card'}>
+      <DetailsItem category={'Name'} value={material.name} />
+      {/*<DetailsItem category={'Description'} value={material.description} />*/}
+      <DetailsItem
+        category={'Tier 2 Supplier'}
+        value={tier2Supplier?.name}
+        href={tier2Supplier ? `/suppliers/${tier2Supplier.id}` : undefined}
+      />
+      <DetailsItem category={'Tier 2 Supplier Country'} value={tier2Supplier?.country} />
+      <DetailsItem category={'Category'} value={material.materialCategory} />
+      <DetailsItem category={'Sub-Category'} value={material.materialSubcategory} />
+      <DetailsItem category={'Brand Material ID'} value={material.brandMaterialId} />
+      <DetailsItem category={'Supplier Material ID'} value={material.supplierMaterialId} />
+    </Card>
+  );
+};
 
 export const MaterialDetailsCard = withErrorBoundary(_MaterialDetailsCard, {
 	FallbackComponent: props => <ErrorFallback {...props} />,
