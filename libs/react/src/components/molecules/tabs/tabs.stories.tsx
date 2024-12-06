@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
-import {Tabs} from '@coldpbc/components';
+import { Tabs } from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
+import { StoryMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof Tabs> = {
   title: 'Molecules/Tabs',
@@ -28,5 +29,12 @@ export const Default: Story = {
         content: <div>Tab 3</div>
       },
     ]
+  },
+  render: (args) => {
+    return (
+      <StoryMockProvider>
+        <Tabs {...args} />
+      </StoryMockProvider>
+    );
   },
 };
