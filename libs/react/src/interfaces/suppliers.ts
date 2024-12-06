@@ -110,5 +110,29 @@ export interface SupplierGraphQL {
       materialSubcategory: string | null;
       attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
     }
-  }[]
+  }[];
+  products: {
+    id: string;
+    name: string;
+    description: string | null;
+    seasonCode: string | null;
+    upcCode: string | null;
+    brandProductId: string | null;
+    supplierProductId: string | null;
+    productCategory: string | null;
+    productSubcategory: string | null;
+    attributeAssurances: {
+      id: string;
+      effectiveEndDate: string | null;
+      organizationFile: {
+        id: string;
+      } | null;
+      sustainabilityAttribute: {
+        id: string;
+        name: string;
+        level: EntityLevel;
+        logoUrl?: string;
+      };
+    }[];
+  }[];
 }
