@@ -1,3 +1,12 @@
+# [1.489.0](https://github.com/coldPBC/cold-monorepo/compare/v1.488.2...v1.489.0) (2024-12-06)
+
+
+### Features
+
+* add links to material/product's supplier ([cd699a9](https://github.com/coldPBC/cold-monorepo/commit/cd699a936d4d79d620d651382d2daa026a16a7ad))
+* add links to material/product's supplier ([#708](https://github.com/coldPBC/cold-monorepo/issues/708)) ([a520c3c](https://github.com/coldPBC/cold-monorepo/commit/a520c3c89da184e0a9341f7468b46b4ced2bb713))
+* add products to supplier detail page ([3cb8a43](https://github.com/coldPBC/cold-monorepo/commit/3cb8a433d81c8258acf21022adfc3c8c2b47bc75))
+
 ## [1.488.2](https://github.com/coldPBC/cold-monorepo/compare/v1.488.1...v1.488.2) (2024-12-05)
 
 
