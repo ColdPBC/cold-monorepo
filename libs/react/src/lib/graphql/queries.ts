@@ -552,6 +552,30 @@ export const GET_SUPPLIER = gql`
           }
         }
       }
+      products {
+        id
+        name
+        description
+        seasonCode
+        upcCode
+        brandProductId
+        supplierProductId
+        productCategory
+        productSubcategory
+        attributeAssurances {
+          id
+          effectiveEndDate
+          organizationFile {
+            id
+          }
+          sustainabilityAttribute {
+            id
+            level
+            logoUrl
+            name
+          }
+        }
+      }
     }
   }
 `;

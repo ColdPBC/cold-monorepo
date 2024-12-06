@@ -5,6 +5,7 @@ import {
 	ErrorPage,
 	MainContent,
 	MaterialsSuppliedTab,
+  ProductsSuppliedTab,
 	Spinner,
 	SupplierDetailsCard,
 	SupplierSustainabilityAttributesCard,
@@ -67,25 +68,15 @@ export const _SupplierDetail = () => {
 		</>
 	);
 
+  const tabs = [
+    { label: 'Summary', content: summaryContent },
+    ...(supplier.materialSuppliers.length > 0 ? [{ label: 'Materials', content: <MaterialsSuppliedTab supplier={supplier} /> }] : []),
+    ...(supplier.products.length > 0 ? [{ label: 'Products', content: <ProductsSuppliedTab supplier={supplier} /> }] : [])
+  ]
+
 	return (
 		<MainContent title={supplier.name} subTitle={subtitle} breadcrumbs={[{ label: 'Suppliers', href: '/suppliers' }, { label: supplier.name }]} className={'w-[calc(100%)]'}>
-			{/* If the supplier has materials, add a tab structure to include the Materials data grid */}
-			{supplier.materialSuppliers.length > 0 ? (
-				<Tabs
-					tabs={[
-						{
-							label: 'Summary',
-							content: summaryContent,
-						},
-						{
-							label: 'Materials',
-							content: <MaterialsSuppliedTab supplier={supplier} />,
-						},
-					]}
-				/>
-			) : (
-				summaryContent
-			)}
+      {tabs.length > 1 ? <Tabs tabs={tabs} /> : summaryContent}
 		</MainContent>
 	);
 };

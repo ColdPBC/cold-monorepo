@@ -8,6 +8,7 @@ import {
 } from '@coldpbc/interfaces';
 import { EntityLevel } from '@coldpbc/enums';
 import { getMaterialMock } from './materialsMock';
+import { getProductsMock } from './productsMock';
 
 export const getSupplierWithCertificationClaimsMock = (): SuppliersWithCertifications[] => {
   const certifications = getClaimsMock();
@@ -716,5 +717,6 @@ export const getSupplierMock: (tier: number) => SupplierGraphQL = (
         },
       },
     ],
+    products: tier === 1 ? getProductsMock() : [],
   }
 );
