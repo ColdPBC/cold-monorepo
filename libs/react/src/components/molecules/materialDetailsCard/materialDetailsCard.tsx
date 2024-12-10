@@ -14,7 +14,7 @@ const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material }) 
   return (
     <Card title={'Details'} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'material-details-card'}>
       <DetailsItem category={'Name'} value={material.name} />
-      {/*<DetailsItem category={'Description'} value={material.description} />*/}
+      <DetailsItem category={'Description'} value={material.description} />
       <DetailsItem
         category={'Tier 2 Supplier'}
         value={tier2Supplier?.name}

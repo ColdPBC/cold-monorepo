@@ -66,7 +66,7 @@ export interface MaterialsWithRelations extends Materials {
 
 export interface MaterialGraphQL extends Materials {
   brandMaterialId: string | null;
-  // description: string | null;
+  description: string | null;
   materialCategory: string | null;
   materialSubcategory: string | null;
   supplierMaterialId: string | null;

@@ -677,6 +677,7 @@ export const GET_MATERIAL = gql`
   query GetMaterial($id: ID!) {
     material(id: $id) {
       id
+      description
       brandMaterialId
       materialCategory
       materialSubcategory
