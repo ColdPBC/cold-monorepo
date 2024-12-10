@@ -21,7 +21,9 @@ import {
   UPDATE_DOCUMENT_FIELDS,
   GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY,
   GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY,
-  GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY, GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
+  GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY,
+  GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
+  DELETE_ATTRIBUTE_ASSURANCE, DELETE_ATTRIBUTE_ASSURANCES, CREATE_ATTRIBUTE_ASSURANCES,
 } from '@coldpbc/lib';
 import {
 	filesProcessedWithDatesMock,
@@ -521,6 +523,42 @@ export const defaultGraphqlMocks: {
         }
       })
   },
+  {
+    query: DELETE_ATTRIBUTE_ASSURANCE,
+    handler: variables => {
+      return Promise.resolve({
+        data: {
+          deleteAttributeAssurance: {
+            id: variables.filter.id,
+          },
+        },
+      });
+    },
+  },
+  {
+    query: DELETE_ATTRIBUTE_ASSURANCES,
+    handler: variables => {
+      return Promise.resolve({
+        data: {
+          deleteAttributeAssurances: {
+            id_in: variables.filter.id_in,
+          },
+        },
+      });
+    },
+  },
+  {
+    query: CREATE_ATTRIBUTE_ASSURANCES,
+    handler: variables => {
+      return Promise.resolve({
+        data: {
+          createAttributeAssurances: {
+            id: variables.input.map((input: any) => input.id),
+          },
+        },
+      });
+    }
+  }
 ];
 
 export const getSupplierGraphQLMock = (tier: number) => (

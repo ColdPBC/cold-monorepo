@@ -31,43 +31,42 @@ const _BulkEditSustainabilityAttributeModal = (props: BulkEditSustainabilityAttr
   const [buttonLoading, setButtonLoading] = React.useState<boolean>(false);
 	const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
 	const { mutateGraphQL: deleteAttributeAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
+  const { mutateGraphQL: deleteAttributeAssurances } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCES');
+  const { mutateGraphQL: createAttributeAssurances } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCES')
 	const { addToastMessage } = useAddToastMessage();
 
 	const onSave = async () => {
     setButtonLoading(true);
 		try {
-      const promises = entities.map(entity => {
-        if (selectedValue === 'true') {
-          // create attribute assurance if it doesn't exist
-          if(entity.hasAttribute){
-            return Promise.resolve();
-          }
-          return createAttributeAssurance({
-            input: {
-              organization: { id: orgId },
-              material: level === EntityLevel.MATERIAL ? { id: entity.entity.id } : undefined,
-              organizationFacility: level === EntityLevel.SUPPLIER ? { id: entity.entity.id } : undefined,
-              product: level === EntityLevel.PRODUCT ? { id: entity.entity.id } : undefined,
-              sustainabilityAttribute: { id: sustainabilityAttribute.id },
+      if(selectedValue === 'false'){
+        const allAttributeAssuranceIds = entities.map(entity => entity.attributeAssuranceIds).flat();
+        if(allAttributeAssuranceIds.length !== 0){
+          await deleteAttributeAssurances({
+            filter: {
+              id_in: allAttributeAssuranceIds,
             },
-          });
-        } else {
-          // delete attribute assurance if
-          if(!entity.hasAttribute){
-            return Promise.resolve();
-          }
-          const promises =  entity.attributeAssuranceIds.map((attributeAssuranceId) => {
-            return deleteAttributeAssurance({
-              filter: {
-                id: attributeAssuranceId,
-              },
-            });
           })
-          return Promise.all(promises);
         }
-      });
+      } else {
+        const createInputs = entities.map(entity => {
+          if(entity.hasAttribute){
+            return null;
+          }
+          return {
+            organization: { id: orgId },
+            material: level === EntityLevel.MATERIAL ? { id: entity.entity.id } : undefined,
+            organizationFacility: level === EntityLevel.SUPPLIER ? { id: entity.entity.id } : undefined,
+            product: level === EntityLevel.PRODUCT ? { id: entity.entity.id } : undefined,
+            sustainabilityAttribute: { id: sustainabilityAttribute.id },
+          }
+        }).filter(Boolean);
+        if(createInputs.length !== 0){
+          await createAttributeAssurances({
+            input: createInputs,
+          })
+        }
+      }
 
-      await Promise.all(promises)
       refreshMaterials();
       setShow(false);
       addToastMessage({ message: `Success! ${entities.length} ${capitalize(level)} Records Updated`, type: ToastMessage.SUCCESS });
@@ -88,13 +87,19 @@ const _BulkEditSustainabilityAttributeModal = (props: BulkEditSustainabilityAttr
     setButtonLoading(false);
 	};
 
+  logBrowser(`Opened bulk edit sustainability attribute modal`, 'info', {
+    level,
+    entities,
+    sustainabilityAttribute
+  })
+
 	return (
 		<FBModal dismissible show={show} onClose={() => setShow(false)} theme={flowbiteThemeOverride.modal}>
 			<Card className="relative p-4 w-[626px] bg-gray-20 overflow-visible" glow={false}>
 				<div className={'flex flex-col gap-[24px] w-full'}>
 					<div className={'flex flex-row text-h3'}>Edit Attribute</div>
 					<span>
-						Bulk edit for {entities.length} selected {pluralize(lowerCase(level), entities.length)}.
+						Bulk edit for {pluralize(lowerCase(level), entities.length)}.
 					</span>
 					<Dropdown
 						options={[
@@ -110,7 +115,7 @@ const _BulkEditSustainabilityAttributeModal = (props: BulkEditSustainabilityAttr
 					<BaseButton label={'Cancel'} onClick={() => setShow(false)} variant={ButtonTypes.secondary} />
 					<div className={'flex flex-row gap-[16px] items-center'}>
 						<div className={'text-body font-bold text-tc-secondary'}>
-							{entities.length} {pluralize(capitalize(level), entities.length)}
+							{pluralize(capitalize(level), entities.length)}
 						</div>
 						<BaseButton
               label={'Save'}

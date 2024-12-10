@@ -797,6 +797,20 @@ export const GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY = gql`
   }
 `;
 
+export const DELETE_ATTRIBUTE_ASSURANCES = gql`
+  mutation DeleteAttributeAssurances($filter: AttributeAssurancesListFilter!) {
+    deleteAttributeAssurances(filter: $filter)
+  }
+`;
+
+export const CREATE_ATTRIBUTE_ASSURANCES = gql`
+  mutation CreateAttributeAssurances($input: [AttributeAssuranceInsertInput!]!) {
+    createAttributeAssurances(input: $input) {
+      id
+    }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -830,4 +844,6 @@ export const queries: {
   GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY: GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY,
   GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY: GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY,
   GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT: GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
+  DELETE_ATTRIBUTE_ASSURANCES: DELETE_ATTRIBUTE_ASSURANCES,
+  CREATE_ATTRIBUTE_ASSURANCES: CREATE_ATTRIBUTE_ASSURANCES,
 };
