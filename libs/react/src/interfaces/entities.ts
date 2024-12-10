@@ -4,4 +4,5 @@ export interface BaseEntity {
   category: string;
   subcategory: string;
   hasAttribute: boolean;
+  attributeAssuranceIds: string[];
 }

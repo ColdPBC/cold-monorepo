@@ -1,0 +1,128 @@
+import {_SustainabilityAttributeDetail, BaseButton, Card, Dropdown, ErrorFallback} from '@coldpbc/components';
+import { SustainabilityAttribute, ToastMessage } from '@coldpbc/interfaces';
+import { Modal as FBModal } from 'flowbite-react';
+import { flowbiteThemeOverride } from '@coldpbc/themes';
+import {ButtonTypes, EntityLevel} from '@coldpbc/enums';
+import React from 'react';
+import { lowerCase } from 'lodash';
+import capitalize from 'lodash/capitalize';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation } from '@coldpbc/hooks';
+import {withErrorBoundary} from "react-error-boundary";
+
+export const _BulkEditSustainabilityAttributeModal = (props: {
+	show: boolean;
+	setShow: (show: boolean) => void;
+	refreshMaterials: () => void;
+	entities: {
+		entity: any;
+    attributeAssuranceIds: string[];
+		hasAttribute: boolean;
+	}[];
+	sustainabilityAttribute: SustainabilityAttribute;
+	level: string;
+}) => {
+  const { logBrowser } = useColdContext()
+  const { orgId } = useAuth0Wrapper();
+	const { show, setShow, refreshMaterials, entities, sustainabilityAttribute, level } = props;
+	const [selectedValue, setSelectedValue] = React.useState<string>('true');
+  const [buttonLoading, setButtonLoading] = React.useState<boolean>(false);
+	const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
+	const { mutateGraphQL: deleteAttributeAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
+	const { addToastMessage } = useAddToastMessage();
+
+	const onSave = async () => {
+    setButtonLoading(true);
+		try {
+      const promises = entities.map(entity => {
+        if (selectedValue === 'true') {
+          // create attribute assurance if it doesn't exist
+          if(entity.hasAttribute){
+            return Promise.resolve();
+          }
+          return createAttributeAssurance({
+            input: {
+              organization: { id: orgId },
+              material: level === EntityLevel.MATERIAL ? { id: entity.entity.id } : undefined,
+              organizationFacility: level === EntityLevel.SUPPLIER ? { id: entity.entity.id } : undefined,
+              product: level === EntityLevel.PRODUCT ? { id: entity.entity.id } : undefined,
+              sustainabilityAttribute: { id: sustainabilityAttribute.id },
+            },
+          });
+        } else {
+          // delete attribute assurance if
+          if(!entity.hasAttribute){
+            return Promise.resolve();
+          }
+          const promises =  entity.attributeAssuranceIds.map((attributeAssuranceId) => {
+            return deleteAttributeAssurance({
+              filter: {
+                id: attributeAssuranceId,
+              },
+            });
+          })
+          return Promise.all(promises);
+        }
+      });
+
+      await Promise.all(promises)
+      refreshMaterials();
+      setShow(false);
+      addToastMessage({ message: `Success! ${entities.length} ${capitalize(level)} Records Updated`, type: ToastMessage.SUCCESS });
+      logBrowser(`Successfully edited sustainability attribute`, 'info', {
+        level,
+        selectedValue,
+        entities,
+      });
+    } catch (e) {
+      addToastMessage({ message: 'Failed to update attribute', type: ToastMessage.FAILURE });
+      logBrowser(`Failed to edit sustainability attribute`, 'error', {
+        level,
+        selectedValue,
+        entities,
+        error: e,
+      });
+		}
+    setButtonLoading(false);
+	};
+
+	return (
+		<FBModal dismissible show={show} onClose={() => setShow(false)} theme={flowbiteThemeOverride.modal}>
+			<Card className="relative p-4 w-[626px] bg-gray-20 overflow-visible">
+				<div className={'flex flex-col gap-[24px] w-full'}>
+					<div className={'flex flex-row text-h3'}>Edit Attribute</div>
+					<span>
+						Bulk edit for {entities.length} selected {lowerCase(level)}s.
+					</span>
+					<Dropdown
+						options={[
+							{ value: 'true', label: 'True' },
+							{ value: 'false', label: 'False' },
+						]}
+						onSelect={value => setSelectedValue(value)}
+						selected={selectedValue}
+					/>
+				</div>
+				<div className={'w-full flex flex-row justify-between'}>
+					<BaseButton label={'Cancel'} onClick={() => setShow(false)} variant={ButtonTypes.secondary} />
+					<div className={'flex flex-row gap-[16px] items-center'}>
+						<div className={'text-body font-bold text-tc-secondary'}>
+							{entities.length} {capitalize(level)}s
+						</div>
+						<BaseButton
+              label={'Save'}
+              onClick={onSave}
+              loading={buttonLoading}
+            />
+					</div>
+				</div>
+			</Card>
+		</FBModal>
+	);
+};
+
+export const BulkEditSustainabilityAttributeModal = withErrorBoundary(_BulkEditSustainabilityAttributeModal, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in BulkEditSustainabilityAttributeModal: ', error);
+  },
+});

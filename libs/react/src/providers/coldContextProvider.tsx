@@ -36,6 +36,7 @@ export const ColdContextProvider = (props: PropsWithChildren<ColdContextProvider
   };
 
   const logBrowser = (message: string, type: StatusType, context?: any, error?: any) => {
+    console.log(message, context, type, error);
     datadogLogs.logger.log(message, context, type, error);
   };
 

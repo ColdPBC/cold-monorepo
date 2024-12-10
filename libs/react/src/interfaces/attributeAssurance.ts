@@ -4,6 +4,7 @@ import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 // and represents the aggregated status (in the case of multiple
 // attribute assurances for the same entity / attribute).
 export interface SustainabilityAttributeAssurance {
+  ids: string[]
   effectiveEndDate?: Date | null;
   entity: {
     id: string;

@@ -172,6 +172,7 @@ export const processSustainabilityAttributeDataFromGraphQL = (
         const entityName = getEntity(attribute.level, firstAssurance)?.name || '';
 
         return {
+          ids: assurances.map(assurance => assurance.id),
           effectiveEndDate: assuranceExpiration,
           entity: {
             id: entityId,
@@ -227,6 +228,7 @@ export const processEntityLevelAssurances = (
 
       // Add the aggregated assurance for this entity
       sustainabilityAttribute.attributeAssurances.push({
+        ids: assurances.map(assurance => assurance.id),
         effectiveEndDate: assuranceExpiration,
         entity: {
           id: entity.id,

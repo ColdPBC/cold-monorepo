@@ -32,6 +32,7 @@ export const AttributeAssuranceMock = ({
   }
 
   return {
+    ids: ['attr_assr_' + id || index.toString()],
     entity: {
       id: id || index.toString(),
       name: `${toSentenceCase(entity)} ${index}`,

@@ -1,25 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Card,
-  CoverageSpreadBar,
-  ErrorFallback,
-  ErrorPage,
-  MainContent,
-  MuiDataGrid,
-  Spinner,
-  SustainabilityAttributeByProductTab,
-  Tabs,
-  TotalCoverageDonut,
+	BaseButton,
+	Card,
+	CoverageSpreadBar,
+	ErrorFallback,
+	ErrorPage,
+	MainContent,
+	MuiDataGrid,
+	Spinner,
+	SustainabilityAttributeByProductTab,
+	Tabs,
+	TotalCoverageDonut,
 } from '@coldpbc/components';
-import { EntityLevel } from '@coldpbc/enums';
+import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useAuth0Wrapper, useColdContext, useEntityData, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BaseEntity, SustainabilityAttributeGraphQL } from '@coldpbc/interfaces';
 import { get, groupBy, isError, toLower, uniq } from 'lodash';
 import { processSustainabilityAttributeDataFromGraphQL, toSentenceCase } from '@coldpbc/lib';
-import { GridColDef } from '@mui/x-data-grid';
+import {
+  GridCallbackDetails,
+  GridCellParams,
+  GridColDef,
+  GridRowParams,
+  GridRowSelectionModel,
+  MuiEvent
+} from '@mui/x-data-grid';
 import { HexColors } from '@coldpbc/themes';
+import { BulkEditSustainabilityAttributeModal } from '../../organisms/buikEditSustainabilityAttributeModal/bulkEditSustainabilityAttributeModal';
+import { Checkbox } from '@mui/material';
+import capitalize from 'lodash/capitalize';
 
 const COLOR_FOR_ENTITY_LEVEL = {
 	[EntityLevel.MATERIAL]: HexColors.purple['300'],
@@ -33,7 +44,8 @@ export const _SustainabilityAttributeDetail = () => {
 	const { logBrowser } = useColdContext();
 	const navigate = useNavigate();
 	const [selectedView, setSelectedView] = React.useState('category');
-
+  const [showBulkEditModal, setShowBulkEditModal] = React.useState(false);
+  const [rowsSelected, setRowsSelected] = useState<GridRowSelectionModel>([]);
 	const sustainabilityAttributeQuery = useGraphQLSWR<{
 		sustainabilityAttribute: SustainabilityAttributeGraphQL | null;
 	}>('GET_SUSTAINABILITY_ATTRIBUTE', {
@@ -51,6 +63,7 @@ export const _SustainabilityAttributeDetail = () => {
 	const validLevel = sustainabilityAttribute?.level === EntityLevel.ORGANIZATION ? undefined : sustainabilityAttribute?.level;
 	const entities = useEntityData(validLevel, orgId, sustainabilityAttribute?.attributeAssurances || []);
 
+  logBrowser('Sustainability Attribute Detail', 'info', { orgId, sustainabilityAttributeId, entities, sustainabilityAttribute });
 	// Donut chart setup
 	const donutData = React.useMemo(() => {
 		return {
@@ -152,7 +165,42 @@ export const _SustainabilityAttributeDetail = () => {
   ]
 
 	const columns: GridColDef[] = [
-		{
+    {
+      field: 'checkbox',
+      editable: false,
+      sortable: false,
+      hideSortIcons: true,
+      width: 100,
+      headerClassName: 'bg-gray-30',
+      renderCell: (params: GridCellParams) => (
+        <Checkbox
+          checked={rowsSelected.includes(params.row.id) || false}
+          onClick={() => setRowsSelected((prev) => {
+            if (prev.includes(params.row.id)) {
+              return prev.filter((id) => id !== params.row.id);
+            } else {
+              return [...prev, params.row.id];
+            }
+          })}
+        />
+      ),
+      renderHeader: (params) => (
+        <Checkbox
+          checked={rowsSelected.length === entities.length && rowsSelected.length > 0}
+          indeterminate={rowsSelected.length > 0 && rowsSelected.length < entities.length}
+          onClick={(e) => {
+            if(rowsSelected.length === entities.length) {
+              setRowsSelected([]);
+            } else if(rowsSelected.length > 0) {
+              setRowsSelected([]);
+            } else {
+              setRowsSelected(entities.map(r => r.id));
+            }
+          }}
+        />
+      ),
+    },
+    {
 			field: 'name',
 			headerName: `${toSentenceCase(EntityLevel[sustainabilityAttribute.level])} Name`,
 			headerClassName: 'bg-gray-30 h-[37px] text-body',
@@ -184,6 +232,26 @@ export const _SustainabilityAttributeDetail = () => {
 		return navigate(navigationUrl);
 	};
 
+  const getSelectedEntities = (rows: GridRowSelectionModel): {
+    entity: any;
+    attributeAssuranceIds: string[];
+    hasAttribute: boolean;
+  }[] => {
+    return rows.map((id) => {
+      const entity = entities.find((e) => e.id === id);
+      if (!entity) return null;
+      return {
+        entity: entity,
+        attributeAssuranceIds: entity.attributeAssuranceIds,
+        hasAttribute: entity.hasAttribute,
+      };
+    }).filter(Boolean) as {
+      entity: any;
+      attributeAssuranceIds: string[];
+      hasAttribute: boolean;
+    }[];
+  }
+
   const dropdownOptions =
     validLevel === EntityLevel.SUPPLIER
       ? {}
@@ -197,34 +265,53 @@ export const _SustainabilityAttributeDetail = () => {
       };
 
   const defaultTab = (
-    <div className={'w-full flex flex-col items-center gap-10'}>
-      <div className={'w-full flex justify-items-start gap-4'}>
-        <Card title={'Total Coverage'} className={'w-full min-w-[600px] h-full'}>
-          <TotalCoverageDonut {...donutData} accentColor={accentColor} entityLevel={sustainabilityAttribute.level} />
-        </Card>
-        <Card title={'Coverage Spread'} className={'w-full h-full min-w-[352px]'} {...dropdownOptions}>
-          <CoverageSpreadBar data={barData} accentColor={accentColor} />
-        </Card>
-      </div>
-      <div className={'w-full'}>
-        <MuiDataGrid
-          rows={entities}
-          onRowClick={params => onRowClick(params.row)}
-          columns={columns}
-          columnHeaderHeight={55}
-          rowHeight={48}
-          showManageColumns
-          showExport
-          showSearch
-          initialState={{
-            sorting: {
-              sortModel: [{ field: 'hasAttribute', sort: 'desc' }],
-            },
-          }}
-        />
-      </div>
-    </div>
-  );
+		<div className={'w-full flex flex-col items-center gap-10'}>
+			<div className={'w-full flex justify-items-start gap-4'}>
+				<Card title={'Total Coverage'} className={'w-full min-w-[600px] h-full'}>
+					<TotalCoverageDonut {...donutData} accentColor={accentColor} entityLevel={sustainabilityAttribute.level} />
+				</Card>
+				<Card title={'Coverage Spread'} className={'w-full h-full min-w-[352px]'} {...dropdownOptions}>
+					<CoverageSpreadBar data={barData} accentColor={accentColor} />
+				</Card>
+			</div>
+			<div className={'flex flex-col w-full gap-4'}>
+				<div className={'w-full flex items-center justify-between h-[40px]'}>
+					<span className={'text-h3'}>{capitalize(EntityLevel[sustainabilityAttribute.level])}s</span>
+					<BaseButton onClick={() => setShowBulkEditModal(true)} label={'Bulk Edit Attribute'} disabled={rowsSelected.length === 0} variant={ButtonTypes.secondary} />
+				</div>
+				<MuiDataGrid
+					rows={entities}
+					onCellClick={(params: GridCellParams) => {
+						if (params.field === 'checkbox') return;
+						onRowClick(params.row);
+					}}
+					columns={columns}
+					columnHeaderHeight={55}
+					rowHeight={48}
+					showManageColumns
+					showExport
+					showSearch
+					initialState={{
+						sorting: {
+							sortModel: [{ field: 'hasAttribute', sort: 'desc' }],
+						},
+					}}
+					disableRowSelectionOnClick={true}
+				/>
+			</div>
+			<BulkEditSustainabilityAttributeModal
+				show={showBulkEditModal}
+				setShow={setShowBulkEditModal}
+				entities={getSelectedEntities(rowsSelected)}
+				level={validLevel}
+				refreshMaterials={() => {
+					sustainabilityAttributeQuery.mutate();
+          setRowsSelected([]);
+				}}
+				sustainabilityAttribute={sustainabilityAttribute}
+			/>
+		</div>
+	);
 
 	return (
 		<MainContent
