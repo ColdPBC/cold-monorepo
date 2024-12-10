@@ -8,6 +8,7 @@ import { lowerCase } from 'lodash';
 import capitalize from 'lodash/capitalize';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation } from '@coldpbc/hooks';
 import {withErrorBoundary} from "react-error-boundary";
+import {pluralize} from "@coldpbc/lib";
 
 export interface BulkEditSustainabilityAttributeModalProps {
   show: boolean;
@@ -93,7 +94,7 @@ const _BulkEditSustainabilityAttributeModal = (props: BulkEditSustainabilityAttr
 				<div className={'flex flex-col gap-[24px] w-full'}>
 					<div className={'flex flex-row text-h3'}>Edit Attribute</div>
 					<span>
-						Bulk edit for {entities.length} selected {lowerCase(level)}s.
+						Bulk edit for {entities.length} selected {pluralize(lowerCase(level), entities.length)}.
 					</span>
 					<Dropdown
 						options={[
@@ -109,7 +110,7 @@ const _BulkEditSustainabilityAttributeModal = (props: BulkEditSustainabilityAttr
 					<BaseButton label={'Cancel'} onClick={() => setShow(false)} variant={ButtonTypes.secondary} />
 					<div className={'flex flex-row gap-[16px] items-center'}>
 						<div className={'text-body font-bold text-tc-secondary'}>
-							{entities.length} {capitalize(level)}s
+							{entities.length} {pluralize(capitalize(level), entities.length)}
 						</div>
 						<BaseButton
               label={'Save'}
