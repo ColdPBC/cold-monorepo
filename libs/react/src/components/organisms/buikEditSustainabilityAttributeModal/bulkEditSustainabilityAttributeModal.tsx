@@ -9,18 +9,20 @@ import capitalize from 'lodash/capitalize';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation } from '@coldpbc/hooks';
 import {withErrorBoundary} from "react-error-boundary";
 
-export const _BulkEditSustainabilityAttributeModal = (props: {
-	show: boolean;
-	setShow: (show: boolean) => void;
-	refreshMaterials: () => void;
-	entities: {
-		entity: any;
+export interface BulkEditSustainabilityAttributeModalProps {
+  show: boolean;
+  setShow: (show: boolean) => void;
+  refreshMaterials: () => void;
+  entities: {
+    entity: any;
     attributeAssuranceIds: string[];
-		hasAttribute: boolean;
-	}[];
-	sustainabilityAttribute: SustainabilityAttribute;
-	level: string;
-}) => {
+    hasAttribute: boolean;
+  }[];
+  sustainabilityAttribute: SustainabilityAttribute;
+  level: string;
+}
+
+const _BulkEditSustainabilityAttributeModal = (props: BulkEditSustainabilityAttributeModalProps) => {
   const { logBrowser } = useColdContext()
   const { orgId } = useAuth0Wrapper();
 	const { show, setShow, refreshMaterials, entities, sustainabilityAttribute, level } = props;
@@ -87,7 +89,7 @@ export const _BulkEditSustainabilityAttributeModal = (props: {
 
 	return (
 		<FBModal dismissible show={show} onClose={() => setShow(false)} theme={flowbiteThemeOverride.modal}>
-			<Card className="relative p-4 w-[626px] bg-gray-20 overflow-visible">
+			<Card className="relative p-4 w-[626px] bg-gray-20 overflow-visible" glow={false}>
 				<div className={'flex flex-col gap-[24px] w-full'}>
 					<div className={'flex flex-row text-h3'}>Edit Attribute</div>
 					<span>
@@ -100,6 +102,7 @@ export const _BulkEditSustainabilityAttributeModal = (props: {
 						]}
 						onSelect={value => setSelectedValue(value)}
 						selected={selectedValue}
+            data-testid={'bulk-edit-attribute-dropdown'}
 					/>
 				</div>
 				<div className={'w-full flex flex-row justify-between'}>
