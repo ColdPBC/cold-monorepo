@@ -4,7 +4,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { getActionMock, StoryMockProvider } from '@coldpbc/mocks';
 import { EntityLevel } from '@coldpbc/enums';
 import { BulkEditSustainabilityAttributeModal, BulkEditSustainabilityAttributeModalProps } from '@coldpbc/components';
-import {fireEvent, waitFor, within} from "@storybook/testing-library";
+import {fireEvent, waitFor, waitForElementToBeRemoved, within} from "@storybook/testing-library";
 
 const meta: Meta<typeof BulkEditSustainabilityAttributeModal> = {
 	title: 'Organisms/BulkEditSustainabilityAttributeModal',
@@ -84,8 +84,12 @@ export const OpenDropdown: Story = {
     level: 'material',
   },
   play: async ({ canvasElement, args, step }) => {
-    const canvas = within(canvasElement);
-    const dropdown = canvas.getByTestId('button_bulk-edit-attribute-dropdown');
-    fireEvent.click(dropdown);
+    if(canvasElement.parentElement === null) {
+      return;
+    }
+    const canvas = within(canvasElement.parentElement);
+    const dropdown = await canvas.findByTestId('bulk-edit-attribute-dropdown');
+    const button = within(dropdown).getByRole('button');
+    fireEvent.click(button);
   }
 };
