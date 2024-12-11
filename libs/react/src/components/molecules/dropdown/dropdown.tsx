@@ -29,7 +29,7 @@ export const Dropdown = (props: DropdownProps) => {
     >
       <div className={twMerge('relative w-auto mt-1', props.containerClassName)}>
         <Listbox.Button
-          className="relative w-full flex flex-row justify-between cursor-default rounded-lg bg-transparent p-[12px] text-left text-tc-secondary text-body border-[1.5px] border-bgc-accent active:border-primary"
+          className="relative w-full flex flex-row justify-between cursor-default rounded-lg bg-transparent p-[12px] text-left text-tc-secondary text-body border-[1.5px] border-bgc-accent active:border-primary focus:ring-0 focus:shadow-none"
           data-testid={`button_${props['data-testid']}`}
         >
           <span className="block truncate">{props.options.find(option => option.value === props.selected)?.label}</span>
@@ -38,7 +38,7 @@ export const Dropdown = (props: DropdownProps) => {
           </span>
         </Listbox.Button>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-          <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-lg bg-bgc-elevated py-1 text-body text-tc-secondary border-[1.5px] border-bgc-accent z-10">
+          <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-lg bg-bgc-elevated py-1 text-body text-tc-secondary border-[1.5px] border-bgc-accent z-10 focus:ring-0">
             {props.options.map((option, index) => (
               <Listbox.Option
                 key={index}

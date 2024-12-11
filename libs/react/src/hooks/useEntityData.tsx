@@ -18,7 +18,6 @@ const ENTITY_MAP = {
     dataPath: 'data.materials',
     categoryNames: ['materialCategory', 'materialSubcategory'],
     transform: (item: MaterialBaseEntity, assurances: Array<{
-      ids: string[];
       entity: { id: string };
     }>): BaseEntity => ({
       id: item.id,
@@ -33,7 +32,6 @@ const ENTITY_MAP = {
     dataPath: 'data.products',
     categoryNames: ['productCategory', 'productSubcategory'],
     transform: (item: ProductBaseEntity, assurances: Array<{
-      ids: string[];
       entity: { id: string };
     }>): BaseEntity => ({
       id: item.id,
@@ -48,7 +46,6 @@ const ENTITY_MAP = {
     dataPath: 'data.organizationFacilities',
     categoryNames: ['category', 'subcategory'],
     transform: (item: SupplierBaseEntity, assurances: Array<{
-      ids: string[];
       entity: { id: string };
     }>): BaseEntity => ({
       id: item.id,
@@ -85,7 +82,6 @@ export function useEntityData(
   entityLevel: SupportedEntityLevel | undefined,
   orgId: string | undefined,
   attributeAssurances: Array<{
-    ids: string[];
     entity: { id: string };
   }> = []
 ): BaseEntity[] {

@@ -27,7 +27,6 @@ export const Default: Story = {
       name: 'Default Material Attribute',
       attributeAssurances: [
         {
-          ids: [],
           status: AttributeAssuranceStatus.NOT_DOCUMENTED,
           entity: getMaterialsMocksWithAssurances()[0],
         },
@@ -51,7 +50,6 @@ export const Product: Story = {
 			name: 'Default Product Attribute',
 			attributeAssurances: [
 				{
-          ids: [],
 					status: AttributeAssuranceStatus.ACTIVE,
 					entity: getProductsMock()[0],
 				},
@@ -86,7 +84,6 @@ export const Supplier: Story = {
       name: 'Default Supplier Attribute',
       attributeAssurances: [
         {
-          ids: [],
           status: AttributeAssuranceStatus.ACTIVE,
           entity: getSupplierMocks()[0],
         },
