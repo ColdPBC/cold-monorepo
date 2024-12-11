@@ -172,7 +172,6 @@ export const processSustainabilityAttributeDataFromGraphQL = (
         const entityName = getEntity(attribute.level, firstAssurance)?.name || '';
 
         return {
-          ids: assurances.map(assurance => assurance.id),
           effectiveEndDate: assuranceExpiration,
           entity: {
             id: entityId,

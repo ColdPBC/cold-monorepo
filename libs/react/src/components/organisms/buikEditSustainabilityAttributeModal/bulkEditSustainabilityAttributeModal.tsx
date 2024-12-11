@@ -1,4 +1,4 @@
-import {_SustainabilityAttributeDetail, BaseButton, Card, Dropdown, ErrorFallback} from '@coldpbc/components';
+import { BaseButton, Card, Dropdown, ErrorFallback } from '@coldpbc/components';
 import { SustainabilityAttribute, ToastMessage } from '@coldpbc/interfaces';
 import { Modal as FBModal } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';

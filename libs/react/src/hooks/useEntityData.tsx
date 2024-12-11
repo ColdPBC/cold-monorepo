@@ -3,7 +3,7 @@ import {
   BaseEntity,
   MaterialBaseEntity,
   ProductBaseEntity,
-  SupplierBaseEntity, SustainabilityAttributeAssurance,
+  SupplierBaseEntity,
 } from '@coldpbc/interfaces';
 import { useGraphQLSWR } from '@coldpbc/hooks';
 import { get } from 'lodash';
@@ -17,43 +17,37 @@ const ENTITY_MAP = {
     queryKey: 'GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY',
     dataPath: 'data.materials',
     categoryNames: ['materialCategory', 'materialSubcategory'],
-    transform: (item: MaterialBaseEntity, assurances: Array<{
-      entity: { id: string };
-    }>): BaseEntity => ({
+    transform: (item: MaterialBaseEntity, assurances: Array<{ entity: { id: string }}>): BaseEntity => ({
       id: item.id,
       name: item.name,
       category: item.materialCategory || '',
       subcategory: item.materialSubcategory || '',
-      hasAttribute: assurances.some(assurance => assurance.entity.id === item.id),
+      hasAttribute: assurances.some(assurance => assurance.entity.id === item.id)
     })
   },
   [EntityLevel.PRODUCT]: {
     queryKey: 'GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY',
     dataPath: 'data.products',
     categoryNames: ['productCategory', 'productSubcategory'],
-    transform: (item: ProductBaseEntity, assurances: Array<{
-      entity: { id: string };
-    }>): BaseEntity => ({
+    transform: (item: ProductBaseEntity, assurances: Array<{ entity: { id: string }}>): BaseEntity => ({
       id: item.id,
       name: item.name,
       category: item.productCategory || '',
       subcategory: item.productSubcategory || '',
-      hasAttribute: assurances.some(assurance => assurance.entity.id === item.id),
+      hasAttribute: assurances.some(assurance => assurance.entity.id === item.id)
     })
   },
   [EntityLevel.SUPPLIER]: {
     queryKey: 'GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY',
     dataPath: 'data.organizationFacilities',
     categoryNames: ['category', 'subcategory'],
-    transform: (item: SupplierBaseEntity, assurances: Array<{
-      entity: { id: string };
-    }>): BaseEntity => ({
+    transform: (item: SupplierBaseEntity, assurances: Array<{ entity: { id: string }}>): BaseEntity => ({
       id: item.id,
       name: item.name,
       // Use country in lieu of category for suppliers
       category: item.country || '',
       subcategory: '',
-      hasAttribute: assurances.some(assurance => assurance.entity.id === item.id),
+      hasAttribute: assurances.some(assurance => assurance.entity.id === item.id)
     })
   },
 } as const;
@@ -81,9 +75,7 @@ function useQueryConfig(entityLevel: SupportedEntityLevel | undefined, orgId: st
 export function useEntityData(
   entityLevel: SupportedEntityLevel | undefined,
   orgId: string | undefined,
-  attributeAssurances: Array<{
-    entity: { id: string };
-  }> = []
+  attributeAssurances: Array<{ entity: { id: string }}> = []
 ): BaseEntity[] {
   // Get the configuration for the current entity type
   const config = entityLevel ? ENTITY_MAP[entityLevel] : null;
