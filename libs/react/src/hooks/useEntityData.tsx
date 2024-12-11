@@ -26,8 +26,6 @@ const ENTITY_MAP = {
       category: item.materialCategory || '',
       subcategory: item.materialSubcategory || '',
       hasAttribute: assurances.some(assurance => assurance.entity.id === item.id),
-      // find the assurance for the current entity and return the ids
-      attributeAssuranceIds: assurances.filter(assurance => assurance.entity.id === item.id).map(assurance => assurance.ids).flat()
     })
   },
   [EntityLevel.PRODUCT]: {
@@ -43,7 +41,6 @@ const ENTITY_MAP = {
       category: item.productCategory || '',
       subcategory: item.productSubcategory || '',
       hasAttribute: assurances.some(assurance => assurance.entity.id === item.id),
-      attributeAssuranceIds: assurances.filter(assurance => assurance.entity.id === item.id).map(assurance => assurance.ids).flat()
     })
   },
   [EntityLevel.SUPPLIER]: {
@@ -60,7 +57,6 @@ const ENTITY_MAP = {
       category: item.country || '',
       subcategory: '',
       hasAttribute: assurances.some(assurance => assurance.entity.id === item.id),
-      attributeAssuranceIds: assurances.filter(assurance => assurance.entity.id === item.id).map(assurance => assurance.ids).flat()
     })
   },
 } as const;
@@ -111,8 +107,6 @@ export function useEntityData(
     const rawData = get(query.data, config.dataPath, []);
 
     // Transform the raw data into BaseEntity format
-    console.log('attributeAssurances', attributeAssurances);
-    console.log('rawData', rawData);
     return rawData
       .map(item => config.transform(item, attributeAssurances))
       .sort((a: BaseEntity, b: BaseEntity) => a.name.localeCompare(b.name));

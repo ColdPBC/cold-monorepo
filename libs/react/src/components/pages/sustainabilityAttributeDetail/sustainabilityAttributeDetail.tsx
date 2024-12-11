@@ -234,7 +234,6 @@ export const _SustainabilityAttributeDetail = () => {
 
   const getSelectedEntities = (rows: GridRowSelectionModel): {
     entity: any;
-    attributeAssuranceIds: string[];
     hasAttribute: boolean;
   }[] => {
     return rows.map((id) => {
@@ -242,12 +241,10 @@ export const _SustainabilityAttributeDetail = () => {
       if (!entity) return null;
       return {
         entity: entity,
-        attributeAssuranceIds: entity.attributeAssuranceIds,
         hasAttribute: entity.hasAttribute,
       };
     }).filter(Boolean) as {
       entity: any;
-      attributeAssuranceIds: string[];
       hasAttribute: boolean;
     }[];
   }

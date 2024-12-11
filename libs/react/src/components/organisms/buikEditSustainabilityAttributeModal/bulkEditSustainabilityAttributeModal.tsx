@@ -16,7 +16,6 @@ export interface BulkEditSustainabilityAttributeModalProps {
   refreshMaterials: () => void;
   entities: {
     entity: any;
-    attributeAssuranceIds: string[];
     hasAttribute: boolean;
   }[];
   sustainabilityAttribute: SustainabilityAttribute;
@@ -29,8 +28,6 @@ const _BulkEditSustainabilityAttributeModal = (props: BulkEditSustainabilityAttr
 	const { show, setShow, refreshMaterials, entities, sustainabilityAttribute, level } = props;
 	const [selectedValue, setSelectedValue] = React.useState<string>('true');
   const [buttonLoading, setButtonLoading] = React.useState<boolean>(false);
-	const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
-	const { mutateGraphQL: deleteAttributeAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
   const { mutateGraphQL: deleteAttributeAssurances } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCES');
   const { mutateGraphQL: createAttributeAssurances } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCES')
 	const { addToastMessage } = useAddToastMessage();
@@ -39,11 +36,15 @@ const _BulkEditSustainabilityAttributeModal = (props: BulkEditSustainabilityAttr
     setButtonLoading(true);
 		try {
       if(selectedValue === 'false'){
-        const allAttributeAssuranceIds = entities.map(entity => entity.attributeAssuranceIds).flat();
-        if(allAttributeAssuranceIds.length !== 0){
+        const entityIds = entities.map(entity => entity.entity.id) as string[]
+        if(entityIds.length !== 0){
           await deleteAttributeAssurances({
             filter: {
-              id_in: allAttributeAssuranceIds,
+              sustainabilityAttribute: { id: sustainabilityAttribute.id },
+              organization: { id: orgId },
+              material: level === EntityLevel.MATERIAL ? { id_in: entityIds } : undefined,
+              organizationFacility: level === EntityLevel.SUPPLIER ? { id_in: entityIds } : undefined,
+              product: level === EntityLevel.PRODUCT ? { id_in: entityIds } : undefined,
             },
           })
         }

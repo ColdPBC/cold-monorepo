@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { getActionMock, StoryMockProvider } from '@coldpbc/mocks';
+import { StoryMockProvider } from '@coldpbc/mocks';
 import { EntityLevel } from '@coldpbc/enums';
 import { BulkEditSustainabilityAttributeModal, BulkEditSustainabilityAttributeModalProps } from '@coldpbc/components';
-import {fireEvent, waitFor, waitForElementToBeRemoved, within} from "@storybook/testing-library";
+import {fireEvent, within} from "@storybook/testing-library";
 
 const meta: Meta<typeof BulkEditSustainabilityAttributeModal> = {
 	title: 'Organisms/BulkEditSustainabilityAttributeModal',
@@ -39,9 +39,6 @@ export const True: Story = {
           id: '1',
           name: 'Material 1',
         },
-        attributeAssuranceIds: [
-          'attr_assr_1',
-        ],
         hasAttribute: false,
       },
     ],
@@ -69,9 +66,6 @@ export const OpenDropdown: Story = {
           id: '1',
           name: 'Material 1',
         },
-        attributeAssuranceIds: [
-          'attr_assr_1',
-        ],
         hasAttribute: false,
       },
     ],
