@@ -678,7 +678,7 @@ export const getMaterialMock: MaterialGraphQL = (
     name: 'Organic Wool',
     brandMaterialId: 'brand_id_1',
     supplierMaterialId: 'supplier_id_1',
-    // description: 'The softest organic wool made from adorable little lambs.',
+    description: 'This wool is a revolutionary organic wool fiber harvested from heritage Merino sheep raised in New Zealand\'s Southern Alps. This proprietary wool undergoes a unique enzyme-based treatment that enhances its natural water-repellent properties while maintaining exceptional breathability. The result is an ultra-fine 15.5-micron fiber that provides superior warmth-to-weight ratio and remarkable temperature regulation, even in extreme alpine conditions. The wool naturally resists odors and retains 90% of its insulating properties even when damp.',
     materialSuppliers: [
       {
         id: 'material_supplier_1',
