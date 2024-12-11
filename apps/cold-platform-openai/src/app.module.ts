@@ -22,6 +22,7 @@ import { CrawlerModule } from './crawler/crawler.module';
 import { ExtractionModule } from './extraction/extraction.module';
 import { EntitiesModule } from './entities/entities.module';
 import { ClassificationModule } from './classification/classification.module';
+import { YieldEstimationModule } from './yield-estimation/yield-estimation.module';
 
 @Module({})
 export class AppModule {
@@ -94,6 +95,7 @@ export class AppModule {
 				ExtractionModule,
 				await CrawlerModule.forRootAsync(),
 				ChatModule,
+        YieldEstimationModule,
 			],
 			controllers: [OpenAIController],
 			providers: [
