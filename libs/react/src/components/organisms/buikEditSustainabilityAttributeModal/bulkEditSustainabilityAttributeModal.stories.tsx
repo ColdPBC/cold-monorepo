@@ -35,11 +35,11 @@ export const True: Story = {
     refreshMaterials: () => {},
     entities: [
       {
-        entity: {
-          id: '1',
-          name: 'Material 1',
-        },
+        id: '1',
+        name: 'Material 1',
         hasAttribute: false,
+        category: 'Category 1',
+        subcategory: 'Subcategory 1',
       },
     ],
     sustainabilityAttribute: {
@@ -62,11 +62,11 @@ export const OpenDropdown: Story = {
     refreshMaterials: () => {},
     entities: [
       {
-        entity: {
-          id: '1',
-          name: 'Material 1',
-        },
+        id: '1',
+        name: 'Material 1',
         hasAttribute: false,
+        category: 'Category 1',
+        subcategory: 'Subcategory 1',
       },
     ],
     sustainabilityAttribute: {

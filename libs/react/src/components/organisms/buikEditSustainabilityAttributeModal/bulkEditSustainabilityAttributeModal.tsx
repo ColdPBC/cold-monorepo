@@ -1,5 +1,5 @@
 import { BaseButton, Card, Dropdown, ErrorFallback } from '@coldpbc/components';
-import { SustainabilityAttribute, ToastMessage } from '@coldpbc/interfaces';
+import {BaseEntity, SustainabilityAttribute, ToastMessage} from '@coldpbc/interfaces';
 import { Modal as FBModal } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import {ButtonTypes, EntityLevel} from '@coldpbc/enums';
@@ -14,10 +14,7 @@ export interface BulkEditSustainabilityAttributeModalProps {
   show: boolean;
   setShow: (show: boolean) => void;
   refreshMaterials: () => void;
-  entities: {
-    entity: any;
-    hasAttribute: boolean;
-  }[];
+  entities: BaseEntity[];
   sustainabilityAttribute: SustainabilityAttribute;
   level: string;
 }
@@ -36,7 +33,7 @@ const _BulkEditSustainabilityAttributeModal = (props: BulkEditSustainabilityAttr
     setButtonLoading(true);
 		try {
       if(selectedValue === 'false'){
-        const entityIds = entities.map(entity => entity.entity.id) as string[]
+        const entityIds = entities.map(entity => entity.id) as string[]
         if(entityIds.length !== 0){
           await deleteAttributeAssurances({
             filter: {
@@ -55,9 +52,9 @@ const _BulkEditSustainabilityAttributeModal = (props: BulkEditSustainabilityAttr
           }
           return {
             organization: { id: orgId },
-            material: level === EntityLevel.MATERIAL ? { id: entity.entity.id } : undefined,
-            organizationFacility: level === EntityLevel.SUPPLIER ? { id: entity.entity.id } : undefined,
-            product: level === EntityLevel.PRODUCT ? { id: entity.entity.id } : undefined,
+            material: level === EntityLevel.MATERIAL ? { id: entity.id } : undefined,
+            organizationFacility: level === EntityLevel.SUPPLIER ? { id: entity.id } : undefined,
+            product: level === EntityLevel.PRODUCT ? { id: entity.id } : undefined,
             sustainabilityAttribute: { id: sustainabilityAttribute.id },
           }
         }).filter(Boolean);

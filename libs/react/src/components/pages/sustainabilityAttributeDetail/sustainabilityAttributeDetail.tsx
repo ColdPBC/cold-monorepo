@@ -232,21 +232,12 @@ export const _SustainabilityAttributeDetail = () => {
 		return navigate(navigationUrl);
 	};
 
-  const getSelectedEntities = (rows: GridRowSelectionModel): {
-    entity: any;
-    hasAttribute: boolean;
-  }[] => {
+  const getSelectedEntities = (rows: GridRowSelectionModel): BaseEntity[] => {
     return rows.map((id) => {
       const entity = entities.find((e) => e.id === id);
       if (!entity) return null;
-      return {
-        entity: entity,
-        hasAttribute: entity.hasAttribute,
-      };
-    }).filter(Boolean) as {
-      entity: any;
-      hasAttribute: boolean;
-    }[];
+      return entity;
+    }).filter(Boolean) as BaseEntity[];
   }
 
   const dropdownOptions =
