@@ -1,3 +1,13 @@
+# [1.490.0](https://github.com/coldPBC/cold-monorepo/compare/v1.489.0...v1.490.0) (2024-12-11)
+
+
+### Features
+
+* add bulk edit functionality for sustainability attributes ([0a5c2f2](https://github.com/coldPBC/cold-monorepo/commit/0a5c2f2089fe8622cb95700a59c41439991e6252))
+* enhance bulk sustainability attribute management with batch operations ([3b039ae](https://github.com/coldPBC/cold-monorepo/commit/3b039aea8a6707fe38b36e410a52e682b9972288))
+* improve pluralization handling in bulk edit modal ([193d96c](https://github.com/coldPBC/cold-monorepo/commit/193d96c4deaa60c40589a081d890125b5b33e7f9))
+* remove unused `attributeAssuranceIds` references ([f58229e](https://github.com/coldPBC/cold-monorepo/commit/f58229e6f3a5b11750e3b24156e38dc98d3429dd))
+
 # [1.489.0](https://github.com/coldPBC/cold-monorepo/compare/v1.488.2...v1.489.0) (2024-12-06)
 
 
