@@ -22,6 +22,7 @@ import { CrawlerModule } from './crawler/crawler.module';
 import { ExtractionModule } from './extraction/extraction.module';
 import { EntitiesModule } from './entities/entities.module';
 import { ClassificationModule } from './classification/classification.module';
+import { WeightEstimationModule } from './weight-estimation/weight-estimation.module';
 import { EventService } from '../../../libs/nest/src/lib/rabbit/event.service';
 
 @Module({
@@ -98,6 +99,7 @@ export class AppModule {
 				ExtractionModule,
 				await CrawlerModule.forRootAsync(),
 				ChatModule,
+        WeightEstimationModule,
 			],
 			controllers: [OpenAIController],
 			providers: [
