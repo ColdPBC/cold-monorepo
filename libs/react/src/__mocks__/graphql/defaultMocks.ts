@@ -23,7 +23,10 @@ import {
   GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY,
   GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY,
   GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
-  DELETE_ATTRIBUTE_ASSURANCE, DELETE_ATTRIBUTE_ASSURANCES, CREATE_ATTRIBUTE_ASSURANCES,
+  DELETE_ATTRIBUTE_ASSURANCE,
+  DELETE_ATTRIBUTE_ASSURANCES,
+  CREATE_ATTRIBUTE_ASSURANCES,
+  GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
 } from '@coldpbc/lib';
 import {
 	filesProcessedWithDatesMock,
@@ -557,6 +560,35 @@ export const defaultGraphqlMocks: {
           },
         },
       });
+    }
+  },
+  {
+    query: GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
+    handler: () => {
+      return Promise.resolve({
+        data: {
+          sustainabilityAttributes: [
+            {
+              id: 'a',
+              name: 'Global Recycled Standard',
+              logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
+              level: 'MATERIAL',
+            },
+            {
+              id: 'b',
+              name: 'Fair Wear',
+              logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Fair+Wear.png',
+              level: 'MATERIAL',
+            },
+            {
+              id: 'c',
+              name: 'B-Corp Certification',
+              logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/B-Corp+Certification.png',
+              level: 'MATERIAL',
+            }
+          ],
+        },
+      })
     }
   }
 ];

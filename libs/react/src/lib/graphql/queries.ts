@@ -812,6 +812,17 @@ export const CREATE_ATTRIBUTE_ASSURANCES = gql`
   }
 `;
 
+export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES = gql`
+  query SustainabilityAttributes($filter: SustainabilityAttributesListFilter) {
+    sustainabilityAttributes(filter: $filter) {
+      id
+      level
+      logoUrl
+      name
+    }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -847,4 +858,5 @@ export const queries: {
   GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT: GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
   DELETE_ATTRIBUTE_ASSURANCES: DELETE_ATTRIBUTE_ASSURANCES,
   CREATE_ATTRIBUTE_ASSURANCES: CREATE_ATTRIBUTE_ASSURANCES,
+  GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES: GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
 };
