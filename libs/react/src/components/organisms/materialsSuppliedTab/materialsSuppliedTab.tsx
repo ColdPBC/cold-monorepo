@@ -172,7 +172,6 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
           refreshData();
           setRowsSelected([]);
 				}}
-				supplier={supplier}
         materialsSelected={getMaterialsSelected()}
 			/>
 		</Card>

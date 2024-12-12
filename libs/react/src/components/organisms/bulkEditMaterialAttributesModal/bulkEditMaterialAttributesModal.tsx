@@ -1,5 +1,5 @@
 import {
-  SupplierGraphQL, SustainabilityAttribute, SustainabilityAttributeForBulkEditGraphQL,
+  SustainabilityAttribute, SustainabilityAttributeForBulkEditGraphQL,
   SustainabilityAttributeWithoutAssurances, ToastMessage
 } from "@coldpbc/interfaces";
 import {Modal as FBModal} from "flowbite-react";
@@ -14,7 +14,6 @@ import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation,
 import {withErrorBoundary} from "react-error-boundary";
 
 const _BulkEditMaterialAttributesModal = (props: {
-  supplier: SupplierGraphQL
   materialsSelected: {
     id: string;
     material: string;
@@ -25,7 +24,7 @@ const _BulkEditMaterialAttributesModal = (props: {
   show: boolean
   onClose: () => void
 }) => {
-  const { supplier, materialsSelected, show, onClose } = props;
+  const { materialsSelected, show, onClose } = props;
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const [rowsSelected, setRowsSelected] = useState<{
     attributeId: string;
@@ -60,7 +59,7 @@ const _BulkEditMaterialAttributesModal = (props: {
           return material.sustainabilityAttributes.map(sus => sus.id).includes(attribute.id);
         });
         if(materialsWithAttribute.length > 0){
-          const indeterminate = materialsWithAttribute.length > 0 && materialsWithAttribute.length < materialsSelected.length;
+          const indeterminate = materialsWithAttribute.length < materialsSelected.length;
           newSelectedRows.push({
             attributeId: attribute.id,
             indeterminate,
@@ -211,7 +210,6 @@ const _BulkEditMaterialAttributesModal = (props: {
         createInputs.push(...newSelectedSustainabilityAttributes.map(attribute => ({
           organization: { id: orgId },
           material: { id: material.id },
-          organizationFacility: { id: supplier.id },
           sustainabilityAttribute: { id: attribute.attributeId },
         })));
 
