@@ -75,6 +75,9 @@ export class Product {
 	@Property({ type: 'text', nullable: true })
 	brandProductSku?: string;
 
+	@Property({ type: 'text', nullable: true })
+	gender?: string;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'product' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 

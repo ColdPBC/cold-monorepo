@@ -1,7 +1,8 @@
 import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
+import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AttributeAssurance } from './attribute-assurance';
+import { MaterialClassification } from './material-classification';
 import { MaterialSupplier } from './material-supplier';
 import { Organization } from './organization';
 import { ProductMaterial } from './product-material';
@@ -15,7 +16,7 @@ export class Material {
 	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
-	@Field(() => String, { adminUIOptions: { summaryField: true } })
+	@Field(() => String, { adminUIOptions: {summaryField:true} })
 	name!: string;
 
 	@Field(() => ISODateStringScalar, { nullable: true })
@@ -27,7 +28,7 @@ export class Material {
 	@Field(() => Boolean, { nullable: true })
 	deleted = false;
 
-	@RelationshipField<Material>(() => Organization, { id: entity => entity.organization?.id })
+	@RelationshipField<Material>(() => Organization, { id: (entity) => entity.organization?.id })
 	organization!: Organization;
 
 	@Field(() => String, { nullable: true })
@@ -40,9 +41,6 @@ export class Material {
 	brandMaterialId?: string;
 
 	@Field(() => String, { nullable: true })
-	description?: string;
-
-	@Field(() => String, { nullable: true })
 	supplierMaterialId?: string;
 
 	@Field(() => String, { nullable: true })
@@ -50,6 +48,24 @@ export class Material {
 
 	@Field(() => Number, { nullable: true })
 	emissionsFactor?: number;
+
+	@Field(() => String, { nullable: true })
+	activityId?: string;
+
+	@Field(() => GraphQLJSON, { nullable: true })
+	metadata?: Record<string, unknown>;
+
+	@Field(() => String, { nullable: true })
+	dataSource?: string;
+
+	@Field(() => String, { nullable: true })
+	aiDescription?: string;
+
+	@Field(() => String, { nullable: true })
+	description?: string;
+
+	@RelationshipField<Material>(() => MaterialClassification, { id: (entity) => entity.materialClassification?.id, nullable: true })
+	materialClassification?: MaterialClassification;
 
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'material' })
 	attributeAssurances!: AttributeAssurance[];

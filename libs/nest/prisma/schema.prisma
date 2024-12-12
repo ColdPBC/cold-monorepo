@@ -1,7 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["views"]
-	binaryTargets   = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x","linux-arm64-openssl-1.1.x"]
+  binaryTargets   = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x", "linux-arm64-openssl-1.1.x"]
 }
 
 generator zod {
@@ -605,18 +605,20 @@ model facility_footprints {
 }
 
 model sustainability_attributes {
-  id                   String                 @id @default(dbgenerated("uuid_generate_v4()"))
-  organization_id      String?
-  name                 String
-  created_at           DateTime?              @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime?              @updatedAt @db.Timestamptz(6)
-  deleted              Boolean                @default(false)
-  level                claim_levels
-  type                 claim_types
-  logo_url             String?
-  organization         organizations?         @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  metadata             Json?
-  attribute_assurances attribute_assurances[]
+  id                         String                   @id @default(dbgenerated("uuid_generate_v4()"))
+  organization_id            String?
+  name                       String
+  created_at                 DateTime?                @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime?                @updatedAt @db.Timestamptz(6)
+  deleted                    Boolean                  @default(false)
+  level                      claim_levels
+  type                       claim_types
+  logo_url                   String?
+  material_classification_id Int?
+  material_classification    material_classification? @relation(fields: [material_classification_id], references: [id])
+  organization               organizations?           @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  metadata                   Json?
+  attribute_assurances       attribute_assurances[]
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "sustainability_attributes_organization_id_idx1")
@@ -662,7 +664,7 @@ model products {
   product_category     String?
   product_subcategory  String?
   metadata             Json?
-	gender							 String?
+  gender               String?
   season_code          String?
   upc_code             String?
   brand_product_sku    String?
@@ -685,28 +687,45 @@ model products {
   @@index([organization_id], map: "products_organization_id_idx1")
 }
 
+model material_classification {
+  id                        Int                         @id @default(autoincrement())
+  name                      String
+  category                  String
+  created_at                DateTime                    @default(now())
+  updated_at                DateTime                    @updatedAt
+  materials                 materials[]
+  sustainability_attributes sustainability_attributes[]
+
+	@@unique([category, name], name: "categoryName")
+
+	@@index([category], map: "material_classification_category_idx1")
+	@@index([name], map: "material_classification_name_idx1")
+}
+
 model materials {
-  id                   String                 @id @default(cuid())
-  name                 String
-  created_at           DateTime?              @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime?              @updatedAt @db.Timestamptz(6)
-  deleted              Boolean?               @default(false)
-  organization_id      String
-  brand_material_id    String?
-  supplier_material_id String?
-  description          String?
-	ai_description			 String?
-  material_suppliers   material_suppliers[]
-  material_category    String?
-  material_subcategory String?
-	organization_facility_id String?
-	emissions_factor		 Float?
-	activity_id					 String?
-	metadata						 Json?
-  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  attribute_assurances attribute_assurances[]
-  product_materials    product_materials[]
-	data_source					 String?
+  id                        String                   @id @default(cuid())
+  name                      String
+  created_at                DateTime?                @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime?                @updatedAt @db.Timestamptz(6)
+  deleted                   Boolean?                 @default(false)
+  organization_id           String
+  brand_material_id         String?
+  supplier_material_id      String?
+  description               String?
+  ai_description            String?
+  material_suppliers        material_suppliers[]
+  material_category         String?
+  material_subcategory      String?
+  organization_facility_id  String?
+  emissions_factor          Float?
+  activity_id               String?
+  metadata                  Json?
+  organization              organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  attribute_assurances      attribute_assurances[]
+  product_materials         product_materials[]
+  data_source               String?
+  material_classification   material_classification? @relation(fields: [material_classification_id], references: [id])
+  material_classification_id Int?
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "materials_organization_id_idx1")
@@ -737,11 +756,11 @@ model product_materials {
   material_supplier_id String?
   organization_id      String
   yield                Float?
-	weight						 	 Float?
+  weight               Float?
   unit_of_measure      String?
-  placement						 String?
-	bom_section					 String?
-	metadata             Json?
+  placement            String?
+  bom_section          String?
+  metadata             Json?
   created_at           DateTime?     @default(now()) @db.Timestamptz(6)
   updated_at           DateTime?     @updatedAt @db.Timestamptz(6)
   organization         organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
@@ -1061,32 +1080,32 @@ model organization_compliance_ai_response_files {
 }
 
 model climatiq_actvities {
-	id String @id
-	activity_id String
-	name String
-	category String
-	sector String
-	source String
-	source_link String
-	source_dataset String
-	uncertainty Int?
-	year Int
-	year_released Int
-	region String
-	region_name String
-	description String
-	unit_type String
-	unit String?
-	source_lca_activity String
-	data_quality_flags Json
-	access_type String
-	supported_calculation_methods Json
-	factor String?
-	factor_calculation_method String?
-	factor_calculation_origin String?
-	constituent_gases Json?
-	data_version Json
-	data_version_information Json
+  id                            String  @id
+  activity_id                   String
+  name                          String
+  category                      String
+  sector                        String
+  source                        String
+  source_link                   String
+  source_dataset                String
+  uncertainty                   Int?
+  year                          Int
+  year_released                 Int
+  region                        String
+  region_name                   String
+  description                   String
+  unit_type                     String
+  unit                          String?
+  source_lca_activity           String
+  data_quality_flags            Json
+  access_type                   String
+  supported_calculation_methods Json
+  factor                        String?
+  factor_calculation_method     String?
+  factor_calculation_origin     String?
+  constituent_gases             Json?
+  data_version                  Json
+  data_version_information      Json
 }
 
 view compliance_responses {
@@ -1207,8 +1226,8 @@ enum claim_levels {
 }
 
 enum file_types {
-	SUPPLIER_STATEMENT
-	SUPPLIER_AGREEMENT
+  SUPPLIER_STATEMENT
+  SUPPLIER_AGREEMENT
   AUDIT_REPORT
   CERTIFICATE
   TEST_REPORT

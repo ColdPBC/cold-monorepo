@@ -4,6 +4,7 @@ import { Action } from './action';
 import { AttributeAssurance } from './attribute-assurance';
 import { CategoryDatum } from './category-datum';
 import { CategoryDefinition } from './category-definition';
+import { ClimatiqActvity } from './climatiq-actvity';
 import { ComplianceDefinition } from './compliance-definition';
 import { ComplianceQuestionDependencyChain } from './compliance-question-dependency-chain';
 import { ComplianceQuestion } from './compliance-question';
@@ -15,6 +16,7 @@ import { EmissionScope } from './emission-scope';
 import { Emission } from './emission';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
+import { MaterialClassification } from './material-classification';
 import { MaterialSupplier } from './material-supplier';
 import { Material } from './material';
 import { News } from './news';
@@ -50,6 +52,7 @@ export * from './action';
 export * from './attribute-assurance';
 export * from './category-datum';
 export * from './category-definition';
+export * from './climatiq-actvity';
 export * from './compliance-definition';
 export * from './compliance-question-dependency-chain';
 export * from './compliance-question';
@@ -61,6 +64,7 @@ export * from './emission-scope';
 export * from './emission';
 export * from './facility-footprint';
 export * from './integration';
+export * from './material-classification';
 export * from './material-supplier';
 export * from './material';
 export * from './news';
@@ -97,6 +101,7 @@ export const entities = [
 	AttributeAssurance,
 	CategoryDatum,
 	CategoryDefinition,
+	ClimatiqActvity,
 	ComplianceDefinition,
 	ComplianceQuestionDependencyChain,
 	ComplianceQuestion,
@@ -108,6 +113,7 @@ export const entities = [
 	Emission,
 	FacilityFootprint,
 	Integration,
+	MaterialClassification,
 	MaterialSupplier,
 	Material,
 	News,

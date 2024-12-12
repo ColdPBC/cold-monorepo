@@ -789,6 +789,428 @@ export type CategoryDefinitionsPaginationInput = {
   orderBy?: InputMaybe<CategoryDefinitionsOrderByInput>;
 };
 
+export type ClimatiqActvitiesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ClimatiqActvitiesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ClimatiqActvitiesListFilter>>>;
+  accessType?: InputMaybe<Scalars['String']['input']>;
+  accessType_gt?: InputMaybe<Scalars['String']['input']>;
+  accessType_gte?: InputMaybe<Scalars['String']['input']>;
+  accessType_ilike?: InputMaybe<Scalars['String']['input']>;
+  accessType_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  accessType_like?: InputMaybe<Scalars['String']['input']>;
+  accessType_lt?: InputMaybe<Scalars['String']['input']>;
+  accessType_lte?: InputMaybe<Scalars['String']['input']>;
+  accessType_ne?: InputMaybe<Scalars['String']['input']>;
+  accessType_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  accessType_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  accessType_null?: InputMaybe<Scalars['Boolean']['input']>;
+  activityId?: InputMaybe<Scalars['String']['input']>;
+  activityId_gt?: InputMaybe<Scalars['String']['input']>;
+  activityId_gte?: InputMaybe<Scalars['String']['input']>;
+  activityId_ilike?: InputMaybe<Scalars['String']['input']>;
+  activityId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  activityId_like?: InputMaybe<Scalars['String']['input']>;
+  activityId_lt?: InputMaybe<Scalars['String']['input']>;
+  activityId_lte?: InputMaybe<Scalars['String']['input']>;
+  activityId_ne?: InputMaybe<Scalars['String']['input']>;
+  activityId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  activityId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  activityId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  category?: InputMaybe<Scalars['String']['input']>;
+  category_gt?: InputMaybe<Scalars['String']['input']>;
+  category_gte?: InputMaybe<Scalars['String']['input']>;
+  category_ilike?: InputMaybe<Scalars['String']['input']>;
+  category_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  category_like?: InputMaybe<Scalars['String']['input']>;
+  category_lt?: InputMaybe<Scalars['String']['input']>;
+  category_lte?: InputMaybe<Scalars['String']['input']>;
+  category_ne?: InputMaybe<Scalars['String']['input']>;
+  category_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  category_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  category_null?: InputMaybe<Scalars['Boolean']['input']>;
+  constituentGases?: InputMaybe<Scalars['JSON']['input']>;
+  constituentGases_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  constituentGases_ne?: InputMaybe<Scalars['JSON']['input']>;
+  constituentGases_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  constituentGases_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  constituentGases_null?: InputMaybe<Scalars['Boolean']['input']>;
+  dataQualityFlags?: InputMaybe<Scalars['JSON']['input']>;
+  dataQualityFlags_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  dataQualityFlags_ne?: InputMaybe<Scalars['JSON']['input']>;
+  dataQualityFlags_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  dataQualityFlags_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  dataQualityFlags_null?: InputMaybe<Scalars['Boolean']['input']>;
+  dataVersion?: InputMaybe<Scalars['JSON']['input']>;
+  dataVersionInformation?: InputMaybe<Scalars['JSON']['input']>;
+  dataVersionInformation_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  dataVersionInformation_ne?: InputMaybe<Scalars['JSON']['input']>;
+  dataVersionInformation_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  dataVersionInformation_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  dataVersionInformation_null?: InputMaybe<Scalars['Boolean']['input']>;
+  dataVersion_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  dataVersion_ne?: InputMaybe<Scalars['JSON']['input']>;
+  dataVersion_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  dataVersion_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  dataVersion_null?: InputMaybe<Scalars['Boolean']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_gt?: InputMaybe<Scalars['String']['input']>;
+  description_gte?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_lt?: InputMaybe<Scalars['String']['input']>;
+  description_lte?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  description_null?: InputMaybe<Scalars['Boolean']['input']>;
+  factor?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod_gt?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod_gte?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod_ilike?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  factorCalculationMethod_like?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod_lt?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod_lte?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod_ne?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  factorCalculationMethod_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  factorCalculationMethod_null?: InputMaybe<Scalars['Boolean']['input']>;
+  factorCalculationOrigin?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationOrigin_gt?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationOrigin_gte?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationOrigin_ilike?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationOrigin_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  factorCalculationOrigin_like?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationOrigin_lt?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationOrigin_lte?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationOrigin_ne?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationOrigin_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  factorCalculationOrigin_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  factorCalculationOrigin_null?: InputMaybe<Scalars['Boolean']['input']>;
+  factor_gt?: InputMaybe<Scalars['String']['input']>;
+  factor_gte?: InputMaybe<Scalars['String']['input']>;
+  factor_ilike?: InputMaybe<Scalars['String']['input']>;
+  factor_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  factor_like?: InputMaybe<Scalars['String']['input']>;
+  factor_lt?: InputMaybe<Scalars['String']['input']>;
+  factor_lte?: InputMaybe<Scalars['String']['input']>;
+  factor_ne?: InputMaybe<Scalars['String']['input']>;
+  factor_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  factor_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  factor_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  region?: InputMaybe<Scalars['String']['input']>;
+  regionName?: InputMaybe<Scalars['String']['input']>;
+  regionName_gt?: InputMaybe<Scalars['String']['input']>;
+  regionName_gte?: InputMaybe<Scalars['String']['input']>;
+  regionName_ilike?: InputMaybe<Scalars['String']['input']>;
+  regionName_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  regionName_like?: InputMaybe<Scalars['String']['input']>;
+  regionName_lt?: InputMaybe<Scalars['String']['input']>;
+  regionName_lte?: InputMaybe<Scalars['String']['input']>;
+  regionName_ne?: InputMaybe<Scalars['String']['input']>;
+  regionName_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  regionName_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  regionName_null?: InputMaybe<Scalars['Boolean']['input']>;
+  region_gt?: InputMaybe<Scalars['String']['input']>;
+  region_gte?: InputMaybe<Scalars['String']['input']>;
+  region_ilike?: InputMaybe<Scalars['String']['input']>;
+  region_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  region_like?: InputMaybe<Scalars['String']['input']>;
+  region_lt?: InputMaybe<Scalars['String']['input']>;
+  region_lte?: InputMaybe<Scalars['String']['input']>;
+  region_ne?: InputMaybe<Scalars['String']['input']>;
+  region_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  region_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  region_null?: InputMaybe<Scalars['Boolean']['input']>;
+  sector?: InputMaybe<Scalars['String']['input']>;
+  sector_gt?: InputMaybe<Scalars['String']['input']>;
+  sector_gte?: InputMaybe<Scalars['String']['input']>;
+  sector_ilike?: InputMaybe<Scalars['String']['input']>;
+  sector_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  sector_like?: InputMaybe<Scalars['String']['input']>;
+  sector_lt?: InputMaybe<Scalars['String']['input']>;
+  sector_lte?: InputMaybe<Scalars['String']['input']>;
+  sector_ne?: InputMaybe<Scalars['String']['input']>;
+  sector_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  sector_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  sector_null?: InputMaybe<Scalars['Boolean']['input']>;
+  source?: InputMaybe<Scalars['String']['input']>;
+  sourceDataset?: InputMaybe<Scalars['String']['input']>;
+  sourceDataset_gt?: InputMaybe<Scalars['String']['input']>;
+  sourceDataset_gte?: InputMaybe<Scalars['String']['input']>;
+  sourceDataset_ilike?: InputMaybe<Scalars['String']['input']>;
+  sourceDataset_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  sourceDataset_like?: InputMaybe<Scalars['String']['input']>;
+  sourceDataset_lt?: InputMaybe<Scalars['String']['input']>;
+  sourceDataset_lte?: InputMaybe<Scalars['String']['input']>;
+  sourceDataset_ne?: InputMaybe<Scalars['String']['input']>;
+  sourceDataset_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  sourceDataset_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  sourceDataset_null?: InputMaybe<Scalars['Boolean']['input']>;
+  sourceLcaActivity?: InputMaybe<Scalars['String']['input']>;
+  sourceLcaActivity_gt?: InputMaybe<Scalars['String']['input']>;
+  sourceLcaActivity_gte?: InputMaybe<Scalars['String']['input']>;
+  sourceLcaActivity_ilike?: InputMaybe<Scalars['String']['input']>;
+  sourceLcaActivity_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  sourceLcaActivity_like?: InputMaybe<Scalars['String']['input']>;
+  sourceLcaActivity_lt?: InputMaybe<Scalars['String']['input']>;
+  sourceLcaActivity_lte?: InputMaybe<Scalars['String']['input']>;
+  sourceLcaActivity_ne?: InputMaybe<Scalars['String']['input']>;
+  sourceLcaActivity_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  sourceLcaActivity_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  sourceLcaActivity_null?: InputMaybe<Scalars['Boolean']['input']>;
+  sourceLink?: InputMaybe<Scalars['String']['input']>;
+  sourceLink_gt?: InputMaybe<Scalars['String']['input']>;
+  sourceLink_gte?: InputMaybe<Scalars['String']['input']>;
+  sourceLink_ilike?: InputMaybe<Scalars['String']['input']>;
+  sourceLink_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  sourceLink_like?: InputMaybe<Scalars['String']['input']>;
+  sourceLink_lt?: InputMaybe<Scalars['String']['input']>;
+  sourceLink_lte?: InputMaybe<Scalars['String']['input']>;
+  sourceLink_ne?: InputMaybe<Scalars['String']['input']>;
+  sourceLink_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  sourceLink_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  sourceLink_null?: InputMaybe<Scalars['Boolean']['input']>;
+  source_gt?: InputMaybe<Scalars['String']['input']>;
+  source_gte?: InputMaybe<Scalars['String']['input']>;
+  source_ilike?: InputMaybe<Scalars['String']['input']>;
+  source_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  source_like?: InputMaybe<Scalars['String']['input']>;
+  source_lt?: InputMaybe<Scalars['String']['input']>;
+  source_lte?: InputMaybe<Scalars['String']['input']>;
+  source_ne?: InputMaybe<Scalars['String']['input']>;
+  source_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  source_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  source_null?: InputMaybe<Scalars['Boolean']['input']>;
+  supportedCalculationMethods?: InputMaybe<Scalars['JSON']['input']>;
+  supportedCalculationMethods_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  supportedCalculationMethods_ne?: InputMaybe<Scalars['JSON']['input']>;
+  supportedCalculationMethods_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  supportedCalculationMethods_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  supportedCalculationMethods_null?: InputMaybe<Scalars['Boolean']['input']>;
+  uncertainty?: InputMaybe<Scalars['Float']['input']>;
+  uncertainty_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  uncertainty_ne?: InputMaybe<Scalars['Float']['input']>;
+  uncertainty_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  uncertainty_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  uncertainty_null?: InputMaybe<Scalars['Boolean']['input']>;
+  unit?: InputMaybe<Scalars['String']['input']>;
+  unitType?: InputMaybe<Scalars['String']['input']>;
+  unitType_gt?: InputMaybe<Scalars['String']['input']>;
+  unitType_gte?: InputMaybe<Scalars['String']['input']>;
+  unitType_ilike?: InputMaybe<Scalars['String']['input']>;
+  unitType_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  unitType_like?: InputMaybe<Scalars['String']['input']>;
+  unitType_lt?: InputMaybe<Scalars['String']['input']>;
+  unitType_lte?: InputMaybe<Scalars['String']['input']>;
+  unitType_ne?: InputMaybe<Scalars['String']['input']>;
+  unitType_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  unitType_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  unitType_null?: InputMaybe<Scalars['Boolean']['input']>;
+  unit_gt?: InputMaybe<Scalars['String']['input']>;
+  unit_gte?: InputMaybe<Scalars['String']['input']>;
+  unit_ilike?: InputMaybe<Scalars['String']['input']>;
+  unit_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  unit_like?: InputMaybe<Scalars['String']['input']>;
+  unit_lt?: InputMaybe<Scalars['String']['input']>;
+  unit_lte?: InputMaybe<Scalars['String']['input']>;
+  unit_ne?: InputMaybe<Scalars['String']['input']>;
+  unit_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  unit_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  unit_null?: InputMaybe<Scalars['Boolean']['input']>;
+  year?: InputMaybe<Scalars['Float']['input']>;
+  yearReleased?: InputMaybe<Scalars['Float']['input']>;
+  yearReleased_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  yearReleased_ne?: InputMaybe<Scalars['Float']['input']>;
+  yearReleased_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  yearReleased_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  yearReleased_null?: InputMaybe<Scalars['Boolean']['input']>;
+  year_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  year_ne?: InputMaybe<Scalars['Float']['input']>;
+  year_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  year_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  year_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type ClimatiqActvitiesOrderByInput = {
+  accessType?: InputMaybe<Sort>;
+  activityId?: InputMaybe<Sort>;
+  category?: InputMaybe<Sort>;
+  constituentGases?: InputMaybe<Sort>;
+  dataQualityFlags?: InputMaybe<Sort>;
+  dataVersion?: InputMaybe<Sort>;
+  dataVersionInformation?: InputMaybe<Sort>;
+  description?: InputMaybe<Sort>;
+  factor?: InputMaybe<Sort>;
+  factorCalculationMethod?: InputMaybe<Sort>;
+  factorCalculationOrigin?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  region?: InputMaybe<Sort>;
+  regionName?: InputMaybe<Sort>;
+  sector?: InputMaybe<Sort>;
+  source?: InputMaybe<Sort>;
+  sourceDataset?: InputMaybe<Sort>;
+  sourceLcaActivity?: InputMaybe<Sort>;
+  sourceLink?: InputMaybe<Sort>;
+  supportedCalculationMethods?: InputMaybe<Sort>;
+  uncertainty?: InputMaybe<Sort>;
+  unit?: InputMaybe<Sort>;
+  unitType?: InputMaybe<Sort>;
+  year?: InputMaybe<Sort>;
+  yearReleased?: InputMaybe<Sort>;
+};
+
+/** Pagination options for ClimatiqActvities. */
+export type ClimatiqActvitiesPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ClimatiqActvitiesOrderByInput>;
+};
+
+export type ClimatiqActvity = {
+  __typename?: 'ClimatiqActvity';
+  accessType: Scalars['String']['output'];
+  activityId: Scalars['String']['output'];
+  category: Scalars['String']['output'];
+  constituentGases?: Maybe<Scalars['JSON']['output']>;
+  dataQualityFlags: Scalars['JSON']['output'];
+  dataVersion: Scalars['JSON']['output'];
+  dataVersionInformation: Scalars['JSON']['output'];
+  description: Scalars['String']['output'];
+  factor?: Maybe<Scalars['String']['output']>;
+  factorCalculationMethod?: Maybe<Scalars['String']['output']>;
+  factorCalculationOrigin?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  region: Scalars['String']['output'];
+  regionName: Scalars['String']['output'];
+  sector: Scalars['String']['output'];
+  source: Scalars['String']['output'];
+  sourceDataset: Scalars['String']['output'];
+  sourceLcaActivity: Scalars['String']['output'];
+  sourceLink: Scalars['String']['output'];
+  supportedCalculationMethods: Scalars['JSON']['output'];
+  uncertainty?: Maybe<Scalars['Float']['output']>;
+  unit?: Maybe<Scalars['String']['output']>;
+  unitType: Scalars['String']['output'];
+  year: Scalars['Float']['output'];
+  yearReleased: Scalars['Float']['output'];
+};
+
+/** Data needed to create or update ClimatiqActvities. If an ID is passed, this is an update, otherwise it's an insert. */
+export type ClimatiqActvityCreateOrUpdateInput = {
+  accessType?: InputMaybe<Scalars['String']['input']>;
+  activityId?: InputMaybe<Scalars['String']['input']>;
+  category?: InputMaybe<Scalars['String']['input']>;
+  constituentGases?: InputMaybe<Scalars['JSON']['input']>;
+  dataQualityFlags?: InputMaybe<Scalars['JSON']['input']>;
+  dataVersion?: InputMaybe<Scalars['JSON']['input']>;
+  dataVersionInformation?: InputMaybe<Scalars['JSON']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  factor?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationOrigin?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  region?: InputMaybe<Scalars['String']['input']>;
+  regionName?: InputMaybe<Scalars['String']['input']>;
+  sector?: InputMaybe<Scalars['String']['input']>;
+  source?: InputMaybe<Scalars['String']['input']>;
+  sourceDataset?: InputMaybe<Scalars['String']['input']>;
+  sourceLcaActivity?: InputMaybe<Scalars['String']['input']>;
+  sourceLink?: InputMaybe<Scalars['String']['input']>;
+  supportedCalculationMethods?: InputMaybe<Scalars['JSON']['input']>;
+  uncertainty?: InputMaybe<Scalars['Float']['input']>;
+  unit?: InputMaybe<Scalars['String']['input']>;
+  unitType?: InputMaybe<Scalars['String']['input']>;
+  year?: InputMaybe<Scalars['Float']['input']>;
+  yearReleased?: InputMaybe<Scalars['Float']['input']>;
+};
+
+/** Data needed to create ClimatiqActvities. */
+export type ClimatiqActvityInsertInput = {
+  accessType: Scalars['String']['input'];
+  activityId: Scalars['String']['input'];
+  category: Scalars['String']['input'];
+  constituentGases?: InputMaybe<Scalars['JSON']['input']>;
+  dataQualityFlags: Scalars['JSON']['input'];
+  dataVersion: Scalars['JSON']['input'];
+  dataVersionInformation: Scalars['JSON']['input'];
+  description: Scalars['String']['input'];
+  factor?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationOrigin?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  region: Scalars['String']['input'];
+  regionName: Scalars['String']['input'];
+  sector: Scalars['String']['input'];
+  source: Scalars['String']['input'];
+  sourceDataset: Scalars['String']['input'];
+  sourceLcaActivity: Scalars['String']['input'];
+  sourceLink: Scalars['String']['input'];
+  supportedCalculationMethods: Scalars['JSON']['input'];
+  uncertainty?: InputMaybe<Scalars['Float']['input']>;
+  unit?: InputMaybe<Scalars['String']['input']>;
+  unitType: Scalars['String']['input'];
+  year: Scalars['Float']['input'];
+  yearReleased: Scalars['Float']['input'];
+};
+
+/** Data needed to update ClimatiqActvities. An ID must be passed. */
+export type ClimatiqActvityUpdateInput = {
+  accessType?: InputMaybe<Scalars['String']['input']>;
+  activityId?: InputMaybe<Scalars['String']['input']>;
+  category?: InputMaybe<Scalars['String']['input']>;
+  constituentGases?: InputMaybe<Scalars['JSON']['input']>;
+  dataQualityFlags?: InputMaybe<Scalars['JSON']['input']>;
+  dataVersion?: InputMaybe<Scalars['JSON']['input']>;
+  dataVersionInformation?: InputMaybe<Scalars['JSON']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  factor?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationMethod?: InputMaybe<Scalars['String']['input']>;
+  factorCalculationOrigin?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  region?: InputMaybe<Scalars['String']['input']>;
+  regionName?: InputMaybe<Scalars['String']['input']>;
+  sector?: InputMaybe<Scalars['String']['input']>;
+  source?: InputMaybe<Scalars['String']['input']>;
+  sourceDataset?: InputMaybe<Scalars['String']['input']>;
+  sourceLcaActivity?: InputMaybe<Scalars['String']['input']>;
+  sourceLink?: InputMaybe<Scalars['String']['input']>;
+  supportedCalculationMethods?: InputMaybe<Scalars['JSON']['input']>;
+  uncertainty?: InputMaybe<Scalars['Float']['input']>;
+  unit?: InputMaybe<Scalars['String']['input']>;
+  unitType?: InputMaybe<Scalars['String']['input']>;
+  year?: InputMaybe<Scalars['Float']['input']>;
+  yearReleased?: InputMaybe<Scalars['Float']['input']>;
+};
+
 export type ComplianceDefinition = {
   __typename?: 'ComplianceDefinition';
   complianceQuestions: Array<ComplianceQuestion>;
@@ -3257,18 +3679,24 @@ export type IntegrationsPaginationInput = {
 
 export type Material = {
   __typename?: 'Material';
+  activityId?: Maybe<Scalars['String']['output']>;
+  aiDescription?: Maybe<Scalars['String']['output']>;
   attributeAssurances: Array<AttributeAssurance>;
   attributeAssurances_aggregate?: Maybe<AggregationResult>;
   brandMaterialId?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['ISOString']['output']>;
+  dataSource?: Maybe<Scalars['String']['output']>;
   deleted?: Maybe<Scalars['Boolean']['output']>;
-  desription?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
   emissionsFactor?: Maybe<Scalars['Float']['output']>;
   id: Scalars['ID']['output'];
   materialCategory?: Maybe<Scalars['String']['output']>;
+  materialClassification?: Maybe<MaterialClassification>;
+  materialClassification_aggregate?: Maybe<AggregationResult>;
   materialSubcategory?: Maybe<Scalars['String']['output']>;
   materialSuppliers: Array<MaterialSupplier>;
   materialSuppliers_aggregate?: Maybe<AggregationResult>;
+  metadata?: Maybe<Scalars['JSON']['output']>;
   name: Scalars['String']['output'];
   organization: Organization;
   organizationFacilityId?: Maybe<Scalars['String']['output']>;
@@ -3287,6 +3715,16 @@ export type MaterialAttributeAssurancesArgs = {
 
 export type MaterialAttributeAssurances_AggregateArgs = {
   filter?: InputMaybe<AttributeAssurancesListFilter>;
+};
+
+
+export type MaterialMaterialClassificationArgs = {
+  filter?: InputMaybe<MaterialClassificationsListFilter>;
+};
+
+
+export type MaterialMaterialClassification_AggregateArgs = {
+  filter?: InputMaybe<MaterialClassificationsListFilter>;
 };
 
 
@@ -3319,18 +3757,164 @@ export type MaterialProductMaterials_AggregateArgs = {
   filter?: InputMaybe<ProductMaterialsListFilter>;
 };
 
+export type MaterialClassification = {
+  __typename?: 'MaterialClassification';
+  category: Scalars['String']['output'];
+  createdAt: Scalars['ISOString']['output'];
+  id: Scalars['ID']['output'];
+  materials: Array<Material>;
+  materials_aggregate?: Maybe<AggregationResult>;
+  name: Scalars['String']['output'];
+  sustainabilityAttributes: Array<SustainabilityAttribute>;
+  sustainabilityAttributes_aggregate?: Maybe<AggregationResult>;
+  updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type MaterialClassificationMaterialsArgs = {
+  filter?: InputMaybe<MaterialsListFilter>;
+};
+
+
+export type MaterialClassificationMaterials_AggregateArgs = {
+  filter?: InputMaybe<MaterialsListFilter>;
+};
+
+
+export type MaterialClassificationSustainabilityAttributesArgs = {
+  filter?: InputMaybe<SustainabilityAttributesListFilter>;
+};
+
+
+export type MaterialClassificationSustainabilityAttributes_AggregateArgs = {
+  filter?: InputMaybe<SustainabilityAttributesListFilter>;
+};
+
+/** Data needed to create or update MaterialClassifications. If an ID is passed, this is an update, otherwise it's an insert. */
+export type MaterialClassificationCreateOrUpdateInput = {
+  category?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to create MaterialClassifications. */
+export type MaterialClassificationInsertInput = {
+  category: Scalars['String']['input'];
+  createdAt: Scalars['ISOString']['input'];
+  materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
+  name: Scalars['String']['input'];
+  sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
+  updatedAt: Scalars['ISOString']['input'];
+};
+
+/** Data needed to update MaterialClassifications. An ID must be passed. */
+export type MaterialClassificationUpdateInput = {
+  category?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id: Scalars['ID']['input'];
+  materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type MaterialClassificationsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<MaterialClassificationsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<MaterialClassificationsListFilter>>>;
+  category?: InputMaybe<Scalars['String']['input']>;
+  category_gt?: InputMaybe<Scalars['String']['input']>;
+  category_gte?: InputMaybe<Scalars['String']['input']>;
+  category_ilike?: InputMaybe<Scalars['String']['input']>;
+  category_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  category_like?: InputMaybe<Scalars['String']['input']>;
+  category_lt?: InputMaybe<Scalars['String']['input']>;
+  category_lte?: InputMaybe<Scalars['String']['input']>;
+  category_ne?: InputMaybe<Scalars['String']['input']>;
+  category_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  category_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  category_null?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  materials?: InputMaybe<MaterialsListFilter>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  sustainabilityAttributes?: InputMaybe<SustainabilityAttributesListFilter>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type MaterialClassificationsOrderByInput = {
+  category?: InputMaybe<Sort>;
+  createdAt?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for MaterialClassifications. */
+export type MaterialClassificationsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<MaterialClassificationsOrderByInput>;
+};
+
 /** Data needed to create or update Materials. If an ID is passed, this is an update, otherwise it's an insert. */
 export type MaterialCreateOrUpdateInput = {
+  activityId?: InputMaybe<Scalars['String']['input']>;
+  aiDescription?: InputMaybe<Scalars['String']['input']>;
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
   brandMaterialId?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  dataSource?: InputMaybe<Scalars['String']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
-  desription?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   materialCategory?: InputMaybe<Scalars['String']['input']>;
+  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
   materialSubcategory?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   organizationFacilityId?: InputMaybe<Scalars['String']['input']>;
@@ -3341,15 +3925,20 @@ export type MaterialCreateOrUpdateInput = {
 
 /** Data needed to create Materials. */
 export type MaterialInsertInput = {
+  activityId?: InputMaybe<Scalars['String']['input']>;
+  aiDescription?: InputMaybe<Scalars['String']['input']>;
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
   brandMaterialId?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  dataSource?: InputMaybe<Scalars['String']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
-  desription?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
   materialCategory?: InputMaybe<Scalars['String']['input']>;
+  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
   materialSubcategory?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   organizationFacilityId?: InputMaybe<Scalars['String']['input']>;
@@ -3500,16 +4089,21 @@ export type MaterialSuppliersPaginationInput = {
 
 /** Data needed to update Materials. An ID must be passed. */
 export type MaterialUpdateInput = {
+  activityId?: InputMaybe<Scalars['String']['input']>;
+  aiDescription?: InputMaybe<Scalars['String']['input']>;
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
   brandMaterialId?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  dataSource?: InputMaybe<Scalars['String']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
-  desription?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
   id: Scalars['ID']['input'];
   materialCategory?: InputMaybe<Scalars['String']['input']>;
+  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
   materialSubcategory?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   organizationFacilityId?: InputMaybe<Scalars['String']['input']>;
@@ -3521,6 +4115,30 @@ export type MaterialUpdateInput = {
 export type MaterialsListFilter = {
   _and?: InputMaybe<Array<InputMaybe<MaterialsListFilter>>>;
   _or?: InputMaybe<Array<InputMaybe<MaterialsListFilter>>>;
+  activityId?: InputMaybe<Scalars['String']['input']>;
+  activityId_gt?: InputMaybe<Scalars['String']['input']>;
+  activityId_gte?: InputMaybe<Scalars['String']['input']>;
+  activityId_ilike?: InputMaybe<Scalars['String']['input']>;
+  activityId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  activityId_like?: InputMaybe<Scalars['String']['input']>;
+  activityId_lt?: InputMaybe<Scalars['String']['input']>;
+  activityId_lte?: InputMaybe<Scalars['String']['input']>;
+  activityId_ne?: InputMaybe<Scalars['String']['input']>;
+  activityId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  activityId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  activityId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  aiDescription?: InputMaybe<Scalars['String']['input']>;
+  aiDescription_gt?: InputMaybe<Scalars['String']['input']>;
+  aiDescription_gte?: InputMaybe<Scalars['String']['input']>;
+  aiDescription_ilike?: InputMaybe<Scalars['String']['input']>;
+  aiDescription_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  aiDescription_like?: InputMaybe<Scalars['String']['input']>;
+  aiDescription_lt?: InputMaybe<Scalars['String']['input']>;
+  aiDescription_lte?: InputMaybe<Scalars['String']['input']>;
+  aiDescription_ne?: InputMaybe<Scalars['String']['input']>;
+  aiDescription_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  aiDescription_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  aiDescription_null?: InputMaybe<Scalars['Boolean']['input']>;
   attributeAssurances?: InputMaybe<AttributeAssurancesListFilter>;
   brandMaterialId?: InputMaybe<Scalars['String']['input']>;
   brandMaterialId_gt?: InputMaybe<Scalars['String']['input']>;
@@ -3544,24 +4162,36 @@ export type MaterialsListFilter = {
   createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
   createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  dataSource?: InputMaybe<Scalars['String']['input']>;
+  dataSource_gt?: InputMaybe<Scalars['String']['input']>;
+  dataSource_gte?: InputMaybe<Scalars['String']['input']>;
+  dataSource_ilike?: InputMaybe<Scalars['String']['input']>;
+  dataSource_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  dataSource_like?: InputMaybe<Scalars['String']['input']>;
+  dataSource_lt?: InputMaybe<Scalars['String']['input']>;
+  dataSource_lte?: InputMaybe<Scalars['String']['input']>;
+  dataSource_ne?: InputMaybe<Scalars['String']['input']>;
+  dataSource_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  dataSource_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  dataSource_null?: InputMaybe<Scalars['Boolean']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   deleted_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
   deleted_ne?: InputMaybe<Scalars['Boolean']['input']>;
   deleted_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
   deleted_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   deleted_null?: InputMaybe<Scalars['Boolean']['input']>;
-  desription?: InputMaybe<Scalars['String']['input']>;
-  desription_gt?: InputMaybe<Scalars['String']['input']>;
-  desription_gte?: InputMaybe<Scalars['String']['input']>;
-  desription_ilike?: InputMaybe<Scalars['String']['input']>;
-  desription_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  desription_like?: InputMaybe<Scalars['String']['input']>;
-  desription_lt?: InputMaybe<Scalars['String']['input']>;
-  desription_lte?: InputMaybe<Scalars['String']['input']>;
-  desription_ne?: InputMaybe<Scalars['String']['input']>;
-  desription_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  desription_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  desription_null?: InputMaybe<Scalars['Boolean']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_gt?: InputMaybe<Scalars['String']['input']>;
+  description_gte?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_lt?: InputMaybe<Scalars['String']['input']>;
+  description_lte?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  description_null?: InputMaybe<Scalars['Boolean']['input']>;
   emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
   emissionsFactor_in?: InputMaybe<Array<Scalars['Float']['input']>>;
   emissionsFactor_ne?: InputMaybe<Scalars['Float']['input']>;
@@ -3590,6 +4220,7 @@ export type MaterialsListFilter = {
   materialCategory_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   materialCategory_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   materialCategory_null?: InputMaybe<Scalars['Boolean']['input']>;
+  materialClassification?: InputMaybe<MaterialClassificationsListFilter>;
   materialSubcategory?: InputMaybe<Scalars['String']['input']>;
   materialSubcategory_gt?: InputMaybe<Scalars['String']['input']>;
   materialSubcategory_gte?: InputMaybe<Scalars['String']['input']>;
@@ -3603,6 +4234,12 @@ export type MaterialsListFilter = {
   materialSubcategory_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   materialSubcategory_null?: InputMaybe<Scalars['Boolean']['input']>;
   materialSuppliers?: InputMaybe<MaterialSuppliersListFilter>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  metadata_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  metadata_ne?: InputMaybe<Scalars['JSON']['input']>;
+  metadata_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  metadata_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  metadata_null?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_gt?: InputMaybe<Scalars['String']['input']>;
   name_gte?: InputMaybe<Scalars['String']['input']>;
@@ -3654,14 +4291,18 @@ export type MaterialsListFilter = {
 };
 
 export type MaterialsOrderByInput = {
+  activityId?: InputMaybe<Sort>;
+  aiDescription?: InputMaybe<Sort>;
   brandMaterialId?: InputMaybe<Sort>;
   createdAt?: InputMaybe<Sort>;
+  dataSource?: InputMaybe<Sort>;
   deleted?: InputMaybe<Sort>;
-  desription?: InputMaybe<Sort>;
+  description?: InputMaybe<Sort>;
   emissionsFactor?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   materialCategory?: InputMaybe<Sort>;
   materialSubcategory?: InputMaybe<Sort>;
+  metadata?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
   organizationFacilityId?: InputMaybe<Sort>;
   supplierMaterialId?: InputMaybe<Sort>;
@@ -3815,6 +4456,10 @@ export type Mutation = {
   createCategoryDefinition?: Maybe<CategoryDefinition>;
   /** Create many CategoryDefinitions. */
   createCategoryDefinitions?: Maybe<Array<Maybe<CategoryDefinition>>>;
+  /** Create many ClimatiqActvities. */
+  createClimatiqActvities?: Maybe<Array<Maybe<ClimatiqActvity>>>;
+  /** Create a single ClimatiqActvity. */
+  createClimatiqActvity?: Maybe<ClimatiqActvity>;
   /** Create a single ComplianceDefinition. */
   createComplianceDefinition?: Maybe<ComplianceDefinition>;
   /** Create many ComplianceDefinitions. */
@@ -3861,6 +4506,10 @@ export type Mutation = {
   createIntegrations?: Maybe<Array<Maybe<Integration>>>;
   /** Create a single Material. */
   createMaterial?: Maybe<Material>;
+  /** Create a single MaterialClassification. */
+  createMaterialClassification?: Maybe<MaterialClassification>;
+  /** Create many MaterialClassifications. */
+  createMaterialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
   /** Create a single MaterialSupplier. */
   createMaterialSupplier?: Maybe<MaterialSupplier>;
   /** Create many MaterialSuppliers. */
@@ -3881,6 +4530,8 @@ export type Mutation = {
   createOrUpdateCategoryData?: Maybe<Array<Maybe<CategoryDatum>>>;
   /** Create or update many CategoryDefinitions. */
   createOrUpdateCategoryDefinitions?: Maybe<Array<Maybe<CategoryDefinition>>>;
+  /** Create or update many ClimatiqActvities. */
+  createOrUpdateClimatiqActvities?: Maybe<Array<Maybe<ClimatiqActvity>>>;
   /** Create or update many ComplianceDefinitions. */
   createOrUpdateComplianceDefinitions?: Maybe<Array<Maybe<ComplianceDefinition>>>;
   /** Create or update many ComplianceQuestionDependencyChains. */
@@ -3903,6 +4554,8 @@ export type Mutation = {
   createOrUpdateFacilityFootprints?: Maybe<Array<Maybe<FacilityFootprint>>>;
   /** Create or update many Integrations. */
   createOrUpdateIntegrations?: Maybe<Array<Maybe<Integration>>>;
+  /** Create or update many MaterialClassifications. */
+  createOrUpdateMaterialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
   /** Create or update many MaterialSuppliers. */
   createOrUpdateMaterialSuppliers?: Maybe<Array<Maybe<MaterialSupplier>>>;
   /** Create or update many Materials. */
@@ -4085,6 +4738,10 @@ export type Mutation = {
   deleteCategoryDefinition?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many CategoryDefinitions with a filter. */
   deleteCategoryDefinitions?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many ClimatiqActvities with a filter. */
+  deleteClimatiqActvities?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single ClimatiqActvity. */
+  deleteClimatiqActvity?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single ComplianceDefinition. */
   deleteComplianceDefinition?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many ComplianceDefinitions with a filter. */
@@ -4131,6 +4788,10 @@ export type Mutation = {
   deleteIntegrations?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single Material. */
   deleteMaterial?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single MaterialClassification. */
+  deleteMaterialClassification?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many MaterialClassifications with a filter. */
+  deleteMaterialClassifications?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single MaterialSupplier. */
   deleteMaterialSupplier?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many MaterialSuppliers with a filter. */
@@ -4265,6 +4926,10 @@ export type Mutation = {
   updateCategoryDefinition?: Maybe<CategoryDefinition>;
   /** Update many CategoryDefinitions. */
   updateCategoryDefinitions?: Maybe<Array<Maybe<CategoryDefinition>>>;
+  /** Update many ClimatiqActvities. */
+  updateClimatiqActvities?: Maybe<Array<Maybe<ClimatiqActvity>>>;
+  /** Update a single ClimatiqActvity. */
+  updateClimatiqActvity?: Maybe<ClimatiqActvity>;
   /** Update a single ComplianceDefinition. */
   updateComplianceDefinition?: Maybe<ComplianceDefinition>;
   /** Update many ComplianceDefinitions. */
@@ -4311,6 +4976,10 @@ export type Mutation = {
   updateIntegrations?: Maybe<Array<Maybe<Integration>>>;
   /** Update a single Material. */
   updateMaterial?: Maybe<Material>;
+  /** Update a single MaterialClassification. */
+  updateMaterialClassification?: Maybe<MaterialClassification>;
+  /** Update many MaterialClassifications. */
+  updateMaterialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
   /** Update a single MaterialSupplier. */
   updateMaterialSupplier?: Maybe<MaterialSupplier>;
   /** Update many MaterialSuppliers. */
@@ -4478,6 +5147,16 @@ export type MutationCreateCategoryDefinitionsArgs = {
 };
 
 
+export type MutationCreateClimatiqActvitiesArgs = {
+  input: Array<ClimatiqActvityInsertInput>;
+};
+
+
+export type MutationCreateClimatiqActvityArgs = {
+  input: ClimatiqActvityInsertInput;
+};
+
+
 export type MutationCreateComplianceDefinitionArgs = {
   input: ComplianceDefinitionInsertInput;
 };
@@ -4593,6 +5272,16 @@ export type MutationCreateMaterialArgs = {
 };
 
 
+export type MutationCreateMaterialClassificationArgs = {
+  input: MaterialClassificationInsertInput;
+};
+
+
+export type MutationCreateMaterialClassificationsArgs = {
+  input: Array<MaterialClassificationInsertInput>;
+};
+
+
 export type MutationCreateMaterialSupplierArgs = {
   input: MaterialSupplierInsertInput;
 };
@@ -4640,6 +5329,11 @@ export type MutationCreateOrUpdateCategoryDataArgs = {
 
 export type MutationCreateOrUpdateCategoryDefinitionsArgs = {
   input: Array<CategoryDefinitionCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateClimatiqActvitiesArgs = {
+  input: Array<ClimatiqActvityCreateOrUpdateInput>;
 };
 
 
@@ -4695,6 +5389,11 @@ export type MutationCreateOrUpdateFacilityFootprintsArgs = {
 
 export type MutationCreateOrUpdateIntegrationsArgs = {
   input: Array<IntegrationCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateMaterialClassificationsArgs = {
+  input: Array<MaterialClassificationCreateOrUpdateInput>;
 };
 
 
@@ -5153,6 +5852,16 @@ export type MutationDeleteCategoryDefinitionsArgs = {
 };
 
 
+export type MutationDeleteClimatiqActvitiesArgs = {
+  filter: ClimatiqActvitiesListFilter;
+};
+
+
+export type MutationDeleteClimatiqActvityArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
 export type MutationDeleteComplianceDefinitionArgs = {
   filter: DeleteOneFilterInput;
 };
@@ -5265,6 +5974,16 @@ export type MutationDeleteIntegrationsArgs = {
 
 export type MutationDeleteMaterialArgs = {
   filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteMaterialClassificationArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteMaterialClassificationsArgs = {
+  filter: MaterialClassificationsListFilter;
 };
 
 
@@ -5603,6 +6322,16 @@ export type MutationUpdateCategoryDefinitionsArgs = {
 };
 
 
+export type MutationUpdateClimatiqActvitiesArgs = {
+  input: Array<ClimatiqActvityUpdateInput>;
+};
+
+
+export type MutationUpdateClimatiqActvityArgs = {
+  input: ClimatiqActvityUpdateInput;
+};
+
+
 export type MutationUpdateComplianceDefinitionArgs = {
   input: ComplianceDefinitionUpdateInput;
 };
@@ -5715,6 +6444,16 @@ export type MutationUpdateIntegrationsArgs = {
 
 export type MutationUpdateMaterialArgs = {
   input: MaterialUpdateInput;
+};
+
+
+export type MutationUpdateMaterialClassificationArgs = {
+  input: MaterialClassificationUpdateInput;
+};
+
+
+export type MutationUpdateMaterialClassificationsArgs = {
+  input: Array<MaterialClassificationUpdateInput>;
 };
 
 
@@ -9508,6 +10247,7 @@ export type Product = {
   createdAt?: Maybe<Scalars['ISOString']['output']>;
   deleted?: Maybe<Scalars['Boolean']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  gender?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   metadata?: Maybe<Scalars['JSON']['output']>;
   name: Scalars['String']['output'];
@@ -9574,6 +10314,7 @@ export type ProductCreateOrUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  gender?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -9597,6 +10338,7 @@ export type ProductInsertInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  gender?: InputMaybe<Scalars['String']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
@@ -9843,6 +10585,7 @@ export type ProductUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  gender?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -9914,6 +10657,18 @@ export type ProductsListFilter = {
   description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   description_null?: InputMaybe<Scalars['Boolean']['input']>;
+  gender?: InputMaybe<Scalars['String']['input']>;
+  gender_gt?: InputMaybe<Scalars['String']['input']>;
+  gender_gte?: InputMaybe<Scalars['String']['input']>;
+  gender_ilike?: InputMaybe<Scalars['String']['input']>;
+  gender_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  gender_like?: InputMaybe<Scalars['String']['input']>;
+  gender_lt?: InputMaybe<Scalars['String']['input']>;
+  gender_lte?: InputMaybe<Scalars['String']['input']>;
+  gender_ne?: InputMaybe<Scalars['String']['input']>;
+  gender_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  gender_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  gender_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -10035,6 +10790,7 @@ export type ProductsOrderByInput = {
   createdAt?: InputMaybe<Sort>;
   deleted?: InputMaybe<Sort>;
   description?: InputMaybe<Sort>;
+  gender?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   metadata?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
@@ -10088,6 +10844,12 @@ export type Query = {
   categoryDefinitions?: Maybe<Array<Maybe<CategoryDefinition>>>;
   /** Get aggregated data for CategoryDefinitions. */
   categoryDefinitions_aggregate?: Maybe<AggregationResult>;
+  /** Get multiple ClimatiqActvities. */
+  climatiqActvities?: Maybe<Array<Maybe<ClimatiqActvity>>>;
+  /** Get aggregated data for ClimatiqActvities. */
+  climatiqActvities_aggregate?: Maybe<AggregationResult>;
+  /** Get a single ClimatiqActvity. */
+  climatiqActvity?: Maybe<ClimatiqActvity>;
   /** Get a single ComplianceDefinition. */
   complianceDefinition?: Maybe<ComplianceDefinition>;
   /** Get multiple ComplianceDefinitions. */
@@ -10156,6 +10918,12 @@ export type Query = {
   integrations_aggregate?: Maybe<AggregationResult>;
   /** Get a single Material. */
   material?: Maybe<Material>;
+  /** Get a single MaterialClassification. */
+  materialClassification?: Maybe<MaterialClassification>;
+  /** Get multiple MaterialClassifications. */
+  materialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
+  /** Get aggregated data for MaterialClassifications. */
+  materialClassifications_aggregate?: Maybe<AggregationResult>;
   /** Get a single MaterialSupplier. */
   materialSupplier?: Maybe<MaterialSupplier>;
   /** Get multiple MaterialSuppliers. */
@@ -10411,6 +11179,22 @@ export type QueryCategoryDefinitions_AggregateArgs = {
 };
 
 
+export type QueryClimatiqActvitiesArgs = {
+  filter?: InputMaybe<ClimatiqActvitiesListFilter>;
+  pagination?: InputMaybe<ClimatiqActvitiesPaginationInput>;
+};
+
+
+export type QueryClimatiqActvities_AggregateArgs = {
+  filter?: InputMaybe<ClimatiqActvitiesListFilter>;
+};
+
+
+export type QueryClimatiqActvityArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type QueryComplianceDefinitionArgs = {
   id: Scalars['ID']['input'];
 };
@@ -10589,6 +11373,22 @@ export type QueryIntegrations_AggregateArgs = {
 
 export type QueryMaterialArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryMaterialClassificationArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryMaterialClassificationsArgs = {
+  filter?: InputMaybe<MaterialClassificationsListFilter>;
+  pagination?: InputMaybe<MaterialClassificationsPaginationInput>;
+};
+
+
+export type QueryMaterialClassifications_AggregateArgs = {
+  filter?: InputMaybe<MaterialClassificationsListFilter>;
 };
 
 
@@ -11840,6 +12640,8 @@ export type SustainabilityAttribute = {
   id: Scalars['ID']['output'];
   level: SustainabilityAttributesLevel;
   logoUrl?: Maybe<Scalars['String']['output']>;
+  materialClassification?: Maybe<MaterialClassification>;
+  materialClassification_aggregate?: Maybe<AggregationResult>;
   metadata?: Maybe<Scalars['JSON']['output']>;
   name: Scalars['String']['output'];
   organization?: Maybe<Organization>;
@@ -11856,6 +12658,16 @@ export type SustainabilityAttributeAttributeAssurancesArgs = {
 
 export type SustainabilityAttributeAttributeAssurances_AggregateArgs = {
   filter?: InputMaybe<AttributeAssurancesListFilter>;
+};
+
+
+export type SustainabilityAttributeMaterialClassificationArgs = {
+  filter?: InputMaybe<MaterialClassificationsListFilter>;
+};
+
+
+export type SustainabilityAttributeMaterialClassification_AggregateArgs = {
+  filter?: InputMaybe<MaterialClassificationsListFilter>;
 };
 
 
@@ -11876,6 +12688,7 @@ export type SustainabilityAttributeCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   level?: InputMaybe<SustainabilityAttributesLevel>;
   logoUrl?: InputMaybe<Scalars['String']['input']>;
+  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
@@ -11890,6 +12703,7 @@ export type SustainabilityAttributeInsertInput = {
   deleted: Scalars['Boolean']['input'];
   level: SustainabilityAttributesLevel;
   logoUrl?: InputMaybe<Scalars['String']['input']>;
+  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
@@ -11905,6 +12719,7 @@ export type SustainabilityAttributeUpdateInput = {
   id: Scalars['ID']['input'];
   level?: InputMaybe<SustainabilityAttributesLevel>;
   logoUrl?: InputMaybe<Scalars['String']['input']>;
+  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
@@ -11964,6 +12779,7 @@ export type SustainabilityAttributesListFilter = {
   logoUrl_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   logoUrl_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   logoUrl_null?: InputMaybe<Scalars['Boolean']['input']>;
+  materialClassification?: InputMaybe<MaterialClassificationsListFilter>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   metadata_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   metadata_ne?: InputMaybe<Scalars['JSON']['input']>;

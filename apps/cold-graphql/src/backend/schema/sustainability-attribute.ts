@@ -1,7 +1,8 @@
-import { Entity, Field, ID, RelationshipField, graphweaverMetadata, Source } from '@exogee/graphweaver';
+import { Entity, Field, ID, RelationshipField, graphweaverMetadata } from '@exogee/graphweaver';
 import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AttributeAssurance } from './attribute-assurance';
+import { MaterialClassification } from './material-classification';
 import { Organization } from './organization';
 import { SustainabilityAttributesLevel, SustainabilityAttributesType, SustainabilityAttribute as OrmSustainabilityAttribute } from '../entities';
 import { connection } from '../database';
@@ -16,10 +17,10 @@ export class SustainabilityAttribute {
 	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
-	@RelationshipField<SustainabilityAttribute>(() => Organization, { id: entity => entity.organization?.id, nullable: true })
+	@RelationshipField<SustainabilityAttribute>(() => Organization, { id: (entity) => entity.organization?.id, nullable: true })
 	organization?: Organization;
 
-	@Field(() => String, { adminUIOptions: { summaryField: true } })
+	@Field(() => String, { adminUIOptions: {summaryField:true} })
 	name!: string;
 
 	@Field(() => ISODateStringScalar, { nullable: true })
@@ -42,6 +43,9 @@ export class SustainabilityAttribute {
 
 	@Field(() => String, { nullable: true })
 	logoUrl?: string;
+
+	@RelationshipField<SustainabilityAttribute>(() => MaterialClassification, { id: (entity) => entity.materialClassification?.id, nullable: true })
+	materialClassification?: MaterialClassification;
 
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'sustainabilityAttribute' })
 	attributeAssurances!: AttributeAssurance[];

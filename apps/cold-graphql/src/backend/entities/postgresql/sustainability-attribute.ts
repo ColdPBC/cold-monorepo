@@ -3,6 +3,7 @@ import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHoo
 
 import { Collection, Entity, Enum, Index, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { AttributeAssurance } from './attribute-assurance';
+import { MaterialClassification } from './material-classification';
 import { Organization } from './organization';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -61,6 +62,9 @@ export class SustainabilityAttribute {
 
 	@Property({ type: 'text', nullable: true })
 	logoUrl?: string;
+
+	@ManyToOne({ entity: () => MaterialClassification, ref: true, nullable: true })
+	materialClassification?: Ref<MaterialClassification>;
 
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'sustainabilityAttribute' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
