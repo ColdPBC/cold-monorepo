@@ -568,23 +568,10 @@ export const defaultGraphqlMocks: {
       return Promise.resolve({
         data: {
           sustainabilityAttributes: [
-            // For 'My Attributes'
             {
               id: 'a',
               name: 'Global Recycled Standard',
               logoUrl: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Global+Recycled+Standard.png',
-              attributeAssurances: [
-                {
-                  id: 'a',
-                  effectiveEndDate: addDays(new Date(), 100),
-                  material: {
-                    id: 'mat_1',
-                  },
-                  organizationFile: {
-                    id: 'doc_1',
-                  },
-                }
-              ],
               level: 'MATERIAL',
             },
             {
