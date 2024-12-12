@@ -63,6 +63,7 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
       headerClassName: 'bg-gray-30',
       renderCell: (params: GridCellParams) => (
         <Checkbox
+          data-testid={`select-checkbox-materials-supplied-${params.row.id}`}
           checked={rowsSelected.includes(params.row.id) || false}
           onClick={() => setRowsSelected((prev) => {
             if (prev.includes(params.row.id)) {
@@ -75,6 +76,7 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
       ),
       renderHeader: (params) => (
         <Checkbox
+          data-testid={'select-all-checkbox-materials-supplied'}
           checked={rowsSelected.length === rows.length && rowsSelected.length > 0}
           indeterminate={rowsSelected.length > 0 && rowsSelected.length < rows.length}
           onClick={(e) => {
