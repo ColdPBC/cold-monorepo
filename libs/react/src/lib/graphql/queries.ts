@@ -704,6 +704,10 @@ export const GET_MATERIAL = gql`
           country
         }
       }
+      materialClassification {
+        id
+        name
+      }
     }
   }
 `;

@@ -71,6 +71,10 @@ export interface MaterialGraphQL extends Materials {
   materialSubcategory: string | null;
   supplierMaterialId: string | null;
   attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
+  materialClassification: {
+    id: string;
+    name: string;
+  } | null;
   materialSuppliers: {
     id: string;
     organizationFacility: {
