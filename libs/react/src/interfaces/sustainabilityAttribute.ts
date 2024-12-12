@@ -35,3 +35,13 @@ export interface SustainabilityAttributeWithStatus {
   assuranceStatus: AttributeAssuranceStatus;
   expirationDate?: Date | null;
 }
+
+export interface SustainabilityAttributeForBulkEditGraphQL {
+  id: string;
+  name: string;
+  logoUrl?: string;
+  level: EntityLevel;
+  organization: {
+    id: string;
+  } | null;
+}

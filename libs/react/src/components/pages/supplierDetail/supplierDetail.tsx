@@ -70,7 +70,7 @@ export const _SupplierDetail = () => {
 
   const tabs = [
     { label: 'Summary', content: summaryContent },
-    ...(supplier.materialSuppliers.length > 0 ? [{ label: 'Materials', content: <MaterialsSuppliedTab supplier={supplier} /> }] : []),
+    ...(supplier.materialSuppliers.length > 0 ? [{ label: 'Materials', content: <MaterialsSuppliedTab supplier={supplier} refreshData={supplierQuery.mutate} /> }] : []),
     ...(supplier.products.length > 0 ? [{ label: 'Products', content: <ProductsSuppliedTab supplier={supplier} /> }] : [])
   ]
 

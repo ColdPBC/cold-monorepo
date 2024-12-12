@@ -812,6 +812,114 @@ export const CREATE_ATTRIBUTE_ASSURANCES = gql`
   }
 `;
 
+export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_BULK_EDIT = gql`
+  query SustainabilityAttributes($filter: SustainabilityAttributesListFilter) {
+    sustainabilityAttributes(filter: $filter) {
+      id
+      level
+      logoUrl
+      name
+    }
+  }
+`;
+
+// export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
+//   query Products($filter: ProductsListFilter, $pagination: ProductsPaginationInput){
+//     products(filter: $filter, pagination: $pagination){
+//       id
+//       name
+//       productCategory
+//       productSubcategory
+//       description
+//       metadata
+//       seasonCode
+//       upcCode
+//       brandProductId
+//       supplierProductId
+//       productMaterials {
+//         id
+//         yield
+//         unitOfMeasure
+//         weight
+//         material {
+//           id
+//           name
+//           materialCategory
+//           materialSubcategory
+//           emissionsFactor
+//           materialSuppliers {
+//             id
+//             organizationFacility {
+//               id
+//               name
+//               attributeAssurances {
+//                 id
+//                 effectiveEndDate
+//                 organizationFile {
+//                   id
+//                 }
+//                 sustainabilityAttribute {
+//                   id
+//                   level
+//                   logoUrl
+//                   name
+//                 }
+//               }
+//             }
+//           }
+//           attributeAssurances {
+//             id
+//             effectiveEndDate
+//             organizationFile {
+//               id
+//             }
+//             sustainabilityAttribute {
+//               id
+//               level
+//               logoUrl
+//               name
+//             }
+//           }
+//         }
+//       }
+//       attributeAssurances {
+//         id
+//         effectiveEndDate
+//         organizationFile {
+//           id
+//         }
+//         sustainabilityAttribute {
+//           id
+//           level
+//           logoUrl
+//           name
+//         }
+//       }
+//       organizationFacility {
+//         id
+//         name
+//         attributeAssurances {
+//           id
+//           effectiveEndDate
+//           organizationFile {
+//             id
+//           }
+//           sustainabilityAttribute {
+//             id
+//             level
+//             logoUrl
+//             name
+//           }
+//         }
+//       }
+//     }
+//     products_aggregate(filter: $filter) {
+//       count
+//     }
+//   }
+// `;
+
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -847,4 +955,5 @@ export const queries: {
   GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT: GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
   DELETE_ATTRIBUTE_ASSURANCES: DELETE_ATTRIBUTE_ASSURANCES,
   CREATE_ATTRIBUTE_ASSURANCES: CREATE_ATTRIBUTE_ASSURANCES,
+  GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_BULK_EDIT: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_BULK_EDIT,
 };

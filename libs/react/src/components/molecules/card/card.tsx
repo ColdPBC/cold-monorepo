@@ -12,6 +12,7 @@ export interface CardProps {
     action?: () => void;
     variant?: ButtonTypes;
     child?: React.ReactNode;
+    disabled?: boolean;
   }>;
   className?: string;
   'data-testid'?: string;
@@ -69,6 +70,7 @@ export function Card(props: PropsWithChildren<CardProps>) {
                       label={cta.text}
                       onClick={cta.action}
                       variant={cta.variant || ButtonTypes.secondary}
+                      disabled={cta.disabled}
                     />
                   )
                 );
