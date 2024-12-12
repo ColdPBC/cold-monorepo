@@ -1,5 +1,5 @@
 import { SupplierGraphQL, SustainabilityAttribute } from '@coldpbc/interfaces';
-import { Card, DEFAULT_GRID_COL_DEF, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumnList } from '@coldpbc/components';
+import { Card, DEFAULT_GRID_COL_DEF, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumnList, BulkEditMaterialAttributesModal} from '@coldpbc/components';
 import {GridCellParams, GridColDef, GridRowSelectionModel} from '@mui/x-data-grid';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import { uniq } from 'lodash';
@@ -7,8 +7,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import React, {useState} from 'react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useNavigate } from 'react-router-dom';
-import {ButtonTypes, EntityLevel} from "@coldpbc/enums";
-import {BulkEditMaterialAttributesModal} from "../bulkEditMaterialAttributesModal/bulkEditMaterialAttributesModal";
+import {ButtonTypes} from "@coldpbc/enums";
 import {Checkbox} from "@mui/material";
 
 interface MaterialsSuppliedTabProps {
