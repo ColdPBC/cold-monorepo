@@ -1,7 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { MaterialsSuppliedTab, Tabs } from '@coldpbc/components';
 import { getMaterialsMocksWithAssurances, getSupplierMock, StoryMockProvider } from '@coldpbc/mocks';
-import {fireEvent, within} from "@storybook/testing-library";
+import { fireEvent, within } from "@storybook/testing-library";
+import { expect } from '@storybook/jest'
 
 const meta: Meta<typeof MaterialsSuppliedTab> = {
 	title: 'Organisms/MaterialsSuppliedTab',
@@ -65,15 +66,18 @@ export const SelectMaterialsOpenBulkEditModal: Story = {
       </StoryMockProvider>
     );
   },
-  play: async ({ canvasElement}) => {
+  play: async ({ canvasElement, step}) => {
     const canvas = within(canvasElement);
-    // find 'Bulk Edit Attributes' button
-    const bulkEditButton = canvas.getByText('Bulk Edit Attributes');
-    // make sure it is disabled
-    await expect(bulkEditButton).toBeDisabled();
-
-    const selectAllCheckbox = canvas.getByTestId('select-all-checkbox-materials-supplied');
-    fireEvent.click(selectAllCheckbox);
-
+    await step('Select all materials', async () => {
+      // find 'Bulk Edit Attributes' button
+      const bulkEditButton = canvas.getByRole('button', { name: 'Bulk Edit Attributes' });
+      await expect(bulkEditButton).toBeDisabled();
+      const selectAllCheckbox = canvas.getByTestId('select-all-checkbox-materials-supplied');
+      fireEvent.click(selectAllCheckbox);
+      const buttonEnabled = await canvas.findByRole('button', { name: 'Bulk Edit Attributes' });
+      await expect(buttonEnabled).toBeEnabled();
+      // click the button
+      fireEvent.click(bulkEditButton);
+    })
   }
 };
