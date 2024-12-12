@@ -88,21 +88,10 @@ const _BulkEditMaterialAttributesModal = (props: {
   const rows: {
     id: string;
     sustainabilityAttribute: SustainabilityAttributeWithoutAssurances | null;
-    materials: {
-      id: string;
-      material: string;
-      materialCategory: string;
-      materialSubcategory: string;
-      sustainabilityAttributes: SustainabilityAttribute[]
-    }[]
   }[] = sustainabilityAttributes.map((sustainabilityAttribute) => {
     return {
       id: sustainabilityAttribute.id,
       sustainabilityAttribute: sustainabilityAttribute,
-      materials: materialsSelected.filter(material => {
-        // filter out the materials that do not have the selected sustainability attribute
-        return material.sustainabilityAttributes.map(sus => sus.id).includes(sustainabilityAttribute.id);
-      })
     }
   })
 
