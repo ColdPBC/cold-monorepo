@@ -1,3 +1,10 @@
+## [1.492.1](https://github.com/coldPBC/cold-monorepo/compare/v1.492.0...v1.492.1) (2024-12-12)
+
+
+### Bug Fixes
+
+* add missing material classifications script ([0f72cf5](https://github.com/coldPBC/cold-monorepo/commit/0f72cf55917ece34bd7a56c7d2301f9b869c4905))
+
 # [1.492.0](https://github.com/coldPBC/cold-monorepo/compare/v1.491.0...v1.492.0) (2024-12-12)
 
 
