@@ -1,3 +1,15 @@
+# [1.492.0](https://github.com/coldPBC/cold-monorepo/compare/v1.491.0...v1.492.0) (2024-12-12)
+
+
+### Bug Fixes
+
+* remove unused supplier prop from bulkEditMaterialAttributesModal and related components ([96eae28](https://github.com/coldPBC/cold-monorepo/commit/96eae28050aa867b9d33d3d3388b6931faa4ea08))
+
+
+### Features
+
+* add bulk editing for sustainability attributes in materials ([11e4be8](https://github.com/coldPBC/cold-monorepo/commit/11e4be8f0b3f332b0a03832f85a7d08cf6f7d3e4))
+
 # [1.491.0](https://github.com/coldPBC/cold-monorepo/compare/v1.490.0...v1.491.0) (2024-12-12)
 
 
