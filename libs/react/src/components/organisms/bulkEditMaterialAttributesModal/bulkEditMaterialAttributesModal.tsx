@@ -37,9 +37,6 @@ const _BulkEditMaterialAttributesModal = (props: {
   const { addToastMessage } = useAddToastMessage();
   const { logBrowser } = useColdContext();
 
-  // get all sustainability attributes
-  // handle saving the selected sustainability attributes
-  // match them with the supplier's material suppliers material's sustainability attributes
   const sustainabilityAttributesQuery = useGraphQLSWR<{
     sustainabilityAttributes: SustainabilityAttributeForBulkEditGraphQL[]
   }>(orgId ? 'GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_BULK_EDIT' : null, {
