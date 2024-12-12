@@ -36,7 +36,7 @@ export interface SustainabilityAttributeWithStatus {
   expirationDate?: Date | null;
 }
 
-export interface SustainabilityAttributeForBulkEditGraphQL {
+export interface SustainabilityAttributeWithoutAssurancesGraphQL {
   id: string;
   name: string;
   logoUrl?: string;

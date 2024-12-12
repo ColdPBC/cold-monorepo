@@ -1,5 +1,5 @@
 import {
-  SustainabilityAttribute, SustainabilityAttributeForBulkEditGraphQL,
+  SustainabilityAttribute, SustainabilityAttributeWithoutAssurancesGraphQL,
   SustainabilityAttributeWithoutAssurances, ToastMessage
 } from "@coldpbc/interfaces";
 import {Modal as FBModal} from "flowbite-react";
@@ -30,15 +30,15 @@ const _BulkEditMaterialAttributesModal = (props: {
     attributeId: string;
     indeterminate: boolean;
   }[]>([]);
-  const [sustainabilityAttributes, setSustainabilityAttributes] = useState<SustainabilityAttributeForBulkEditGraphQL[]>([]);
+  const [sustainabilityAttributes, setSustainabilityAttributes] = useState<SustainabilityAttributeWithoutAssurancesGraphQL[]>([]);
 
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
   const { logBrowser } = useColdContext();
 
   const sustainabilityAttributesQuery = useGraphQLSWR<{
-    sustainabilityAttributes: SustainabilityAttributeForBulkEditGraphQL[]
-  }>(orgId ? 'GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_BULK_EDIT' : null, {
+    sustainabilityAttributes: SustainabilityAttributeWithoutAssurancesGraphQL[]
+  }>(orgId ? 'GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES' : null, {
     filter: {
       level: 'MATERIAL'
     }
