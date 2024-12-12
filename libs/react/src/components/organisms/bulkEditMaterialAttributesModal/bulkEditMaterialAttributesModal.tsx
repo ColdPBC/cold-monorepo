@@ -1,21 +1,19 @@
 import {
   SupplierGraphQL, SustainabilityAttribute, SustainabilityAttributeForBulkEditGraphQL,
-  type SustainabilityAttributeGraphQL,
   SustainabilityAttributeWithoutAssurances, ToastMessage
 } from "@coldpbc/interfaces";
 import {Modal as FBModal} from "flowbite-react";
 import {flowbiteThemeOverride} from "@coldpbc/themes";
-import {BaseButton, Card, MuiDataGrid, SustainabilityAttributeColumn} from "@coldpbc/components";
-import {find, forEach, get, has, isEqual, orderBy, some, sortBy} from "lodash";
+import {BaseButton, Card, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumn} from "@coldpbc/components";
+import {find, forEach, get, has, isEqual, some} from "lodash";
 import {ButtonTypes} from "@coldpbc/enums";
 import React, {useEffect, useState} from "react";
-import {GridCellParams, GridColDef, GridRowSelectionModel} from "@mui/x-data-grid";
+import {GridCellParams, GridColDef} from "@mui/x-data-grid";
 import {Checkbox} from "@mui/material";
 import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR} from "@coldpbc/hooks";
-import {attributes} from "js-cookie";
-import {processEntityLevelAssurances} from "@coldpbc/lib";
+import {withErrorBoundary} from "react-error-boundary";
 
-export const BulkEditMaterialAttributesModal = (props: {
+const _BulkEditMaterialAttributesModal = (props: {
   supplier: SupplierGraphQL
   materialsSelected: {
     id: string;
@@ -319,5 +317,12 @@ export const BulkEditMaterialAttributesModal = (props: {
         </div>
       </Card>
     </FBModal>
-);
+  );
 }
+
+export const BulkEditMaterialAttributesModal = withErrorBoundary(_BulkEditMaterialAttributesModal, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in BulkEditMaterialAttributesModal: ', error);
+  },
+});
