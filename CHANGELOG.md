@@ -1,3 +1,10 @@
+# [1.491.0](https://github.com/coldPBC/cold-monorepo/compare/v1.490.0...v1.491.0) (2024-12-12)
+
+
+### Features
+
+* add core material types model, relation to materials, and Climatiq entity types ([c2aa1dd](https://github.com/coldPBC/cold-monorepo/commit/c2aa1dd0b0282788c671eda522e2f44b1df6627c))
+
 # [1.490.0](https://github.com/coldPBC/cold-monorepo/compare/v1.489.0...v1.490.0) (2024-12-11)
 
 
