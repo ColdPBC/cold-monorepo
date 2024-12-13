@@ -58,7 +58,7 @@ const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttrib
       ctas={ctas}
     >
 			{productSustainabilityAttributes.length + materialSustainabilityAttributes.length + supplierSustainabilityAttributes.length === 0 && (
-				<span className="text-body text-cold-secondary">Add a new attribute manually or upload documents to track sustainability attributes on this product.</span>
+				<span className="text-body text-tc-secondary">Add a new attribute manually or upload documents to track sustainability attributes on this product.</span>
 			)}
 			{productSustainabilityAttributes.length > 0 && (
 				<div className="w-full h-fit flex flex-col gap-2 justify-start items-start">
