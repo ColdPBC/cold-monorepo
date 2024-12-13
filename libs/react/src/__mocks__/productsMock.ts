@@ -20,13 +20,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_qf5x197buxezns68tbgbs37h',
           yield: null,
           unitOfMeasure: null,
-          weight: null,
+          weight: 5,
 					material: {
 						id: 'mat_xyqmz0hdf1p8p26wg3d5ju97',
 						name: 'Material 15',
             materialCategory: null,
             materialSubcategory: null,
-            emissionsFactor: null,
+            emissionsFactor: 11.2,
 						materialSuppliers: [
 							{
 								id: 'matsup_ty7un10erbcr9ruvuwye02e6',
@@ -44,13 +44,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_zt3p4bfsa3ub3rxfe8witshb',
           yield: null,
           unitOfMeasure: null,
-          weight: null,
+          weight: 5,
 					material: {
 						id: 'mat_beq7hd4e7efg5vzrzpp1xcb9',
 						name: 'Material 7',
             materialCategory: null,
             materialSubcategory: null,
-            emissionsFactor: null,
+            emissionsFactor: 2,
 						materialSuppliers: [
 							{
 								id: 'msup_mvldtl3a1y1y27i6dpuz7qs2',
@@ -102,13 +102,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_pwrhpxj9xkrxprxol7k54gr4',
           yield: null,
           unitOfMeasure: null,
-          weight: null,
+          weight: 2,
 					material: {
 						id: 'mat_x0x7th2m41zdgahmrbt9t58c',
 						name: 'Material 9',
             materialCategory: null,
             materialSubcategory: null,
-            emissionsFactor: null,
+            emissionsFactor: 5,
 						materialSuppliers: [
 							{
 								id: 'msup_v1092i9nodjiixmgf1ze4zfm',
@@ -162,13 +162,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_lg4rlg979blgkw6k5pezltj3',
           yield: null,
           unitOfMeasure: null,
-          weight: null,
+          weight: 1,
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
             materialCategory: null,
             materialSubcategory: null,
-            emissionsFactor: null,
+            emissionsFactor: 4,
 						materialSuppliers: [
 							{
 								id: 'msup_i3819gq1c53fygmlcn4qyz8w',

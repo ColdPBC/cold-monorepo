@@ -812,6 +812,25 @@ export const CREATE_ATTRIBUTE_ASSURANCES = gql`
   }
 `;
 
+export const GET_PRODUCT_CARBON_FOOTPRINT_DATA = gql`
+  query Products($organizationId: ID!) {
+    products(filter: { organization: { id: $organizationId } }) {
+      id
+      name
+      productCategory
+      productMaterials {
+        id
+        weight
+        material {
+          id
+          name
+          emissionsFactor
+        }
+      }
+    }
+  }
+`;
+
 export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES = gql`
   query SustainabilityAttributes($filter: SustainabilityAttributesListFilter) {
     sustainabilityAttributes(filter: $filter) {
@@ -858,5 +877,6 @@ export const queries: {
   GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT: GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
   DELETE_ATTRIBUTE_ASSURANCES: DELETE_ATTRIBUTE_ASSURANCES,
   CREATE_ATTRIBUTE_ASSURANCES: CREATE_ATTRIBUTE_ASSURANCES,
+  GET_PRODUCT_CARBON_FOOTPRINT_DATA: GET_PRODUCT_CARBON_FOOTPRINT_DATA,
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES: GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
 };
