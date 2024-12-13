@@ -64,8 +64,6 @@ export const useProductCarbonFootprintCache = () => {
 
   // Update cache when data changes
   const cache = useMemo(() => {
-    if (query.isLoading) return null;
-
     const productData = get(query.data, 'data.products', []);
     if (!productData) return null;
 
@@ -105,7 +103,7 @@ export const useProductCarbonFootprintCache = () => {
       getProductFootprint: (productId: string) =>
         footprintCache.products.get(productId)
     };
-  }, [query]);
+  }, [query.data]);
 
   return {
     cache,
