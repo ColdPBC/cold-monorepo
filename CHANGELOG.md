@@ -1,3 +1,11 @@
+# [1.493.0](https://github.com/coldPBC/cold-monorepo/compare/v1.492.1...v1.493.0) (2024-12-13)
+
+
+### Features
+
+* add product footprint to product data grid ([cbdf20c](https://github.com/coldPBC/cold-monorepo/commit/cbdf20c8389a350dab7ecd18e9b2f16ed89b6517))
+* add product footprint to product data grid ([#714](https://github.com/coldPBC/cold-monorepo/issues/714)) ([c3134ed](https://github.com/coldPBC/cold-monorepo/commit/c3134ed8bc65fe5866f1787fe8c9bb5905ebc4b4))
+
 ## [1.492.1](https://github.com/coldPBC/cold-monorepo/compare/v1.492.0...v1.492.1) (2024-12-12)
 
 
