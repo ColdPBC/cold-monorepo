@@ -50,7 +50,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 7',
             materialCategory: null,
             materialSubcategory: null,
-            emissionsFactor: 20,
+            emissionsFactor: 2,
 						materialSuppliers: [
 							{
 								id: 'msup_mvldtl3a1y1y27i6dpuz7qs2',
