@@ -3,7 +3,7 @@ import { IconProps } from '@coldpbc/interfaces';
 
 export const ColdFootprintIconThree = (props: IconProps) => {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <rect x="9" y="9" width="6" height="6" rx="3" fill={props.color || 'white'} />
       <path
         d="M10.5 5.5C10.5 4.67157 11.1716 4 12 4C12.8284 4 13.5 4.67157 13.5 5.5C13.5 6.32843 12.8284 7 12 7C11.1716 7 10.5 6.32843 10.5 5.5Z"
