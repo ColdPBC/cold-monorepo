@@ -62,57 +62,6 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       },
     },
   },
-  alert: {
-    base: 'flex flex-col gap-2 p-4 text-sm',
-    borderAccent: 'border-t-4',
-    closeButton: {
-      base: '-mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 rounded-lg p-1.5 focus:ring-2',
-      icon: 'w-5 h-5',
-      color: {
-        info: 'bg-cold-primary-100 text-cold-primary-500 hover:bg-cold-primary-200 focus:ring-cold-primary-400 dark:bg-cold-primary-200 dark:text-cold-primary-600 dark:hover:bg-cold-primary-300',
-        gray: 'bg-cold-limestone-100 text-cold-limestone-500 hover:bg-cold-limestone-200 focus:ring-cold-limestone-400 dark:bg-cold-limestone-700 dark:text-cold-limestone-300 dark:hover:bg-cold-limestone-800 dark:hover:text-cold-stark-white',
-        failure: 'bg-cold-red-100 text-cold-red-500 hover:bg-cold-red-200 focus:ring-cold-red-400 dark:bg-cold-red-200 dark:text-cold-red-600 dark:hover:bg-cold-red-300',
-        success:
-          'bg-cold-pineGreen-100 text-cold-pineGreen-500 hover:bg-cold-pineGreen-200 focus:ring-cold-pineGreen-400 dark:bg-cold-pineGreen-200 dark:text-cold-pineGreen-600 dark:hover:bg-cold-pineGreen-300',
-        warning: 'bg-yellow-100 text-yellow-500 hover:bg-yellow-200 focus:ring-yellow-400 dark:bg-yellow-200 dark:text-yellow-600 dark:hover:bg-yellow-300',
-        red: 'bg-red-100 text-red-500 hover:bg-red-200 focus:ring-red-400 dark:bg-red-200 dark:text-red-600 dark:hover:bg-red-300',
-        green:
-          'bg-cold-pineGreen-100 text-cold-pineGreen-500 hover:bg-cold-pineGreen-200 focus:ring-cold-pineGreen-400 dark:bg-cold-pineGreen-200 dark:text-cold-pineGreen-600 dark:hover:bg-cold-pineGreen-300',
-        yellow: 'bg-yellow-100 text-yellow-500 hover:bg-yellow-200 focus:ring-yellow-400 dark:bg-yellow-200 dark:text-yellow-600 dark:hover:bg-yellow-300',
-        blue: 'bg-cold-skyBlue-100 text-cold-skyBlue-500 hover:bg-cold-skyBlue-200 focus:ring-cold-skyBlue-400 dark:bg-cold-skyBlue-200 dark:text-cold-skyBlue-600 dark:hover:bg-cold-skyBlue-300',
-        cyan: 'bg-cyan-100 text-cyan-500 hover:bg-cyan-200 focus:ring-cyan-400 dark:bg-cyan-200 dark:text-cyan-600 dark:hover:bg-cyan-300',
-        pink: 'bg-pink-100 text-pink-500 hover:bg-pink-200 focus:ring-pink-400 dark:bg-pink-200 dark:text-pink-600 dark:hover:bg-pink-300',
-        lime: 'bg-lime-100 text-lime-500 hover:bg-lime-200 focus:ring-lime-400 dark:bg-lime-200 dark:text-lime-600 dark:hover:bg-lime-300',
-        dark: 'bg-gray-100 text-gray-500 hover:bg-gray-200 focus:ring-gray-400 dark:bg-gray-200 dark:text-gray-600 dark:hover:bg-gray-300',
-        indigo: 'bg-indigo-100 text-indigo-500 hover:bg-indigo-200 focus:ring-indigo-400 dark:bg-indigo-200 dark:text-indigo-600 dark:hover:bg-indigo-300',
-        purple: 'bg-purple-100 text-purple-500 hover:bg-purple-200 focus:ring-purple-400 dark:bg-purple-200 dark:text-purple-600 dark:hover:bg-purple-300',
-        teal: 'bg-teal-100 text-teal-500 hover:bg-teal-200 focus:ring-teal-400 dark:bg-teal-200 dark:text-teal-600 dark:hover:bg-teal-300',
-        light: 'bg-gray-50 text-gray-500 hover:bg-gray-100 focus:ring-gray-200 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white',
-      },
-    },
-    color: {
-      info: 'text-cold-skyBlue-700 bg-cold-skyBlue-100 border-cold-skyBlue-500 dark:bg-cold-skyBlue-200 dark:text-cold-skyBlue-800',
-      gray: 'text-gray-700 bg-gray-100 border-gray-500 dark:bg-gray-700 dark:text-gray-300',
-      failure: 'text-red-700 bg-red-100 border-red-500 dark:bg-red-200 dark:text-red-800',
-      success: 'text-cold-pineGreen-700 bg-cold-pineGreen-100 border-cold-pineGreen-500 dark:bg-cold-pineGreen-200 dark:text-cold-pineGreen-800',
-      warning: 'text-yellow-700 bg-yellow-100 border-yellow-500 dark:bg-yellow-200 dark:text-yellow-800',
-      red: 'text-red-700 bg-red-100 border-red-500 dark:bg-red-200 dark:text-red-800',
-      green: 'text-cold-pineGreen-700 bg-cold-pineGreen-100 border-cold-pineGreen-500 dark:bg-cold-pineGreen-200 dark:text-cold-pineGreen-800',
-      yellow: 'text-yellow-700 bg-yellow-100 border-yellow-500 dark:bg-yellow-200 dark:text-yellow-800',
-      blue: 'text-cold-skyBlue-700 bg-cold-skyBlue-100 border-cold-skyBlue-500 dark:bg-cold-skyBlue-200 dark:text-cold-skyBlue-800',
-      cyan: 'text-cyan-700 bg-cyan-100 border-cyan-500 dark:bg-cyan-200 dark:text-cyan-800',
-      pink: 'text-pink-700 bg-pink-100 border-pink-500 dark:bg-pink-200 dark:text-pink-800',
-      lime: 'text-lime-700 bg-lime-100 border-lime-500 dark:bg-lime-200 dark:text-lime-800',
-      dark: 'text-gray-200 bg-gray-800 border-gray-600 dark:bg-gray-900 dark:text-gray-300',
-      indigo: 'text-indigo-700 bg-indigo-100 border-indigo-500 dark:bg-indigo-200 dark:text-indigo-800',
-      purple: 'text-purple-700 bg-purple-100 border-purple-500 dark:bg-purple-200 dark:text-purple-800',
-      teal: 'text-teal-700 bg-teal-100 border-teal-500 dark:bg-teal-200 dark:text-teal-800',
-      light: 'text-gray-600 bg-gray-50 border-gray-400 dark:bg-gray-500 dark:text-gray-200',
-    },
-    icon: 'mr-3 inline h-5 w-5 flex-shrink-0',
-    rounded: 'rounded-lg',
-    wrapper: 'flex items-center',
-  },
   avatar: {
     root: {
       base: 'flex justify-center items-center space-x-4',
@@ -162,8 +111,8 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
         online: 'bg-green-400',
       },
       initials: {
-        text: 'font-medium text-cold-midnightBlue-a11y',
-        base: 'inline-flex overflow-hidden relative justify-center items-center bg-cold-midnightBlue',
+        text: 'font-medium text-white',
+        base: 'inline-flex overflow-hidden relative justify-center items-center bg-black',
       },
     },
     group: {
@@ -171,45 +120,6 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
     },
     groupCounter: {
       base: 'relative flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 rounded-full ring-2 ring-gray-300 hover:bg-gray-600 dark:ring-gray-500',
-    },
-  },
-  badge: {
-    root: {
-      base: 'flex h-fit items-center gap-1 font-semibold',
-      color: {
-        info: 'bg-cold-skyBlue-100 text-cold-skyBlue-800 dark:bg-cold-skyBlue-200 dark:text-cold-skyBlue-800 group-hover:bg-cold-skyBlue-200 dark:group-hover:bg-cold-skyBlue-300',
-        gray: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 group-hover:bg-gray-200 dark:group-hover:bg-gray-600',
-        failure: 'bg-red-100 text-red-800 dark:bg-red-200 dark:text-red-900 group-hover:bg-red-200 dark:group-hover:bg-red-300',
-        success:
-          'bg-cold-pineGreen-100 text-cold-pineGreen-800 dark:bg-cold-pineGreen-200 dark:text-cold-pineGreen-900 group-hover:bg-cold-pineGreen-200 dark:group-hover:bg-cold-pineGreen-300',
-        warning: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-200 dark:text-yellow-900 group-hover:bg-yellow-200 dark:group-hover:bg-yellow-300',
-        indigo: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-200 dark:text-indigo-900 group-hover:bg-indigo-200 dark:group-hover:bg-indigo-300',
-        purple: 'bg-purple-100 text-purple-800 dark:bg-purple-200 dark:text-purple-900 group-hover:bg-purple-200 dark:group-hover:bg-purple-300',
-        pink: 'bg-pink-100 text-pink-800 dark:bg-pink-200 dark:text-pink-900 group-hover:bg-pink-200 dark:group-hover:bg-pink-300',
-        blue: 'bg-cold-skyBlue-100 text-cold-skyBlue-800 dark:bg-cold-skyBlue-200 dark:text-cold-skyBlue-900 group-hover:bg-cold-skyBlue-200 dark:group-hover:bg-cold-skyBlue-300',
-        cyan: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-200 dark:text-cyan-900 group-hover:bg-cyan-200 dark:group-hover:bg-cyan-300',
-        dark: 'bg-gray-600 text-gray-100 dark:bg-gray-900 dark:text-gray-200 group-hover:bg-gray-500 dark:group-hover:bg-gray-700',
-        light: 'bg-gray-200 text-gray-800 dark:bg-gray-400 dark:text-gray-900 group-hover:bg-gray-300 dark:group-hover:bg-gray-500',
-        green:
-          'bg-cold-pineGreen-100 text-cold-pineGreen-800 dark:bg-cold-pineGreen-200 dark:text-cold-pineGreen-900 group-hover:bg-cold-pineGreen-200 dark:group-hover:bg-cold-pineGreen-300',
-        lime: 'bg-lime-100 text-lime-800 dark:bg-lime-200 dark:text-lime-900 group-hover:bg-lime-200 dark:group-hover:bg-lime-300',
-        red: 'bg-red-100 text-red-800 dark:bg-red-200 dark:text-red-900 group-hover:bg-red-200 dark:group-hover:bg-red-300',
-        teal: 'bg-teal-100 text-teal-800 dark:bg-teal-200 dark:text-teal-900 group-hover:bg-teal-200 dark:group-hover:bg-teal-300',
-        yellow: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-200 dark:text-yellow-900 group-hover:bg-yellow-200 dark:group-hover:bg-yellow-300',
-      },
-      href: 'group',
-      size: {
-        xs: 'p-1 text-xs',
-        sm: 'p-1.5 text-sm',
-      },
-    },
-    icon: {
-      off: 'rounded px-2 py-0.5',
-      on: 'rounded-full p-1.5',
-      size: {
-        xs: 'w-3 h-3',
-        sm: 'w-3.5 h-3.5',
-      },
     },
   },
   breadcrumb: {
@@ -225,113 +135,6 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
         on: 'flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white',
       },
       icon: 'mr-2 h-4 w-4',
-    },
-  },
-  button: {
-    base: 'group flex h-min items-center justify-center p-0.5 text-center font-medium focus:z-10',
-    fullSized: 'w-full',
-    color: {
-      dark: 'text-white bg-gray-800 border border-transparent hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 disabled:hover:bg-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-800 dark:border-gray-700 dark:disabled:hover:bg-gray-800',
-      failure:
-        'text-white bg-red-700 border border-transparent hover:bg-red-800 focus:ring-4 focus:ring-red-300 disabled:hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 dark:disabled:hover:bg-red-600',
-      gray: 'text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-cold-skyBlue-700 disabled:hover:bg-white focus:ring-cold-skyBlue-700 focus:text-cold-skyBlue-700 dark:bg-transparent dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-2 dark:disabled:hover:bg-gray-800',
-      info: 'text-white bg-cold-skyBlue-700 border border-transparent hover:bg-cold-skyBlue-800 focus:ring-4 focus:ring-cold-skyBlue-300 disabled:hover:bg-cold-skyBlue-700 dark:bg-cold-skyBlue-600 dark:hover:bg-cold-skyBlue-700 dark:focus:ring-cold-skyBlue-800 dark:disabled:hover:bg-cold-skyBlue-600',
-      light:
-        'text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cold-skyBlue-300 disabled:hover:bg-white dark:bg-gray-600 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700',
-      purple:
-        'text-white bg-purple-700 border border-transparent hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 disabled:hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 dark:disabled:hover:bg-purple-600',
-      success:
-        'text-white bg-cold-lichenGreen-700 border border-transparent hover:bg-cold-pineGreen-800 focus:ring-4 focus:ring-cold-pineGreen-300 disabled:hover:bg-cold-pineGreen-700 dark:bg-cold-pineGreen-600 dark:hover:bg-cold-pineGreen-700 dark:focus:ring-cold-pineGreen-800 dark:disabled:hover:bg-cold-pineGreen-600',
-      warning:
-        'text-white bg-yellow-400 border border-transparent hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 disabled:hover:bg-yellow-400 dark:focus:ring-yellow-900 dark:disabled:hover:bg-yellow-400',
-      blue: 'text-cold-skyBlue-900 bg-white border border-cold-skyBlue-300 hover:bg-cold-skyBlue-100 focus:ring-4 focus:ring-cold-skyBlue-300 disabled:hover:bg-white dark:bg-cold-skyBlue-600 dark:text-white dark:border-cold-skyBlue-600 dark:hover:bg-cold-skyBlue-700 dark:hover:border-cold-skyBlue-700 dark:focus:ring-cold-skyBlue-700',
-      cyan: 'text-cyan-900 bg-white border border-cyan-300 hover:bg-cyan-100 focus:ring-4 focus:ring-cyan-300 disabled:hover:bg-white dark:bg-cyan-600 dark:text-white dark:border-cyan-600 dark:hover:bg-cyan-700 dark:hover:border-cyan-700 dark:focus:ring-cyan-700',
-      green:
-        'text-cold-pineGreen-900 bg-white border border-cold-pineGreen-300 hover:bg-cold-pineGreen-100 focus:ring-4 focus:ring-cold-pineGreen-300 disabled:hover:bg-white dark:bg-cold-pineGreen-600 dark:text-white dark:border-cold-pineGreen-600 dark:hover:bg-cold-pineGreen-700 dark:hover:border-cold-pineGreen-700 dark:focus:ring-cold-pineGreen-700',
-      indigo:
-        'text-indigo-900 bg-white border border-indigo-300 hover:bg-indigo-100 focus:ring-4 focus:ring-indigo-300 disabled:hover:bg-white dark:bg-indigo-600 dark:text-white dark:border-indigo-600 dark:hover:bg-indigo-700 dark:hover:border-indigo-700 dark:focus:ring-indigo-700',
-      lime: 'text-lime-900 bg-white border border-lime-300 hover:bg-lime-100 focus:ring-4 focus:ring-lime-300 disabled:hover:bg-white dark:bg-lime-600 dark:text-white dark:border-lime-600 dark:hover:bg-lime-700 dark:hover:border-lime-700 dark:focus:ring-lime-700',
-      pink: 'text-pink-900 bg-white border border-pink-300 hover:bg-pink-100 focus:ring-4 focus:ring-pink-300 disabled:hover:bg-white dark:bg-pink-600 dark:text-white dark:border-pink-600 dark:hover:bg-pink-700 dark:hover:border-pink-700 dark:focus:ring-pink-700',
-      red: 'text-red-900 bg-white border border-red-300 hover:bg-red-100 focus:ring-4 focus:ring-red-300 disabled:hover:bg-white dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700 dark:hover:border-red-700 dark:focus:ring-red-700',
-      teal: 'text-teal-900 bg-white border border-teal-300 hover:bg-teal-100 focus:ring-4 focus:ring-teal-300 disabled:hover:bg-white dark:bg-teal-600 dark:text-white dark:border-teal-600 dark:hover:bg-teal-700 dark:hover:border-teal-700 dark:focus:ring-teal-700',
-      yellow:
-        'text-yellow-900 bg-white border border-yellow-300 hover:bg-yellow-100 focus:ring-4 focus:ring-yellow-300 disabled:hover:bg-white dark:bg-yellow-600 dark:text-white dark:border-yellow-600 dark:hover:bg-yellow-700 dark:hover:border-yellow-700 dark:focus:ring-yellow-700',
-    },
-    disabled: 'cursor-not-allowed opacity-50',
-    isProcessing: '!cursor-wait',
-    spinnerSlot: 'mr-3',
-    spinnerLeftPosition: {
-      xs: 'left-2',
-      sm: 'left-3',
-      md: 'left-4',
-      lg: 'left-5',
-      xl: 'left-6',
-    },
-    gradient: {
-      cyan: 'text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800',
-      failure: 'text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800',
-      info: 'text-white bg-gradient-to-r from-cold-skyBlue-500 via-cold-skyBlue-600 to-cold-skyBlue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-cold-skyBlue-300 dark:focus:ring-cold-skyBlue-800 ',
-      lime: 'text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:ring-lime-300 dark:focus:ring-lime-800',
-
-      pink: 'text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:ring-pink-300 dark:focus:ring-pink-800',
-      purple: 'text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800',
-      success:
-        'text-white bg-gradient-to-r from-cold-pineGreen-400 via-cold-pineGreen-500 to-cold-pineGreen-600 hover:bg-gradient-to-br focus:ring-4 focus:ring-cold-pineGreen-300 dark:focus:ring-cold-pineGreen-800',
-      teal: 'text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800',
-    },
-    gradientDuoTone: {
-      cyanToBlue: 'text-white bg-gradient-to-r from-cyan-500 to-cold-skyBlue-500 hover:bg-gradient-to-bl focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800',
-      greenToBlue:
-        'text-white bg-gradient-to-br from-cold-pineGreen-400 to-cold-skyBlue-600 hover:bg-gradient-to-bl focus:ring-4 focus:ring-cold-pineGreen-200 dark:focus:ring-cold-pineGreen-800',
-      pinkToOrange: 'text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:ring-pink-200 dark:focus:ring-pink-800',
-      purpleToBlue:
-        'text-white bg-gradient-to-br from-purple-600 to-cold-skyBlue-500 hover:bg-gradient-to-bl focus:ring-4 focus:ring-cold-skyBlue-300 dark:focus:ring-cold-skyBlue-800',
-      purpleToPink: 'text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:ring-purple-200 dark:focus:ring-purple-800',
-      redToYellow: 'text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:ring-red-100 dark:focus:ring-red-400',
-      tealToLime:
-        'text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 hover:!text-gray-900 focus:ring-4 focus:ring-lime-200 dark:focus:ring-teal-700',
-    },
-    inner: {
-      base: 'flex items-center',
-      position: {
-        none: '',
-        start: 'rounded-r-none',
-        middle: '!rounded-none',
-        end: 'rounded-l-none',
-      },
-      outline: 'border border-transparent',
-      isProcessingPadding: {
-        xs: 'pl-8',
-        sm: 'pl-10',
-        md: 'pl-12',
-        lg: 'pl-16',
-        xl: 'pl-20',
-      },
-    },
-    label: 'ml-2 inline-flex h-4 w-4 items-center justify-center rounded-full bg-cold-skyBlue-200 text-xs font-semibold text-cold-skyBlue-800',
-    outline: {
-      color: {
-        gray: 'border border-gray-900 dark:border-white',
-        default: 'border-0',
-        light: '',
-      },
-      off: '',
-      on: 'flex justify-center bg-white text-gray-900 transition-all duration-75 ease-in group-hover:bg-opacity-0 group-hover:text-inherit dark:bg-gray-900 dark:text-white w-full',
-      pill: {
-        off: 'rounded-md',
-        on: 'rounded-full',
-      },
-    },
-    pill: {
-      off: 'rounded-lg',
-      on: 'rounded-full',
-    },
-    size: {
-      xs: 'text-xs px-2 py-1',
-      sm: 'text-sm px-3 py-1.5',
-      md: 'text-sm px-4 py-2',
-      lg: 'text-base px-5 py-2.5',
-      xl: 'text-base px-6 py-3',
     },
   },
   buttonGroup: {
@@ -391,12 +194,6 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       snap: 'snap-x',
     },
   },
-  checkbox: {
-    root: {
-      ...theme.checkbox.root,
-      base: 'h-4 w-4 rounded border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-cold-skyBlue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-cold-skyBlue-600',
-    },
-  },
   darkThemeToggle: {
     root: {
       base: 'rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700',
@@ -436,32 +233,6 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
     },
     inlineWrapper: 'flex items-center w-full',
   },
-  fileInput: {
-    root: {
-      base: 'flex',
-    },
-    field: {
-      base: 'relative w-full',
-      input: {
-        base: 'rounded-lg overflow-hidden block w-full border disabled:cursor-not-allowed disabled:opacity-50',
-        sizes: {
-          sm: 'sm:text-xs',
-          md: 'text-sm',
-          lg: 'sm:text-md',
-        },
-        colors: {
-          gray: 'bg-gray-50 border-gray-300 text-gray-900 focus:border-cold-skyBlue-500 focus:ring-cold-skyBlue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cold-skyBlue-500 dark:focus:ring-cold-skyBlue-500',
-          info: 'border-cold-skyBlue-500 bg-cold-skyBlue-50 text-cold-skyBlue-900 placeholder-cold-skyBlue-700 focus:border-cold-skyBlue-500 focus:ring-cold-skyBlue-500 dark:border-cold-skyBlue-400 dark:bg-cold-skyBlue-100 dark:focus:border-cold-skyBlue-500 dark:focus:ring-cold-skyBlue-500',
-          failure:
-            'border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-100 dark:focus:border-red-500 dark:focus:ring-red-500',
-          warning:
-            'border-yellow-500 bg-yellow-50 text-yellow-900 placeholder-yellow-700 focus:border-yellow-500 focus:ring-yellow-500 dark:border-yellow-400 dark:bg-yellow-100 dark:focus:border-yellow-500 dark:focus:ring-yellow-500',
-          success:
-            'border-cold-pineGreen-500 bg-cold-pineGreen-50 text-cold-pineGreen-900 placeholder-cold-pineGreen-700 focus:border-cold-pineGreen-500 focus:ring-cold-pineGreen-500 dark:border-cold-pineGreen-400 dark:bg-cold-pineGreen-100 dark:focus:border-cold-pineGreen-500 dark:focus:ring-cold-pineGreen-500',
-        },
-      },
-    },
-  },
   footer: {
     root: {
       base: 'w-full rounded-lg bg-white shadow dark:bg-gray-800 md:flex md:items-center md:justify-between',
@@ -495,31 +266,6 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       base: 'mb-4 flex items-center sm:mb-0',
       img: 'mr-3 h-8',
       span: 'self-center whitespace-nowrap text-2xl font-semibold text-gray-800 dark:text-white',
-    },
-  },
-  helperText: {
-    root: {
-      base: 'mt-2 text-sm',
-      colors: {
-        gray: 'text-gray-500 dark:text-gray-400',
-        info: 'text-cold-skyBlue-700 dark:text-cold-skyBlue-800',
-        success: 'text-cold-pineGreen-600 dark:text-cold-pineGreen-500',
-        failure: 'text-red-600 dark:text-red-500',
-        warning: 'text-yellow-500 dark:text-yellow-600',
-      },
-    },
-  },
-  label: {
-    root: {
-      base: 'text-sm font-medium',
-      disabled: 'opacity-50',
-      colors: {
-        default: 'text-gray-900 dark:text-gray-300',
-        info: 'text-cold-skyBlue-500 dark:text-cold-skyBlue-600',
-        failure: 'text-red-700 dark:text-red-500',
-        warning: 'text-yellow-500 dark:text-yellow-600',
-        success: 'text-cold-pineGreen-700 dark:text-cold-pineGreen-500',
-      },
     },
   },
   listGroup: {
@@ -599,78 +345,6 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       popup: 'border-t',
     },
   },
-  navbar: {
-    root: {
-      base: 'border-gray-200 bg-white px-2 py-2.5 dark:border-gray-700 dark:bg-gray-800 sm:px-4',
-      rounded: {
-        on: 'rounded',
-        off: '',
-      },
-      bordered: {
-        on: 'border',
-        off: '',
-      },
-      inner: {
-        base: 'mx-auto flex flex-wrap items-center justify-between',
-        fluid: {
-          on: '',
-          off: 'container',
-        },
-      },
-    },
-    brand: {
-      base: 'flex items-center',
-    },
-    collapse: {
-      base: 'w-full md:block md:w-auto',
-      list: 'mt-4 flex flex-col md:mt-0 md:flex-row md:space-x-8 md:text-sm md:font-medium',
-      hidden: {
-        on: 'hidden',
-        off: '',
-      },
-    },
-    link: {
-      base: 'block py-2 pr-4 pl-3 md:p-0',
-      active: {
-        on: 'bg-cold-skyBlue-700 text-white dark:text-white md:bg-transparent md:text-cold-skyBlue-700',
-        off: 'border-b border-gray-100  text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:border-0 md:hover:bg-transparent md:hover:text-cold-skyBlue-700 md:dark:hover:bg-transparent md:dark:hover:text-white',
-      },
-      disabled: {
-        on: 'text-gray-400 hover:cursor-not-allowed dark:text-gray-600',
-        off: '',
-      },
-    },
-    toggle: {
-      base: 'inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 md:hidden',
-      icon: 'h-6 w-6 shrink-0',
-    },
-  },
-  pagination: {
-    base: '',
-    layout: {
-      table: {
-        base: 'text-sm text-gray-700 dark:text-gray-400',
-        span: 'font-semibold text-gray-900 dark:text-white',
-      },
-    },
-    pages: {
-      base: 'xs:mt-0 mt-2 inline-flex items-center -space-x-px',
-      showIcon: 'inline-flex',
-      previous: {
-        base: 'ml-0 rounded-l-lg border border-gray-300 bg-white py-2 px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-        icon: 'h-5 w-5',
-      },
-      next: {
-        base: 'rounded-r-lg border border-gray-300 bg-white py-2 px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-        icon: 'h-5 w-5',
-      },
-      selector: {
-        base: 'w-12 border border-gray-300 bg-white py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-        active: 'bg-cold-skyBlue-50 text-cold-skyBlue-600 hover:bg-cold-skyBlue-100 hover:text-cold-skyBlue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white',
-        disabled: '',
-      },
-    },
-  },
   progress: {
     base: 'w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700',
     label: 'mb-1 flex justify-between font-medium dark:text-white',
@@ -696,27 +370,6 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       xl: 'h-6',
     },
   },
-  radio: {
-    root: {
-      base: 'h-4 w-4 border border-gray-300 focus:ring-2 focus:ring-cold-skyBlue-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:bg-cold-skyBlue-600 dark:focus:ring-cold-skyBlue-600',
-    },
-  },
-  rangeSlider: {
-    root: {
-      base: 'flex',
-    },
-    field: {
-      base: 'relative w-full',
-      input: {
-        base: 'w-full bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700',
-        sizes: {
-          sm: 'h-1 range-sm',
-          md: 'h-2',
-          lg: 'h-3 range-lg',
-        },
-      },
-    },
-  },
   rating: {
     root: {
       base: 'flex items-center',
@@ -740,241 +393,15 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       label: 'text-sm font-medium text-cyan-600 dark:text-cyan-500',
     },
   },
-  select: {
-    base: 'flex',
-    addon:
-      'inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-200 px-3 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-600 dark:text-gray-400',
-    field: {
-      base: 'relative w-full',
-      icon: {
-        base: 'pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3',
-        svg: 'h-5 w-5 text-gray-500 dark:text-gray-400',
-      },
-      select: {
-        base: 'block w-full border disabled:cursor-not-allowed disabled:opacity-50',
-        withIcon: {
-          on: 'pl-10',
-          off: '',
-        },
-        withAddon: {
-          on: 'rounded-r-lg',
-          off: 'rounded-lg',
-        },
-        withShadow: {
-          on: 'shadow-sm dark:shadow-sm-light',
-          off: '',
-        },
-        sizes: {
-          sm: 'p-2 sm:text-xs',
-          md: 'p-2.5 text-sm',
-          lg: 'sm:text-md p-4',
-        },
-        colors: {
-          gray: 'bg-gray-50 border-gray-300 text-gray-900 focus:border-cold-skyBlue-500 focus:ring-cold-skyBlue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cold-skyBlue-500 dark:focus:ring-cold-skyBlue-500',
-          info: 'border-cold-skyBlue-500 bg-cold-skyBlue-50 text-cold-skyBlue-900 placeholder-cold-skyBlue-700 focus:border-cold-skyBlue-500 focus:ring-cold-skyBlue-500 dark:border-cold-skyBlue-400 dark:bg-cold-skyBlue-100 dark:focus:border-cold-skyBlue-500 dark:focus:ring-cold-skyBlue-500',
-          failure:
-            'border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-100 dark:focus:border-red-500 dark:focus:ring-red-500',
-          warning:
-            'border-yellow-500 bg-yellow-50 text-yellow-900 placeholder-yellow-700 focus:border-yellow-500 focus:ring-yellow-500 dark:border-yellow-400 dark:bg-yellow-100 dark:focus:border-yellow-500 dark:focus:ring-yellow-500',
-          success:
-            'border-cold-pineGreen-500 bg-cold-pineGreen-50 text-cold-pineGreen-900 placeholder-cold-pineGreen-700 focus:border-cold-pineGreen-500 focus:ring-cold-pineGreen-500 dark:border-cold-pineGreen-400 dark:bg-cold-pineGreen-100 dark:focus:border-cold-pineGreen-500 dark:focus:ring-cold-pineGreen-500',
-        },
-      },
-    },
-  },
-  textInput: {
-    base: 'flex',
-    addon:
-      'inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-200 px-3 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-600 dark:text-gray-400',
-    field: {
-      base: 'relative w-full',
-      icon: {
-        base: 'pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3',
-        svg: 'h-5 w-5 text-gray-500 dark:text-gray-400',
-      },
-      rightIcon: {
-        base: 'pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3',
-        svg: 'h-5 w-5 text-gray-500 dark:text-gray-400',
-      },
-      input: {
-        base: 'block w-full border disabled:cursor-not-allowed disabled:opacity-50',
-        sizes: {
-          sm: 'p-2 sm:text-xs',
-          md: 'p-2.5 text-sm',
-          lg: 'sm:text-md p-4',
-        },
-        colors: {
-          gray: 'bg-gray-50 border-gray-300 text-gray-900 focus:border-cold-skyBlue-500 focus:ring-cold-skyBlue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cold-skyBlue-500 dark:focus:ring-cold-skyBlue-500',
-          info: 'border-cold-skyBlue-500 bg-cold-skyBlue-50 text-cold-skyBlue-900 placeholder-cold-skyBlue-700 focus:border-cold-skyBlue-500 focus:ring-cold-skyBlue-500 dark:border-cold-skyBlue-400 dark:bg-cold-skyBlue-100 dark:focus:border-cold-skyBlue-500 dark:focus:ring-cold-skyBlue-500',
-          failure:
-            'border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-100 dark:focus:border-red-500 dark:focus:ring-red-500',
-          warning:
-            'border-yellow-500 bg-yellow-50 text-yellow-900 placeholder-yellow-700 focus:border-yellow-500 focus:ring-yellow-500 dark:border-yellow-400 dark:bg-yellow-100 dark:focus:border-yellow-500 dark:focus:ring-yellow-500',
-          success:
-            'border-cold-pineGreen-500 bg-cold-pineGreen-50 text-cold-pineGreen-900 placeholder-cold-pineGreen-700 focus:border-cold-pineGreen-500 focus:ring-cold-pineGreen-500 dark:border-cold-pineGreen-400 dark:bg-cold-pineGreen-100 dark:focus:border-cold-pineGreen-500 dark:focus:ring-cold-pineGreen-500',
-        },
-        withRightIcon: {
-          on: 'pr-10',
-          off: '',
-        },
-        withIcon: {
-          on: 'pl-10',
-          off: '',
-        },
-        withAddon: {
-          on: 'rounded-r-lg',
-          off: 'rounded-lg',
-        },
-        withShadow: {
-          on: 'shadow-sm dark:shadow-sm-light',
-          off: '',
-        },
-      },
-    },
-  },
-  textarea: {
-    base: 'block w-full rounded-lg border disabled:cursor-not-allowed disabled:opacity-50',
-    colors: {
-      gray: 'bg-gray-50 border-gray-300 text-gray-900 focus:border-cold-skyBlue-500 focus:ring-cold-skyBlue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cold-skyBlue-500 dark:focus:ring-cold-skyBlue-500',
-      info: 'border-cold-skyBlue-500 bg-cold-skyBlue-50 text-cold-skyBlue-900 placeholder-cold-skyBlue-700 focus:border-cold-skyBlue-500 focus:ring-cold-skyBlue-500 dark:border-cold-skyBlue-400 dark:bg-cold-skyBlue-100 dark:focus:border-cold-skyBlue-500 dark:focus:ring-cold-skyBlue-500',
-      failure:
-        'border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-100 dark:focus:border-red-500 dark:focus:ring-red-500',
-      warning:
-        'border-yellow-500 bg-yellow-50 text-yellow-900 placeholder-yellow-700 focus:border-yellow-500 focus:ring-yellow-500 dark:border-yellow-400 dark:bg-yellow-100 dark:focus:border-yellow-500 dark:focus:ring-yellow-500',
-      success:
-        'border-cold-pineGreen-500 bg-cold-pineGreen-50 text-cold-pineGreen-900 placeholder-cold-pineGreen-700 focus:border-cold-pineGreen-500 focus:ring-cold-pineGreen-500 dark:border-cold-pineGreen-400 dark:bg-cold-pineGreen-100 dark:focus:border-cold-pineGreen-500 dark:focus:ring-cold-pineGreen-500',
-    },
-    withShadow: {
-      on: 'shadow-sm dark:shadow-sm-light',
-      off: '',
-    },
-  },
-  toggleSwitch: {
-    root: {
-      base: 'group relative flex items-center rounded-lg focus:outline-none',
-      active: {
-        on: 'cursor-pointer',
-        off: 'cursor-not-allowed opacity-50',
-      },
-      label: 'ml-3 text-sm font-medium text-gray-900 dark:text-gray-300',
-    },
-    toggle: {
-      ...theme.toggleSwitch.toggle,
-      base: 'toggle-bg h-6 w-11 rounded-full border group-focus:ring-4 group-focus:ring-cold-skyBlue-500/25',
-      checked: {
-        on: 'after:translate-x-full after:border-white',
-        off: 'border-gray-200 bg-gray-200 dark:border-gray-600 dark:bg-gray-700',
-        color: {
-          blue: ' bg-cold-skyBlue-700 border-cold-skyBlue-700',
-          dark: 'bg-dark-700 border-dark-900',
-          failure: 'bg-red-700 border-red-900',
-          gray: 'bg-gray-500 border-gray-600',
-          green: 'bg-cold-pineGreen-600 border-cold-pineGreen-700',
-          light: 'bg-light-700 border-light-900',
-          red: 'bg-red-700 border-red-900',
-          purple: 'bg-purple-700 border-purple-900',
-          success: 'bg-cold-pineGreen-500 border-cold-pineGreen-500',
-          yellow: 'bg-yellow-400 border-yellow-400',
-          warning: 'bg-yellow-600 border-yellow-600',
-          cyan: 'bg-cyan-500 border-cyan-500',
-          lime: 'bg-lime-400 border-lime-400',
-          indigo: 'bg-indigo-400 border-indigo-400',
-          teal: 'bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4',
-          info: 'bg-cold-skyBlue-600 border-cold-skyBlue-600',
-          pink: 'bg-pink-600 border-pink-600',
-        },
-      },
-    },
-  },
-  sidebar: {
-    root: {
-      base: '',
-      collapsed: {
-        on: 'w-16',
-        off: 'w-[208px] min-w-[208px]',
-      },
-      // The calculation here locking the sidebar height assumes the padding around the site remains at 40px
-      inner:
-        'h-[calc(100vh-80px)] w-[208px] min-w-[208px] py-6 flex flex-col gap-6 bg-bgc-elevated rounded-2xl border-2 border-gray-30 fixed overflow-y-auto overflow-x-visible scrollbar-hide',
-    },
-    collapse: {
-      button: 'w-full flex items-center pl-4 py-3 pr-2 hover:bg-bgc-accent fill-white stroke-white text-tc-primary text-sm font-bold gap-x-2 transition duration-75',
-      icon: {
-        base: 'h-6 w-6 transition duration-75',
-        open: {
-          off: '',
-          on: '',
-        },
-      },
-      label: {
-        base: 'flex-1 whitespace-nowrap text-left',
-        icon: {
-          base: 'h-6 w-6',
-          open: {
-            on: '',
-            off: '',
-          },
-        },
-      },
-      list: 'py-2',
-    },
-    cta: {
-      base: 'mt-6 rounded-lg p-4',
-      color: {
-        blue: 'bg-cold-midnightBlue dark:bg-midnightBlue',
-        dark: 'bg-dark-50 dark:bg-dark-900',
-        failure: 'bg-cold-red-100 dark:bg-red-500',
-        gray: 'bg-cold-secondary-100 dark:bg-secondary-900',
-        green: 'bg-success-100 dark:bg-success-900',
-        light: 'bg-light-50 dark:bg-light-900',
-        red: 'bg-cold-red-100 dark:bg-cold-red-900',
-        purple: 'bg-cold-midnightBlue-100 dark:bg-midnightBlue-900',
-        success: 'bg-pineGreen-100 dark:bg-pineGreen-900',
-        yellow: 'bg-astralYellow-100 dark:bg-astralYellow-900',
-        warning: 'bg-astralYellow-100 dark:bg-astralYellow-900',
-      },
-    },
-    item: {
-      base: 'flex items-center pl-4 py-3 pr-2 hover:bg-bgc-accent fill-white stroke-white text-tc-primary text-sm font-semibold gap-x-2',
-      active: 'bg-gray-50 hover:bg-gray-60 border-l-2 border-l-primary w-[calc(100%+2px)] shrink-sidebar-item',
-      collapsed: {
-        insideCollapse: 'group font-normal text-tc-secondary w-full pl-12 transition duration-75',
-        noIcon: 'font-bold',
-      },
-      content: {
-        base: 'flex-1 whitespace-nowrap',
-      },
-      icon: {
-        base: 'h-6 w-6 flex-shrink-0 transition duration-75',
-        active: '',
-      },
-      label: '',
-      listItem: '',
-    },
-    items: {
-      base: '',
-    },
-    itemGroup: {
-      base: '',
-    },
-    logo: {
-      base: 'mb-5 flex items-center pl-2.5',
-      collapsed: {
-        on: 'hidden',
-        off: 'self-center whitespace-nowrap text-xl font-semibold dark:text-white',
-      },
-      img: 'mr-3 h-6 sm:h-7',
-    },
-  },
   spinner: {
     base: 'inline animate-spin text-gray-200',
     color: {
       failure: 'fill-red-600',
       gray: 'fill-gray-600',
-      info: 'fill-cold-skyBlue-600',
+      info: 'fill-cyan-600',
       pink: 'fill-pink-600',
       purple: 'fill-purple-600',
-      success: 'fill-cold-pineGreen-500',
+      success: 'fill-green-500',
       warning: 'fill-yellow-400',
     },
     light: {
@@ -1069,7 +496,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
   },
   table: {
     root: {
-      base: 'w-full text-left text-sm text-gray-500 dark:text-gray-400 border-1 border-cold-fadeAwayGray bg-white',
+      base: 'w-full text-left text-sm text-gray-500 dark:text-gray-400 border-1 border-gray bg-white',
       shadow: 'absolute bg-white dark:bg-black w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10',
       wrapper: 'relative',
     },
