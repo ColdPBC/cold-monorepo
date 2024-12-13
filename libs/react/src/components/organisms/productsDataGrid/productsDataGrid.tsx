@@ -1,10 +1,11 @@
 import {
-  BubbleList,
+  BubbleList, ColdIcon,
   ErrorFallback,
   MuiDataGrid,
-  SustainabilityAttributeColumnList
-} from "@coldpbc/components";
-import { useAuth0Wrapper, useGraphQLSWR } from "@coldpbc/hooks";
+  Popover,
+  SustainabilityAttributeColumnList,
+} from '@coldpbc/components';
+import { getProductCarbonFootprint, useAuth0Wrapper, useGraphQLSWR, useProductCarbonFootprintCache } from '@coldpbc/hooks';
 import {
   EntityWithAttributeAssurances,
   ProductsQuery,
@@ -17,6 +18,7 @@ import { processEntityLevelAssurances } from '@coldpbc/lib';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
 import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
+import { IconNames } from '@coldpbc/enums';
 
 
 const getColumnRows = (
@@ -140,6 +142,8 @@ export const _ProductsDataGrid = () => {
     }
   });
 
+  const { cache, loading: footprintLoading, error: footprintError } = useProductCarbonFootprintCache();
+
   const [rows, setRows] = useState<{
     id: string;
     name: string;
@@ -209,104 +213,145 @@ export const _ProductsDataGrid = () => {
     )
   }
 
-  const columns = [
-    {
-      ...defaultColumnProperties,
-      field: 'name',
-      headerName: 'Name',
-      minWidth: 230,
-      flex: 1,
-      renderCell: renderName,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'description',
-      headerName: 'Description',
-      minWidth: 200,
-      flex: 1,
-      renderCell: renderDescription,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'tier1Supplier',
-      headerName: 'Tier 1 Supplier',
-      minWidth: 200,
-      flex: 1,
-      sortable: false,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'seasonCode',
-      headerName: 'Season',
-      minWidth: 200,
-      flex: 1,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'sustainabilityAttributes',
-      headerName: 'Sustainability Attributes',
-      flex: 1,
-      minWidth: 350,
-      renderCell: (params) => {
-        return (
-          <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />
-        )
-      },
-      sortable: false,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'upcCode',
-      headerName: 'UPC',
-      minWidth: 200,
-      flex: 1,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'brandProductId',
-      headerName: 'Brand Product ID',
-      minWidth: 200,
-      flex: 1,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'supplierProductId',
-      headerName: 'Supplier Product ID',
-      minWidth: 200,
-      flex: 1,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'materials', headerName: 'Materials',
-      flex: 1,
-      minWidth: 350,
-      renderCell: (params) => {
-        return (
-          <BubbleList values={params.value} />
-        )
-      },
-      sortable: false,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'productCategory',
-      headerName: 'Category',
-      minWidth: 230,
-      flex: 1,
-    },
-    {
-      ...defaultColumnProperties,
-      field: 'productSubcategory',
-      headerName: 'Sub Category',
-      minWidth: 230,
-      flex: 1,
-    },
-  ]
+  const productFootprintColumn =
+		ldFlags.productCarbonFootprintMvp && !footprintError
+			? [
+					{
+						...defaultColumnProperties,
+						field: 'carbonFootprint',
+						headerName: 'Carbon Footprint',
+						flex: 1,
+						minWidth: 200,
+						renderCell: params => {
+							const { totalFootprint, categoryAverage, percentageFromAverage } = getProductCarbonFootprint(cache, {
+								id: params.row.id,
+								productCategory: params.row.productCategory,
+							});
+              const showComparison = params.row.productCategory && categoryAverage > 0;
+
+              return totalFootprint > 0 ? (
+								<div className="flex w-full items-center justify-start">
+									<span className="text-tc-primary">{`${totalFootprint.toFixed(1)} kgCO2e`}</span>
+                  {showComparison && (
+                    <>
+                      <span className="pl-1 text-tc-primary">{'('}</span>
+                      <span className={percentageFromAverage > 0 ? 'text-red-300' : 'text-green-300'}>
+                        {percentageFromAverage > 0 && '+'}
+                        {percentageFromAverage.toFixed(1)}%
+                      </span>
+                      <Popover
+                        contentClassName="max-w-[260px]"
+                        content={`Compared to average footprint of ${categoryAverage.toFixed(1)} kgCO2e for products in the category ${params.row.productCategory}`}>
+                        <ColdIcon name={IconNames.ColdInfoIcon} />
+                      </Popover>
+                      <span className="text-tc-primary">)</span>
+                    </>
+                )}
+								</div>
+							) : (
+								'No data available'
+							);
+						},
+					},
+			  ]
+			: [];
+
+	const columns = [
+		{
+			...defaultColumnProperties,
+			field: 'name',
+			headerName: 'Name',
+			minWidth: 230,
+			flex: 1,
+			renderCell: renderName,
+		},
+		{
+			...defaultColumnProperties,
+			field: 'description',
+			headerName: 'Description',
+			minWidth: 200,
+			flex: 1,
+			renderCell: renderDescription,
+		},
+		{
+			...defaultColumnProperties,
+			field: 'tier1Supplier',
+			headerName: 'Tier 1 Supplier',
+			minWidth: 200,
+			flex: 1,
+			sortable: false,
+		},
+		{
+			...defaultColumnProperties,
+			field: 'seasonCode',
+			headerName: 'Season',
+			minWidth: 200,
+			flex: 1,
+		},
+		...productFootprintColumn,
+		{
+			...defaultColumnProperties,
+			field: 'sustainabilityAttributes',
+			headerName: 'Sustainability Attributes',
+			flex: 1,
+			minWidth: 350,
+			renderCell: params => {
+				return <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />;
+			},
+			sortable: false,
+		},
+		{
+			...defaultColumnProperties,
+			field: 'upcCode',
+			headerName: 'UPC',
+			minWidth: 200,
+			flex: 1,
+		},
+		{
+			...defaultColumnProperties,
+			field: 'brandProductId',
+			headerName: 'Brand Product ID',
+			minWidth: 200,
+			flex: 1,
+		},
+		{
+			...defaultColumnProperties,
+			field: 'supplierProductId',
+			headerName: 'Supplier Product ID',
+			minWidth: 200,
+			flex: 1,
+		},
+		{
+			...defaultColumnProperties,
+			field: 'materials',
+			headerName: 'Materials',
+			flex: 1,
+			minWidth: 350,
+			renderCell: params => {
+				return <BubbleList values={params.value} />;
+			},
+			sortable: false,
+		},
+		{
+			...defaultColumnProperties,
+			field: 'productCategory',
+			headerName: 'Category',
+			minWidth: 230,
+			flex: 1,
+		},
+		{
+			...defaultColumnProperties,
+			field: 'productSubcategory',
+			headerName: 'Sub Category',
+			minWidth: 230,
+			flex: 1,
+		},
+	];
 
   return (
     <div className={'w-full'}>
       <MuiDataGrid
-        loading={productsQuery.isLoading}
+        loading={productsQuery.isLoading || footprintLoading}
         columns={columns}
         rows={rows}
         rowHeight={72}

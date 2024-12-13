@@ -812,6 +812,25 @@ export const CREATE_ATTRIBUTE_ASSURANCES = gql`
   }
 `;
 
+export const GET_PRODUCT_CARBON_FOOTPRINT_DATA = gql`
+  query Products($organizationId: ID!) {
+    products(filter: { organization: { id: $organizationId } }) {
+      id
+      name
+      productCategory
+      productMaterials {
+        id
+        weight
+        material {
+          id
+          name
+          emissionsFactor
+        }
+      }
+    }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -847,4 +866,5 @@ export const queries: {
   GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT: GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT,
   DELETE_ATTRIBUTE_ASSURANCES: DELETE_ATTRIBUTE_ASSURANCES,
   CREATE_ATTRIBUTE_ASSURANCES: CREATE_ATTRIBUTE_ASSURANCES,
+  GET_PRODUCT_CARBON_FOOTPRINT_DATA: GET_PRODUCT_CARBON_FOOTPRINT_DATA,
 };

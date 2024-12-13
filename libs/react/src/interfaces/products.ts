@@ -82,3 +82,16 @@ export interface ProductsQuery {
   brandProductId: string | null;
   supplierProductId: string | null;
 }
+
+export interface ProductCarbonFootprintData extends Products {
+  productCategory: string | null;
+  productMaterials: {
+    id: string;
+    weight: number | null;
+    material: {
+      id: string;
+      name: string;
+      emissionsFactor: number | null;
+    }
+  }[]
+}
