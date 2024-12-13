@@ -83,8 +83,8 @@ export const useProductCarbonFootprintCache = () => {
       const footprint = calculateProductFootprint(product);
       footprintCache.products.set(product.id, footprint);
 
-      // Only include in category average if data is complete and category exists
-      if (footprint.hasCompleteData && product.productCategory) {
+      // Only include in category average if data is available and category exists
+      if (footprint.totalFootprint > 0 && product.productCategory) {
         const current = categoryTotals.get(product.productCategory) || { sum: 0, count: 0 };
         categoryTotals.set(product.productCategory, {
           sum: current.sum + footprint.totalFootprint,

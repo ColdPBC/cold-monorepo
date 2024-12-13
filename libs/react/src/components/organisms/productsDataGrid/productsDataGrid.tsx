@@ -229,7 +229,9 @@ export const _ProductsDataGrid = () => {
 							});
               const showComparison = params.row.productCategory && categoryAverage > 0;
 
-              return totalFootprint > 0 ? (
+              if (totalFootprint === 0) return 'No data available';
+
+              return (
 								<div className="flex w-full items-center justify-start">
 									<span className="text-tc-primary">{`${totalFootprint.toFixed(1)} kgCO2e`}</span>
                   {showComparison && (
@@ -248,8 +250,6 @@ export const _ProductsDataGrid = () => {
                     </>
                 )}
 								</div>
-							) : (
-								'No data available'
 							);
 						},
 					},
