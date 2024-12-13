@@ -2,6 +2,7 @@ export enum IconNames {
   ColdHomeIcon = 'ColdHomeIcon',
   ColdFootprintIcon = 'ColdFootprintIcon',
   ColdFootprintIconTwo = 'ColdFootprintIconTwo',
+  ColdFootprintIconThree = 'ColdFootprintIconThree',
   ColdJourneyIcon = 'ColdJourneyIcon',
   ColdActionsIcon = 'ColdActionsIcon',
   ColdReportIcon = 'ColdReportIcon',

@@ -23,7 +23,7 @@ import {
   ColdDocumentUploadIcon,
   ColdEmptyCheckboxIcon,
   ColdExpiringIcon,
-  ColdFootprintIcon,
+  ColdFootprintIcon, ColdFootprintIconThree,
   ColdFootprintIconTwo,
   ColdHomeIcon,
   ColdInfoIcon,
@@ -141,6 +141,8 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdCalendarCloseIcon {...props} />;
     case IconNames.ColdUnknownIcon:
       return <ColdUnknownIcon {...props} />;
+    case IconNames.ColdFootprintIconThree:
+      return <ColdFootprintIconThree {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;
