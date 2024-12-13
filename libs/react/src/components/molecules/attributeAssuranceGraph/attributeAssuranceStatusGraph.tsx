@@ -45,7 +45,7 @@ export const AttributeAssuranceStatusGraph: React.FC<AttributeAssuranceStatusGra
             <div className="bg-red-400" style={{ width: `${notDocumentedPercentage}%` }} />
           </div>
 
-          <div className="flex items-start justify-items-center text-label text-cold-secondary mt-1 gap-4">
+          <div className="flex items-start justify-items-center text-label text-tc-secondary mt-1 gap-4">
 						<div className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-green-200 mr-1" />
               <span>{activePercentage.toFixed(0)}% Active</span>

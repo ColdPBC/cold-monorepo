@@ -62,7 +62,7 @@ export const ComplianceSurveyCollapse = (props: ComplianceSurveyCollapseProps) =
     const section = complianceSet.definition.sections[sectionKey];
     const progressSection = find(complianceSet.progress.sections, { title: section.title });
     if (activeKey.section === sectionKey) {
-      return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-cold-starkWhite'}></div>;
+      return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-white'}></div>;
     } else {
       if (progressSection?.complete) {
         return (

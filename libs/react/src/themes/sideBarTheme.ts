@@ -11,12 +11,12 @@ export const SideBarTheme: FlowbiteSidebarTheme = {
   },
   collapse: {
     button:
-      'group flex w-full items-center rounded p-2 text-base text-cold-limestone stroke-cold-limestone group-hover:text-cold-starkWhite fill-cold-limestone font-normal transition duration-75 ',
+      'group flex w-full items-center rounded p-2 text-base text-cold-limestone stroke-cold-limestone group-hover:text-white fill-cold-limestone font-normal transition duration-75 ',
     icon: {
       base: 'h-6 w-6 transition duration-75',
       open: {
         off: '',
-        on: 'bg-cold-skyBlue text-cold-starkWhite',
+        on: 'bg-cold-skyBlue text-white',
       },
     },
     label: {
@@ -48,7 +48,7 @@ export const SideBarTheme: FlowbiteSidebarTheme = {
     },
   },
   item: {
-    base: 'flex items-center justify-center rounded p-2 py-2 stroke-cold-limestone fill-cold-limestone text-cold-limestone hover:text-cold-starkWhite hover:bg-cold-midnightBlue-100 hover:stroke-cold-starkWhite ',
+    base: 'flex items-center justify-center rounded p-2 py-2 stroke-cold-limestone fill-cold-limestone text-cold-limestone hover:text-white hover:bg-cold-midnightBlue-100 hover:stroke-white ',
     active: 'bg-cold-skyBlue',
     collapsed: {
       insideCollapse: 'group w-full pl-8 transition duration-75',
@@ -58,8 +58,8 @@ export const SideBarTheme: FlowbiteSidebarTheme = {
       base: 'px-3 flex-1 whitespace-nowrap',
     },
     icon: {
-      base: 'h-6 w-6 active:bg-cold-skyBlue stroke-cold-limestone fill-cold-limestone text-cold-limestone hover:stroke-cold-starkWhite, hover:fill-cold-starkWhite hover:text-cold-starkWhite flex-shrink-0 transition duration-75',
-      active: 'bg-cold-skyBlue text-cold-starkWhite',
+      base: 'h-6 w-6 active:bg-cold-skyBlue stroke-cold-limestone fill-cold-limestone text-cold-limestone hover:stroke-white, hover:fill-white hover:text-white flex-shrink-0 transition duration-75',
+      active: 'bg-cold-skyBlue text-white',
     },
     label: '',
     listItem: '',
