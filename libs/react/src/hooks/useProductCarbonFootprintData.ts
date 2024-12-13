@@ -17,7 +17,7 @@ interface CarbonFootprintResult {
   hasCompleteData: boolean;
 }
 
-type CacheType = {
+export type ProductFootprintCache = {
   getProductFootprint: (id: string) => ProductFootprint | undefined;
   getCategoryAverage: (category: string | null) => number | undefined;
 } | null;
@@ -116,7 +116,7 @@ export const useProductCarbonFootprintCache = () => {
 
 // Function to access cached calculations for a specific product
 export const getProductCarbonFootprint = (
-  cache: CacheType | null,
+  cache: ProductFootprintCache | null,
   { id, productCategory }: { id: string; productCategory: string | null }
 ): CarbonFootprintResult => {
   const result: CarbonFootprintResult = {

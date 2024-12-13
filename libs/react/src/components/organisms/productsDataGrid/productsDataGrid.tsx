@@ -1,8 +1,8 @@
 import {
-  BubbleList, ColdIcon,
+  BubbleList,
   ErrorFallback,
   MuiDataGrid,
-  Popover,
+  ProductFootprintDataGridCell,
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
 import { getProductCarbonFootprint, useAuth0Wrapper, useGraphQLSWR, useProductCarbonFootprintCache } from '@coldpbc/hooks';
@@ -19,6 +19,7 @@ import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
 import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 import { IconNames } from '@coldpbc/enums';
+import { HexColors } from '@coldpbc/themes';
 
 
 const getColumnRows = (
@@ -219,39 +220,12 @@ export const _ProductsDataGrid = () => {
 					{
 						...defaultColumnProperties,
 						field: 'carbonFootprint',
-						headerName: 'Carbon Footprint',
+						headerName: 'Carbon Footprint (kgCO2e)',
 						flex: 1,
-						minWidth: 200,
-						renderCell: params => {
-							const { totalFootprint, categoryAverage, percentageFromAverage } = getProductCarbonFootprint(cache, {
-								id: params.row.id,
-								productCategory: params.row.productCategory,
-							});
-              const showComparison = params.row.productCategory && categoryAverage > 0;
-
-              if (totalFootprint === 0) return 'No data available';
-
-              return (
-								<div className="flex w-full items-center justify-start">
-									<span className="text-tc-primary">{`${totalFootprint.toFixed(1)} kgCO2e`}</span>
-                  {showComparison && (
-                    <>
-                      <span className="pl-1 text-tc-primary">{'('}</span>
-                      <span className={percentageFromAverage > 0 ? 'text-red-300' : 'text-green-300'}>
-                        {percentageFromAverage > 0 && '+'}
-                        {percentageFromAverage.toFixed(1)}%
-                      </span>
-                      <Popover
-                        contentClassName="max-w-[260px]"
-                        content={`Compared to average footprint of ${categoryAverage.toFixed(1)} kgCO2e for products in the category ${params.row.productCategory}`}>
-                        <ColdIcon name={IconNames.ColdInfoIcon} />
-                      </Popover>
-                      <span className="text-tc-primary">)</span>
-                    </>
-                )}
-								</div>
-							);
-						},
+						minWidth: 220,
+						renderCell: params => (
+             <ProductFootprintDataGridCell cache={cache} id={params.row.id} productCategory={params.row.productCategory} />
+            ),
 					},
 			  ]
 			: [];
