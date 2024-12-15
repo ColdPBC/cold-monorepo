@@ -1,3 +1,10 @@
+# [1.496.0](https://github.com/coldPBC/cold-monorepo/compare/v1.495.0...v1.496.0) (2024-12-15)
+
+
+### Features
+
+* add support for emissions tracking in product schema and operations ([80b4178](https://github.com/coldPBC/cold-monorepo/commit/80b41786b35ba0a5d991f605f18f202ef1e287a6))
+
 # [1.495.0](https://github.com/coldPBC/cold-monorepo/compare/v1.494.0...v1.495.0) (2024-12-15)
 
 
