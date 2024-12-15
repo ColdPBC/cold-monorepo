@@ -1,3 +1,10 @@
+## [1.493.1](https://github.com/coldPBC/cold-monorepo/compare/v1.493.0...v1.493.1) (2024-12-15)
+
+
+### Bug Fixes
+
+* **cold-platform:** update project configurations, enable dynamic module setups, and improve integration service logic ([35835af](https://github.com/coldPBC/cold-monorepo/commit/35835af04bd1d588581b58ed5e97fbe36f6735f8))
+
 # [1.493.0](https://github.com/coldPBC/cold-monorepo/compare/v1.492.1...v1.493.0) (2024-12-13)
 
 
