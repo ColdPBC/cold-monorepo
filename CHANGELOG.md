@@ -1,3 +1,10 @@
+# [1.495.0](https://github.com/coldPBC/cold-monorepo/compare/v1.494.0...v1.495.0) (2024-12-15)
+
+
+### Features
+
+* implement organization-product-material-emissions entity and related hooks ([6f1defd](https://github.com/coldPBC/cold-monorepo/commit/6f1defd765941c8af22986d778f04d1690066afb))
+
 # [1.494.0](https://github.com/coldPBC/cold-monorepo/compare/v1.493.1...v1.494.0) (2024-12-15)
 
 
