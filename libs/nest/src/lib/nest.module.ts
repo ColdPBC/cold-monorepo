@@ -40,7 +40,6 @@ export class NestModule {
 		const secrets = await ss.getSecrets('core');
 
 		const configSecrets: any = [];
-
 		configSecrets.push(() => secrets);
 
 		try {

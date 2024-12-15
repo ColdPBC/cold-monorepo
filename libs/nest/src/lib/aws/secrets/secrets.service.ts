@@ -45,18 +45,13 @@ export class SecretsService extends BaseWorker implements OnModuleInit {
 			const type = parts.length > 2 ? parts[1] : 'core';
 			const project = parts.length > 2 ? parts[2] : parts[1];
 
-			const typeSecrets = await this.getRootSecrets(type);
-			if (!typeSecrets) {
-				this.logger.error(`No secrets found for ${type}`);
-			}
-
 			const secrets = await this.getSecrets(`${type}/${project}`);
+
 			if (!secrets) {
 				this.logger.error(`No secrets found for ${type}/${project}`);
 			}
 
-			const combined = Object.assign({}, typeSecrets, secrets);
-			return combined;
+			return secrets;
 		} catch (e: any) {
 			this.logger.error(e.message, e);
 			return {};
