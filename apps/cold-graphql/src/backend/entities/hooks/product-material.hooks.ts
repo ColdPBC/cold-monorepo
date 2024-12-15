@@ -1,9 +1,11 @@
-
 // ProductMaterial Hooks
 import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
-import { ProductMaterial } from '../postgresql';
+import { Product, ProductMaterial } from '../postgresql';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { getConnection } from '../../database.config';
+import { OrganizationProductMaterialEmissions } from '../postgresql/organization-product-material-emissions';
 
 export class ProductMaterialHooks extends BaseSidecar {
 	constructor() {
@@ -24,5 +26,4 @@ export class ProductMaterialHooks extends BaseSidecar {
 	// Overrride BeforeDeleteHook here:
 
 	// Overrride AfterDeleteHook here:
-
 }

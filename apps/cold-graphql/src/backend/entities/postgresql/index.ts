@@ -45,6 +45,7 @@ import { SurveyStatus } from './survey-status';
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
+import { OrganizationProductMaterialEmissions } from './organization-product-material-emissions';
 
 export * from './prisma-migration';
 export * from './action-template';
@@ -68,6 +69,7 @@ export * from './material-classification';
 export * from './material-supplier';
 export * from './material';
 export * from './news';
+export * from './organization-product-material-emissions';
 export * from './organization-compliance';
 export * from './organization-compliance-ai-response-file';
 export * from './organization-compliance-ai-response';
@@ -117,6 +119,7 @@ export const entities = [
 	MaterialSupplier,
 	Material,
 	News,
+	OrganizationProductMaterialEmissions,
 	OrganizationCompliance,
 	OrganizationComplianceAiResponseFile,
 	OrganizationComplianceAiResponse,
