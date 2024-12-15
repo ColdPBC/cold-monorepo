@@ -15,7 +15,7 @@ export class Product {
 	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
-	@Field(() => String, { adminUIOptions: { summaryField: true } })
+	@Field(() => String, { adminUIOptions: {summaryField:true} })
 	name!: string;
 
 	@Field(() => ISODateStringScalar, { nullable: true })
@@ -27,7 +27,7 @@ export class Product {
 	@Field(() => Boolean, { nullable: true })
 	deleted = false;
 
-	@RelationshipField<Product>(() => Organization, { id: entity => entity.organization?.id })
+	@RelationshipField<Product>(() => Organization, { id: (entity) => entity.organization?.id })
 	organization!: Organization;
 
 	@Field(() => GraphQLJSON, { nullable: true })
@@ -39,7 +39,7 @@ export class Product {
 	@Field(() => String, { nullable: true })
 	styleCode?: string;
 
-	@RelationshipField<Product>(() => OrganizationFacility, { id: entity => entity.organizationFacility?.id, nullable: true })
+	@RelationshipField<Product>(() => OrganizationFacility, { id: (entity) => entity.organizationFacility?.id, nullable: true })
 	organizationFacility?: OrganizationFacility;
 
 	@Field(() => String, { nullable: true })
@@ -65,9 +65,6 @@ export class Product {
 
 	@Field(() => String, { nullable: true })
 	gender?: string;
-
-	@Field(() => GraphQLJSON, { nullable: true })
-	emissions?: Record<string, number>;
 
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'product' })
 	attributeAssurances!: AttributeAssurance[];
