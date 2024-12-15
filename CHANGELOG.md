@@ -1,3 +1,15 @@
+# [1.494.0](https://github.com/coldPBC/cold-monorepo/compare/v1.493.1...v1.494.0) (2024-12-15)
+
+
+### Bug Fixes
+
+* remove unused imports and streamline secret retrieval logic ([ea51711](https://github.com/coldPBC/cold-monorepo/commit/ea51711a8eaff333ef3bbad0873f7efb8fb3a599))
+
+
+### Features
+
+* integrate AWS KMS service with encryption/decryption support ([7d431f5](https://github.com/coldPBC/cold-monorepo/commit/7d431f534c5db6f69b4fd246c5c9658d6ffb50b5))
+
 ## [1.493.1](https://github.com/coldPBC/cold-monorepo/compare/v1.493.0...v1.493.1) (2024-12-15)
 
 
