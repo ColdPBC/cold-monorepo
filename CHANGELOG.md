@@ -1,3 +1,10 @@
+# [1.498.0](https://github.com/coldPBC/cold-monorepo/compare/v1.497.0...v1.498.0) (2024-12-15)
+
+
+### Features
+
+* enhance filter capabilities and add emissions field ([ca3ad44](https://github.com/coldPBC/cold-monorepo/commit/ca3ad44eb73cc84b394f2e4df43b74c4bd482ea2))
+
 # [1.497.0](https://github.com/coldPBC/cold-monorepo/compare/v1.496.0...v1.497.0) (2024-12-15)
 
 
