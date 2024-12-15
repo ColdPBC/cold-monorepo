@@ -120,6 +120,8 @@ export type ActionTemplateUpdateInput = {
 };
 
 export type ActionTemplatesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ActionTemplatesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ActionTemplatesListFilter>>>;
   actions?: InputMaybe<ActionsListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -184,6 +186,8 @@ export type ActionUpdateInput = {
 };
 
 export type ActionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ActionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ActionsListFilter>>>;
   action?: InputMaybe<Scalars['JSON']['input']>;
   actionTemplate?: InputMaybe<ActionTemplatesListFilter>;
   action_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
@@ -354,6 +358,8 @@ export type ApiKeyUpdateInput = {
 };
 
 export type ApiKeysListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ApiKeysListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ApiKeysListFilter>>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -510,6 +516,8 @@ export type AttributeAssuranceUpdateInput = {
 };
 
 export type AttributeAssurancesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<AttributeAssurancesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<AttributeAssurancesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -584,6 +592,8 @@ export type AttributeAssurancesPaginationInput = {
 };
 
 export type CategoryDataListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<CategoryDataListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<CategoryDataListFilter>>>;
   categoryDefinition?: InputMaybe<CategoryDefinitionsListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -754,6 +764,8 @@ export type CategoryDefinitionUpdateInput = {
 };
 
 export type CategoryDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<CategoryDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<CategoryDefinitionsListFilter>>>;
   categoryData?: InputMaybe<CategoryDataListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -834,6 +846,8 @@ export type CategoryDefinitionsPaginationInput = {
 };
 
 export type ClimatiqActvitiesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ClimatiqActvitiesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ClimatiqActvitiesListFilter>>>;
   accessType?: InputMaybe<Scalars['String']['input']>;
   accessType_gt?: InputMaybe<Scalars['String']['input']>;
   accessType_gte?: InputMaybe<Scalars['String']['input']>;
@@ -1396,6 +1410,8 @@ export type ComplianceDefinitionUpdateInput = {
 };
 
 export type ComplianceDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceDefinitionsListFilter>>>;
   complianceQuestions?: InputMaybe<ComplianceQuestionsListFilter>;
   complianceSectionGroups?: InputMaybe<ComplianceSectionGroupsListFilter>;
   complianceSections?: InputMaybe<ComplianceSectionsListFilter>;
@@ -1754,6 +1770,8 @@ export type ComplianceQuestionDependencyChainUpdateInput = {
 };
 
 export type ComplianceQuestionDependencyChainsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceQuestionDependencyChainsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceQuestionDependencyChainsListFilter>>>;
   complianceDefinitionName?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gt?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gte?: InputMaybe<Scalars['String']['input']>;
@@ -1963,6 +1981,8 @@ export type ComplianceQuestionUpdateInput = {
 };
 
 export type ComplianceQuestionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceQuestionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceQuestionsListFilter>>>;
   additionalContext?: InputMaybe<Scalars['JSON']['input']>;
   additionalContext_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   additionalContext_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -2325,6 +2345,8 @@ export type ComplianceSectionDependencyChainUpdateInput = {
 };
 
 export type ComplianceSectionDependencyChainsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceSectionDependencyChainsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceSectionDependencyChainsListFilter>>>;
   complianceDefinitionName?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gt?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gte?: InputMaybe<Scalars['String']['input']>;
@@ -2528,6 +2550,8 @@ export type ComplianceSectionGroupUpdateInput = {
 };
 
 export type ComplianceSectionGroupsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceSectionGroupsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceSectionGroupsListFilter>>>;
   complianceDefinition?: InputMaybe<ComplianceDefinitionsListFilter>;
   complianceDefinitionName?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gt?: InputMaybe<Scalars['String']['input']>;
@@ -2658,6 +2682,8 @@ export type ComplianceSectionUpdateInput = {
 };
 
 export type ComplianceSectionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComplianceSectionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComplianceSectionsListFilter>>>;
   complianceDefinition?: InputMaybe<ComplianceDefinitionsListFilter>;
   complianceDefinitionName?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gt?: InputMaybe<Scalars['String']['input']>;
@@ -2824,6 +2850,8 @@ export type ComponentDefinitionUpdateInput = {
 };
 
 export type ComponentDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ComponentDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ComponentDefinitionsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -2936,6 +2964,8 @@ export type CredentialUpdateInput = {
 };
 
 export type CredentialsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<CredentialsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<CredentialsListFilter>>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -3100,6 +3130,8 @@ export type EmissionScopeUpdateInput = {
 };
 
 export type EmissionScopesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<EmissionScopesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<EmissionScopesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -3227,6 +3259,8 @@ export type EmissionUpdateInput = {
 };
 
 export type EmissionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<EmissionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<EmissionsListFilter>>>;
   activityData?: InputMaybe<Scalars['JSON']['input']>;
   activityData_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   activityData_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -3457,6 +3491,8 @@ export type FacilityFootprintUpdateInput = {
 };
 
 export type FacilityFootprintsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<FacilityFootprintsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<FacilityFootprintsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -3676,6 +3712,8 @@ export type IntegrationUpdateInput = {
 };
 
 export type IntegrationsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<IntegrationsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<IntegrationsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -3887,6 +3925,8 @@ export type MaterialClassificationUpdateInput = {
 };
 
 export type MaterialClassificationsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<MaterialClassificationsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<MaterialClassificationsListFilter>>>;
   category?: InputMaybe<Scalars['String']['input']>;
   category_gt?: InputMaybe<Scalars['String']['input']>;
   category_gte?: InputMaybe<Scalars['String']['input']>;
@@ -4086,6 +4126,8 @@ export type MaterialSupplierUpdateInput = {
 };
 
 export type MaterialSuppliersListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<MaterialSuppliersListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<MaterialSuppliersListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -4173,6 +4215,8 @@ export type MaterialUpdateInput = {
 };
 
 export type MaterialsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<MaterialsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<MaterialsListFilter>>>;
   activityId?: InputMaybe<Scalars['String']['input']>;
   activityId_gt?: InputMaybe<Scalars['String']['input']>;
   activityId_gte?: InputMaybe<Scalars['String']['input']>;
@@ -4375,6 +4419,8 @@ export type MaterialsPaginationInput = {
 };
 
 export type MultipleNewsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<MultipleNewsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<MultipleNewsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -7383,6 +7429,8 @@ export type OrganizationComplianceAiResponseFileUpdateInput = {
 };
 
 export type OrganizationComplianceAiResponseFilesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceAiResponseFilesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceAiResponseFilesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -7473,6 +7521,8 @@ export type OrganizationComplianceAiResponseUpdateInput = {
 };
 
 export type OrganizationComplianceAiResponsesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceAiResponsesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceAiResponsesListFilter>>>;
   additionalContext?: InputMaybe<Scalars['JSON']['input']>;
   additionalContext_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   additionalContext_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -7743,6 +7793,8 @@ export type OrganizationComplianceNoteFileUpdateInput = {
 };
 
 export type OrganizationComplianceNoteFilesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceNoteFilesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceNoteFilesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -7861,6 +7913,8 @@ export type OrganizationComplianceNoteLinkUpdateInput = {
 };
 
 export type OrganizationComplianceNoteLinksListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceNoteLinksListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceNoteLinksListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -7942,6 +7996,8 @@ export type OrganizationComplianceNoteUpdateInput = {
 };
 
 export type OrganizationComplianceNotesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceNotesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceNotesListFilter>>>;
   complianceQuestion?: InputMaybe<ComplianceQuestionsListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -8084,6 +8140,8 @@ export type OrganizationComplianceQuestionBookmarkUpdateInput = {
 };
 
 export type OrganizationComplianceQuestionBookmarksListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceQuestionBookmarksListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceQuestionBookmarksListFilter>>>;
   complianceQuestion?: InputMaybe<ComplianceQuestionsListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -8221,6 +8279,8 @@ export type OrganizationComplianceResponseUpdateInput = {
 };
 
 export type OrganizationComplianceResponsesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceResponsesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceResponsesListFilter>>>;
   additionalContext?: InputMaybe<Scalars['JSON']['input']>;
   additionalContext_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   additionalContext_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -8344,6 +8404,8 @@ export type OrganizationComplianceStatusUpdateInput = {
 };
 
 export type OrganizationComplianceStatusesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationComplianceStatusesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationComplianceStatusesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -8444,6 +8506,8 @@ export type OrganizationComplianceUpdateInput = {
 };
 
 export type OrganizationCompliancesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationCompliancesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationCompliancesListFilter>>>;
   complianceDefinition?: InputMaybe<ComplianceDefinitionsListFilter>;
   complianceDefinitionName?: InputMaybe<Scalars['String']['input']>;
   complianceDefinitionName_gt?: InputMaybe<Scalars['String']['input']>;
@@ -8592,6 +8656,8 @@ export type OrganizationCompliancesOldUpdateInput = {
 };
 
 export type OrganizationCompliancesOldsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationCompliancesOldsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationCompliancesOldsListFilter>>>;
   complianceDefinition?: InputMaybe<ComplianceDefinitionsListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -8709,6 +8775,8 @@ export type OrganizationCreateOrUpdateInput = {
 };
 
 export type OrganizationFacilitiesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationFacilitiesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationFacilitiesListFilter>>>;
   addressLine1?: InputMaybe<Scalars['String']['input']>;
   addressLine1_gt?: InputMaybe<Scalars['String']['input']>;
   addressLine1_gte?: InputMaybe<Scalars['String']['input']>;
@@ -9317,6 +9385,8 @@ export type OrganizationFileUpdateInput = {
 };
 
 export type OrganizationFilesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationFilesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationFilesListFilter>>>;
   acl?: InputMaybe<Scalars['String']['input']>;
   acl_gt?: InputMaybe<Scalars['String']['input']>;
   acl_gte?: InputMaybe<Scalars['String']['input']>;
@@ -9718,6 +9788,8 @@ export type OrganizationUpdateInput = {
 };
 
 export type OrganizationsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<OrganizationsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<OrganizationsListFilter>>>;
   actions?: InputMaybe<ActionsListFilter>;
   attributeAssurances?: InputMaybe<AttributeAssurancesListFilter>;
   branding?: InputMaybe<Scalars['JSON']['input']>;
@@ -9902,6 +9974,8 @@ export type PasskeyRegistrationResponse = {
 };
 
 export type PolicyDataListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<PolicyDataListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<PolicyDataListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -10058,6 +10132,8 @@ export type PolicyDefinitionUpdateInput = {
 };
 
 export type PolicyDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<PolicyDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<PolicyDefinitionsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -10178,6 +10254,8 @@ export type PrismaMigrationUpdateInput = {
 };
 
 export type PrismaMigrationsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<PrismaMigrationsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<PrismaMigrationsListFilter>>>;
   appliedStepsCount?: InputMaybe<Scalars['Float']['input']>;
   appliedStepsCount_in?: InputMaybe<Array<Scalars['Float']['input']>>;
   appliedStepsCount_ne?: InputMaybe<Scalars['Float']['input']>;
@@ -10499,6 +10577,8 @@ export type ProductMaterialUpdateInput = {
 };
 
 export type ProductMaterialsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ProductMaterialsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ProductMaterialsListFilter>>>;
   bomSection?: InputMaybe<Scalars['String']['input']>;
   bomSection_gt?: InputMaybe<Scalars['String']['input']>;
   bomSection_gte?: InputMaybe<Scalars['String']['input']>;
@@ -10646,6 +10726,8 @@ export type ProductUpdateInput = {
 };
 
 export type ProductsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ProductsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ProductsListFilter>>>;
   attributeAssurances?: InputMaybe<AttributeAssurancesListFilter>;
   brandProductId?: InputMaybe<Scalars['String']['input']>;
   brandProductId_gt?: InputMaybe<Scalars['String']['input']>;
@@ -11973,6 +12055,8 @@ export type ServiceDefinitionUpdateInput = {
 };
 
 export type ServiceDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ServiceDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ServiceDefinitionsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -12069,6 +12153,8 @@ export enum Sort {
 }
 
 export type SupportedUtilitiesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<SupportedUtilitiesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<SupportedUtilitiesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -12203,6 +12289,8 @@ export type SupportedUtilityUpdateInput = {
 };
 
 export type SurveyDataListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<SurveyDataListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<SurveyDataListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -12408,6 +12496,8 @@ export type SurveyDefinitionUpdateInput = {
 };
 
 export type SurveyDefinitionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<SurveyDefinitionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<SurveyDefinitionsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -12592,6 +12682,8 @@ export type SurveyStatusUpdateInput = {
 };
 
 export type SurveyStatusesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<SurveyStatusesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<SurveyStatusesListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -12774,6 +12866,8 @@ export enum SustainabilityAttributesLevel {
 }
 
 export type SustainabilityAttributesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<SustainabilityAttributesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<SustainabilityAttributesListFilter>>>;
   attributeAssurances?: InputMaybe<AttributeAssurancesListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -12970,6 +13064,8 @@ export type UtilityBillUpdateInput = {
 };
 
 export type UtilityBillsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<UtilityBillsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<UtilityBillsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -13132,6 +13228,8 @@ export type VectorRecordUpdateInput = {
 };
 
 export type VectorRecordsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<VectorRecordsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<VectorRecordsListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
