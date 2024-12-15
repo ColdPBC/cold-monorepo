@@ -13,7 +13,7 @@ import { InterceptorModule } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
 import { ColdRabbitModule } from './rabbit'; //import { CronModule, CronService } from './crons';
 import { DatadogTraceModule } from 'nestjs-ddtrace';
-import { S3Module, SecretsModule, SecretsService } from './aws';
+import { KmsModule, KmsService, S3Module, SecretsModule, SecretsService } from './aws';
 import { RedisServiceConfig, GeneratorsModule } from './utility';
 import { MqttModule } from './mqtt';
 import { ComplianceDataModule } from './compliance';
@@ -32,20 +32,24 @@ export class NestModule {
 			}
 		}
 
-		const ss = new SecretsService();
-		await ss.onModuleInit();
+		const ss: SecretsService = new SecretsService();
+		await ss.init();
+
 		const service = config.getOrThrow('DD_SERVICE');
+
+		const secrets = await ss.getSecrets('core');
+
 		const configSecrets: any = [];
 
-		const secrets = await ss.getRootSecrets(service);
 		configSecrets.push(() => secrets);
 
-		const darkly = new DarklyService(config);
-		await darkly.onModuleInit(secrets['LD_SDK_KEY']);
-
-		const serviceSecrets = await ss.getServiceSecrets(service);
-		if (serviceSecrets) {
-			configSecrets.push(() => serviceSecrets);
+		try {
+			const serviceSecrets = await ss.getServiceSecrets(service);
+			if (serviceSecrets) {
+				configSecrets.push(() => serviceSecrets);
+			}
+		} catch (e) {
+			logger.error(e.message, e);
 		}
 
 		const configModule = ConfigModule.forRoot({
@@ -62,12 +66,13 @@ export class NestModule {
 		 * Imports Array
 		 */
 		const imports: any = [
-			configModule, //ConfigurationModule.forRootAsync(),
+			await configModule, //ConfigurationModule.forRootAsync(),
 			S3Module,
 			SecretsModule,
 			BullModule.forRoot(await new RedisServiceConfig(secrets).getQueueConfig(type, project)),
 			HttpModule,
 			MqttModule,
+			KmsModule,
 			ComplianceDataModule,
 			GeneratorsModule,
 		];
@@ -75,7 +80,7 @@ export class NestModule {
 		/**
 		 * Providers Array
 		 */
-		const providers: any = [ConfigService];
+		const providers: any = [ConfigService, KmsService];
 
 		/**
 		 * Controllers Array
@@ -94,12 +99,16 @@ export class NestModule {
 			MqttModule,
 			ComplianceDataModule,
 			GeneratorsModule,
+			KmsModule,
 		];
 
 		logger.info('Configuring Nest Module...');
 
+		//const darkly = new DarklyService(config);
+		//await darkly.onModuleInit(await secrets()['LD_SDK_KEY']);
+
 		//configure-enable-hot-shots-module
-		const enableHotShots = await darkly.getBooleanFlag('static-enable-hot-shots-module');
+		const enableHotShots = true; // await darkly.getBooleanFlag('static-enable-hot-shots-module');
 		if (enableHotShots) {
 			imports.push(
 				HotShotsModule.forRoot({
@@ -140,7 +149,7 @@ export class NestModule {
 		/**
 		 * Datadog tracing module
 		 */
-		const enableDDTrace = await darkly.getBooleanFlag('static-enable-data-dog-trace-module');
+		const enableDDTrace = true; //await darkly.getBooleanFlag('static-enable-data-dog-trace-module');
 		if (enableDDTrace) {
 			imports.push(
 				DatadogTraceModule.forRoot({
@@ -155,7 +164,7 @@ export class NestModule {
 		/**
 		 * Health module
 		 */
-		const enableHealthModule = await darkly.getBooleanFlag('static-enable-health-module');
+		const enableHealthModule = true; //await darkly.getBooleanFlag('static-enable-health-module');
 		if (enableHealthModule) {
 			imports.push(HealthModule);
 			exports.push(HealthModule);
@@ -164,7 +173,7 @@ export class NestModule {
 		/**
 		 * Authorization module
 		 */
-		const enableAuthorizationModule = await darkly.getBooleanFlag('static-enable-authorization-module');
+		const enableAuthorizationModule = true; //await darkly.getBooleanFlag('static-enable-authorization-module');
 		if (enableAuthorizationModule) {
 			if (!secrets['REDISCLOUD_URL']) {
 				throw new Error('REDISCLOUD_URL is not set in this environment; It is required for the authorization module to function properly.');
@@ -177,7 +186,7 @@ export class NestModule {
 		/**
 		 * Prisma Module
 		 */
-		const enablePrismaModule = await darkly.getBooleanFlag('static-enable-prisma-module');
+		const enablePrismaModule = true; //await darkly.getBooleanFlag('static-enable-prisma-module');
 		if (enablePrismaModule) {
 			imports.push(PrismaModule);
 			exports.push(PrismaModule);
@@ -186,7 +195,7 @@ export class NestModule {
 		/**
 		 * Interceptors module
 		 */
-		const enableInterceptorModule = await darkly.getBooleanFlag('static-enable-interceptors-module');
+		const enableInterceptorModule = true; //await darkly.getBooleanFlag('static-enable-interceptors-module');
 		if (enableInterceptorModule) {
 			imports.push(InterceptorModule);
 			exports.push(InterceptorModule);
@@ -195,10 +204,10 @@ export class NestModule {
 		/**
 		 * Rabbit Module
 		 */
-		const enableRabbitModule = await darkly.getBooleanFlag('static-enable-rabbit-module');
+		const enableRabbitModule = true; //await darkly.getBooleanFlag('static-enable-rabbit-module');
 		if (enableRabbitModule) {
-			imports.push(await ColdRabbitModule.forRootAsync());
-			exports.push(await ColdRabbitModule.forRootAsync());
+			imports.push(await ColdRabbitModule.forRootAsync(secrets));
+			exports.push(await ColdRabbitModule.forRootAsync(secrets));
 		}
 
 		return {

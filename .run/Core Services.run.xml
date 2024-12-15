@@ -1,0 +1,33 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Core Services" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker">
+    <deployment type="docker-compose.yml">
+      <settings>
+        <option name="envFilePath" value="" />
+        <option name="envVars">
+          <list>
+            <DockerEnvVarImpl>
+              <option name="name" value="NODE_ENV" />
+              <option name="value" value="docker" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="DD_ENV" />
+              <option name="value" value="docker" />
+            </DockerEnvVarImpl>
+          </list>
+        </option>
+        <option name="services">
+          <list>
+            <option value="proxy" />
+            <option value="rabbit" />
+            <option value="cache" />
+            <option value="postgres" />
+            <option value="api" />
+            <option value="graphql" />
+          </list>
+        </option>
+        <option name="sourceFilePath" value="docker-compose.yml" />
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>
