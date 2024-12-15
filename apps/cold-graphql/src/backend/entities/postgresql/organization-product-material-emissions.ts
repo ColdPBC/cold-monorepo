@@ -8,7 +8,7 @@ import { BaseSidecar } from '../base.sidecar';
 import { OrganizationProductMaterialEmissionsHooks } from '../hooks/organization-product-material-emissions.hooks';
 
 @Entity({
-	expression: `SELECT organization_id, product_id, material_id, material_name, product_category, product_subcategory, emissions_factor FROM organization_product_material_emissions GROUP BY organization_id, product_id, material_id, material_name, product_category, product_subcategory, emissions_factor`,
+	expression: `SELECT organization_id, product_id, material_id, material_name, product_category, product_subcategory, emissions_factor FROM organization_product_material_emissions WHERE emissions_factor > 0 GROUP BY organization_id, product_id, material_id, material_name, product_category, product_subcategory, emissions_factor`,
 })
 export class OrganizationProductMaterialEmissions {
 	sidecar: OrganizationProductMaterialEmissionsHooks;

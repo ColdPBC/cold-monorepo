@@ -132,6 +132,7 @@ export const entities = [
 	OrganizationCompliancesOld,
 	OrganizationFacility,
 	OrganizationFile,
+	OrganizationProductMaterialEmissions,
 	Organization,
 	PolicyDatum,
 	PolicyDefinition,

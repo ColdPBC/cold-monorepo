@@ -43,9 +43,9 @@ export class ProductHooks extends BaseSidecar {
 				if (emission.emissionsFactor) {
 					categoryEmissionEntries++;
 					return sum + emission.emissionsFactor || 0;
-				} else {
-					return sum;
 				}
+
+				return sum;
 			}, 0);
 			const averageCategoryEmissionsFactor = totalCategoryEmissionsFactor / categoryEmissionEntries;
 
@@ -53,7 +53,6 @@ export class ProductHooks extends BaseSidecar {
 				total_product_c02e: totalEmissionsFactor,
 				product_category: category,
 				products_in_category: categoryEmissions.length,
-				products_in_category_with_emissions: categoryEmissionEntries,
 				total_category_c02e: totalCategoryEmissionsFactor,
 				average_category_c02e: averageCategoryEmissionsFactor,
 			});
