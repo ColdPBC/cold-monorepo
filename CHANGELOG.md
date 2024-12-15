@@ -1,3 +1,10 @@
+# [1.497.0](https://github.com/coldPBC/cold-monorepo/compare/v1.496.0...v1.497.0) (2024-12-15)
+
+
+### Features
+
+* bump graphweaver version to re-introduce _or / _and operators due to bug in graphweaver ([71da272](https://github.com/coldPBC/cold-monorepo/commit/71da2729e5d6a39ce1105bffe53341de3651fc32))
+
 # [1.496.0](https://github.com/coldPBC/cold-monorepo/compare/v1.495.0...v1.496.0) (2024-12-15)
 
 
