@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ColdRabbitModule, ColdRabbitService, NestModule, OrgUserInterceptor, PrismaModule } from '@coldpbc/nest';
+import { ColdRabbitService, NestModule, OrgUserInterceptor, PrismaModule, EventService } from '@coldpbc/nest';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppService } from './app.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -22,12 +22,8 @@ import { CrawlerModule } from './crawler/crawler.module';
 import { ExtractionModule } from './extraction/extraction.module';
 import { EntitiesModule } from './entities/entities.module';
 import { ClassificationModule } from './classification/classification.module';
-import { EventService } from '../../../libs/nest/src/lib/rabbit/event.service';
 
-@Module({
-	imports: [FreeplayModule, CrawlerModule, ExtractionModule, EntitiesModule],
-	providers: [],
-})
+@Module({})
 export class AppModule {
 	static async forRootAsync() {
 		//const config = new ConfigService();
@@ -87,10 +83,10 @@ export class AppModule {
 					},
 					serveRoot: '../../../assets',
 				}),
+				FreeplayModule,
 				ClassificationModule,
 				EntitiesModule,
 				PrismaModule,
-				await ColdRabbitModule.forRootAsync(),
 				AssistantModule,
 				PineconeModule,
 				LangchainModule,

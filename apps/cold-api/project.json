@@ -19,7 +19,6 @@
         "assets": [
           "apps/cold-api/src/assets"
         ],
-        "isolatedConfig": true,
         "webpackConfig": "apps/cold-api/webpack.config.js"
       },
       "configurations": {
@@ -39,17 +38,21 @@
         "development": {
           "buildTarget": "cold-api:build:development",
           "runtimeArgs": ["--trace-warnings"],
-          "port": 9001
+	       "runBuildTargetDependencies": true,
+	       "buildTargetOptions": {
+						"watch": true
+					},
+          "port": 7001
         },
         "staging": {
           "buildTarget": "cold-api:build:staging",
           "runtimeArgs": ["--trace-warnings"],
-          "port": 9001
+          "port": 7001
         },
         "production": {
           "buildTarget": "cold-api:build:production",
           "runtimeArgs": ["--trace-warnings"],
-          "port": 9001
+          "port": 7001
         }
       }
     },

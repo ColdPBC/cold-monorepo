@@ -6,7 +6,7 @@
       <script value="sync" />
     </scripts>
     <node-interpreter value="project" />
-    <package-manager value="pnpm" />
+    <package-manager value="yarn" />
     <envs>
       <env name="AUTH_BASE_URI" value="http://localhost:9000" />
       <env name="AUTH_JWKS_URI" value="https://dev-6qt527e13qyo4ls6.us.auth0.com/.well-known/jwks.json" />

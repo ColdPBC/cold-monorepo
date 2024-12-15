@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
 import { PineconeService } from './pinecone/pinecone.service';
+import { ChatService } from './chat/chat.service';
 
 /**
  * RabbitService class.
@@ -23,6 +24,7 @@ export class RabbitService extends BaseWorker {
 		readonly files: FileService,
 		readonly cache: CacheService,
 		readonly pc: PineconeService,
+		readonly chatService: ChatService,
 	) {
 		super(RabbitService.name);
 	}
@@ -90,6 +92,11 @@ export class RabbitService extends BaseWorker {
 			this.logger.info(`Processing ${event} event triggered by ${parsed.user?.coldclimate_claims?.email} from ${from}`);
 
 			switch (event) {
+				case 'openai_question.sent': {
+					const response = await this.chatService.askRawQuestion(from, parsed);
+					return response;
+					break;
+				}
 				case 'organization.created': {
 					const response = await this.appService.createAssistant(parsed);
 					if (parsed.organization.website) {

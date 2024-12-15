@@ -4,14 +4,15 @@
     <option name="nx-targets" value="serve" />
     <option name="nx-target-configuration" value="development" />
     <envs>
-      <env name="CLIMATIQ_API_KEY" value="0YY90XF4CS4RZMNTHPZAVHC5EGSD" />
+      <env name="CLIMATIQ_API_KEY" value="EDEXHZH5S84JCNN3V87Q1VQQE2DP" />
       <env name="CLIMATIQ_API_URL" value="https://beta4.api.climatiq.io" />
+      <env name="DD_ENV" value="development" />
       <env name="DD_SERVICE" value="cold-platform-climatiq" />
+      <env name="LOG_FORMAT" value="pretty" />
       <env name="NODE_ENV" value="development" />
       <env name="PORT" value="7003" />
-      <env name="LOG_FORMAT" value="pretty" />
     </envs>
-    <option name="arguments" value="" />
+    <option name="arguments" value="--verbose" />
     <method v="2" />
   </configuration>
 </component>

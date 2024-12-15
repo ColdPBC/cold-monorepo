@@ -3,8 +3,8 @@ import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import { BaseWorker } from '../worker';
 import { RabbitMessagePayload } from './rabbit.types';
 import { service_definitions } from '../../validation/generated/modelSchema/service_definitionsSchema';
-import { SecretsService } from '../aws';
 import { omit } from 'lodash';
+import { ConfigService } from '@nestjs/config';
 
 export enum WorkerTypes {
 	PLATFORM = 'platform',
@@ -21,7 +21,7 @@ export type RabbitMessageOptions = {
 @Global()
 @Injectable()
 export class ColdRabbitService extends BaseWorker implements OnModuleInit {
-	constructor(private readonly client: AmqpConnection) {
+	constructor(private readonly client: AmqpConnection, readonly config: ConfigService) {
 		super(ColdRabbitService.name);
 	}
 
@@ -102,7 +102,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
 	public async request(routingKey: string, payload: RabbitMessagePayload, options?: RabbitMessageOptions): Promise<any> {
 		try {
 			const requestBody = {
-				exchange: options?.exchange || 'amq.direct',
+				exchange: 'amq.direct',
 				routingKey: routingKey,
 				timeout: options?.timeout || 5000,
 				payload,
@@ -148,12 +148,11 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
 		process.on('uncaughtException', this.exitHandler.bind(this, { cleanup: false, exit: false }));
 	}
 
-	static async getRabbitConfig(): Promise<RabbitMQConfig> {
-		const secrets = new SecretsService();
-		await secrets.onModuleInit();
-		const response = await secrets.getRootSecrets(process.env['DD_SERVICE'] as string);
-		const url = response['RABBITMQ_URL'];
-
+	static async getRabbitConfig(rabbit_url?: string): Promise<RabbitMQConfig> {
+		const url = rabbit_url ? rabbit_url : process.env['RABBITMQ_URL'];
+		if (!url) {
+			throw new Error('RABBITMQ_URL is required');
+		}
 		return {
 			uri: url,
 			connectionManagerOptions: {

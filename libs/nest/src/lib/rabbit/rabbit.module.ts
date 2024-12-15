@@ -7,10 +7,13 @@ import { EventService } from './event.service';
 @Global()
 @Module({})
 export class ColdRabbitModule {
-	static async forRootAsync(): Promise<DynamicModule> {
+	static async forRootAsync(secrets?: any): Promise<DynamicModule> {
+		if (!secrets) {
+			console.warn('No secrets provided to ColdRabbitModule.forRootAsync');
+		}
 		const module: DynamicModule = {
 			module: ColdRabbitModule,
-			imports: [ConfigModule, RabbitMQModule.forRoot(RabbitMQModule, await ColdRabbitService.getRabbitConfig())],
+			imports: [ConfigModule, RabbitMQModule.forRoot(RabbitMQModule, await ColdRabbitService.getRabbitConfig(secrets ? secrets.RABBITMQ_URL : undefined))],
 			providers: [ColdRabbitService, EventService],
 			exports: [ConfigModule, ColdRabbitService, EventService, RabbitMQModule],
 		};

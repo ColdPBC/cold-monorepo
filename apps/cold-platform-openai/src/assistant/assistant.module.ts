@@ -4,19 +4,18 @@ import { AssistantService } from './assistant.service';
 import { FileService } from './files/file.service';
 import { Tools } from './tools/tools';
 import { BullModule } from '@nestjs/bull';
-import { ColdRabbitModule, DarklyModule } from '@coldpbc/nest';
+import { DarklyModule } from '@coldpbc/nest';
 
 @Module({
-  imports: [
-    DarklyModule.forRoot(),
-    ColdRabbitModule.forRootAsync(),
-    BullModule.registerQueue({
-      name: 'openai',
-    }),
-    BullModule.registerQueue({
-      name: 'openai_assistant',
-    }),
-  ],
-  providers: [AppService, AssistantService, FileService, Tools],
+	imports: [
+		DarklyModule.forRoot(),
+		BullModule.registerQueue({
+			name: 'openai',
+		}),
+		BullModule.registerQueue({
+			name: 'openai_assistant',
+		}),
+	],
+	providers: [AppService, AssistantService, FileService, Tools],
 })
 export class AssistantModule {}

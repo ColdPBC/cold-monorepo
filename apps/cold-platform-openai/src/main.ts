@@ -20,7 +20,6 @@ async function bootstrap() {
 
 async function init() {
 	await bootstrap();
-	console.log(`Cold Platform OpenAI started on port ${process.env.PORT}`);
 }
 
 init();

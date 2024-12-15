@@ -8,17 +8,18 @@ import process from 'process';
 export class SecretsService extends BaseWorker implements OnModuleInit {
 	client: SecretsManager;
 	awsCreds: any = {};
+	ready = false;
 
 	constructor() {
 		super(SecretsService.name);
-
-		this.client = new SecretsManager({
-			region: get('AWS_REGION', 'us-east-1'),
-		});
 	}
 
-	override async onModuleInit() {
-		// if running in Flight Control environment
+	async onModuleInit() {
+		await this.init();
+	}
+
+	async init() {
+		// FC_ENV should only be set in the Flight Control environment, not in SM
 		if (process.env['FLIGHTCONTROL'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
 			this.awsCreds = {
 				region: process.env['AWS_REGION'] || 'us-east-1',
@@ -29,11 +30,13 @@ export class SecretsService extends BaseWorker implements OnModuleInit {
 			};
 
 			this.client = new SecretsManager(this.awsCreds);
+			this.ready = true;
 		} else {
 			this.client = new SecretsManager({ region: process.env['AWS_REGION'] || 'us-east-1' });
+			this.ready = true;
 		}
 
-		this.logger.info('SecretsService initialized');
+		this.logger.log('SecretsService initialized');
 	}
 
 	async getServiceSecrets(serviceName: string): Promise<any> {
@@ -42,21 +45,31 @@ export class SecretsService extends BaseWorker implements OnModuleInit {
 			const type = parts.length > 2 ? parts[1] : 'core';
 			const project = parts.length > 2 ? parts[2] : parts[1];
 
-			const secrets = await this.getSecrets(`${type}/${project}`);
+			const typeSecrets = await this.getRootSecrets(type);
+			if (!typeSecrets) {
+				this.logger.error(`No secrets found for ${type}`);
+			}
 
-			return secrets;
+			const secrets = await this.getSecrets(`${type}/${project}`);
+			if (!secrets) {
+				this.logger.error(`No secrets found for ${type}/${project}`);
+			}
+
+			const combined = Object.assign({}, typeSecrets, secrets);
+			return combined;
 		} catch (e: any) {
 			this.logger.error(e.message, e);
 			return {};
 		}
 	}
 
-	async getRootSecrets(serviceName: string): Promise<any> {
+	async getRootSecrets(serviceType: string): Promise<any> {
 		try {
-			const parts = serviceName.split('-');
-			const type = parts.length > 2 ? parts[1] : 'core';
+			const secrets = await this.getSecrets(serviceType);
 
-			const secrets = await this.getSecrets(type);
+			if (!secrets) {
+				this.logger.error(`No secrets found for ${process.env.NODE_ENV}/${serviceType}`);
+			}
 
 			return secrets;
 		} catch (e: any) {
@@ -83,8 +96,8 @@ export class SecretsService extends BaseWorker implements OnModuleInit {
 
 			return secret;
 		} catch (err: any) {
-			this.logger.error(`${err.message}: ${secretName}`, err);
-			throw err;
+			this.logger.warn(`${err.message}: ${secretName}`, err);
+			return;
 		}
 	}
 }

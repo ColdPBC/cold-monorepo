@@ -29,6 +29,8 @@ import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecon
 import { FPSession, FreeplayService } from '../freeplay/freeplay.service';
 import { FormattedPrompt } from 'freeplay/thin';
 import { compliance_sections, file_types, organization_files, organizations } from '@prisma/client';
+import { zodResponseFormat } from 'openai/helpers/zod';
+import { jsonSchemaToZod } from 'json-schema-to-zod';
 
 @Injectable()
 export class ChatService extends BaseWorker implements OnModuleInit {
@@ -58,6 +60,41 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
 	async onModuleInit() {
 		this.logger.info('OpenAI Chat Service Initialized');
+	}
+
+	async askRawQuestion(from: string, data: any) {
+		try {
+			this.logger.info(`Processing request from ${from}`, { service: from, data });
+			const { user, organization, system_prompt, question, schema } = data;
+
+			const openai = new OpenAI({
+				organization: this.config.getOrThrow('OPENAI_ORG_ID'),
+				apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
+			});
+
+			const responseSchema = eval(jsonSchemaToZod(schema, { module: 'cjs' }));
+			const classifyResponse = await openai.beta.chat.completions.parse({
+				model: 'gpt-4o-2024-08-06',
+				messages: [
+					{
+						role: 'system',
+						content: system_prompt,
+					},
+					{
+						role: 'user',
+						content: question,
+					},
+				],
+				response_format: zodResponseFormat(responseSchema, 'microservice_chat'),
+			});
+
+			this.logger.info('Received response from OpenAI', { user, organization, question, system_prompt, parsed: classifyResponse?.choices['0']?.message?.parsed });
+
+			return classifyResponse?.choices['0']?.message?.parsed;
+		} catch (e) {
+			this.logger.error(`Error asking raw question`, e);
+			return;
+		}
 	}
 
 	/**

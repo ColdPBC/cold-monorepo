@@ -3,7 +3,7 @@ import { BaseWorker, coldAdminOnly, HttpExceptionFilter, IRequest, JwtAuthGuard,
 import { ClimatiqService } from './climatiq.service';
 import { Span } from 'nestjs-ddtrace';
 
-@Controller('categories')
+@Controller()
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseInterceptors(OrgUserInterceptor)
@@ -13,7 +13,7 @@ export class ClimatiqController extends BaseWorker {
 		super(ClimatiqController.name);
 	}
 
-	@Get('sync')
+	@Get('categories/sync')
 	@Roles(...coldAdminOnly)
 	sync(
 		@Query('sector') sector: string,
@@ -25,5 +25,15 @@ export class ClimatiqController extends BaseWorker {
 	) {
 		this.logger.info('Syncing sector categories', { sector, region, category, data_version });
 		return this.cl.syncSectorCategories(req, sector, region, category, data_version);
+	}
+
+	@Get('activities/sync')
+	@Roles(...coldAdminOnly)
+	syncActivities(
+		@Req()
+		req: IRequest,
+	) {
+		this.logger.info('Syncing sector activities', { user: req.user, org: req.organization });
+		return this.cl.mapOrgMaterialActivities(req);
 	}
 }

@@ -14,7 +14,7 @@
 		"useUnknownInCatchVariables": false,
 		"strictPropertyInitialization": false,
 		"noImplicitAny": false,
-		"strictBindCallApply": true,
+		"strictBindCallApply": false,
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
 		"noImplicitOverride": false,
@@ -47,7 +47,6 @@
 			"@coldpbc/types": ["./apps/cold-graphql/src"],
 			"@coldpbc/graphweaver": ["./tools/graphweaver/src/index.ts"],
 			"graphweaver": ["tools/graphweaver/src/index.ts"],
-			"nxGraphWeaver": ["tools/nxGraphWeaver/src/index.ts"]
 		}
 	},
 	"files": ["./node_modules/@nx/react/typings/cssmodule.d.ts", "./node_modules/@nx/react/typings/image.d.ts"],

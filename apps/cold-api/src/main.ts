@@ -41,6 +41,7 @@ async function bootstrap() {
   patchNestjsSwagger();
 
   await app.listen(process.env['PORT'] || 7001, '0.0.0.0');
+	console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
 async function init() {

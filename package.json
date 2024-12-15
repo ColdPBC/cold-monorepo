@@ -162,6 +162,7 @@
 		"html-to-image": "^1.11.11",
 		"join-images": "^1.1.5",
 		"js-cookie": "^3.0.5",
+		"json-schema-to-zod": "^2.4.1",
 		"json-stringify-safe": "^5.0.1",
 		"jsonata": "^2.0.4",
 		"jwks-rsa": "^3.0.1",

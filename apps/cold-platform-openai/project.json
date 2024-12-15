@@ -34,7 +34,7 @@
         "development": {
           "buildTarget": "cold-platform-openai:build:development",
           "runtimeArgs": ["--trace-warnings"],
-          "port": 9002
+          "port": 9004
         },
         "staging": {
           "buildTarget": "cold-platform-openai:build:staging"
