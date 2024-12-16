@@ -20,7 +20,7 @@ export class ProductHooks extends BaseSidecar {
 				return params as ReadHookParams<typeof Product, OrgContext>;
 			}
 
-			const item = items[0] as any;
+			const item = items[0];
 
 			const emissionProvider = new MikroBackendProvider(OrganizationProductMaterialEmissions, getConnection());
 

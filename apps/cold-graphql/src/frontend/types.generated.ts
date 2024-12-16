@@ -20,6 +20,8 @@ export type Scalars = {
   ISOString: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
+  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSONObject: { input: any; output: any; }
 };
 
 export type Action = {
@@ -4534,6 +4536,106 @@ export type MultipleNewsPaginationInput = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<MultipleNewsOrderByInput>;
+};
+
+export type MultipleOrganizationProductMaterialEmissionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<MultipleOrganizationProductMaterialEmissionsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<MultipleOrganizationProductMaterialEmissionsListFilter>>>;
+  emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
+  emissionsFactor_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  emissionsFactor_ne?: InputMaybe<Scalars['Float']['input']>;
+  emissionsFactor_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  emissionsFactor_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  emissionsFactor_null?: InputMaybe<Scalars['Boolean']['input']>;
+  materialId?: InputMaybe<Scalars['String']['input']>;
+  materialId_gt?: InputMaybe<Scalars['String']['input']>;
+  materialId_gte?: InputMaybe<Scalars['String']['input']>;
+  materialId_ilike?: InputMaybe<Scalars['String']['input']>;
+  materialId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  materialId_like?: InputMaybe<Scalars['String']['input']>;
+  materialId_lt?: InputMaybe<Scalars['String']['input']>;
+  materialId_lte?: InputMaybe<Scalars['String']['input']>;
+  materialId_ne?: InputMaybe<Scalars['String']['input']>;
+  materialId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  materialId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  materialId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  materialName?: InputMaybe<Scalars['String']['input']>;
+  materialName_gt?: InputMaybe<Scalars['String']['input']>;
+  materialName_gte?: InputMaybe<Scalars['String']['input']>;
+  materialName_ilike?: InputMaybe<Scalars['String']['input']>;
+  materialName_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  materialName_like?: InputMaybe<Scalars['String']['input']>;
+  materialName_lt?: InputMaybe<Scalars['String']['input']>;
+  materialName_lte?: InputMaybe<Scalars['String']['input']>;
+  materialName_ne?: InputMaybe<Scalars['String']['input']>;
+  materialName_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  materialName_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  materialName_null?: InputMaybe<Scalars['Boolean']['input']>;
+  organizationId?: InputMaybe<Scalars['String']['input']>;
+  organizationId_gt?: InputMaybe<Scalars['String']['input']>;
+  organizationId_gte?: InputMaybe<Scalars['String']['input']>;
+  organizationId_ilike?: InputMaybe<Scalars['String']['input']>;
+  organizationId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  organizationId_like?: InputMaybe<Scalars['String']['input']>;
+  organizationId_lt?: InputMaybe<Scalars['String']['input']>;
+  organizationId_lte?: InputMaybe<Scalars['String']['input']>;
+  organizationId_ne?: InputMaybe<Scalars['String']['input']>;
+  organizationId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  organizationId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  organizationId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  productCategory?: InputMaybe<Scalars['String']['input']>;
+  productCategory_gt?: InputMaybe<Scalars['String']['input']>;
+  productCategory_gte?: InputMaybe<Scalars['String']['input']>;
+  productCategory_ilike?: InputMaybe<Scalars['String']['input']>;
+  productCategory_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  productCategory_like?: InputMaybe<Scalars['String']['input']>;
+  productCategory_lt?: InputMaybe<Scalars['String']['input']>;
+  productCategory_lte?: InputMaybe<Scalars['String']['input']>;
+  productCategory_ne?: InputMaybe<Scalars['String']['input']>;
+  productCategory_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  productCategory_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  productCategory_null?: InputMaybe<Scalars['Boolean']['input']>;
+  productId?: InputMaybe<Scalars['String']['input']>;
+  productId_gt?: InputMaybe<Scalars['String']['input']>;
+  productId_gte?: InputMaybe<Scalars['String']['input']>;
+  productId_ilike?: InputMaybe<Scalars['String']['input']>;
+  productId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  productId_like?: InputMaybe<Scalars['String']['input']>;
+  productId_lt?: InputMaybe<Scalars['String']['input']>;
+  productId_lte?: InputMaybe<Scalars['String']['input']>;
+  productId_ne?: InputMaybe<Scalars['String']['input']>;
+  productId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  productId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  productId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  productSubcategory?: InputMaybe<Scalars['String']['input']>;
+  productSubcategory_gt?: InputMaybe<Scalars['String']['input']>;
+  productSubcategory_gte?: InputMaybe<Scalars['String']['input']>;
+  productSubcategory_ilike?: InputMaybe<Scalars['String']['input']>;
+  productSubcategory_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  productSubcategory_like?: InputMaybe<Scalars['String']['input']>;
+  productSubcategory_lt?: InputMaybe<Scalars['String']['input']>;
+  productSubcategory_lte?: InputMaybe<Scalars['String']['input']>;
+  productSubcategory_ne?: InputMaybe<Scalars['String']['input']>;
+  productSubcategory_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  productSubcategory_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  productSubcategory_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type MultipleOrganizationProductMaterialEmissionsOrderByInput = {
+  emissionsFactor?: InputMaybe<Sort>;
+  materialId?: InputMaybe<Sort>;
+  materialName?: InputMaybe<Sort>;
+  organizationId?: InputMaybe<Sort>;
+  productCategory?: InputMaybe<Sort>;
+  productId?: InputMaybe<Sort>;
+  productSubcategory?: InputMaybe<Sort>;
+};
+
+/** Pagination options for MultipleOrganizationProductMaterialEmissions. */
+export type MultipleOrganizationProductMaterialEmissionsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<MultipleOrganizationProductMaterialEmissionsOrderByInput>;
 };
 
 export type Mutation = {
@@ -9750,6 +9852,17 @@ export type OrganizationInsertInput = {
   website?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type OrganizationProductMaterialEmissions = {
+  __typename?: 'OrganizationProductMaterialEmissions';
+  emissionsFactor?: Maybe<Scalars['Float']['output']>;
+  materialId?: Maybe<Scalars['String']['output']>;
+  materialName?: Maybe<Scalars['String']['output']>;
+  organizationId?: Maybe<Scalars['String']['output']>;
+  productCategory?: Maybe<Scalars['String']['output']>;
+  productId?: Maybe<Scalars['String']['output']>;
+  productSubcategory?: Maybe<Scalars['String']['output']>;
+};
+
 /** Data needed to update Organizations. An ID must be passed. */
 export type OrganizationUpdateInput = {
   actions?: InputMaybe<Array<ActionCreateOrUpdateInput>>;
@@ -11069,6 +11182,10 @@ export type Query = {
   multipleNews?: Maybe<Array<Maybe<News>>>;
   /** Get aggregated data for MultipleNews. */
   multipleNews_aggregate?: Maybe<AggregationResult>;
+  /** Get multiple MultipleOrganizationProductMaterialEmissions. */
+  multipleOrganizationProductMaterialEmissions?: Maybe<Array<Maybe<OrganizationProductMaterialEmissions>>>;
+  /** Get aggregated data for MultipleOrganizationProductMaterialEmissions. */
+  multipleOrganizationProductMaterialEmissions_aggregate?: Maybe<AggregationResult>;
   /** Get a single News. */
   news?: Maybe<News>;
   /** Get a single Organization. */
@@ -11145,10 +11262,13 @@ export type Query = {
   organizationFiles?: Maybe<Array<Maybe<OrganizationFile>>>;
   /** Get aggregated data for OrganizationFiles. */
   organizationFiles_aggregate?: Maybe<AggregationResult>;
+  /** Get a single OrganizationProductMaterialEmissions. */
+  organizationProductMaterialEmissions?: Maybe<OrganizationProductMaterialEmissions>;
   /** Get multiple Organizations. */
   organizations?: Maybe<Array<Maybe<Organization>>>;
   /** Get aggregated data for Organizations. */
   organizations_aggregate?: Maybe<AggregationResult>;
+  pcfEmissionsByProduct?: Maybe<Scalars['JSONObject']['output']>;
   /** Get multiple PolicyData. */
   policyData?: Maybe<Array<Maybe<PolicyDatum>>>;
   /** Get aggregated data for PolicyData. */
@@ -11561,6 +11681,17 @@ export type QueryMultipleNews_AggregateArgs = {
 };
 
 
+export type QueryMultipleOrganizationProductMaterialEmissionsArgs = {
+  filter?: InputMaybe<MultipleOrganizationProductMaterialEmissionsListFilter>;
+  pagination?: InputMaybe<MultipleOrganizationProductMaterialEmissionsPaginationInput>;
+};
+
+
+export type QueryMultipleOrganizationProductMaterialEmissions_AggregateArgs = {
+  filter?: InputMaybe<MultipleOrganizationProductMaterialEmissionsListFilter>;
+};
+
+
 export type QueryNewsArgs = {
   id: Scalars['ID']['input'];
 };
@@ -11763,6 +11894,11 @@ export type QueryOrganizationFiles_AggregateArgs = {
 };
 
 
+export type QueryOrganizationProductMaterialEmissionsArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type QueryOrganizationsArgs = {
   filter?: InputMaybe<OrganizationsListFilter>;
   pagination?: InputMaybe<OrganizationsPaginationInput>;
@@ -11771,6 +11907,12 @@ export type QueryOrganizationsArgs = {
 
 export type QueryOrganizations_AggregateArgs = {
   filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+
+export type QueryPcfEmissionsByProductArgs = {
+  organizationId: Scalars['String']['input'];
+  productId: Scalars['String']['input'];
 };
 
 
