@@ -33,10 +33,10 @@ const COLOR_FOR_ENTITY_LEVEL = {
 };
 
 // This is a temporary solution until the backend can provide a list of classifications
-const filterableSustainabilityAttributes = {
+export const filterableSustainabilityAttributes = {
   // RDS Staging
   '9e5f2088-03f0-4274-b142-80a210a82942': {
-    type: 'RDS',
+    type: 'Down',
     environment: 'staging',
     classifications: [
       { id: '96', name: 'Duck Down insulation' },
@@ -45,7 +45,7 @@ const filterableSustainabilityAttributes = {
   },
   // RDS Production
   'cca7e119-727b-4784-92f9-252d1f2e687c': {
-    type: 'RDS',
+    type: 'Down',
     environment: 'production',
     classifications: [
       { id: '96', name: 'Duck Down insulation' },
@@ -54,7 +54,7 @@ const filterableSustainabilityAttributes = {
   },
   // RWS Staging
   '389640c2-9c29-4946-8f12-f09978f2dc14': {
-    type: 'RWS',
+    type: 'Wool',
     environment: 'staging',
     classifications: [
       { id: '7', name: 'Sheep Wool insulation' },
@@ -63,7 +63,7 @@ const filterableSustainabilityAttributes = {
   },
   // RWS Production
   '36d106e9-46ad-4f1b-8b19-b3115a0881c7': {
-    type: 'RWS',
+    type: 'Wool',
     environment: 'production',
     classifications: [
       { id: '7', name: 'Sheep Wool insulation' },
@@ -100,8 +100,8 @@ export const _SustainabilityAttributeDetail = () => {
 
   // Filter entities for the relevant material classification.
   // Right now this is only defined for RWS and RDS in Staging and Prod (per configuration above).
-  const filterMaterials = ldFlags.cold1292MaterialReportsFilteredForRelevantMaterialClass && validLevel === EntityLevel.MATERIAL && sustainabilityAttributeId && sustainabilityAttributeId in filterableSustainabilityAttributes;
-  const relevantMaterialClassifications = sustainabilityAttributeId ? filterableSustainabilityAttributes[sustainabilityAttributeId]?.classifications ?? [] : [];
+  const filterMaterials = ldFlags.cold1292MaterialReportsFilteredForRelevantMaterialClassification && validLevel === EntityLevel.MATERIAL && sustainabilityAttributeId && sustainabilityAttributeId in filterableSustainabilityAttributes;
+  const relevantMaterialClassifications = filterMaterials && sustainabilityAttributeId ? filterableSustainabilityAttributes[sustainabilityAttributeId]?.classifications ?? [] : [];
   const relevantMaterialClassificationIds = relevantMaterialClassifications.map(classification => classification.id);
   const entities = relevantMaterialClassifications.length === 0 ? unfilteredEntities : unfilteredEntities.filter(entity => {
     const materialClassificationId = get(entity, 'classificationId', '');

@@ -3,6 +3,9 @@ import { EntityLevel } from '@coldpbc/enums';
 import { pluralize, processSustainabilityAttributeForGraph, toSentenceCase } from '@coldpbc/lib';
 import { SustainabilityAttribute } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useEntityData } from '@coldpbc/hooks';
+import { useFlags } from 'launchdarkly-react-client-sdk';
+import { filterableSustainabilityAttributes } from '../../pages';
+import { get } from 'lodash';
 
 interface AttributeAssuranceCountGraphProps {
   sustainabilityAttribute: SustainabilityAttribute;
@@ -16,10 +19,30 @@ const COLOR_FOR_ENTITY_LEVEL = {
 
 export const AttributeAssuranceCountGraph: React.FC<AttributeAssuranceCountGraphProps> = ({ sustainabilityAttribute }) => {
   const { orgId } = useAuth0Wrapper();
+  const ldFlags = useFlags();
   const validLevel = sustainabilityAttribute.level === EntityLevel.ORGANIZATION ? undefined : sustainabilityAttribute.level;
-  const entities = useEntityData(validLevel, orgId);
-  const totalEntities = entities.length;
+  let entities = useEntityData(validLevel, orgId);
+  let filterCategory = '';
 
+  const filterMaterials = ldFlags.cold1292MaterialReportsFilteredForRelevantMaterialClassification && validLevel === EntityLevel.MATERIAL && sustainabilityAttribute.id in filterableSustainabilityAttributes;
+  if (filterMaterials) {
+    const relevantMaterialClassifications = filterableSustainabilityAttributes[sustainabilityAttribute.id]?.classifications ?? [];
+    const relevantMaterialClassificationIds = relevantMaterialClassifications.map(classification => classification.id);
+
+    // Filter entities
+    entities = entities.filter(entity => {
+      const materialClassificationId = get(entity, 'classificationId', '');
+      return relevantMaterialClassificationIds.includes(materialClassificationId);
+    })
+
+    // Filter assurances in case there's one tied to a material that not actually wool, etc.
+    const entityIds = entities.map(entity => entity.id);
+    sustainabilityAttribute = { ...sustainabilityAttribute, attributeAssurances: sustainabilityAttribute.attributeAssurances.filter(attributeAssurance => entityIds.includes(attributeAssurance.entity.id))};
+
+    filterCategory = `${filterableSustainabilityAttributes[sustainabilityAttribute.id].type} `;
+  }
+
+  const totalEntities = entities.length;
   const graphData = processSustainabilityAttributeForGraph(sustainabilityAttribute);
   const documentedCount = graphData.activeCount + graphData.inactiveCount;
   const hasAttributeCount = documentedCount + graphData.notDocumentedCount;
@@ -52,7 +75,7 @@ export const AttributeAssuranceCountGraph: React.FC<AttributeAssuranceCountGraph
 					<div className="flex items-start justify-items-center text-label text-tc-secondary mt-1 gap-4">
 						<div className="flex items-center">
 							<div className={`w-2 h-2 rounded-full ${accentColor} mr-1`} />
-							<span>{`${hasAttributePercentage.toFixed(0)}% of all ${toSentenceCase(EntityLevel[sustainabilityAttribute.level])}s`}</span>
+							<span>{`${hasAttributePercentage.toFixed(0)}% of all ${filterCategory}${toSentenceCase(EntityLevel[sustainabilityAttribute.level])}s`}</span>
 						</div>
 					</div>
 				</div>
