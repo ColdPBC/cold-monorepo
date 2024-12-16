@@ -1,3 +1,10 @@
+# [1.501.0](https://github.com/coldPBC/cold-monorepo/compare/v1.500.1...v1.501.0) (2024-12-16)
+
+
+### Features
+
+* show classification on materials detail page ([2b11f16](https://github.com/coldPBC/cold-monorepo/commit/2b11f162ec1a706c602f5f5b27f5b9515e283106))
+
 ## [1.500.1](https://github.com/coldPBC/cold-monorepo/compare/v1.500.0...v1.500.1) (2024-12-16)
 
 
