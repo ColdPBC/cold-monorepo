@@ -749,6 +749,9 @@ export const GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY = gql`
       name
       materialCategory
       materialSubcategory
+      materialClassification {
+        id
+      }
     }
   }
 `;
@@ -842,6 +845,15 @@ export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES = gql`
   }
 `;
 
+export const GET_ALL_MATERIAL_CLASSIFICATIONS = gql`
+    query MaterialClassifications {
+      materialClassifications {
+        id
+        name
+      }
+    }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -879,4 +891,5 @@ export const queries: {
   CREATE_ATTRIBUTE_ASSURANCES: CREATE_ATTRIBUTE_ASSURANCES,
   GET_PRODUCT_CARBON_FOOTPRINT_DATA: GET_PRODUCT_CARBON_FOOTPRINT_DATA,
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES: GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
+  GET_ALL_MATERIAL_CLASSIFICATIONS: GET_ALL_MATERIAL_CLASSIFICATIONS,
 };

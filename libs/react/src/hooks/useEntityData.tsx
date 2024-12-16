@@ -22,6 +22,7 @@ const ENTITY_MAP = {
       name: item.name,
       category: item.materialCategory || '',
       subcategory: item.materialSubcategory || '',
+      classificationId: item.materialClassification?.id || '',
       hasAttribute: assurances.some(assurance => assurance.entity.id === item.id)
     })
   },
