@@ -42,17 +42,17 @@
 	       "buildTargetOptions": {
 						"watch": true
 					},
-          "port": 7001
+          "port": 9001
         },
         "staging": {
           "buildTarget": "cold-api:build:staging",
           "runtimeArgs": ["--trace-warnings"],
-          "port": 7001
+          "port": 9001
         },
         "production": {
           "buildTarget": "cold-api:build:production",
           "runtimeArgs": ["--trace-warnings"],
-          "port": 7001
+          "port": 9001
         }
       }
     },
