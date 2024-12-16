@@ -25,7 +25,6 @@ const orgToInputOption = (org: Organization | undefined) => {
 }
 
 const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
-  const ldFlags = useFlags();
   const navigate = useNavigate();
   const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
   const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
@@ -70,7 +69,7 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
 
   logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOption });
 
-  if (sidebarExpanded || !ldFlags.showNewNavigationCold698) {
+  if (sidebarExpanded) {
     const organizationOptions: InputOption[] = data
       .sort((a: Organization, b: Organization) => a.display_name.localeCompare(b.display_name))
       .map((org: Organization, index: number) => ({

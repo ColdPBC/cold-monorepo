@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { axiosFetcher } from '../../../fetchers/axiosFetcher';
-import { NavbarItem } from '../../../interfaces/sideBar';
-import { Spinner } from '../../atoms/spinner/spinner';
-import { clone, remove } from 'lodash';
+import { axiosFetcher } from '@coldpbc/fetchers';
+import { clone } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useLocation } from 'react-router-dom';
-import { ActionPayload } from '@coldpbc/interfaces';
+import { ActionPayload, NavbarItem } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
-import { ColdLogoAnimation, ColdWordmark, OrganizationSelector, SideBarCollapse, SideBarItem } from '@coldpbc/components';
-import { flowbiteThemeOverride, HexColors } from '@coldpbc/themes';
-import { Sidebar as FBSidebar } from 'flowbite-react';
+import { ColdLogoAnimation, OrganizationSelector, SideBarCollapse, SideBarItem, ErrorFallback, Spinner } from '@coldpbc/components';
 
 const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Element => {
 	const ldFlags = useFlags();
@@ -67,7 +62,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 
 	const getOrgSelector = () => {
 		if (auth0.user && auth0.user.coldclimate_claims.roles.includes('cold:admin')) {
-			return <OrganizationSelector sidebarExpanded={expanded || !ldFlags.showNewNavigationCold698} />;
+			return <OrganizationSelector sidebarExpanded={expanded} />;
 		} else {
 			return null;
 		}
@@ -125,73 +120,32 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 		logBrowser('Sidebar data loaded', 'info', { data, filteredSidebarItems });
 		const topItems: NavbarItem[] = clone(filteredSidebarItems);
 
-		const bottomItems = remove(topItems, (item: NavbarItem) => {
-			return item.placement && item.placement === 'bottom';
-		});
-
-		if (ldFlags.showNewNavigationCold698) {
-			return (
-				<div
-					data-testid={'sidebar'}
-					className={
-						'text-tc-primary fixed left-0 top-0 h-[100vh] justify-between w-[58px] flex flex-col items-center ' +
-						'py-[24px] bg-bgc-elevated transition-width ease-in duration-200 hover:w-[208px] z-20 ' +
-						'hover:shadow-[0px_8px_12px_4px_rgba(0,0,0,0.85)]'
-					}
-					onMouseEnter={() => setExpanded(true)}
-					onMouseLeave={() => setExpanded(false)}>
-					<div className={'flex flex-col gap-[24px] w-full'}>
-						{getSidebarLogo()}
-						<div className={'w-full flex flex-col gap-[8px]'}>
-							{topItems.map((item: NavbarItem, index: number) => {
-								return item.items ? (
-									<SideBarCollapse key={index} item={item} activeItem={activeItem} setActiveItem={setActiveItem} expanded={expanded} />
-								) : (
-									<SideBarItem key={index} item={item} activeItem={activeItem} setActiveItem={setActiveItem} expanded={expanded} />
-								);
-							})}
-						</div>
-					</div>
-					{/* put org selector at the bottom of the nav bar */}
-					<div className={'flex px-[18px] items-center justify-center w-full'}>{getOrgSelector()}</div>
-				</div>
-			);
-		} else {
-			return (
-				<FBSidebar theme={flowbiteThemeOverride.sidebar} data-testid={'sidebar'}>
-					<div className="flex px-4 self-stretch items-center">
-						<div className="h-6 w-[76px]">
-							<ColdWordmark color={HexColors.white} />
-						</div>
-					</div>
-					<FBSidebar.Items className="gap-2 mb-auto">
-						<FBSidebar.ItemGroup className="space-y-2 border-t pt-8 first:mt-0 first:border-t-0 first:pt-0 mt-0 overflow-visible flex-grow">
-							{topItems.map((item: NavbarItem, index: number) => {
-								if (item.items) {
-									return <SideBarCollapse setActiveItem={setActiveItem} activeItem={activeItem} item={item} key={item.key} expanded={expanded} />;
-								} else {
-									return <SideBarItem setActiveItem={setActiveItem} activeItem={activeItem} item={item} key={item.key} expanded={expanded} />;
-								}
-							})}
-						</FBSidebar.ItemGroup>
-					</FBSidebar.Items>
-					<FBSidebar.Items className="gap-2">
-						<FBSidebar.ItemGroup className="mt-0 border-t-0 overflow-visible">
-							<div id={'orgSelector'} className={'w-full p-4'}>
-								{getOrgSelector()}
-							</div>
-							{bottomItems.map((item: NavbarItem, index: number) => {
-								if (item.items) {
-									return <SideBarCollapse setActiveItem={setActiveItem} activeItem={activeItem} item={item} key={item.key} expanded={expanded} />;
-								} else {
-									return <SideBarItem setActiveItem={setActiveItem} activeItem={activeItem} item={item} key={item.key} expanded={expanded} />;
-								}
-							})}
-						</FBSidebar.ItemGroup>
-					</FBSidebar.Items>
-				</FBSidebar>
-			);
-		}
+    return (
+      <div
+        data-testid={'sidebar'}
+        className={
+          'text-tc-primary fixed left-0 top-0 h-[100vh] justify-between w-[58px] flex flex-col items-center ' +
+          'py-[24px] bg-bgc-elevated transition-width ease-in duration-200 hover:w-[208px] z-20 ' +
+          'hover:shadow-[0px_8px_12px_4px_rgba(0,0,0,0.85)]'
+        }
+        onMouseEnter={() => setExpanded(true)}
+        onMouseLeave={() => setExpanded(false)}>
+        <div className={'flex flex-col gap-[24px] w-full'}>
+          {getSidebarLogo()}
+          <div className={'w-full flex flex-col gap-[8px]'}>
+            {topItems.map((item: NavbarItem, index: number) => {
+              return item.items ? (
+                <SideBarCollapse key={index} item={item} activeItem={activeItem} setActiveItem={setActiveItem} expanded={expanded} />
+              ) : (
+                <SideBarItem key={index} item={item} activeItem={activeItem} setActiveItem={setActiveItem} expanded={expanded} />
+              );
+            })}
+          </div>
+        </div>
+        {/* put org selector at the bottom of the nav bar */}
+        <div className={'flex px-[18px] items-center justify-center w-full'}>{getOrgSelector()}</div>
+      </div>
+    );
 	} else {
 		return <div></div>;
 	}

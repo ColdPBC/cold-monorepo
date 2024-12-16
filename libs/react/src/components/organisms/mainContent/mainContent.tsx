@@ -2,7 +2,6 @@ import React, { PropsWithChildren, ReactNode } from 'react';
 import { Breadcrumbs, Spinner } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
 import { twMerge } from 'tailwind-merge';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export interface MainContentProps {
 	title?: string;
@@ -19,7 +18,6 @@ export interface MainContentProps {
 }
 
 export function MainContent(props: PropsWithChildren<MainContentProps>) {
-	const ldFlags = useFlags();
 
 	const getTitle = () => {
 		return (
@@ -56,16 +54,18 @@ export function MainContent(props: PropsWithChildren<MainContentProps>) {
 		);
 	} else {
 		return (
-			<div className={twMerge('w-[1129px] flex flex-col items-center gap-6 text-tc-primary', ldFlags.showNewNavigationCold698 ? 'py-[40px] ml-[50px]' : '', props.className)}>
-				<div className={'w-full flex flex-row justify-between'}>
-					{getTitle()}
-					{
-						// show header element next to title if we have one
-						props.headerElement && props.headerElement
-					}
-				</div>
-				{props.isLoading ? <Spinner size={GlobalSizes.xLarge} /> : props.children}
-			</div>
-		);
-	}
+      <div
+        className={twMerge('w-[1129px] flex flex-col items-center gap-6 text-tc-primary py-[40px] ml-[50px]', props.className)}
+      >
+        <div className={'w-full flex flex-row justify-between'}>
+          {getTitle()}
+          {
+            // show header element next to title if we have one
+            props.headerElement && props.headerElement
+          }
+        </div>
+        {props.isLoading ? <Spinner size={GlobalSizes.xLarge}/> : props.children}
+      </div>
+    );
+  }
 }

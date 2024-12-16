@@ -49,7 +49,7 @@ export const AttributeAssuranceCountGraph: React.FC<AttributeAssuranceCountGraph
 						<div className="bg-gray-90" style={{ width: `${doesNotHavePercentage}%` }} />
 					</div>
 
-					<div className="flex items-start justify-items-center text-label text-cold-secondary mt-1 gap-4">
+					<div className="flex items-start justify-items-center text-label text-tc-secondary mt-1 gap-4">
 						<div className="flex items-center">
 							<div className={`w-2 h-2 rounded-full ${accentColor} mr-1`} />
 							<span>{`${hasAttributePercentage.toFixed(0)}% of all ${toSentenceCase(EntityLevel[sustainabilityAttribute.level])}s`}</span>

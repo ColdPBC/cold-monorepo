@@ -461,29 +461,6 @@ const changeLightness = (hex: string, lpct: number) => {
 export const themeColors = (): any => {
   const theme = {
     ...HexColors,
-    cold: {
-      midnightBlue: { ...generateVariants(DefaultHexColors.midnightBlue) },
-      slate: { ...generateVariants(DefaultHexColors.slate) },
-      skyBlue: { ...generateVariants(DefaultHexColors.skyBlue) },
-      superiorBlue: { ...generateVariants(DefaultHexColors.superiorBlue) },
-      lichenGreen: { ...generateVariants(DefaultHexColors.lichenGreen) },
-      pineGreen: { ...generateVariants(DefaultHexColors.pineGreen) },
-      astralYellow: { ...generateVariants(DefaultHexColors.astralYellow) },
-      silver: { ...generateVariants(DefaultHexColors.silver) },
-      limestone: { ...generateVariants(DefaultHexColors.limestone) },
-      fadeAwayGray: { ...generateVariants(DefaultHexColors.fadeAwayGray) },
-      jetBlack: { ...generateVariants(DefaultHexColors.jetBlack) },
-      gray: { ...generateVariants(DefaultHexColors.fadeAwayGray) },
-      charcoal: { ...generateVariants(DefaultHexColors.charcoal) },
-      black: { ...generateVariants(DefaultHexColors.jetBlack) },
-      alert: { ...generateVariants(DefaultHexColors.red) },
-      red: { ...generateVariants(DefaultHexColors.red) },
-      starkWhite: { ...generateVariants(DefaultHexColors.starkWhite) },
-      primary: { ...generateVariants(DefaultHexColors.skyBlue) },
-      secondary: { ...generateVariants(DefaultHexColors.limestone) },
-      warning: { ...generateVariants(DefaultHexColors.astralYellow) },
-      success: { ...generateVariants(DefaultHexColors.pineGreen) },
-    },
   };
 
   return theme;

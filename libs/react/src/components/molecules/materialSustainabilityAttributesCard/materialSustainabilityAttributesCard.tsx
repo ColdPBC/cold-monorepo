@@ -29,7 +29,7 @@ const _MaterialSustainabilityAttributesCard: React.FC<MaterialSustainabilityAttr
   return (
     <Card title={'Sustainability Attributes'} ctas={ctas} className={'w-full h-fit'} data-testid={'material-sustainability-attributes-card'}>
       {materialSustainabilityAttributes.length === 0 ? (
-        <span className="text-body text-cold-secondary">Add a new attribute manually or upload documents to track sustainability attributes on this material.</span>
+        <span className="text-body text-tc-secondary">Add a new attribute manually or upload documents to track sustainability attributes on this material.</span>
       ) : (
         <div className="w-full h-fit flex flex-col gap-2 justify-start items-start">
           {materialSustainabilityAttributes.map(sustainabilityAttribute => (
