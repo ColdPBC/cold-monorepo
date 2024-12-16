@@ -48,7 +48,7 @@ export const filterableSustainabilityAttributes = {
     type: 'Down',
     environment: 'production',
     classifications: [
-      { id: '96', name: 'Duck Down insulation' },
+      { id: '96', name: 'Duck Down Insulation' },
       { id: '95', name: 'Goose Down Insulation' }
     ]
   },
@@ -57,8 +57,8 @@ export const filterableSustainabilityAttributes = {
     type: 'Wool',
     environment: 'staging',
     classifications: [
-      { id: '7', name: 'Sheep Wool insulation' },
-      { id: '6', name: 'Wool fabric' }
+      { id: '7', name: 'Sheep Wool Insulation' },
+      { id: '6', name: 'Wool Fabric' }
     ]
   },
   // RWS Production
