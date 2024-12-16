@@ -1,3 +1,10 @@
+## [1.500.1](https://github.com/coldPBC/cold-monorepo/compare/v1.500.0...v1.500.1) (2024-12-16)
+
+
+### Bug Fixes
+
+* update default port configurations for cold-api environments ([49e0c8a](https://github.com/coldPBC/cold-monorepo/commit/49e0c8a96dc853106d217ff860894d22575b56e1))
+
 # [1.500.0](https://github.com/coldPBC/cold-monorepo/compare/v1.499.0...v1.500.0) (2024-12-16)
 
 
