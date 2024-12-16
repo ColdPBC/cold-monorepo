@@ -1,3 +1,11 @@
+# [1.500.0](https://github.com/coldPBC/cold-monorepo/compare/v1.499.0...v1.500.0) (2024-12-16)
+
+
+### Features
+
+* filter RDS and RWS material reports ([b0fa674](https://github.com/coldPBC/cold-monorepo/commit/b0fa6741ab81e6bcb16646dc6d1e22a0e1cd4362))
+* filter RDS and RWS material reports ([#717](https://github.com/coldPBC/cold-monorepo/issues/717)) ([5e7ba2c](https://github.com/coldPBC/cold-monorepo/commit/5e7ba2c5d8e6fcb0778c18625ecb3a5e0b74f3ea))
+
 # [1.499.0](https://github.com/coldPBC/cold-monorepo/compare/v1.498.0...v1.499.0) (2024-12-16)
 
 
