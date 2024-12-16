@@ -21,6 +21,7 @@ const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material }) 
         href={tier2Supplier ? `/suppliers/${tier2Supplier.id}` : undefined}
       />
       <DetailsItem category={'Tier 2 Supplier Country'} value={tier2Supplier?.country} />
+      <DetailsItem category={'Classification'} value={material.materialClassification?.name} />
       <DetailsItem category={'Category'} value={material.materialCategory} />
       <DetailsItem category={'Sub-Category'} value={material.materialSubcategory} />
       <DetailsItem category={'Brand Material ID'} value={material.brandMaterialId} />

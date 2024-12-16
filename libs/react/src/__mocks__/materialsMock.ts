@@ -689,6 +689,10 @@ export const getMaterialMock: MaterialGraphQL = (
         },
       },
     ],
+    materialClassification: {
+      id: 'mat_class_1',
+      name: 'Wool',
+    },
     materialCategory: 'Fabrics',
     materialSubcategory: 'Wools',
     attributeAssurances: [
