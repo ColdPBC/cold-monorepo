@@ -10,6 +10,9 @@ export interface Materials {
 export interface MaterialBaseEntity extends Materials {
   materialCategory: string | null;
   materialSubcategory: string | null;
+  materialClassification: {
+    id: string;
+  } | null;
 }
 
 export interface MaterialsWithCertifications extends Materials {

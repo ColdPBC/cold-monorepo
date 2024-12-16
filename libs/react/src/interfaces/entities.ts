@@ -3,5 +3,6 @@ export interface BaseEntity {
   name: string;
   category: string;
   subcategory: string;
+  classificationId?: string;
   hasAttribute: boolean;
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
 	BaseButton,
+  BulkEditSustainabilityAttributeModal,
 	Card,
 	CoverageSpreadBar,
 	ErrorFallback,
@@ -19,18 +20,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { BaseEntity, SustainabilityAttributeGraphQL } from '@coldpbc/interfaces';
 import { get, groupBy, isError, toLower, uniq } from 'lodash';
 import { processSustainabilityAttributeDataFromGraphQL, toSentenceCase } from '@coldpbc/lib';
-import {
-  GridCallbackDetails,
-  GridCellParams,
-  GridColDef,
-  GridRowParams,
-  GridRowSelectionModel,
-  MuiEvent
-} from '@mui/x-data-grid';
+import { GridCellParams, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { HexColors } from '@coldpbc/themes';
-import { BulkEditSustainabilityAttributeModal } from '../../organisms/buikEditSustainabilityAttributeModal/bulkEditSustainabilityAttributeModal';
 import { Checkbox } from '@mui/material';
 import capitalize from 'lodash/capitalize';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 const COLOR_FOR_ENTITY_LEVEL = {
 	[EntityLevel.MATERIAL]: HexColors.purple['300'],
@@ -38,9 +32,50 @@ const COLOR_FOR_ENTITY_LEVEL = {
 	[EntityLevel.SUPPLIER]: HexColors.teal['300'],
 };
 
+// This is a temporary solution until the backend can provide a list of classifications
+const filterableSustainabilityAttributes = {
+  // RDS Staging
+  '9e5f2088-03f0-4274-b142-80a210a82942': {
+    type: 'RDS',
+    environment: 'staging',
+    classifications: [
+      { id: '96', name: 'Duck Down insulation' },
+      { id: '95', name: 'Goose Down Insulation' }
+    ]
+  },
+  // RDS Production
+  'cca7e119-727b-4784-92f9-252d1f2e687c': {
+    type: 'RDS',
+    environment: 'production',
+    classifications: [
+      { id: '96', name: 'Duck Down insulation' },
+      { id: '95', name: 'Goose Down Insulation' }
+    ]
+  },
+  // RWS Staging
+  '389640c2-9c29-4946-8f12-f09978f2dc14': {
+    type: 'RWS',
+    environment: 'staging',
+    classifications: [
+      { id: '7', name: 'Sheep Wool insulation' },
+      { id: '6', name: 'Wool fabric' }
+    ]
+  },
+  // RWS Production
+  '36d106e9-46ad-4f1b-8b19-b3115a0881c7': {
+    type: 'RWS',
+    environment: 'production',
+    classifications: [
+      { id: '7', name: 'Sheep Wool insulation' },
+      { id: '6', name: 'Wool fabric' }
+    ]
+  }
+};
+
 export const _SustainabilityAttributeDetail = () => {
 	const { id: sustainabilityAttributeId } = useParams();
-	const { orgId } = useAuth0Wrapper();
+	const ldFlags = useFlags();
+  const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
 	const navigate = useNavigate();
 	const [selectedView, setSelectedView] = React.useState('category');
@@ -61,7 +96,17 @@ export const _SustainabilityAttributeDetail = () => {
 
 	// The entity query isn't valid for Organization-level attributes (for which this page will return null)
 	const validLevel = sustainabilityAttribute?.level === EntityLevel.ORGANIZATION ? undefined : sustainabilityAttribute?.level;
-	const entities = useEntityData(validLevel, orgId, sustainabilityAttribute?.attributeAssurances || []);
+	const unfilteredEntities = useEntityData(validLevel, orgId, sustainabilityAttribute?.attributeAssurances || []);
+
+  // Filter entities for the relevant material classification.
+  // Right now this is only defined for RWS and RDS in Staging and Prod (per configuration above).
+  const filterMaterials = ldFlags.cold1292MaterialReportsFilteredForRelevantMaterialClass && validLevel === EntityLevel.MATERIAL && sustainabilityAttributeId && sustainabilityAttributeId in filterableSustainabilityAttributes;
+  const relevantMaterialClassifications = sustainabilityAttributeId ? filterableSustainabilityAttributes[sustainabilityAttributeId]?.classifications ?? [] : [];
+  const relevantMaterialClassificationIds = relevantMaterialClassifications.map(classification => classification.id);
+  const entities = relevantMaterialClassifications.length === 0 ? unfilteredEntities : unfilteredEntities.filter(entity => {
+    const materialClassificationId = get(entity, 'classificationId', '');
+    return relevantMaterialClassificationIds.includes(materialClassificationId);
+  })
 
   logBrowser('Sustainability Attribute Detail', 'info', { orgId, sustainabilityAttributeId, entities, sustainabilityAttribute });
 	// Donut chart setup
@@ -122,7 +167,8 @@ export const _SustainabilityAttributeDetail = () => {
 
 	// Header setup
 	const levelLabel = `${toSentenceCase(EntityLevel[sustainabilityAttribute.level])}-Level`;
-	const subtitle = [levelLabel].filter(val => !!val).join(' | ');
+  const appliesTo = relevantMaterialClassificationIds.length > 0 ? `Applies to: ${relevantMaterialClassifications.map(classification => classification.name).join(', ')}` : '';
+	const subtitle = [levelLabel, appliesTo].filter(val => !!val).join(' | ');
 
 	// Data Grid setup
 	const uniqCategories = uniq(entities.map(entity => entity.category))
@@ -309,7 +355,8 @@ export const _SustainabilityAttributeDetail = () => {
 			breadcrumbs={[{ label: 'Sustainability', href: '/sustainability' }, { label: sustainabilityAttribute.name }]}
 			className="w-[calc(100%)]">
 			{/* If the sustainability attribute is material-level, add a tab structure to include the By Product view */}
-			{sustainabilityAttribute.level === EntityLevel.MATERIAL ? (
+      {/* However, we suppress it when filtering materials, e.g. for RDS and RWS */}
+			{sustainabilityAttribute.level === EntityLevel.MATERIAL && !filterMaterials ? (
 				<Tabs
 					tabs={[
 						{
