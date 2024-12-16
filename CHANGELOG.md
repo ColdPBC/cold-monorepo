@@ -1,3 +1,10 @@
+# [1.499.0](https://github.com/coldPBC/cold-monorepo/compare/v1.498.0...v1.499.0) (2024-12-16)
+
+
+### Features
+
+* add query for PCF emissions by product ([12ac3f6](https://github.com/coldPBC/cold-monorepo/commit/12ac3f67817e296b661e7b926856af996641cc2e))
+
 # [1.498.0](https://github.com/coldPBC/cold-monorepo/compare/v1.497.0...v1.498.0) (2024-12-15)
 
 
