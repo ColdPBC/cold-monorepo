@@ -31,6 +31,7 @@ import './organization-compliance-response';
 import './organization-compliance-status';
 import './organization-compliances-old';
 import './organization-facility';
+import './queries/pcf-emissions-by-product';
 import './organization-file';
 import './organization';
 import './policy-datum';

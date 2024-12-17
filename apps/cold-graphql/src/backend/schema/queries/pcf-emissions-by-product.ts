@@ -115,6 +115,12 @@ async function updateProductEmission(
 	});
 }
 
+/**
+ * Caches the PCF emissions for products based on the given options.
+ *
+ * @param {ResolverOptions} options - The options to be used for caching PCF emissions
+ * @return {Promise<{emissions: any[]}>} - A promise that resolves to an object containing the cached emissions
+ */
 export async function cache_pcf_emissions(options: ResolverOptions) {
 	try {
 		const emissionProvider = new MikroBackendProvider(OrganizationProductMaterialEmissions, getConnection());
@@ -158,11 +164,6 @@ graphweaverMetadata.addQuery({
 			type: () => String,
 			description: 'Organization ID',
 			nullable: false,
-		},
-		productId: {
-			type: () => String,
-			description: 'Product ID',
-			nullable: true,
 		},
 	},
 	resolver: async options => await cache_pcf_emissions(options),
