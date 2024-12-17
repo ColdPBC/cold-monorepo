@@ -74,6 +74,7 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
 			{...props}
 			sx={{
 				'--DataGrid-overlayHeight': '300px',
+        '--DataGrid-containerBackground': 'transparent',
 				'--DataGrid-rowBorderColor': HexColors.gray[30],
 				'& .MuiTablePagination-root': {
 					color: HexColors.tc.primary,
