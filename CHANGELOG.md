@@ -1,3 +1,10 @@
+# [1.503.0](https://github.com/coldPBC/cold-monorepo/compare/v1.502.1...v1.503.0) (2024-12-17)
+
+
+### Features
+
+* use deep clone for files in product detail ([f1b67d9](https://github.com/coldPBC/cold-monorepo/commit/f1b67d92d6c667ef6c8d33f971f1c6adf5579b30))
+
 ## [1.502.1](https://github.com/coldPBC/cold-monorepo/compare/v1.502.0...v1.502.1) (2024-12-17)
 
 
