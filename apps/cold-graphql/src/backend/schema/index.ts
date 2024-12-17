@@ -45,4 +45,3 @@ import './survey-status';
 import './sustainability-attribute';
 import './utility-bill';
 import './vector-record';
-import './queries/pcf-emissions-by-product';

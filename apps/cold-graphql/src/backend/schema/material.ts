@@ -67,6 +67,9 @@ export class Material {
 	@RelationshipField<Material>(() => MaterialClassification, { id: (entity) => entity.materialClassification?.id, nullable: true })
 	materialClassification?: MaterialClassification;
 
+	@Field(() => GraphQLJSON, { nullable: true })
+	emissionStats?: Record<string, unknown>;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'material' })
 	attributeAssurances!: AttributeAssurance[];
 

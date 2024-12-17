@@ -672,6 +672,7 @@ model products {
   supplier_product_id  String?
   supplier_id          String?
   style_code           String?
+	emission_stats	     Json?
   materials            product_materials[]
   organization         organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   supplier             organization_facilities? @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
@@ -726,6 +727,7 @@ model materials {
   data_source               String?
   material_classification   material_classification? @relation(fields: [material_classification_id], references: [id])
   material_classification_id Int?
+	emission_stats	          Json?
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "materials_organization_id_idx1")

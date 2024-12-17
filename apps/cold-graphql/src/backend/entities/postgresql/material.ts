@@ -74,6 +74,9 @@ export class Material {
 	@ManyToOne({ entity: () => MaterialClassification, ref: true, nullable: true })
 	materialClassification?: Ref<MaterialClassification>;
 
+	@Property({ type: 'json', nullable: true })
+	emissionStats?: Record<string, unknown>;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'material' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 
