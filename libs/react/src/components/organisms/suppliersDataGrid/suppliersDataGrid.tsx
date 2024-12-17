@@ -57,10 +57,6 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
     }
   }, [suppliersQuery.data, tier]);
 
-  if (suppliersQuery.isLoading) {
-    return <Spinner />;
-  }
-
   const renderHeader = (params: GridColumnHeaderParams<any, any, any>) => {
     // check if the header is materials or products
     // then return the appropriate icon with the header title: Materials or Products
@@ -195,6 +191,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
   return (
     <div className={'w-full'}>
       <MuiDataGrid
+        loading={suppliersQuery.isLoading}
         rows={rows}
         columns={columns}
         onRowClick={params => {
