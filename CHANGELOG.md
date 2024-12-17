@@ -1,3 +1,10 @@
+## [1.502.1](https://github.com/coldPBC/cold-monorepo/compare/v1.502.0...v1.502.1) (2024-12-17)
+
+
+### Bug Fixes
+
+* correct parameter keys and logical comparison in backend code ([2dd2d58](https://github.com/coldPBC/cold-monorepo/commit/2dd2d58b38455cbcb119ee566d45bcf58c0e90d7))
+
 # [1.502.0](https://github.com/coldPBC/cold-monorepo/compare/v1.501.0...v1.502.0) (2024-12-17)
 
 
