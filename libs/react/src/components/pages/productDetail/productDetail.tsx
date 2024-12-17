@@ -12,7 +12,7 @@ import {
 import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
 import {FilesWithAssurances, ProductsQuery} from '@coldpbc/interfaces';
-import { get, isError } from 'lodash';
+import {cloneDeep, get, isError} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import {parseDocumentsForProductDetails} from "@coldpbc/lib";
@@ -90,7 +90,7 @@ const _ProductDetail = () => {
           },
           {
             label: 'Documents',
-            content: <ProductDocumentsTab files={parseDocumentsForProductDetails(product, files)} />,
+            content: <ProductDocumentsTab files={parseDocumentsForProductDetails(product, cloneDeep(files))} />,
           },
         ]}
       />

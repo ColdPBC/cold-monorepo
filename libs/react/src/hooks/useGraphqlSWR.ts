@@ -23,7 +23,8 @@ export const useGraphQLSWR = <Data = any, Error = any>(key: string | null, varia
 				});
 
 				logBrowser(`Successful fetching graphql query ${queryKey}`, 'info', {
-					query: queryKey,
+					queryKey,
+          query,
 					variables,
 					response,
 				});
