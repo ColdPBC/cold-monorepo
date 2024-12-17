@@ -13,7 +13,7 @@
     "apply:hooks": "ts-node ./custom_generators/apply_hooks.ts",
     "create:sidecar": "ts-node ./custom_generators/create_sidecar.ts",
     "sync": "yarn import && yarn generate",
-	  "generate": "ts-node ./custom_generators/update_database_connection.ts && yarn apply:acl && yarn apply:hooks && yarn create:sidecar"
+    "generate": "ts-node ./custom_generators/update_database_connection.ts && yarn apply:acl && yarn apply:hooks && yarn create:sidecar"
   },
   "resolutions": {
     "graphql": "^16.9.0"
