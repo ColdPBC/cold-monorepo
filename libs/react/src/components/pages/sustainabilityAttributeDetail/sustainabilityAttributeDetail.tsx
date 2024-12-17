@@ -33,43 +33,45 @@ const COLOR_FOR_ENTITY_LEVEL = {
 };
 
 // This is a temporary solution until the backend can provide a list of classifications
-export const filterableSustainabilityAttributes = {
+export const materialClassificationGroupByAttributeId = {
   // RDS Staging
-  '9e5f2088-03f0-4274-b142-80a210a82942': {
-    type: 'Down',
-    environment: 'staging',
-    classifications: [
-      { id: '96', name: 'Duck Down insulation' },
-      { id: '95', name: 'Goose Down Insulation' }
-    ]
-  },
+  '9e5f2088-03f0-4274-b142-80a210a82942': 'Down',
   // RDS Production
-  'cca7e119-727b-4784-92f9-252d1f2e687c': {
-    type: 'Down',
-    environment: 'production',
-    classifications: [
-      { id: '96', name: 'Duck Down Insulation' },
-      { id: '95', name: 'Goose Down Insulation' }
-    ]
-  },
+  'cca7e119-727b-4784-92f9-252d1f2e687c': 'Down',
   // RWS Staging
-  '389640c2-9c29-4946-8f12-f09978f2dc14': {
-    type: 'Wool',
-    environment: 'staging',
-    classifications: [
-      { id: '7', name: 'Sheep Wool Insulation' },
-      { id: '6', name: 'Wool Fabric' }
-    ]
-  },
+  '389640c2-9c29-4946-8f12-f09978f2dc14': 'Wool',
   // RWS Production
-  '36d106e9-46ad-4f1b-8b19-b3115a0881c7': {
-    type: 'Wool',
-    environment: 'production',
-    classifications: [
-      { id: '7', name: 'Sheep Wool insulation' },
-      { id: '6', name: 'Wool fabric' }
-    ]
-  }
+  '36d106e9-46ad-4f1b-8b19-b3115a0881c7': 'Wool',
+  // LWG Staging
+  '7b58eff9-b629-473b-ac12-1e9ab8b3f35c': 'Leather',
+  '25ccec45-4d48-4bc2-b4a4-6a88f07ff448': 'Leather',
+  '447c8bd7-138d-42a8-83d5-335279707308': 'Leather',
+  '1074436c-eb53-4f6a-95aa-5d8b6bed2f44': 'Leather',
+  // LWG Production
+  'bb3adc2f-639c-4965-b90c-63fdbbe23b24': 'Leather',
+  '8ddf586a-fd8f-45fb-97ce-278df40c0dbc': 'Leather',
+  'susatr_wrbhcgo73sxgu5tby7rxenjx': 'Leather',
+  '6a5e73ad-aa64-46dc-9c8e-47ca1b2576b3': 'Leather',
+  '0d0d430e-610d-449d-8a8e-a49a0f28a9e0': 'Leather'
+};
+
+// Map of types to their environment-specific configurations
+export const classificationsByGroup = {
+  Down: [
+    { id: '96', name: 'Duck Down insulation' },
+    { id: '95', name: 'Goose Down Insulation' }
+  ],
+  Wool: [
+    { id: '7', name: 'Sheep Wool insulation' },
+    { id: '6', name: 'Wool fabric' }
+  ],
+  Leather: [
+    { id: '17', name: 'Bovine (cow) leather' },
+    { id: '27', name: 'Pig leather' },
+    { id: '28', name: 'Goat leather' },
+    { id: '31', name: 'Kangaroo leather' },
+    { id: '90', name: 'Reptile leather' }
+  ]
 };
 
 export const _SustainabilityAttributeDetail = () => {
@@ -100,10 +102,13 @@ export const _SustainabilityAttributeDetail = () => {
 
   // Filter entities for the relevant material classification.
   // Right now this is only defined for RWS and RDS in Staging and Prod (per configuration above).
-  const filterMaterials = ldFlags.cold1292MaterialReportsFilteredForRelevantMaterialClassification && validLevel === EntityLevel.MATERIAL && sustainabilityAttributeId && sustainabilityAttributeId in filterableSustainabilityAttributes;
-  const relevantMaterialClassifications = filterMaterials && sustainabilityAttributeId ? filterableSustainabilityAttributes[sustainabilityAttributeId]?.classifications ?? [] : [];
+  const filterMaterials = ldFlags.cold1292MaterialReportsFilteredForRelevantMaterialClassification && validLevel === EntityLevel.MATERIAL;
+
+  const classificationGroup = filterMaterials ? materialClassificationGroupByAttributeId[sustainabilityAttributeId || ''] : null;
+  const relevantMaterialClassifications =  classificationsByGroup[classificationGroup] ?? [];
   const relevantMaterialClassificationIds = relevantMaterialClassifications.map(classification => classification.id);
-  const entities = relevantMaterialClassifications.length === 0 ? unfilteredEntities : unfilteredEntities.filter(entity => {
+
+  const entities = relevantMaterialClassificationIds.length === 0 ? unfilteredEntities : unfilteredEntities.filter(entity => {
     const materialClassificationId = get(entity, 'classificationId', '');
     return relevantMaterialClassificationIds.includes(materialClassificationId);
   })

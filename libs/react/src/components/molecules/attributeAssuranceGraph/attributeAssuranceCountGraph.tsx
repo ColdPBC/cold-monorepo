@@ -4,8 +4,8 @@ import { pluralize, processSustainabilityAttributeForGraph, toSentenceCase } fro
 import { SustainabilityAttribute } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useEntityData } from '@coldpbc/hooks';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { filterableSustainabilityAttributes } from '../../pages';
 import { get } from 'lodash';
+import { classificationsByGroup, materialClassificationGroupByAttributeId } from '@coldpbc/components';
 
 interface AttributeAssuranceCountGraphProps {
   sustainabilityAttribute: SustainabilityAttribute;
@@ -24,9 +24,10 @@ export const AttributeAssuranceCountGraph: React.FC<AttributeAssuranceCountGraph
   let entities = useEntityData(validLevel, orgId);
   let filterCategory = '';
 
-  const filterMaterials = ldFlags.cold1292MaterialReportsFilteredForRelevantMaterialClassification && validLevel === EntityLevel.MATERIAL && sustainabilityAttribute.id in filterableSustainabilityAttributes;
+  const filterMaterials = ldFlags.cold1292MaterialReportsFilteredForRelevantMaterialClassification && validLevel === EntityLevel.MATERIAL && sustainabilityAttribute.id in materialClassificationGroupByAttributeId;
   if (filterMaterials) {
-    const relevantMaterialClassifications = filterableSustainabilityAttributes[sustainabilityAttribute.id]?.classifications ?? [];
+    const classificationGroup = materialClassificationGroupByAttributeId[sustainabilityAttribute.id];
+    const relevantMaterialClassifications =  classificationsByGroup[classificationGroup] ?? [];
     const relevantMaterialClassificationIds = relevantMaterialClassifications.map(classification => classification.id);
 
     // Filter entities
@@ -39,7 +40,7 @@ export const AttributeAssuranceCountGraph: React.FC<AttributeAssuranceCountGraph
     const entityIds = entities.map(entity => entity.id);
     sustainabilityAttribute = { ...sustainabilityAttribute, attributeAssurances: sustainabilityAttribute.attributeAssurances.filter(attributeAssurance => entityIds.includes(attributeAssurance.entity.id))};
 
-    filterCategory = `${filterableSustainabilityAttributes[sustainabilityAttribute.id].type} `;
+    filterCategory = `${materialClassificationGroupByAttributeId[sustainabilityAttribute.id]} `;
   }
 
   const totalEntities = entities.length;
