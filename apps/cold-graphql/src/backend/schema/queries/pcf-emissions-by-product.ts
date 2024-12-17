@@ -134,7 +134,7 @@ export async function cache_pcf_emissions(options: ResolverOptions) {
 
 			const categoryEmissions = await emissionProvider.find({
 				productCategory: category ? category : null,
-				organizationId: options.args.oprganizationId,
+				organizationId: options.args.organizationId,
 			});
 
 			const emission_stats = calculateCategoryEmissionsStats(categoryEmissions, productsInCategory, category, categories);
