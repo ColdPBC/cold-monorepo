@@ -1,3 +1,13 @@
+# [1.502.0](https://github.com/coldPBC/cold-monorepo/compare/v1.501.0...v1.502.0) (2024-12-17)
+
+
+### Features
+
+* add caching mechanism for PCF emissions and adjust schema queries ([8608be5](https://github.com/coldPBC/cold-monorepo/commit/8608be552208bee678bf91068f46129b667b8031))
+* add emissions tracking via schema updates and new database view ([2b63f49](https://github.com/coldPBC/cold-monorepo/commit/2b63f49f6d36e20604fbb741ae017b2b21da0359))
+* implement cache_pcf_emissions query to enhance emission data processing ([84e874e](https://github.com/coldPBC/cold-monorepo/commit/84e874e6520bda8281cc4d3b56e7ab855cd5b877))
+* rename `emissions` to `emissionStats` and update schema and entity definitions ([f991a69](https://github.com/coldPBC/cold-monorepo/commit/f991a69721749eb8b61d722090e03bc16384b946))
+
 # [1.501.0](https://github.com/coldPBC/cold-monorepo/compare/v1.500.1...v1.501.0) (2024-12-16)
 
 
