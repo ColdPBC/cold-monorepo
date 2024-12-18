@@ -20,6 +20,7 @@ import { ProductMaterial } from './product-material';
 import { SurveyDatum } from './survey-datum';
 import { SurveyStatus } from './survey-status';
 import { SustainabilityAttribute } from './sustainability-attribute';
+import { SustainabilityAttributeClassifcationAssignment } from './sustainability-attribute-classifcation-assignment';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
 
@@ -125,6 +126,9 @@ export class Organization {
 
 	@OneToMany({ entity: () => SurveyStatus, mappedBy: 'organization' })
 	surveyStatuses = new Collection<SurveyStatus>(this);
+
+	@OneToMany({ entity: () => SustainabilityAttributeClassifcationAssignment, mappedBy: 'organization' })
+	sustainabilityAttributeClassifcationAssignments = new Collection<SustainabilityAttributeClassifcationAssignment>(this);
 
 	@OneToMany({ entity: () => SustainabilityAttribute, mappedBy: 'organization' })
 	sustainabilityAttributes = new Collection<SustainabilityAttribute>(this);

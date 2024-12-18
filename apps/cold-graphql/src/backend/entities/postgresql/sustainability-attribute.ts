@@ -5,6 +5,7 @@ import { Collection, Entity, Enum, Index, ManyToOne, OneToMany, PrimaryKey, Prop
 import { AttributeAssurance } from './attribute-assurance';
 import { MaterialClassification } from './material-classification';
 import { Organization } from './organization';
+import { SustainabilityAttributeClassifcationAssignment } from './sustainability-attribute-classifcation-assignment';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { allow_null_orgs_acl, OrgContext } from '../../libs/acls/acl_policies';
@@ -68,6 +69,9 @@ export class SustainabilityAttribute {
 
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'sustainabilityAttribute' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
+
+	@OneToMany({ entity: () => SustainabilityAttributeClassifcationAssignment, mappedBy: 'sustainabilityAttribute' })
+	sustainabilityAttributeClassifcationAssignments = new Collection<SustainabilityAttributeClassifcationAssignment>(this);
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof SustainabilityAttribute, OrgContext>) {

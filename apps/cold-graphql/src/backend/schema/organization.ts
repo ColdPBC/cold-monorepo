@@ -19,6 +19,7 @@ import { ProductMaterial } from './product-material';
 import { SurveyDatum } from './survey-datum';
 import { SurveyStatus } from './survey-status';
 import { SustainabilityAttribute } from './sustainability-attribute';
+import { SustainabilityAttributeClassifcationAssignment } from './sustainability-attribute-classifcation-assignment';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
 import { Organization as OrmOrganization } from '../entities';
@@ -117,6 +118,9 @@ export class Organization {
 
 	@RelationshipField<SurveyStatus>(() => [SurveyStatus], { relatedField: 'organization' })
 	surveyStatuses!: SurveyStatus[];
+
+	@RelationshipField<SustainabilityAttributeClassifcationAssignment>(() => [SustainabilityAttributeClassifcationAssignment], { relatedField: 'organization' })
+	sustainabilityAttributeClassifcationAssignments!: SustainabilityAttributeClassifcationAssignment[];
 
 	@RelationshipField<SustainabilityAttribute>(() => [SustainabilityAttribute], { relatedField: 'organization' })
 	sustainabilityAttributes!: SustainabilityAttribute[];

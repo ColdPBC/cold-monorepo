@@ -293,47 +293,48 @@ model category_data {
 /// @actions
 model organizations {
   /// @zod.custom.use(z.string().uuid())
-  id                                        String                                      @id
-  name                                      String                                      @unique
-  enabled_connections                       Json
-  display_name                              String
-  branding                                  Json?
-  phone                                     String?
+  id                                                String                                              @id
+  name                                              String                                              @unique
+  enabled_connections                               Json
+  display_name                                      String
+  branding                                          Json?
+  phone                                             String?
   /// @zod.custom.use(z.string().email())
-  email                                     String?
+  email                                             String?
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
-  created_at                                DateTime                                    @default(now())
+  created_at                                        DateTime                                            @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at                                DateTime                                    @updatedAt
-  isTest                                    Boolean                                     @default(false)
-  website                                   String?
-  deleted                                   Boolean                                     @default(false)
-  actions                                   actions[]
-  category_data                             category_data[]
-  integrations                              integrations[]
-  organization_compliance                   organization_compliance[]
-  organization_compliance_ai_response_files organization_compliance_ai_response_files[]
-  organization_compliance_ai_responses      organization_compliance_ai_responses[]
-  organization_compliances_old              organization_compliances_old[]
-  facilities                                organization_facilities[]
-  organization_files                        organization_files[]
-  survey_data                               survey_data[]
-  survey_status                             survey_status[]
-  utility_bills                             utility_bills[]
-  vector_records                            vector_records[]
-  facility_footprints                       facility_footprints[]
-  compliance_responses                      compliance_responses[]
-  metadata                                  Json?
-  sustainability_attributes                 sustainability_attributes[]
-  attribute_assurances                      attribute_assurances[]
-  products                                  products[]
-  materials                                 materials[]
-  material_suppliers                        material_suppliers[]
-  product_materials                         product_materials[]
+  updated_at                                        DateTime                                            @updatedAt
+  isTest                                            Boolean                                             @default(false)
+  website                                           String?
+  deleted                                           Boolean                                             @default(false)
+  actions                                           actions[]
+  category_data                                     category_data[]
+  integrations                                      integrations[]
+  organization_compliance                           organization_compliance[]
+  organization_compliance_ai_response_files         organization_compliance_ai_response_files[]
+  organization_compliance_ai_responses              organization_compliance_ai_responses[]
+  organization_compliances_old                      organization_compliances_old[]
+  facilities                                        organization_facilities[]
+  organization_files                                organization_files[]
+  survey_data                                       survey_data[]
+  survey_status                                     survey_status[]
+  utility_bills                                     utility_bills[]
+  vector_records                                    vector_records[]
+  facility_footprints                               facility_footprints[]
+  compliance_responses                              compliance_responses[]
+  metadata                                          Json?
+  sustainability_attributes                         sustainability_attributes[]
+  attribute_assurances                              attribute_assurances[]
+  products                                          products[]
+  materials                                         materials[]
+  material_suppliers                                material_suppliers[]
+  product_materials                                 product_materials[]
+  sustainability_attribute_classifcation_assignment sustainability_attribute_classifcation_assignment[]
 }
 
 /// @namespace Organization_Facilities
@@ -605,20 +606,21 @@ model facility_footprints {
 }
 
 model sustainability_attributes {
-  id                         String                   @id @default(dbgenerated("uuid_generate_v4()"))
-  organization_id            String?
-  name                       String
-  created_at                 DateTime?                @default(now()) @db.Timestamptz(6)
-  updated_at                 DateTime?                @updatedAt @db.Timestamptz(6)
-  deleted                    Boolean                  @default(false)
-  level                      claim_levels
-  type                       claim_types
-  logo_url                   String?
-  material_classification_id Int?
-  material_classification    material_classification? @relation(fields: [material_classification_id], references: [id])
-  organization               organizations?           @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  metadata                   Json?
-  attribute_assurances       attribute_assurances[]
+  id                                                String                                              @id @default(dbgenerated("uuid_generate_v4()"))
+  organization_id                                   String?
+  name                                              String
+  created_at                                        DateTime?                                           @default(now()) @db.Timestamptz(6)
+  updated_at                                        DateTime?                                           @updatedAt @db.Timestamptz(6)
+  deleted                                           Boolean                                             @default(false)
+  level                                             claim_levels
+  type                                              claim_types
+  logo_url                                          String?
+  material_classification_id                        Int?
+  material_classification                           material_classification?                            @relation(fields: [material_classification_id], references: [id])
+  organization                                      organizations?                                      @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  metadata                                          Json?
+  attribute_assurances                              attribute_assurances[]
+  sustainability_attribute_classifcation_assignment sustainability_attribute_classifcation_assignment[]
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "sustainability_attributes_organization_id_idx1")
@@ -672,7 +674,7 @@ model products {
   supplier_product_id  String?
   supplier_id          String?
   style_code           String?
-	emission_stats	     Json?
+  emission_stats       Json?
   materials            product_materials[]
   organization         organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   supplier             organization_facilities? @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
@@ -688,46 +690,71 @@ model products {
   @@index([organization_id], map: "products_organization_id_idx1")
 }
 
+model core_classifications {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  material_classification material_classification[]
+}
+
 model material_classification {
-  id                        Int                         @id @default(autoincrement())
-  name                      String
-  category                  String
-  created_at                DateTime                    @default(now())
-  updated_at                DateTime                    @updatedAt
-  materials                 materials[]
-  sustainability_attributes sustainability_attributes[]
+  id                                                Int                                                 @id @default(autoincrement())
+  name                                              String
+  category                                          String
+  created_at                                        DateTime                                            @default(now())
+  updated_at                                        DateTime                                            @updatedAt
+  materials                                         materials[]
+  core_classification_id                            Int?
+  core_classification                               core_classifications?                                @relation(fields: [core_classification_id], references: [id], onDelete: Cascade)
+  sustainability_attributes                         sustainability_attributes[]
+  sustainability_attribute_classifcation_assignment sustainability_attribute_classifcation_assignment[]
 
-	@@unique([category, name], name: "categoryName")
+  @@unique([category, name], name: "categoryName")
+  @@index([category], map: "material_classification_category_idx1")
+  @@index([name], map: "material_classification_name_idx1")
+}
 
-	@@index([category], map: "material_classification_category_idx1")
-	@@index([name], map: "material_classification_name_idx1")
+model sustainability_attribute_classifcation_assignment {
+  id                          Int      @id @default(autoincrement())
+  organization_id             String
+  created_at                  DateTime @default(now())
+  updated_at                  DateTime @updatedAt
+  metadata                    Json
+  sustainability_attribute_id String
+  material_classification_id  Int
+
+  sustainability_attribute sustainability_attributes @relation(fields: [sustainability_attribute_id], references: [id], onDelete: Cascade)
+  material_classification  material_classification   @relation(fields: [material_classification_id], references: [id], onDelete: Cascade)
+  organization             organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 }
 
 model materials {
-  id                        String                   @id @default(cuid())
-  name                      String
-  created_at                DateTime?                @default(now()) @db.Timestamptz(6)
-  updated_at                DateTime?                @updatedAt @db.Timestamptz(6)
-  deleted                   Boolean?                 @default(false)
-  organization_id           String
-  brand_material_id         String?
-  supplier_material_id      String?
-  description               String?
-  ai_description            String?
-  material_suppliers        material_suppliers[]
-  material_category         String?
-  material_subcategory      String?
-  organization_facility_id  String?
-  emissions_factor          Float?
-  activity_id               String?
-  metadata                  Json?
-  organization              organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  attribute_assurances      attribute_assurances[]
-  product_materials         product_materials[]
-  data_source               String?
-  material_classification   material_classification? @relation(fields: [material_classification_id], references: [id])
+  id                         String                   @id @default(cuid())
+  name                       String
+  created_at                 DateTime?                @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime?                @updatedAt @db.Timestamptz(6)
+  deleted                    Boolean?                 @default(false)
+  organization_id            String
+  brand_material_id          String?
+  supplier_material_id       String?
+  description                String?
+  ai_description             String?
+  material_suppliers         material_suppliers[]
+  material_category          String?
+  material_subcategory       String?
+  organization_facility_id   String?
+  emissions_factor           Float?
+  activity_id                String?
+  metadata                   Json?
+  organization               organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  attribute_assurances       attribute_assurances[]
+  product_materials          product_materials[]
+  data_source                String?
+  material_classification    material_classification? @relation(fields: [material_classification_id], references: [id])
   material_classification_id Int?
-	emission_stats	          Json?
+  emission_stats             Json?
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "materials_organization_id_idx1")

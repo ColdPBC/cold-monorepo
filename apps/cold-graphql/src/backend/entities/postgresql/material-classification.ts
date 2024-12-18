@@ -1,9 +1,11 @@
 import { MaterialClassificationHooks } from '../hooks/material-classification.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Collection, Entity, Index, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import { Collection, Entity, Index, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { CoreClassification } from './core-classification';
 import { Material } from './material';
 import { SustainabilityAttribute } from './sustainability-attribute';
+import { SustainabilityAttributeClassifcationAssignment } from './sustainability-attribute-classifcation-assignment';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl, OrgContext } from '../../libs/acls/acl_policies';
@@ -34,8 +36,14 @@ export class MaterialClassification {
 	@Property({ type: 'datetime', length: 3 })
 	updatedAt!: Date;
 
+	@ManyToOne({ entity: () => CoreClassification, ref: true, nullable: true })
+	coreClassification?: Ref<CoreClassification>;
+
 	@OneToMany({ entity: () => Material, mappedBy: 'materialClassification' })
 	materials = new Collection<Material>(this);
+
+	@OneToMany({ entity: () => SustainabilityAttributeClassifcationAssignment, mappedBy: 'materialClassification' })
+	sustainabilityAttributeClassifcationAssignments = new Collection<SustainabilityAttributeClassifcationAssignment>(this);
 
 	@OneToMany({ entity: () => SustainabilityAttribute, mappedBy: 'materialClassification' })
 	sustainabilityAttributes = new Collection<SustainabilityAttribute>(this);

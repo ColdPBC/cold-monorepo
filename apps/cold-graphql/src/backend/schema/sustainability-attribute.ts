@@ -4,6 +4,7 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AttributeAssurance } from './attribute-assurance';
 import { MaterialClassification } from './material-classification';
 import { Organization } from './organization';
+import { SustainabilityAttributeClassifcationAssignment } from './sustainability-attribute-classifcation-assignment';
 import { SustainabilityAttributesLevel, SustainabilityAttributesType, SustainabilityAttribute as OrmSustainabilityAttribute } from '../entities';
 import { connection } from '../database';
 
@@ -49,4 +50,7 @@ export class SustainabilityAttribute {
 
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'sustainabilityAttribute' })
 	attributeAssurances!: AttributeAssurance[];
+
+	@RelationshipField<SustainabilityAttributeClassifcationAssignment>(() => [SustainabilityAttributeClassifcationAssignment], { relatedField: 'sustainabilityAttribute' })
+	sustainabilityAttributeClassifcationAssignments!: SustainabilityAttributeClassifcationAssignment[];
 }

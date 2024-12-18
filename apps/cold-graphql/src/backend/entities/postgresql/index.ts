@@ -12,6 +12,7 @@ import { ComplianceSectionDependencyChain } from './compliance-section-dependenc
 import { ComplianceSectionGroup } from './compliance-section-group';
 import { ComplianceSection } from './compliance-section';
 import { ComponentDefinition } from './component-definition';
+import { CoreClassification } from './core-classification';
 import { EmissionScope } from './emission-scope';
 import { Emission } from './emission';
 import { FacilityFootprint } from './facility-footprint';
@@ -42,10 +43,10 @@ import { SupportedUtility } from './supported-utility';
 import { SurveyDatum } from './survey-datum';
 import { SurveyDefinition } from './survey-definition';
 import { SurveyStatus } from './survey-status';
+import { SustainabilityAttributeClassifcationAssignment } from './sustainability-attribute-classifcation-assignment';
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
-import { OrganizationProductMaterialEmissions } from './organization-product-material-emissions';
 
 export * from './prisma-migration';
 export * from './action-template';
@@ -61,6 +62,7 @@ export * from './compliance-section-dependency-chain';
 export * from './compliance-section-group';
 export * from './compliance-section';
 export * from './component-definition';
+export * from './core-classification';
 export * from './emission-scope';
 export * from './emission';
 export * from './facility-footprint';
@@ -91,10 +93,10 @@ export * from './supported-utility';
 export * from './survey-datum';
 export * from './survey-definition';
 export * from './survey-status';
+export * from './sustainability-attribute-classifcation-assignment';
 export * from './sustainability-attribute';
 export * from './utility-bill';
 export * from './vector-record';
-export * from './organization-product-material-emissions';
 
 export const entities = [
 	PrismaMigration,
@@ -111,6 +113,7 @@ export const entities = [
 	ComplianceSectionGroup,
 	ComplianceSection,
 	ComponentDefinition,
+	CoreClassification,
 	EmissionScope,
 	Emission,
 	FacilityFootprint,
@@ -131,7 +134,6 @@ export const entities = [
 	OrganizationCompliancesOld,
 	OrganizationFacility,
 	OrganizationFile,
-	OrganizationProductMaterialEmissions,
 	Organization,
 	PolicyDatum,
 	PolicyDefinition,
@@ -142,6 +144,7 @@ export const entities = [
 	SurveyDatum,
 	SurveyDefinition,
 	SurveyStatus,
+	SustainabilityAttributeClassifcationAssignment,
 	SustainabilityAttribute,
 	UtilityBill,
 	VectorRecord,
