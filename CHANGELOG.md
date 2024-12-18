@@ -1,3 +1,10 @@
+# [1.504.0](https://github.com/coldPBC/cold-monorepo/compare/v1.503.0...v1.504.0) (2024-12-18)
+
+
+### Features
+
+* add core classifications and sustainability attribute classification assignment models ([2c8e40c](https://github.com/coldPBC/cold-monorepo/commit/2c8e40c2fb97e2ad04a4b8da2a2600a465a3d63b))
+
 # [1.503.0](https://github.com/coldPBC/cold-monorepo/compare/v1.502.1...v1.503.0) (2024-12-17)
 
 
