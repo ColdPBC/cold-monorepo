@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import {
-	BaseButton,
+  BaseButton,
+  BubbleList,
   BulkEditSustainabilityAttributeModal,
-	Card,
-	CoverageSpreadBar,
-	ErrorFallback,
-	ErrorPage,
-	MainContent,
-	MuiDataGrid,
-	Spinner,
-	SustainabilityAttributeByProductTab,
-	Tabs,
-	TotalCoverageDonut,
+  Card,
+  CoverageSpreadBar,
+  ErrorFallback,
+  ErrorPage,
+  MainContent,
+  MuiDataGrid,
+  Spinner,
+  SustainabilityAttributeByProductTab,
+  Tabs,
+  TotalCoverageDonut,
 } from '@coldpbc/components';
 import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -172,8 +173,13 @@ export const _SustainabilityAttributeDetail = () => {
 
 	// Header setup
 	const levelLabel = `${toSentenceCase(EntityLevel[sustainabilityAttribute.level])}-Level`;
-  const appliesTo = relevantMaterialClassificationIds.length > 0 ? `Applies to: ${relevantMaterialClassifications.map(classification => classification.name).join(', ')}` : '';
-	const subtitle = [levelLabel, appliesTo].filter(val => !!val).join(' | ');
+  // When we filter for material classifications, we have a more complex subtitle, so we use a headerElement instead
+  const subtitle = relevantMaterialClassificationIds.length > 0 ? (
+    <div className={'flex items-center gap-2 text-body text-tc-primary self-stretch'}>
+      <span className={'whitespace-nowrap'}>{`${levelLabel} | Applies to:`}</span>
+      <BubbleList values={relevantMaterialClassifications.map(classification => classification.name)} />
+    </div>
+  ) : levelLabel;
 
 	// Data Grid setup
 	const uniqCategories = uniq(entities.map(entity => entity.category))
@@ -355,7 +361,7 @@ export const _SustainabilityAttributeDetail = () => {
 	return (
 		<MainContent
 			title={sustainabilityAttribute.name}
-			subTitle={subtitle}
+      subTitle={subtitle}
 			imageUrl={sustainabilityAttribute.logoUrl}
 			breadcrumbs={[{ label: 'Sustainability', href: '/sustainability' }, { label: sustainabilityAttribute.name }]}
 			className="w-[calc(100%)]">
