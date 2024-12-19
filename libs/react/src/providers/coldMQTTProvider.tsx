@@ -15,7 +15,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const client = useRef<mqtt.MqttClient | null>(null);
   const [connectionStatus, setConnectionStatus] = React.useState(false);
   const [token, setToken] = React.useState<string>('');
-  const { mutate } = useSWRConfig();
+  const { mutate, cache } = useSWRConfig();
   const flags = useFlags();
 
   const getToken = async () => {
@@ -105,11 +105,19 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
                 parsedStorage[parsedPayload.swr_key] = new Date().toISOString();
                 localStorage.setItem('api-calls', JSON.stringify(parsedStorage));
               }
-              const graphqlMappings = getQueryMappingsForKey(parsedPayload.swr_key);
+              const cacheKeys = Array.from(cache.keys());
+              const swrKey = parsedPayload.swr_key;
+              const graphqlMappings = getQueryMappingsForKey(swrKey, cacheKeys, orgId);
               forEach(graphqlMappings, async query => {
                 await mutate(query);
               });
               await mutate([parsedPayload.swr_key, 'GET']);
+              logBrowser(`GraphQL Mapping Updates processed from message for topic: ${topic}`, 'info', {
+                graphqlMappings,
+                swrKey,
+                cacheKeys,
+                orgId
+              })
             }
           } catch (e) {
             logBrowser('Error parsing payload from IOT', 'error', { topic, e }, e);
