@@ -40,7 +40,7 @@ const _MaterialsDataGrid = () => {
 
   // Handle search input changes
   const handleFilterChange = (filterModel: GridFilterModel) => {
-    const searchValue = filterModel.quickFilterValues?.[0] || '';
+    const searchValue = filterModel.quickFilterValues?.join(' ') || '';
     setSearchQuery(searchValue);
     setPaginationModel(prev => ({
       ...prev,
