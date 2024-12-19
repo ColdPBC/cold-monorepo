@@ -22,15 +22,17 @@ export interface CardProps {
   dropdownOptions?: Array<{ value: string; label: string }>;
   selectedDropdownValue?: string;
   onDropdownSelect?: (value: string) => void;
+  overflowHidden?: boolean;
 }
 
 export function Card(props: PropsWithChildren<CardProps>) {
 	const showHeader = props.title || props.ctas || props.dropdownOptions;
 	const glow = props.glow !== undefined ? props.glow : true;
+  const overflowHidden = props.overflowHidden !== undefined ? props.overflowHidden : true;
 
   return (
     <div
-      className={twMerge('flex flex-col p-4 items-start gap-6 self-stretch bg-bgc-elevated rounded-2xl text-tc-primary relative overflow-hidden', props.className)}
+      className={twMerge(`flex flex-col p-4 items-start gap-6 self-stretch bg-bgc-elevated rounded-2xl text-tc-primary relative ${overflowHidden && 'overflow-hidden'}`, props.className)}
       data-testid={props['data-testid']}
       onClick={props.onClick}
       ref={props.innerRef}>

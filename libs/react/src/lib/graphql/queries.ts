@@ -858,6 +858,18 @@ export const GET_ALL_MATERIAL_CLASSIFICATIONS = gql`
     }
 `;
 
+export const UPDATE_MATERIAL_CLASSIFICATION = gql`
+  mutation UpdateMaterial($input: MaterialUpdateInput!) {
+    updateMaterial(input: $input) {
+      id
+      materialClassification {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -896,4 +908,5 @@ export const queries: {
   GET_PRODUCT_CARBON_FOOTPRINT_DATA: GET_PRODUCT_CARBON_FOOTPRINT_DATA,
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES: GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
   GET_ALL_MATERIAL_CLASSIFICATIONS: GET_ALL_MATERIAL_CLASSIFICATIONS,
+  UPDATE_MATERIAL_CLASSIFICATION: UPDATE_MATERIAL_CLASSIFICATION,
 };
