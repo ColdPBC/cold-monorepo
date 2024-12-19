@@ -2918,6 +2918,112 @@ export enum ComponentDefinitionsType {
   Unknown = 'UNKNOWN'
 }
 
+export type CoreClassification = {
+  __typename?: 'CoreClassification';
+  createdAt: Scalars['ISOString']['output'];
+  id: Scalars['ID']['output'];
+  materialClassifications: Array<MaterialClassification>;
+  materialClassifications_aggregate?: Maybe<AggregationResult>;
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type CoreClassificationMaterialClassificationsArgs = {
+  filter?: InputMaybe<MaterialClassificationsListFilter>;
+};
+
+
+export type CoreClassificationMaterialClassifications_AggregateArgs = {
+  filter?: InputMaybe<MaterialClassificationsListFilter>;
+};
+
+/** Data needed to create or update CoreClassifications. If an ID is passed, this is an update, otherwise it's an insert. */
+export type CoreClassificationCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  materialClassifications?: InputMaybe<Array<MaterialClassificationCreateOrUpdateInput>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to create CoreClassifications. */
+export type CoreClassificationInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  materialClassifications?: InputMaybe<Array<MaterialClassificationCreateOrUpdateInput>>;
+  name: Scalars['String']['input'];
+  updatedAt: Scalars['ISOString']['input'];
+};
+
+/** Data needed to update CoreClassifications. An ID must be passed. */
+export type CoreClassificationUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id: Scalars['ID']['input'];
+  materialClassifications?: InputMaybe<Array<MaterialClassificationCreateOrUpdateInput>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type CoreClassificationsListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  materialClassifications?: InputMaybe<MaterialClassificationsListFilter>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type CoreClassificationsOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for CoreClassifications. */
+export type CoreClassificationsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<CoreClassificationsOrderByInput>;
+};
+
 export type Credential = {
   __typename?: 'Credential';
   id: Scalars['ID']['output'];
@@ -3827,14 +3933,28 @@ export type MaterialProductMaterials_AggregateArgs = {
 export type MaterialClassification = {
   __typename?: 'MaterialClassification';
   category: Scalars['String']['output'];
+  coreClassification?: Maybe<CoreClassification>;
+  coreClassification_aggregate?: Maybe<AggregationResult>;
   createdAt: Scalars['ISOString']['output'];
   id: Scalars['ID']['output'];
   materials: Array<Material>;
   materials_aggregate?: Maybe<AggregationResult>;
   name: Scalars['String']['output'];
+  sustainabilityAttributeClassifcationAssignments: Array<SustainabilityAttributeClassifcationAssignment>;
+  sustainabilityAttributeClassifcationAssignments_aggregate?: Maybe<AggregationResult>;
   sustainabilityAttributes: Array<SustainabilityAttribute>;
   sustainabilityAttributes_aggregate?: Maybe<AggregationResult>;
   updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type MaterialClassificationCoreClassificationArgs = {
+  filter?: InputMaybe<CoreClassificationsListFilter>;
+};
+
+
+export type MaterialClassificationCoreClassification_AggregateArgs = {
+  filter?: InputMaybe<CoreClassificationsListFilter>;
 };
 
 
@@ -3845,6 +3965,16 @@ export type MaterialClassificationMaterialsArgs = {
 
 export type MaterialClassificationMaterials_AggregateArgs = {
   filter?: InputMaybe<MaterialsListFilter>;
+};
+
+
+export type MaterialClassificationSustainabilityAttributeClassifcationAssignmentsArgs = {
+  filter?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
+};
+
+
+export type MaterialClassificationSustainabilityAttributeClassifcationAssignments_AggregateArgs = {
+  filter?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
 };
 
 
@@ -3860,10 +3990,12 @@ export type MaterialClassificationSustainabilityAttributes_AggregateArgs = {
 /** Data needed to create or update MaterialClassifications. If an ID is passed, this is an update, otherwise it's an insert. */
 export type MaterialClassificationCreateOrUpdateInput = {
   category?: InputMaybe<Scalars['String']['input']>;
+  coreClassification?: InputMaybe<CoreClassificationCreateOrUpdateInput>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
@@ -3871,9 +4003,11 @@ export type MaterialClassificationCreateOrUpdateInput = {
 /** Data needed to create MaterialClassifications. */
 export type MaterialClassificationInsertInput = {
   category: Scalars['String']['input'];
+  coreClassification?: InputMaybe<CoreClassificationCreateOrUpdateInput>;
   createdAt: Scalars['ISOString']['input'];
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   name: Scalars['String']['input'];
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
   updatedAt: Scalars['ISOString']['input'];
 };
@@ -3881,10 +4015,12 @@ export type MaterialClassificationInsertInput = {
 /** Data needed to update MaterialClassifications. An ID must be passed. */
 export type MaterialClassificationUpdateInput = {
   category?: InputMaybe<Scalars['String']['input']>;
+  coreClassification?: InputMaybe<CoreClassificationCreateOrUpdateInput>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   id: Scalars['ID']['input'];
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
@@ -3902,6 +4038,7 @@ export type MaterialClassificationsListFilter = {
   category_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   category_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   category_null?: InputMaybe<Scalars['Boolean']['input']>;
+  coreClassification?: InputMaybe<CoreClassificationsListFilter>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -3935,6 +4072,7 @@ export type MaterialClassificationsListFilter = {
   name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
   sustainabilityAttributes?: InputMaybe<SustainabilityAttributesListFilter>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -4655,6 +4793,10 @@ export type Mutation = {
   createComponentDefinition?: Maybe<ComponentDefinition>;
   /** Create many ComponentDefinitions. */
   createComponentDefinitions?: Maybe<Array<Maybe<ComponentDefinition>>>;
+  /** Create a single CoreClassification. */
+  createCoreClassification?: Maybe<CoreClassification>;
+  /** Create many CoreClassifications. */
+  createCoreClassifications?: Maybe<Array<Maybe<CoreClassification>>>;
   /** Create a single Emission. */
   createEmission?: Maybe<Emission>;
   /** Create a single EmissionScope. */
@@ -4713,6 +4855,8 @@ export type Mutation = {
   createOrUpdateComplianceSections?: Maybe<Array<Maybe<ComplianceSection>>>;
   /** Create or update many ComponentDefinitions. */
   createOrUpdateComponentDefinitions?: Maybe<Array<Maybe<ComponentDefinition>>>;
+  /** Create or update many CoreClassifications. */
+  createOrUpdateCoreClassifications?: Maybe<Array<Maybe<CoreClassification>>>;
   /** Create or update many EmissionScopes. */
   createOrUpdateEmissionScopes?: Maybe<Array<Maybe<EmissionScope>>>;
   /** Create or update many Emissions. */
@@ -4775,6 +4919,8 @@ export type Mutation = {
   createOrUpdateSurveyDefinitions?: Maybe<Array<Maybe<SurveyDefinition>>>;
   /** Create or update many SurveyStatuses. */
   createOrUpdateSurveyStatuses?: Maybe<Array<Maybe<SurveyStatus>>>;
+  /** Create or update many SustainabilityAttributeClassifcationAssignments. */
+  createOrUpdateSustainabilityAttributeClassifcationAssignments?: Maybe<Array<Maybe<SustainabilityAttributeClassifcationAssignment>>>;
   /** Create or update many SustainabilityAttributes. */
   createOrUpdateSustainabilityAttributes?: Maybe<Array<Maybe<SustainabilityAttribute>>>;
   /** Create or update many UtilityBills. */
@@ -4875,6 +5021,10 @@ export type Mutation = {
   createSurveyStatuses?: Maybe<Array<Maybe<SurveyStatus>>>;
   /** Create a single SustainabilityAttribute. */
   createSustainabilityAttribute?: Maybe<SustainabilityAttribute>;
+  /** Create a single SustainabilityAttributeClassifcationAssignment. */
+  createSustainabilityAttributeClassifcationAssignment?: Maybe<SustainabilityAttributeClassifcationAssignment>;
+  /** Create many SustainabilityAttributeClassifcationAssignments. */
+  createSustainabilityAttributeClassifcationAssignments?: Maybe<Array<Maybe<SustainabilityAttributeClassifcationAssignment>>>;
   /** Create many SustainabilityAttributes. */
   createSustainabilityAttributes?: Maybe<Array<Maybe<SustainabilityAttribute>>>;
   /** Create a single UtilityBill. */
@@ -4937,6 +5087,10 @@ export type Mutation = {
   deleteComponentDefinition?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many ComponentDefinitions with a filter. */
   deleteComponentDefinitions?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single CoreClassification. */
+  deleteCoreClassification?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many CoreClassifications with a filter. */
+  deleteCoreClassifications?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single Emission. */
   deleteEmission?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single EmissionScope. */
@@ -5063,6 +5217,10 @@ export type Mutation = {
   deleteSurveyStatuses?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single SustainabilityAttribute. */
   deleteSustainabilityAttribute?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single SustainabilityAttributeClassifcationAssignment. */
+  deleteSustainabilityAttributeClassifcationAssignment?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many SustainabilityAttributeClassifcationAssignments with a filter. */
+  deleteSustainabilityAttributeClassifcationAssignments?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many SustainabilityAttributes with a filter. */
   deleteSustainabilityAttributes?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single UtilityBill. */
@@ -5125,6 +5283,10 @@ export type Mutation = {
   updateComponentDefinition?: Maybe<ComponentDefinition>;
   /** Update many ComponentDefinitions. */
   updateComponentDefinitions?: Maybe<Array<Maybe<ComponentDefinition>>>;
+  /** Update a single CoreClassification. */
+  updateCoreClassification?: Maybe<CoreClassification>;
+  /** Update many CoreClassifications. */
+  updateCoreClassifications?: Maybe<Array<Maybe<CoreClassification>>>;
   /** Update a single Emission. */
   updateEmission?: Maybe<Emission>;
   /** Update a single EmissionScope. */
@@ -5251,6 +5413,10 @@ export type Mutation = {
   updateSurveyStatuses?: Maybe<Array<Maybe<SurveyStatus>>>;
   /** Update a single SustainabilityAttribute. */
   updateSustainabilityAttribute?: Maybe<SustainabilityAttribute>;
+  /** Update a single SustainabilityAttributeClassifcationAssignment. */
+  updateSustainabilityAttributeClassifcationAssignment?: Maybe<SustainabilityAttributeClassifcationAssignment>;
+  /** Update many SustainabilityAttributeClassifcationAssignments. */
+  updateSustainabilityAttributeClassifcationAssignments?: Maybe<Array<Maybe<SustainabilityAttributeClassifcationAssignment>>>;
   /** Update many SustainabilityAttributes. */
   updateSustainabilityAttributes?: Maybe<Array<Maybe<SustainabilityAttribute>>>;
   /** Update a single UtilityBill. */
@@ -5391,6 +5557,16 @@ export type MutationCreateComponentDefinitionArgs = {
 
 export type MutationCreateComponentDefinitionsArgs = {
   input: Array<ComponentDefinitionInsertInput>;
+};
+
+
+export type MutationCreateCoreClassificationArgs = {
+  input: CoreClassificationInsertInput;
+};
+
+
+export type MutationCreateCoreClassificationsArgs = {
+  input: Array<CoreClassificationInsertInput>;
 };
 
 
@@ -5536,6 +5712,11 @@ export type MutationCreateOrUpdateComplianceSectionsArgs = {
 
 export type MutationCreateOrUpdateComponentDefinitionsArgs = {
   input: Array<ComponentDefinitionCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateCoreClassificationsArgs = {
+  input: Array<CoreClassificationCreateOrUpdateInput>;
 };
 
 
@@ -5691,6 +5872,11 @@ export type MutationCreateOrUpdateSurveyDefinitionsArgs = {
 
 export type MutationCreateOrUpdateSurveyStatusesArgs = {
   input: Array<SurveyStatusCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateSustainabilityAttributeClassifcationAssignmentsArgs = {
+  input: Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>;
 };
 
 
@@ -5944,6 +6130,16 @@ export type MutationCreateSustainabilityAttributeArgs = {
 };
 
 
+export type MutationCreateSustainabilityAttributeClassifcationAssignmentArgs = {
+  input: SustainabilityAttributeClassifcationAssignmentInsertInput;
+};
+
+
+export type MutationCreateSustainabilityAttributeClassifcationAssignmentsArgs = {
+  input: Array<SustainabilityAttributeClassifcationAssignmentInsertInput>;
+};
+
+
 export type MutationCreateSustainabilityAttributesArgs = {
   input: Array<SustainabilityAttributeInsertInput>;
 };
@@ -6096,6 +6292,16 @@ export type MutationDeleteComponentDefinitionArgs = {
 
 export type MutationDeleteComponentDefinitionsArgs = {
   filter: ComponentDefinitionsListFilter;
+};
+
+
+export type MutationDeleteCoreClassificationArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteCoreClassificationsArgs = {
+  filter: CoreClassificationsListFilter;
 };
 
 
@@ -6414,6 +6620,16 @@ export type MutationDeleteSustainabilityAttributeArgs = {
 };
 
 
+export type MutationDeleteSustainabilityAttributeClassifcationAssignmentArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteSustainabilityAttributeClassifcationAssignmentsArgs = {
+  filter: SustainabilityAttributeClassifcationAssignmentsListFilter;
+};
+
+
 export type MutationDeleteSustainabilityAttributesArgs = {
   filter: SustainabilityAttributesListFilter;
 };
@@ -6566,6 +6782,16 @@ export type MutationUpdateComponentDefinitionArgs = {
 
 export type MutationUpdateComponentDefinitionsArgs = {
   input: Array<ComponentDefinitionUpdateInput>;
+};
+
+
+export type MutationUpdateCoreClassificationArgs = {
+  input: CoreClassificationUpdateInput;
+};
+
+
+export type MutationUpdateCoreClassificationsArgs = {
+  input: Array<CoreClassificationUpdateInput>;
 };
 
 
@@ -6884,6 +7110,16 @@ export type MutationUpdateSustainabilityAttributeArgs = {
 };
 
 
+export type MutationUpdateSustainabilityAttributeClassifcationAssignmentArgs = {
+  input: SustainabilityAttributeClassifcationAssignmentUpdateInput;
+};
+
+
+export type MutationUpdateSustainabilityAttributeClassifcationAssignmentsArgs = {
+  input: Array<SustainabilityAttributeClassifcationAssignmentUpdateInput>;
+};
+
+
 export type MutationUpdateSustainabilityAttributesArgs = {
   input: Array<SustainabilityAttributeUpdateInput>;
 };
@@ -7006,6 +7242,8 @@ export type Organization = {
   surveyData_aggregate?: Maybe<AggregationResult>;
   surveyStatuses: Array<SurveyStatus>;
   surveyStatuses_aggregate?: Maybe<AggregationResult>;
+  sustainabilityAttributeClassifcationAssignments: Array<SustainabilityAttributeClassifcationAssignment>;
+  sustainabilityAttributeClassifcationAssignments_aggregate?: Maybe<AggregationResult>;
   sustainabilityAttributes: Array<SustainabilityAttribute>;
   sustainabilityAttributes_aggregate?: Maybe<AggregationResult>;
   updatedAt: Scalars['ISOString']['output'];
@@ -7184,6 +7422,16 @@ export type OrganizationSurveyStatusesArgs = {
 
 export type OrganizationSurveyStatuses_AggregateArgs = {
   filter?: InputMaybe<SurveyStatusesListFilter>;
+};
+
+
+export type OrganizationSustainabilityAttributeClassifcationAssignmentsArgs = {
+  filter?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
+};
+
+
+export type OrganizationSustainabilityAttributeClassifcationAssignments_AggregateArgs = {
+  filter?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
 };
 
 
@@ -8812,6 +9060,7 @@ export type OrganizationCreateOrUpdateInput = {
   products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
   surveyData?: InputMaybe<Array<SurveyDatumCreateOrUpdateInput>>;
   surveyStatuses?: InputMaybe<Array<SurveyStatusCreateOrUpdateInput>>;
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   utilityBills?: InputMaybe<Array<UtilityBillCreateOrUpdateInput>>;
@@ -9784,6 +10033,7 @@ export type OrganizationInsertInput = {
   products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
   surveyData?: InputMaybe<Array<SurveyDatumCreateOrUpdateInput>>;
   surveyStatuses?: InputMaybe<Array<SurveyStatusCreateOrUpdateInput>>;
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
   updatedAt: Scalars['ISOString']['input'];
   utilityBills?: InputMaybe<Array<UtilityBillCreateOrUpdateInput>>;
@@ -9832,6 +10082,7 @@ export type OrganizationUpdateInput = {
   products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
   surveyData?: InputMaybe<Array<SurveyDatumCreateOrUpdateInput>>;
   surveyStatuses?: InputMaybe<Array<SurveyStatusCreateOrUpdateInput>>;
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   utilityBills?: InputMaybe<Array<UtilityBillCreateOrUpdateInput>>;
@@ -9955,6 +10206,7 @@ export type OrganizationsListFilter = {
   products?: InputMaybe<ProductsListFilter>;
   surveyData?: InputMaybe<SurveyDataListFilter>;
   surveyStatuses?: InputMaybe<SurveyStatusesListFilter>;
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
   sustainabilityAttributes?: InputMaybe<SustainabilityAttributesListFilter>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -11064,6 +11316,12 @@ export type Query = {
   componentDefinitions?: Maybe<Array<Maybe<ComponentDefinition>>>;
   /** Get aggregated data for ComponentDefinitions. */
   componentDefinitions_aggregate?: Maybe<AggregationResult>;
+  /** Get a single CoreClassification. */
+  coreClassification?: Maybe<CoreClassification>;
+  /** Get multiple CoreClassifications. */
+  coreClassifications?: Maybe<Array<Maybe<CoreClassification>>>;
+  /** Get aggregated data for CoreClassifications. */
+  coreClassifications_aggregate?: Maybe<AggregationResult>;
   /** Get a single Emission. */
   emission?: Maybe<Emission>;
   /** Get a single EmissionScope. */
@@ -11258,6 +11516,12 @@ export type Query = {
   surveyStatuses_aggregate?: Maybe<AggregationResult>;
   /** Get a single SustainabilityAttribute. */
   sustainabilityAttribute?: Maybe<SustainabilityAttribute>;
+  /** Get a single SustainabilityAttributeClassifcationAssignment. */
+  sustainabilityAttributeClassifcationAssignment?: Maybe<SustainabilityAttributeClassifcationAssignment>;
+  /** Get multiple SustainabilityAttributeClassifcationAssignments. */
+  sustainabilityAttributeClassifcationAssignments?: Maybe<Array<Maybe<SustainabilityAttributeClassifcationAssignment>>>;
+  /** Get aggregated data for SustainabilityAttributeClassifcationAssignments. */
+  sustainabilityAttributeClassifcationAssignments_aggregate?: Maybe<AggregationResult>;
   /** Get multiple SustainabilityAttributes. */
   sustainabilityAttributes?: Maybe<Array<Maybe<SustainabilityAttribute>>>;
   /** Get aggregated data for SustainabilityAttributes. */
@@ -11487,6 +11751,22 @@ export type QueryComponentDefinitionsArgs = {
 
 export type QueryComponentDefinitions_AggregateArgs = {
   filter?: InputMaybe<ComponentDefinitionsListFilter>;
+};
+
+
+export type QueryCoreClassificationArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryCoreClassificationsArgs = {
+  filter?: InputMaybe<CoreClassificationsListFilter>;
+  pagination?: InputMaybe<CoreClassificationsPaginationInput>;
+};
+
+
+export type QueryCoreClassifications_AggregateArgs = {
+  filter?: InputMaybe<CoreClassificationsListFilter>;
 };
 
 
@@ -12004,6 +12284,22 @@ export type QuerySurveyStatuses_AggregateArgs = {
 
 export type QuerySustainabilityAttributeArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QuerySustainabilityAttributeClassifcationAssignmentArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QuerySustainabilityAttributeClassifcationAssignmentsArgs = {
+  filter?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
+  pagination?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsPaginationInput>;
+};
+
+
+export type QuerySustainabilityAttributeClassifcationAssignments_AggregateArgs = {
+  filter?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
 };
 
 
@@ -12835,6 +13131,8 @@ export type SustainabilityAttribute = {
   name: Scalars['String']['output'];
   organization?: Maybe<Organization>;
   organization_aggregate?: Maybe<AggregationResult>;
+  sustainabilityAttributeClassifcationAssignments: Array<SustainabilityAttributeClassifcationAssignment>;
+  sustainabilityAttributeClassifcationAssignments_aggregate?: Maybe<AggregationResult>;
   type: SustainabilityAttributesType;
   updatedAt?: Maybe<Scalars['ISOString']['output']>;
 };
@@ -12869,6 +13167,148 @@ export type SustainabilityAttributeOrganization_AggregateArgs = {
   filter?: InputMaybe<OrganizationsListFilter>;
 };
 
+
+export type SustainabilityAttributeSustainabilityAttributeClassifcationAssignmentsArgs = {
+  filter?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
+};
+
+
+export type SustainabilityAttributeSustainabilityAttributeClassifcationAssignments_AggregateArgs = {
+  filter?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
+};
+
+export type SustainabilityAttributeClassifcationAssignment = {
+  __typename?: 'SustainabilityAttributeClassifcationAssignment';
+  createdAt: Scalars['ISOString']['output'];
+  id: Scalars['ID']['output'];
+  materialClassification: MaterialClassification;
+  materialClassification_aggregate?: Maybe<AggregationResult>;
+  metadata: Scalars['JSON']['output'];
+  organization: Organization;
+  organization_aggregate?: Maybe<AggregationResult>;
+  sustainabilityAttribute: SustainabilityAttribute;
+  sustainabilityAttribute_aggregate?: Maybe<AggregationResult>;
+  updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type SustainabilityAttributeClassifcationAssignmentMaterialClassificationArgs = {
+  filter?: InputMaybe<MaterialClassificationsListFilter>;
+};
+
+
+export type SustainabilityAttributeClassifcationAssignmentMaterialClassification_AggregateArgs = {
+  filter?: InputMaybe<MaterialClassificationsListFilter>;
+};
+
+
+export type SustainabilityAttributeClassifcationAssignmentOrganizationArgs = {
+  filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+
+export type SustainabilityAttributeClassifcationAssignmentOrganization_AggregateArgs = {
+  filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+
+export type SustainabilityAttributeClassifcationAssignmentSustainabilityAttributeArgs = {
+  filter?: InputMaybe<SustainabilityAttributesListFilter>;
+};
+
+
+export type SustainabilityAttributeClassifcationAssignmentSustainabilityAttribute_AggregateArgs = {
+  filter?: InputMaybe<SustainabilityAttributesListFilter>;
+};
+
+/** Data needed to create or update SustainabilityAttributeClassifcationAssignments. If an ID is passed, this is an update, otherwise it's an insert. */
+export type SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  sustainabilityAttribute?: InputMaybe<SustainabilityAttributeCreateOrUpdateInput>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to create SustainabilityAttributeClassifcationAssignments. */
+export type SustainabilityAttributeClassifcationAssignmentInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
+  metadata: Scalars['JSON']['input'];
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  sustainabilityAttribute?: InputMaybe<SustainabilityAttributeCreateOrUpdateInput>;
+  updatedAt: Scalars['ISOString']['input'];
+};
+
+/** Data needed to update SustainabilityAttributeClassifcationAssignments. An ID must be passed. */
+export type SustainabilityAttributeClassifcationAssignmentUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id: Scalars['ID']['input'];
+  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  sustainabilityAttribute?: InputMaybe<SustainabilityAttributeCreateOrUpdateInput>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type SustainabilityAttributeClassifcationAssignmentsListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  materialClassification?: InputMaybe<MaterialClassificationsListFilter>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  metadata_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  metadata_ne?: InputMaybe<Scalars['JSON']['input']>;
+  metadata_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  metadata_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  metadata_null?: InputMaybe<Scalars['Boolean']['input']>;
+  organization?: InputMaybe<OrganizationsListFilter>;
+  sustainabilityAttribute?: InputMaybe<SustainabilityAttributesListFilter>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type SustainabilityAttributeClassifcationAssignmentsOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  metadata?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for SustainabilityAttributeClassifcationAssignments. */
+export type SustainabilityAttributeClassifcationAssignmentsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsOrderByInput>;
+};
+
 /** Data needed to create or update SustainabilityAttributes. If an ID is passed, this is an update, otherwise it's an insert. */
 export type SustainabilityAttributeCreateOrUpdateInput = {
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
@@ -12881,6 +13321,7 @@ export type SustainabilityAttributeCreateOrUpdateInput = {
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   type?: InputMaybe<SustainabilityAttributesType>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
@@ -12896,6 +13337,7 @@ export type SustainabilityAttributeInsertInput = {
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   type: SustainabilityAttributesType;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
@@ -12912,6 +13354,7 @@ export type SustainabilityAttributeUpdateInput = {
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   type?: InputMaybe<SustainabilityAttributesType>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
@@ -12986,6 +13429,7 @@ export type SustainabilityAttributesListFilter = {
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
   organization?: InputMaybe<OrganizationsListFilter>;
+  sustainabilityAttributeClassifcationAssignments?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
   type?: InputMaybe<SustainabilityAttributesType>;
   type_in?: InputMaybe<Array<SustainabilityAttributesType>>;
   type_nin?: InputMaybe<Array<SustainabilityAttributesType>>;
