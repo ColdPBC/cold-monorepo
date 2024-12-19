@@ -1,3 +1,10 @@
+## [1.505.1](https://github.com/coldPBC/cold-monorepo/compare/v1.505.0...v1.505.1) (2024-12-19)
+
+
+### Bug Fixes
+
+* reconstruct the full search query (not just the first term) ([9bbc4d6](https://github.com/coldPBC/cold-monorepo/commit/9bbc4d6446320ebaf5570bb590dcda41d5a31451))
+
 # [1.505.0](https://github.com/coldPBC/cold-monorepo/compare/v1.504.0...v1.505.0) (2024-12-19)
 
 
