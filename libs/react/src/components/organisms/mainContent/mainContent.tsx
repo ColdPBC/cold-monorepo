@@ -5,7 +5,7 @@ import { twMerge } from 'tailwind-merge';
 
 export interface MainContentProps {
 	title?: string;
-	subTitle?: string;
+	subTitle?: string | ReactNode;
 	imageUrl?: string;
 	headerElement?: ReactNode;
 	isLoading?: boolean;
