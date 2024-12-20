@@ -1,3 +1,12 @@
+# [1.506.0](https://github.com/coldPBC/cold-monorepo/compare/v1.505.1...v1.506.0) (2024-12-20)
+
+
+### Features
+
+* add transparent background for DataGrid container ([42db4d8](https://github.com/coldPBC/cold-monorepo/commit/42db4d8b1763d9136f95f2d801c03eaac9fb5e18))
+* enable token refresh and localstorage caching for auth config ([f6c94ea](https://github.com/coldPBC/cold-monorepo/commit/f6c94ea6b19b765714eec3a3a75e50b94957c9c7))
+* handle loading state directly via MuiDataGrid ([8123ce0](https://github.com/coldPBC/cold-monorepo/commit/8123ce05685c8c61dd760051578719c975b6a6af))
+
 ## [1.505.1](https://github.com/coldPBC/cold-monorepo/compare/v1.505.0...v1.505.1) (2024-12-19)
 
 
