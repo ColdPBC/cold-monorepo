@@ -14,18 +14,13 @@ const containsOrganizationReference = (key: string) => queryContainsExactWord(ke
 
 const isOrgKey = (key: string, orgId: string) => containsOrganizationReference(key) && queryContainsExactWord(key, orgId);
 
-const hasQuery = (key: string, query: string) => {
-  const regex = new RegExp(`\\b${query}\\b`, 'g');
-  return regex.test(key);
-};
-
 export const getQueryMappingsForKey = (key: string, cacheKeys: string[], orgId: string): string[] => {
   const firstPart = key.split('.')[0];
   const queryKeys = mqttMappings[firstPart] || [];
-  const newCacheKeys = cacheKeys.filter(cacheKey => queryKeys.some(queryKey => hasQuery(cacheKey, queryKey)));
+  const newCacheKeys = cacheKeys.filter(cacheKey => queryKeys.some(queryKey => queryContainsExactWord(cacheKey, queryKey)));
   return queryKeys.flatMap(query =>
     newCacheKeys.filter(cacheKey => {
-			return (isOrgKey(cacheKey, orgId) || !(containsOrganizationReference(cacheKey))) && hasQuery(cacheKey, query);
+			return (isOrgKey(cacheKey, orgId) || !(containsOrganizationReference(cacheKey))) && queryContainsExactWord(cacheKey, query);
 		}),
 	);
 };
