@@ -1,5 +1,3 @@
-import { forEach } from 'lodash';
-
 export const mqttMappings: {
   [key: string]: string[];
 } = {
@@ -7,15 +5,22 @@ export const mqttMappings: {
   attribute_assurances: ['GET_ALL_FILES', 'GET_ALL_SUS_ATTRIBUTES', 'GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT', 'GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT'],
 };
 
-export const getQueryMappingsForKey = (key: string): string[] => {
-  const mappings: string[] = [];
-  // Check the swr key against the mqttMappings object. the key example is 'organization_files.uploaded'.
-  // Get the first word separated by a dot.
-  forEach(mqttMappings, (value, query) => {
-    if (key.startsWith(query)) {
-      mappings.push(...value);
-    }
-  });
+const queryContainsExactWord = (query: string, word: string) => {
+  const regex = new RegExp(`\\b${word}\\b`, 'g');
+  return regex.test(query);
+}
 
-  return mappings;
+const containsOrganizationReference = (key: string) => queryContainsExactWord(key, 'organization') || queryContainsExactWord(key, 'organizationId');
+
+const isOrgKey = (key: string, orgId: string) => containsOrganizationReference(key) && queryContainsExactWord(key, orgId);
+
+export const getQueryMappingsForKey = (key: string, cacheKeys: string[], orgId: string): string[] => {
+  const firstPart = key.split('.')[0];
+  const queryKeys = mqttMappings[firstPart] || [];
+  const newCacheKeys = cacheKeys.filter(cacheKey => queryKeys.some(queryKey => queryContainsExactWord(cacheKey, queryKey)));
+  return queryKeys.flatMap(query =>
+    newCacheKeys.filter(cacheKey => {
+			return (isOrgKey(cacheKey, orgId) || !(containsOrganizationReference(cacheKey))) && queryContainsExactWord(cacheKey, query);
+		}),
+	);
 };
