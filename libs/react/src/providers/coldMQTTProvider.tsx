@@ -112,7 +112,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
                 await mutate(query);
               });
               await mutate([parsedPayload.swr_key, 'GET']);
-              logBrowser(`GraphQL Mapping Updates processed from message for topic: ${topic}`, 'info', {
+              logBrowser(`graphQL mapping updates processed from message for topic: ${topic}`, 'info', {
                 graphqlMappings,
                 swrKey,
                 cacheKeys,
