@@ -1,3 +1,16 @@
+# [1.507.0](https://github.com/coldPBC/cold-monorepo/compare/v1.506.0...v1.507.0) (2024-12-20)
+
+
+### Bug Fixes
+
+* update `isOrgKey` logic to include `organizationId` and adjust query mapping filtering ([b29cc33](https://github.com/coldPBC/cold-monorepo/commit/b29cc331442935eeaa5e9ccb12185d6bc4173401))
+
+
+### Features
+
+* correct log message casing in coldMQTTProvider.tsx ([72071f5](https://github.com/coldPBC/cold-monorepo/commit/72071f5851a6b48fc40c5f1ead4e9d0f43a659e3))
+* enhance MQTT mapping logic and add logging for GraphQL updates ([d524576](https://github.com/coldPBC/cold-monorepo/commit/d52457602271ddcf55dbe2c5242154c5a92a39f2))
+
 # [1.506.0](https://github.com/coldPBC/cold-monorepo/compare/v1.505.1...v1.506.0) (2024-12-20)
 
 
