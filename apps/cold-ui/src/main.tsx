@@ -58,6 +58,8 @@ root.render(
             organization: urlParams.get('organization') || undefined,
             organization_name: urlParams.get('organization_name') || undefined,
           },
+          useRefreshTokens: true,
+          cacheLocation: 'localstorage'
         }}
         launchDarklyClientSideId={launchDarklyClientSideId}>
         <StyledEngineProvider injectFirst>
