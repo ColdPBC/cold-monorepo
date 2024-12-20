@@ -5,14 +5,27 @@ export const mqttMappings: {
   attribute_assurances: ['GET_ALL_FILES', 'GET_ALL_SUS_ATTRIBUTES', 'GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT', 'GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT'],
 };
 
-const isOrgKey = (key: string, orgId: string) => (key.includes('organization') || key.includes('organizationId')) && key.includes(orgId);
+const queryContainsExactWord = (query: string, word: string) => {
+  const regex = new RegExp(`\\b${word}\\b`, 'g');
+  return regex.test(query);
+}
 
-const hasQuery = (key: string, query: string) => key.includes(query);
+const containsOrganizationReference = (key: string) => queryContainsExactWord(key, 'organization') || queryContainsExactWord(key, 'organizationId');
+
+const isOrgKey = (key: string, orgId: string) => containsOrganizationReference(key) && queryContainsExactWord(key, orgId);
+
+const hasQuery = (key: string, query: string) => {
+  const regex = new RegExp(`\\b${query}\\b`, 'g');
+  return regex.test(key);
+};
 
 export const getQueryMappingsForKey = (key: string, cacheKeys: string[], orgId: string): string[] => {
   const firstPart = key.split('.')[0];
   const queryKeys = mqttMappings[firstPart] || [];
+  const newCacheKeys = cacheKeys.filter(cacheKey => queryKeys.some(queryKey => hasQuery(cacheKey, queryKey)));
   return queryKeys.flatMap(query =>
-		cacheKeys.filter(cacheKey => (isOrgKey(cacheKey, orgId) || !(cacheKey.includes('organization') || cacheKey.includes('organizationId'))) && hasQuery(cacheKey, query)),
+    newCacheKeys.filter(cacheKey => {
+			return (isOrgKey(cacheKey, orgId) || !(containsOrganizationReference(cacheKey))) && hasQuery(cacheKey, query);
+		}),
 	);
 };
