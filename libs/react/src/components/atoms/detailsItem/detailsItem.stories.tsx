@@ -3,6 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { DetailsItem } from '@coldpbc/components';
 import { StoryMockProvider } from '@coldpbc/mocks';
 import React from 'react';
+import { IconNames } from '@coldpbc/enums';
 
 const meta: Meta<typeof DetailsItem> = {
   title: "Atoms/DetailsItem",
@@ -41,5 +42,14 @@ export const NoValue: Story = {
   args: {
     category: 'Brand Product ID',
     value: null,
+  }
+};
+
+export const WithCta: Story = {
+  args: {
+    category: 'Classification',
+    value: 'Wool Fabric',
+    cta: () => {},
+    ctaIconName: IconNames.ColdEditPencilIcon,
   }
 };
