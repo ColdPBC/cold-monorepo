@@ -31,6 +31,7 @@ datadogRum.init({
   trackResources: true,
   trackLongTasks: true,
   trackUserInteractions: true,
+  trackFrustrations: true,
 });
 datadogRum.startSessionReplayRecording();
 
