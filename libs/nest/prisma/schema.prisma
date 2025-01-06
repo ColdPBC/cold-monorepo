@@ -662,6 +662,7 @@ model products {
   updated_at           DateTime?                @updatedAt @db.Timestamptz(6)
   deleted              Boolean?                 @default(false)
   organization_id      String
+	plm_id							 String?
   description          String?
   product_category     String?
   product_subcategory  String?
@@ -688,6 +689,8 @@ model products {
   @@index([brand_product_sku], map: "brand_product_sku_idx1")
   @@index([supplier_product_id], map: "supplier_product_id_idx1")
   @@index([organization_id], map: "products_organization_id_idx1")
+	@@index([name], map: "products_name_idx1")
+	@@index([plm_id], map: "products_plm_id_idx1")
 }
 
 model core_classifications {
@@ -758,6 +761,7 @@ model materials {
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "materials_organization_id_idx1")
+	@@index([name], map: "materials_name_idx1")
 }
 
 model material_suppliers {

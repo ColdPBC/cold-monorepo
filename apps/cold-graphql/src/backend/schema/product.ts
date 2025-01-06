@@ -69,6 +69,9 @@ export class Product {
 	@Field(() => GraphQLJSON, { nullable: true })
 	emissionStats?: Record<string, unknown>;
 
+	@Field(() => String, { nullable: true })
+	plmId?: string;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'product' })
 	attributeAssurances!: AttributeAssurance[];
 
