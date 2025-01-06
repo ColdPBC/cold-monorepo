@@ -3,13 +3,14 @@ import { Modal as FBModal } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { BaseButton, Card } from '@coldpbc/components';
 import React from 'react';
-import { useAddToastMessage, useGraphQLMutation } from '@coldpbc/hooks';
+import {useAddToastMessage, useAuth0Wrapper, useGraphQLMutation, useGraphqlSWRMutate} from '@coldpbc/hooks';
 import { capitalize, toLower } from 'lodash';
 import { ToastMessage } from '@coldpbc/interfaces';
 import {useNavigate} from "react-router-dom";
 
 export const DeleteEntityModal = (props: { isOpen: boolean; onClose: () => void; entityLevel: EntityLevel; entityId: string;}) => {
 	const { isOpen, onClose, entityLevel, entityId } = props;
+  const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
 	const { addToastMessage } = useAddToastMessage();
 	const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -17,64 +18,44 @@ export const DeleteEntityModal = (props: { isOpen: boolean; onClose: () => void;
 	const { mutateGraphQL: deleteMaterial } = useGraphQLMutation('DELETE_MATERIAL');
 	const { mutateGraphQL: deleteProduct } = useGraphQLMutation('DELETE_PRODUCT');
 	const { mutateGraphQL: deleteSupplier } = useGraphQLMutation('DELETE_SUPPLIER');
+  const {mutateKey} = useGraphqlSWRMutate(orgId);
 
-	let title = '';
-	const upperCase = capitalize(entityLevel);
+  const ENTITY_MAP = {
+		[EntityLevel.MATERIAL]: {
+			mutateGraphQL: deleteMaterial,
+			onCloseFunction: async () => {
+				await mutateKey('GET_PAGINATED_MATERIALS_FOR_ORG');
+        navigate('/materials');
+			},
+		},
+		[EntityLevel.PRODUCT]: {
+			mutateGraphQL: deleteProduct,
+			onCloseFunction: async () => {
+				await mutateKey('GET_PAGINATED_PRODUCTS_FOR_ORG');
+				navigate('/products');
+			},
+		},
+		[EntityLevel.SUPPLIER]: {
+			mutateGraphQL: deleteSupplier,
+			onCloseFunction: async () => {
+        await mutateKey('GET_ALL_SUPPLIERS_FOR_ORG');
+				navigate('/suppliers');
+			},
+		},
+	};
+
+  const upperCase = capitalize(entityLevel);
 	const lower = toLower(entityLevel);
-
-	switch (entityLevel) {
-		case EntityLevel.MATERIAL:
-			title = 'Delete Material';
-			break;
-		case EntityLevel.PRODUCT:
-			title = 'Delete Product';
-			break;
-		case EntityLevel.SUPPLIER:
-			title = 'Delete Supplier';
-			break;
-		default:
-			title = 'Delete Entity';
-			break;
-	}
-
-  const updateEntities = async () => {
-    // get the keys for the
-    //  call SWR mutate
-  }
 
 	const deleteEntity = async () => {
 		setIsLoading(true);
 		try {
-      switch (entityLevel) {
-        case EntityLevel.MATERIAL:
-          await deleteMaterial({ filter: { id: entityId } });
-          break;
-        case EntityLevel.PRODUCT:
-          await deleteProduct({ filter: { id: entityId } });
-          break;
-        case EntityLevel.SUPPLIER:
-          await deleteSupplier({ filter: { id: entityId } });
-          break;
-        default:
-          break;
-      }
-      addToastMessage({
+      await ENTITY_MAP[entityLevel].mutateGraphQL({ filter: { id: entityId } });
+      await addToastMessage({
         message: `${upperCase} deleted successfully`,
         type: ToastMessage.SUCCESS,
       });
-      switch (entityLevel) {
-        case EntityLevel.MATERIAL:
-          navigate('/materials');
-          break;
-        case EntityLevel.PRODUCT:
-          navigate('/products');
-          break;
-        case EntityLevel.SUPPLIER:
-          navigate('/suppliers');
-          break;
-        default:
-          break;
-      }
+      ENTITY_MAP[entityLevel].onCloseFunction();
       onClose();
 		} catch (error) {
 			addToastMessage({
@@ -112,6 +93,7 @@ export const DeleteEntityModal = (props: { isOpen: boolean; onClose: () => void;
               loading={isLoading}
               onClick={deleteEntity}
               variant={ButtonTypes.warning}
+              disabled={isLoading}
             />
 					</div>
 				</div>
