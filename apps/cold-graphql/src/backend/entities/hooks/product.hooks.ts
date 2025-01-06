@@ -24,6 +24,7 @@ export class ProductHooks extends BaseSidecar {
 
 			const emissionProvider = new MikroBackendProvider(OrganizationProductMaterialEmissions, getConnection());
 
+			// get emissions for this organization's product
 			const emissions = await emissionProvider.find({
 				organizationId: params.context.user.organization.id, //options.args.organizationId,
 				productId: params?.args?.filter?.id, //options.args.id,
@@ -31,13 +32,16 @@ export class ProductHooks extends BaseSidecar {
 
 			const category = item.productCategory;
 
+			// get total emissions for this product by adding all emissions factors
 			const totalEmissionsFactor = emissions.reduce((sum, emission: any) => sum + emission.emissionsFactor || 0, 0);
 
+			// get emissions for this category
 			const categoryEmissions = await emissionProvider.find({
 				productCategory: category,
 				organizationId: params?.args?.filter?.organization?.id, //options.args.oprganizationId,
 			});
 
+			// get rolled up emissions for this category by adding all emissions factors
 			let categoryEmissionEntries = 0;
 			const totalCategoryEmissionsFactor = categoryEmissions.reduce((sum, emission: any) => {
 				if (emission.emissionsFactor) {
