@@ -1,3 +1,10 @@
+# [1.508.0](https://github.com/coldPBC/cold-monorepo/compare/v1.507.0...v1.508.0) (2025-01-06)
+
+
+### Features
+
+* enable frustration tracking in Datadog RUM settings ([f4d74e0](https://github.com/coldPBC/cold-monorepo/commit/f4d74e06a27c1585c36c19c5cff88a7d23fae237))
+
 # [1.507.0](https://github.com/coldPBC/cold-monorepo/compare/v1.506.0...v1.507.0) (2024-12-20)
 
 
