@@ -37,6 +37,11 @@ export const DeleteEntityModal = (props: { isOpen: boolean; onClose: () => void;
 			break;
 	}
 
+  const updateEntities = async () => {
+    // get the keys for the
+    //  call SWR mutate
+  }
+
 	const deleteEntity = async () => {
 		setIsLoading(true);
 		try {
@@ -90,7 +95,7 @@ export const DeleteEntityModal = (props: { isOpen: boolean; onClose: () => void;
         boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
       }}
     >
-			<Card title={`Are you sure you want to delete this ${lower}`} className="relative p-4 w-full bg-gray-20" overflowHidden={false}
+			<Card title={`Are you sure you want to delete this ${lower}?`} className="relative p-4 w-full bg-gray-20" overflowHidden={false}
             glow={false}
       >
 				<div className={'flex flex-col w-full h-full justify-between gap-4'}>
