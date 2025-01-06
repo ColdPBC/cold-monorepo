@@ -1,6 +1,6 @@
 import { graphweaverMetadata, ResolverOptions } from '@exogee/graphweaver';
 import { GraphQLJSONObject } from '@exogee/graphweaver-scalars';
-import { cache_pcf_emissions } from '../../services/emissions/cache_pcf_emissions';
+import { cache_pcf_emissions_for_organization } from '../../services/emissions/cache_pcf_emissions_for_organization';
 
 graphweaverMetadata.addQuery({
 	name: 'cache_pcf_emissions',
@@ -13,5 +13,5 @@ graphweaverMetadata.addQuery({
 			nullable: false,
 		},
 	},
-	resolver: async options => await cache_pcf_emissions(options),
+	resolver: async options => await cache_pcf_emissions_for_organization(options),
 });
