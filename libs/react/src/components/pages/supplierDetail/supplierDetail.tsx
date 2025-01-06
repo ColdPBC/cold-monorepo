@@ -1,15 +1,16 @@
 import React from 'react';
 import {
-	EditSustainabilityAttributesForEntity,
-	ErrorFallback,
-	ErrorPage,
-	MainContent,
-	MaterialsSuppliedTab,
+  DeleteEntityModal,
+  EditSustainabilityAttributesForEntity, EllipsisMenu,
+  ErrorFallback,
+  ErrorPage,
+  MainContent,
+  MaterialsSuppliedTab,
   ProductsSuppliedTab,
-	Spinner,
-	SupplierDetailsCard,
-	SupplierSustainabilityAttributesCard,
-	Tabs,
+  Spinner,
+  SupplierDetailsCard,
+  SupplierSustainabilityAttributesCard,
+  Tabs,
 } from '@coldpbc/components';
 import { EntityLevel } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -22,6 +23,7 @@ export const _SupplierDetail = () => {
 	const { id: supplierId } = useParams();
 	const { logBrowser } = useColdContext();
 	const [showUpdateAttributesModal, setShowUpdateAttributesModal] = React.useState<boolean>(false);
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState<boolean>(false);
 	const supplierQuery = useGraphQLSWR<{
 		organizationFacility: SupplierGraphQL | null;
 	}>('GET_SUPPLIER', {
@@ -75,9 +77,33 @@ export const _SupplierDetail = () => {
   ]
 
 	return (
-		<MainContent title={supplier.name} subTitle={subtitle} breadcrumbs={[{ label: 'Suppliers', href: '/suppliers' }, { label: supplier.name }]} className={'w-[calc(100%)]'}>
+		<MainContent
+      title={supplier.name}
+      subTitle={subtitle}
+      breadcrumbs={[{ label: 'Suppliers', href: '/suppliers' }, { label: supplier.name }]}
+      className={'w-[calc(100%)]'}
+      headerElement={
+        <EllipsisMenu
+          data-testid={'supplier-details-menu'}
+          items={[
+            {
+              label: 'Delete Supplier',
+              onClick: () => {
+                setDeleteModalOpen(true);
+              },
+              color: 'warning',
+            }
+          ]}/>
+      }
+    >
       {tabs.length > 1 ? <Tabs tabs={tabs} /> : summaryContent}
-		</MainContent>
+      <DeleteEntityModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        entityId={supplier.id}
+        entityLevel={EntityLevel.SUPPLIER}
+      />
+    </MainContent>
 	);
 };
 

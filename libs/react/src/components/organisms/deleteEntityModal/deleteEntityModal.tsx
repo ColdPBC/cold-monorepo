@@ -1,5 +1,5 @@
 import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
-import { Modal as FBModal } from 'flowbite-react/lib/types/components/Modal/Modal';
+import { Modal as FBModal } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { BaseButton, Card } from '@coldpbc/components';
 import React from 'react';
@@ -81,10 +81,19 @@ export const DeleteEntityModal = (props: { isOpen: boolean; onClose: () => void;
 	};
 
 	return (
-		<FBModal dismissible show={isOpen} onClose={onClose} theme={flowbiteThemeOverride.modal}>
-			<Card title={title} className="relative p-4 w-[500px] bg-gray-20" overflowHidden={false}>
+		<FBModal
+      dismissible
+      show={isOpen}
+      onClose={onClose}
+      theme={flowbiteThemeOverride.modal}
+      style={{
+        boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
+      }}
+    >
+			<Card title={`Are you sure you want to delete this ${lower}`} className="relative p-4 w-full bg-gray-20" overflowHidden={false}
+            glow={false}
+      >
 				<div className={'flex flex-col w-full h-full justify-between gap-4'}>
-					<span className={'text-body'}>Are you sure you want to delete this {lower}</span>
 					<div className="w-full flex justify-between">
 						<BaseButton
 							label="Cancel"
@@ -93,7 +102,12 @@ export const DeleteEntityModal = (props: { isOpen: boolean; onClose: () => void;
 							}}
 							variant={ButtonTypes.secondary}
 						/>
-						<BaseButton label={'Yes, Delete'} loading={isLoading} onClick={deleteEntity} />
+						<BaseButton
+              label={'Yes, Delete'}
+              loading={isLoading}
+              onClick={deleteEntity}
+              variant={ButtonTypes.warning}
+            />
 					</div>
 				</div>
 			</Card>

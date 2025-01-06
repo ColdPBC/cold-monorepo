@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  DocumentDetailsMenu,
+  EllipsisMenu,
   EditSustainabilityAttributesForEntity,
   ErrorFallback,
   ErrorPage,
@@ -9,19 +9,18 @@ import {
   MaterialSustainabilityAttributesCard,
   Spinner,
   EditMaterialClassification,
+  DeleteEntityModal,
 } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
-import {useNavigate, useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { MaterialGraphQL } from '@coldpbc/interfaces';
 import { get, isError } from 'lodash';
 import { EntityLevel } from '@coldpbc/enums';
-import {DeleteEntityModal} from "../../organisms/deleteEntityModal/deleteEntityModal";
 
 const _MaterialDetail: React.FC = () => {
 	const { id: materialId } = useParams();
 	const { logBrowser } = useColdContext();
-  const navigate = useNavigate();
   const [showUpdateAttributesModal, setShowUpdateAttributesModal] = React.useState<boolean>(false);
   const [showEditClassificationModal, setShowEditClassificationModal] = React.useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = React.useState<boolean>(false);
@@ -61,16 +60,18 @@ const _MaterialDetail: React.FC = () => {
         breadcrumbs={[{ label: 'Material', href: '/materials' }, { label: material.name }]}
         className={'w-[calc(100%)]'}
         headerElement={
-        <DocumentDetailsMenu items={[
-          {
-            label: 'Delete Material',
-            onClick: () => {
-              setDeleteModalOpen(true);
-            },
-            color: 'warning',
-          }
-        ]}/>
-      }
+          <EllipsisMenu
+            data-testid={'material-details-menu'}
+            items={[
+            {
+              label: 'Delete Material',
+              onClick: () => {
+                setDeleteModalOpen(true);
+              },
+              color: 'warning',
+            }
+          ]}/>
+        }
       >
         {material && (
           <>

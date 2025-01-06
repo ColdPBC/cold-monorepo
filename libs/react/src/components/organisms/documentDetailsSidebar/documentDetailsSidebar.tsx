@@ -9,7 +9,7 @@ import {
   BaseButton,
   ColdIcon,
   DetailsItem,
-  DocumentDetailsMenu,
+  EllipsisMenu,
   DocumentMaterialsTable,
   EntitySelect,
   ErrorFallback,
@@ -643,7 +643,7 @@ const _DocumentDetailsSidebar = (props: {
 							<ColdIcon name={IconNames.CloseModalIcon} width={16} height={16} />
 						</div>
 						<span className={'w-full text-h5 text-wrap break-all'}>{fileState.originalName}</span>
-						<DocumentDetailsMenu
+						<EllipsisMenu
               items={[
                 {
                   label: 'Download',
