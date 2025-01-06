@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  DocumentDetailsMenu,
   EditSustainabilityAttributesForEntity,
   ErrorFallback,
   ErrorPage,
@@ -7,20 +8,23 @@ import {
   MaterialDetailsCard,
   MaterialSustainabilityAttributesCard,
   Spinner,
+  EditMaterialClassification,
 } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import { MaterialGraphQL } from '@coldpbc/interfaces';
 import { get, isError } from 'lodash';
 import { EntityLevel } from '@coldpbc/enums';
-import { EditMaterialClassification } from '../../molecules/editMaterialClassification/editMaterialClassification';
+import {DeleteEntityModal} from "../../organisms/deleteEntityModal/deleteEntityModal";
 
 const _MaterialDetail: React.FC = () => {
 	const { id: materialId } = useParams();
 	const { logBrowser } = useColdContext();
+  const navigate = useNavigate();
   const [showUpdateAttributesModal, setShowUpdateAttributesModal] = React.useState<boolean>(false);
   const [showEditClassificationModal, setShowEditClassificationModal] = React.useState<boolean>(false);
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState<boolean>(false);
 	const materialQuery = useGraphQLSWR<{
 		material: MaterialGraphQL | null;
 	}>('GET_MATERIAL', {
@@ -51,7 +55,23 @@ const _MaterialDetail: React.FC = () => {
 
 	return (
 		<div key={material.id}>
-      <MainContent title={material.name} subTitle={subTitle} breadcrumbs={[{ label: 'Material', href: '/materials' }, { label: material.name }]} className={'w-[calc(100%)]'}>
+      <MainContent
+        title={material.name}
+        subTitle={subTitle}
+        breadcrumbs={[{ label: 'Material', href: '/materials' }, { label: material.name }]}
+        className={'w-[calc(100%)]'}
+        headerElement={
+        <DocumentDetailsMenu items={[
+          {
+            label: 'Delete Material',
+            onClick: () => {
+              setDeleteModalOpen(true);
+            },
+            color: 'warning',
+          }
+        ]}/>
+      }
+      >
         {material && (
           <>
             <EditMaterialClassification
@@ -73,6 +93,16 @@ const _MaterialDetail: React.FC = () => {
           <MaterialDetailsCard material={material} openEditClassificationModal={() => setShowEditClassificationModal(true)} />
           <MaterialSustainabilityAttributesCard material={material} setShowUpdateAttributesModal={setShowUpdateAttributesModal} />
         </div>
+        {
+          materialId && (
+            <DeleteEntityModal
+              isOpen={deleteModalOpen}
+              onClose={() => setDeleteModalOpen(false)}
+              entityId={materialId}
+              entityLevel={EntityLevel.MATERIAL}
+            />
+          )
+        }
       </MainContent>
     </div>
 	);

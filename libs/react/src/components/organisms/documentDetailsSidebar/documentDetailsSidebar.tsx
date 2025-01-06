@@ -644,13 +644,20 @@ const _DocumentDetailsSidebar = (props: {
 						</div>
 						<span className={'w-full text-h5 text-wrap break-all'}>{fileState.originalName}</span>
 						<DocumentDetailsMenu
-							onMenuClick={item => {
-								if (item === 'delete') {
-									if (fileState?.id) deleteFile(fileState.id);
-								} else if (item === 'download') {
-									downloadFile(signedUrl);
-								}
-							}}
+              items={[
+                {
+                  label: 'Download',
+                  onClick: () => {
+                    downloadFile(signedUrl);
+                  }
+                },
+                {
+                  label: 'Delete',
+                  onClick: () => {
+                    if (fileState?.id) deleteFile(fileState.id);
+                  }
+                }
+              ]}
 						/>
 					</div>
 
