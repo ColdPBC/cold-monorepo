@@ -87,6 +87,7 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
       <div className={'w-full h-full flex flex-col'}>
         <div className={'text-h3'}>{complianceSet.title}</div>
         <div
+          data-chromatic="ignore"
           className={`text-body
           ${complianceStatus === ComplianceStatus.inActive ? 'text-tc-disabled' : 'text-tc-secondary'}`}>
           {dueDateAndTerm()}
