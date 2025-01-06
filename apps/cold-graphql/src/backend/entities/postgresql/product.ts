@@ -22,6 +22,7 @@ export class Product {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
+	@Index({ name: 'products_name_idx1' })
 	@Property({ type: 'text' })
 	name!: string;
 
@@ -80,6 +81,10 @@ export class Product {
 
 	@Property({ type: 'json', nullable: true })
 	emissionStats?: Record<string, unknown>;
+
+	@Index({ name: 'products_plm_id_idx1' })
+	@Property({ type: 'text', nullable: true })
+	plmId?: string;
 
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'product' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
