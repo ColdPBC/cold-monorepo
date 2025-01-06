@@ -19,6 +19,7 @@ export class MaterialHooks extends BaseSidecar {
 	// Overrride AfterCreateHook here:
 	override async afterCreateHook(params: CreateOrUpdateHookParams<Material, OrgContext>) {
 		//await this.cache_emissions(params);
+		/*
 		const materials = params?.entities as Material[];
 		if (!materials || materials.length < 1) {
 			return params;
@@ -34,7 +35,7 @@ export class MaterialHooks extends BaseSidecar {
 		};
 		await cache_product_emission_stats(prodParams);
 		await super.afterCreateHook(params);
-
+		*/
 		return params;
 	}
 
@@ -42,8 +43,8 @@ export class MaterialHooks extends BaseSidecar {
 
 	// Overrride AfterUpdateHook here:
 	override async afterUpdateHook(params: CreateOrUpdateHookParams<Material, OrgContext>) {
-		await cache_product_emission_stats(params);
-		await super.afterUpdateHook(params);
+		// await cache_product_emission_stats(params);
+		// await super.afterUpdateHook(params);
 
 		return params;
 	}
@@ -51,8 +52,8 @@ export class MaterialHooks extends BaseSidecar {
 
 	// Overrride AfterDeleteHook here:
 	override async afterDeleteHook(params: DeleteHookParams<Material, OrgContext>) {
-		await cache_product_emission_stats(params);
-		await super.afterDeleteHook(params);
+		// await cache_product_emission_stats(params);
+		// await super.afterDeleteHook(params);
 
 		return params;
 	}
