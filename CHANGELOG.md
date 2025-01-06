@@ -1,3 +1,16 @@
+# [1.509.0](https://github.com/coldPBC/cold-monorepo/compare/v1.508.0...v1.509.0) (2025-01-06)
+
+
+### Bug Fixes
+
+* comment out pcf hooks for this release ([243b447](https://github.com/coldPBC/cold-monorepo/commit/243b44796ac26838d04d99a4541c92cbffbb7001))
+
+
+### Features
+
+* add indexes for materials and products tables, introduce PLM ID to products ([e2a89b9](https://github.com/coldPBC/cold-monorepo/commit/e2a89b92d9ca67c0cfe9f7b71e15be9481767a7b))
+* enhance MaterialHooks with product emission stats caching ([f5ab06d](https://github.com/coldPBC/cold-monorepo/commit/f5ab06d9e49d85342ff07fabaccbe25ed412e320))
+
 # [1.508.0](https://github.com/coldPBC/cold-monorepo/compare/v1.507.0...v1.508.0) (2025-01-06)
 
 
