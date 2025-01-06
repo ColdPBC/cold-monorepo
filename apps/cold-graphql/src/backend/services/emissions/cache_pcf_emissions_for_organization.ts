@@ -14,7 +14,7 @@ import { uniqBy } from 'lodash';
  *
  * @return {Object} - Object containing emissions statistics for the category, including total and average CO2e emissions factors.
  */
-function calculateCategoryEmissionsStats(categoryEmissions: Array<OrganizationProductMaterialEmissions>, productsInCategory: Array<Product>, category, categories: any) {
+export function calculateCategoryEmissionsStats(categoryEmissions: Array<OrganizationProductMaterialEmissions>, productsInCategory: Array<any>, category, categories: any) {
 	const totalCategoryEmissionsFactor = categoryEmissions.reduce((sum, emission: any) => {
 		if (emission.emissionsFactor) {
 			return sum + emission.emissionsFactor || 0;
@@ -43,7 +43,7 @@ function calculateCategoryEmissionsStats(categoryEmissions: Array<OrganizationPr
  * @param {Product} product - The product for which to extract the PCF value
  * @returns {Object} Object containing the Product Carbon Footprint (PCF) value for the specified product
  */
-function extractPCF(categoryEmissions: Array<OrganizationProductMaterialEmissions>, product: Product) {
+export function extractPCF(categoryEmissions: Array<OrganizationProductMaterialEmissions>, product: any) {
 	const productEmissions = categoryEmissions.filter((emission: any) => {
 		if (emission.product.id === product.id) {
 			return emission;
@@ -65,10 +65,10 @@ function extractPCF(categoryEmissions: Array<OrganizationProductMaterialEmission
  *
  * @return {Object} An object containing productProvider, products, and distinctCategories.
  */
-async function getProducts(options: { args: any; context: object }) {
+export async function getProducts(options: { args: any; context: any }) {
 	const filter = {
 		organization: {
-			id: options.args.organizationId,
+			id: options.args?.organizationId || options.context?.user?.organization?.id,
 		},
 	};
 
@@ -88,7 +88,7 @@ async function getProducts(options: { args: any; context: object }) {
  * @param {MikroBackendProvider<Product>} productProvider - The provider for interacting with the backend
  * @return {Promise<void>} - A promise that resolves once the product emission stats are updated
  */
-async function updateProductEmission(
+export async function updateProductEmission(
 	pcf: number,
 	emission_stats: {
 		average_category_c02e: number;
@@ -106,19 +106,19 @@ async function updateProductEmission(
 
 	console.log(`Updating emission stats for ${product.name}(id: ${product.id})`, stats);
 
-	await productProvider.em.upsert('Product', {
+	return await productProvider.em.upsert('Product', {
 		id: product.id,
 		emissionStats: pcf ? stats : undefined,
 	});
 }
 
 /**
- * Caches the PCF emissions for products based on the given options.
+ * Caches the PCF emissions for organization products based on the given options.
  *
  * @param {ResolverOptions} options - The options to be used for caching PCF emissions
  * @return {Promise<{emissions: any[]}>} - A promise that resolves to an object containing the cached emissions
  */
-export async function cache_pcf_emissions(options: any) {
+export async function cache_pcf_emissions_for_organization(options: any) {
 	try {
 		const emissionProvider = new MikroBackendProvider(OrganizationProductMaterialEmissions, getConnection());
 
