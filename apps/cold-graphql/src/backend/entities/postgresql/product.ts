@@ -86,6 +86,9 @@ export class Product {
 	@Property({ type: 'text', nullable: true })
 	plmId?: string;
 
+	@Property({ type: 'integer', nullable: true })
+	weight?: number;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'product' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 

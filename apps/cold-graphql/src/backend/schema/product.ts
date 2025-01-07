@@ -72,6 +72,9 @@ export class Product {
 	@Field(() => String, { nullable: true })
 	plmId?: string;
 
+	@Field(() => Number, { nullable: true })
+	weight?: number;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'product' })
 	attributeAssurances!: AttributeAssurance[];
 
