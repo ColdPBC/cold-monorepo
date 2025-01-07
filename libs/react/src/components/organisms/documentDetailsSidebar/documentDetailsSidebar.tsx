@@ -9,7 +9,7 @@ import {
   BaseButton,
   ColdIcon,
   DetailsItem,
-  DocumentDetailsMenu,
+  EllipsisMenu,
   DocumentMaterialsTable,
   EntitySelect,
   ErrorFallback,
@@ -643,14 +643,21 @@ const _DocumentDetailsSidebar = (props: {
 							<ColdIcon name={IconNames.CloseModalIcon} width={16} height={16} />
 						</div>
 						<span className={'w-full text-h5 text-wrap break-all'}>{fileState.originalName}</span>
-						<DocumentDetailsMenu
-							onMenuClick={item => {
-								if (item === 'delete') {
-									if (fileState?.id) deleteFile(fileState.id);
-								} else if (item === 'download') {
-									downloadFile(signedUrl);
-								}
-							}}
+						<EllipsisMenu
+              items={[
+                {
+                  label: 'Download',
+                  onClick: () => {
+                    downloadFile(signedUrl);
+                  }
+                },
+                {
+                  label: 'Delete',
+                  onClick: () => {
+                    if (fileState?.id) deleteFile(fileState.id);
+                  }
+                }
+              ]}
 						/>
 					</div>
 
