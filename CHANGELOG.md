@@ -1,3 +1,18 @@
+# [1.510.0](https://github.com/coldPBC/cold-monorepo/compare/v1.509.0...v1.510.0) (2025-01-07)
+
+
+### Bug Fixes
+
+* add missing punctuation to deleteEntityModal title ([1da934e](https://github.com/coldPBC/cold-monorepo/commit/1da934e9254e4e5e77205440d840a69a00862b4e))
+
+
+### Features
+
+* add material deletion modal and refactor GraphQL mutations ([b52f708](https://github.com/coldPBC/cold-monorepo/commit/b52f708028c2b98dd55161513eab3c0e42cf7ec5))
+* add useGraphqlSWRMutate hook and integrate into DeleteEntityModal ([aab6110](https://github.com/coldPBC/cold-monorepo/commit/aab61107234dd17a8c34653e35c5997d5e68d139))
+* export utility functions in mqttMappings ([1fa56d5](https://github.com/coldPBC/cold-monorepo/commit/1fa56d56ae21d743181a828f4d4b3a183c0991e1))
+* replace DocumentDetailsMenu with EllipsisMenu across components and enhance delete modal styling ([1007395](https://github.com/coldPBC/cold-monorepo/commit/1007395b4ab0f1e4e39365d03d2e36601906e06c))
+
 # [1.509.0](https://github.com/coldPBC/cold-monorepo/compare/v1.508.0...v1.509.0) (2025-01-06)
 
 
