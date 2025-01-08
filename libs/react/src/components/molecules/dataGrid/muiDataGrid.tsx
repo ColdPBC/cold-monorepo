@@ -47,15 +47,11 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
   }, [orgId, searchKey]);
 
   const controlledFilterModelChange = (filterModel: GridFilterModel, details: GridCallbackDetails) => {
-    if (!searchKey && props.onFilterModelChange) {
-      props.onFilterModelChange(filterModel, details);
-      return;
-    }
     if(orgId && searchKey) {
       const searchValue = filterModel.quickFilterValues?.join(' ') || '';
 			addToOrgStorage(orgId, searchKey, searchValue);
+      setFilterModel(filterModel);
 		}
-    setFilterModel(filterModel);
   }
 
   const toolbar = () => {
@@ -190,7 +186,7 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
 			}}
 			className={twMerge('text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto', props.className)}
       filterDebounceMs={searchKey ? 500 : props.filterDebounceMs}
-      onFilterModelChange={controlledFilterModelChange}
+      onFilterModelChange={searchKey ? controlledFilterModelChange : props.onFilterModelChange}
       filterModel={searchKey ? filterModel : props.filterModel}
     />
 	);
