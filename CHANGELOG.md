@@ -1,3 +1,13 @@
+# [1.511.0](https://github.com/coldPBC/cold-monorepo/compare/v1.510.0...v1.511.0) (2025-01-08)
+
+
+### Features
+
+* add persistent search functionality for data grids ([0ca0388](https://github.com/coldPBC/cold-monorepo/commit/0ca03885b522f4149f0c100033941d831154c4c1))
+* add support for initializing quick filter values from org storage ([602d966](https://github.com/coldPBC/cold-monorepo/commit/602d966672dd926545a1f379a31a9f248314e06c))
+* add unique searchKey support for various DataGrid components ([0c39bf8](https://github.com/coldPBC/cold-monorepo/commit/0c39bf87d2a4dcf001268670efd0ec8320edee12))
+* enhance orgStorageUtils with additional utility functions ([7c92a1f](https://github.com/coldPBC/cold-monorepo/commit/7c92a1f80e448bb906036a6297c19c4344a6016a))
+
 # [1.510.0](https://github.com/coldPBC/cold-monorepo/compare/v1.509.0...v1.510.0) (2025-01-07)
 
 
