@@ -29,21 +29,6 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
   const { showSearch, showExport, showManageColumns, slotProps, searchKey } = props;
   const { orgId } = useAuth0Wrapper()
 
-  const getInitialFilterModel = (): GridFilterModel => {
-    let initial: GridFilterModel = {
-      items: [],
-      quickFilterValues: [],
-    }
-
-    if(orgId && searchKey){
-      initial = {
-        items: [],
-        quickFilterValues: [getFromOrgStorage(orgId, searchKey)],
-      }
-    }
-    return initial;
-  }
-
   const initialFilterModel: GridFilterModel = {
     items: [],
     quickFilterValues: [],
