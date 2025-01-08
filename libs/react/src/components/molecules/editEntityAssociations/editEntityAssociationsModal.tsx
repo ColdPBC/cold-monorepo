@@ -112,6 +112,10 @@ export const EditEntityAssociationsModal = (
           rowsSelected,
           responses
         });
+        addToastMessage({
+          message: 'Associations updated successfully',
+          type: ToastMessage.SUCCESS
+        })
         refresh();
         setShowEntityAssociationModal(false);
       }).catch((error) => {
