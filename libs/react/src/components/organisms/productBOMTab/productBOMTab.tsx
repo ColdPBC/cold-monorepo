@@ -189,6 +189,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
             sortModel: [{ field: 'name', sort: 'asc' }],
           },
         }}
+        searchKey={`${product.id}productBOMSearchValue`}
 			/>
 		</Card>
 	);

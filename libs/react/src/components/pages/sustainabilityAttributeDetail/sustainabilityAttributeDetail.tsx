@@ -342,6 +342,7 @@ export const _SustainabilityAttributeDetail = () => {
 						},
 					}}
 					disableRowSelectionOnClick={true}
+          searchKey={`${EntityLevel[sustainabilityAttribute.level]}Level${sustainabilityAttribute.id}SustainabilityAttributeDetailEntitySearchValue`}
 				/>
 			</div>
 			<BulkEditSustainabilityAttributeModal

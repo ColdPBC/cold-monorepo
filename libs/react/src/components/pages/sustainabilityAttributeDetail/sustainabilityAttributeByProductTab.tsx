@@ -267,6 +267,7 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 							sortModel: [{ field: 'materialPercentByWeight', sort: 'desc' }],
 						},
 					}}
+          searchKey={`${sustainabilityAttribute.id}sustainabilityAttributeByProductsSearchValue`}
 				/>
 			</div>
 		</div>
