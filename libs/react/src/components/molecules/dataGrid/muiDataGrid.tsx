@@ -50,8 +50,8 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
     if(orgId && searchKey) {
       const searchValue = filterModel.quickFilterValues?.join(' ') || '';
 			addToOrgStorage(orgId, searchKey, searchValue);
-      setFilterModel(filterModel);
 		}
+    setFilterModel(filterModel);
   }
 
   const toolbar = () => {
