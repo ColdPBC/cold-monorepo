@@ -1,18 +1,20 @@
 import { HexColors } from '@coldpbc/themes';
 import { MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import {
-	DataGrid,
-	DataGridProps,
-	GridColDef,
-	GridToolbarColumnsButton,
-	GridToolbarContainer,
-	GridToolbarExport,
-	GridToolbarQuickFilter,
-	GridValidRowModel,
+  DataGrid,
+  DataGridProps, GridCallbackDetails,
+  GridColDef, GridFilterModel,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarExport,
+  GridToolbarQuickFilter,
+  GridValidRowModel,
 } from '@mui/x-data-grid';
 import { twMerge } from 'tailwind-merge';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Box} from "@mui/material";
+import {useAuth0Wrapper} from "@coldpbc/hooks";
+import {addToOrgStorage, getFromOrgStorage} from "@coldpbc/lib";
 
 export interface MUIDataGridProps extends DataGridProps {
 	rows: GridValidRowModel[];
@@ -20,10 +22,41 @@ export interface MUIDataGridProps extends DataGridProps {
 	showSearch?: boolean;
 	showExport?: boolean;
 	showManageColumns?: boolean;
+  searchKey?: string; // enabled controlled search
 }
 
 export const MuiDataGrid = (props: MUIDataGridProps) => {
-  const { showSearch, showExport, showManageColumns, slotProps } = props;
+  const { showSearch, showExport, showManageColumns, slotProps, searchKey } = props;
+  const { orgId } = useAuth0Wrapper()
+
+  const initialFilterModel: GridFilterModel = {
+    items: [],
+    quickFilterValues: [],
+  };
+
+  const [filterModel, setFilterModel] = React.useState<GridFilterModel>(initialFilterModel);
+
+  useEffect(() => {
+    if (orgId && searchKey) {
+      const searchValue = getFromOrgStorage(orgId, searchKey);
+      setFilterModel(prev => ({
+        ...prev,
+        quickFilterValues: [searchValue],
+      }));
+    }
+  }, [orgId, searchKey]);
+
+  const controlledFilterModelChange = (filterModel: GridFilterModel, details: GridCallbackDetails) => {
+    if (!searchKey && props.onFilterModelChange) {
+      props.onFilterModelChange(filterModel, details);
+      return;
+    }
+    if(orgId && searchKey) {
+      const searchValue = filterModel.quickFilterValues?.join(' ') || '';
+			addToOrgStorage(orgId, searchKey, searchValue);
+		}
+    setFilterModel(filterModel);
+  }
 
   const toolbar = () => {
     if (showSearch || showExport || showManageColumns)
@@ -156,6 +189,9 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
 				...props.slotProps,
 			}}
 			className={twMerge('text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto', props.className)}
-		/>
+      filterDebounceMs={searchKey ? 500 : props.filterDebounceMs}
+      onFilterModelChange={controlledFilterModelChange}
+      filterModel={searchKey ? filterModel : props.filterModel}
+    />
 	);
 };

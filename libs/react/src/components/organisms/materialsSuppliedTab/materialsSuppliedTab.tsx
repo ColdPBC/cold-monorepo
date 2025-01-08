@@ -164,7 +164,8 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
 					},
 				}}
         disableRowSelectionOnClick={true}
-			/>
+        searchKey={`${supplier.id}materialsSuppliedSearchValue`}
+      />
 			<BulkEditMaterialAttributesModal
 				show={showBulkEditAttributesModal}
 				onClose={() => {

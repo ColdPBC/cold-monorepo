@@ -207,6 +207,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
             sortModel: [{ field: 'name', sort: 'asc' }],
           },
         }}
+        searchKey={`${tier}TierSuppliersDataGridSearchValue`}
       />
     </div>
   );

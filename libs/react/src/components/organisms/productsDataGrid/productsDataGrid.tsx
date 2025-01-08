@@ -14,7 +14,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { get, has } from 'lodash';
 import { withErrorBoundary } from "react-error-boundary";
-import { processEntityLevelAssurances } from '@coldpbc/lib';
+import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
 import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
@@ -91,7 +91,7 @@ export const _ProductsDataGrid = () => {
     { field: 'name', sort: 'asc' }
   ]);
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>(getFromOrgStorage(orgId, 'productsDataGridSearchValue') || '');
 
   // Handle search input changes
   const handleFilterChange = (filterModel: GridFilterModel) => {
@@ -101,6 +101,7 @@ export const _ProductsDataGrid = () => {
       ...prev,
       page: 0,
     }));
+    if(orgId) addToOrgStorage(orgId, 'productsDataGridSearchValue', searchValue);
   };
 
   // Convert MUI sort model to GraphQL ordering
@@ -348,6 +349,10 @@ export const _ProductsDataGrid = () => {
         onSortModelChange={setSortModel}
         sortingMode="server"
         // Search props
+        filterModel={{
+          items: [],
+          quickFilterValues: [searchQuery],
+        }}
         filterMode="server"
         onFilterModelChange={handleFilterChange}
         filterDebounceMs={500}
@@ -355,6 +360,7 @@ export const _ProductsDataGrid = () => {
           toolbar: {
             quickFilterProps: {
               placeholder: 'Search by name...',
+              value: searchQuery,
             }
           }
         }}
