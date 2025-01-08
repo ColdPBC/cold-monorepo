@@ -11,7 +11,7 @@ import {
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import { twMerge } from 'tailwind-merge';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Box} from "@mui/material";
 import {useAuth0Wrapper} from "@coldpbc/hooks";
 import {addToOrgStorage, getFromOrgStorage} from "@coldpbc/lib";
@@ -44,9 +44,22 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
     return initial;
   }
 
-  const [filterModel, setFilterModel] = React.useState<GridFilterModel>(
-    getInitialFilterModel()
-  );
+  const initialFilterModel: GridFilterModel = {
+    items: [],
+    quickFilterValues: [],
+  };
+
+  const [filterModel, setFilterModel] = React.useState<GridFilterModel>(initialFilterModel);
+
+  useEffect(() => {
+    if (orgId && searchKey) {
+      const searchValue = getFromOrgStorage(orgId, searchKey);
+      setFilterModel(prev => ({
+        ...prev,
+        quickFilterValues: [searchValue],
+      }));
+    }
+  }, [orgId, searchKey]);
 
   const controlledFilterModelChange = (filterModel: GridFilterModel, details: GridCallbackDetails) => {
     if (!searchKey && props.onFilterModelChange) {
