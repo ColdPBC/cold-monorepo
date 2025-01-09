@@ -5,7 +5,7 @@ import {
   ProductFootprintDataGridCell,
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
-import { getProductCarbonFootprint, useAuth0Wrapper, useGraphQLSWR, useProductCarbonFootprintCache } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useGraphQLSWR, useProductCarbonFootprintCache } from '@coldpbc/hooks';
 import {
   EntityWithAttributeAssurances,
   ProductsQuery,
@@ -18,9 +18,6 @@ import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
 import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
-import { IconNames } from '@coldpbc/enums';
-import { HexColors } from '@coldpbc/themes';
-
 
 const getColumnRows = (
   products: ProductsQuery[],
@@ -46,17 +43,9 @@ const getColumnRows = (
       }
     )));
 
-    const suppliers = new Set<EntityWithAttributeAssurances>;
     if (tier1Supplier) {
-      suppliers.add(tier1Supplier);
+      entitiesWithAttributeAssurances.push(tier1Supplier);
     }
-    product.productMaterials.forEach(productMaterial => {
-      const tier2supplier = productMaterial.material.materialSuppliers[0]?.organizationFacility;
-      if (tier2supplier) {
-        suppliers.add(tier2supplier);
-      }
-    });
-    entitiesWithAttributeAssurances.push(...Array.from(suppliers));
 
     const sustainabilityAttributes = processEntityLevelAssurances(entitiesWithAttributeAssurances);
 
