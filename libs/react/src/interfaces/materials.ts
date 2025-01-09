@@ -50,7 +50,6 @@ export interface MaterialsWithRelations extends Materials {
       id: string;
       name: string;
       supplierTier: number | null;
-      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
     };
   }[];
   attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
@@ -62,6 +61,18 @@ export interface MaterialsWithRelations extends Materials {
         id: string;
         name: string;
       } | null;
+    };
+  }[];
+}
+
+// This is only used in mocks to serve as a super-set of Material data
+export interface MaterialsWithAssurances extends MaterialsWithRelations {
+  materialSuppliers: {
+    id: string;
+    organizationFacility: {
+      id: string;
+      name: string;
+      supplierTier: number | null;
       attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
     };
   }[];

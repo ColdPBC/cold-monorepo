@@ -139,19 +139,6 @@ query GET_PAGINATED_MATERIALS_FOR_ORG($filter: MaterialsListFilter!, $pagination
         id
         name
         supplierTier
-        attributeAssurances {
-          id
-          effectiveEndDate
-          sustainabilityAttribute {
-            id
-            name
-            level
-            logoUrl
-          }
-          organizationFile {
-            id
-          }
-        }
       }
     }
     attributeAssurances {
@@ -174,19 +161,6 @@ query GET_PAGINATED_MATERIALS_FOR_ORG($filter: MaterialsListFilter!, $pagination
         organizationFacility {
           id
           name
-        }
-        attributeAssurances {
-          id
-          effectiveEndDate
-          sustainabilityAttribute {
-            id
-            name
-            level
-            logoUrl
-          }
-          organizationFile {
-            id
-          }
         }
       }
     }
