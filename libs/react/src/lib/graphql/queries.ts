@@ -295,26 +295,6 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
           materialCategory
           materialSubcategory
           emissionsFactor
-          materialSuppliers {
-            id
-            organizationFacility {
-              id
-              name
-              attributeAssurances {
-                id
-                effectiveEndDate
-                organizationFile {
-                  id
-                }
-                sustainabilityAttribute {
-                  id
-                  level
-                  logoUrl
-                  name
-                }
-              }
-            }
-          }
           attributeAssurances {
             id
             effectiveEndDate

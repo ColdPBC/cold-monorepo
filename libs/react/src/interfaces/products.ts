@@ -60,14 +60,6 @@ export interface ProductsQuery {
       materialSubcategory: string | null;
       emissionsFactor: number | null;
       attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
-      materialSuppliers: {
-        id: string;
-        organizationFacility: {
-          id: string;
-          name: string;
-          attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
-        };
-      }[];
     };
   }[];
   organizationFacility: {
