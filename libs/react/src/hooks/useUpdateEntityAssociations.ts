@@ -51,15 +51,29 @@ export const useUpdateEntityAssociations = () => {
       }
     } else {
       if(entityLevel === EntityLevel.MATERIAL){
-        return mutateFunction({
-          input: {
-            material: { id: entityToAddId },
-            organizationFacility: { id: entityBeingAddedToId },
-            organization: {
-              id: orgId
+        // need to delete the old one first and then add the new one
+        const promises = [
+          deleteEntityAssociation({
+            filter: {
+              material: {
+                id: entityToAddId
+              },
+              organization: {
+                id: orgId
+              }
             }
-          }
-        });
+          }),
+          createEntityAssociation({
+            input: {
+              material: { id: entityToAddId },
+              organizationFacility: { id: entityBeingAddedToId },
+              organization: {
+                id: orgId
+              }
+            }
+          })
+        ]
+        return Promise.all(promises)
       } else {
         return mutateFunction({
           input: {
