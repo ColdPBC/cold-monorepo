@@ -109,7 +109,7 @@ export const CREATE_ATTRIBUTE_ASSURANCES = gql`
   }
 `;
 
-export const UPDATE_MATERIAL_CLASSIFICATION = gql`
+export const UPDATE_MATERIAL = gql`
   mutation UpdateMaterial($input: MaterialUpdateInput!) {
     updateMaterial(input: $input) {
       id
