@@ -18,10 +18,11 @@ interface EditEntityAssociationsModalProps {
 	idsSelected: string[];
 	saveButtonText: string;
 	entityToBeAddedId: string;
+  'data-testid'?: string;
 }
 
 export const EditEntityAssociationsModal = (
-  {buttonText, refresh, title, entityLevel, idsSelected, saveButtonText, entityToBeAddedId}: EditEntityAssociationsModalProps
+  {buttonText, refresh, title, entityLevel, idsSelected, entityToBeAddedId}: EditEntityAssociationsModalProps
 ) => {
   const {orgId} = useAuth0Wrapper();
   const [showEntityAssociationModal, setShowEntityAssociationModal] = useState<boolean>(false);
@@ -151,55 +152,49 @@ export const EditEntityAssociationsModal = (
   }
 
 	return (
-		<div>
-			<BaseButton
-        label={buttonText}
-        variant={ButtonTypes.secondary}
-        onClick={() => setShowEntityAssociationModal(true)}
+		<div data-testid={`${buttonText}`}>
+			<BaseButton label={buttonText} variant={ButtonTypes.secondary} onClick={() => setShowEntityAssociationModal(true)}
+                  data-testid={`${buttonText}-button`}
       />
-      <FBModal
-        dismissible
-        show={showEntityAssociationModal}
-        onClose={() => setShowEntityAssociationModal(false)}
-        theme={flowbiteThemeOverride.modal}
-        style={{
-          boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
-        }}
+			<FBModal
+				dismissible
+				show={showEntityAssociationModal}
+				onClose={() => setShowEntityAssociationModal(false)}
+				theme={flowbiteThemeOverride.modal}
+				style={{
+					boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
+				}}
+        data-testid={`${buttonText}-modal`}
       >
-        <Card className="relative p-4 w-[962px] bg-gray-20" glow={false}>
-          <div className="flex flex-col gap-[24px] w-full">
-            <div className="flex flex-row text-h3">{title}</div>
-            <div className="w-full h-[400px]">
-              <MuiDataGrid
-                rows={rows}
-                columns={columns}
-                sx={{
-                  '--DataGrid-overlayHeight': '300px',
-                }}
-                className="h-full"
-                autoHeight={false}
-                disableColumnMenu={true}
-                rowSelection={false}
-                showSearch={true}
-              />
-            </div>
-          </div>
-          <div className="w-full flex flex-row justify-between">
-            <BaseButton label="Cancel" onClick={() => setShowEntityAssociationModal(false)} variant={ButtonTypes.secondary} disabled={isLoading} />
-            <div className="flex flex-row gap-[16px] items-center">
-              <div className="text-body font-bold text-tc-secondary">
-                {rowsSelected.length}/{rows.length} Selected
-              </div>
-              <BaseButton
-                label={buttonText}
-                loading={isLoading}
-                onClick={onEntitiesUpdate}
-                disabled={isEqual(sortBy(idsSelected), sortBy(rowsSelected)) || isLoading}
-              />
-            </div>
-          </div>
-        </Card>
-      </FBModal>
+				<Card className="relative p-4 w-[962px] bg-gray-20" glow={false}>
+					<div className="flex flex-col gap-[24px] w-full">
+						<div className="flex flex-row text-h3">{title}</div>
+						<div className="w-full h-[400px]">
+							<MuiDataGrid
+								rows={rows}
+								columns={columns}
+								sx={{
+									'--DataGrid-overlayHeight': '300px',
+								}}
+								className="h-full"
+								autoHeight={false}
+								disableColumnMenu={true}
+								rowSelection={false}
+								showSearch={true}
+							/>
+						</div>
+					</div>
+					<div className="w-full flex flex-row justify-between">
+						<BaseButton label="Cancel" onClick={() => setShowEntityAssociationModal(false)} variant={ButtonTypes.secondary} disabled={isLoading} />
+						<div className="flex flex-row gap-[16px] items-center">
+							<div className="text-body font-bold text-tc-secondary">
+								{rowsSelected.length}/{rows.length} Selected
+							</div>
+							<BaseButton label={buttonText} loading={isLoading} onClick={onEntitiesUpdate} disabled={isEqual(sortBy(idsSelected), sortBy(rowsSelected)) || isLoading} />
+						</div>
+					</div>
+				</Card>
+			</FBModal>
 		</div>
-  );
+	);
 };
