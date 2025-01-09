@@ -8,7 +8,7 @@ import {
 import { useAuth0Wrapper, useGraphQLSWR, useProductCarbonFootprintCache } from '@coldpbc/hooks';
 import {
   EntityWithAttributeAssurances,
-  ProductsQuery,
+  PaginatedProductsQuery,
   SustainabilityAttribute,
 } from '@coldpbc/interfaces';
 import React, { useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 
 const getColumnRows = (
-  products: ProductsQuery[],
+  products: PaginatedProductsQuery[],
   flags: {
     [key: string]: boolean
   }) => {
@@ -122,7 +122,7 @@ export const _ProductsDataGrid = () => {
   };
 
   const productsQuery = useGraphQLSWR<{
-    products: ProductsQuery[];
+    products: PaginatedProductsQuery[];
     products_aggregate: { count: number };
   }>(orgId ? 'GET_PAGINATED_PRODUCTS_FOR_ORG' : null, {
     filter: getSearchFilter(searchQuery),
