@@ -50,7 +50,6 @@ export interface MaterialsWithRelations extends Materials {
       id: string;
       name: string;
       supplierTier: number | null;
-      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
     };
   }[];
   attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
@@ -62,7 +61,6 @@ export interface MaterialsWithRelations extends Materials {
         id: string;
         name: string;
       } | null;
-      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
     };
   }[];
 }
