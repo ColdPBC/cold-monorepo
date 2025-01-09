@@ -42,7 +42,7 @@ export interface ProductForMaterialLevelSustainabilityReport extends ProductBase
   tier1SupplierName: string | null;
 }
 
-export interface ProductsQuery {
+export interface PaginatedProductsQuery {
   id: string;
   name: string;
   description: string | null;
@@ -73,6 +73,20 @@ export interface ProductsQuery {
   upcCode: string | null;
   brandProductId: string | null;
   supplierProductId: string | null;
+}
+
+export interface ProductsQuery extends PaginatedProductsQuery {
+  productMaterials: Array<PaginatedProductsQuery['productMaterials'][0] & {
+    material: PaginatedProductsQuery['productMaterials'][0]['material'] & {
+      materialSuppliers: {
+        id: string;
+        organizationFacility: {
+          id: string;
+          name: string;
+        };
+      }[];
+    };
+  }>;
 }
 
 export interface ProductCarbonFootprintData extends Products {
