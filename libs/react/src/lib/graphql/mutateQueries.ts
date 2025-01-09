@@ -158,3 +158,13 @@ export const UPDATE_PRODUCTS = gql`
     }
   }
 `;
+
+
+export const DELETE_AND_CREATE_MATERIAL_SUPPLIER = gql`
+  mutation DeleteAndCreateMaterialSupplier($deleteFilter: MaterialSuppliersListFilter!, $createInput: MaterialSupplierInsertInput!) {
+    deleteMaterialSuppliers(filter: $deleteFilter)
+    createMaterialSupplier(input: $createInput) {
+      id
+    }
+  }
+`;
