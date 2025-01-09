@@ -11,48 +11,48 @@ export const useUpdateEntityAssociations = () => {
   const { mutateGraphQL: deleteMaterialSuppliers } = useGraphQLMutation('DELETE_MATERIAL_SUPPLIERS')
 
   const callMutateFunction = (entityLevel: EntityLevel, entityToAddId: string, entityBeingAddedToId: string, orgId: string | undefined, create: boolean): (Promise<void> | Promise<FetchResult<any>>) => {
-    if(entityLevel === EntityLevel.MATERIAL) {
-      if(create){
-        return deleteAndCreateMaterialSupplier({
-          deleteFilter: {
-            material: {
-              id: entityToAddId
-            },
-            organization: {
-              id: orgId
-            }
+    // if(entityLevel === EntityLevel.MATERIAL) {
+    if(create){
+      return deleteAndCreateMaterialSupplier({
+        deleteFilter: {
+          material: {
+            id: entityToAddId
           },
-          createInput: {
-            material: { id: entityToAddId },
-            organizationFacility: { id: entityBeingAddedToId },
-            organization: {
-              id: orgId
-            }
+          organization: {
+            id: orgId
           }
-        })
-      } else {
-        return deleteMaterialSuppliers({
-          filter: {
-            material: {
-              id: entityToAddId,
-            },
-            organizationFacility: {
-              id: entityBeingAddedToId
-            },
-            organization: {
-              id: orgId
-            }
-          },
-        });
-      }
+        },
+        createInput: {
+          material: { id: entityToAddId },
+          organizationFacility: { id: entityBeingAddedToId },
+          organization: {
+            id: orgId
+          }
+        }
+      })
     } else {
-      return updateProduct({
-          input: {
+      return deleteMaterialSuppliers({
+        filter: {
+          material: {
             id: entityToAddId,
-            organizationFacility: create ? { id: entityBeingAddedToId } : null
+          },
+          organizationFacility: {
+            id: entityBeingAddedToId
+          },
+          organization: {
+            id: orgId
           }
-        })
+        },
+      });
     }
+    // } else {
+    //   return updateProduct({
+    //       input: {
+    //         id: entityToAddId,
+    //         organizationFacility: create ? { id: entityBeingAddedToId } : null
+    //       }
+    //     })
+    // }
   }
 
   return { callMutateFunction }
