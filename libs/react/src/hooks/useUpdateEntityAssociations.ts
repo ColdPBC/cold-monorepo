@@ -11,7 +11,6 @@ export const useUpdateEntityAssociations = () => {
   const { mutateGraphQL: deleteMaterialSuppliers } = useGraphQLMutation('DELETE_MATERIAL_SUPPLIERS')
 
   const callMutateFunction = (entityLevel: EntityLevel, entityToAddId: string, entityBeingAddedToId: string, orgId: string | undefined, create: boolean): (Promise<void> | Promise<FetchResult<any>>) => {
-    // if(entityLevel === EntityLevel.MATERIAL) {
     if(create){
       return deleteAndCreateMaterialSupplier({
         deleteFilter: {
@@ -45,6 +44,7 @@ export const useUpdateEntityAssociations = () => {
         },
       });
     }
+    // if(entityLevel === EntityLevel.MATERIAL) {
     // } else {
     //   return updateProduct({
     //       input: {
