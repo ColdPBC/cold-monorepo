@@ -69,4 +69,6 @@ export interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
   loading?: boolean;
 
   key?: string;
+
+  'data-testid'?: string;
 }
