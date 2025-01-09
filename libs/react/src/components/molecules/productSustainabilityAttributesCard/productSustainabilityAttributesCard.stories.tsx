@@ -49,20 +49,6 @@ export const Default: Story = {
                 organizationFacility: {
                   id: 'ofac_123',
                   name: 'Tier 2 Supplier',
-                  attributeAssurances: [
-                    {
-                      id: 'aa_123',
-                      effectiveEndDate: null,
-                      organizationFile: {
-                        id: 'org_file'
-                      },
-                      sustainabilityAttribute: {
-                        id: 'sa_tier_2',
-                        name: 'Tier 2 Supplier Certification',
-                        level: EntityLevel.SUPPLIER,
-                      }
-                    },
-                  ],
                 }
               }
             ],
@@ -125,7 +111,6 @@ export const NoAssurances: Story = {
                 organizationFacility: {
                   id: 'ofac_123',
                   name: 'Tier 2 Supplier',
-                  attributeAssurances: [],
                 }
               }
             ],
