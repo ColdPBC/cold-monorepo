@@ -1,12 +1,10 @@
 import {
   MaterialGraphQL,
+  MaterialsWithAssurances,
   MaterialsWithCertifications,
-  MaterialsWithRelations,
-  ProductsQuery,
 } from '@coldpbc/interfaces';
 import { addDays, subDays } from 'date-fns';
 import { EntityLevel } from '@coldpbc/enums';
-import { getProductsMock } from './productsMock';
 
 export function getMaterialsMock(): MaterialsWithCertifications[] {
   return [
@@ -160,7 +158,9 @@ export function getMaterialDetailMockById(id: string): MaterialsWithCertificatio
   return getMaterialsMock().find(material => material.id === id) || getMaterialsMock()[0];
 }
 
-export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
+// This mock data provides a super-set of Material data that can be used flexibly to fulfill direct queries
+// of materials or indirect queries, e.g. via a Product query
+export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
   return [
     {
       id: "mat_lc4oufc9130spa0rpmsp6ou0",
@@ -294,7 +294,6 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
               id: "ofac_wxxekywiila10puwj2j7gmwg",
               name: "Supplier 10",
             },
-            attributeAssurances: [],
           },
         },
         {
@@ -305,18 +304,6 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
               id: "ofac_wxxekywiila10puwj2j7gmwg",
               name: "Supplier 10",
             },
-            attributeAssurances: [
-              {
-                id: "attrass_qtu8uc01hqportfm2cq4vfdi",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "susatr_ctzexktkgpudh39j7fr5v506",
-                  name: "Super Duper PFAS Free 2",
-                  level: EntityLevel.PRODUCT,
-                },
-                organizationFile: null,
-              }
-            ],
           },
         }
       ],
@@ -457,7 +444,6 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
               id: "ofac_wxxekywiila10puwj2j7gmwg",
               name: "Supplier 10",
             },
-            attributeAssurances: [],
           },
         },
         {
@@ -468,7 +454,6 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
               id: "ofac_wxxekywiila10puwj2j7gmwg",
               name: "Supplier 10",
             },
-            attributeAssurances: [],
           },
         },
         {
@@ -479,18 +464,6 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
               id: "ofac_wxxekywiila10puwj2j7gmwg",
               name: "Supplier 10",
             },
-            attributeAssurances: [
-              {
-                id: "attrass_qtu8uc01hqportfm2cq4vfdi",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "susatr_ctzexktkgpudh39j7fr5v506",
-                  name: "Super Duper PFAS Free 2",
-                  level: EntityLevel.PRODUCT,
-                },
-                organizationFile: null,
-              }
-            ],
           },
         }
       ],
@@ -581,18 +554,6 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
               id: "ofac_wxxekywiila10puwj2j7gmwg",
               name: "Supplier 10",
             },
-            attributeAssurances: [
-              {
-                id: "attrass_qtu8uc01hqportfm2cq4vfdi",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "susatr_ctzexktkgpudh39j7fr5v506",
-                  name: "Super Duper PFAS Free 2",
-                  level: EntityLevel.PRODUCT,
-                },
-                organizationFile: null,
-              }
-            ],
           },
         },
         {
@@ -603,7 +564,6 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithRelations[] {
               id: "ofac_wxxekywiila10puwj2j7gmwg",
               name: "Supplier 10",
             },
-            attributeAssurances: [],
           },
         }
       ],
