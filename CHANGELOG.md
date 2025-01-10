@@ -1,3 +1,24 @@
+# [1.512.0](https://github.com/coldPBC/cold-monorepo/compare/v1.511.0...v1.512.0) (2025-01-10)
+
+
+### Bug Fixes
+
+* correct filter model update placement in muiDataGrid ([f1b0939](https://github.com/coldPBC/cold-monorepo/commit/f1b0939593bb0889acff408e3948d4b86b99f067))
+* display 'Materials' tab for tier 2 suppliers ([cf42e8c](https://github.com/coldPBC/cold-monorepo/commit/cf42e8c50195d019c6bc44719d2b3cc6eb30a052))
+* handle update of material entity associations correctly ([5692152](https://github.com/coldPBC/cold-monorepo/commit/569215215f280076184a30c5d9f798d84feff0dd))
+* remove unnecessary `refreshData` prop from `ProductsSuppliedTab` ([ffc8a08](https://github.com/coldPBC/cold-monorepo/commit/ffc8a08a01875a408d6c1841505bf83227f35bb7))
+* remove unnecessary array wrapping for Materials tab ([7305240](https://github.com/coldPBC/cold-monorepo/commit/7305240178fedc5ae51ef7e6ae37ca5e25b35dd3))
+* simplify and correct entity association update logic ([689ea82](https://github.com/coldPBC/cold-monorepo/commit/689ea82a416df560fd3ff51028a9a50fe6d69d4c))
+
+
+### Features
+
+* add 'data-testid' prop support for buttons ([2febe74](https://github.com/coldPBC/cold-monorepo/commit/2febe7424b71f4f4b19fd953985b72ab04fd4efd))
+* add entity association editing functionality and update data handling logic ([b38d899](https://github.com/coldPBC/cold-monorepo/commit/b38d899a84818900088f226492654820f2c98783))
+* add success toast message after updating associations ([cd6a28a](https://github.com/coldPBC/cold-monorepo/commit/cd6a28a1cb1db18d63c74203655336fc68a87beb))
+* correct tabs order for Materials and Products ([576d125](https://github.com/coldPBC/cold-monorepo/commit/576d125490471f8c753aef01000d5ba43afa29ef))
+* update tab visibility logic for materials and products ([ef87e2c](https://github.com/coldPBC/cold-monorepo/commit/ef87e2c061bfca7e5d451a095b4a60b9fb81b8ba))
+
 # [1.511.0](https://github.com/coldPBC/cold-monorepo/compare/v1.510.0...v1.511.0) (2025-01-08)
 
 
