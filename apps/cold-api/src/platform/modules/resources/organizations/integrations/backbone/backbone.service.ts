@@ -519,6 +519,7 @@ export class BackboneService extends BaseWorker {
 		return response.data.bom_items;
 	}
 
+	//Todo: Move this into a utility class
 	resolveUofM(item, existing: any): { uofm: string | null; yieldNumber: number | null } {
 		try {
 			let uofm: string | null;
