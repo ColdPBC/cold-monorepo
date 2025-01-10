@@ -138,3 +138,33 @@ export const DELETE_SUPPLIER = gql`
     deleteOrganizationFacility(filter: $filter)
   }
 `;
+
+export const DELETE_MATERIAL_SUPPLIER = gql`
+  mutation DeleteMaterialSupplier($filter: DeleteOneFilterInput!) {
+    deleteMaterialSupplier(filter: $filter)
+  }
+`;
+
+export const DELETE_MATERIAL_SUPPLIERS = gql`
+  mutation DeleteMaterialSuppliers($filter: MaterialSuppliersListFilter!) {
+    deleteMaterialSuppliers(filter: $filter)
+  }
+`;
+
+export const UPDATE_PRODUCTS = gql`
+  mutation UpdateProducts($input: [ProductUpdateInput!]!) {
+    updateProducts(input: $input) {
+      id
+    }
+  }
+`;
+
+
+export const DELETE_AND_CREATE_MATERIAL_SUPPLIER = gql`
+  mutation DeleteAndCreateMaterialSupplier($deleteFilter: MaterialSuppliersListFilter!, $createInput: MaterialSupplierInsertInput!) {
+    deleteMaterialSuppliers(filter: $deleteFilter)
+    createMaterialSupplier(input: $createInput) {
+      id
+    }
+  }
+`;
