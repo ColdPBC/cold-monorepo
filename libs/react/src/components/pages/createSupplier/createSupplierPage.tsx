@@ -23,6 +23,19 @@ import {withErrorBoundary} from "react-error-boundary";
 import {useSWRConfig} from "swr";
 import {Products} from "../../../interfaces/products";
 
+interface SupplierCreate {
+  name: string;
+  address_line_1: string;
+  address_line_2: string;
+  city: string;
+  state: string;
+  postal_code: string;
+  country: string;
+  category: string;
+  subcategory: string;
+  brandSupplierId: string;
+}
+
 const _CreateSupplierPage = () => {
   const {addToastMessage} = useAddToastMessage();
   const {mutate} = useSWRConfig();
@@ -31,23 +44,15 @@ const _CreateSupplierPage = () => {
   const navigate = useNavigate();
   const placeHolderOption: InputOption = {
     id: -1,
-    name: '',
-    value: '0',
+    name: 'Select yes or no',
+    value: 'none',
   };
 
-  const isFormValid = (name: string, tier: InputOption) => {
-    return name !== '' && tier.value !== '0';
+  const isFormValid = (state: SupplierCreate, tier: number, hasMaterials: InputOption, hasProducts: InputOption) => {
+    return state.name !== '' && tier !== 0 && hasMaterials.value !== 'none' && hasProducts.value !== 'none';
   }
 
-  const [supplierState, setSupplierState] = useState<{
-    name: string;
-    address_line_1: string;
-    address_line_2: string;
-    city: string;
-    state: string;
-    postal_code: string;
-    country: string;
-  }>({
+  const [supplierState, setSupplierState] = useState<SupplierCreate>({
     name: '',
     address_line_1: '',
     address_line_2: '',
@@ -55,43 +60,30 @@ const _CreateSupplierPage = () => {
     state: '',
     postal_code: '',
     country: '',
+    category: '',
+    subcategory: '',
+    brandSupplierId: '',
   });
 
-  const [tier, setTier] = useState<InputOption>(placeHolderOption);
+  const [tier, setTier] = useState< 0 | 1 | 2>(0);
+  const [hasMaterials, setHasMaterials] = useState<InputOption>(placeHolderOption);
+  const [hasProducts, setHasProducts] = useState<InputOption>(placeHolderOption);
   const [attributes, setAttributes] = useState<Claims[]>([]);
   const [attributesToAdd, setAttributesToAdd] = useState<Claims[]>([]);
-  const [products, setProducts] = useState<Products[]>([]);
-  const [productsToAdd, setProductsToAdd] = useState<Products[]>([]);
-  const [materials, setMaterials] = useState<Materials[]>([]);
-  const [materialsToAdd, setMaterialsToAdd] = useState<Materials[]>([]);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [createModalType, setCreateModalType] = useState<'products' | 'attributes' | 'materials' | undefined>(undefined);
+  const [createModalType, setCreateModalType] = useState<'attributes' | undefined>(undefined);
   const {mutateGraphQL: createSupplier} = useGraphQLMutation('CREATE_SUPPLIER');
   const {mutateGraphQL: createAttributeAssurance} = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
-  const {mutateGraphQL: createMaterialSupplier} = useGraphQLMutation('CREATE_MATERIAL_SUPPLIER');
-  const {mutateGraphQL: updateProduct} = useGraphQLMutation('UPDATE_PRODUCT');
 
   const allSustainabilityAttributes = useGraphQLSWR<{
     sustainabilityAttributes: Claims[];
   }>('GET_ALL_SUS_ATTRIBUTES');
 
-  const productsQuery = useGraphQLSWR<{
-    products: Products[];
-  }>(orgId ? 'GET_ALL_PRODUCTS_FOR_ORG_AS_BASE_ENTITY' : null, {
-    organizationId: orgId,
-  });
-
-  const materialsQuery = useGraphQLSWR<{
-    materials: Materials[];
-  }>(orgId ? 'GET_ALL_MATERIALS_FOR_ORG_AS_BASE_ENTITY' : null, {
-    organizationId: orgId,
-  });
-
   useEffect(() => {
-    setSaveButtonDisabled(!isFormValid(supplierState.name, tier));
-  }, [supplierState, tier]);
+    setSaveButtonDisabled(!isFormValid(supplierState, tier, hasMaterials, hasProducts));
+  }, [supplierState, tier, hasMaterials, hasProducts]);
 
   useEffect(() => {
     if (allSustainabilityAttributes.data) {
@@ -105,47 +97,14 @@ const _CreateSupplierPage = () => {
   }, [allSustainabilityAttributes.data]);
 
   useEffect(() => {
-    if (productsQuery.data) {
-      if (has(productsQuery.data, 'errors')) {
-        setProducts([]);
-      } else {
-        const products = get(productsQuery.data, 'data.products', []);
-        setProducts(products);
-      }
+    if (hasProducts.value === 'yes') {
+      setTier(1);
+    } else if (hasMaterials.value === 'yes') {
+      setTier(2);
+    } else {
+      setTier(0);
     }
-  }, [productsQuery.data]);
-
-  useEffect(() => {
-    if (materialsQuery.data) {
-      if (has(materialsQuery.data, 'errors')) {
-        setMaterials([]);
-      } else {
-        const materials = get(materialsQuery.data, 'data.materials', []);
-        setMaterials(materials);
-      }
-    }
-  }, [materialsQuery.data]);
-
-  useEffect(() => {
-    if (tier.value === '1') {
-      setMaterialsToAdd([]);
-    } else if(tier.value === '2') {
-      setProductsToAdd([]);
-    }
-  }, [tier]);
-
-  const tierOptions: InputOption[] = [
-    {
-      id: 1,
-      name: 'Tier 1',
-      value: '1',
-    },
-    {
-      id: 2,
-      name: 'Tier 2',
-      value: '2',
-    },
-  ]
+  }, [hasProducts, hasMaterials]);
 
   const onSaveButtonClick = async () => {
     setSaveButtonLoading(true);
@@ -158,7 +117,10 @@ const _CreateSupplierPage = () => {
         stateProvince: supplierState.state,
         postalCode: supplierState.postal_code,
         country: supplierState.country,
-        supplierTier: parseInt(tier.value),
+        category: supplierState.category,
+        subcategory: supplierState.subcategory,
+        brandFacilityId: supplierState.brandSupplierId,
+        supplierTier: tier,
       }
       const createSupplierResponse = await createSupplier({
         input: {
@@ -190,38 +152,6 @@ const _CreateSupplierPage = () => {
             });
           }
         }
-
-        if(productsToAdd.length !== 0 && tier.value === '1') {
-          for (const product of productsToAdd) {
-            await updateProduct({
-              input: {
-                id: product.id,
-                organizationFacility: {
-                  id: supplierId,
-                }
-              },
-            });
-          }
-        }
-
-        if(materialsToAdd.length !== 0 && tier.value === '2') {
-          for (const material of materialsToAdd) {
-            await createMaterialSupplier({
-              input: {
-                material: {
-                  id: material.id,
-                },
-                organizationFacility: {
-                  id: supplierId,
-                },
-                organization: {
-                  id: orgId,
-                },
-              },
-            });
-          }
-        }
-
         logBrowser('Supplier created with assurances successfully', 'error', {
           orgId,
           supplierId
@@ -230,8 +160,7 @@ const _CreateSupplierPage = () => {
           message: 'Supplier created successfully',
           type: ToastMessage.SUCCESS,
         })
-        await mutate(['GET_ALL_SUPPLIERS_FOR_ORG', JSON.stringify({ filter: { organization: { id: orgId }}})]);
-        navigate('/suppliers');
+        navigate(`/suppliers/${supplierId}`);
       } else {
         logBrowser(
           'Error creating supplier', 'error', {
@@ -286,20 +215,24 @@ const _CreateSupplierPage = () => {
   }
 
   const getEntities = (createModalType: string) => {
-    if (createModalType === 'products') {
-      return products.filter(product => {
-        return !some(productsToAdd, { id: product.id, name: product.name });
-      });
-    } else if (createModalType === 'materials') {
-      return materials.filter(material => {
-        return !some(materialsToAdd, { id: material.id, name: material.name });
-      })
-    } else {
-      return attributes.filter(attribute => {
-        return !some(attributesToAdd, { id: attribute.id, name: attribute.name });
-      });
-    }
+    return attributes.filter(attribute => {
+      return !some(attributesToAdd, { id: attribute.id, name: attribute.name });
+    });
   }
+
+  const yesNoOptions = [
+    placeHolderOption,
+    {
+      id: 1,
+      name: 'Yes',
+      value: 'yes',
+    },
+    {
+      id: 2,
+      name: 'No',
+      value: 'no',
+    },
+  ]
 
   return (
 		<MainContent
@@ -315,190 +248,289 @@ const _CreateSupplierPage = () => {
 			]}
 			className={'w-full'}
 			headerElement={pageButtons()}
-      isLoading={allSustainabilityAttributes.isLoading || productsQuery.isLoading || materialsQuery.isLoading}
-    >
-			<div className={'flex flex-row gap-[40px] w-full'}>
-				<div className={'flex flex-col w-1/2 gap-[40px]'}>
+			isLoading={allSustainabilityAttributes.isLoading}>
+			<div className={'flex flex-row gap-[24px] w-full mb-[80px]'}>
+				<Card className={'flex flex-col w-1/2 gap-[32px]'} title={'Details'} glow={false}>
+					<Input
+						input_props={{
+							name: 'name',
+							value: supplierState.name,
+							onChange: e => {
+								setSupplierState({
+									...supplierState,
+									name: e.target.value,
+								});
+							},
+							onValueChange: e => {
+								setSupplierState({
+									...supplierState,
+									name: e,
+								});
+							},
+							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+							placeholder: 'Name',
+						}}
+						container_classname={'w-full'}
+						input_label_props={{
+							className: 'text-eyebrow',
+						}}
+						input_label={'Name'}
+					/>
+					<Input
+						input_props={{
+							name: 'address_line_1',
+							value: supplierState.address_line_1,
+							onChange: e => {
+								setSupplierState({
+									...supplierState,
+									address_line_1: e.target.value,
+								});
+							},
+							onValueChange: e => {
+								setSupplierState({
+									...supplierState,
+									address_line_1: e,
+								});
+							},
+							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+							placeholder: 'Address 1',
+						}}
+						container_classname={'w-full'}
+						input_label_props={{
+							className: 'text-eyebrow',
+						}}
+						input_label={'Address Line 1'}
+					/>
+					<Input
+						input_props={{
+							name: 'address_line_2',
+							value: supplierState.address_line_2,
+							onChange: e => {
+								setSupplierState({
+									...supplierState,
+									address_line_2: e.target.value,
+								});
+							},
+							onValueChange: e => {
+								setSupplierState({
+									...supplierState,
+									address_line_2: e,
+								});
+							},
+							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+							placeholder: 'Address 2',
+						}}
+						container_classname={'w-full'}
+						input_label_props={{
+							className: 'text-eyebrow',
+						}}
+						input_label={'Address Line 2'}
+					/>
+					<Input
+						input_props={{
+							name: 'city',
+							value: supplierState.city,
+							onChange: e => {
+								setSupplierState({
+									...supplierState,
+									city: e.target.value,
+								});
+							},
+							onValueChange: e => {
+								setSupplierState({
+									...supplierState,
+									city: e,
+								});
+							},
+							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+							placeholder: 'City',
+						}}
+						container_classname={'w-full'}
+						input_label_props={{
+							className: 'text-eyebrow',
+						}}
+						input_label={'City'}
+					/>
+					<Input
+						input_props={{
+							name: 'state',
+							value: supplierState.state,
+							onChange: e => {
+								setSupplierState({
+									...supplierState,
+									state: e.target.value,
+								});
+							},
+							onValueChange: e => {
+								setSupplierState({
+									...supplierState,
+									state: e,
+								});
+							},
+							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+							placeholder: 'State',
+						}}
+						container_classname={'w-full'}
+						input_label_props={{
+							className: 'text-eyebrow',
+						}}
+						input_label={'State'}
+					/>
+					<Input
+						input_props={{
+							name: 'postal_code',
+							value: supplierState.postal_code,
+							onChange: e => {
+								setSupplierState({
+									...supplierState,
+									postal_code: e.target.value,
+								});
+							},
+							onValueChange: e => {
+								setSupplierState({
+									...supplierState,
+									postal_code: e,
+								});
+							},
+							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+							placeholder: 'Zip',
+						}}
+						container_classname={'w-full'}
+						input_label_props={{
+							className: 'text-eyebrow',
+						}}
+						input_label={'Postal Code'}
+					/>
+					<Input
+						input_props={{
+							name: 'country',
+							value: supplierState.country,
+							onChange: e => {
+								setSupplierState({
+									...supplierState,
+									country: e.target.value,
+								});
+							},
+							onValueChange: e => {
+								setSupplierState({
+									...supplierState,
+									country: e,
+								});
+							},
+							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+							placeholder: 'Country',
+						}}
+						container_classname={'w-full'}
+						input_label_props={{
+							className: 'text-eyebrow',
+						}}
+						input_label={'Country'}
+					/>
 					<div className={'flex flex-col gap-[8px] w-full'}>
-						<div className={'text-eyebrow'}>Name</div>
-						<Input
-							input_props={{
-								name: 'name',
-								value: supplierState.name,
-								onChange: e => {
-                  setSupplierState({
-                    ...supplierState,
-                    name: e.target.value,
-                  });
-                },
-								onValueChange: e => {
-                  setSupplierState({
-                    ...supplierState,
-                    name: e,
-                  });
-                },
-								className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-								placeholder: 'Name',
-							}}
-							container_classname={'w-full'}
-						/>
+						<div className={'text-eyebrow'}>Does this entity supply materials?</div>
+						<ComboBox
+              options={yesNoOptions}
+              value={hasMaterials}
+              name={'hasMaterials'}
+              onChange={option => setHasMaterials(option)}
+            />
 					</div>
 					<div className={'flex flex-col gap-[8px] w-full'}>
-						<div className={'text-eyebrow'}>Tier</div>
-						<ComboBox options={[placeHolderOption, ...tierOptions]} value={tier} name={'tier select'} onChange={option => setTier(option)} />
+						<div className={'text-eyebrow'}>Does this entity create finished products?</div>
+						<ComboBox
+              options={yesNoOptions}
+              value={hasProducts}
+              name={'hasProducts'}
+              onChange={option => setHasProducts(option)}
+            />
 					</div>
-          <div className={'w-full mt-[345px]'}>
-            <AddProductOrMaterialsToCreateSupplierCard
-              tier={tier}
-              productsToAdd={productsToAdd}
-              setProductsToAdd={setProductsToAdd}
-              materialsToAdd={materialsToAdd}
-              setMaterialsToAdd={setMaterialsToAdd}
-              setCreateModalType={setCreateModalType}
-              />
-          </div>
-				</div>
-				<div className={'flex flex-col w-1/2 gap-[40px]'}>
+					<Input
+						input_props={{
+							name: 'category',
+							value: supplierState.category,
+							onChange: e => {
+								setSupplierState({
+									...supplierState,
+                  category: e.target.value,
+								});
+							},
+							onValueChange: e => {
+								setSupplierState({
+									...supplierState,
+                  category: e,
+								});
+							},
+							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+							placeholder: 'Category',
+						}}
+						container_classname={'w-full'}
+						input_label_props={{
+							className: 'text-eyebrow',
+						}}
+						input_label={'Category'}
+					/>
+					<Input
+						input_props={{
+							name: 'subcategory',
+							value: supplierState.subcategory,
+							onChange: e => {
+								setSupplierState({
+									...supplierState,
+                  subcategory: e.target.value,
+								});
+							},
+							onValueChange: e => {
+								setSupplierState({
+									...supplierState,
+                  subcategory: e,
+								});
+							},
+							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+							placeholder: 'Sub-Category',
+						}}
+						container_classname={'w-full'}
+						input_label_props={{
+							className: 'text-eyebrow',
+						}}
+						input_label={'Sub-Category'}
+					/>
           <Input
             input_props={{
-              name: 'address_line_1',
-              value: supplierState.address_line_1,
+              name: 'brandSupplierId',
+              value: supplierState.brandSupplierId,
               onChange: e => {
                 setSupplierState({
                   ...supplierState,
-                  address_line_1: e.target.value,
+                  brandSupplierId: e.target.value,
                 });
               },
               onValueChange: e => {
                 setSupplierState({
                   ...supplierState,
-                  address_line_1: e,
+                  brandSupplierId: e,
                 });
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-              placeholder: 'Address 1',
+              placeholder: 'Brand Supplier Id',
             }}
-            container_classname={'w-full mt-[20px]'}
-          />
-          <Input
-            input_props={{
-              name: 'address_line_2',
-              value: supplierState.address_line_2,
-              onChange: e => {
-                setSupplierState({
-                  ...supplierState,
-                  address_line_2: e.target.value,
-                });
-              },
-              onValueChange: e => {
-                setSupplierState({
-                  ...supplierState,
-                  address_line_2: e,
-                });
-              },
-              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-              placeholder: 'Address 2',
+            container_classname={'w-full'}
+            input_label_props={{
+              className: 'text-eyebrow',
             }}
-            container_classname={'w-full mt-[20px]'}
+            input_label={'Brand Supplier Id'}
           />
-          <Input
-            input_props={{
-              name: 'city',
-              value: supplierState.city,
-              onChange: e => {
-                setSupplierState({
-                  ...supplierState,
-                  city: e.target.value,
-                });
-              },
-              onValueChange: e => {
-                setSupplierState({
-                  ...supplierState,
-                  city: e,
-                });
-              },
-              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-              placeholder: 'City',
+				</Card>
+        <Card className={'flex flex-col w-1/2 h-auto'} title={'Sustainability Attributes'} glow={true}>
+          <BaseButton label={'Add'} iconLeft={IconNames.PlusIcon} variant={ButtonTypes.secondary} onClick={() => setCreateModalType('attributes')} />
+          <CreateEntityTable
+            type={'attributes'}
+            remove={id => {
+              const newAttributes = attributesToAdd.filter(attr => attr.id !== id);
+              setAttributesToAdd(newAttributes);
             }}
-            container_classname={'w-full mt-[20px]'}
+            entities={attributesToAdd}
           />
-          <div className={'w-full flex flex-row gap-[16px]'}>
-            <Input
-              input_props={{
-                name: 'state',
-                value: supplierState.state,
-                onChange: e => {
-                  setSupplierState({
-                    ...supplierState,
-                    state: e.target.value,
-                  });
-                },
-                onValueChange: e => {
-                  setSupplierState({
-                    ...supplierState,
-                    state: e,
-                  });
-                },
-                className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-                placeholder: 'State',
-              }}
-              container_classname={'w-full mt-[20px]'}
-            />
-            <Input
-              input_props={{
-                name: 'postal_code',
-                value: supplierState.postal_code,
-                onChange: e => {
-                  setSupplierState({
-                    ...supplierState,
-                    postal_code: e.target.value,
-                  });
-                },
-                onValueChange: e => {
-                  setSupplierState({
-                    ...supplierState,
-                    postal_code: e,
-                  });
-                },
-                className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-                placeholder: 'Zip',
-              }}
-              container_classname={'w-full mt-[20px]'}
-            />
-          </div>
-          <Input
-            input_props={{
-              name: 'country',
-              value: supplierState.country,
-              onChange: e => {
-                setSupplierState({
-                  ...supplierState,
-                  country: e.target.value,
-                });
-              },
-              onValueChange: e => {
-                setSupplierState({
-                  ...supplierState,
-                  country: e,
-                });
-              },
-              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-              placeholder: 'Country',
-            }}
-            container_classname={'w-full mt-[20px]'}
-          />
-          <Card title={'Sustainability Attributes'} glow={true}>
-						<BaseButton label={'Add'} iconLeft={IconNames.PlusIcon} variant={ButtonTypes.secondary} onClick={() => setCreateModalType('attributes')} />
-						<CreateEntityTable
-							type={'attributes'}
-							remove={id => {
-								const newAttributes = attributesToAdd.filter(attr => attr.id !== id);
-								setAttributesToAdd(newAttributes);
-							}}
-							entities={attributesToAdd}
-						/>
-					</Card>
-				</div>
+        </Card>
 			</div>
 			{createModalType !== undefined && (
 				<AddToCreateEntityModal
@@ -507,38 +539,18 @@ const _CreateSupplierPage = () => {
 						setCreateModalType(undefined);
 					}}
 					onAdd={(ids: string[]) => {
-						if (createModalType === 'products') {
-							const newProducts: Products[] = [];
-							ids.forEach(id => {
-								const foundProduct = products.find(product => product.id === id);
-								if (foundProduct) {
-									newProducts.push(foundProduct);
-								}
-							});
-							setProductsToAdd([...productsToAdd, ...newProducts]);
-						} else if(createModalType === 'attributes') {
-							const newAttributes: Claims[] = [];
-							ids.forEach(id => {
-								const foundAttribute = attributes.find(attr => attr.id === id);
-								if (foundAttribute) {
-									newAttributes.push(foundAttribute);
-								}
-							});
-							setAttributesToAdd([...attributesToAdd, ...newAttributes]);
-						} else {
-              const newMaterials: Materials[] = [];
-              ids.forEach(id => {
-                const foundMaterial = materials.find(material => material.id === id);
-                if (foundMaterial) {
-                  newMaterials.push(foundMaterial);
-                }
-              });
-              setMaterialsToAdd([...materialsToAdd, ...newMaterials]);
-            }
+            const newAttributes: Claims[] = [];
+            ids.forEach(id => {
+              const foundAttribute = attributes.find(attr => attr.id === id);
+              if (foundAttribute) {
+                newAttributes.push(foundAttribute);
+              }
+            });
+            setAttributesToAdd([...attributesToAdd, ...newAttributes]);
 						setCreateModalType(undefined);
 					}}
 					type={createModalType}
-          entities={getEntities(createModalType)}
+					entities={getEntities(createModalType)}
 				/>
 			)}
 			<Modal
