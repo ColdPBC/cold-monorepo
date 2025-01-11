@@ -3,13 +3,11 @@ import {useNavigate} from "react-router-dom";
 import {
   Claims,
   InputOption,
-  Materials,
   ToastMessage
 } from "@coldpbc/interfaces";
 import React, {useEffect, useState} from "react";
 import {get, has, some} from "lodash";
 import {
-  AddProductOrMaterialsToCreateSupplierCard,
   AddToCreateEntityModal,
   BaseButton,
   Card,
@@ -20,16 +18,14 @@ import {
 } from "@coldpbc/components";
 import {ButtonTypes, IconNames} from "@coldpbc/enums";
 import {withErrorBoundary} from "react-error-boundary";
-import {useSWRConfig} from "swr";
-import {Products} from "../../../interfaces/products";
 
 interface SupplierCreate {
   name: string;
-  address_line_1: string;
-  address_line_2: string;
+  addressLine1: string;
+  addressLine2: string;
   city: string;
   state: string;
-  postal_code: string;
+  postalCode: string;
   country: string;
   category: string;
   subcategory: string;
@@ -38,7 +34,6 @@ interface SupplierCreate {
 
 const _CreateSupplierPage = () => {
   const {addToastMessage} = useAddToastMessage();
-  const {mutate} = useSWRConfig();
   const {logBrowser} = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
@@ -54,11 +49,11 @@ const _CreateSupplierPage = () => {
 
   const [supplierState, setSupplierState] = useState<SupplierCreate>({
     name: '',
-    address_line_1: '',
-    address_line_2: '',
+    addressLine1: '',
+    addressLine2: '',
     city: '',
     state: '',
-    postal_code: '',
+    postalCode: '',
     country: '',
     category: '',
     subcategory: '',
@@ -109,26 +104,14 @@ const _CreateSupplierPage = () => {
   const onSaveButtonClick = async () => {
     setSaveButtonLoading(true);
     try {
-      const supplier = {
-        name: supplierState.name,
-        addressLine1: supplierState.address_line_1,
-        addressLine2: supplierState.address_line_2,
-        city: supplierState.city,
-        stateProvince: supplierState.state,
-        postalCode: supplierState.postal_code,
-        country: supplierState.country,
-        category: supplierState.category,
-        subcategory: supplierState.subcategory,
-        brandFacilityId: supplierState.brandSupplierId,
-        supplierTier: tier,
-      }
       const createSupplierResponse = await createSupplier({
         input: {
           organization: {
             id: orgId,
           },
           supplier: true,
-          ...supplier,
+          ...supplierState,
+          tier
         },
       })
       const supplierId = get(createSupplierResponse, 'data.createOrganizationFacility.id');
@@ -214,7 +197,7 @@ const _CreateSupplierPage = () => {
     )
   }
 
-  const getEntities = (createModalType: string) => {
+  const getEntities = () => {
     return attributes.filter(attribute => {
       return !some(attributesToAdd, { id: attribute.id, name: attribute.name });
     });
@@ -278,18 +261,18 @@ const _CreateSupplierPage = () => {
 					/>
 					<Input
 						input_props={{
-							name: 'address_line_1',
-							value: supplierState.address_line_1,
+							name: 'addressLine1',
+							value: supplierState.addressLine1,
 							onChange: e => {
 								setSupplierState({
 									...supplierState,
-									address_line_1: e.target.value,
+									addressLine1: e.target.value,
 								});
 							},
 							onValueChange: e => {
 								setSupplierState({
 									...supplierState,
-									address_line_1: e,
+									addressLine1: e,
 								});
 							},
 							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
@@ -303,18 +286,18 @@ const _CreateSupplierPage = () => {
 					/>
 					<Input
 						input_props={{
-							name: 'address_line_2',
-							value: supplierState.address_line_2,
+							name: 'addressLine2',
+							value: supplierState.addressLine2,
 							onChange: e => {
 								setSupplierState({
 									...supplierState,
-									address_line_2: e.target.value,
+									addressLine2: e.target.value,
 								});
 							},
 							onValueChange: e => {
 								setSupplierState({
 									...supplierState,
-									address_line_2: e,
+									addressLine2: e,
 								});
 							},
 							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
@@ -378,18 +361,18 @@ const _CreateSupplierPage = () => {
 					/>
 					<Input
 						input_props={{
-							name: 'postal_code',
-							value: supplierState.postal_code,
+							name: 'postalCode',
+							value: supplierState.postalCode,
 							onChange: e => {
 								setSupplierState({
 									...supplierState,
-									postal_code: e.target.value,
+									postalCode: e.target.value,
 								});
 							},
 							onValueChange: e => {
 								setSupplierState({
 									...supplierState,
-									postal_code: e,
+									postalCode: e,
 								});
 							},
 							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
@@ -550,7 +533,7 @@ const _CreateSupplierPage = () => {
 						setCreateModalType(undefined);
 					}}
 					type={createModalType}
-					entities={getEntities(createModalType)}
+					entities={getEntities()}
 				/>
 			)}
 			<Modal
