@@ -126,7 +126,7 @@ const _CreateMaterialPage = () => {
     }
   }, [materialClassificationsQuery.data]);
 
-  if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading) {
+  if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading || materialClassificationsQuery.isLoading) {
 		return <Spinner />;
 	}
 
