@@ -116,8 +116,8 @@ const _CreateMaterialPage = () => {
       if (has(materialClassificationsQuery.data, 'errors')) {
         setMaterialClassifications([]);
       } else {
-        const attributes = get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', []);
-        setMaterialClassifications(attributes);
+        const classifications = get(materialClassificationsQuery.data, 'data.materialClassifications', []);
+        setMaterialClassifications(classifications);
       }
     }
   }, [materialClassificationsQuery.data]);
@@ -285,13 +285,13 @@ const _CreateMaterialPage = () => {
                 });
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-              placeholder: 'Name',
+              placeholder: '',
             }}
             container_classname={'w-full'}
             input_label_props={{
               className: 'text-eyebrow',
             }}
-            input_label={'Name'}
+            input_label={'Name *'}
           />
           <Input
             input_props={{
@@ -310,7 +310,7 @@ const _CreateMaterialPage = () => {
                 });
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-              placeholder: 'Description',
+              placeholder: '',
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -359,7 +359,7 @@ const _CreateMaterialPage = () => {
                 });
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-              placeholder: 'Address 2',
+              placeholder: '',
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -409,7 +409,7 @@ const _CreateMaterialPage = () => {
                 });
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-              placeholder: 'Brand Supplier Id',
+              placeholder: '',
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -434,7 +434,7 @@ const _CreateMaterialPage = () => {
                 });
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-              placeholder: 'Brand Supplier Id',
+              placeholder: '',
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -442,7 +442,7 @@ const _CreateMaterialPage = () => {
             }}
             input_label={'Brand Material Id'}
           />        </Card>
-        <Card className={'flex flex-col w-1/2 gap-[32px] h-auto'} title={'Sustainability Attributes'} glow={true}>
+        <Card className={'flex-col w-1/2 gap-[32px] self-start'} title={'Sustainability Attributes'} glow={true}>
           <BaseButton
             label={'Add'}
             iconLeft={IconNames.PlusIcon}
