@@ -24,12 +24,12 @@ interface SupplierCreate {
   addressLine1: string;
   addressLine2: string;
   city: string;
-  state: string;
+  stateProvince: string;
   postalCode: string;
   country: string;
   category: string;
   subcategory: string;
-  brandSupplierId: string;
+  brandFacilityId: string;
 }
 
 const _CreateSupplierPage = () => {
@@ -43,8 +43,8 @@ const _CreateSupplierPage = () => {
     value: 'none',
   };
 
-  const isFormValid = (state: SupplierCreate, tier: number, hasMaterials: InputOption, hasProducts: InputOption) => {
-    return state.name !== '' && tier !== 0 && hasMaterials.value !== 'none' && hasProducts.value !== 'none';
+  const isFormValid = (state: SupplierCreate, tier: number, hasProducts: InputOption) => {
+    return state.name !== '' && tier !== 0 && hasProducts.value !== 'none';
   }
 
   const [supplierState, setSupplierState] = useState<SupplierCreate>({
@@ -52,16 +52,15 @@ const _CreateSupplierPage = () => {
     addressLine1: '',
     addressLine2: '',
     city: '',
-    state: '',
+    stateProvince: '',
     postalCode: '',
     country: '',
     category: '',
     subcategory: '',
-    brandSupplierId: '',
+    brandFacilityId: '',
   });
 
   const [tier, setTier] = useState< 0 | 1 | 2>(0);
-  const [hasMaterials, setHasMaterials] = useState<InputOption>(placeHolderOption);
   const [hasProducts, setHasProducts] = useState<InputOption>(placeHolderOption);
   const [attributes, setAttributes] = useState<Claims[]>([]);
   const [attributesToAdd, setAttributesToAdd] = useState<Claims[]>([]);
@@ -77,8 +76,8 @@ const _CreateSupplierPage = () => {
   }>('GET_ALL_SUS_ATTRIBUTES');
 
   useEffect(() => {
-    setSaveButtonDisabled(!isFormValid(supplierState, tier, hasMaterials, hasProducts));
-  }, [supplierState, tier, hasMaterials, hasProducts]);
+    setSaveButtonDisabled(!isFormValid(supplierState, tier, hasProducts));
+  }, [supplierState, tier, hasProducts]);
 
   useEffect(() => {
     if (allSustainabilityAttributes.data) {
@@ -94,12 +93,12 @@ const _CreateSupplierPage = () => {
   useEffect(() => {
     if (hasProducts.value === 'yes') {
       setTier(1);
-    } else if (hasMaterials.value === 'yes') {
+    } else if (hasProducts.value === 'no') {
       setTier(2);
     } else {
       setTier(0);
     }
-  }, [hasProducts, hasMaterials]);
+  }, [hasProducts]);
 
   const onSaveButtonClick = async () => {
     setSaveButtonLoading(true);
@@ -111,7 +110,7 @@ const _CreateSupplierPage = () => {
           },
           supplier: true,
           ...supplierState,
-          tier
+          supplierTier: tier
         },
       })
       const supplierId = get(createSupplierResponse, 'data.createOrganizationFacility.id');
@@ -233,268 +232,259 @@ const _CreateSupplierPage = () => {
 			headerElement={pageButtons()}
 			isLoading={allSustainabilityAttributes.isLoading}>
 			<div className={'flex flex-row gap-[24px] w-full mb-[80px]'}>
-				<Card className={'flex flex-col w-1/2 gap-[32px]'} title={'Details'} glow={false}>
-					<Input
-						input_props={{
-							name: 'name',
-							value: supplierState.name,
-							onChange: e => {
-								setSupplierState({
-									...supplierState,
-									name: e.target.value,
-								});
-							},
-							onValueChange: e => {
-								setSupplierState({
-									...supplierState,
-									name: e,
-								});
-							},
-							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-							placeholder: 'Name',
-						}}
-						container_classname={'w-full'}
-						input_label_props={{
-							className: 'text-eyebrow',
-						}}
-						input_label={'Name'}
-					/>
-					<Input
-						input_props={{
-							name: 'addressLine1',
-							value: supplierState.addressLine1,
-							onChange: e => {
-								setSupplierState({
-									...supplierState,
-									addressLine1: e.target.value,
-								});
-							},
-							onValueChange: e => {
-								setSupplierState({
-									...supplierState,
-									addressLine1: e,
-								});
-							},
-							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-							placeholder: 'Address 1',
-						}}
-						container_classname={'w-full'}
-						input_label_props={{
-							className: 'text-eyebrow',
-						}}
-						input_label={'Address Line 1'}
-					/>
-					<Input
-						input_props={{
-							name: 'addressLine2',
-							value: supplierState.addressLine2,
-							onChange: e => {
-								setSupplierState({
-									...supplierState,
-									addressLine2: e.target.value,
-								});
-							},
-							onValueChange: e => {
-								setSupplierState({
-									...supplierState,
-									addressLine2: e,
-								});
-							},
-							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-							placeholder: 'Address 2',
-						}}
-						container_classname={'w-full'}
-						input_label_props={{
-							className: 'text-eyebrow',
-						}}
-						input_label={'Address Line 2'}
-					/>
-					<Input
-						input_props={{
-							name: 'city',
-							value: supplierState.city,
-							onChange: e => {
-								setSupplierState({
-									...supplierState,
-									city: e.target.value,
-								});
-							},
-							onValueChange: e => {
-								setSupplierState({
-									...supplierState,
-									city: e,
-								});
-							},
-							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-							placeholder: 'City',
-						}}
-						container_classname={'w-full'}
-						input_label_props={{
-							className: 'text-eyebrow',
-						}}
-						input_label={'City'}
-					/>
-					<Input
-						input_props={{
-							name: 'state',
-							value: supplierState.state,
-							onChange: e => {
-								setSupplierState({
-									...supplierState,
-									state: e.target.value,
-								});
-							},
-							onValueChange: e => {
-								setSupplierState({
-									...supplierState,
-									state: e,
-								});
-							},
-							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-							placeholder: 'State',
-						}}
-						container_classname={'w-full'}
-						input_label_props={{
-							className: 'text-eyebrow',
-						}}
-						input_label={'State'}
-					/>
-					<Input
-						input_props={{
-							name: 'postalCode',
-							value: supplierState.postalCode,
-							onChange: e => {
-								setSupplierState({
-									...supplierState,
-									postalCode: e.target.value,
-								});
-							},
-							onValueChange: e => {
-								setSupplierState({
-									...supplierState,
-									postalCode: e,
-								});
-							},
-							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-							placeholder: 'Zip',
-						}}
-						container_classname={'w-full'}
-						input_label_props={{
-							className: 'text-eyebrow',
-						}}
-						input_label={'Postal Code'}
-					/>
-					<Input
-						input_props={{
-							name: 'country',
-							value: supplierState.country,
-							onChange: e => {
-								setSupplierState({
-									...supplierState,
-									country: e.target.value,
-								});
-							},
-							onValueChange: e => {
-								setSupplierState({
-									...supplierState,
-									country: e,
-								});
-							},
-							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-							placeholder: 'Country',
-						}}
-						container_classname={'w-full'}
-						input_label_props={{
-							className: 'text-eyebrow',
-						}}
-						input_label={'Country'}
-					/>
-					<div className={'flex flex-col gap-[8px] w-full'}>
-						<div className={'text-eyebrow'}>Does this entity supply materials?</div>
-						<ComboBox
-              options={yesNoOptions}
-              value={hasMaterials}
-              name={'hasMaterials'}
-              onChange={option => setHasMaterials(option)}
-            />
-					</div>
-					<div className={'flex flex-col gap-[8px] w-full'}>
-						<div className={'text-eyebrow'}>Does this entity create finished products?</div>
-						<ComboBox
-              options={yesNoOptions}
-              value={hasProducts}
-              name={'hasProducts'}
-              onChange={option => setHasProducts(option)}
-            />
-					</div>
-					<Input
-						input_props={{
-							name: 'category',
-							value: supplierState.category,
-							onChange: e => {
-								setSupplierState({
-									...supplierState,
-                  category: e.target.value,
-								});
-							},
-							onValueChange: e => {
-								setSupplierState({
-									...supplierState,
-                  category: e,
-								});
-							},
-							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-							placeholder: 'Category',
-						}}
-						container_classname={'w-full'}
-						input_label_props={{
-							className: 'text-eyebrow',
-						}}
-						input_label={'Category'}
-					/>
-					<Input
-						input_props={{
-							name: 'subcategory',
-							value: supplierState.subcategory,
-							onChange: e => {
-								setSupplierState({
-									...supplierState,
-                  subcategory: e.target.value,
-								});
-							},
-							onValueChange: e => {
-								setSupplierState({
-									...supplierState,
-                  subcategory: e,
-								});
-							},
-							className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-							placeholder: 'Sub-Category',
-						}}
-						container_classname={'w-full'}
-						input_label_props={{
-							className: 'text-eyebrow',
-						}}
-						input_label={'Sub-Category'}
-					/>
+        <Card className={'flex flex-col w-1/2 gap-[32px]'} title={'Details'} glow={false}>
           <Input
             input_props={{
-              name: 'brandSupplierId',
-              value: supplierState.brandSupplierId,
+              name: 'name',
+              value: supplierState.name,
               onChange: e => {
                 setSupplierState({
                   ...supplierState,
-                  brandSupplierId: e.target.value,
+                  name: e.target.value,
                 });
               },
               onValueChange: e => {
                 setSupplierState({
                   ...supplierState,
-                  brandSupplierId: e,
+                  name: e,
                 });
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-              placeholder: 'Brand Supplier Id',
+              placeholder: '',
+            }}
+            container_classname={'w-full'}
+            input_label_props={{
+              className: 'text-eyebrow',
+            }}
+            input_label={'Name *'}
+          />
+          <div className={'flex flex-col gap-[8px] w-full'}>
+            <div className={'text-eyebrow'}>Does this entity create finished products? *</div>
+            <ComboBox
+              options={yesNoOptions}
+              value={hasProducts}
+              name={'hasProducts'}
+              onChange={option => setHasProducts(option)}
+            />
+          </div>
+          <Input
+            input_props={{
+              name: 'addressLine1',
+              value: supplierState.addressLine1,
+              onChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  addressLine1: e.target.value,
+                });
+              },
+              onValueChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  addressLine1: e,
+                });
+              },
+              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+              placeholder: '',
+            }}
+            container_classname={'w-full'}
+            input_label_props={{
+              className: 'text-eyebrow',
+            }}
+            input_label={'Address Line 1'}
+          />
+          <Input
+            input_props={{
+              name: 'addressLine2',
+              value: supplierState.addressLine2,
+              onChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  addressLine2: e.target.value,
+                });
+              },
+              onValueChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  addressLine2: e,
+                });
+              },
+              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+              placeholder: '',
+            }}
+            container_classname={'w-full'}
+            input_label_props={{
+              className: 'text-eyebrow',
+            }}
+            input_label={'Address Line 2'}
+          />
+          <Input
+            input_props={{
+              name: 'city',
+              value: supplierState.city,
+              onChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  city: e.target.value,
+                });
+              },
+              onValueChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  city: e,
+                });
+              },
+              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+              placeholder: '',
+            }}
+            container_classname={'w-full'}
+            input_label_props={{
+              className: 'text-eyebrow',
+            }}
+            input_label={'City'}
+          />
+          <Input
+            input_props={{
+              name: 'postalCode',
+              value: supplierState.postalCode,
+              onChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  postalCode: e.target.value,
+                });
+              },
+              onValueChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  postalCode: e,
+                });
+              },
+              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+              placeholder: '',
+            }}
+            container_classname={'w-full'}
+            input_label_props={{
+              className: 'text-eyebrow',
+            }}
+            input_label={'Postal Code'}
+          />
+          <Input
+            input_props={{
+              name: 'state',
+              value: supplierState.stateProvince,
+              onChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  stateProvince: e.target.value,
+                });
+              },
+              onValueChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  stateProvince: e,
+                });
+              },
+              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+              placeholder: '',
+            }}
+            container_classname={'w-full'}
+            input_label_props={{
+              className: 'text-eyebrow',
+            }}
+            input_label={'State'}
+          />
+          <Input
+            input_props={{
+              name: 'country',
+              value: supplierState.country,
+              onChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  country: e.target.value,
+                });
+              },
+              onValueChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  country: e,
+                });
+              },
+              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+              placeholder: '',
+            }}
+            container_classname={'w-full'}
+            input_label_props={{
+              className: 'text-eyebrow',
+            }}
+            input_label={'Country'}
+          />
+          <Input
+            input_props={{
+              name: 'category',
+              value: supplierState.category,
+              onChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  category: e.target.value,
+                });
+              },
+              onValueChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  category: e,
+                });
+              },
+              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+              placeholder: '',
+            }}
+            container_classname={'w-full'}
+            input_label_props={{
+              className: 'text-eyebrow',
+            }}
+            input_label={'Category'}
+          />
+          <Input
+            input_props={{
+              name: 'subcategory',
+              value: supplierState.subcategory,
+              onChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  subcategory: e.target.value,
+                });
+              },
+              onValueChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  subcategory: e,
+                });
+              },
+              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+              placeholder: '',
+            }}
+            container_classname={'w-full'}
+            input_label_props={{
+              className: 'text-eyebrow',
+            }}
+            input_label={'Sub-Category'}
+          />
+          <Input
+            input_props={{
+              name: 'brandFacilityId',
+              value: supplierState.brandFacilityId,
+              onChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  brandFacilityId: e.target.value,
+                });
+              },
+              onValueChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  brandFacilityId: e,
+                });
+              },
+              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+              placeholder: '',
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -502,9 +492,10 @@ const _CreateSupplierPage = () => {
             }}
             input_label={'Brand Supplier Id'}
           />
-				</Card>
-        <Card className={'flex flex-col w-1/2 h-auto'} title={'Sustainability Attributes'} glow={true}>
-          <BaseButton label={'Add'} iconLeft={IconNames.PlusIcon} variant={ButtonTypes.secondary} onClick={() => setCreateModalType('attributes')} />
+        </Card>
+        <Card className={'flex flex-col w-1/2 self-start'} title={'Sustainability Attributes'} glow={true}>
+          <BaseButton label={'Add'} iconLeft={IconNames.PlusIcon} variant={ButtonTypes.secondary}
+                      onClick={() => setCreateModalType('attributes')} />
           <CreateEntityTable
             type={'attributes'}
             remove={id => {
