@@ -73,7 +73,11 @@ const _CreateSupplierPage = () => {
 
   const allSustainabilityAttributes = useGraphQLSWR<{
     sustainabilityAttributes: Claims[];
-  }>('GET_ALL_SUS_ATTRIBUTES');
+  }>('GET_ALL_SUS_ATTRIBUTES', {
+    filter: {
+      level: 'SUPPLIER'
+    }
+  });
 
   useEffect(() => {
     setSaveButtonDisabled(!isFormValid(supplierState, tier, hasProducts));
