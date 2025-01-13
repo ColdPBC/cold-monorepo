@@ -21,11 +21,15 @@ import {
   SustainabilityAttributeDetail,
   Terms,
   UserSettingsPage,
-  WizardRoutes,
+  WizardRoutes, PolicyInfoChecker,
 } from '@coldpbc/components';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { QuestionnaireRoutes } from './questionnaireRoutes';
 import {ProductRoutes} from "./productRoutes";
+import {ColdApolloProvider, ColdAxiosInterceptorProvider, ColdLDProvider, ColdMQTTProvider} from "@coldpbc/providers";
+import React from "react";
+import ReactMarkdown from "react-markdown";
+import children = ReactMarkdown.propTypes.children;
 
 const DEFAULT_PAGE = '/sustainability';
 
@@ -66,9 +70,19 @@ export const ColdRoutes = () => {
       <Route path={'/privacy'} element={<Terms type={'privacy'} />} />
       <Route path={'/terms'} element={<Terms type={'tos'} />} />
       <Route element={<ProtectedRoute />}>
-        <Route element={<Interceptor />}>
-          <Route element={<DashboardLayout />}>{getFilteredRoutes()}</Route>
-        </Route>
+        <ColdAxiosInterceptorProvider>
+          <Route element={<PolicyInfoChecker />}>
+            <ColdMQTTProvider>
+              <ColdApolloProvider>
+                <Route element={<Interceptor />}>
+                  <Route element={<DashboardLayout />}>
+                    {getFilteredRoutes()}
+                  </Route>
+                </Route>
+              </ColdApolloProvider>
+            </ColdMQTTProvider>
+          </Route>
+        </ColdAxiosInterceptorProvider>
       </Route>
     </Routes>
   );

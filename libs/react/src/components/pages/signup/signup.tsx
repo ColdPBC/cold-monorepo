@@ -11,7 +11,7 @@ import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 
 export interface SignupPageProps {
-  userData: User;
+  userData: User | undefined;
   signedPolicyData?: PolicySignedDataType[];
 }
 

@@ -61,13 +61,9 @@ export const ColdContextProvider = (props: PropsWithChildren<ColdContextProvider
           setImpersonatingOrg: setSelectedOrg,
         }}>
         <ColdAuthProvider>
-          <ColdAxiosInterceptorProvider>
-            <ColdLDProvider>
-              <ColdMQTTProvider>
-                <ColdApolloProvider>{children}</ColdApolloProvider>
-              </ColdMQTTProvider>
-            </ColdLDProvider>
-          </ColdAxiosInterceptorProvider>
+          <ColdLDProvider>
+            {children}
+          </ColdLDProvider>
         </ColdAuthProvider>
       </ColdContext.Provider>
     </BrowserRouter>

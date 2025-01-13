@@ -26,22 +26,6 @@ const _ProtectedRoute = () => {
 
   const location = useLocation();
 
-  const signedPolicySWR = useSWR<PolicySignedDataType[], any, any>(user && isAuthenticated ? ['/policies/signed/user', 'GET'] : null, axiosFetcher);
-
-  const needsSignup = () => {
-    if (signedPolicySWR.data && !isAxiosError(signedPolicySWR.data)) {
-      // check if user has signed both policies
-      const tos = signedPolicySWR.data?.some(policy => policy.name === 'tos' && !isEmpty(policy.policy_data));
-      const privacy = signedPolicySWR.data?.some(policy => policy.name === 'privacy' && !isEmpty(policy.policy_data));
-      return !tos || !privacy || !user?.family_name || !user?.given_name;
-    } else {
-      return true;
-    }
-    // todo - put this check back in when we need to check for company
-    // check if company is already set
-    // if (isUndefined(user?.coldclimate_claims.org_id)) return true;
-  };
-
   const getAppState = () => {
     const { pathname, search } = location;
     let searchToBeAdded = '';
@@ -134,7 +118,7 @@ const _ProtectedRoute = () => {
     getUserMetadata();
   }, [getAccessTokenSilently, user, isAuthenticated, isLoading, appState, orgId, error]);
 
-  if (isLoading || signedPolicySWR.isLoading) {
+  if (isLoading) {
     return (
       <Takeover show={true} setShow={() => {}}>
         <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
@@ -144,7 +128,7 @@ const _ProtectedRoute = () => {
     );
   }
 
-  if (error || isAxiosError(signedPolicySWR.data)) {
+  if (error) {
     let errorMessage;
 
     if (error) {
@@ -157,21 +141,10 @@ const _ProtectedRoute = () => {
       }
     }
 
-    if (isAxiosError(signedPolicySWR.data)) {
-      logBrowser('Error occurred in ProtectedRoute', 'error', { error: signedPolicySWR.error }, signedPolicySWR.error);
-      logError(signedPolicySWR.data, ErrorType.SWRError);
-      errorMessage = 'A connection error occurred. Please refresh the page or re-login.';
-    }
-
     return <ErrorPage error={errorMessage} />;
   }
 
   if (isAuthenticated && user) {
-    if (needsSignup()) {
-      logBrowser('User needs to sign up', 'info', { user });
-      return <SignupPage signedPolicyData={signedPolicySWR.data} userData={user} />;
-    }
-    logBrowser('User is authenticated', 'info', { user, isAuthenticated, orgId });
     return <Outlet />;
   } else {
     logBrowser('User is not authenticated', 'info', { user, isAuthenticated, orgId, isLoading, error });

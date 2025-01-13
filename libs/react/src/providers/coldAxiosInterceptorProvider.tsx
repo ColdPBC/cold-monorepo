@@ -1,22 +1,15 @@
-import { GetTokenSilentlyOptions, useAuth0 } from '@auth0/auth0-react';
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { resolveAPIUrl, resolveStripeIntegrationUrl } from '@coldpbc/fetchers';
 import { ErrorType } from '@coldpbc/enums';
-import { useColdContext } from '@coldpbc/hooks';
+import {useColdContext, useTokenManager} from '@coldpbc/hooks';
 import { ColdContextType } from '@coldpbc/context';
 
-const setAxiosTokenInterceptor = async (getAccessTokenSilently: (options?: GetTokenSilentlyOptions) => Promise<string>, context: ColdContextType): Promise<void> => {
+const setAxiosTokenInterceptor = async (getAccessTokenSilently: () => Promise<string | null>, context: ColdContextType): Promise<void> => {
   const { logBrowser } = context;
   axios.interceptors.request.use(async config => {
     if (config.baseURL === resolveAPIUrl() || config.baseURL === resolveStripeIntegrationUrl()) {
-      const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
-      const accessToken = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: audience,
-          scope: 'offline_access email profile openid',
-        },
-      });
+      const accessToken = await getAccessTokenSilently();
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     logBrowser(`Axios request sent to ${config.url}`, 'info', {
@@ -55,14 +48,14 @@ const setAxiosResponseInterceptor = (coldContext: ColdContextType) => {
 type AxiosInterceptorProviderProps = { children: React.ReactNode };
 
 export const ColdAxiosInterceptorProvider = ({ children }: AxiosInterceptorProviderProps) => {
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessToken } = useTokenManager()
   const context = useColdContext();
   useEffect(() => {
-    const getAccessToken = async () => {
-      await setAxiosTokenInterceptor(getAccessTokenSilently, context);
+    const fetchAccessToken = async () => {
+      await setAxiosTokenInterceptor(getAccessToken, context);
     };
-    getAccessToken();
-  }, [getAccessTokenSilently]);
+    fetchAccessToken();
+  }, [getAccessToken]);
 
   setAxiosResponseInterceptor(context);
 

@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useContext } from 'react';
 import ColdContext from '../context/coldContext';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
+import {ColdTokenProvider} from "./coldTokenProvider";
 
 export const ColdAuthProvider = ({ children }: PropsWithChildren) => {
   const { auth0Options } = useContext(ColdContext) as any;
@@ -13,7 +14,9 @@ export const ColdAuthProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <Auth0Provider {...auth0Options} onRedirectCallback={onRedirectCallback}>
-      {children}
+      <ColdTokenProvider>
+        {children}
+      </ColdTokenProvider>
     </Auth0Provider>
   );
 };
