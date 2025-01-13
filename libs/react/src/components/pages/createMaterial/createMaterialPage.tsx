@@ -79,7 +79,11 @@ const _CreateMaterialPage = () => {
 
 	const allSustainabilityAttributes = useGraphQLSWR<{
     sustainabilityAttributes: Claims[];
-  }>('GET_ALL_SUS_ATTRIBUTES');
+  }>('GET_ALL_SUS_ATTRIBUTES', {
+    filter: {
+      level: 'MATERIAL'
+    }
+  });
 
   const materialClassificationsQuery = useGraphQLSWR<{
     materialClassifications: {id: string; name: string;}[];
@@ -419,18 +423,18 @@ const _CreateMaterialPage = () => {
           />
           <Input
             input_props={{
-              name: 'brandMaterialId',
-              value: materialState.brandMaterialId,
+              name: 'supplierMaterialId',
+              value: materialState.supplierMaterialId,
               onChange: e => {
                 setMaterialState({
                   ...materialState,
-                  brandMaterialId: e.target.value,
+                  supplierMaterialId: e.target.value,
                 });
               },
               onValueChange: e => {
                 setMaterialState({
                   ...materialState,
-                  brandMaterialId: e,
+                  supplierMaterialId: e,
                 });
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
@@ -440,8 +444,9 @@ const _CreateMaterialPage = () => {
             input_label_props={{
               className: 'text-eyebrow',
             }}
-            input_label={'Brand Material Id'}
-          />        </Card>
+            input_label={'Supplier Material Id'}
+          />
+        </Card>
         <Card className={'flex-col w-1/2 gap-[32px] self-start'} title={'Sustainability Attributes'} glow={true}>
           <BaseButton
             label={'Add'}
