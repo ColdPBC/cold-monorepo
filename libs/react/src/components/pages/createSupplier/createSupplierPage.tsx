@@ -344,31 +344,6 @@ const _CreateSupplierPage = () => {
           />
           <Input
             input_props={{
-              name: 'postalCode',
-              value: supplierState.postalCode,
-              onChange: e => {
-                setSupplierState({
-                  ...supplierState,
-                  postalCode: e.target.value,
-                });
-              },
-              onValueChange: e => {
-                setSupplierState({
-                  ...supplierState,
-                  postalCode: e,
-                });
-              },
-              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-              placeholder: '',
-            }}
-            container_classname={'w-full'}
-            input_label_props={{
-              className: 'text-eyebrow',
-            }}
-            input_label={'Postal Code'}
-          />
-          <Input
-            input_props={{
               name: 'state',
               value: supplierState.stateProvince,
               onChange: e => {
@@ -391,6 +366,31 @@ const _CreateSupplierPage = () => {
               className: 'text-eyebrow',
             }}
             input_label={'State'}
+          />
+          <Input
+            input_props={{
+              name: 'postalCode',
+              value: supplierState.postalCode,
+              onChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  postalCode: e.target.value,
+                });
+              },
+              onValueChange: e => {
+                setSupplierState({
+                  ...supplierState,
+                  postalCode: e,
+                });
+              },
+              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+              placeholder: '',
+            }}
+            container_classname={'w-full'}
+            input_label_props={{
+              className: 'text-eyebrow',
+            }}
+            input_label={'Postal Code'}
           />
           <Input
             input_props={{
