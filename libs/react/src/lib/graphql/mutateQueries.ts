@@ -159,11 +159,18 @@ export const UPDATE_PRODUCTS = gql`
   }
 `;
 
-
 export const DELETE_AND_CREATE_MATERIAL_SUPPLIER = gql`
   mutation DeleteAndCreateMaterialSupplier($deleteFilter: MaterialSuppliersListFilter!, $createInput: MaterialSupplierInsertInput!) {
     deleteMaterialSuppliers(filter: $deleteFilter)
     createMaterialSupplier(input: $createInput) {
+      id
+    }
+  }
+`;
+
+export const CREATE_PRODUCT = gql`
+  mutation CreateProduct($input: ProductInsertInput!) {
+    createProduct(input: $input) {
       id
     }
   }
