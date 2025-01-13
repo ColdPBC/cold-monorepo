@@ -21,7 +21,7 @@ interface MaterialCreate {
   name: string;
   description: string;
   materialCategory: string;
-  materialSubCategory: string;
+  materialSubcategory: string;
   brandMaterialId: string;
   supplierMaterialId: string;
 }
@@ -46,7 +46,7 @@ const _CreateMaterialPage = () => {
     name: '',
     description: '',
     materialCategory: '',
-    materialSubCategory: '',
+    materialSubcategory: '',
     brandMaterialId: '',
     supplierMaterialId: '',
   });
@@ -373,18 +373,18 @@ const _CreateMaterialPage = () => {
           />
           <Input
             input_props={{
-              name: 'materialSubCategory',
-              value: materialState.materialSubCategory,
+              name: 'materialSubcategory',
+              value: materialState.materialSubcategory,
               onChange: e => {
                 setMaterialState({
                   ...materialState,
-                  materialSubCategory: e.target.value,
+                  materialSubcategory: e.target.value,
                 });
               },
               onValueChange: e => {
                 setMaterialState({
                   ...materialState,
-                  materialSubCategory: e,
+                  materialSubcategory: e,
                 });
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
