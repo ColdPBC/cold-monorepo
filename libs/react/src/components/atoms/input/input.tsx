@@ -67,15 +67,21 @@ export const Input = (props: IInputProps) => {
 
   function renderText(): JSX.Element {
     // eslint-disable-next-line no-restricted-globals
-    const key = `${name}_${idx}`;
+    const key = `${input_props.name}_${idx}`;
     return (
-      <div key={key} className={twMerge('col-span-full', container_classname)}>
+      <div
+        key={key}
+        className={twMerge('col-span-full', container_classname)}
+        data-testid={`input_container_${input_props.name}`}
+      >
         {input_label && (
           <label
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}
+            data-testid={`input_label_${input_props.name}`}
+          >
             {input_label}
           </label>
         )}
@@ -90,14 +96,15 @@ export const Input = (props: IInputProps) => {
             input_props.error ? 'border-red-100 focus:border-red-100' : 'border-gray-90 focus:border-gray-90',
           )}
           id={input_props.name}
+          data-testid={`input_${input_props.name}`}
         />
         {
           input_props.error ? (
-            <div className="text-red-100 text-eyebrow mt-[8px]" key={`error_${key}`} data-testid={`error_${input_props.name}`}>
+            <div className="text-red-100 text-eyebrow mt-[8px]" key={`error_${key}`} data-testid={`input_error_${input_props.name}`}>
               {input_props.error}
             </div>
           ) : (
-            <div className={'h-5'} key={`error_${key}`} data-testid={`error_${input_props.name}`}>
+            <div className={'h-5'} key={`error_${key}`} data-testid={`input_error_space_${input_props.name}`}>
             {/*
             space for padding 20px
             */}

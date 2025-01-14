@@ -233,6 +233,7 @@ const _CreateProductPage = () => {
           disabled={saveButtonDisabled || saveButtonLoading}
           loading={saveButtonLoading}
           className={'h-[40px]'}
+          data-testid={'save_button'}
         />
       </div>
     )
@@ -285,7 +286,7 @@ const _CreateProductPage = () => {
                 setErrors((prev) => {
                   return {
                     ...prev,
-                    name: otherProducts.some((product) => product.name === e.target.value) ? 'Product name already exists' : undefined
+                    name: otherProducts.some((product) => product.name === e) ? 'Product name already exists' : undefined
                   }
                 })
               },
