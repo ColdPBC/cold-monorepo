@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { ErrorFallback, SignupPage, Spinner, Takeover } from '@coldpbc/components';
+import { ProtectedRouteErrorFallback, SignupPage, Spinner, Takeover } from '@coldpbc/components';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { PolicySignedDataType } from '@coldpbc/interfaces';
@@ -190,7 +190,7 @@ const _ProtectedRoute = () => {
 };
 
 export const ProtectedRoute = withErrorBoundary(_ProtectedRoute, {
-  FallbackComponent: props => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ProtectedRouteErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in ProtectedRoute: ', error);
   },
