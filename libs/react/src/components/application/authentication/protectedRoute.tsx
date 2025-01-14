@@ -53,6 +53,12 @@ const _ProtectedRoute = () => {
 
   const appState = getAppState();
 
+  const clearStorageAndLogoutLogin = async (logout: () => Promise<void>) => {
+    localStorage.clear();
+    sessionStorage.clear();
+    await logout();
+  };
+
   useEffect(() => {
     const getUserMetadata = async () => {
       try {
@@ -118,23 +124,17 @@ const _ProtectedRoute = () => {
           if (get(e, 'error') === 'login_required') {
             logBrowser('User needs to login', 'error', { error: e });
             logError(e, ErrorType.Auth0Error);
-            localStorage.clear()
-            sessionStorage.clear()
-            await logout();
+            await clearStorageAndLogoutLogin(logout)
           }
           if (get(e, 'error') === 'consent_required') {
             logBrowser('User needs to give consent', 'error', { error: e });
             logError(e, ErrorType.Auth0Error);
-            localStorage.clear()
-            sessionStorage.clear()
-            await logout();
+            await clearStorageAndLogoutLogin(logout)
           }
         }
         logBrowser('Error occurred while logging user in', 'error', { error: e });
         logError(e, ErrorType.Auth0Error);
-        localStorage.clear()
-        sessionStorage.clear()
-        await logout();
+        await clearStorageAndLogoutLogin(logout)
       }
     };
 
