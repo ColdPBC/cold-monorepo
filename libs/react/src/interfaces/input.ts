@@ -1,4 +1,4 @@
-import { InputTypes } from '../enums/inputs';
+import { InputTypes } from '@coldpbc/enums';
 import { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
 import { NumericFormatProps } from 'react-number-format';
 import { TextareaProps } from 'flowbite-react';
@@ -19,6 +19,7 @@ export interface BaseInputProps extends InputHTMLAttributes<HTMLInputElement> {
   options?: Array<InputOption>;
   onValueChange: (value: any) => void;
   value?: any;
+  error?: string;
 }
 
 export type NumericInputProps = NumericFormatProps;
