@@ -1,3 +1,13 @@
+# [1.513.0](https://github.com/coldPBC/cold-monorepo/compare/v1.512.0...v1.513.0) (2025-01-13)
+
+
+### Features
+
+* Refactor createSupplier form structure and validations. ([4ce56b2](https://github.com/coldPBC/cold-monorepo/commit/4ce56b2cdda95a4b5425b2f734e789127422475b))
+* Refine GraphQL query with supplier-level filter ([5131185](https://github.com/coldPBC/cold-monorepo/commit/513118560cb9f5c4b84508af26c4ee816a7dc32f))
+* standardize supplier state property casing ([fd540d6](https://github.com/coldPBC/cold-monorepo/commit/fd540d60d6b67603f6b126c116285849ec8937c0))
+* update create supplier page logic and UI ([347e23b](https://github.com/coldPBC/cold-monorepo/commit/347e23b07d33696d16eff5f9d585a3bfb50903b3))
+
 # [1.512.0](https://github.com/coldPBC/cold-monorepo/compare/v1.511.0...v1.512.0) (2025-01-10)
 
 
