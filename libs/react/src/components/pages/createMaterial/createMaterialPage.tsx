@@ -184,7 +184,7 @@ const _CreateMaterialPage = () => {
             });
           }
         }
-        logBrowser('Material created with assurances successfully', 'error', {
+        logBrowser('Material created with assurances successfully', 'info', {
           orgId,
           materialId,
         });

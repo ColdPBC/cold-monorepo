@@ -138,7 +138,7 @@ const _CreateSupplierPage = () => {
             });
           }
         }
-        logBrowser('Supplier created with assurances successfully', 'error', {
+        logBrowser('Supplier created with assurances successfully', 'info', {
           orgId,
           supplierId
         });

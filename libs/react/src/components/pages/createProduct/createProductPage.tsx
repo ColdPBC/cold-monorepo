@@ -161,7 +161,7 @@ const _CreateProductPage = () => {
           }
         }
 
-        logBrowser('Product created with assurances successfully', 'error', {
+        logBrowser('Product created with assurances successfully', 'info', {
           orgId,
           productId,
         });
