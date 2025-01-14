@@ -1,7 +1,7 @@
 import React from 'react';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { ButtonTypes } from '@coldpbc/enums';
 import { BaseButton } from '@coldpbc/components';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export type ErrorPageProps = {
   error?: string;
@@ -9,9 +9,11 @@ export type ErrorPageProps = {
 };
 
 export const ErrorPage = ({ error, showLogout=true }: ErrorPageProps) => {
-  const { logout } = useAuth0Wrapper();
+  const { logout } = useAuth0();
 
   const handleLogout = async () => {
+    localStorage.clear();
+    sessionStorage.clear();
     await logout(
       {
         logoutParams: { returnTo: window.location.origin },

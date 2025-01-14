@@ -8,13 +8,12 @@ import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 import useSWR from 'swr';
-import { get, has, isEmpty } from 'lodash';
+import { get, has, isArray, isEmpty, isError } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorPage } from '../errors/errorPage';
 import { datadogRum } from '@datadog/browser-rum';
 import { LDContext } from 'launchdarkly-js-sdk-common';
 import { datadogLogs } from '@datadog/browser-logs';
-import {isAxiosError} from "axios";
 
 const _ProtectedRoute = () => {
   const { user, error, loginWithRedirect, isAuthenticated, isLoading, getAccessTokenSilently, orgId, logout } = useAuth0Wrapper();
@@ -29,7 +28,7 @@ const _ProtectedRoute = () => {
   const signedPolicySWR = useSWR<PolicySignedDataType[], any, any>(user && isAuthenticated ? ['/policies/signed/user', 'GET'] : null, axiosFetcher);
 
   const needsSignup = () => {
-    if (signedPolicySWR.data && !isAxiosError(signedPolicySWR.data)) {
+    if (signedPolicySWR.data && isArray(signedPolicySWR.data) && !isError(signedPolicySWR.data)) {
       // check if user has signed both policies
       const tos = signedPolicySWR.data?.some(policy => policy.name === 'tos' && !isEmpty(policy.policy_data));
       const privacy = signedPolicySWR.data?.some(policy => policy.name === 'privacy' && !isEmpty(policy.policy_data));
@@ -53,6 +52,11 @@ const _ProtectedRoute = () => {
   };
 
   const appState = getAppState();
+
+  const isPolicyError = (data: any) => {
+    // return true if data is an error or not an array
+    return data && (isError(data) || !isArray(data))
+  }
 
   useEffect(() => {
     const getUserMetadata = async () => {
@@ -144,7 +148,7 @@ const _ProtectedRoute = () => {
     );
   }
 
-  if (error || isAxiosError(signedPolicySWR.data)) {
+  if (error || isPolicyError(signedPolicySWR.data)) {
     let errorMessage;
 
     if (error) {
@@ -157,7 +161,7 @@ const _ProtectedRoute = () => {
       }
     }
 
-    if (isAxiosError(signedPolicySWR.data)) {
+    if (isError(signedPolicySWR.data)) {
       logBrowser('Error occurred in ProtectedRoute', 'error', { error: signedPolicySWR.error }, signedPolicySWR.error);
       logError(signedPolicySWR.data, ErrorType.SWRError);
       errorMessage = 'A connection error occurred. Please refresh the page or re-login.';
