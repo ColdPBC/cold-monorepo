@@ -105,6 +105,8 @@ const _ProtectedRoute = () => {
               datadogLogs.setUser(user?.coldclimate_claims);
             } else {
               logBrowser('Logging in user', 'info', { user, isAuthenticated });
+              localStorage.clear()
+              sessionStorage.clear()
               await loginWithRedirect({
                 appState: appState,
                 authorizationParams: {
@@ -121,16 +123,22 @@ const _ProtectedRoute = () => {
           if (get(e, 'error') === 'login_required') {
             logBrowser('User needs to login', 'error', { error: e });
             logError(e, ErrorType.Auth0Error);
+            localStorage.clear()
+            sessionStorage.clear()
             await logout();
           }
           if (get(e, 'error') === 'consent_required') {
             logBrowser('User needs to give consent', 'error', { error: e });
             logError(e, ErrorType.Auth0Error);
+            localStorage.clear()
+            sessionStorage.clear()
             await logout();
           }
         }
         logBrowser('Error occurred while logging user in', 'error', { error: e });
         logError(e, ErrorType.Auth0Error);
+        localStorage.clear()
+        sessionStorage.clear()
         await logout();
       }
     };
