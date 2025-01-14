@@ -11,12 +11,17 @@ const setAxiosTokenInterceptor = async (getAccessTokenSilently: (options?: GetTo
   axios.interceptors.request.use(async config => {
     if (config.baseURL === resolveAPIUrl() || config.baseURL === resolveStripeIntegrationUrl()) {
       const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
-      const accessToken = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: audience,
-          scope: 'offline_access email profile openid',
-        },
-      });
+      let accessToken = ''
+      try {
+        accessToken = await getAccessTokenSilently({
+          authorizationParams: {
+            audience: audience,
+            scope: 'offline_access email profile openid',
+          },
+        });
+      } catch (error) {
+        logBrowser('Error getting token for Axios', 'error', { error, audience, config }, error);
+      }
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     logBrowser(`Axios request sent to ${config.url}`, 'info', {

@@ -20,12 +20,17 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
 
   const getToken = async () => {
     const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
-    return await getAccessTokenSilently({
-      authorizationParams: {
-        audience: audience,
-        scope: 'offline_access email profile openid',
-      },
-    });
+    try {
+      return await getAccessTokenSilently({
+        authorizationParams: {
+          audience: audience,
+          scope: 'offline_access email profile openid',
+        },
+      });
+    } catch (error) {
+      logBrowser('Error getting token for MQTT', 'error', { error, audience }, error);
+      return '';
+    }
   };
 
   useEffect(() => {
