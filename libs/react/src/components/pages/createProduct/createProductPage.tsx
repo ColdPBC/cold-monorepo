@@ -451,13 +451,21 @@ const _CreateProductPage = () => {
             input_label={'Supplier Product Id'}
           />
         </Card>
-        <Card className={'flex-col w-1/2 gap-[32px] self-start'} title={'Sustainability Attributes'} glow={true}>
-          <BaseButton
-            label={'Add'}
-            iconLeft={IconNames.PlusIcon}
-            variant={ButtonTypes.secondary}
-            onClick={() => setCreateModalType('attributes')}
-          />
+        <Card
+          className={'flex-col w-1/2 gap-[32px] self-start'}
+          title={'Sustainability Attributes'}
+          glow={true}
+          ctas={[
+            {
+              child: <BaseButton
+                label={'Add'}
+                iconLeft={IconNames.PlusIcon}
+                variant={ButtonTypes.secondary}
+                onClick={() => setCreateModalType('attributes')}
+              />,
+            }
+          ]}
+        >
           <CreateEntityTable
             type={'attributes'}
             remove={(id) => {

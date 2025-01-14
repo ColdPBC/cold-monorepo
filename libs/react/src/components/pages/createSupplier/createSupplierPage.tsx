@@ -497,9 +497,21 @@ const _CreateSupplierPage = () => {
             input_label={'Brand Supplier Id'}
           />
         </Card>
-        <Card className={'flex flex-col w-1/2 self-start'} title={'Sustainability Attributes'} glow={true}>
-          <BaseButton label={'Add'} iconLeft={IconNames.PlusIcon} variant={ButtonTypes.secondary}
-                      onClick={() => setCreateModalType('attributes')} />
+        <Card
+          className={'flex flex-col w-1/2 self-start'}
+          title={'Sustainability Attributes'}
+          glow={true}
+          ctas={[
+            {
+              child: <BaseButton
+                label={'Add'}
+                iconLeft={IconNames.PlusIcon}
+                variant={ButtonTypes.secondary}
+                onClick={() => setCreateModalType('attributes')}
+              />,
+            }
+          ]}
+        >
           <CreateEntityTable
             type={'attributes'}
             remove={id => {
