@@ -44,7 +44,7 @@ const _CreateSupplierPage = () => {
   };
 
   const isFormValid = (state: SupplierCreate, tier: number, hasProducts: InputOption) => {
-    return state.name !== '' && tier !== 0 && hasProducts.value !== 'none';
+    return state.name.trim() !== '' && tier !== 0 && hasProducts.value !== 'none';
   }
 
   const [supplierState, setSupplierState] = useState<SupplierCreate>({

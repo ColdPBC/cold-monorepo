@@ -29,7 +29,7 @@ const _CreateMaterialPage = () => {
   };
 
   const isFormValid = (name: string) => {
-    return name !== '';
+    return name.trim() !== '';
   }
 
   const [name, setName] = useState('');
