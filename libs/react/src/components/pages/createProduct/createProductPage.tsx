@@ -34,10 +34,6 @@ const _CreateProductPage = () => {
   const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
 
-  const isFormValid = (productState: ProductCreate) => {
-    return productState.name.trim() !== '';
-  }
-
   const placeHolderOption: InputOption = {
     id: -1,
     name: 'Select one',
@@ -63,6 +59,12 @@ const _CreateProductPage = () => {
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [createModalType, setCreateModalType] = useState<'attributes' | undefined>(undefined);
+  const [otherProducts, setOtherProducts] = useState<{
+    id: string;
+    name: string;
+  }[]>([]);
+  const [errors, setErrors] = useState<Partial<Record<keyof ProductCreate, string>>>({});
+
   const {mutateGraphQL: createProduct} = useGraphQLMutation('CREATE_PRODUCT');
   const {mutateGraphQL: createAttributeAssurance} = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
 
@@ -86,9 +88,15 @@ const _CreateProductPage = () => {
     }
   });
 
+  const otherProductsQuery = useGraphQLSWR<{
+    products: Claims[];
+  }>('GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT', {
+    organizationId: orgId,
+  });
+
   useEffect(() => {
-    setSaveButtonDisabled(!isFormValid(productState));
-  }, [productState]);
+    setSaveButtonDisabled(Object.values(errors).some(error => error !== null && error !== undefined));
+  }, [errors]);
 
   useEffect(() => {
     if (suppliersQuery.data) {
@@ -112,7 +120,18 @@ const _CreateProductPage = () => {
     }
   }, [allSustainabilityAttributes.data]);
 
-  if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading) {
+  useEffect(() => {
+    if (otherProductsQuery.data) {
+      if (has(otherProductsQuery.data, 'errors')) {
+        setOtherProducts([]);
+      } else {
+        const products = get(otherProductsQuery.data, 'data.products', []);
+        setOtherProducts(products);
+      }
+    }
+  }, [otherProductsQuery.data]);
+
+  if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading || otherProductsQuery.isLoading) {
     return <Spinner />;
   }
 
@@ -190,8 +209,9 @@ const _CreateProductPage = () => {
         message: 'Error creating product',
         type: ToastMessage.FAILURE,
       })
+    } finally {
+      setSaveButtonLoading(false);
     }
-    setSaveButtonLoading(false);
   }
 
   const pageButtons = () => {
@@ -250,15 +270,28 @@ const _CreateProductPage = () => {
                   ...productState,
                   name: e.target.value,
                 });
+                setErrors((prev) => {
+                  return {
+                    ...prev,
+                    name: otherProducts.some((product) => product.name === e.target.value) ? 'Product name already exists' : undefined
+                  }
+                })
               },
               onValueChange: e => {
                 setProductState({
                   ...productState,
                   name: e,
                 });
+                setErrors((prev) => {
+                  return {
+                    ...prev,
+                    name: otherProducts.some((product) => product.name === e.target.value) ? 'Product name already exists' : undefined
+                  }
+                })
               },
-              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+              className: `text-body p-4 rounded-[8px] border-[1.5px] w-full focus:border-[1.5px] focus:ring-0`,
               placeholder: '',
+              error: errors.name,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -291,7 +324,7 @@ const _CreateProductPage = () => {
             }}
             input_label={'Description'}
           />
-          <div className={'flex flex-col gap-[8px] w-full'}>
+          <div className={'flex flex-col gap-[8px] w-full mb-[20px]'}>
             <div className={'text-eyebrow'}>Tier 1 Supplier</div>
             <ComboBox
               options={[placeHolderOption, ...supplierOptions]}
