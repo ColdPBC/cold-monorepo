@@ -33,7 +33,7 @@ const _CreateMaterialPage = () => {
   const navigate = useNavigate();
 
   const isFormValid = (materialState: MaterialCreate) => {
-    return materialState.name !== '';
+    return materialState.name.trim() !== '';
   }
 
   const placeHolderOption: InputOption = {
