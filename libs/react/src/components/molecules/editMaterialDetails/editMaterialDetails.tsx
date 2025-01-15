@@ -1,4 +1,12 @@
-import { Card, ColdIcon, ErrorFallback, ErrorPage, Popover, Spinner } from '@coldpbc/components';
+import {
+  Card,
+  ColdIcon,
+  ErrorFallback,
+  ErrorPage,
+  Popover,
+  Spinner,
+  TextInputForEntityEdit,
+} from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import { ButtonTypes, GlobalSizes, IconNames } from '@coldpbc/enums';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -16,35 +24,61 @@ interface EditMaterialDetailsProps {
 	refreshMaterial: () => void;
 }
 
+const isMaterialEdited = (originalMaterial: MaterialGraphQL, editedMaterial: MaterialGraphQL): boolean => {
+  const keysToCompare = [
+    'name',
+    'description',
+    'materialCategory',
+    'materialSubcategory',
+    'brandMaterialId',
+    'supplierMaterialId',
+    ['materialClassification', 'id'],
+  ];
+
+  return keysToCompare.some(key => {
+    if (Array.isArray(key)) {
+      // Handle nested properties
+      const [parent, child] = key;
+      return editedMaterial[parent]?.[child] !== originalMaterial[parent]?.[child];
+    }
+    return editedMaterial[key] !== originalMaterial[key];
+  });
+};
+
 const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, onClose, refreshMaterial }) => {
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
 	const { addToastMessage } = useAddToastMessage();
 	const [isLoading, setIsLoading] = useState(false);
-  const [editedMaterial, setEditedMaterial] = useState<MaterialGraphQL | undefined>(material);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [editedMaterial, setEditedMaterial] = useState<MaterialGraphQL>(material);
 
   useEffect(() => {
     setEditedMaterial(material);
   }, [material])
+
+  useEffect(() => {
+    if (editedMaterial) {
+      setIsDisabled(!isMaterialEdited(material, editedMaterial));
+    }
+  }, [material, editedMaterial]);
 
 	const materialClassificationsQuery = useGraphQLSWR<{
 		materialClassifications: { id: string; name: string }[];
 	}>('GET_ALL_MATERIAL_CLASSIFICATIONS');
 	const { mutateGraphQL: updateMaterial } = useGraphQLMutation('UPDATE_MATERIAL');
 
-	const options = useMemo(() => {
+	const classificationOptions = useMemo(() => {
 		const materialClassifications: { id: string; name: string }[] | undefined = get(materialClassificationsQuery.data, 'data.materialClassifications');
 
 		if (!materialClassifications) return null;
 
-		const classificationOptions = materialClassifications
+		return materialClassifications
 			.sort((a, b) => a.name.localeCompare(b.name))
 			.map(classification => ({
 				value: classification.id,
 				label: classification.name,
 			}));
-
-		return [{ value: '', label: 'None' }, ...classificationOptions];
 	}, [materialClassificationsQuery.data]);
 
 	const saveMaterialChange = useCallback(
@@ -55,6 +89,12 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 				await updateMaterial({
 					input: {
             id: editedMaterial.id,
+            name: editedMaterial.name,
+            description: editedMaterial.description,
+            materialCategory: editedMaterial.materialCategory,
+            materialSubcategory: editedMaterial.materialSubcategory,
+            brandMaterialId: editedMaterial.brandMaterialId,
+            supplierMaterialId: editedMaterial.supplierMaterialId,
             // Only update materialClassification if there's a new value, due to a bug we can't unset it
             materialClassification: editedMaterial.materialClassification ? {
               id: editedMaterial.materialClassification?.id,
@@ -95,10 +135,7 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 
   const cancelCta = {
     text: 'Cancel',
-    action: () => {
-      setEditedMaterial(undefined);
-      onClose();
-    },
+    action: onClose,
     variant: ButtonTypes.secondary,
   }
 
@@ -121,7 +158,7 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 		);
 	}
 
-	if (!options) return null;
+	if (!classificationOptions || !editedMaterial) return null;
 
 	const ctas = [
     cancelCta,
@@ -132,17 +169,25 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 					await saveMaterialChange(editedMaterial);
 				}
 			},
-			disabled: !editedMaterial || editedMaterial.materialClassification?.id === material.materialClassification?.id,
+			disabled: isDisabled,
 			loading: isLoading,
       variant: ButtonTypes.primary,
 		},
 	];
 
+  const inputProps = {
+    setEntityState: setEditedMaterial,
+    entityState: editedMaterial,
+  };
+
 	return (
-		<Card title={'Details'} ctas={ctas} className='w-[406px] min-w-[406px] h-fit' overflowHidden={false}>
+    <Card title={'Details'} ctas={ctas} className='w-[406px] min-w-[406px] h-fit' overflowHidden={false}>
+      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'name'} label={'Name'} required={true} {...inputProps} />
+      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'description'} label={'Description'} {...inputProps} />
+      {/* Material Classification selector */}
       <div className={'flex flex-col w-full h-full justify-between gap-4'}>
         <div className="w-full h-fit flex flex-col gap-2 items-start">
-          <div className="text-eyebrow text-tc-disabled">
+          <div className="text-eyebrow text-tc-primary">
             <div className={'flex items-center justify-start gap-1'}>
               <span>Classification</span>
               <Popover
@@ -164,11 +209,17 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
                 padding: '8px',
               },
             }}
-            options={options}
-            value={editedMaterial?.materialClassification ? { value: editedMaterial.materialClassification.id, label: editedMaterial.materialClassification.name } : undefined}
+            options={classificationOptions}
+            value={editedMaterial?.materialClassification ? {
+              value: editedMaterial.materialClassification.id,
+              label: editedMaterial.materialClassification.name
+            } : undefined}
             onChange={(_event, newValue) => {
               if (editedMaterial && newValue) {
-                setEditedMaterial({...editedMaterial, materialClassification: { id: newValue.value, name: newValue.label }});
+                setEditedMaterial({
+                  ...editedMaterial,
+                  materialClassification: { id: newValue.value, name: newValue.label }
+                });
               }
             }}
             popupIcon={<ColdIcon name={IconNames.ColdChevronDownIcon} className="h-[10px] w-[10px]" />}
@@ -222,10 +273,14 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
           />
         </div>
       </div>
+      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'materialCategory'} label={'Category'} {...inputProps} />
+      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'materialSubcategory'} label={'Sub-Category'} {...inputProps} />
+      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'brandMaterialId'} label={'Brand Material ID'} {...inputProps} />
+      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'supplierMaterialId'} label={'Supplier Material ID'} {...inputProps} />
     </Card>
-);
+  );
 };
 
 export const EditMaterialDetails = withErrorBoundary(_EditMaterialDetails, {
-	FallbackComponent: props => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
 });
