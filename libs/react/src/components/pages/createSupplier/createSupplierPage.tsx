@@ -44,7 +44,7 @@ const _CreateSupplierPage = () => {
   };
 
   const isFormValid = (state: SupplierCreate, tier: number, hasProducts: InputOption) => {
-    return state.name !== '' && tier !== 0 && hasProducts.value !== 'none';
+    return state.name.trim() !== '' && tier !== 0 && hasProducts.value !== 'none';
   }
 
   const [supplierState, setSupplierState] = useState<SupplierCreate>({
@@ -138,7 +138,7 @@ const _CreateSupplierPage = () => {
             });
           }
         }
-        logBrowser('Supplier created with assurances successfully', 'error', {
+        logBrowser('Supplier created with assurances successfully', 'info', {
           orgId,
           supplierId
         });
@@ -497,9 +497,21 @@ const _CreateSupplierPage = () => {
             input_label={'Brand Supplier Id'}
           />
         </Card>
-        <Card className={'flex flex-col w-1/2 self-start'} title={'Sustainability Attributes'} glow={true}>
-          <BaseButton label={'Add'} iconLeft={IconNames.PlusIcon} variant={ButtonTypes.secondary}
-                      onClick={() => setCreateModalType('attributes')} />
+        <Card
+          className={'flex flex-col w-1/2 self-start'}
+          title={'Sustainability Attributes'}
+          glow={true}
+          ctas={[
+            {
+              child: <BaseButton
+                label={'Add'}
+                iconLeft={IconNames.PlusIcon}
+                variant={ButtonTypes.secondary}
+                onClick={() => setCreateModalType('attributes')}
+              />,
+            }
+          ]}
+        >
           <CreateEntityTable
             type={'attributes'}
             remove={id => {

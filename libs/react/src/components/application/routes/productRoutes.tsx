@@ -1,7 +1,6 @@
 import {useFlags} from "launchdarkly-react-client-sdk";
 import {Route} from "react-router-dom";
-import {ProductDetail, ProductsPage} from "@coldpbc/components";
-
+import {ProductDetail, ProductsPage, CreateProductPage} from "@coldpbc/components";
 
 export const ProductRoutes = () => {
   const ldFlags = useFlags();
@@ -11,6 +10,7 @@ export const ProductRoutes = () => {
       {
         ldFlags.showProductDetailPageCold1140 && <Route path={'/products/:id'} element={<ProductDetail /> } />
       }
+      <Route path={'/products/new'} element={<CreateProductPage /> } />
     </>
   );
 }
