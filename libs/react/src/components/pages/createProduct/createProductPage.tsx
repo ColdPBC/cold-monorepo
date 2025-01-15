@@ -349,8 +349,8 @@ const _CreateProductPage = () => {
             }}
             input_label={'Description'}
           />
-          <div className={'flex flex-col gap-[8px] w-full mb-[20px]'}>
-            <div className={'text-eyebrow'}>Tier 1 Supplier</div>
+          <div className={'flex flex-col w-full mb-[20px]'}>
+            <div className={'text-eyebrow leading-6'}>Tier 1 Supplier</div>
             <ComboBox
               options={[placeHolderOption, ...supplierOptions]}
               value={supplier}

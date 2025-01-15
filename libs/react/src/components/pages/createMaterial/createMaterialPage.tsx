@@ -380,8 +380,8 @@ const _CreateMaterialPage = () => {
             }}
             input_label={'Description'}
           />
-          <div className={'flex flex-col gap-[8px] w-full mb-5'}>
-            <div className={'text-eyebrow'}>Supplier</div>
+          <div className={'flex flex-col w-full mb-[20px]'}>
+            <div className={'text-eyebrow leading-6'}>Supplier</div>
             <ComboBox
               options={[placeHolderOption, ...supplierOptions]}
               value={supplier}
@@ -389,8 +389,8 @@ const _CreateMaterialPage = () => {
               onChange={option => setSupplier(option)}
             />
           </div>
-          <div className={'flex flex-col gap-[8px] w-full mb-5'}>
-            <div className={'text-eyebrow'}>Material Classification</div>
+          <div className={'flex flex-col w-full mb-[20px]'}>
+            <div className={'text-eyebrow leading-6'}>Material Classification</div>
             <ComboBox
               options={[placeHolderOption, ...materialClassifications.map((classification, index) => {
                 return {

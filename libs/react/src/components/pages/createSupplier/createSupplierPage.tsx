@@ -336,7 +336,7 @@ const _CreateSupplierPage = () => {
             }}
             input_label={'Name *'}
           />
-          <div className={'flex flex-col gap-[8px] w-full'}>
+          <div className={'flex flex-col w-full'}>
             <div className={'text-eyebrow leading-6'}>Does this entity create finished products? *</div>
             <ComboBox
               options={yesNoOptions}
@@ -362,11 +362,11 @@ const _CreateSupplierPage = () => {
             />
             {
               errors.supplierTier ? (
-                <div className="text-red-100 text-eyebrow" data-testid={`error_supplierTier`}>
+                <div className="text-red-100 text-eyebrow mt-[8px]" data-testid={`error_supplierTier`}>
                   {errors.supplierTier}
                 </div>
               ) : (
-                <div className={'h-3'} data-testid={`error_space_supplierTier`}>
+                <div className={'h-5'} data-testid={`error_space_supplierTier`}>
                 </div>
               )
             }
