@@ -1,3 +1,13 @@
+# [1.515.0](https://github.com/coldPBC/cold-monorepo/compare/v1.514.0...v1.515.0) (2025-01-15)
+
+
+### Features
+
+* Add "Create Product" functionality with UI and GraphQL mutation ([95e11d0](https://github.com/coldPBC/cold-monorepo/commit/95e11d05c3d659d5d4b4c54f2bfdfec4da5deedd))
+* Ensure form validation checks for trimmed input values. ([300073d](https://github.com/coldPBC/cold-monorepo/commit/300073d285105051ab1c0e51bdda44d3276cdb45))
+* Fix form validation to properly handle whitespace-only names. ([4e0bd23](https://github.com/coldPBC/cold-monorepo/commit/4e0bd23da3daf0d4dac625e459e3d17cd540841b))
+* Refactor Sustainability Attributes card to use CTAs prop ([aa35f77](https://github.com/coldPBC/cold-monorepo/commit/aa35f7779eee98afabb0d983fd57834f83741475))
+
 # [1.514.0](https://github.com/coldPBC/cold-monorepo/compare/v1.513.0...v1.514.0) (2025-01-15)
 
 
