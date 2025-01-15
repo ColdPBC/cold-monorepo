@@ -75,7 +75,6 @@ const _CreateMaterialPage = () => {
 				id: orgId,
 			},
 			supplier: true,
-			supplierTier: 2,
 		},
 	});
 
