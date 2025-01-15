@@ -607,7 +607,7 @@ const _CreateSupplierPage = () => {
           />
         </Card>
         <Card
-          className={'flex flex-col w-1/2 self-start'}
+          className={'flex flex-col w-1/2 gap-[32px] self-start'}
           title={'Sustainability Attributes'}
           glow={true}
           ctas={[
