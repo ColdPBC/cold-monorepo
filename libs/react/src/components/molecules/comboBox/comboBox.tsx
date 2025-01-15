@@ -88,7 +88,9 @@ export const ComboBox = (props: ComboBoxProps) => {
 						className={`
               ${dropdownDirection === 'up' ? 'bottom-full' : ''}
               absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-bgc-elevated py-1 text-tc-primary text-body shadow-lg focus:outline-none
-            `}>
+            `}
+            data-testid={name + '_options'}
+          >
 						{filteredOptions.length === 0 && query !== '' ? (
 							<div className="relative cursor-default select-none p-4 text-white">Nothing found.</div>
 						) : (
