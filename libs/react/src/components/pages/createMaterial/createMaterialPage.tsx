@@ -315,6 +315,7 @@ const _CreateMaterialPage = () => {
               name: 'name',
               value: materialState.name,
               onChange: e => {
+                const error = validateName(e.target.value, otherMaterials);
                 setMaterialState({
                   ...materialState,
                   name: e.target.value,
@@ -322,17 +323,23 @@ const _CreateMaterialPage = () => {
                 setErrors((prev) => {
                   return {
                     ...prev,
-                    name: validateName(e.target.value, otherMaterials),
+                    name: error,
                   }
                 })
               },
               onValueChange: e => {
+                const error = validateName(e, otherMaterials);
                 setMaterialState({
                   ...materialState,
                   name: e,
                 });
-              },
-              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+                setErrors((prev) => {
+                  return {
+                    ...prev,
+                    name: error,
+                  }
+                })
+              },              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
               error: errors.name,
               showError: true,
