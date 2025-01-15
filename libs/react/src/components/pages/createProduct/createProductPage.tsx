@@ -293,6 +293,7 @@ const _CreateProductPage = () => {
               className: `text-body p-4 rounded-[8px] border-[1.5px] w-full focus:border-[1.5px] focus:ring-0`,
               placeholder: '',
               error: errors.name,
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -318,6 +319,7 @@ const _CreateProductPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -352,6 +354,7 @@ const _CreateProductPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -377,6 +380,7 @@ const _CreateProductPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -402,6 +406,7 @@ const _CreateProductPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -427,6 +432,7 @@ const _CreateProductPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -452,6 +458,7 @@ const _CreateProductPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -477,6 +484,7 @@ const _CreateProductPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
