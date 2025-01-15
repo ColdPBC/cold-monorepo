@@ -85,6 +85,7 @@ const _MaterialDetail: React.FC = () => {
         <div className="w-full h-full flex gap-6 items-start mt-4 mb-20">
           {editMaterial ? (
             <EditMaterialDetails
+              key={material.id}
               material={material}
               onClose={() => setEditMaterial(false)}
               refreshMaterial={materialQuery.mutate}

@@ -1,106 +1,134 @@
 import {
-  Card,
-  ColdIcon,
+  Card, ColdIcon,
+  DropdownInputForEntityEdit,
   ErrorFallback,
-  ErrorPage,
   Popover,
   Spinner,
   TextInputForEntityEdit,
 } from '@coldpbc/components';
-import { HexColors } from '@coldpbc/themes';
-import { ButtonTypes, GlobalSizes, IconNames } from '@coldpbc/enums';
+import { ButtonTypes, EntityLevel, GlobalSizes, IconNames } from '@coldpbc/enums';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
-import { MaterialGraphQL, ToastMessage } from '@coldpbc/interfaces';
+import { MaterialGraphQL, SuppliersWithAssurances, ToastMessage } from '@coldpbc/interfaces';
 import { get } from 'lodash';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR, useUpdateEntityAssociations } from '@coldpbc/hooks';
+import { HexColors } from '@coldpbc/themes';
 
 interface EditMaterialDetailsProps {
 	material: MaterialGraphQL;
 	onClose: () => void;
-	refreshMaterial: () => void;
+	refreshMaterial: () => Promise<void>;
 }
 
-const isMaterialEdited = (originalMaterial: MaterialGraphQL, editedMaterial: MaterialGraphQL): boolean => {
-  const keysToCompare = [
-    'name',
-    'description',
-    'materialCategory',
-    'materialSubcategory',
-    'brandMaterialId',
-    'supplierMaterialId',
-    ['materialClassification', 'id'],
-  ];
+interface EditableMaterial extends MaterialGraphQL {
+	organizationFacility: {
+		id: string;
+		name: string;
+	} | null;
+}
 
-  return keysToCompare.some(key => {
-    if (Array.isArray(key)) {
-      // Handle nested properties
-      const [parent, child] = key;
-      return editedMaterial[parent]?.[child] !== originalMaterial[parent]?.[child];
-    }
-    return editedMaterial[key] !== originalMaterial[key];
-  });
+const isMaterialEdited = (originalMaterial: EditableMaterial, editedMaterial: EditableMaterial): boolean => {
+	const keysToCompare = [
+		'name',
+		'description',
+		'materialCategory',
+		'materialSubcategory',
+		'brandMaterialId',
+		'supplierMaterialId',
+		['materialClassification', 'id'],
+		['organizationFacility', 'id'],
+	];
+
+	return keysToCompare.some(key => {
+		if (Array.isArray(key)) {
+			// Handle nested properties
+			const [parent, child] = key;
+			return editedMaterial[parent]?.[child] !== originalMaterial[parent]?.[child];
+		}
+		return editedMaterial[key] !== originalMaterial[key];
+	});
 };
+
+// This conversion is due to some legacy tech debt. Although we've required it throughout the code, we have not yet formalized in our data structure that there is only 1 supplier per Material.
+const convertMaterialGraphQLObjectToEditableMaterial = (material: MaterialGraphQL): EditableMaterial => ({
+	...material,
+	organizationFacility: material.materialSuppliers[0]?.organizationFacility,
+});
 
 const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, onClose, refreshMaterial }) => {
 	const { orgId } = useAuth0Wrapper();
+	const { callMutateFunction } = useUpdateEntityAssociations();
 	const { logBrowser } = useColdContext();
 	const { addToastMessage } = useAddToastMessage();
 	const [isLoading, setIsLoading] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [editedMaterial, setEditedMaterial] = useState<MaterialGraphQL>(material);
+	const [isDisabled, setIsDisabled] = useState(false);
+	const [editedMaterial, setEditedMaterial] = useState<EditableMaterial>(convertMaterialGraphQLObjectToEditableMaterial(material));
 
-  useEffect(() => {
-    setEditedMaterial(material);
-  }, [material])
-
-  useEffect(() => {
-    if (editedMaterial) {
-      setIsDisabled(!isMaterialEdited(material, editedMaterial));
-    }
-  }, [material, editedMaterial]);
+	useEffect(() => {
+		if (editedMaterial) {
+			setIsDisabled(!isMaterialEdited(convertMaterialGraphQLObjectToEditableMaterial(material), editedMaterial));
+		}
+	}, [material, editedMaterial]);
 
 	const materialClassificationsQuery = useGraphQLSWR<{
 		materialClassifications: { id: string; name: string }[];
 	}>('GET_ALL_MATERIAL_CLASSIFICATIONS');
 	const { mutateGraphQL: updateMaterial } = useGraphQLMutation('UPDATE_MATERIAL');
 
-	const classificationOptions = useMemo(() => {
-		const materialClassifications: { id: string; name: string }[] | undefined = get(materialClassificationsQuery.data, 'data.materialClassifications');
-
-		if (!materialClassifications) return null;
-
-		return materialClassifications
-			.sort((a, b) => a.name.localeCompare(b.name))
-			.map(classification => ({
-				value: classification.id,
-				label: classification.name,
-			}));
+	const materialClassifications: { id: string; name: string }[] | undefined = useMemo(() => {
+		return get(materialClassificationsQuery.data, 'data.materialClassifications');
 	}, [materialClassificationsQuery.data]);
 
+	const suppliersQuery = useGraphQLSWR<{
+		organizationFacilities: SuppliersWithAssurances[];
+	}>(orgId ? 'GET_ALL_SUPPLIERS_FOR_ORG' : null, {
+		filter: {
+			organization: {
+				id: orgId,
+			},
+			supplier: true,
+		},
+	});
+
+	const suppliers: { id: string; name: string }[] | undefined = useMemo(() => {
+		return get(suppliersQuery.data, 'data.organizationFacilities');
+	}, [suppliersQuery.data]);
+
 	const saveMaterialChange = useCallback(
-		async (editedMaterial: MaterialGraphQL) => {
+		async (editedMaterial: EditableMaterial) => {
 			setIsLoading(true);
 
 			try {
 				await updateMaterial({
 					input: {
-            id: editedMaterial.id,
-            name: editedMaterial.name,
-            description: editedMaterial.description,
-            materialCategory: editedMaterial.materialCategory,
-            materialSubcategory: editedMaterial.materialSubcategory,
-            brandMaterialId: editedMaterial.brandMaterialId,
-            supplierMaterialId: editedMaterial.supplierMaterialId,
-            // Only update materialClassification if there's a new value, due to a bug we can't unset it
-            materialClassification: editedMaterial.materialClassification ? {
-              id: editedMaterial.materialClassification?.id,
-            } : undefined,
-          },
+						id: editedMaterial.id,
+						name: editedMaterial.name,
+						description: editedMaterial.description,
+						materialCategory: editedMaterial.materialCategory,
+						materialSubcategory: editedMaterial.materialSubcategory,
+						brandMaterialId: editedMaterial.brandMaterialId,
+						supplierMaterialId: editedMaterial.supplierMaterialId,
+						// Only update materialClassification if there's a new value, due to a bug we can't unset it
+						materialClassification: editedMaterial.materialClassification
+							? {
+									id: editedMaterial.materialClassification?.id,
+							  }
+							: undefined,
+					},
 				});
+
+				// Changes to supplier happen on the Material Supplier, not the Material itself
+        const newSupplierId = editedMaterial.organizationFacility?.id;
+        const oldSupplierId = material.materialSuppliers[0]?.organizationFacility.id;
+        if (newSupplierId !== oldSupplierId) {
+          if (newSupplierId) {
+            // Update or create new one
+            await callMutateFunction(EntityLevel.MATERIAL, editedMaterial.id, newSupplierId, orgId, true);
+          } else {
+            // Delete old one
+            await callMutateFunction(EntityLevel.MATERIAL, editedMaterial.id, oldSupplierId, orgId, false);
+          }
+        }
 
 				logBrowser(`Updated material ${material.id} successfully`, 'info', {
 					orgId,
@@ -108,7 +136,7 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 				});
 
 				// Revalidate material query
-				refreshMaterial();
+				await refreshMaterial();
 
 				onClose();
 
@@ -130,38 +158,38 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 				setIsLoading(false);
 			}
 		},
-		[orgId, material, onClose, logBrowser, addToastMessage, refreshMaterial, updateMaterial],
+		[orgId, material, onClose, logBrowser, addToastMessage, refreshMaterial, updateMaterial, callMutateFunction],
 	);
 
-  const cancelCta = {
-    text: 'Cancel',
-    action: onClose,
-    variant: ButtonTypes.secondary,
-  }
+	const cancelCta = {
+		text: 'Cancel',
+		action: onClose,
+		variant: ButtonTypes.secondary,
+	};
 
 	// Handle loading and error states
-	if (materialClassificationsQuery.isLoading) {
+	if (materialClassificationsQuery.isLoading || suppliersQuery.isLoading) {
 		return (
-      <Card title={'Details'} ctas={[cancelCta]} className='w-[406px] min-w-[406px] h-fit' overflowHidden={false}>
+			<Card title={'Details'} ctas={[cancelCta]} className="w-[406px] min-w-[406px] h-fit" overflowHidden={false}>
 				<Spinner size={GlobalSizes.large} />
 			</Card>
 		);
 	}
 
-	const error = materialClassificationsQuery.error || get(materialClassificationsQuery.data, 'errors');
-	if (error) {
-		logBrowser('Error fetching material classification data', 'error', {}, error);
-		return (
-      <Card title={'Details'} ctas={[cancelCta]} className='w-[406px] min-w-[406px] h-fit' overflowHidden={false}>
-				<ErrorPage error="Unable to load material edit modal. Please try again later." showLogout={false} />
-			</Card>
-		);
-	}
+  const error = materialClassificationsQuery.error || get(materialClassificationsQuery.data, 'errors') || suppliersQuery.error || get(suppliersQuery.data, 'errors');
+  if (error) {
+    logBrowser('Error fetching material classification or supplier data', 'error', {}, error);
+    return (
+      <Card title={'Details'} ctas={[cancelCta]} className="w-[406px] min-w-[406px] h-fit" overflowHidden={false}>
+        Error loading material edit modal. Please try again later.
+      </Card>
+    );
+  }
 
-	if (!classificationOptions || !editedMaterial) return null;
+	if (!materialClassifications || !suppliers || !editedMaterial) return null;
 
 	const ctas = [
-    cancelCta,
+		cancelCta,
 		{
 			text: 'Save',
 			action: async () => {
@@ -171,116 +199,38 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 			},
 			disabled: isDisabled,
 			loading: isLoading,
-      variant: ButtonTypes.primary,
+			variant: ButtonTypes.primary,
 		},
 	];
 
-  const inputProps = {
-    setEntityState: setEditedMaterial,
-    entityState: editedMaterial,
-  };
+	const inputProps = {
+		setEntityState: setEditedMaterial,
+		entityState: editedMaterial,
+	};
+
+  const classificationLabel = (
+    <div className={'flex items-center justify-start gap-1'}>
+      <span>Classification</span>
+      <Popover content={'This classification is used for carbon accounting and sustainability attribute reporting.'} contentClassName="w-[275px]">
+        <ColdIcon name={IconNames.ColdInfoIcon} color={HexColors.tc['disabled']} />
+      </Popover>
+    </div>
+  );
 
 	return (
-    <Card title={'Details'} ctas={ctas} className='w-[406px] min-w-[406px] h-fit' overflowHidden={false}>
-      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'name'} label={'Name'} required={true} {...inputProps} />
-      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'description'} label={'Description'} {...inputProps} />
-      {/* Material Classification selector */}
-      <div className={'flex flex-col w-full h-full justify-between gap-4'}>
-        <div className="w-full h-fit flex flex-col gap-2 items-start">
-          <div className="text-eyebrow text-tc-primary">
-            <div className={'flex items-center justify-start gap-1'}>
-              <span>Classification</span>
-              <Popover
-                content={'This classification is used for carbon accounting and sustainability attribute reporting.'}
-                contentClassName="w-[275px]">
-                <ColdIcon name={IconNames.ColdInfoIcon} color={HexColors.tc['disabled']} />
-              </Popover>
-            </div>
-          </div>
-          <Autocomplete
-            fullWidth
-            disableClearable
-            id={'material-classification-select'}
-            sx={{
-              '& .MuiInputBase-root': {
-                backgroundColor: 'transparent',
-              },
-              '& .MuiAutocomplete-popupIndicator': {
-                padding: '8px',
-              },
-            }}
-            options={classificationOptions}
-            value={editedMaterial?.materialClassification ? {
-              value: editedMaterial.materialClassification.id,
-              label: editedMaterial.materialClassification.name
-            } : undefined}
-            onChange={(_event, newValue) => {
-              if (editedMaterial && newValue) {
-                setEditedMaterial({
-                  ...editedMaterial,
-                  materialClassification: { id: newValue.value, name: newValue.label }
-                });
-              }
-            }}
-            popupIcon={<ColdIcon name={IconNames.ColdChevronDownIcon} className="h-[10px] w-[10px]" />}
-            autoHighlight
-            getOptionLabel={option => option.label}
-            isOptionEqualToValue={(option, value) => option.value === value.value}
-            renderOption={(props, option) => {
-              const { key, ...optionProps } = props;
-              return (
-                <Box key={key} component="li"
-                     sx={{ '& > img': { mr: 2, flexShrink: 0 }, borderRadius: '8px' }} {...optionProps}>
-                  <span className="text-body text-tc-primary">{option.label}</span>
-                </Box>
-              );
-            }}
-            renderInput={params => (
-              <TextField
-                {...params}
-                sx={{
-                  '& .MuiInputBase-input': {
-                    backgroundColor: 'transparent',
-                    fontFamily: 'Inter',
-                    fontSize: '14px',
-                    padding: '16px',
-                    borderBottomLeftRadius: '8px',
-                    borderTopLeftRadius: '8px',
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderRadius: '8px',
-                    borderColor: HexColors.gray['90'],
-                    borderWidth: '1.5px',
-                  },
-                  '&  .MuiOutlinedInput-root': {
-                    borderRadius: '8px',
-                    '&:hover fieldset': {
-                      borderColor: HexColors.gray['90'],
-                      borderWidth: '1.5px',
-                    },
-                    '&:focus-within fieldset': {
-                      borderColor: HexColors.gray['90'],
-                      borderWidth: '1.5px',
-                    },
-                  },
-                  '& .MuiOutlinedInput-input:focus': {
-                    outline: 'none',
-                    boxShadow: 'none',
-                  },
-                }}
-              />
-            )}
-          />
-        </div>
-      </div>
-      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'materialCategory'} label={'Category'} {...inputProps} />
-      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'materialSubcategory'} label={'Sub-Category'} {...inputProps} />
-      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'brandMaterialId'} label={'Brand Material ID'} {...inputProps} />
-      <TextInputForEntityEdit<MaterialGraphQL> fieldName={'supplierMaterialId'} label={'Supplier Material ID'} {...inputProps} />
-    </Card>
-  );
+		<Card title={'Details'} ctas={ctas} className="w-[406px] min-w-[406px] h-fit" overflowHidden={false}>
+			<TextInputForEntityEdit<EditableMaterial> fieldName={'name'} label={'Name'} required={true} {...inputProps} />
+			<TextInputForEntityEdit<EditableMaterial> fieldName={'description'} label={'Description'} {...inputProps} />
+			<DropdownInputForEntityEdit<EditableMaterial> fieldName={'organizationFacility'} label={'Tier 2 Supplier'} options={suppliers} allowNone={true} {...inputProps} />
+			<DropdownInputForEntityEdit<EditableMaterial> fieldName={'materialClassification'} label={classificationLabel} options={materialClassifications} {...inputProps} />
+			<TextInputForEntityEdit<EditableMaterial> fieldName={'materialCategory'} label={'Category'} {...inputProps} />
+			<TextInputForEntityEdit<EditableMaterial> fieldName={'materialSubcategory'} label={'Sub-Category'} {...inputProps} />
+			<TextInputForEntityEdit<EditableMaterial> fieldName={'brandMaterialId'} label={'Brand Material ID'} {...inputProps} />
+			<TextInputForEntityEdit<EditableMaterial> fieldName={'supplierMaterialId'} label={'Supplier Material ID'} {...inputProps} />
+		</Card>
+	);
 };
 
 export const EditMaterialDetails = withErrorBoundary(_EditMaterialDetails, {
-  FallbackComponent: props => <ErrorFallback {...props} />,
+	FallbackComponent: props => <ErrorFallback {...props} />,
 });
