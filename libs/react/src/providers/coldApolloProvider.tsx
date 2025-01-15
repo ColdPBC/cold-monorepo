@@ -31,7 +31,7 @@ export const ColdApolloProvider = ({ children }: PropsWithChildren) => {
             },
           });
         } catch (error) {
-          logBrowser('Error getting token for Apollo', 'error', { error, audience, token }, error);
+          logBrowser('Error getting token for Apollo', 'error', { error, audience }, error);
         }
 				return {
 					headers: {
