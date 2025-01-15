@@ -343,7 +343,7 @@ export const defaultGraphqlMocks: {
 		handler: () =>
 			Promise.resolve({
 				data: {
-					suppliers: suppliersForAssurancesMock,
+					organizationFacilities: suppliersForAssurancesMock,
 				},
 			}),
 	},
