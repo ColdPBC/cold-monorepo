@@ -107,6 +107,14 @@ const _CreateSupplierPage = () => {
     }
   }
 
+  const validateTier = (tier: number) => {
+    if(tier === 0) {
+      return 'Supplier tier is required';
+    } else {
+      return undefined;
+    }
+  }
+
   const getTier = (hasProducts: InputOption) => {
     switch(hasProducts.value) {
       case 'yes':
@@ -119,8 +127,14 @@ const _CreateSupplierPage = () => {
   }
 
   useEffect(() => {
-    setSaveButtonDisabled(Object.values(errors).some(error => error !== null && error !== undefined));
-  }, [errors]);
+    const hasErrors = Object.values(errors).some(error => error !== null && error !== undefined);
+    const isFormValid = () => {
+      const isNameValid = validateName(supplierState.name, otherSuppliers);
+      const isTierValid = validateTier(supplierState.supplierTier);
+      return isNameValid === undefined && isTierValid === undefined
+    }
+    setSaveButtonDisabled(hasErrors || !isFormValid());
+  }, [errors, supplierState, hasProducts, otherSuppliers]);
 
   useEffect(() => {
     if (allSustainabilityAttributes.data) {
@@ -336,7 +350,7 @@ const _CreateSupplierPage = () => {
                     supplierTier: getTier(option),
                   }
                 })
-                const error = getTier(option) === 0 ? 'Supplier tier is required' : undefined;
+                const error = validateTier(getTier(option));
                 setErrors((prev) => {
                   return {
                     ...prev,

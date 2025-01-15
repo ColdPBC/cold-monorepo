@@ -99,9 +99,30 @@ const _CreateMaterialPage = () => {
     organizationId: orgId,
   });
 
+
+  const validateName = (
+    name: string,
+    otherMaterials: {
+      id: string
+      name: string
+    }[]
+  ) => {
+    if(name.trim() === '') {
+      return 'Material name is required';
+    } else if(otherMaterials.some((material) => material.name === name)) {
+      return 'Material name already exists';
+    } else {
+      return undefined;
+    }
+  }
+
   useEffect(() => {
-    setSaveButtonDisabled(Object.values(errors).some(error => error !== null && error !== undefined));
-  }, [errors]);
+    const hasErrors = Object.values(errors).some(error => error !== null && error !== undefined);
+    const isFormValid = () => {
+      return validateName(materialState.name, otherMaterials) === undefined;
+    }
+    setSaveButtonDisabled(hasErrors || !isFormValid());
+  }, [errors, materialState, otherMaterials]);
 
 	useEffect(() => {
 		if (suppliersQuery.data) {
@@ -274,22 +295,6 @@ const _CreateMaterialPage = () => {
     return attributes.filter(attribute => {
       return !some(attributesToAdd, { id: attribute.id, name: attribute.name });
     });
-  }
-
-  const validateName = (
-    name: string,
-    otherMaterials: {
-      id: string
-      name: string
-    }[]
-  ) => {
-    if(name.trim() === '') {
-      return 'Material name is required';
-    } else if(otherMaterials.some((material) => material.name === name)) {
-      return 'Material name already exists';
-    } else {
-      return undefined;
-    }
   }
 
 	return (

@@ -94,9 +94,31 @@ const _CreateProductPage = () => {
     organizationId: orgId,
   });
 
+
+  const validateName = (
+    name: string,
+    otherProducts: {
+      id: string
+      name: string
+    }[]
+  ) => {
+    if(name.trim() === '') {
+      return 'Product name is required';
+    } else if(otherProducts.some((product) => product.name === name)) {
+      return 'Product name already exists';
+    } else {
+      return undefined;
+    }
+  }
+
   useEffect(() => {
-    setSaveButtonDisabled(Object.values(errors).some(error => error !== null && error !== undefined));
-  }, [errors]);
+    const hasErrors = Object.values(errors).some(error => error !== null && error !== undefined);
+    const isFormValid = () => {
+      return validateName(productState.name, otherProducts) === undefined;
+    }
+    setSaveButtonDisabled(hasErrors || !isFormValid());
+
+  }, [errors, productState, otherProducts]);
 
   useEffect(() => {
     if (suppliersQuery.data) {
@@ -243,22 +265,6 @@ const _CreateProductPage = () => {
     return attributes.filter(attribute => {
       return !some(attributesToAdd, { id: attribute.id, name: attribute.name });
     });
-  }
-
-  const validateName = (
-    name: string,
-    otherProducts: {
-      id: string
-      name: string
-    }[]
-  ) => {
-    if(name.trim() === '') {
-      return 'Product name is required';
-    } else if(otherProducts.some((product) => product.name === name)) {
-      return 'Product name already exists';
-    } else {
-      return undefined;
-    }
   }
 
   return (
