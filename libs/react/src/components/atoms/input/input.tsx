@@ -68,14 +68,6 @@ export const Input = (props: IInputProps) => {
   function renderText(): JSX.Element {
     // eslint-disable-next-line no-restricted-globals
     const key = `${input_props.name}_${idx}`;
-    console.log({
-      input_props,
-      className: twMerge(
-        'text-body not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
-        input_props?.className,
-        input_props.showError ? (input_props.error ? 'border-red-100 focus:border-red-100' : 'border-gray-90 focus:border-gray-90') : '',
-      )
-    });
     return (
       <div
         key={key}

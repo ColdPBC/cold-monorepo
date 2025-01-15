@@ -5,7 +5,7 @@ import {
   InputOption,
   ToastMessage
 } from "@coldpbc/interfaces";
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {get, has, some} from "lodash";
 import {
   AddToCreateEntityModal,
@@ -138,8 +138,8 @@ const _CreateSupplierPage = () => {
       if (has(otherSuppliersQuery.data, 'errors')) {
         setOtherSuppliers([]);
       } else {
-        const products = get(otherSuppliersQuery.data, 'data.organizationFacilities', []);
-        setOtherSuppliers(products);
+        const suppliers = get(otherSuppliersQuery.data, 'data.organizationFacilities', []);
+        setOtherSuppliers(suppliers);
       }
     }
   }, [otherSuppliersQuery.data]);
@@ -238,6 +238,7 @@ const _CreateSupplierPage = () => {
           disabled={saveButtonDisabled || saveButtonLoading}
           loading={saveButtonLoading}
           className={'h-[40px]'}
+          data-testid={'save_button'}
         />
       </div>
     )
@@ -290,10 +291,6 @@ const _CreateSupplierPage = () => {
                   ...supplierState,
                   name: e.target.value,
                 });
-                console.log({
-                  error,
-                  e: e.target.value,
-                });
                 setErrors((prev) => {
                   return {
                     ...prev,
@@ -302,14 +299,10 @@ const _CreateSupplierPage = () => {
                 })
               },
               onValueChange: e => {
-                const error = validateName(e.target.value, otherSuppliers);
+                const error = validateName(e, otherSuppliers);
                 setSupplierState({
                   ...supplierState,
                   name: e,
-                });
-                console.log({
-                  error,
-                  e: e,
                 });
                 setErrors((prev) => {
                   return {
@@ -359,7 +352,7 @@ const _CreateSupplierPage = () => {
                   {errors.supplierTier}
                 </div>
               ) : (
-                <div className={'h-3'} data-testid={`error_supplierTier`}>
+                <div className={'h-3'} data-testid={`error_space_supplierTier`}>
                 </div>
               )
             }
