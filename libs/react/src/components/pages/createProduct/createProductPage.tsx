@@ -245,6 +245,22 @@ const _CreateProductPage = () => {
     });
   }
 
+  const validateName = (
+    name: string,
+    otherProducts: {
+      id: string
+      name: string
+    }[]
+  ) => {
+    if(name.trim() === '') {
+      return 'Product name is required';
+    } else if(otherProducts.some((product) => product.name === name)) {
+      return 'Product name already exists';
+    } else {
+      return undefined;
+    }
+  }
+
   return (
     <MainContent
       title={'Create New Product'}
@@ -274,7 +290,7 @@ const _CreateProductPage = () => {
                 setErrors((prev) => {
                   return {
                     ...prev,
-                    name: otherProducts.some((product) => product.name === e.target.value) ? 'Product name already exists' : undefined
+                    name: validateName(e.target.value, otherProducts)
                   }
                 })
               },
@@ -286,7 +302,7 @@ const _CreateProductPage = () => {
                 setErrors((prev) => {
                   return {
                     ...prev,
-                    name: otherProducts.some((product) => product.name === e) ? 'Product name already exists' : undefined
+                    name: validateName(e.target.value, otherProducts)
                   }
                 })
               },
