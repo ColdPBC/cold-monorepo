@@ -293,12 +293,6 @@ const seeds: Array<{
 		logo_url: `${baseUrl}/Ethical+Trading+Initiative+Base+Code.png`,
 	},
 	{
-		name: 'Fair Trade Quarterly Reporting',
-		type: 'THIRD_PARTY',
-		level: 'PRODUCT',
-		logo_url: `${baseUrl}/Fairtrade.png`,
-	},
-	{
 		name: 'Cradle to Cradle',
 		type: 'THIRD_PARTY',
 		level: 'PRODUCT',
@@ -323,7 +317,7 @@ const seeds: Array<{
 		logo_url: `${baseUrl}/Bluesign+Product.png`,
 	},
 	{
-		name: 'Fair Trade Annual Reporting',
+		name: 'Fairtrade International',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
 		logo_url: `${baseUrl}/Fairtrade.png`,
@@ -371,7 +365,7 @@ const seeds: Array<{
 		logo_url: `${baseUrl}/Detox+to+Zero.png`,
 	},
 	{
-		name: 'Fair Trade Textile Standard',
+		name: 'Fairtrade Textile Standard',
 		type: 'THIRD_PARTY',
 		level: 'SUPPLIER',
 		logo_url: `${baseUrl}/Fairtrade+Textile+Standard.png`,

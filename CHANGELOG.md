@@ -1,3 +1,13 @@
+# [1.514.0](https://github.com/coldPBC/cold-monorepo/compare/v1.513.0...v1.514.0) (2025-01-15)
+
+
+### Features
+
+* add AutoComplete component using MUI Autocomplete ([995562c](https://github.com/coldPBC/cold-monorepo/commit/995562ca757ae3fd5e3934681441727f21627ba3))
+* Refactor input placeholders and fix material classifications handling. ([8591166](https://github.com/coldPBC/cold-monorepo/commit/859116663b3dd9757034ae938bd47c43bb01291e))
+* update createMaterialPage to improve state management and UI ([436e7e5](https://github.com/coldPBC/cold-monorepo/commit/436e7e570c73fbc6d11f63d6b008e9c6d943c168))
+* Update filters and rename fields in createMaterialPage ([e10f852](https://github.com/coldPBC/cold-monorepo/commit/e10f8528f057431e657301e5f06c5ff3ec50a937))
+
 # [1.513.0](https://github.com/coldPBC/cold-monorepo/compare/v1.512.0...v1.513.0) (2025-01-13)
 
 
