@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
 import { Claims, InputOption, SuppliersWithAssurances, ToastMessage } from '@coldpbc/interfaces';
 import {get, has, some} from 'lodash';
-import { ButtonTypes, IconNames } from '@coldpbc/enums';
+import { ButtonTypes, IconNames, InputTypes } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import {withErrorBoundary} from "react-error-boundary";
 
@@ -267,19 +267,14 @@ const _CreateProductPage = () => {
             input_label={'Name *'}
           />
           <Input
-            input_props={{
+            type={InputTypes.TextArea}
+            textarea_props={{
               name: 'description',
               value: productState.description,
               onChange: e => {
                 setProductState({
                   ...productState,
                   description: e.target.value,
-                });
-              },
-              onValueChange: e => {
-                setProductState({
-                  ...productState,
-                  description: e,
                 });
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
