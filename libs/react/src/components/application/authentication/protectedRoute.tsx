@@ -186,7 +186,7 @@ const _ProtectedRoute = () => {
 };
 
 export const ProtectedRoute = withErrorBoundary(_ProtectedRoute, {
-  FallbackComponent: props => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorPage fallbackProps={props} />,
   onError: (error, info) => {
     console.error('Error occurred in ProtectedRoute: ', error);
   },
