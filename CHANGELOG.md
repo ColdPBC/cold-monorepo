@@ -1,3 +1,10 @@
+## [1.515.1](https://github.com/coldPBC/cold-monorepo/compare/v1.515.0...v1.515.1) (2025-01-16)
+
+
+### Bug Fixes
+
+* **hooks:** simplify afterReadHook in product hooks to improve performance ([a8e1eb4](https://github.com/coldPBC/cold-monorepo/commit/a8e1eb44d5d4786c110c155a49d92e79f0ff1ba6))
+
 # [1.515.0](https://github.com/coldPBC/cold-monorepo/compare/v1.514.0...v1.515.0) (2025-01-15)
 
 
