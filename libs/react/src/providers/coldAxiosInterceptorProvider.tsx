@@ -1,23 +1,41 @@
-import { GetTokenSilentlyOptions, useAuth0 } from '@auth0/auth0-react';
+import { Auth0ContextInterface, GetTokenSilentlyOptions, useAuth0, User } from '@auth0/auth0-react';
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { resolveAPIUrl, resolveStripeIntegrationUrl } from '@coldpbc/fetchers';
 import { ErrorType } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
 import { ColdContextType } from '@coldpbc/context';
+import { AuthError } from '@auth0/nextjs-auth0';
+import { forEach, get } from 'lodash';
 
-const setAxiosTokenInterceptor = async (getAccessTokenSilently: (options?: GetTokenSilentlyOptions) => Promise<string>, context: ColdContextType): Promise<void> => {
+const setAxiosTokenInterceptor = async ( auth0Context: Auth0ContextInterface<User>, context: ColdContextType): Promise<void> => {
   const { logBrowser } = context;
   axios.interceptors.request.use(async config => {
     if (config.baseURL === resolveAPIUrl() || config.baseURL === resolveStripeIntegrationUrl()) {
       const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
-      const accessToken = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: audience,
-          scope: 'offline_access email profile openid',
-        },
-      });
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
+      try {
+        const accessToken = await auth0Context.getAccessTokenSilently({
+          authorizationParams: {
+            audience: audience,
+            scope: 'offline_access email profile openid',
+          },
+        });
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
+      } catch (error) {
+        if(get(error, 'error', '') === 'invalid_grant'){
+          // delete auth0 data in localstorage
+          const keysThatHaveAuth0 = Object.keys(localStorage).filter(key => key.includes('auth0spajs'));
+          forEach(keysThatHaveAuth0, key => {
+            localStorage.removeItem(key);
+          })
+        }
+        logBrowser('Error getting access token for Axios', 'error', {
+          error: error,
+        }, error);
+        await auth0Context.logout({
+          logoutParams: { returnTo: window.location.origin }
+        });
+      }
     }
     logBrowser(`Axios request sent to ${config.url}`, 'info', {
       config: config
@@ -55,14 +73,14 @@ const setAxiosResponseInterceptor = (coldContext: ColdContextType) => {
 type AxiosInterceptorProviderProps = { children: React.ReactNode };
 
 export const ColdAxiosInterceptorProvider = ({ children }: AxiosInterceptorProviderProps) => {
-  const { getAccessTokenSilently } = useAuth0();
+  const auth0Context = useAuth0();
   const context = useColdContext();
   useEffect(() => {
     const getAccessToken = async () => {
-      await setAxiosTokenInterceptor(getAccessTokenSilently, context);
+      await setAxiosTokenInterceptor(auth0Context, context);
     };
     getAccessToken();
-  }, [getAccessTokenSilently]);
+  }, [auth0Context.getAccessTokenSilently, context]);
 
   setAxiosResponseInterceptor(context);
 
