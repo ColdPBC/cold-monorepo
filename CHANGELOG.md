@@ -1,3 +1,11 @@
+# [1.517.0](https://github.com/coldPBC/cold-monorepo/compare/v1.516.0...v1.517.0) (2025-01-16)
+
+
+### Features
+
+* Add array type check for signed policy data validation ([a66a4b7](https://github.com/coldPBC/cold-monorepo/commit/a66a4b7d61e0e8eb36660d718283be13feaf364b))
+* Handle invalid Auth0 tokens and enhance error logging. ([d7d1e4f](https://github.com/coldPBC/cold-monorepo/commit/d7d1e4fffb31bd16e8ef4ce3923e6bcb520ac2c4))
+
 # [1.516.0](https://github.com/coldPBC/cold-monorepo/compare/v1.515.1...v1.516.0) (2025-01-16)
 
 
