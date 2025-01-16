@@ -126,7 +126,7 @@ export const Input = (props: IInputProps) => {
           draggable={false}
           {...textarea_props}
           key={`input_${key}`}
-          className={twMerge('text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 resize-none', textarea_props?.className)}
+          className={twMerge('block text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 resize-none', textarea_props?.className)}
         />
       </div>
     );
