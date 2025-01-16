@@ -1,5 +1,5 @@
-import { InputTypes } from '../enums/inputs';
-import { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
+import { InputTypes } from '@coldpbc/enums';
+import { InputHTMLAttributes, LabelHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import { NumericFormatProps } from 'react-number-format';
 
 export interface IInputProps {
@@ -10,7 +10,12 @@ export interface IInputProps {
   type?: InputTypes;
   container_classname?: string;
   numeric_input_props?: NumericInputProps;
-  textarea_props?: TextareaHTMLAttributes<HTMLTextAreaElement>;
+  textarea_props?: TextAreaProps;
+}
+
+export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  error?: string;
+  showError?: boolean;
 }
 
 export interface BaseInputProps extends InputHTMLAttributes<HTMLInputElement> {
