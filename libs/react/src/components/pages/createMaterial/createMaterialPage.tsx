@@ -32,10 +32,6 @@ const _CreateMaterialPage = () => {
 	const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
 
-  const isFormValid = (materialState: MaterialCreate) => {
-    return materialState.name.trim() !== '';
-  }
-
   const placeHolderOption: InputOption = {
     id: -1,
     name: 'Select one',
@@ -61,6 +57,12 @@ const _CreateMaterialPage = () => {
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [createModalType, setCreateModalType] = useState<'attributes' | undefined>(undefined);
+  const [errors, setErrors] = useState<Partial<Record<keyof MaterialCreate, string>>>({});
+  const [otherMaterials, setOtherMaterials] = useState<{
+    id: string;
+    name: string;
+  }[]>([]);
+
   const {mutateGraphQL: createMaterial} = useGraphQLMutation('CREATE_MATERIAL');
   const {mutateGraphQL: createAttributeAssurance} = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
   const {mutateGraphQL: createMaterialSupplier} = useGraphQLMutation('CREATE_MATERIAL_SUPPLIER');
@@ -73,7 +75,6 @@ const _CreateMaterialPage = () => {
 				id: orgId,
 			},
 			supplier: true,
-			supplierTier: 2,
 		},
 	});
 
@@ -89,9 +90,39 @@ const _CreateMaterialPage = () => {
     materialClassifications: {id: string; name: string;}[];
   }>('GET_ALL_MATERIAL_CLASSIFICATIONS');
 
+  const otherMaterialsQuery = useGraphQLSWR<{
+    materials: {
+      id: string;
+      name: string;
+    }[];
+  }>('GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT', {
+    organizationId: orgId,
+  });
+
+
+  const validateName = (
+    name: string,
+    otherMaterials: {
+      id: string
+      name: string
+    }[]
+  ) => {
+    if(name.trim() === '') {
+      return 'Material name is required';
+    } else if(otherMaterials.some((material) => material.name === name)) {
+      return 'Material name already exists';
+    } else {
+      return undefined;
+    }
+  }
+
   useEffect(() => {
-    setSaveButtonDisabled(!isFormValid(materialState));
-  }, [materialState]);
+    const hasErrors = Object.values(errors).some(error => error !== null && error !== undefined);
+    const isFormValid = () => {
+      return validateName(materialState.name, otherMaterials) === undefined;
+    }
+    setSaveButtonDisabled(hasErrors || !isFormValid());
+  }, [errors, materialState, otherMaterials]);
 
 	useEffect(() => {
 		if (suppliersQuery.data) {
@@ -126,10 +157,20 @@ const _CreateMaterialPage = () => {
     }
   }, [materialClassificationsQuery.data]);
 
-  if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading || materialClassificationsQuery.isLoading) {
+  useEffect(() => {
+    if (otherMaterialsQuery.data) {
+      if (has(otherMaterialsQuery.data, 'errors')) {
+        setOtherMaterials([]);
+      } else {
+        const materials = get(otherMaterialsQuery.data, 'data.materials', []);
+        setOtherMaterials(materials);
+      }
+    }
+  }, [otherMaterialsQuery.data]);
+
+  if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading || materialClassificationsQuery.isLoading || otherMaterialsQuery.isLoading) {
 		return <Spinner />;
 	}
-
 
 	const supplierOptions: InputOption[] = suppliers.map((supplier, index) => {
 		return {
@@ -149,9 +190,9 @@ const _CreateMaterialPage = () => {
           organization: {
             id: orgId,
           },
-          materialClassification: hasMaterialClassification && {
+          materialClassification: hasMaterialClassification ? {
             id: materialClassification.value,
-          }
+          } : undefined,
         },
       })
       const materialId = get(createMaterialResponse, 'data.createMaterial.id');
@@ -244,6 +285,7 @@ const _CreateMaterialPage = () => {
           disabled={saveButtonDisabled || saveButtonLoading}
           loading={saveButtonLoading}
           className={'h-[40px]'}
+          data-testid={'save_button'}
         />
       </div>
     )
@@ -277,19 +319,34 @@ const _CreateMaterialPage = () => {
               name: 'name',
               value: materialState.name,
               onChange: e => {
+                const error = validateName(e.target.value, otherMaterials);
                 setMaterialState({
                   ...materialState,
                   name: e.target.value,
                 });
+                setErrors((prev) => {
+                  return {
+                    ...prev,
+                    name: error,
+                  }
+                })
               },
               onValueChange: e => {
+                const error = validateName(e, otherMaterials);
                 setMaterialState({
                   ...materialState,
                   name: e,
                 });
-              },
-              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
+                setErrors((prev) => {
+                  return {
+                    ...prev,
+                    name: error,
+                  }
+                })
+              },              className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              error: errors.name,
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -315,6 +372,7 @@ const _CreateMaterialPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -322,8 +380,8 @@ const _CreateMaterialPage = () => {
             }}
             input_label={'Description'}
           />
-          <div className={'flex flex-col gap-[8px] w-full'}>
-            <div className={'text-eyebrow'}>Supplier</div>
+          <div className={'flex flex-col w-full mb-[20px]'}>
+            <div className={'text-eyebrow leading-6'}>Supplier</div>
             <ComboBox
               options={[placeHolderOption, ...supplierOptions]}
               value={supplier}
@@ -331,8 +389,8 @@ const _CreateMaterialPage = () => {
               onChange={option => setSupplier(option)}
             />
           </div>
-          <div className={'flex flex-col gap-[8px] w-full'}>
-            <div className={'text-eyebrow'}>Material Classification</div>
+          <div className={'flex flex-col w-full mb-[20px]'}>
+            <div className={'text-eyebrow leading-6'}>Material Classification</div>
             <ComboBox
               options={[placeHolderOption, ...materialClassifications.map((classification, index) => {
                 return {
@@ -364,6 +422,7 @@ const _CreateMaterialPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -389,6 +448,7 @@ const _CreateMaterialPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -414,6 +474,7 @@ const _CreateMaterialPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -439,6 +500,7 @@ const _CreateMaterialPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -447,13 +509,21 @@ const _CreateMaterialPage = () => {
             input_label={'Supplier Material Id'}
           />
         </Card>
-        <Card className={'flex-col w-1/2 gap-[32px] self-start'} title={'Sustainability Attributes'} glow={true}>
-          <BaseButton
-            label={'Add'}
-            iconLeft={IconNames.PlusIcon}
-            variant={ButtonTypes.secondary}
-            onClick={() => setCreateModalType('attributes')}
-          />
+        <Card
+          className={'flex-col w-1/2 gap-[32px] self-start'}
+          title={'Sustainability Attributes'}
+          glow={true}
+          ctas={[
+            {
+              child: <BaseButton
+                label={'Add'}
+                iconLeft={IconNames.PlusIcon}
+                variant={ButtonTypes.secondary}
+                onClick={() => setCreateModalType('attributes')}
+              />,
+            }
+          ]}
+        >
           <CreateEntityTable
             type={'attributes'}
             remove={(id) => {

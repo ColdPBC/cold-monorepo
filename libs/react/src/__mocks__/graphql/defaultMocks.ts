@@ -26,7 +26,9 @@ import {
   DELETE_ATTRIBUTE_ASSURANCE,
   DELETE_ATTRIBUTE_ASSURANCES,
   CREATE_ATTRIBUTE_ASSURANCES,
-  GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES, GET_PRODUCT_CARBON_FOOTPRINT_DATA,
+  GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
+  GET_PRODUCT_CARBON_FOOTPRINT_DATA,
+  GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT, GET_ALL_MATERIAL_CLASSIFICATIONS,
 } from '@coldpbc/lib';
 import {
 	filesProcessedWithDatesMock,
@@ -44,8 +46,6 @@ import { getSchemaMocks } from '../schemaMocks';
 import { getSupplierMock, getSupplierMocks } from '../suppliersMock';
 import {getProductsMock, getProductsMockById} from '../productsMock';
 import { getMaterialsMocksWithAssurances } from '../materialsMock';
-import { AttributeAssuranceMock } from '../attributeAssuranceMock';
-import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 import { addDays } from 'date-fns';
 
 export const defaultGraphqlMocks: {
@@ -343,7 +343,7 @@ export const defaultGraphqlMocks: {
 		handler: () =>
 			Promise.resolve({
 				data: {
-					suppliers: suppliersForAssurancesMock,
+					organizationFacilities: suppliersForAssurancesMock,
 				},
 			}),
 	},
@@ -598,6 +598,42 @@ export const defaultGraphqlMocks: {
           ],
         },
       })
+    }
+  },
+  {
+    query: GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT,
+    handler: () => {
+      return Promise.resolve({
+        data: {
+          products: getProductsMock().map(product => ({
+            id: product.id,
+            name: product.name,
+          })),
+        },
+      });
+    }
+  },
+  {
+    query: GET_ALL_MATERIAL_CLASSIFICATIONS,
+    handler: () => {
+      return Promise.resolve({
+        data: {
+          materialClassifications: [
+            {
+              id: 'a',
+              name: 'Material Classification A',
+            },
+            {
+              id: 'b',
+              name: 'Material Classification B',
+            },
+            {
+              id: 'c',
+              name: 'Material Classification C',
+            },
+          ],
+        },
+      });
     }
   }
 ];
