@@ -1,5 +1,5 @@
 import { InputTypes } from '../enums/inputs';
-import { InputHTMLAttributes, LabelHTMLAttributes, TextareaHTMLAttributes } from 'react';
+import { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
 import { NumericFormatProps } from 'react-number-format';
 
 export interface IInputProps {
@@ -18,6 +18,11 @@ export interface BaseInputProps extends InputHTMLAttributes<HTMLInputElement> {
   options?: Array<InputOption>;
   onValueChange: (value: any) => void;
   value?: any;
+  error?: string;
+  /**
+   * Controls showing the new layout for the input to ensure backward compatibility as this is uses in multiple places
+   */
+  showError?: boolean;
 }
 
 export type NumericInputProps = NumericFormatProps;
