@@ -2,7 +2,6 @@ import React from 'react';
 import { NumericFormat } from 'react-number-format';
 import { Select } from './select/select';
 import { IInputProps } from '../../../interfaces/input';
-import { Textarea } from 'flowbite-react';
 import { twMerge } from 'tailwind-merge';
 
 export const Input = (props: IInputProps) => {
@@ -72,7 +71,7 @@ export const Input = (props: IInputProps) => {
       <div
         key={key}
         className={twMerge('col-span-full', container_classname)}
-        data-testid={`input_container_${input_props.name}`}
+        data-testid={`input_container_${input_props?.name}`}
       >
         {input_label && (
           <label
