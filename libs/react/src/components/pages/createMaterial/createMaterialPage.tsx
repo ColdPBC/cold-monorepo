@@ -190,9 +190,9 @@ const _CreateMaterialPage = () => {
           organization: {
             id: orgId,
           },
-          materialClassification: hasMaterialClassification && {
+          materialClassification: hasMaterialClassification ? {
             id: materialClassification.value,
-          }
+          } : undefined,
         },
       })
       const materialId = get(createMaterialResponse, 'data.createMaterial.id');

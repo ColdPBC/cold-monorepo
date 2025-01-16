@@ -94,7 +94,6 @@ const _CreateProductPage = () => {
     organizationId: orgId,
   });
 
-
   const validateName = (
     name: string,
     otherProducts: {
@@ -175,9 +174,9 @@ const _CreateProductPage = () => {
           organization: {
             id: orgId,
           },
-          organizationFacility: hasSupplier && {
+          organizationFacility: hasSupplier ? {
             id: supplier.value,
-          }
+          } : undefined,
         },
       })
       const productId = get(createProductResponse, 'data.createProduct.id');
