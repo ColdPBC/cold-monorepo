@@ -1,3 +1,10 @@
+# [1.516.0](https://github.com/coldPBC/cold-monorepo/compare/v1.515.1...v1.516.0) (2025-01-16)
+
+
+### Features
+
+* add unit enums and validation schemas ([c0c230d](https://github.com/coldPBC/cold-monorepo/commit/c0c230de229a8c6d6177d90331069567593828d5))
+
 ## [1.515.1](https://github.com/coldPBC/cold-monorepo/compare/v1.515.0...v1.515.1) (2025-01-16)
 
 
