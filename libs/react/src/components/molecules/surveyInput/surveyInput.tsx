@@ -185,18 +185,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
         return (
           <Input
             type={InputTypes.TextArea}
-            input_props={{
-              name: input_key,
-              value: displayValue === null ? undefined : displayValue,
-              onValueChange: value => {
-                onFieldUpdated(input_key, value);
-              },
-              placeholder: placeholder,
-              title: tooltip,
-            }}
             textarea_props={{
-              draggable: false,
-              rows: 4,
               onChange: e => {
                 if (e.target.value === '') {
                   onFieldUpdated(input_key, null);
@@ -206,8 +195,6 @@ const _SurveyInput = (props: SurveyInputProps) => {
               },
               name: input_key,
               value: displayValue === null ? undefined : displayValue,
-              className:
-                'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 resize-none',
               placeholder: placeholder,
               title: tooltip,
               'aria-label': input_key + (isAdditional ? '-additional' : ''),

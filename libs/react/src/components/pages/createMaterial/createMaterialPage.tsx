@@ -3,11 +3,12 @@ import {
   BaseButton,
   Card,
   ComboBox,
-  CreateEntityTable, ErrorFallback,
+  CreateEntityTable,
+  ErrorFallback,
   Input,
   MainContent,
   Modal,
-  Spinner
+  Spinner,
 } from '@coldpbc/components';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
@@ -19,10 +20,10 @@ import {
   useGraphQLSWR,
 } from '@coldpbc/hooks';
 import { Claims, InputOption, SuppliersWithAssurances, ToastMessage } from '@coldpbc/interfaces';
-import {get, has, some} from 'lodash';
-import { ButtonTypes, EntityLevel, IconNames } from '@coldpbc/enums';
+import { get, has, some } from 'lodash';
+import { ButtonTypes, EntityLevel, IconNames, InputTypes } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
-import {withErrorBoundary} from "react-error-boundary";
+import { withErrorBoundary } from 'react-error-boundary';
 
 interface MaterialCreate {
   name: string;
@@ -336,19 +337,14 @@ const _CreateMaterialPage = () => {
             input_label={'Name *'}
           />
           <Input
-            input_props={{
+            type={InputTypes.TextArea}
+            textarea_props={{
               name: 'description',
               value: materialState.description,
               onChange: e => {
                 setMaterialState({
                   ...materialState,
                   description: e.target.value,
-                });
-              },
-              onValueChange: e => {
-                setMaterialState({
-                  ...materialState,
-                  description: e,
                 });
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',

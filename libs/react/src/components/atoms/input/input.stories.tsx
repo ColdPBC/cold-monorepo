@@ -106,7 +106,7 @@ const InputStory = (props: IInputProps) => {
     idx,
     type,
   } = props;
-  const [value, setValue] = useState<any>('' || input_props.defaultValue);
+  const [value, setValue] = useState<any>(input_props?.defaultValue || '');
   return (
     <Input
       {...props}
@@ -116,6 +116,7 @@ const InputStory = (props: IInputProps) => {
         onValueChange: (value) => {
           setValue(value);
         },
+        name: input_props?.name || '',
       }}
     />
   );
