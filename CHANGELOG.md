@@ -1,3 +1,21 @@
+# [1.518.0](https://github.com/coldPBC/cold-monorepo/compare/v1.517.0...v1.518.0) (2025-01-17)
+
+
+### Features
+
+* Add "showError" prop to input components for error control ([41ded43](https://github.com/coldPBC/cold-monorepo/commit/41ded438a693a2d20a841339e26d1312ced03694))
+* Add a validateName helper function for product name checks ([e42d280](https://github.com/coldPBC/cold-monorepo/commit/e42d280aad64a11297ad61b5fa88734c604d36bf))
+* Add error message support for Input component ([041f595](https://github.com/coldPBC/cold-monorepo/commit/041f5952e7bdcc2988ede5d1b1f4f1d4885eff7d))
+* Add test IDs and refine error handling logic ([6153afe](https://github.com/coldPBC/cold-monorepo/commit/6153afef06f4f9fa5b7927ca1d82486aa42af5f6))
+* Add validation and error handling for ComboBox inputs ([ae62e14](https://github.com/coldPBC/cold-monorepo/commit/ae62e1449583cacb6a1a74543a5a4ac6cab95023))
+* Add validation for material name and improve UI error handling ([d345afd](https://github.com/coldPBC/cold-monorepo/commit/d345afd6810dd11c67572b5a376d121be8d3863c))
+* Refactor conditional object assignments for clarity ([2875f37](https://github.com/coldPBC/cold-monorepo/commit/2875f378ab82b4836fa6575fc96ad36d7689007a))
+* Refactor data handling with useMemo and useEntityData ([a4a1da5](https://github.com/coldPBC/cold-monorepo/commit/a4a1da5a067508c46984da1a9b1e9e36eb5ba65d))
+* Refactor name validation in createMaterialPage component. ([1ca2017](https://github.com/coldPBC/cold-monorepo/commit/1ca2017548de290343f131347fddea290ce5f12c))
+* Refactor validation logic across creation pages. ([75448ba](https://github.com/coldPBC/cold-monorepo/commit/75448bace92bbad597c7dce3654a71096c09167f))
+* Refine UI layout and styling across create pages. ([1e00bee](https://github.com/coldPBC/cold-monorepo/commit/1e00beef62fc938315d339049127f8228c7e004e))
+* remove tier 2 filter. allow all suppliers able to supply materials ([14a30c8](https://github.com/coldPBC/cold-monorepo/commit/14a30c8a9fa0e886616ce8a533d1f90884dbd43e))
+
 # [1.517.0](https://github.com/coldPBC/cold-monorepo/compare/v1.516.0...v1.517.0) (2025-01-16)
 
 
