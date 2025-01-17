@@ -98,9 +98,9 @@ export const Input = (props: IInputProps) => {
           data-testid={`input_${input_props?.name}`}
         />
         {
-          input_props?.showError && (input_props?.error ? (
-            <div className="text-red-100 text-eyebrow mt-[8px]" key={`error_${key}`} data-testid={`input_error_${input_props?.name}`}>
-              {input_props?.error}
+          input_props && input_props.showError && (input_props.error ? (
+            <div className="text-red-100 text-eyebrow mt-[8px]" key={`error_${key}`} data-testid={`input_error_${input_props.name}`}>
+              {input_props.error}
             </div>
           ) : (
             <div className={'h-5'} key={`error_${key}`} data-testid={`input_error_space_${input_props.name}`}>
@@ -147,15 +147,15 @@ export const Input = (props: IInputProps) => {
           {...textarea_props}
           key={`input_${key}`}
           className={twMerge('block text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 resize-none', textarea_props?.className)}
-          data-testid={`input_error_${input_props?.name}`}
+          data-testid={`input_error_${textarea_props?.name}`}
         />
         {
-          textarea_props?.showError && (textarea_props?.error ? (
-            <div className="text-red-100 text-eyebrow mt-[8px]" key={`error_${key}`} data-testid={`input_error_${textarea_props?.name}`}>
-              {textarea_props?.error}
+          textarea_props && textarea_props.showError && (textarea_props.error ? (
+            <div className="text-red-100 text-eyebrow mt-[8px]" key={`error_${key}`} data-testid={`input_error_${textarea_props.name}`}>
+              {textarea_props.error}
             </div>
           ) : (
-            <div className={'h-5'} key={`error_${key}`} data-testid={`input_error_space_${textarea_props?.name}`}>
+            <div className={'h-5'} key={`error_${key}`} data-testid={`input_error_space_${textarea_props.name}`}>
             </div>
           ))
         }
