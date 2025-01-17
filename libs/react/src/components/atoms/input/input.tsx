@@ -1,7 +1,7 @@
 import React from 'react';
 import { NumericFormat } from 'react-number-format';
-import { Select } from './select/select';
-import { IInputProps } from '../../../interfaces/input';
+import { Select } from './select';
+import { IInputProps } from '@coldpbc/interfaces';
 import { Textarea } from 'flowbite-react';
 import { twMerge } from 'tailwind-merge';
 
@@ -67,15 +67,21 @@ export const Input = (props: IInputProps) => {
 
   function renderText(): JSX.Element {
     // eslint-disable-next-line no-restricted-globals
-    const key = `${name}_${idx}`;
+    const key = `${input_props.name}_${idx}`;
     return (
-      <div key={key} className={twMerge('col-span-full', container_classname)}>
+      <div
+        key={key}
+        className={twMerge('col-span-full', container_classname)}
+        data-testid={`input_container_${input_props.name}`}
+      >
         {input_label && (
           <label
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}
+            data-testid={`input_label_${input_props.name}`}
+          >
             {input_label}
           </label>
         )}
@@ -86,10 +92,22 @@ export const Input = (props: IInputProps) => {
           autoComplete={input_props.autoComplete || input_props.name}
           className={twMerge(
             'text-body not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
-            input_props?.className
+            input_props?.className,
+            input_props.showError ? (input_props.error ? 'border-red-100 focus:border-red-100' : 'border-gray-90 focus:border-gray-90') : '',
           )}
           id={input_props.name}
+          data-testid={`input_${input_props.name}`}
         />
+        {
+          input_props.showError && (input_props.error ? (
+            <div className="text-red-100 text-eyebrow mt-[8px]" key={`error_${key}`} data-testid={`input_error_${input_props.name}`}>
+              {input_props.error}
+            </div>
+          ) : (
+            <div className={'h-5'} key={`error_${key}`} data-testid={`input_error_space_${input_props.name}`}>
+            </div>
+          ))
+        }
       </div>
     );
   }

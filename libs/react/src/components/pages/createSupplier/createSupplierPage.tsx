@@ -1,23 +1,29 @@
-import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR} from "@coldpbc/hooks";
-import {useNavigate} from "react-router-dom";
 import {
-  Claims,
-  InputOption,
-  ToastMessage
-} from "@coldpbc/interfaces";
-import React, {useEffect, useState} from "react";
-import {get, has, some} from "lodash";
+  useAddToastMessage,
+  useAuth0Wrapper,
+  useColdContext,
+  useEntityData,
+  useGraphQLMutation,
+  useGraphQLSWR,
+} from '@coldpbc/hooks';
+import { useNavigate } from 'react-router-dom';
+import { Claims, InputOption, ToastMessage } from '@coldpbc/interfaces';
+import React, { useEffect, useMemo, useState } from 'react';
+import { get, has, some } from 'lodash';
 import {
   AddToCreateEntityModal,
   BaseButton,
   Card,
   ComboBox,
-  CreateEntityTable, ErrorFallback,
+  CreateEntityTable,
+  ErrorFallback,
   Input,
-  MainContent, Modal,
-} from "@coldpbc/components";
-import {ButtonTypes, IconNames} from "@coldpbc/enums";
-import {withErrorBoundary} from "react-error-boundary";
+  MainContent,
+  Modal,
+  Spinner,
+} from '@coldpbc/components';
+import { ButtonTypes, EntityLevel, IconNames } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
 
 interface SupplierCreate {
   name: string;
@@ -30,6 +36,7 @@ interface SupplierCreate {
   category: string;
   subcategory: string;
   brandFacilityId: string;
+  supplierTier: number;
 }
 
 const _CreateSupplierPage = () => {
@@ -43,10 +50,6 @@ const _CreateSupplierPage = () => {
     value: 'none',
   };
 
-  const isFormValid = (state: SupplierCreate, tier: number, hasProducts: InputOption) => {
-    return state.name.trim() !== '' && tier !== 0 && hasProducts.value !== 'none';
-  }
-
   const [supplierState, setSupplierState] = useState<SupplierCreate>({
     name: '',
     addressLine1: '',
@@ -58,16 +61,17 @@ const _CreateSupplierPage = () => {
     category: '',
     subcategory: '',
     brandFacilityId: '',
+    supplierTier: 0,
   });
 
-  const [tier, setTier] = useState< 0 | 1 | 2>(0);
   const [hasProducts, setHasProducts] = useState<InputOption>(placeHolderOption);
-  const [attributes, setAttributes] = useState<Claims[]>([]);
   const [attributesToAdd, setAttributesToAdd] = useState<Claims[]>([]);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [createModalType, setCreateModalType] = useState<'attributes' | undefined>(undefined);
+  const [errors, setErrors] = useState<Partial<Record<keyof SupplierCreate, string>>>({});
+
   const {mutateGraphQL: createSupplier} = useGraphQLMutation('CREATE_SUPPLIER');
   const {mutateGraphQL: createAttributeAssurance} = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
 
@@ -79,30 +83,67 @@ const _CreateSupplierPage = () => {
     }
   });
 
-  useEffect(() => {
-    setSaveButtonDisabled(!isFormValid(supplierState, tier, hasProducts));
-  }, [supplierState, tier, hasProducts]);
+  const otherSuppliers = useEntityData(EntityLevel.SUPPLIER, orgId);
+
+  const validateName = (
+    name: string,
+    otherSuppliers: {
+      id: string;
+      name: string;
+    }[]
+  ) => {
+    if(name.trim() === '') {
+      return 'Supplier name is required';
+    } else if(otherSuppliers.some((supplier) => supplier.name === name)) {
+      return 'Supplier name already exists';
+    } else {
+      return undefined;
+    }
+  }
+
+  const validateTier = (tier: number) => {
+    if(tier === 0) {
+      return 'Supplier tier is required';
+    } else {
+      return undefined;
+    }
+  }
+
+  const getTier = (hasProducts: InputOption) => {
+    switch(hasProducts.value) {
+      case 'yes':
+        return 1;
+      case 'no':
+        return 2;
+      default:
+        return 0;
+    }
+  }
 
   useEffect(() => {
+    const hasErrors = Object.values(errors).some(error => error !== null && error !== undefined);
+    const isFormValid = () => {
+      const isNameValid = validateName(supplierState.name, otherSuppliers);
+      const isTierValid = validateTier(supplierState.supplierTier);
+      return isNameValid === undefined && isTierValid === undefined
+    }
+    setSaveButtonDisabled(hasErrors || !isFormValid());
+  }, [errors, supplierState, hasProducts, otherSuppliers]);
+
+  const attributes = useMemo(() => {
     if (allSustainabilityAttributes.data) {
       if (has(allSustainabilityAttributes.data, 'errors')) {
-        setAttributes([]);
+        return [];
       } else {
-        const attributes = get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', []);
-        setAttributes(attributes);
+        return get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', []);
       }
     }
+    return [];
   }, [allSustainabilityAttributes.data]);
 
-  useEffect(() => {
-    if (hasProducts.value === 'yes') {
-      setTier(1);
-    } else if (hasProducts.value === 'no') {
-      setTier(2);
-    } else {
-      setTier(0);
-    }
-  }, [hasProducts]);
+  if (allSustainabilityAttributes.isLoading) {
+    return <Spinner />;
+  }
 
   const onSaveButtonClick = async () => {
     setSaveButtonLoading(true);
@@ -114,7 +155,6 @@ const _CreateSupplierPage = () => {
           },
           supplier: true,
           ...supplierState,
-          supplierTier: tier
         },
       })
       const supplierId = get(createSupplierResponse, 'data.createOrganizationFacility.id');
@@ -195,6 +235,7 @@ const _CreateSupplierPage = () => {
           disabled={saveButtonDisabled || saveButtonLoading}
           loading={saveButtonLoading}
           className={'h-[40px]'}
+          data-testid={'save_button'}
         />
       </div>
     )
@@ -242,19 +283,35 @@ const _CreateSupplierPage = () => {
               name: 'name',
               value: supplierState.name,
               onChange: e => {
+                const error = validateName(e.target.value, otherSuppliers);
                 setSupplierState({
                   ...supplierState,
                   name: e.target.value,
                 });
+                setErrors((prev) => {
+                  return {
+                    ...prev,
+                    name: error,
+                  }
+                })
               },
               onValueChange: e => {
+                const error = validateName(e, otherSuppliers);
                 setSupplierState({
                   ...supplierState,
                   name: e,
                 });
+                setErrors((prev) => {
+                  return {
+                    ...prev,
+                    name: error,
+                  }
+                })
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              error: errors.name,
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -262,14 +319,40 @@ const _CreateSupplierPage = () => {
             }}
             input_label={'Name *'}
           />
-          <div className={'flex flex-col gap-[8px] w-full'}>
-            <div className={'text-eyebrow'}>Does this entity create finished products? *</div>
+          <div className={'flex flex-col w-full'}>
+            <div className={'text-eyebrow leading-6'}>Does this entity create finished products? *</div>
             <ComboBox
               options={yesNoOptions}
               value={hasProducts}
               name={'hasProducts'}
-              onChange={option => setHasProducts(option)}
+              onChange={option => {
+                setHasProducts(option);
+                setSupplierState((prev) => {
+                  return {
+                    ...prev,
+                    supplierTier: getTier(option),
+                  }
+                })
+                const error = validateTier(getTier(option));
+                setErrors((prev) => {
+                  return {
+                    ...prev,
+                    supplierTier: error,
+                  }
+                })
+              }}
+              buttonClassName={errors.supplierTier ? 'border-red-100' : ''}
             />
+            {
+              errors.supplierTier ? (
+                <div className="text-red-100 text-eyebrow mt-[8px]" data-testid={`error_supplierTier`}>
+                  {errors.supplierTier}
+                </div>
+              ) : (
+                <div className={'h-5'} data-testid={`error_space_supplierTier`}>
+                </div>
+              )
+            }
           </div>
           <Input
             input_props={{
@@ -289,6 +372,7 @@ const _CreateSupplierPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -314,6 +398,7 @@ const _CreateSupplierPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -339,6 +424,7 @@ const _CreateSupplierPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -364,6 +450,7 @@ const _CreateSupplierPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -389,6 +476,7 @@ const _CreateSupplierPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -414,6 +502,7 @@ const _CreateSupplierPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -439,6 +528,7 @@ const _CreateSupplierPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -464,6 +554,7 @@ const _CreateSupplierPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -489,6 +580,7 @@ const _CreateSupplierPage = () => {
               },
               className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
               placeholder: '',
+              showError: true,
             }}
             container_classname={'w-full'}
             input_label_props={{
@@ -498,7 +590,7 @@ const _CreateSupplierPage = () => {
           />
         </Card>
         <Card
-          className={'flex flex-col w-1/2 self-start'}
+          className={'flex flex-col w-1/2 gap-[32px] self-start'}
           title={'Sustainability Attributes'}
           glow={true}
           ctas={[
