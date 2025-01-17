@@ -13,11 +13,13 @@ import { MaterialGraphQL, SuppliersWithAssurances, ToastMessage } from '@coldpbc
 import { get } from 'lodash';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR, useUpdateEntityAssociations } from '@coldpbc/hooks';
 import { HexColors } from '@coldpbc/themes';
+import { ApolloQueryResult } from '@apollo/client';
+import { KeyedMutator } from 'swr';
 
 interface EditMaterialDetailsProps {
 	material: MaterialGraphQL;
 	onClose: () => void;
-	refreshMaterial: () => Promise<void>;
+	refreshMaterial: KeyedMutator<ApolloQueryResult<{   material: MaterialGraphQL | null; }>>;
 }
 
 interface EditableMaterial extends MaterialGraphQL {

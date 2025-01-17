@@ -45,7 +45,7 @@ const _MaterialDetail: React.FC = () => {
 
 	const material = get(materialQuery.data, 'data.material');
 
-	if (material === null || material === undefined) {
+	if (material === null || material === undefined || !materialQuery.mutate) {
 		return null;
 	}
 
