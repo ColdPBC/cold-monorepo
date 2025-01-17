@@ -7,6 +7,7 @@ interface DropdownInputForEntityEditProps<T> {
 	options: { id: string; name: string }[];
 	setEntityState: (state: T) => void;
 	entityState: T;
+  originalEntity: T;
   allowNone?: boolean;
 	required?: boolean;
 }
@@ -17,6 +18,7 @@ export const DropdownInputForEntityEdit = <T,>({
 	options,
 	setEntityState,
 	entityState,
+  originalEntity,
   allowNone = false,
 	required = false
 }: DropdownInputForEntityEditProps<T>) => {
@@ -34,12 +36,12 @@ export const DropdownInputForEntityEdit = <T,>({
 
     if (allowNone) {
       return [noneOption, ...formattedOptions];
-    } else if (!entityState[fieldName]) {
+    } else if (!originalEntity[fieldName]) {
       return [defaultOption, ...formattedOptions];
     } else {
       return formattedOptions;
     }
-  }, [allowNone, entityState, fieldName, options]);
+  }, [allowNone, originalEntity, fieldName, options]);
 
   return (
 		<div className={'flex flex-col w-full h-full justify-between gap-4'}>
@@ -55,7 +57,10 @@ export const DropdownInputForEntityEdit = <T,>({
         <div className={'w-full'}>
           <ComboBox
             options={dropdownOptions}
-            value={dropdownOptions.find(option => option.value === entityState[fieldName]['id']) ?? dropdownOptions[0]}
+            value={dropdownOptions.find(option => {
+              const fieldValue = entityState[fieldName] as { id: string };
+              return option.value === fieldValue?.id;
+            }) ?? dropdownOptions[0]}
             name={`${String(fieldName)}-select`}
             onChange={(selectedOption) => {
               if (entityState) {

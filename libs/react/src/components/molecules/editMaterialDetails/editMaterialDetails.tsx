@@ -206,6 +206,7 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 	const inputProps = {
 		setEntityState: setEditedMaterial,
 		entityState: editedMaterial,
+    originalEntity: convertMaterialGraphQLObjectToEditableMaterial(material),
 	};
 
   const classificationLabel = (
