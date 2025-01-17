@@ -1,3 +1,14 @@
+# [1.520.0](https://github.com/coldPBC/cold-monorepo/compare/v1.519.0...v1.520.0) (2025-01-17)
+
+
+### Features
+
+* Add error handling and test IDs to input component ([32e0f77](https://github.com/coldPBC/cold-monorepo/commit/32e0f777e109ec20de4e50b92346a117f61b0d92))
+* Refactor input components to improve optional prop handling ([2f7888b](https://github.com/coldPBC/cold-monorepo/commit/2f7888b338311449878942e50a830c086211ab9a))
+* Refactor input error handling logic for consistency. ([5cc953d](https://github.com/coldPBC/cold-monorepo/commit/5cc953d33f57377bc92aa8b0797f01a70423f836))
+* Remove unused Textarea import and fix optional chaining issue. ([8de946e](https://github.com/coldPBC/cold-monorepo/commit/8de946eb4ba12c6856a34095fe61f356cd32261e))
+* Use `InputTypes.TextArea` for description fields. ([57da3c2](https://github.com/coldPBC/cold-monorepo/commit/57da3c2cffacb9562675fc4a424a668a8de35876))
+
 # [1.519.0](https://github.com/coldPBC/cold-monorepo/compare/v1.518.0...v1.519.0) (2025-01-17)
 
 
