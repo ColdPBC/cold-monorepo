@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useEffect, useRef } from 'react';
 import mqtt from 'mqtt';
 import { useSWRConfig } from 'swr';
-import { forEach, set } from 'lodash';
+import { forEach, get, set } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { SWRSubscription } from 'swr/subscription';
 import ColdMQTTContext from '../context/coldMQTTContext';
@@ -11,7 +11,7 @@ import { getQueryMappingsForKey } from '@coldpbc/lib';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { logBrowser } = useColdContext();
-  const { user, orgId, getAccessTokenSilently, isAuthenticated } = useAuth0Wrapper();
+  const { user, orgId, getAccessTokenSilently, isAuthenticated, logout } = useAuth0Wrapper();
   const client = useRef<mqtt.MqttClient | null>(null);
   const [connectionStatus, setConnectionStatus] = React.useState(false);
   const [token, setToken] = React.useState<string>('');
@@ -20,12 +20,30 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
 
   const getToken = async () => {
     const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
-    return await getAccessTokenSilently({
-      authorizationParams: {
-        audience: audience,
-        scope: 'offline_access email profile openid',
-      },
-    });
+    let token = '';
+    try {
+      token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: audience,
+          scope: 'offline_access email profile openid',
+        },
+      });
+    } catch (error) {
+      if(get(error, 'error', '') === 'invalid_grant'){
+        // delete auth0 data in localstorage
+        const keysThatHaveAuth0 = Object.keys(localStorage).filter(key => key.includes('auth0spajs'));
+        forEach(keysThatHaveAuth0, key => {
+          localStorage.removeItem(key);
+        })
+      }
+      logBrowser('Error getting access token for MQTT', 'error', {
+        error: error,
+      }, error);
+      await logout({
+        logoutParams: { returnTo: window.location.origin }
+      });
+    }
+    return token;
   };
 
   useEffect(() => {

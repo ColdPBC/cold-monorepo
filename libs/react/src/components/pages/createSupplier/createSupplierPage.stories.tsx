@@ -39,7 +39,7 @@ export const ShowInputErrorValidation: Story = {
     await step('Show name input error', async () => {
       const input = canvas.getByTestId('input_name');
       // type in Product 1. This should trigger an error
-      await userEvent.type(input, 'Supplier 1');
+      await userEvent.type(input, 'Supplier 6');
       // check for the save_button to be disabled
       const saveButton = canvas.getByTestId('save_button');
       await expect(saveButton).toBeDisabled();

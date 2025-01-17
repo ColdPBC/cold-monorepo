@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
 import { Claims, InputOption, SuppliersWithAssurances, ToastMessage } from '@coldpbc/interfaces';
 import {get, has, some} from 'lodash';
-import { ButtonTypes, IconNames, InputTypes } from '@coldpbc/enums';
+import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import {withErrorBoundary} from "react-error-boundary";
 
@@ -52,17 +52,11 @@ const _CreateProductPage = () => {
   });
 
   const [supplier, setSupplier] = useState<InputOption>(placeHolderOption);
-  const [suppliers, setSuppliers] = useState<SuppliersWithAssurances[]>([]);
-  const [attributes, setAttributes] = useState<Claims[]>([]);
   const [attributesToAdd, setAttributesToAdd] = useState<Claims[]>([]);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [createModalType, setCreateModalType] = useState<'attributes' | undefined>(undefined);
-  const [otherProducts, setOtherProducts] = useState<{
-    id: string;
-    name: string;
-  }[]>([]);
   const [errors, setErrors] = useState<Partial<Record<keyof ProductCreate, string>>>({});
 
   const {mutateGraphQL: createProduct} = useGraphQLMutation('CREATE_PRODUCT');
@@ -88,11 +82,7 @@ const _CreateProductPage = () => {
     }
   });
 
-  const otherProductsQuery = useGraphQLSWR<{
-    products: Claims[];
-  }>('GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT', {
-    organizationId: orgId,
-  });
+  const otherProducts = useEntityData(EntityLevel.PRODUCT, orgId);
 
   const validateName = (
     name: string,
@@ -119,40 +109,29 @@ const _CreateProductPage = () => {
 
   }, [errors, productState, otherProducts]);
 
-  useEffect(() => {
-    if (suppliersQuery.data) {
-      if (has(suppliersQuery.data, 'errors')) {
-        setSuppliers([]);
-      } else {
-        const suppliers = get(suppliersQuery.data, 'data.organizationFacilities', []);
-        setSuppliers(suppliers);
-      }
-    }
-  }, [suppliersQuery.data]);
-
-  useEffect(() => {
+  const attributes = useMemo(() => {
     if (allSustainabilityAttributes.data) {
       if (has(allSustainabilityAttributes.data, 'errors')) {
-        setAttributes([]);
+        return [];
       } else {
-        const attributes = get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', []);
-        setAttributes(attributes);
+        return get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', []);
       }
     }
+    return [];
   }, [allSustainabilityAttributes.data]);
 
-  useEffect(() => {
-    if (otherProductsQuery.data) {
-      if (has(otherProductsQuery.data, 'errors')) {
-        setOtherProducts([]);
+  const suppliers = useMemo(() => {
+    if (suppliersQuery.data) {
+      if (has(suppliersQuery.data, 'errors')) {
+        return [];
       } else {
-        const products = get(otherProductsQuery.data, 'data.products', []);
-        setOtherProducts(products);
+        return get(suppliersQuery.data, 'data.organizationFacilities', []);
       }
     }
-  }, [otherProductsQuery.data]);
+    return [];
+  }, [suppliersQuery.data]);
 
-  if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading || otherProductsQuery.isLoading) {
+  if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading) {
     return <Spinner />;
   }
 

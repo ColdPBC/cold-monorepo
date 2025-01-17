@@ -1,15 +1,29 @@
 import React from 'react';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { ButtonTypes } from '@coldpbc/enums';
 import { BaseButton } from '@coldpbc/components';
+import { FallbackProps } from 'react-error-boundary';
 
 export type ErrorPageProps = {
   error?: string;
   showLogout?: boolean;
+  fallbackProps?: FallbackProps;
 };
 
-export const ErrorPage = ({ error, showLogout=true }: ErrorPageProps) => {
+export const ErrorPage = ({ error, showLogout=true, fallbackProps }: ErrorPageProps) => {
   const { logout } = useAuth0Wrapper();
+  const { logBrowser } = useColdContext();
+
+  logBrowser(
+    'Error page',
+    'error',
+    {
+      error,
+      fallbackProps,
+      showLogout
+    },
+    error,
+  )
 
   const handleLogout = async () => {
     await logout(

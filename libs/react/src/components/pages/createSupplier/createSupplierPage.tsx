@@ -1,23 +1,29 @@
-import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR} from "@coldpbc/hooks";
-import {useNavigate} from "react-router-dom";
 import {
-  Claims,
-  InputOption,
-  ToastMessage
-} from "@coldpbc/interfaces";
-import React, { useEffect, useState } from 'react';
-import {get, has, some} from "lodash";
+  useAddToastMessage,
+  useAuth0Wrapper,
+  useColdContext,
+  useEntityData,
+  useGraphQLMutation,
+  useGraphQLSWR,
+} from '@coldpbc/hooks';
+import { useNavigate } from 'react-router-dom';
+import { Claims, InputOption, ToastMessage } from '@coldpbc/interfaces';
+import React, { useEffect, useMemo, useState } from 'react';
+import { get, has, some } from 'lodash';
 import {
   AddToCreateEntityModal,
   BaseButton,
   Card,
   ComboBox,
-  CreateEntityTable, ErrorFallback,
+  CreateEntityTable,
+  ErrorFallback,
   Input,
-  MainContent, Modal, Spinner,
+  MainContent,
+  Modal,
+  Spinner,
 } from '@coldpbc/components';
-import {ButtonTypes, IconNames} from "@coldpbc/enums";
-import {withErrorBoundary} from "react-error-boundary";
+import { ButtonTypes, EntityLevel, IconNames } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
 
 interface SupplierCreate {
   name: string;
@@ -59,16 +65,11 @@ const _CreateSupplierPage = () => {
   });
 
   const [hasProducts, setHasProducts] = useState<InputOption>(placeHolderOption);
-  const [attributes, setAttributes] = useState<Claims[]>([]);
   const [attributesToAdd, setAttributesToAdd] = useState<Claims[]>([]);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [createModalType, setCreateModalType] = useState<'attributes' | undefined>(undefined);
-  const [otherSuppliers, setOtherSuppliers] = useState<{
-    id: string;
-    name: string;
-  }[]>([]);
   const [errors, setErrors] = useState<Partial<Record<keyof SupplierCreate, string>>>({});
 
   const {mutateGraphQL: createSupplier} = useGraphQLMutation('CREATE_SUPPLIER');
@@ -82,14 +83,7 @@ const _CreateSupplierPage = () => {
     }
   });
 
-  const otherSuppliersQuery = useGraphQLSWR<{
-    organizationFacilities: {
-      id: string
-      name: string
-    }[];
-  }>('GET_ALL_SUPPLIERS_TO_ADD_ASSURANCE_TO_DOCUMENT', {
-    organizationId: orgId,
-  });
+  const otherSuppliers = useEntityData(EntityLevel.SUPPLIER, orgId);
 
   const validateName = (
     name: string,
@@ -136,29 +130,18 @@ const _CreateSupplierPage = () => {
     setSaveButtonDisabled(hasErrors || !isFormValid());
   }, [errors, supplierState, hasProducts, otherSuppliers]);
 
-  useEffect(() => {
+  const attributes = useMemo(() => {
     if (allSustainabilityAttributes.data) {
       if (has(allSustainabilityAttributes.data, 'errors')) {
-        setAttributes([]);
+        return [];
       } else {
-        const attributes = get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', []);
-        setAttributes(attributes);
+        return get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', []);
       }
     }
+    return [];
   }, [allSustainabilityAttributes.data]);
 
-  useEffect(() => {
-    if (otherSuppliersQuery.data) {
-      if (has(otherSuppliersQuery.data, 'errors')) {
-        setOtherSuppliers([]);
-      } else {
-        const suppliers = get(otherSuppliersQuery.data, 'data.organizationFacilities', []);
-        setOtherSuppliers(suppliers);
-      }
-    }
-  }, [otherSuppliersQuery.data]);
-
-  if (allSustainabilityAttributes.isLoading || otherSuppliersQuery.isLoading) {
+  if (allSustainabilityAttributes.isLoading) {
     return <Spinner />;
   }
 

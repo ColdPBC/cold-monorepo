@@ -8,7 +8,7 @@ import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 import useSWR from 'swr';
-import { get, has, isEmpty } from 'lodash';
+import { get, has, isArray, isEmpty } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorPage } from '../errors/errorPage';
 import { datadogRum } from '@datadog/browser-rum';
@@ -29,7 +29,7 @@ const _ProtectedRoute = () => {
   const signedPolicySWR = useSWR<PolicySignedDataType[], any, any>(user && isAuthenticated ? ['/policies/signed/user', 'GET'] : null, axiosFetcher);
 
   const needsSignup = () => {
-    if (signedPolicySWR.data && !isAxiosError(signedPolicySWR.data)) {
+    if (signedPolicySWR.data && isArray(signedPolicySWR.data) && !isAxiosError(signedPolicySWR.data)) {
       // check if user has signed both policies
       const tos = signedPolicySWR.data?.some(policy => policy.name === 'tos' && !isEmpty(policy.policy_data));
       const privacy = signedPolicySWR.data?.some(policy => policy.name === 'privacy' && !isEmpty(policy.policy_data));
@@ -158,7 +158,7 @@ const _ProtectedRoute = () => {
     }
 
     if (isAxiosError(signedPolicySWR.data)) {
-      logBrowser('Error occurred in ProtectedRoute', 'error', { error: signedPolicySWR.error }, signedPolicySWR.error);
+      logBrowser('Error occurred in ProtectedRoute', 'error', { error: signedPolicySWR.data }, signedPolicySWR.data);
       logError(signedPolicySWR.data, ErrorType.SWRError);
       errorMessage = 'A connection error occurred. Please refresh the page or re-login.';
     }
@@ -186,7 +186,7 @@ const _ProtectedRoute = () => {
 };
 
 export const ProtectedRoute = withErrorBoundary(_ProtectedRoute, {
-  FallbackComponent: props => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorPage fallbackProps={props} />,
   onError: (error, info) => {
     console.error('Error occurred in ProtectedRoute: ', error);
   },
