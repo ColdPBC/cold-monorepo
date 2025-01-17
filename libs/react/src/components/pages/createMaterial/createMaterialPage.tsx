@@ -9,11 +9,18 @@ import {
   Modal,
   Spinner
 } from '@coldpbc/components';
-import React, { useEffect, useState } from 'react';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  useAddToastMessage,
+  useAuth0Wrapper,
+  useColdContext,
+  useEntityData,
+  useGraphQLMutation,
+  useGraphQLSWR,
+} from '@coldpbc/hooks';
 import { Claims, InputOption, SuppliersWithAssurances, ToastMessage } from '@coldpbc/interfaces';
 import {get, has, some} from 'lodash';
-import { ButtonTypes, IconNames } from '@coldpbc/enums';
+import { ButtonTypes, EntityLevel, IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import {withErrorBoundary} from "react-error-boundary";
 
@@ -48,24 +55,19 @@ const _CreateMaterialPage = () => {
   });
 
 	const [supplier, setSupplier] = useState<InputOption>(placeHolderOption);
-	const [suppliers, setSuppliers] = useState<SuppliersWithAssurances[]>([]);
-	const [attributes, setAttributes] = useState<Claims[]>([]);
 	const [attributesToAdd, setAttributesToAdd] = useState<Claims[]>([]);
-  const [materialClassifications, setMaterialClassifications] = useState<{id: string, name: string}[]>([]);
   const [materialClassification, setMaterialClassification] = useState<InputOption>(placeHolderOption);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [createModalType, setCreateModalType] = useState<'attributes' | undefined>(undefined);
   const [errors, setErrors] = useState<Partial<Record<keyof MaterialCreate, string>>>({});
-  const [otherMaterials, setOtherMaterials] = useState<{
-    id: string;
-    name: string;
-  }[]>([]);
 
   const {mutateGraphQL: createMaterial} = useGraphQLMutation('CREATE_MATERIAL');
   const {mutateGraphQL: createAttributeAssurance} = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
   const {mutateGraphQL: createMaterialSupplier} = useGraphQLMutation('CREATE_MATERIAL_SUPPLIER');
+
+  const otherMaterials = useEntityData(EntityLevel.MATERIAL, orgId);
 
 	const suppliersQuery = useGraphQLSWR<{
 		organizationFacilities: SuppliersWithAssurances[];
@@ -89,16 +91,6 @@ const _CreateMaterialPage = () => {
   const materialClassificationsQuery = useGraphQLSWR<{
     materialClassifications: {id: string; name: string;}[];
   }>('GET_ALL_MATERIAL_CLASSIFICATIONS');
-
-  const otherMaterialsQuery = useGraphQLSWR<{
-    materials: {
-      id: string;
-      name: string;
-    }[];
-  }>('GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT', {
-    organizationId: orgId,
-  });
-
 
   const validateName = (
     name: string,
@@ -124,51 +116,40 @@ const _CreateMaterialPage = () => {
     setSaveButtonDisabled(hasErrors || !isFormValid());
   }, [errors, materialState, otherMaterials]);
 
-	useEffect(() => {
-		if (suppliersQuery.data) {
-			if (has(suppliersQuery.data, 'errors')) {
-				setSuppliers([]);
-			} else {
-				const suppliers = get(suppliersQuery.data, 'data.organizationFacilities', []);
-				setSuppliers(suppliers);
-			}
-		}
-	}, [suppliersQuery.data]);
+  const attributes = useMemo(() => {
+    if (allSustainabilityAttributes.data) {
+      if (has(allSustainabilityAttributes.data, 'errors')) {
+        return [];
+      } else {
+        return get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', []);
+      }
+    }
+    return [];
+  }, [allSustainabilityAttributes.data]);
 
-	useEffect(() => {
-		if (allSustainabilityAttributes.data) {
-			if (has(allSustainabilityAttributes.data, 'errors')) {
-				setAttributes([]);
-			} else {
-				const attributes = get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', []);
-				setAttributes(attributes);
-			}
-		}
-	}, [allSustainabilityAttributes.data]);
-
-  useEffect(() => {
+  const materialClassifications = useMemo(() => {
     if (materialClassificationsQuery.data) {
       if (has(materialClassificationsQuery.data, 'errors')) {
-        setMaterialClassifications([]);
+        return [];
       } else {
-        const classifications = get(materialClassificationsQuery.data, 'data.materialClassifications', []);
-        setMaterialClassifications(classifications);
+        return get(materialClassificationsQuery.data, 'data.materialClassifications', []);
       }
     }
+    return [];
   }, [materialClassificationsQuery.data]);
 
-  useEffect(() => {
-    if (otherMaterialsQuery.data) {
-      if (has(otherMaterialsQuery.data, 'errors')) {
-        setOtherMaterials([]);
+  const suppliers = useMemo(() => {
+    if (suppliersQuery.data) {
+      if (has(suppliersQuery.data, 'errors')) {
+        return [];
       } else {
-        const materials = get(otherMaterialsQuery.data, 'data.materials', []);
-        setOtherMaterials(materials);
+        return get(suppliersQuery.data, 'data.organizationFacilities', []);
       }
     }
-  }, [otherMaterialsQuery.data]);
+    return [];
+  }, [suppliersQuery.data]);
 
-  if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading || materialClassificationsQuery.isLoading || otherMaterialsQuery.isLoading) {
+  if (suppliersQuery.isLoading || allSustainabilityAttributes.isLoading || materialClassificationsQuery.isLoading) {
 		return <Spinner />;
 	}
 
