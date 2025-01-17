@@ -1,3 +1,12 @@
+# [1.519.0](https://github.com/coldPBC/cold-monorepo/compare/v1.518.0...v1.519.0) (2025-01-17)
+
+
+### Features
+
+* add in Suppliers and finishing touches ([a31634a](https://github.com/coldPBC/cold-monorepo/commit/a31634a96879f0efcafbf7690b9fc7a74d6d9b13))
+* allow edit of text fields on Material ([aadbd86](https://github.com/coldPBC/cold-monorepo/commit/aadbd8694cc6e6c208e446a091422afbc67834fe))
+* new component for TextInput ([427ca6a](https://github.com/coldPBC/cold-monorepo/commit/427ca6a07c923ccc60490f2d672c2d4d75c67f37))
+
 # [1.518.0](https://github.com/coldPBC/cold-monorepo/compare/v1.517.0...v1.518.0) (2025-01-17)
 
 
