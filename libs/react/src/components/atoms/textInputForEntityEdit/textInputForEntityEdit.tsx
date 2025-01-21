@@ -64,7 +64,7 @@ export const TextInputForEntityEdit = <T,>({
         className: inputClassName,
         placeholder,
         error: error,
-        showError: true,
+        showError: !!error,
         autoComplete: "off",
       }}
       container_classname={containerClassName}
