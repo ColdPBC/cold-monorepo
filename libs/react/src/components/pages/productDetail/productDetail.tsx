@@ -7,7 +7,7 @@ import {
   ProductBOMTab,
   ProductDocumentsTab,
   Spinner,
-  Tabs,
+  Tabs, EllipsisMenu, DeleteEntityModal,
 } from '@coldpbc/components';
 import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
@@ -22,6 +22,7 @@ const _ProductDetail = () => {
   const { orgId } = useAuth0Wrapper();
 	const { id } = useParams();
   const { logBrowser } = useColdContext();
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState<boolean>(false);
   const [showUpdateAttributesModal, setShowUpdateAttributesModal] = React.useState<boolean>(false);
 	const productQuery = useGraphQLSWR<{
 		product: ProductsQuery | null;
@@ -68,7 +69,23 @@ const _ProductDetail = () => {
 	const subTitle = [product.productCategory, product.productSubcategory, product.seasonCode].filter(val => !!val).join(' | ');
 
 	return (
-    <MainContent title={product.name} subTitle={subTitle} breadcrumbs={[{ label: 'Products', href: '/products' }, { label: product.name }]} className={'w-[calc(100%)]'}>
+    <MainContent
+      title={product.name}
+      subTitle={subTitle} breadcrumbs={[{ label: 'Products', href: '/products' }, { label: product.name }]} className={'w-[calc(100%)]'}
+      headerElement={
+        <EllipsisMenu
+          data-testid={'product-details-menu'}
+          items={[
+            {
+              label: 'Delete Product',
+              onClick: () => {
+                setDeleteModalOpen(true);
+              },
+              color: 'warning',
+            }
+          ]}/>
+      }
+    >
       {product && (
         <EditSustainabilityAttributesForEntity
           key={product.id}
@@ -93,6 +110,12 @@ const _ProductDetail = () => {
             content: <ProductDocumentsTab files={parseDocumentsForProductDetails(product, cloneDeep(files))} />,
           },
         ]}
+      />
+      <DeleteEntityModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        entityId={product.id}
+        entityLevel={EntityLevel.PRODUCT}
       />
     </MainContent>
 	);

@@ -1,4 +1,27 @@
 import { DocumentNode, gql } from '@apollo/client';
+import {
+  CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
+  CREATE_ATTRIBUTE_ASSURANCES,
+  CREATE_MATERIAL,
+  CREATE_MATERIAL_SUPPLIER,
+  CREATE_PRODUCT_MATERIAL,
+  CREATE_SUPPLIER,
+  DELETE_ATTRIBUTE_ASSURANCE,
+  DELETE_ATTRIBUTE_ASSURANCES,
+  DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE,
+  UPDATE_DOCUMENT_ASSURANCE,
+  UPDATE_DOCUMENT_FIELDS,
+  UPDATE_MATERIAL,
+  UPDATE_PRODUCT,
+  DELETE_MATERIAL,
+  DELETE_PRODUCT,
+  DELETE_SUPPLIER,
+  DELETE_MATERIAL_SUPPLIER,
+  DELETE_MATERIAL_SUPPLIERS,
+  UPDATE_PRODUCTS,
+  DELETE_AND_CREATE_MATERIAL_SUPPLIER,
+  CREATE_PRODUCT,
+} from "./mutateQueries";
 
 export const GET_ALL_ORGS = gql`
   query GetAllOrganizations {
@@ -111,60 +134,6 @@ export const GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
   }
 `;
 
-export const CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE = gql`
-  mutation CreateAttributeAssurance($input: AttributeAssuranceInsertInput!) {
-    createAttributeAssurance(input: $input) {
-      effectiveStartDate
-      effectiveEndDate
-    }
-  }
-`;
-
-export const UPDATE_DOCUMENT_FIELDS = gql`
-  mutation UpdateOrganizationFile($input: OrganizationFileUpdateInput!) {
-    updateOrganizationFile(input: $input) {
-      originalName
-      createdAt
-      type
-    }
-  }
-`;
-
-export const UPDATE_DOCUMENT_ASSURANCE = gql`
-  mutation UpdateAttributeAssurance($input: AttributeAssuranceUpdateInput!) {
-    updateAttributeAssurance(input: $input) {
-      effectiveStartDate
-      effectiveEndDate
-    }
-  }
-`;
-
-export const DELETE_ATTRIBUTE_ASSURANCE = gql`
-  mutation DeleteAttributeAssurance($filter: DeleteOneFilterInput!) {
-    deleteAttributeAssurance(filter: $filter)
-  }
-`;
-
-export const DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE = gql`
-  mutation DeleteAttributeAssurancesByEntity(
-    $materialId: ID,
-    $productId: ID,
-    $supplierId: ID,
-    $sustainabilityAttributeId: ID!,
-    $organizationId: ID!
-  ) {
-    deleteAttributeAssurances(
-      filter: {
-        product: { id: $productId },
-        material: { id: $materialId },
-        organizationFacility: { id: $supplierId },
-        sustainabilityAttribute: { id: $sustainabilityAttributeId },
-        organization: { id: $organizationId }
-      }
-    )
-  }
-`;
-
 export const GET_PAGINATED_MATERIALS_FOR_ORG = gql`
 query GET_PAGINATED_MATERIALS_FOR_ORG($filter: MaterialsListFilter!, $pagination: MaterialsPaginationInput!) {
   materials(filter: $filter, pagination: $pagination) {
@@ -178,19 +147,6 @@ query GET_PAGINATED_MATERIALS_FOR_ORG($filter: MaterialsListFilter!, $pagination
         id
         name
         supplierTier
-        attributeAssurances {
-          id
-          effectiveEndDate
-          sustainabilityAttribute {
-            id
-            name
-            level
-            logoUrl
-          }
-          organizationFile {
-            id
-          }
-        }
       }
     }
     attributeAssurances {
@@ -213,19 +169,6 @@ query GET_PAGINATED_MATERIALS_FOR_ORG($filter: MaterialsListFilter!, $pagination
         organizationFacility {
           id
           name
-        }
-        attributeAssurances {
-          id
-          effectiveEndDate
-          sustainabilityAttribute {
-            id
-            name
-            level
-            logoUrl
-          }
-          organizationFile {
-            id
-          }
         }
       }
     }
@@ -310,22 +253,6 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
   }
 `;
 
-export const CREATE_MATERIAL = gql`
-  mutation CreateMaterial($input: MaterialInsertInput!) {
-    createMaterial(input: $input) {
-      id
-    }
-  }
-`;
-
-export const CREATE_MATERIAL_SUPPLIER = gql`
-  mutation CreateMaterialSupplier($input: MaterialSupplierInsertInput!) {
-    createMaterialSupplier(input: $input) {
-      id
-    }
-  }
-`;
-
 export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
   query Products($filter: ProductsListFilter, $pagination: ProductsPaginationInput){
     products(filter: $filter, pagination: $pagination){
@@ -350,26 +277,6 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
           materialCategory
           materialSubcategory
           emissionsFactor
-          materialSuppliers {
-            id
-            organizationFacility {
-              id
-              name
-              attributeAssurances {
-                id
-                effectiveEndDate
-                organizationFile {
-                  id
-                }
-                sustainabilityAttribute {
-                  id
-                  level
-                  logoUrl
-                  name
-                }
-              }
-            }
-          }
           attributeAssurances {
             id
             effectiveEndDate
@@ -418,30 +325,6 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
     }
     products_aggregate(filter: $filter) {
       count
-    }
-  }
-`;
-
-export const CREATE_PRODUCT_MATERIAL = gql`
-  mutation CreateProductMaterial($input: ProductMaterialInsertInput!){
-    createProductMaterial(input: $input){
-      id
-    }
-  }
-`;
-
-export const CREATE_SUPPLIER = gql`
-  mutation CreateOrganizationFacility($input: OrganizationFacilityInsertInput!) {
-    createOrganizationFacility(input: $input) {
-      id
-    }
-  }
-`;
-
-export const UPDATE_PRODUCT = gql`
-  mutation UpdateProduct($input: ProductUpdateInput!){
-    updateProduct(input: $input){
-      id
     }
   }
 `;
@@ -609,19 +492,6 @@ export const GET_PRODUCT = gql`
             organizationFacility {
               id
               name
-              attributeAssurances {
-                id
-                effectiveEndDate
-                organizationFile {
-                  id
-                }
-                sustainabilityAttribute {
-                  id
-                  level
-                  logoUrl
-                  name
-                }
-              }
             }
           }
           attributeAssurances {
@@ -805,20 +675,6 @@ export const GET_ALL_SUPPLIERS_FOR_ORG_AS_BASE_ENTITY = gql`
   }
 `;
 
-export const DELETE_ATTRIBUTE_ASSURANCES = gql`
-  mutation DeleteAttributeAssurances($filter: AttributeAssurancesListFilter!) {
-    deleteAttributeAssurances(filter: $filter)
-  }
-`;
-
-export const CREATE_ATTRIBUTE_ASSURANCES = gql`
-  mutation CreateAttributeAssurances($input: [AttributeAssuranceInsertInput!]!) {
-    createAttributeAssurances(input: $input) {
-      id
-    }
-  }
-`;
-
 export const GET_PRODUCT_CARBON_FOOTPRINT_DATA = gql`
   query Products($organizationId: ID!) {
     products(filter: { organization: { id: $organizationId } }) {
@@ -858,17 +714,6 @@ export const GET_ALL_MATERIAL_CLASSIFICATIONS = gql`
     }
 `;
 
-export const UPDATE_MATERIAL_CLASSIFICATION = gql`
-  mutation UpdateMaterial($input: MaterialUpdateInput!) {
-    updateMaterial(input: $input) {
-      id
-      materialClassification {
-        id
-        name
-      }
-    }
-  }
-`;
 
 export const queries: {
   [key: string]: DocumentNode;
@@ -908,5 +753,13 @@ export const queries: {
   GET_PRODUCT_CARBON_FOOTPRINT_DATA: GET_PRODUCT_CARBON_FOOTPRINT_DATA,
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES: GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
   GET_ALL_MATERIAL_CLASSIFICATIONS: GET_ALL_MATERIAL_CLASSIFICATIONS,
-  UPDATE_MATERIAL_CLASSIFICATION: UPDATE_MATERIAL_CLASSIFICATION,
+  UPDATE_MATERIAL: UPDATE_MATERIAL,
+  DELETE_MATERIAL: DELETE_MATERIAL,
+  DELETE_PRODUCT: DELETE_PRODUCT,
+  DELETE_SUPPLIER: DELETE_SUPPLIER,
+  DELETE_MATERIAL_SUPPLIER: DELETE_MATERIAL_SUPPLIER,
+  DELETE_MATERIAL_SUPPLIERS: DELETE_MATERIAL_SUPPLIERS,
+  UPDATE_PRODUCTS: UPDATE_PRODUCTS,
+  DELETE_AND_CREATE_MATERIAL_SUPPLIER: DELETE_AND_CREATE_MATERIAL_SUPPLIER,
+  CREATE_PRODUCT: CREATE_PRODUCT,
 };

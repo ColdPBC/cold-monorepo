@@ -14,7 +14,7 @@ import {
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import { get, has, uniq } from 'lodash';
-import { processEntityLevelAssurances } from '@coldpbc/lib';
+import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +36,7 @@ const _MaterialsDataGrid = () => {
   ]);
 
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>(getFromOrgStorage(orgId, 'materialsDataGridSearchValue') || '');
 
   // Handle search input changes
   const handleFilterChange = (filterModel: GridFilterModel) => {
@@ -46,6 +46,7 @@ const _MaterialsDataGrid = () => {
       ...prev,
       page: 0,
     }));
+    if(orgId) addToOrgStorage(orgId, 'materialsDataGridSearchValue', searchValue);
   };
 
   // Build search filter
@@ -275,11 +276,16 @@ const _MaterialsDataGrid = () => {
         // Search props
         filterMode="server"
         onFilterModelChange={handleFilterChange}
+        filterModel={{
+          items: [],
+          quickFilterValues: [searchQuery],
+        }}
         filterDebounceMs={500}
         slotProps={{
           toolbar: {
             quickFilterProps: {
               placeholder: 'Search by name...',
+              value: searchQuery,
             }
           }
         }}

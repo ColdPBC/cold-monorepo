@@ -5,25 +5,22 @@ import {
   ProductFootprintDataGridCell,
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
-import { getProductCarbonFootprint, useAuth0Wrapper, useGraphQLSWR, useProductCarbonFootprintCache } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import {
   EntityWithAttributeAssurances,
-  ProductsQuery,
+  PaginatedProductsQuery,
   SustainabilityAttribute,
 } from '@coldpbc/interfaces';
 import React, { useEffect, useState } from 'react';
 import { get, has } from 'lodash';
 import { withErrorBoundary } from "react-error-boundary";
-import { processEntityLevelAssurances } from '@coldpbc/lib';
+import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
 import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
-import { IconNames } from '@coldpbc/enums';
-import { HexColors } from '@coldpbc/themes';
-
 
 const getColumnRows = (
-  products: ProductsQuery[],
+  products: PaginatedProductsQuery[],
   flags: {
     [key: string]: boolean
   }) => {
@@ -46,17 +43,9 @@ const getColumnRows = (
       }
     )));
 
-    const suppliers = new Set<EntityWithAttributeAssurances>;
     if (tier1Supplier) {
-      suppliers.add(tier1Supplier);
+      entitiesWithAttributeAssurances.push(tier1Supplier);
     }
-    product.productMaterials.forEach(productMaterial => {
-      const tier2supplier = productMaterial.material.materialSuppliers[0]?.organizationFacility;
-      if (tier2supplier) {
-        suppliers.add(tier2supplier);
-      }
-    });
-    entitiesWithAttributeAssurances.push(...Array.from(suppliers));
 
     const sustainabilityAttributes = processEntityLevelAssurances(entitiesWithAttributeAssurances);
 
@@ -73,6 +62,7 @@ const getColumnRows = (
       materials: product.productMaterials.map(material => material.material?.name).filter((material): material is string => material !== null),
       productCategory: product.productCategory ?? '',
       productSubcategory: product.productSubcategory ?? '',
+      product
     }
   })
 }
@@ -91,7 +81,7 @@ export const _ProductsDataGrid = () => {
     { field: 'name', sort: 'asc' }
   ]);
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>(getFromOrgStorage(orgId, 'productsDataGridSearchValue') || '');
 
   // Handle search input changes
   const handleFilterChange = (filterModel: GridFilterModel) => {
@@ -101,6 +91,7 @@ export const _ProductsDataGrid = () => {
       ...prev,
       page: 0,
     }));
+    if(orgId) addToOrgStorage(orgId, 'productsDataGridSearchValue', searchValue);
   };
 
   // Convert MUI sort model to GraphQL ordering
@@ -132,7 +123,7 @@ export const _ProductsDataGrid = () => {
   };
 
   const productsQuery = useGraphQLSWR<{
-    products: ProductsQuery[];
+    products: PaginatedProductsQuery[];
     products_aggregate: { count: number };
   }>(orgId ? 'GET_PAGINATED_PRODUCTS_FOR_ORG' : null, {
     filter: getSearchFilter(searchQuery),
@@ -143,7 +134,7 @@ export const _ProductsDataGrid = () => {
     }
   });
 
-  const { cache, loading: footprintLoading, error: footprintError } = useProductCarbonFootprintCache();
+  // const { cache, loading: footprintLoading, error: footprintError } = useProductCarbonFootprintCache();
 
   const [rows, setRows] = useState<{
     id: string;
@@ -215,7 +206,7 @@ export const _ProductsDataGrid = () => {
   }
 
   const productFootprintColumn =
-		ldFlags.productCarbonFootprintMvp && !footprintError
+		ldFlags.productCarbonFootprintMvp
 			? [
 					{
 						...defaultColumnProperties,
@@ -224,7 +215,7 @@ export const _ProductsDataGrid = () => {
 						flex: 1,
 						minWidth: 220,
 						renderCell: params => (
-             <ProductFootprintDataGridCell cache={cache} id={params.row.id} productCategory={params.row.productCategory} />
+             <ProductFootprintDataGridCell product={params.row.product as PaginatedProductsQuery} />
             ),
 					},
 			  ]
@@ -325,7 +316,7 @@ export const _ProductsDataGrid = () => {
   return (
     <div className={'w-full'}>
       <MuiDataGrid
-        loading={productsQuery.isLoading || footprintLoading}
+        loading={productsQuery.isLoading} // || footprintLoading}
         columns={columns}
         rows={rows}
         rowHeight={72}
@@ -348,6 +339,10 @@ export const _ProductsDataGrid = () => {
         onSortModelChange={setSortModel}
         sortingMode="server"
         // Search props
+        filterModel={{
+          items: [],
+          quickFilterValues: [searchQuery],
+        }}
         filterMode="server"
         onFilterModelChange={handleFilterChange}
         filterDebounceMs={500}
@@ -355,6 +350,7 @@ export const _ProductsDataGrid = () => {
           toolbar: {
             quickFilterProps: {
               placeholder: 'Search by name...',
+              value: searchQuery,
             }
           }
         }}

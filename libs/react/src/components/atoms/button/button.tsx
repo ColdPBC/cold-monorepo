@@ -40,13 +40,13 @@ export function BaseButton(props: IButtonProps): JSX.Element {
 
   if (!href) {
     return (
-      <button onClick={onClick} className={twMerge(getClassName(props), className)} disabled={!!props.disabled || loading} key={key}>
+      <button onClick={onClick} className={twMerge(getClassName(props), className)} disabled={!!props.disabled || loading} key={key} data-testid={props['data-testid']}>
         {content}
       </button>
     );
   } else {
     return (
-      <Link to={href} className={twMerge(getClassName(props), className)} target={target} key={key}>
+      <Link to={href} className={twMerge(getClassName(props), className)} target={target} key={key} data-testid={props['data-testid']}>
         {content}
       </Link>
     );

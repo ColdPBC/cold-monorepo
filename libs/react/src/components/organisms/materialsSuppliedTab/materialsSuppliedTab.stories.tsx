@@ -81,3 +81,39 @@ export const SelectMaterialsOpenBulkEditModal: Story = {
     })
   }
 };
+
+export const SelectMaterialsOpenEditMaterialsModal: Story = {
+  args: {
+    supplier: {
+      ...getSupplierMock(2),
+      materialSuppliers: getMaterialsMocksWithAssurances().map((material, index) => ({
+        id: index.toString(),
+        material,
+      })),
+    },
+  },
+  // Need to place the data grid in a parent component for correct rendering
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <Tabs
+          tabs={[
+            {
+              label: 'Materials',
+              content: <MaterialsSuppliedTab {...args} />,
+            },
+          ]}
+        />
+      </StoryMockProvider>
+    );
+  },
+  play: async ({ canvasElement, step}) => {
+    const canvas = within(canvasElement);
+    await step('Select all materials', async () => {
+      const editButton = canvas.getByTestId('Edit Materials-button');
+      await expect(editButton).toBeEnabled();
+      // click the button
+      fireEvent.click(editButton);
+    })
+  }
+};

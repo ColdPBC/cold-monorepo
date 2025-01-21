@@ -1,3 +1,140 @@
+
+# [1.520.0](https://github.com/coldPBC/cold-monorepo/compare/v1.519.0...v1.520.0) (2025-01-17)
+
+
+### Features
+
+* Add error handling and test IDs to input component ([32e0f77](https://github.com/coldPBC/cold-monorepo/commit/32e0f777e109ec20de4e50b92346a117f61b0d92))
+* Refactor input components to improve optional prop handling ([2f7888b](https://github.com/coldPBC/cold-monorepo/commit/2f7888b338311449878942e50a830c086211ab9a))
+* Refactor input error handling logic for consistency. ([5cc953d](https://github.com/coldPBC/cold-monorepo/commit/5cc953d33f57377bc92aa8b0797f01a70423f836))
+* Remove unused Textarea import and fix optional chaining issue. ([8de946e](https://github.com/coldPBC/cold-monorepo/commit/8de946eb4ba12c6856a34095fe61f356cd32261e))
+* Use `InputTypes.TextArea` for description fields. ([57da3c2](https://github.com/coldPBC/cold-monorepo/commit/57da3c2cffacb9562675fc4a424a668a8de35876))
+
+# [1.519.0](https://github.com/coldPBC/cold-monorepo/compare/v1.518.0...v1.519.0) (2025-01-17)
+
+
+### Features
+
+* add in Suppliers and finishing touches ([a31634a](https://github.com/coldPBC/cold-monorepo/commit/a31634a96879f0efcafbf7690b9fc7a74d6d9b13))
+* allow edit of text fields on Material ([aadbd86](https://github.com/coldPBC/cold-monorepo/commit/aadbd8694cc6e6c208e446a091422afbc67834fe))
+* new component for TextInput ([427ca6a](https://github.com/coldPBC/cold-monorepo/commit/427ca6a07c923ccc60490f2d672c2d4d75c67f37))
+
+# [1.518.0](https://github.com/coldPBC/cold-monorepo/compare/v1.517.0...v1.518.0) (2025-01-17)
+
+
+### Features
+
+* Add "showError" prop to input components for error control ([41ded43](https://github.com/coldPBC/cold-monorepo/commit/41ded438a693a2d20a841339e26d1312ced03694))
+* Add a validateName helper function for product name checks ([e42d280](https://github.com/coldPBC/cold-monorepo/commit/e42d280aad64a11297ad61b5fa88734c604d36bf))
+* Add error message support for Input component ([041f595](https://github.com/coldPBC/cold-monorepo/commit/041f5952e7bdcc2988ede5d1b1f4f1d4885eff7d))
+* Add test IDs and refine error handling logic ([6153afe](https://github.com/coldPBC/cold-monorepo/commit/6153afef06f4f9fa5b7927ca1d82486aa42af5f6))
+* Add validation and error handling for ComboBox inputs ([ae62e14](https://github.com/coldPBC/cold-monorepo/commit/ae62e1449583cacb6a1a74543a5a4ac6cab95023))
+* Add validation for material name and improve UI error handling ([d345afd](https://github.com/coldPBC/cold-monorepo/commit/d345afd6810dd11c67572b5a376d121be8d3863c))
+* Refactor conditional object assignments for clarity ([2875f37](https://github.com/coldPBC/cold-monorepo/commit/2875f378ab82b4836fa6575fc96ad36d7689007a))
+* Refactor data handling with useMemo and useEntityData ([a4a1da5](https://github.com/coldPBC/cold-monorepo/commit/a4a1da5a067508c46984da1a9b1e9e36eb5ba65d))
+* Refactor name validation in createMaterialPage component. ([1ca2017](https://github.com/coldPBC/cold-monorepo/commit/1ca2017548de290343f131347fddea290ce5f12c))
+* Refactor validation logic across creation pages. ([75448ba](https://github.com/coldPBC/cold-monorepo/commit/75448bace92bbad597c7dce3654a71096c09167f))
+* Refine UI layout and styling across create pages. ([1e00bee](https://github.com/coldPBC/cold-monorepo/commit/1e00beef62fc938315d339049127f8228c7e004e))
+* remove tier 2 filter. allow all suppliers able to supply materials ([14a30c8](https://github.com/coldPBC/cold-monorepo/commit/14a30c8a9fa0e886616ce8a533d1f90884dbd43e))
+
+# [1.517.0](https://github.com/coldPBC/cold-monorepo/compare/v1.516.0...v1.517.0) (2025-01-16)
+
+
+### Features
+
+* Add array type check for signed policy data validation ([a66a4b7](https://github.com/coldPBC/cold-monorepo/commit/a66a4b7d61e0e8eb36660d718283be13feaf364b))
+* Handle invalid Auth0 tokens and enhance error logging. ([d7d1e4f](https://github.com/coldPBC/cold-monorepo/commit/d7d1e4fffb31bd16e8ef4ce3923e6bcb520ac2c4))
+
+# [1.516.0](https://github.com/coldPBC/cold-monorepo/compare/v1.515.1...v1.516.0) (2025-01-16)
+
+
+### Features
+
+* add unit enums and validation schemas ([c0c230d](https://github.com/coldPBC/cold-monorepo/commit/c0c230de229a8c6d6177d90331069567593828d5))
+
+## [1.515.1](https://github.com/coldPBC/cold-monorepo/compare/v1.515.0...v1.515.1) (2025-01-16)
+
+
+### Bug Fixes
+
+* **hooks:** simplify afterReadHook in product hooks to improve performance ([a8e1eb4](https://github.com/coldPBC/cold-monorepo/commit/a8e1eb44d5d4786c110c155a49d92e79f0ff1ba6))
+
+# [1.515.0](https://github.com/coldPBC/cold-monorepo/compare/v1.514.0...v1.515.0) (2025-01-15)
+
+
+### Features
+
+* Add "Create Product" functionality with UI and GraphQL mutation ([95e11d0](https://github.com/coldPBC/cold-monorepo/commit/95e11d05c3d659d5d4b4c54f2bfdfec4da5deedd))
+* Ensure form validation checks for trimmed input values. ([300073d](https://github.com/coldPBC/cold-monorepo/commit/300073d285105051ab1c0e51bdda44d3276cdb45))
+* Fix form validation to properly handle whitespace-only names. ([4e0bd23](https://github.com/coldPBC/cold-monorepo/commit/4e0bd23da3daf0d4dac625e459e3d17cd540841b))
+* Refactor Sustainability Attributes card to use CTAs prop ([aa35f77](https://github.com/coldPBC/cold-monorepo/commit/aa35f7779eee98afabb0d983fd57834f83741475))
+
+# [1.514.0](https://github.com/coldPBC/cold-monorepo/compare/v1.513.0...v1.514.0) (2025-01-15)
+
+
+### Features
+
+* add AutoComplete component using MUI Autocomplete ([995562c](https://github.com/coldPBC/cold-monorepo/commit/995562ca757ae3fd5e3934681441727f21627ba3))
+* Refactor input placeholders and fix material classifications handling. ([8591166](https://github.com/coldPBC/cold-monorepo/commit/859116663b3dd9757034ae938bd47c43bb01291e))
+* update createMaterialPage to improve state management and UI ([436e7e5](https://github.com/coldPBC/cold-monorepo/commit/436e7e570c73fbc6d11f63d6b008e9c6d943c168))
+* Update filters and rename fields in createMaterialPage ([e10f852](https://github.com/coldPBC/cold-monorepo/commit/e10f8528f057431e657301e5f06c5ff3ec50a937))
+
+# [1.513.0](https://github.com/coldPBC/cold-monorepo/compare/v1.512.0...v1.513.0) (2025-01-13)
+
+
+### Features
+
+* Refactor createSupplier form structure and validations. ([4ce56b2](https://github.com/coldPBC/cold-monorepo/commit/4ce56b2cdda95a4b5425b2f734e789127422475b))
+* Refine GraphQL query with supplier-level filter ([5131185](https://github.com/coldPBC/cold-monorepo/commit/513118560cb9f5c4b84508af26c4ee816a7dc32f))
+* standardize supplier state property casing ([fd540d6](https://github.com/coldPBC/cold-monorepo/commit/fd540d60d6b67603f6b126c116285849ec8937c0))
+* update create supplier page logic and UI ([347e23b](https://github.com/coldPBC/cold-monorepo/commit/347e23b07d33696d16eff5f9d585a3bfb50903b3))
+
+# [1.512.0](https://github.com/coldPBC/cold-monorepo/compare/v1.511.0...v1.512.0) (2025-01-10)
+
+
+### Bug Fixes
+
+* correct filter model update placement in muiDataGrid ([f1b0939](https://github.com/coldPBC/cold-monorepo/commit/f1b0939593bb0889acff408e3948d4b86b99f067))
+* display 'Materials' tab for tier 2 suppliers ([cf42e8c](https://github.com/coldPBC/cold-monorepo/commit/cf42e8c50195d019c6bc44719d2b3cc6eb30a052))
+* handle update of material entity associations correctly ([5692152](https://github.com/coldPBC/cold-monorepo/commit/569215215f280076184a30c5d9f798d84feff0dd))
+* remove unnecessary `refreshData` prop from `ProductsSuppliedTab` ([ffc8a08](https://github.com/coldPBC/cold-monorepo/commit/ffc8a08a01875a408d6c1841505bf83227f35bb7))
+* remove unnecessary array wrapping for Materials tab ([7305240](https://github.com/coldPBC/cold-monorepo/commit/7305240178fedc5ae51ef7e6ae37ca5e25b35dd3))
+* simplify and correct entity association update logic ([689ea82](https://github.com/coldPBC/cold-monorepo/commit/689ea82a416df560fd3ff51028a9a50fe6d69d4c))
+
+
+### Features
+
+* add 'data-testid' prop support for buttons ([2febe74](https://github.com/coldPBC/cold-monorepo/commit/2febe7424b71f4f4b19fd953985b72ab04fd4efd))
+* add entity association editing functionality and update data handling logic ([b38d899](https://github.com/coldPBC/cold-monorepo/commit/b38d899a84818900088f226492654820f2c98783))
+* add success toast message after updating associations ([cd6a28a](https://github.com/coldPBC/cold-monorepo/commit/cd6a28a1cb1db18d63c74203655336fc68a87beb))
+* correct tabs order for Materials and Products ([576d125](https://github.com/coldPBC/cold-monorepo/commit/576d125490471f8c753aef01000d5ba43afa29ef))
+* update tab visibility logic for materials and products ([ef87e2c](https://github.com/coldPBC/cold-monorepo/commit/ef87e2c061bfca7e5d451a095b4a60b9fb81b8ba))
+
+# [1.511.0](https://github.com/coldPBC/cold-monorepo/compare/v1.510.0...v1.511.0) (2025-01-08)
+
+
+### Features
+
+* add persistent search functionality for data grids ([0ca0388](https://github.com/coldPBC/cold-monorepo/commit/0ca03885b522f4149f0c100033941d831154c4c1))
+* add support for initializing quick filter values from org storage ([602d966](https://github.com/coldPBC/cold-monorepo/commit/602d966672dd926545a1f379a31a9f248314e06c))
+* add unique searchKey support for various DataGrid components ([0c39bf8](https://github.com/coldPBC/cold-monorepo/commit/0c39bf87d2a4dcf001268670efd0ec8320edee12))
+* enhance orgStorageUtils with additional utility functions ([7c92a1f](https://github.com/coldPBC/cold-monorepo/commit/7c92a1f80e448bb906036a6297c19c4344a6016a))
+
+# [1.510.0](https://github.com/coldPBC/cold-monorepo/compare/v1.509.0...v1.510.0) (2025-01-07)
+
+
+### Bug Fixes
+
+* add missing punctuation to deleteEntityModal title ([1da934e](https://github.com/coldPBC/cold-monorepo/commit/1da934e9254e4e5e77205440d840a69a00862b4e))
+
+
+### Features
+
+* add material deletion modal and refactor GraphQL mutations ([b52f708](https://github.com/coldPBC/cold-monorepo/commit/b52f708028c2b98dd55161513eab3c0e42cf7ec5))
+* add useGraphqlSWRMutate hook and integrate into DeleteEntityModal ([aab6110](https://github.com/coldPBC/cold-monorepo/commit/aab61107234dd17a8c34653e35c5997d5e68d139))
+* export utility functions in mqttMappings ([1fa56d5](https://github.com/coldPBC/cold-monorepo/commit/1fa56d56ae21d743181a828f4d4b3a183c0991e1))
+* replace DocumentDetailsMenu with EllipsisMenu across components and enhance delete modal styling ([1007395](https://github.com/coldPBC/cold-monorepo/commit/1007395b4ab0f1e4e39365d03d2e36601906e06c))
+
 # [1.509.0](https://github.com/coldPBC/cold-monorepo/compare/v1.508.0...v1.509.0) (2025-01-06)
 
 

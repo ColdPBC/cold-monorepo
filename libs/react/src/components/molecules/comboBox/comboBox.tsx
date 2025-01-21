@@ -5,12 +5,14 @@ import React, {Fragment, useEffect, useState} from "react";
 import {clsx} from "clsx";
 import {ChevronUpDownIcon} from '@heroicons/react/20/solid';
 import {isEqual} from "lodash";
+import { twMerge } from 'tailwind-merge';
 
 export interface ComboBoxProps extends SelectProps {
   options: Array<InputOption>;
   value: InputOption;
   dropdownDirection?: 'down' | 'up'; // undefined will implicitly default to down
   id?: string;
+  buttonClassName?: string;
 }
 
 export const ComboBox = (props: ComboBoxProps) => {
@@ -54,7 +56,12 @@ export const ComboBox = (props: ComboBoxProps) => {
       nullable={true}
     >
 			<div className="relative" data-testid={name}>
-				<Combobox.Button className="relative w-full border-[1.5px] border-gray-90 rounded-[8px] cursor-pointer p-0 flex justify-between items-center" as={'div'}>
+				<Combobox.Button
+          className={
+          twMerge(
+            "relative w-full border-[1.5px] border-gray-90 rounded-[8px] cursor-pointer p-0 flex justify-between items-center",
+            buttonClassName
+          )} as={'div'}>
 					<Combobox.Input
 						className="w-full bg-transparent border-none text-tc-primary p-4 text-left text-body focus:border-none focus:ring-0"
 						onChange={event => setQuery(event.target.value)}
@@ -81,7 +88,9 @@ export const ComboBox = (props: ComboBoxProps) => {
 						className={`
               ${dropdownDirection === 'up' ? 'bottom-full' : ''}
               absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-bgc-elevated py-1 text-tc-primary text-body shadow-lg focus:outline-none
-            `}>
+            `}
+            data-testid={name + '_options'}
+          >
 						{filteredOptions.length === 0 && query !== '' ? (
 							<div className="relative cursor-default select-none p-4 text-white">Nothing found.</div>
 						) : (

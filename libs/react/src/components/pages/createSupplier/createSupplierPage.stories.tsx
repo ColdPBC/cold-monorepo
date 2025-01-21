@@ -2,7 +2,8 @@ import { Meta, StoryObj } from '@storybook/react';
 import {CreateSupplierPage} from '@coldpbc/components';
 import { withKnobs} from '@storybook/addon-knobs';
 import { StoryMockProvider } from '@coldpbc/mocks';
-import {waitForElementToBeRemoved, within} from "@storybook/testing-library";
+import { userEvent, waitForElementToBeRemoved, within } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
 
 const meta: Meta<typeof CreateSupplierPage> = {
   title: 'Pages/CreateSupplierPage',
@@ -24,7 +25,7 @@ export const Default: Story = {
   },
 };
 
-export const Tier1Selected: Story = {
+export const ShowInputErrorValidation: Story = {
   render: () => {
     return (
       <StoryMockProvider>
@@ -32,35 +33,40 @@ export const Tier1Selected: Story = {
       </StoryMockProvider>
     );
   },
-  play: async ({ canvasElement, step }) => {
+  play: async ({canvasElement, step}) => {
     const canvas = within(canvasElement);
     await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-    const comboBox = await canvas.findByTestId('tier select');
-    const comboBoxInput = await within(comboBox).findByTestId('tier select_input');
-    comboBoxInput.click();
-    // find Tier 1 and click it
-    const tier1Option = await within(comboBox).findByTestId('option_1');
-    tier1Option.click();
-  }
-};
+    await step('Show name input error', async () => {
+      const input = canvas.getByTestId('input_name');
+      // type in Product 1. This should trigger an error
+      await userEvent.type(input, 'Supplier 6');
+      // check for the save_button to be disabled
+      const saveButton = canvas.getByTestId('save_button');
+      await expect(saveButton).toBeDisabled();
+      // find the input error
+      const error = canvas.getByTestId('input_error_name');
+      await expect(error).toHaveTextContent('Supplier name already exists');
+    });
 
-export const Tier2Selected: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider>
-        <CreateSupplierPage />
-      </StoryMockProvider>
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-    const comboBox = await canvas.findByTestId('tier select');
-    const comboBoxInput = await within(comboBox).findByTestId('tier select_input');
-    //  find the button and click it
-    comboBoxInput.click();
-    // find Tier 1 and click it
-    const tier1Option = await within(comboBox).findByTestId('option_2');
-    tier1Option.click();
+    await step('Show tier option error handling', async () => {
+      // click on the hasProducts combobox
+      const combobox = canvas.getByTestId('hasProducts');
+      const button = within(combobox).getByTestId('hasProducts_input')
+      await userEvent.click(button);
+      // select the first option
+      const yesOption = within(combobox).getByTestId('option_1');
+      await userEvent.click(yesOption);
+      // now deselect the option by clicking on the option_0
+      await userEvent.click(button);
+      const placeHolderOption = within(combobox).getByTestId('option_-1');
+      await userEvent.click(placeHolderOption);
+      // check for the save_button to be disabled
+      const saveButton = canvas.getByTestId('save_button');
+      await expect(saveButton).toBeDisabled();
+      // expect Supplier tier is required error. fin test id error_supplierTier
+      const error = canvas.getByTestId('error_supplierTier');
+      await expect(error).toHaveTextContent('Supplier tier is required');
+    });
+
   }
 };

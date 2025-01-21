@@ -342,6 +342,7 @@ export const _SustainabilityAttributeDetail = () => {
 						},
 					}}
 					disableRowSelectionOnClick={true}
+          searchKey={`${EntityLevel[sustainabilityAttribute.level]}Level${sustainabilityAttribute.id}SustainabilityAttributeDetailEntitySearchValue`}
 				/>
 			</div>
 			<BulkEditSustainabilityAttributeModal
@@ -367,7 +368,7 @@ export const _SustainabilityAttributeDetail = () => {
 			className="w-[calc(100%)]">
 			{/* If the sustainability attribute is material-level, add a tab structure to include the By Product view */}
       {/* However, we suppress it when filtering materials, e.g. for RDS and RWS */}
-			{sustainabilityAttribute.level === EntityLevel.MATERIAL && !filterMaterials ? (
+			{sustainabilityAttribute.level === EntityLevel.MATERIAL && !classificationGroup ? (
 				<Tabs
 					tabs={[
 						{

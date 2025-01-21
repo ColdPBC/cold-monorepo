@@ -1,7 +1,7 @@
 import React from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { EntityWithAttributeAssurances, ProductsQuery, SustainabilityAttribute } from '@coldpbc/interfaces';
+import { ProductsQuery } from '@coldpbc/interfaces';
 import { Card, SustainabilityAttributeCard, SustainabilityAttributeCardStyle } from '@coldpbc/components';
 import { filterAttributes, processEntityLevelAssurances } from '@coldpbc/lib';
 import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
@@ -13,18 +13,6 @@ interface ProductSustainabilityAttributesCardProps {
 
 const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttributesCardProps> = ({ product, setShowUpdateAttributesModal }) => {
   const materials = product.productMaterials.map(productMaterial => productMaterial.material);
-  const suppliers = new Set<EntityWithAttributeAssurances>;
-  // Tier 1 Supplier
-  if (product.organizationFacility) {
-    suppliers.add(product.organizationFacility);
-  }
-  // Tier 2 Supplier
-  product.productMaterials.forEach(productMaterial => {
-    if (productMaterial.material.materialSuppliers.length > 0) {
-      // each material can only have 1 Tier 2 supplier, so we pick the first
-      suppliers.add(productMaterial.material.materialSuppliers[0].organizationFacility)
-    }
-  });
 
   // These filters reflect the current state of our data, but be unnecessary if we had better data validations
   const productSustainabilityAttributes = filterAttributes(
@@ -37,10 +25,11 @@ const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttrib
     EntityLevel.MATERIAL
   );
 
-  const supplierSustainabilityAttributes = filterAttributes(
-    processEntityLevelAssurances(Array.from(suppliers)),
-    EntityLevel.SUPPLIER
-  );
+  const supplierSustainabilityAttributes = product.organizationFacility ?
+    filterAttributes(
+      processEntityLevelAssurances([product.organizationFacility]),
+      EntityLevel.SUPPLIER
+    ) : [];
 
   const ctas = [
     {
@@ -105,7 +94,7 @@ const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttrib
 
 export const ProductSustainabilityAttributesCard = withErrorBoundary(_ProductSustainabilityAttributesCard, {
 	FallbackComponent: props => <ErrorFallback {...props} />,
-	onError: (error, info) => {
+	onError: (error, _info) => {
 		console.error('Error occurred in ProductSustainabilityAttributesCard: ', error);
 	},
 });

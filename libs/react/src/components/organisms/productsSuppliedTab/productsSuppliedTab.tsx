@@ -120,6 +120,7 @@ const _ProductsSuppliedTab: React.FC<ProductsSuppliedTabProps> = ({ supplier }) 
             sortModel: [{ field: 'name', sort: 'asc' }],
           },
         }}
+        searchKey={`${supplier.id}productsSuppliedSearchValue`}
       />
     </Card>
   );

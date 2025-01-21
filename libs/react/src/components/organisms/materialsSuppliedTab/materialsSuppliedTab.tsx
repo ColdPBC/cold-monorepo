@@ -1,18 +1,26 @@
 import { SupplierGraphQL, SustainabilityAttribute } from '@coldpbc/interfaces';
-import { Card, DEFAULT_GRID_COL_DEF, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumnList, BulkEditMaterialAttributesModal} from '@coldpbc/components';
-import {GridCellParams, GridColDef, GridRowSelectionModel} from '@mui/x-data-grid';
+import {
+	BulkEditMaterialAttributesModal,
+	Card,
+	DEFAULT_GRID_COL_DEF,
+	EditEntityAssociationsModal,
+	ErrorFallback,
+	MuiDataGrid,
+	SustainabilityAttributeColumnList,
+} from '@coldpbc/components';
+import { GridCellParams, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import { uniq } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useNavigate } from 'react-router-dom';
-import {ButtonTypes} from "@coldpbc/enums";
-import {Checkbox} from "@mui/material";
+import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
+import { Checkbox } from '@mui/material';
 
 interface MaterialsSuppliedTabProps {
 	supplier: SupplierGraphQL;
-  refreshData: () => void;
+	refreshData: () => void;
 }
 
 const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, refreshData }) => {
@@ -134,6 +142,17 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
 			className={'w-full'}
 			data-testid={'materials-supplied-tab-card'}
 			ctas={[
+        {
+          child: <EditEntityAssociationsModal
+            buttonText={'Edit Materials'}
+            refresh={refreshData}
+            title={'Edit Materials'}
+            entityLevel={EntityLevel.MATERIAL}
+            entityToBeAddedId={supplier.id}
+            saveButtonText={'Save'}
+            idsSelected={rows.map(r => r.id)}
+          />
+        },
 				{
 					text: 'Bulk Edit Attributes',
 					action: () => {
@@ -164,7 +183,8 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
 					},
 				}}
         disableRowSelectionOnClick={true}
-			/>
+        searchKey={`${supplier.id}materialsSuppliedSearchValue`}
+      />
 			<BulkEditMaterialAttributesModal
 				show={showBulkEditAttributesModal}
 				onClose={() => {
