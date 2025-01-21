@@ -32,7 +32,7 @@ export const TextInputForEntityEdit = <T,>({
 }: TextInputForEntityEditProps<T>) => {
   const validate = (newValue: string) => {
     if (setError) {
-      if (required && newValue === '') {
+      if (required && newValue.trim() === '') {
         setError(`${label} is required`);
       } else if (preexistingValues && preexistingValues.includes(newValue)) {
         setError(`${label} already exists`);
