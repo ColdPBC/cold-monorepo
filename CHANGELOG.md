@@ -1,3 +1,21 @@
+# [1.521.0](https://github.com/coldPBC/cold-monorepo/compare/v1.520.0...v1.521.0) (2025-01-21)
+
+
+### Bug Fixes
+
+* comment out pcf hooks for this release ([4bcacdf](https://github.com/coldPBC/cold-monorepo/commit/4bcacdff5dcea68d6cd39877696c04ab6452e5e1))
+
+
+### Features
+
+* add BackboneService for product synchronization and integration ([7124095](https://github.com/coldPBC/cold-monorepo/commit/71240952da2fed590e7e2d7e1e3490a2e4889d36))
+* add BackboneService integration to organization integrations ([ac5363e](https://github.com/coldPBC/cold-monorepo/commit/ac5363e7d55cdccdfe47d113faadc235c6c75246))
+* add comprehensive unit enums and schemas for utility library ([62911ee](https://github.com/coldPBC/cold-monorepo/commit/62911ee0bb3cd2254e0866c956ba904d01a76e9a))
+* add indexes for materials and products tables, introduce PLM ID to products ([8230dcc](https://github.com/coldPBC/cold-monorepo/commit/8230dcc64bd2a4dbaa69780419936865c9f222ca))
+* enable frustration tracking in Datadog RUM settings ([b18a736](https://github.com/coldPBC/cold-monorepo/commit/b18a7366bad51b41380a60e86dc73723767ab612))
+* enhance BackboneService with sync logic for products, materials, and suppliers ([29a2d13](https://github.com/coldPBC/cold-monorepo/commit/29a2d13fa0324d85361531b12350e3a7d604b50b))
+* enhance MaterialHooks with product emission stats caching ([a381faa](https://github.com/coldPBC/cold-monorepo/commit/a381faafbe28b6107c6cfe53125adf81e2402c88))
+* update Prisma schema with weight and plm_id fields, add migrations ([7e7db2a](https://github.com/coldPBC/cold-monorepo/commit/7e7db2a527b807810b464039530f305f2d5a8423))
 
 # [1.520.0](https://github.com/coldPBC/cold-monorepo/compare/v1.519.0...v1.520.0) (2025-01-17)
 
