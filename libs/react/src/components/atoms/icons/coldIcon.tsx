@@ -20,7 +20,7 @@ import {
   ColdComplianceSurveyCheckBoxIcon,
   ColdDangerIcon,
   ColdDocumentsIcon,
-  ColdDocumentUploadIcon, ColdEditPencilIcon,
+  ColdDocumentUploadIcon, ColdDollarSignIcon, ColdEditPencilIcon,
   ColdEmptyCheckboxIcon,
   ColdExpiringIcon,
   ColdFootprintIcon, ColdFootprintIconThree,
@@ -145,6 +145,8 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdFootprintIconThree {...props} />;
     case IconNames.ColdEditPencilIcon:
       return <ColdEditPencilIcon {...props} />
+    case IconNames.ColdDollarSignIcon:
+        return <ColdDollarSignIcon {...props} />
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

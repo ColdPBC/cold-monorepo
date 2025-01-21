@@ -6,8 +6,10 @@ import React from 'react';
 import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { get } from 'lodash';
 import { EntityLevel } from '@coldpbc/enums';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 const _SustainabilityPage = () => {
+  const ldFlags = useFlags();
   const { logBrowser } = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const sustainabilityAttributesQuery = useGraphQLSWR<{
@@ -29,7 +31,7 @@ const _SustainabilityPage = () => {
 
   if (sustainabilityAttributesQuery.isLoading) {
     return (
-      <MainContent title="Sustainability Attributes" className={'w-[calc(100%-100px)]'}>
+      <MainContent title={ldFlags.showNewSidebarCold1354 ? 'Sustainability Claims' : 'Sustainability Attributes'} className={'w-[calc(100%-100px)]'}>
         <Spinner />
       </MainContent>
     );

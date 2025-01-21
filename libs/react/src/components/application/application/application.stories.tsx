@@ -95,3 +95,20 @@ export const ColdAdmin: Story = {
 		},
 	},
 };
+
+export const NewSidebar: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider>
+        <Application />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showNewSidebarCold1354: true,
+      },
+    },
+  },
+};

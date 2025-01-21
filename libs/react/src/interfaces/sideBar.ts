@@ -5,6 +5,11 @@ export interface NavbarItem {
   label: string;
   key: string;
   placement?: string;
+  route?: string;
+  items?: Array<NavbarItemWithRoute>;
+  roles?: string[];
+}
+
+export interface NavbarItemWithRoute extends NavbarItem {
   route: string;
-  items?: Array<NavbarItem>;
 }
