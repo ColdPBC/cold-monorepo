@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "products" ALTER COLUMN "weight" SET DATA TYPE DOUBLE PRECISION;

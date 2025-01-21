@@ -49,4 +49,7 @@ export class ProductMaterial {
 
 	@Field(() => Number, { nullable: true })
 	weight?: number;
+
+	@Field(() => String, { nullable: true })
+	plmId?: string;
 }

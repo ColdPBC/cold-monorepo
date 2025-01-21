@@ -3,6 +3,7 @@ import { BaseWorker, CacheService, ColdRabbitService, IRequest, MqttService, Pri
 import { get } from 'lodash';
 import { EventService } from '../../../utilities/events/event.service';
 import { OrganizationHelper } from '../helpers/organization.helper';
+import { BackboneService } from './backbone/backbone.service';
 
 @Injectable()
 export class OrganizationIntegrationsService extends BaseWorker {
@@ -13,6 +14,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
 		readonly prisma: PrismaService,
 		readonly rabbit: ColdRabbitService,
 		readonly broadcast: EventService,
+		readonly backbone: BackboneService,
 	) {
 		super(OrganizationIntegrationsService.name);
 	}
@@ -252,10 +254,12 @@ export class OrganizationIntegrationsService extends BaseWorker {
 		},
 	): Promise<any> {
 		const { user, url, organization } = req;
-		this.logger.info(`Integration enabled for ${organization.name} with Backbone`, {
+		this.logger.info(`Backbone integration triggered for ${organization.name}`, {
 			user,
 			organization,
 		});
+
+		await this.backbone.syncProducts(req, 0, 100, 1000);
 	}
 
 	async createIntegration(
