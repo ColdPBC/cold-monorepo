@@ -60,14 +60,6 @@ const OLD_ITEMS: NavbarItem[] = [
     "route": "/suppliers"
   },
   {
-    "key": "assessments_key",
-    "icon": {
-      "name": IconNames.ColdJourneyIcon
-    },
-    "label": "Assessments",
-    "route": "/assessments"
-  },
-  {
     "key": "actions_key",
     "icon": {
       "name": IconNames.ColdActionsIcon
