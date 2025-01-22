@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { ColdIcon } from '@coldpbc/components';
-import { NavbarItem } from '@coldpbc/interfaces';
+import { NavbarItem, NavbarItemWithRoute } from '@coldpbc/interfaces';
 import { twMerge } from 'tailwind-merge';
 import { Link } from 'react-router-dom';
 
 export interface SideBarItemProps {
-  item: NavbarItem;
-  activeItem: NavbarItem | null;
-  setActiveItem: (activeItem: NavbarItem) => void;
+  item: NavbarItemWithRoute | NavbarItem;
+  activeItem: NavbarItemWithRoute | NavbarItem | null;
+  setActiveItem: (activeItem: NavbarItemWithRoute) => void;
   expanded: boolean;
 }
 
@@ -15,6 +15,9 @@ export const SideBarItem = (props: SideBarItemProps) => {
   const { item, activeItem, setActiveItem, expanded } = props;
 
   const isActive = activeItem?.key === item.key;
+
+  if(item.route === undefined)
+    return null;
 
   return (
     <Link

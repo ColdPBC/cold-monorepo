@@ -111,102 +111,115 @@ const seeds: Array<{
     definition: {
       items: [
         {
-          key: 'sustainability_key',
-          icon: {
-            name: 'ColdSustainabilityIcon',
-          },
-          label: 'Sustainability',
-          route: '/sustainability',
+          key: 'compliance_key',
+          label: 'Compliance',
+          items: [
+            {
+              key: 'sustainability_key',
+              icon: {
+                name: 'ColdSustainabilityIcon',
+              },
+              label: 'Sustainability Claims',
+              route: '/sustainability_claims',
+            }
+          ]
         },
         {
-          key: 'questionnaires_key',
-          icon: {
-            name: 'ColdQuestionnaireIcon',
-          },
-          label: 'Questionnaires',
-          route: '/questionnaires',
+          key: 'climate_key',
+          label: 'Climate',
+          items: [
+            {
+              key: 'carbon_footprint_key',
+              icon: {
+                name: 'ColdChartIcon',
+              },
+              label: 'Carbon Footprint',
+              route: '/carbon_footprint',
+            }
+          ]
         },
         {
-          key: 'materials_key',
-          icon: {
-            name: 'ColdMaterialsNavIcon',
-          },
-          label: 'Materials',
-          route: '/materials',
+          key: 'reporting_automation_key',
+          label: 'Reporting Automation',
+          items: [
+            {
+              key: 'questionnaires_key',
+              icon: {
+                name: 'ColdQuestionnaireIcon',
+              },
+              label: 'Assessments',
+              route: '/assessments',
+            }
+          ]
         },
         {
-          key: 'products_key',
-          icon: {
-            name: 'ColdProductsNavIcon',
-          },
-          label: 'Products',
-          route: '/products',
-        },
-        {
-          key: 'suppliers_key',
-          icon: {
-            name: 'ColdSuppliersNavIcon',
-          },
-          label: 'Suppliers',
-          route: '/suppliers',
-        },
-        {
-          key: 'assessments_key',
-          icon: {
-            name: 'ColdJourneyIcon',
-          },
-          label: 'Assessments',
-          route: '/assessments',
-        },
-        {
-          key: 'actions_key',
-          icon: {
-            name: 'ColdActionsIcon',
-          },
-          label: 'Actions',
-          route: '/actions',
-        },
-        {
-          key: 'carbon_footprint_key',
-          icon: {
-            name: 'ColdChartIcon',
-          },
-          label: 'Carbon Footprint',
-          route: '/carbon_footprint',
-        },
-        {
-          key: 'documents_key',
-          icon: {
-            name: 'ColdDocumentsIcon',
-          },
-          label: 'Documents',
-          route: '/documents',
+          key: 'my_data_key',
+          label: 'My Data',
+          items: [
+            {
+              key: 'materials_key',
+              icon: {
+                name: 'ColdMaterialsNavIcon',
+              },
+              label: 'Materials',
+              route: '/materials',
+            },
+            {
+              key: 'products_key',
+              icon: {
+                name: 'ColdProductsNavIcon',
+              },
+              label: 'Products',
+              route: '/products',
+            },
+            {
+              key: 'suppliers_key',
+              icon: {
+                name: 'ColdSuppliersNavIcon',
+              },
+              label: 'Suppliers',
+              route: '/suppliers',
+            },
+            {
+              key: 'documents_key',
+              icon: {
+                name: 'ColdDocumentsIcon',
+              },
+              label: 'Documents',
+              route: '/documents',
+            },
+          ]
         },
         {
           key: 'settings_key',
-          icon: {
-            name: 'ColdSettingsIcon',
-          },
           items: [
             {
               key: 'settings_account_key',
               label: 'Account',
               route: '/settings/account',
+              icon: {
+                name: 'ColdSettingsIcon',
+              },
             },
             {
               key: 'settings_user_key',
               label: 'Users',
               route: '/settings/users',
+              icon: {
+                name: 'ColdTeamMembersIcon',
+              },
             },
             {
               key: 'settings_billing_key',
               label: 'Billing',
               route: '/settings/billing',
+              icon: {
+                name: 'ColdDollarSignIcon',
+              },
             },
           ],
           label: 'Settings',
           roles: ['cold:admin', 'company:admin', 'company:owner'],
-          route: '/settings',
         },
       ],
     },

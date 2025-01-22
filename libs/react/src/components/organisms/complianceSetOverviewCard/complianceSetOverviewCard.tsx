@@ -161,11 +161,11 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
         logBrowser(response.message, 'error', { response });
       } else {
         await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
-        navigate(`/questionnaires/${complianceSet.name}`);
+        navigate(`/assessments/${complianceSet.name}`);
       }
       setComplianceSetLoading(false);
     } else {
-      navigate(`/questionnaires/${complianceSet.name}`);
+      navigate(`/assessments/${complianceSet.name}`);
     }
   };
 

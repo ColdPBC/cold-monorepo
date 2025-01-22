@@ -35,7 +35,7 @@ export const ColdLogoAnimation = (props: ColdLogoAnimationProps) => {
   };
 
   return (
-    <div className="h-[24px] flex flex-row items-center justify-start pl-[20px] w-full">
+    <div className="h-[24px] flex flex-row items-center justify-start w-full">
       <Transition
         show={expanded}
         enter={'transition-opacity ease-out duration-200'}

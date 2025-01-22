@@ -6,7 +6,7 @@ export const ComplianceRoutes = () => {
   const ldFlags = useFlags();
 
   return (
-    <Route path={'/questionnaires'}>
+    <Route path={'/assessments'}>
       <Route index element={<CompliancePage />} />
       {ldFlags.showNewComplianceManagerCold711 && <Route path={':name'} element={<ComplianceManager />} />}
     </Route>

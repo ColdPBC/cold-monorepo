@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ColdIcon, SideBarItem } from '@coldpbc/components';
-import { NavbarItem } from '@coldpbc/interfaces';
+import { NavbarItem, NavbarItemWithRoute } from '@coldpbc/interfaces';
 import { IconNames } from '@coldpbc/enums';
 import { twMerge } from 'tailwind-merge';
 import { Sidebar } from 'flowbite-react';
@@ -43,8 +43,8 @@ export const SideBarCollapse = (props: SideBarCollapseProps) => {
     <div className={'w-full flex flex-col gap-[8px] transition-height duration-200'}>
       <div
         className={twMerge(
-          'flex flex-row justify-start items-center gap-[8px] w-full cursor-pointer h-[48px] border-l-[2px] border-transparent hover:bg-gray-50 pl-[16px] pr-[8px]',
-          ifSubItemIsActive() ? 'border-primary-300 bg-gray-50 text-tc-primary' : 'text-tc-secondary',
+          'flex flex-row justify-start items-center gap-[8px] w-full cursor-pointer h-[48px] border-l-[2px] border-transparent hover:bg-gray-50 pl-[16px] pr-[8px] text-tc-primary',
+          ifSubItemIsActive() ? 'border-primary-300 bg-gray-50' : '',
         )}
         onClick={() => {
           setCollapseIsOpen(!collapseIsOpen);
@@ -63,7 +63,7 @@ export const SideBarCollapse = (props: SideBarCollapseProps) => {
           style={{
             height: collapseIsOpen ? getSubItemsHeight() + 'px' : '0px',
           }}>
-          {item.items?.map((sub_item: NavbarItem, index: number) => {
+          {item.items?.map((sub_item: NavbarItemWithRoute, index: number) => {
             return (
               <Link
                 to={sub_item.route}

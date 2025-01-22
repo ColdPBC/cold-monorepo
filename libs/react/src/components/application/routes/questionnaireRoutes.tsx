@@ -7,7 +7,7 @@ export const QuestionnaireRoutes = () => {
 
   if (ldFlags.showNewComplianceManagerCold711) {
     return (
-      <Route path={'/questionnaire'}>
+      <Route path={'/assessment'}>
         <Route path={':complianceName'} element={<ComplianceQuestionnaire />} />
       </Route>
     );

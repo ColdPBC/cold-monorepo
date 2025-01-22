@@ -3,8 +3,10 @@ import React, { useContext } from 'react';
 import { CompliancePageFilter } from '@coldpbc/enums';
 import { InputOption } from '@coldpbc/interfaces';
 import { ColdCompliancePageContext } from '@coldpbc/context';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export const CompliancePageWrapper = () => {
+  const ldFlags = useFlags();
   const { data, filter, setFilter } = useContext(ColdCompliancePageContext);
   const { allComplianceSets } = data;
   const getFilter = () => {
@@ -30,7 +32,7 @@ export const CompliancePageWrapper = () => {
   };
 
   return (
-    <MainContent title="Questionnaires" headerElement={getFilter()}>
+    <MainContent title={ldFlags.showNewSidebarCold1354 ? 'Assessments' : 'Questionnaires'} headerElement={getFilter()}>
       <div className={'w-full space-y-[24px]'}>
         {allComplianceSets
           ?.sort((a, b) => {

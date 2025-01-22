@@ -1,3 +1,5 @@
+import { ColdDollarSignIcon } from '../components/atoms/icons/coldDollarSignIcon';
+
 export enum IconNames {
   ColdHomeIcon = 'ColdHomeIcon',
   ColdFootprintIcon = 'ColdFootprintIcon',
@@ -46,4 +48,5 @@ export enum IconNames {
   ColdSustainabilityIcon = 'ColdSustainabilityIcon',
   ColdUnknownIcon = 'ColdUnknownIcon',
   ColdEditPencilIcon = 'ColdEditPencilIcon',
+  ColdDollarSignIcon = 'ColdDollarSignIcon',
 }
