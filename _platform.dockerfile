@@ -1,37 +1,30 @@
 ARG NODE_VERSION=22.8
-FROM node:${NODE_VERSION} as base
+FROM node:${NODE_VERSION} AS base
 
-#RUN npm uninstall -g yarn pnpm
-RUN apt-get update
-RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake
-RUN rm -rf /var/lib/apt/lists/*
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libcairo2-dev \
+    libpango1.0-dev \
+    libjpeg-dev \
+    libgif-dev \
+    librsvg2-dev \
+    libtool \
+    autoconf \
+    automake && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-# uninstall old yarn or pnpm
 
+# Add source files
 ADD . /app/
 
 # Install Dependencies
 
-FROM base as dependencies
+FROM base AS dependencies
 WORKDIR /app
-USER root
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.yarn to speed up subsequent builds.
-# Leverage a bind mounts to package.json and yarn.lock to avoid having to copy them into
-# into this layer.
-#RUN #--mount=type=bind,source=package.json,target=package.json \
-    #--mount=type=bind,source=yarn.lock,target=yarn.lock,readwrite \
-RUN  --mount=type=cache,target=/root/.yarn
-
-COPY package.json package.json ./
-
-RUN yarn
-
-#RUN yarn dedupe --strategy highest
-
-FROM dependencies as build
+FROM dependencies AS build
 WORKDIR /app
 USER root
 
@@ -72,7 +65,7 @@ RUN ls -la /app/dist
 RUN ls -la /app/dist/apps/${DD_SERVICE}
 
 
-FROM node:${NODE_VERSION} as final
+FROM node:${NODE_VERSION} AS final
 USER root
 WORKDIR /home/node/apps/${DD_SERVICE}
 

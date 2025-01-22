@@ -1,6 +1,6 @@
 # Use the official Node.js image as the base
 ARG NODE_VERSION=22.8
-FROM node:${NODE_VERSION} as base
+FROM node:${NODE_VERSION} AS base
 USER root
 
 RUN apt-get update
@@ -8,21 +8,6 @@ RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev
 RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /repo
-
-# Capture the build arguments
-ARG NODE_ENV
-ARG DATABASE_URL
-ARG DD_SERVICE
-ARG DD_VERSION
-ARG DD_API_KEY
-
-# Set the environment variables
-ENV NODE_ENV=${NODE_ENV}
-ENV DD_ENV=${NODE_ENV}
-ENV DD_API_KEY=${DD_API_KEY}
-ENV DATABASE_URL=${DATABASE_URL}
-ENV DD_SERVICE=${DD_SERVICE}
-ENV DD_VERSION=${DD_VERSION}
 
 ADD . .
 

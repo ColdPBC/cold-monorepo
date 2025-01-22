@@ -14,7 +14,7 @@ const tracer = Tracer.init({
 	profiling: true,
 	runtimeMetrics: true,
 	tags: {
-		service: appPkg.name || process.env.NX_TASK_TARGET_PROJECT || BaseWorker.getProjectName(),
+		service: appPkg?.name || process.env.NX_TASK_TARGET_PROJECT || BaseWorker.getProjectName(),
 		env: process.env.NODE_ENV,
 		version: repoPkg.version || process.env.npm_package_version || BaseWorker.getPkgVersion(),
 		environment: process.env.NODE_ENV,

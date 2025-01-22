@@ -1,5 +1,5 @@
 ARG NODE_VERSION=22.8
-FROM node:${NODE_VERSION} as base
+FROM node:${NODE_VERSION} AS base
 ARG NODE_ENV
 ARG DATABASE_URL
 ARG DD_SERVICE
@@ -26,7 +26,7 @@ ADD . /app/
 
 # Install Dependencies
 
-FROM base as dependencies
+FROM base AS dependencies
 WORKDIR /app
 USER root
 
@@ -46,7 +46,7 @@ RUN yarn
 
 #RUN yarn dedupe --strategy highest
 
-FROM dependencies as build
+FROM dependencies AS build
 WORKDIR /app
 USER root
 
@@ -76,7 +76,7 @@ RUN ls -la /app/dist
 RUN ls -la /app/dist/apps/${DD_SERVICE}
 
 
-FROM node:${NODE_VERSION} as final
+FROM node:${NODE_VERSION} AS final
 USER root
 WORKDIR /home/node/apps/${DD_SERVICE}
 
