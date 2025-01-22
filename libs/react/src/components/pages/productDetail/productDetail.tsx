@@ -99,7 +99,7 @@ const _ProductDetail = () => {
         tabs={[
           {
             label: 'Summary',
-            content: <ProductDetailsTab product={product} setShowUpdateAttributesModal={setShowUpdateAttributesModal} />,
+            content: <ProductDetailsTab product={product} setShowUpdateAttributesModal={setShowUpdateAttributesModal} refreshProduct={productQuery.mutate} />,
           },
           {
             label: 'BOM',

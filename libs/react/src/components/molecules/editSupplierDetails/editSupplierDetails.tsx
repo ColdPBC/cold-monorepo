@@ -146,7 +146,7 @@ const _EditSupplierDetails: React.FC<EditSupplierDetailsProps> = ({ supplier, on
 				options={[{ value: 1 }, { value: 2 }]}
 				fieldType={'value'}
 				disabled={tierSelectorIsDisabled}
-				disabledMessage={'Cannot change tier of supplier with products'}
+				disabledMessage={'Cannot change tier of supplier once products have been added'}
 			/>
 			<TextInputForEntityEdit<SupplierGraphQL> {...inputProps('addressLine1')} label={'Address Line 1'} />
 			<TextInputForEntityEdit<SupplierGraphQL> {...inputProps('addressLine2')} label={'Address Line 2'} />
