@@ -191,8 +191,14 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 	};
 
 	useEffect(() => {
-		if (data) {
-			data.definition.items.forEach((item: NavbarItem) => {
+    let items: NavbarItem[] = [];
+    if(ldFlags.showNewSidebarCold1354 && data) {
+      items = data.definition.items;
+    } else {
+      items = OLD_ITEMS;
+    }
+		if (items && items.length > 0) {
+			items.forEach((item: NavbarItem) => {
 				if (location.pathname === item.route && activeItem?.key !== item.key) {
 					setActiveItem(item);
 				}
@@ -205,7 +211,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 				}
 			});
 		}
-	}, [location.pathname, data]);
+	}, [location.pathname, data, OLD_ITEMS]);
 
 	if (isLoading || auth0.isLoading)
 		return (
