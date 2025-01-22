@@ -5,7 +5,7 @@ import {
   ProductFootprintDataGridCell,
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
-import { useAuth0Wrapper, useGraphQLSWR, useProductCarbonFootprintCache } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import {
   EntityWithAttributeAssurances,
   PaginatedProductsQuery,
@@ -62,6 +62,7 @@ const getColumnRows = (
       materials: product.productMaterials.map(material => material.material?.name).filter((material): material is string => material !== null),
       productCategory: product.productCategory ?? '',
       productSubcategory: product.productSubcategory ?? '',
+      product
     }
   })
 }
@@ -133,7 +134,7 @@ export const _ProductsDataGrid = () => {
     }
   });
 
-  const { cache, loading: footprintLoading, error: footprintError } = useProductCarbonFootprintCache();
+  // const { cache, loading: footprintLoading, error: footprintError } = useProductCarbonFootprintCache();
 
   const [rows, setRows] = useState<{
     id: string;
@@ -205,7 +206,7 @@ export const _ProductsDataGrid = () => {
   }
 
   const productFootprintColumn =
-		ldFlags.productCarbonFootprintMvp && !footprintError
+		ldFlags.productCarbonFootprintMvp
 			? [
 					{
 						...defaultColumnProperties,
@@ -214,7 +215,7 @@ export const _ProductsDataGrid = () => {
 						flex: 1,
 						minWidth: 220,
 						renderCell: params => (
-             <ProductFootprintDataGridCell cache={cache} id={params.row.id} productCategory={params.row.productCategory} />
+             <ProductFootprintDataGridCell product={params.row.product as PaginatedProductsQuery} />
             ),
 					},
 			  ]
@@ -315,7 +316,7 @@ export const _ProductsDataGrid = () => {
   return (
     <div className={'w-full'}>
       <MuiDataGrid
-        loading={productsQuery.isLoading || footprintLoading}
+        loading={productsQuery.isLoading} // || footprintLoading}
         columns={columns}
         rows={rows}
         rowHeight={72}

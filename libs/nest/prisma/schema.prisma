@@ -676,6 +676,7 @@ model products {
   supplier_id          String?
   style_code           String?
   emission_stats       Json?
+	weight							 Float?
   materials            product_materials[]
   organization         organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   supplier             organization_facilities? @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
@@ -788,6 +789,7 @@ model product_materials {
   material_id          String?
   material_supplier_id String?
   organization_id      String
+	plm_id							 String?
   yield                Float?
   weight               Float?
   unit_of_measure      String?
@@ -801,6 +803,7 @@ model product_materials {
   product              products      @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
   @@unique([material_id, product_id], name: "materialProductKey")
+	@@index([plm_id, organization_id], map: "product_materials_plm_id_organization_id_idx1")
   @@index([material_id], map: "product_materials_material_id_idx1")
   @@index([organization_id], map: "product_materials_organization_id_idx1")
   @@index([product_id], map: "product_materials_product_id_idx1")
