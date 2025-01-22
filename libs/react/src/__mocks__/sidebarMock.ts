@@ -16,7 +16,7 @@ export function getSidebarMock() {
                 name: 'ColdSustainabilityIcon',
               },
               label: 'Sustainability Claims',
-              route: '/sustainability',
+              route: '/sustainability_claims',
             }
           ]
         },
@@ -44,7 +44,7 @@ export function getSidebarMock() {
                 name: 'ColdQuestionnaireIcon',
               },
               label: 'Assessments',
-              route: '/questionnaires',
+              route: '/assessments',
             }
           ]
         },

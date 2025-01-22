@@ -90,7 +90,7 @@ export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProp
             className="w-full"
             onClick={() => {
               if(ldFlags.cold1220SustainabilityAttributePage) {
-                navigate(`/sustainability/${sustainabilityAttribute.id}`);
+                navigate(`/sustainability_claims/${sustainabilityAttribute.id}`);
               }
             }}>
 						<SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} />

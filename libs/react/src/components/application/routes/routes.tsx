@@ -27,7 +27,7 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { QuestionnaireRoutes } from './questionnaireRoutes';
 import {ProductRoutes} from "./productRoutes";
 
-const DEFAULT_PAGE = '/sustainability';
+const DEFAULT_PAGE = '/sustainability_claims';
 
 export const ColdRoutes = () => {
   const ldFlags = useFlags();
@@ -39,9 +39,8 @@ export const ColdRoutes = () => {
         <Route path={'/'} element={<Navigate to={DEFAULT_PAGE} replace={true} />} />
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
-        {ldFlags.showActions261 && <Route path={'/actions'} element={<ActionsOverview />} />}
-        <Route path={'/sustainability'} element={<SustainabilityPage />} />
-        {ldFlags.cold1220SustainabilityAttributePage && <Route path={'/sustainability/:id'} element={<SustainabilityAttributeDetail />} />}
+        <Route path={'/sustainability_claims'} element={<SustainabilityPage />} />
+        {ldFlags.cold1220SustainabilityAttributePage && <Route path={'/sustainability_claims/:id'} element={<SustainabilityAttributeDetail />} />}
         <Route path={'/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
         <Route path={'/documents'} element={ldFlags.showNewDocumentsPage ? <DocumentsPage /> : <DocumentUpload />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />
@@ -54,8 +53,8 @@ export const ColdRoutes = () => {
         <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
 
         // Temporary redirects from old route until we're certain that the seeds are updated to the new sidebar.
-        <Route path={'/reports/carbon_footprint'} element={<Navigate to={'/carbon_footprint'} replace={true} />} />
-        <Route path={'/compliance'} element={<Navigate to={'/questionnaires'} replace={true} />} />
+        <Route path={'/questionnaires'} element={<Navigate to={'/assessments'} replace={true} />} />
+        <Route path={'/sustainability'} element={<Navigate to={'/sustainability_claims'} replace={true} />} />
       </>
     );
   };

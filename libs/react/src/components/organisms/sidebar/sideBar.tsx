@@ -25,7 +25,7 @@ const OLD_ITEMS: NavbarItem[] = [
       "name": IconNames.ColdSustainabilityIcon,
     },
     "label": "Sustainability",
-    "route": "/sustainability"
+    "route": "/sustainability_claims"
   },
   {
     "key": "questionnaires_key",
@@ -33,7 +33,7 @@ const OLD_ITEMS: NavbarItem[] = [
       "name": IconNames.ColdQuestionnaireIcon
     },
     "label": "Questionnaires",
-    "route": "/questionnaires"
+    "route": "/assessments"
   },
   {
     "key": "materials_key",

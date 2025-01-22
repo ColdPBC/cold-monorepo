@@ -26,7 +26,7 @@ export const Default: Story = {
   render: args => (
     <StoryMockProvider
       memoryRouterProps={{
-        initialEntries: ['/questionnaires/rei_pia_2024'],
+        initialEntries: ['/assessments/rei_pia_2024'],
       }}>
       <Routes>{ComplianceRoutes()}</Routes>
     </StoryMockProvider>
@@ -37,7 +37,7 @@ export const Error: Story = {
   render: args => (
     <StoryMockProvider
       memoryRouterProps={{
-        initialEntries: ['/questionnaires/rei_pia_2024'],
+        initialEntries: ['/assessments/rei_pia_2024'],
       }}
       handlers={[
         http.get(getApiUrl('/compliance/:name/organizations/:orgId/responses/counts'), ({ request, params, cookies }) => {

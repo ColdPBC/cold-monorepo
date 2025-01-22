@@ -197,7 +197,7 @@ const _ComplianceManager = () => {
         <div className={'w-full h-[281px] flex flex-col gap-[47px] justify-between relative'} data-testid={'compliance-manager-header'}>
           <div
             className={'w-full px-[16px] py-[8px] text-button text-tc-primary flex flex-row gap-[1px] items-center bg-[#1f202e80] cursor-pointer justify-start'}
-            onClick={() => navigate('/questionnaires')}>
+            onClick={() => navigate('/assessments')}>
             <ColdLeftArrowIcon className={'w-[24px] h-[24px]'} />
             <div>Compliance Sets</div>
           </div>
