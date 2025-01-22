@@ -1,3 +1,10 @@
+## [1.521.2](https://github.com/coldPBC/cold-monorepo/compare/v1.521.1...v1.521.2) (2025-01-22)
+
+
+### Bug Fixes
+
+* only give extra space for error when it's present ([06a479b](https://github.com/coldPBC/cold-monorepo/commit/06a479b86220734a1fa704e99432b6a1635959fb))
+
 ## [1.521.1](https://github.com/coldPBC/cold-monorepo/compare/v1.521.0...v1.521.1) (2025-01-22)
 
 
