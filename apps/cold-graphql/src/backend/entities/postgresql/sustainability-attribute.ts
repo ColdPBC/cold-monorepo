@@ -64,7 +64,7 @@ export class SustainabilityAttribute {
 	@Property({ type: 'text', nullable: true })
 	logoUrl?: string;
 
-	@ManyToOne({ entity: () => MaterialClassification, ref: true, nullable: true })
+	@ManyToOne({ entity: () => MaterialClassification, ref: true, nullable: true, index: 'sustainability_attributes_material_classification_id_idx1' })
 	materialClassification?: Ref<MaterialClassification>;
 
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'sustainabilityAttribute' })

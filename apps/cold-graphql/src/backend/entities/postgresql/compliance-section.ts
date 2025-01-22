@@ -37,7 +37,7 @@ export class ComplianceSection {
 	@Property({ type: 'datetime', length: 3, nullable: true })
 	updatedAt?: Date;
 
-	@ManyToOne({ entity: () => ComplianceSectionGroup, ref: true })
+	@ManyToOne({ entity: () => ComplianceSectionGroup, ref: true, index: 'compliance_sections_compliance_section_group_id_idx1' })
 	complianceSectionGroup!: Ref<ComplianceSectionGroup>;
 
 	@Property({ type: 'integer' })

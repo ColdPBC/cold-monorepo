@@ -64,7 +64,7 @@ export class ComplianceQuestion {
 	@Property({ type: 'datetime', length: 3, nullable: true })
 	updatedAt?: Date;
 
-	@ManyToOne({ entity: () => ComplianceSection, ref: true })
+	@ManyToOne({ entity: () => ComplianceSection, ref: true, index: 'compliance_questions_compliance_section_id_idx1' })
 	complianceSection!: Ref<ComplianceSection>;
 
 	@Property({ type: 'text', nullable: true })

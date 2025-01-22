@@ -1,7 +1,7 @@
 import { SurveyStatusHooks } from '../hooks/survey-status.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Entity, Enum, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { Entity, Enum, Index, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { Organization } from './organization';
 import { SurveyDatum } from './survey-datum';
 import { SurveyDefinition } from './survey-definition';
@@ -27,13 +27,14 @@ export class SurveyStatus {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
-	@ManyToOne({ entity: () => SurveyDefinition, ref: true, fieldName: 'survey_id' })
+	@ManyToOne({ entity: () => SurveyDefinition, ref: true, fieldName: 'survey_id', index: 'survey_status_survey_id_idx1' })
 	surveyDefinition!: Ref<SurveyDefinition>;
 
+	@Index({ name: 'survey_status_survey_name_idx1' })
 	@Property({ type: 'text' })
 	surveyName!: string;
 
-	@ManyToOne({ entity: () => SurveyDatum, ref: true, fieldName: 'survey_data_id' })
+	@ManyToOne({ entity: () => SurveyDatum, ref: true, fieldName: 'survey_data_id', index: 'survey_status_survey_data_id_idx1' })
 	surveyDatum!: Ref<SurveyDatum>;
 
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'survey_status_organization_id_idx' })

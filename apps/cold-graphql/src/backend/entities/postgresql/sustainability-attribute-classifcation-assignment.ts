@@ -21,7 +21,7 @@ export class SustainabilityAttributeClassifcationAssignment {
 	@PrimaryKey({ type: 'integer' })
 	id!: number;
 
-	@ManyToOne({ entity: () => Organization, ref: true })
+	@ManyToOne({ entity: () => Organization, ref: true, index: 'classification_organization_id_idx1' })
 	organization!: Ref<Organization>;
 
 	@Property({ type: 'datetime', length: 3 })
@@ -33,10 +33,10 @@ export class SustainabilityAttributeClassifcationAssignment {
 	@Property({ type: 'json' })
 	metadata!: Record<string, unknown>;
 
-	@ManyToOne({ entity: () => SustainabilityAttribute, ref: true })
+	@ManyToOne({ entity: () => SustainabilityAttribute, ref: true, index: 'classification_assignment_sustainability_attribute_id_idx1' })
 	sustainabilityAttribute!: Ref<SustainabilityAttribute>;
 
-	@ManyToOne({ entity: () => MaterialClassification, ref: true })
+	@ManyToOne({ entity: () => MaterialClassification, ref: true, index: 'classification_assignment_material_classification_id_idx1' })
 	materialClassification!: Ref<MaterialClassification>;
 
 	@Hook(HookRegister.BEFORE_CREATE)

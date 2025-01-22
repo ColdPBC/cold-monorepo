@@ -122,6 +122,8 @@ model component_definitions {
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
   updated_at  DateTime                   @updatedAt
+
+	@@index([name], map: "component_definitions_name_idx1")
 }
 
 /// @namespace Policies
@@ -188,6 +190,8 @@ model survey_definitions {
   definition    Json
   survey_data   survey_data[]
   survey_status survey_status[]
+
+	@@index([name], map: "survey_definitions_name_idx1")
 }
 
 /// @namespace Surveys
@@ -217,6 +221,7 @@ model survey_data {
   @@unique([organization_id, survey_definition_id], name: "orgSurveyKey")
   @@index([survey_definition_id])
   @@index([survey_definition_id], map: "survey_data_survey_definition_id_idx1")
+	@@index([organization_id], map: "survey_data_organization_id_idx1")
 }
 
 /// @namespace Survey Status
@@ -238,6 +243,9 @@ model survey_status {
 
   @@index([organization_id])
   @@index([organization_id], map: "survey_status_organization_id_idx1")
+	@@index([survey_id], map: "survey_status_survey_id_idx1")
+	@@index([survey_data_id], map: "survey_status_survey_data_id_idx1")
+	@@index([survey_name], map: "survey_status_survey_name_idx1")
 }
 
 /// @namespace Categories
@@ -284,6 +292,9 @@ model category_data {
   updated_at             DateTime             @updatedAt
   category_definition    category_definitions @relation(fields: [category_definition_id], references: [id], onDelete: Cascade)
   organizations          organizations        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+	@@index([organization_id], map: "category_data_organization_id_idx1")
+	@@index([category_definition_id], map: "category_data_category_definition_id_idx1")
 }
 
 /// @namespace Organizations
@@ -335,6 +346,8 @@ model organizations {
   material_suppliers                                material_suppliers[]
   product_materials                                 product_materials[]
   sustainability_attribute_classifcation_assignment sustainability_attribute_classifcation_assignment[]
+
+	@@index([name], map: "organizations_name_idx1")
 }
 
 /// @namespace Organization_Facilities
@@ -603,6 +616,7 @@ model facility_footprints {
   organization organizations @relation(fields: [organization_id], references: [id])
 
   @@unique([facility_id, type, value], name: "facilityFootprintKey")
+	@@unique([facility_id, type, value], map: "facility_footprints_facility_id_type_value_idx1")
 }
 
 model sustainability_attributes {
@@ -626,6 +640,7 @@ model sustainability_attributes {
   @@index([organization_id], map: "sustainability_attributes_organization_id_idx1")
   @@index([level], map: "sustainability_attributes_level_idx1")
   @@index([type], map: "sustainability_attributes_type_idx1")
+	@@index([material_classification_id], map: "sustainability_attributes_material_classification_id_idx1")
 }
 
 model attribute_assurances {
@@ -690,6 +705,7 @@ model products {
   @@index([brand_product_sku], map: "brand_product_sku_idx1")
   @@index([supplier_product_id], map: "supplier_product_id_idx1")
   @@index([organization_id], map: "products_organization_id_idx1")
+	@@index([supplier_id], map: "products_supplier_id_idx1")
 	@@index([name], map: "products_name_idx1")
 	@@index([plm_id], map: "products_plm_id_idx1")
 }
@@ -732,6 +748,10 @@ model sustainability_attribute_classifcation_assignment {
   sustainability_attribute sustainability_attributes @relation(fields: [sustainability_attribute_id], references: [id], onDelete: Cascade)
   material_classification  material_classification   @relation(fields: [material_classification_id], references: [id], onDelete: Cascade)
   organization             organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+	@@index([organization_id], map: "classification_organization_id_idx1")
+	@@index([sustainability_attribute_id], map: "classification_assignment_sustainability_attribute_id_idx1")
+	@@index([material_classification_id], map: "classification_assignment_material_classification_id_idx1")
 }
 
 model materials {
@@ -762,6 +782,7 @@ model materials {
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "materials_organization_id_idx1")
+	@@index([material_classification_id], map: "materials_material_classification_id_idx1")
 	@@index([name], map: "materials_name_idx1")
 }
 
@@ -832,6 +853,7 @@ model organization_compliance {
 
   @@unique([organization_id, compliance_definition_name], name: "orgIdCompNameKey")
   @@index([compliance_definition_id], map: "organization_compliance_compliance_definition_id_idx1")
+	@@index([organization_id], map: "organization_compliance_organization_id_idx1")
 }
 
 model compliance_definitions {
@@ -898,6 +920,7 @@ model compliance_sections {
   @@unique([compliance_definition_name, key], name: "compDefNameSectionKey")
   @@index([compliance_definition_id], map: "compliance_sections_compliance_definition_id_idx1")
   @@index([compliance_section_dependency_chain_id], map: "compliance_sections_compliance_section_dependency_chain_id_idx1")
+	@@index([compliance_section_group_id], map: "compliance_sections_compliance_section_group_id_idx1")
 }
 
 model compliance_questions {
@@ -935,6 +958,7 @@ model compliance_questions {
   @@unique([compliance_section_id, key], name: "compSecKey")
   @@index([compliance_definition_id], map: "compliance_questions_compliance_definition_id_idx1")
   @@index([compliance_question_dependency_chain_id], map: "compliance_questions_compliance_question_dependency_chain__idx1")
+	@@index([compliance_section_id], map: "compliance_questions_compliance_section_id_idx1")
 }
 
 model compliance_section_dependency_chains {
@@ -1069,6 +1093,7 @@ model organization_compliance_responses {
 
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
   @@index([compliance_question_id], map: "organization_compliance_responses_compliance_question_id_idx1")
+	@@index([organization_compliance_id], map: "compliance_responses_organization_compliance_id_idx1")
 }
 
 model organization_compliance_ai_responses {
@@ -1093,6 +1118,7 @@ model organization_compliance_ai_responses {
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
   @@index([compliance_question_id], map: "organization_compliance_ai_response_compliance_question_id_idx1")
   @@index([organization_id], map: "organization_compliance_ai_responses_organization_id_idx1")
+	@@index([organization_compliance_id], map: "organization_ai_responses_organization_compliance_id_idx1")
 }
 
 model organization_compliance_ai_response_files {
@@ -1113,6 +1139,7 @@ model organization_compliance_ai_response_files {
   @@index([organization_compliance_ai_response_id], map: "organization_compliance_ai_re_organization_compliance_ai_r_idx1")
   @@index([organization_files_id], map: "organization_compliance_ai_response__organization_files_id_idx1")
   @@index([organization_id], map: "organization_compliance_ai_response_files_organization_id_idx1")
+	@@index([organization_compliance_id], map: "organization_compliance_id_idx1")
 }
 
 model climatiq_actvities {

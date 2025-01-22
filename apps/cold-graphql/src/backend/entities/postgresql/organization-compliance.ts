@@ -41,7 +41,7 @@ export class OrganizationCompliance {
 	@Property({ type: 'datetime', length: 3, nullable: true })
 	updatedAt?: Date;
 
-	@ManyToOne({ entity: () => Organization, ref: true })
+	@ManyToOne({ entity: () => Organization, ref: true, index: 'organization_compliance_organization_id_idx1' })
 	organization!: Ref<Organization>;
 
 	@Property({ type: 'boolean', default: false })

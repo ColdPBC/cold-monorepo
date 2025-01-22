@@ -1,7 +1,7 @@
 import { OrganizationHooks } from '../hooks/organization.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Collection, Entity, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Collection, Entity, Index, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Action } from './action';
 import { AttributeAssurance } from './attribute-assurance';
 import { CategoryDatum } from './category-datum';
@@ -39,6 +39,7 @@ export class Organization {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
+	@Index({ name: 'organizations_name_idx1' })
 	@Unique({ name: 'organizations_name_key' })
 	@Property({ type: 'text' })
 	name!: string;

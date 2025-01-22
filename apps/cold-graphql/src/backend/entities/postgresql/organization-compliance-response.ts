@@ -29,7 +29,7 @@ export class OrganizationComplianceResponse {
 	@ManyToOne({ entity: () => ComplianceQuestion, ref: true, index: 'organization_compliance_responses_compliance_question_id_idx' })
 	complianceQuestion!: Ref<ComplianceQuestion>;
 
-	@ManyToOne({ entity: () => OrganizationCompliance, ref: true })
+	@ManyToOne({ entity: () => OrganizationCompliance, ref: true, index: 'compliance_responses_organization_compliance_id_idx1' })
 	organizationCompliance!: Ref<OrganizationCompliance>;
 
 	@Property({ type: 'json', nullable: true })

@@ -1,7 +1,7 @@
 import { ComponentDefinitionHooks } from '../hooks/component-definition.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Entity, Enum, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Entity, Enum, Index, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { read_only_acl, OrgContext } from '../../libs/acls/acl_policies';
@@ -28,6 +28,7 @@ export class ComponentDefinition {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
+	@Index({ name: 'component_definitions_name_idx1' })
 	@Unique({ name: 'component_definitions_name_key' })
 	@Property({ type: 'text' })
 	name!: string;

@@ -34,7 +34,7 @@ export class OrganizationComplianceAiResponseFile {
 	@ManyToOne({ entity: () => OrganizationComplianceAiResponse, ref: true, index: 'organization_compliance_ai_re_organization_compliance_ai_r_idx1' })
 	organizationComplianceAiResponse!: Ref<OrganizationComplianceAiResponse>;
 
-	@ManyToOne({ entity: () => OrganizationCompliance, ref: true })
+	@ManyToOne({ entity: () => OrganizationCompliance, ref: true, index: 'organization_compliance_id_idx1' })
 	organizationCompliance!: Ref<OrganizationCompliance>;
 
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'organization_compliance_ai_response_files_organization_id_idx' })

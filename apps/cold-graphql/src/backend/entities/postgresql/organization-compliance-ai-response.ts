@@ -40,7 +40,7 @@ export class OrganizationComplianceAiResponse {
 	@ManyToOne({ entity: () => ComplianceQuestion, ref: true, index: 'organization_compliance_ai_response_compliance_question_id_idx1' })
 	complianceQuestion!: Ref<ComplianceQuestion>;
 
-	@ManyToOne({ entity: () => OrganizationCompliance, ref: true })
+	@ManyToOne({ entity: () => OrganizationCompliance, ref: true, index: 'organization_ai_responses_organization_compliance_id_idx1' })
 	organizationCompliance!: Ref<OrganizationCompliance>;
 
 	@ManyToOne({ entity: () => Organization, ref: true, index: 'organization_compliance_ai_responses_organization_id_idx' })

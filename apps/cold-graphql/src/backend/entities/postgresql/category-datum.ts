@@ -21,10 +21,10 @@ export class CategoryDatum {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
-	@ManyToOne({ entity: () => CategoryDefinition, ref: true })
+	@ManyToOne({ entity: () => CategoryDefinition, ref: true, index: 'category_data_category_definition_id_idx1' })
 	categoryDefinition!: Ref<CategoryDefinition>;
 
-	@ManyToOne({ entity: () => Organization, ref: true })
+	@ManyToOne({ entity: () => Organization, ref: true, index: 'category_data_organization_id_idx1' })
 	organization!: Ref<Organization>;
 
 	@Property({ type: 'json' })

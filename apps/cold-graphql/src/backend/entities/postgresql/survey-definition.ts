@@ -1,7 +1,7 @@
 import { SurveyDefinitionHooks } from '../hooks/survey-definition.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Collection, Entity, Enum, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Collection, Entity, Enum, Index, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { SurveyDatum } from './survey-datum';
 import { SurveyStatus } from './survey-status';
 
@@ -29,6 +29,7 @@ export class SurveyDefinition {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
+	@Index({ name: 'survey_definitions_name_idx1' })
 	@Unique({ name: 'survey_definitions_name_key' })
 	@Property({ type: 'text' })
 	name!: string;

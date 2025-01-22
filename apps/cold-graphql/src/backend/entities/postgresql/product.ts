@@ -47,7 +47,7 @@ export class Product {
 	@Property({ type: 'text', nullable: true })
 	styleCode?: string;
 
-	@ManyToOne({ entity: () => OrganizationFacility, ref: true, fieldName: 'supplier_id', nullable: true })
+	@ManyToOne({ entity: () => OrganizationFacility, ref: true, fieldName: 'supplier_id', nullable: true, index: 'products_supplier_id_idx1' })
 	organizationFacility?: Ref<OrganizationFacility>;
 
 	@Property({ type: 'text', nullable: true })
@@ -86,7 +86,7 @@ export class Product {
 	@Property({ type: 'text', nullable: true })
 	plmId?: string;
 
-	@Property({ type: 'integer', nullable: true })
+	@Property({ type: 'double', nullable: true })
 	weight?: number;
 
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'product' })

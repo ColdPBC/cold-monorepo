@@ -22,7 +22,7 @@ export class SurveyDatum {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
-	@ManyToOne({ entity: () => Organization, ref: true })
+	@ManyToOne({ entity: () => Organization, ref: true, index: 'survey_data_organization_id_idx1' })
 	organization!: Ref<Organization>;
 
 	@Property({ type: 'json' })
