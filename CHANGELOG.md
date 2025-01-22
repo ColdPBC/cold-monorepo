@@ -1,3 +1,19 @@
+# [1.522.0](https://github.com/coldPBC/cold-monorepo/compare/v1.521.2...v1.522.0) (2025-01-22)
+
+
+### Bug Fixes
+
+* add missing indexes to improve query performance ([b8f3a30](https://github.com/coldPBC/cold-monorepo/commit/b8f3a3021e4a46b89e89e3e6ab547387b7e33c8a))
+
+
+### Features
+
+* Refactor sidebar and update navigation structure ([fb3ffd6](https://github.com/coldPBC/cold-monorepo/commit/fb3ffd6dbdc768d14e0d03099af563926ba84294))
+* Refactor sidebar logic to include feature flag check. ([ae92193](https://github.com/coldPBC/cold-monorepo/commit/ae921933a46457ea262ae6d13427bc540eaf8d4e))
+* Remove "Assessments" item from the sidebar. ([545269a](https://github.com/coldPBC/cold-monorepo/commit/545269a7007db202768246843db320ab39a96f06))
+* Rename routes and navigation paths for consistency ([ef254da](https://github.com/coldPBC/cold-monorepo/commit/ef254da51eafa5838873bcb3d133462e043fae16))
+* Update seed routes and reorder 'My Data' items ([d4a0c42](https://github.com/coldPBC/cold-monorepo/commit/d4a0c4240be28e8259730799b6da9ba46a8d6dc1))
+
 ## [1.521.2](https://github.com/coldPBC/cold-monorepo/compare/v1.521.1...v1.521.2) (2025-01-22)
 
 
