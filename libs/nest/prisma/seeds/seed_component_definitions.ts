@@ -120,7 +120,7 @@ const seeds: Array<{
                 name: 'ColdSustainabilityIcon',
               },
               label: 'Sustainability Claims',
-              route: '/sustainability',
+              route: '/sustainability_claims',
             }
           ]
         },
@@ -148,7 +148,7 @@ const seeds: Array<{
                 name: 'ColdQuestionnaireIcon',
               },
               label: 'Assessments',
-              route: '/questionnaires',
+              route: '/assessments',
             }
           ]
         },
@@ -157,20 +157,20 @@ const seeds: Array<{
           label: 'My Data',
           items: [
             {
-              key: 'products_key',
-              icon: {
-                name: 'ColdProductsNavIcon',
-              },
-              label: 'Products',
-              route: '/products',
-            },
-            {
               key: 'materials_key',
               icon: {
                 name: 'ColdMaterialsNavIcon',
               },
               label: 'Materials',
               route: '/materials',
+            },
+            {
+              key: 'products_key',
+              icon: {
+                name: 'ColdProductsNavIcon',
+              },
+              label: 'Products',
+              route: '/products',
             },
             {
               key: 'suppliers_key',
