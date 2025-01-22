@@ -7,6 +7,8 @@ interface DropdownInputForEntityEditProps<T> {
 	options: { id: string; name: string }[];
 	setEntityState: (state: T) => void;
 	entityState: T;
+  setError: (error?: string) => void;
+  error?: string;
   originalEntity: T;
   allowNone?: boolean;
 	required?: boolean;
@@ -18,6 +20,8 @@ export const DropdownInputForEntityEdit = <T,>({
 	options,
 	setEntityState,
 	entityState,
+  error,
+  setError,
   originalEntity,
   allowNone = false,
 	required = false
@@ -63,6 +67,9 @@ export const DropdownInputForEntityEdit = <T,>({
             }) ?? dropdownOptions[0]}
             name={`${String(fieldName)}-select`}
             onChange={(selectedOption) => {
+              if (required && selectedOption.value === '') {
+                setError(`${label} is required`)
+              }
               if (entityState) {
                 setEntityState({
                   ...entityState,
@@ -70,7 +77,17 @@ export const DropdownInputForEntityEdit = <T,>({
                 });
               }
             }}
+            buttonClassName={error ? 'border-red-100' : ''}
           />
+          {required && (
+            error ? (
+              <div className="text-red-100 text-eyebrow mt-[8px]">
+                {error}
+              </div>
+            ) : (
+              <div className={'h-5'}/>
+            )
+          )}
         </div>
 			</div>
 		</div>
