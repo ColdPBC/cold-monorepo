@@ -11,7 +11,15 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { MaterialGraphQL, SuppliersWithAssurances, ToastMessage } from '@coldpbc/interfaces';
 import { get } from 'lodash';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR, useUpdateEntityAssociations } from '@coldpbc/hooks';
+import {
+  useAddToastMessage,
+  useAuth0Wrapper,
+  useColdContext,
+  useEntityData,
+  useGraphQLMutation,
+  useGraphQLSWR,
+  useUpdateEntityAssociations,
+} from '@coldpbc/hooks';
 import { HexColors } from '@coldpbc/themes';
 import { ApolloQueryResult } from '@apollo/client';
 import { KeyedMutator } from 'swr';
@@ -65,12 +73,16 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 	const [isLoading, setIsLoading] = useState(false);
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [editedMaterial, setEditedMaterial] = useState<EditableMaterial>(convertMaterialGraphQLObjectToEditableMaterial(material));
+  const [errors, setErrors] = useState<Partial<Record<keyof EditableMaterial, string>>>({});
+  const existingMaterials = useEntityData(EntityLevel.MATERIAL, orgId);
+  const preexistingMaterialNames = existingMaterials.filter(m => m.name !== material.name).map(m => m.name)
 
 	useEffect(() => {
-		if (editedMaterial) {
-			setIsDisabled(!isMaterialEdited(convertMaterialGraphQLObjectToEditableMaterial(material), editedMaterial));
-		}
-	}, [material, editedMaterial]);
+    const hasErrors = Object.values(errors).some(error => error !== null && error !== undefined);
+    const isEdited = editedMaterial && isMaterialEdited(convertMaterialGraphQLObjectToEditableMaterial(material), editedMaterial);
+
+    setIsDisabled(hasErrors || !isEdited);
+	}, [errors, material, editedMaterial]);
 
 	const materialClassificationsQuery = useGraphQLSWR<{
 		materialClassifications: { id: string; name: string }[];
@@ -205,11 +217,16 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 		},
 	];
 
-	const inputProps = {
-		setEntityState: setEditedMaterial,
+	const inputProps = (fieldName: keyof EditableMaterial) => ({
+		fieldName: fieldName,
+    setEntityState: setEditedMaterial,
 		entityState: editedMaterial,
     originalEntity: convertMaterialGraphQLObjectToEditableMaterial(material),
-	};
+    error: errors[fieldName],
+    setError: (error?: string) => {
+      setErrors({...errors, [fieldName]: error})
+    },
+	});
 
   const classificationLabel = (
     <div className={'flex items-center justify-start gap-1'}>
@@ -222,14 +239,14 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 
 	return (
 		<Card title={'Details'} ctas={ctas} className="w-[406px] min-w-[406px] h-fit" overflowHidden={false}>
-			<TextInputForEntityEdit<EditableMaterial> fieldName={'name'} label={'Name'} required={true} {...inputProps} />
-			<TextInputForEntityEdit<EditableMaterial> fieldName={'description'} label={'Description'} {...inputProps} />
-			<DropdownInputForEntityEdit<EditableMaterial> fieldName={'organizationFacility'} label={'Tier 2 Supplier'} options={suppliers} allowNone={true} {...inputProps} />
-			<DropdownInputForEntityEdit<EditableMaterial> fieldName={'materialClassification'} label={classificationLabel} options={materialClassifications} {...inputProps} />
-			<TextInputForEntityEdit<EditableMaterial> fieldName={'materialCategory'} label={'Category'} {...inputProps} />
-			<TextInputForEntityEdit<EditableMaterial> fieldName={'materialSubcategory'} label={'Sub-Category'} {...inputProps} />
-			<TextInputForEntityEdit<EditableMaterial> fieldName={'brandMaterialId'} label={'Brand Material ID'} {...inputProps} />
-			<TextInputForEntityEdit<EditableMaterial> fieldName={'supplierMaterialId'} label={'Supplier Material ID'} {...inputProps} />
+      <TextInputForEntityEdit<EditableMaterial> {...inputProps('name')} label={'Name'} required={true} preexistingValues={preexistingMaterialNames} />
+			<TextInputForEntityEdit<EditableMaterial> {...inputProps('description')} label={'Description'} />
+			<DropdownInputForEntityEdit<EditableMaterial> {...inputProps('organizationFacility')} label={'Tier 2 Supplier'} options={suppliers} allowNone={true}  />
+			<DropdownInputForEntityEdit<EditableMaterial> {...inputProps('materialClassification')} label={classificationLabel} options={materialClassifications} />
+			<TextInputForEntityEdit<EditableMaterial> {...inputProps('materialCategory')} label={'Category'} />
+			<TextInputForEntityEdit<EditableMaterial> {...inputProps('materialSubcategory')} label={'Sub-Category'} />
+			<TextInputForEntityEdit<EditableMaterial> {...inputProps('brandMaterialId')} label={'Brand Material ID'} />
+			<TextInputForEntityEdit<EditableMaterial> {...inputProps('supplierMaterialId')} label={'Supplier Material ID'} />
 		</Card>
 	);
 };
