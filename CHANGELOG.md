@@ -1,3 +1,10 @@
+## [1.521.1](https://github.com/coldPBC/cold-monorepo/compare/v1.521.0...v1.521.1) (2025-01-22)
+
+
+### Bug Fixes
+
+* export enums module from nest library ([c65d9ef](https://github.com/coldPBC/cold-monorepo/commit/c65d9ef7a39108df86a4ccb08a608ee086e10915))
+
 # [1.521.0](https://github.com/coldPBC/cold-monorepo/compare/v1.520.0...v1.521.0) (2025-01-21)
 
 
