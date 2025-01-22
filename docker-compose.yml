@@ -15,6 +15,10 @@ services:
       - "--entryPoints.web.address=:80"
       - "--entryPoints.websecure.address=:443"
       - "--entryPoints.tcp.address=:5432"
+      - "--entryPoints.tcp.address=:5672"
+      - "--entryPoints.tcp.address=:15672"
+      - "--entryPoints.tcp.address=:6379"
+      - "--entryPoints.udp.address=:6379"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.proxy.rule=Host(`www.coldclimate.local`)"
@@ -33,6 +37,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   rabbit:
     labels:
+      - "traefik.tcp.routers.rabbit.rule=Host(`rabbit.coldclimate.local`)"
+      - "traefik.http.routers.rabbit.rule=Host(`rabbit.coldclimate.local`)"
       - "traefik.tcp.services.rabbit.loadbalancer.server.port=5672"
       - "traefik.http.services.rabbit.loadbalancer.server.port=15672"
     ports:
@@ -46,9 +52,9 @@ services:
     container_name: cold-rabbit
   cache:
     labels:
-      - "traefik.http.routers.cache.rule=Host(`cache.coldclimate.local`)"
-      - "traefik.tcp.services.cache.loadbalancer.server.port=6379"
-      - "traefik.udp.services.cache.loadbalancer.server.port=6379"
+      - "traefik.tcp.routers.redis.rule=Host(`cache.coldclimate.local`)"
+      - "traefik.tcp.services.redis.loadbalancer.server.port=6379"
+      - "traefik.udp.services.redis.loadbalancer.server.port=6379"
     image: redis:latest
     container_name: cold-cache
     restart: always
@@ -63,9 +69,9 @@ services:
     container_name: cold-postgres
     image: postgres:14-alpine
     labels:
-      - "traefik.http.routers.cache.rule=Host(`db.coldclimate.local`)"
-      - "traefik.tcp.services.cache.loadbalancer.server.port=5432"
-      - "traefik.udp.services.cache.loadbalancer.server.port=5432"
+      - "traefik.http.routers.postgres.rule=Host(`db.coldclimate.local`)"
+      - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
+      - "traefik.udp.services.postgres.loadbalancer.server.port=5432"
     depends_on:
       - proxy
     networks:
@@ -90,8 +96,8 @@ services:
     container_name: cold-graphql
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`graphql.coldclimate.local`)"
-      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.routers.graphql.rule=Host(`graphql.coldclimate.local`)"
+      - "traefik.http.routers.graphql.entrypoints=web"
     restart: always
     networks:
       - cold
