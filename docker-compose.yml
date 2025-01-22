@@ -18,14 +18,17 @@ services:
       - "--entryPoints.tcp.address=:5672"
       - "--entryPoints.tcp.address=:15672"
       - "--entryPoints.tcp.address=:6379"
-      - "--entryPoints.udp.address=:6379"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.proxy.rule=Host(`www.coldclimate.local`)"
+      - "traefik.http.routers.proxy.rule=Host(`proxy.coldclimate.local`)"
       - "traefik.http.routers.proxy.entrypoints=web"
+      - "traefik.http.services.proxy.loadbalancer.server.port=8080"
       - "traefik.entryPoints.web.address=:80"
       - "traefik.entryPoints.websecure.address=:443"
       - "traefik.entryPoints.tcp.address=:5432"
+      - "traefik.entryPoints.tcp.address=:5672"
+      - "traefik.entryPoints.tcp.address=:15672"
+      - "traefik.entryPoints.tcp.address=:6379"
     ports:
       - "80:80"
       - "443:443"
@@ -37,10 +40,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   rabbit:
     labels:
-      - "traefik.tcp.routers.rabbit.rule=Host(`rabbit.coldclimate.local`)"
-      - "traefik.http.routers.rabbit.rule=Host(`rabbit.coldclimate.local`)"
+      - "traefik.tcp.routers.rabbit.rule=HostSNI(`rabbit.coldclimate.local`)"
+      - "traefik.tcp.routers.rabbit.entrypoints=tcp"
+      - "traefik.tcp.routers.rabbit.tls=true"
       - "traefik.tcp.services.rabbit.loadbalancer.server.port=5672"
-      - "traefik.http.services.rabbit.loadbalancer.server.port=15672"
+      - "traefik.http.routers.rabbit-http.rule=Host(`rabbit.coldclimate.local`)"
+      - "traefik.http.routers.rabbit-http.entrypoints=web"
+      - "traefik.http.services.rabbit-http.loadbalancer.server.port=15672"
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -52,9 +58,10 @@ services:
     container_name: cold-rabbit
   cache:
     labels:
-      - "traefik.tcp.routers.redis.rule=Host(`cache.coldclimate.local`)"
+      - "traefik.tcp.routers.redis.rule=HostSNI(`cache.coldclimate.local`)"
+      - "traefik.tcp.routers.redis.entrypoints=tcp"
+      - "traefik.tcp.routers.redis.tls=true"
       - "traefik.tcp.services.redis.loadbalancer.server.port=6379"
-      - "traefik.udp.services.redis.loadbalancer.server.port=6379"
     image: redis:latest
     container_name: cold-cache
     restart: always
@@ -146,7 +153,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`api.coldclimate.local`)"
       - "traefik.http.routers.api.entrypoints=web"
-      - "traefik.entryPoints.web.address=:80"
+      - "traefik.http.services.api.loadbalancer.server.port=7001"
     restart: always
     networks:
       - cold

@@ -10672,6 +10672,7 @@ export type Product = {
   organizationFacility?: Maybe<OrganizationFacility>;
   organizationFacility_aggregate?: Maybe<AggregationResult>;
   organization_aggregate?: Maybe<AggregationResult>;
+  plmId?: Maybe<Scalars['String']['output']>;
   productCategory?: Maybe<Scalars['String']['output']>;
   productMaterials: Array<ProductMaterial>;
   productMaterials_aggregate?: Maybe<AggregationResult>;
@@ -10681,6 +10682,7 @@ export type Product = {
   supplierProductId?: Maybe<Scalars['String']['output']>;
   upcCode?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['ISOString']['output']>;
+  weight?: Maybe<Scalars['Float']['output']>;
 };
 
 
@@ -10738,6 +10740,7 @@ export type ProductCreateOrUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   organizationFacility?: InputMaybe<OrganizationFacilityCreateOrUpdateInput>;
+  plmId?: InputMaybe<Scalars['String']['input']>;
   productCategory?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   productSubcategory?: InputMaybe<Scalars['String']['input']>;
@@ -10746,6 +10749,7 @@ export type ProductCreateOrUpdateInput = {
   supplierProductId?: InputMaybe<Scalars['String']['input']>;
   upcCode?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 /** Data needed to create Products. */
@@ -10762,6 +10766,7 @@ export type ProductInsertInput = {
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   organizationFacility?: InputMaybe<OrganizationFacilityCreateOrUpdateInput>;
+  plmId?: InputMaybe<Scalars['String']['input']>;
   productCategory?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   productSubcategory?: InputMaybe<Scalars['String']['input']>;
@@ -10770,6 +10775,7 @@ export type ProductInsertInput = {
   supplierProductId?: InputMaybe<Scalars['String']['input']>;
   upcCode?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type ProductMaterial = {
@@ -10784,6 +10790,7 @@ export type ProductMaterial = {
   organization: Organization;
   organization_aggregate?: Maybe<AggregationResult>;
   placement?: Maybe<Scalars['String']['output']>;
+  plmId?: Maybe<Scalars['String']['output']>;
   product: Product;
   product_aggregate?: Maybe<AggregationResult>;
   unitOfMeasure?: Maybe<Scalars['String']['output']>;
@@ -10832,6 +10839,7 @@ export type ProductMaterialCreateOrUpdateInput = {
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   placement?: InputMaybe<Scalars['String']['input']>;
+  plmId?: InputMaybe<Scalars['String']['input']>;
   product?: InputMaybe<ProductCreateOrUpdateInput>;
   unitOfMeasure?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -10848,6 +10856,7 @@ export type ProductMaterialInsertInput = {
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   placement?: InputMaybe<Scalars['String']['input']>;
+  plmId?: InputMaybe<Scalars['String']['input']>;
   product?: InputMaybe<ProductCreateOrUpdateInput>;
   unitOfMeasure?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -10865,6 +10874,7 @@ export type ProductMaterialUpdateInput = {
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   placement?: InputMaybe<Scalars['String']['input']>;
+  plmId?: InputMaybe<Scalars['String']['input']>;
   product?: InputMaybe<ProductCreateOrUpdateInput>;
   unitOfMeasure?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -10937,6 +10947,18 @@ export type ProductMaterialsListFilter = {
   placement_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   placement_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   placement_null?: InputMaybe<Scalars['Boolean']['input']>;
+  plmId?: InputMaybe<Scalars['String']['input']>;
+  plmId_gt?: InputMaybe<Scalars['String']['input']>;
+  plmId_gte?: InputMaybe<Scalars['String']['input']>;
+  plmId_ilike?: InputMaybe<Scalars['String']['input']>;
+  plmId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  plmId_like?: InputMaybe<Scalars['String']['input']>;
+  plmId_lt?: InputMaybe<Scalars['String']['input']>;
+  plmId_lte?: InputMaybe<Scalars['String']['input']>;
+  plmId_ne?: InputMaybe<Scalars['String']['input']>;
+  plmId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  plmId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  plmId_null?: InputMaybe<Scalars['Boolean']['input']>;
   product?: InputMaybe<ProductsListFilter>;
   unitOfMeasure?: InputMaybe<Scalars['String']['input']>;
   unitOfMeasure_gt?: InputMaybe<Scalars['String']['input']>;
@@ -10981,6 +11003,7 @@ export type ProductMaterialsOrderByInput = {
   materialSupplierId?: InputMaybe<Sort>;
   metadata?: InputMaybe<Sort>;
   placement?: InputMaybe<Sort>;
+  plmId?: InputMaybe<Sort>;
   unitOfMeasure?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
   weight?: InputMaybe<Sort>;
@@ -11009,6 +11032,7 @@ export type ProductUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
   organizationFacility?: InputMaybe<OrganizationFacilityCreateOrUpdateInput>;
+  plmId?: InputMaybe<Scalars['String']['input']>;
   productCategory?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   productSubcategory?: InputMaybe<Scalars['String']['input']>;
@@ -11017,6 +11041,7 @@ export type ProductUpdateInput = {
   supplierProductId?: InputMaybe<Scalars['String']['input']>;
   upcCode?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type ProductsListFilter = {
@@ -11121,6 +11146,18 @@ export type ProductsListFilter = {
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
   organization?: InputMaybe<OrganizationsListFilter>;
   organizationFacility?: InputMaybe<OrganizationFacilitiesListFilter>;
+  plmId?: InputMaybe<Scalars['String']['input']>;
+  plmId_gt?: InputMaybe<Scalars['String']['input']>;
+  plmId_gte?: InputMaybe<Scalars['String']['input']>;
+  plmId_ilike?: InputMaybe<Scalars['String']['input']>;
+  plmId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  plmId_like?: InputMaybe<Scalars['String']['input']>;
+  plmId_lt?: InputMaybe<Scalars['String']['input']>;
+  plmId_lte?: InputMaybe<Scalars['String']['input']>;
+  plmId_ne?: InputMaybe<Scalars['String']['input']>;
+  plmId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  plmId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  plmId_null?: InputMaybe<Scalars['Boolean']['input']>;
   productCategory?: InputMaybe<Scalars['String']['input']>;
   productCategory_gt?: InputMaybe<Scalars['String']['input']>;
   productCategory_gte?: InputMaybe<Scalars['String']['input']>;
@@ -11204,6 +11241,12 @@ export type ProductsListFilter = {
   updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
   updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
+  weight_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  weight_ne?: InputMaybe<Scalars['Float']['input']>;
+  weight_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  weight_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  weight_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type ProductsOrderByInput = {
@@ -11217,6 +11260,7 @@ export type ProductsOrderByInput = {
   id?: InputMaybe<Sort>;
   metadata?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
+  plmId?: InputMaybe<Sort>;
   productCategory?: InputMaybe<Sort>;
   productSubcategory?: InputMaybe<Sort>;
   seasonCode?: InputMaybe<Sort>;
@@ -11224,6 +11268,7 @@ export type ProductsOrderByInput = {
   supplierProductId?: InputMaybe<Sort>;
   upcCode?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
+  weight?: InputMaybe<Sort>;
 };
 
 /** Pagination options for Products. */

@@ -37,7 +37,7 @@ export const addUserToContext = async (userId: string, token: any) => {
 		}
 
 		if (token.coldclimate_claims.roles.includes('cold:admin')) {
-			orgFilter = { name: `cold-climate-${process.env.NODE_ENV}` };
+			orgFilter = { name: `cold-climate-${process.env.NODE_ENV === 'docker' ? 'development' : process.env.NODE_ENV}` };
 		} else {
 			orgFilter = { id: token.coldclimate_claims.org_id };
 		}

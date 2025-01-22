@@ -22,7 +22,7 @@ export const graphweaver = new Graphweaver({
 		instrumentations: [],
 	},
 	apolloServerOptions: {
-		introspection: true, //process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging',
+		introspection: process.env.NODE_ENV !== 'production',
 		hideSchemaDetailsFromClientErrors: false, //process.env.NODE_ENV !== 'development',
 		includeStacktraceInErrorResponses: true, //process.env.NODE_ENV === 'development',
 		logger: new WorkerLogger('GraphWeaver'),
