@@ -6,6 +6,7 @@ import { Card, DetailsItem } from '@coldpbc/components';
 
 interface SupplierDetailsCardProps {
 	supplier: SupplierGraphQL;
+  editSupplier: () => void;
 }
 
 // Unfortunately all these values are nullable or can be empty
@@ -29,11 +30,11 @@ const formatAddress = (
 	return [addressWithZip, country].filter(val => !!val).join(', ');
 };
 
-const _SupplierDetailsCard: React.FC<SupplierDetailsCardProps> = ({ supplier }) => {
+const _SupplierDetailsCard: React.FC<SupplierDetailsCardProps> = ({ supplier, editSupplier }) => {
 	const address = formatAddress(supplier.addressLine1, supplier.addressLine2, supplier.city, supplier.stateProvince, supplier.postalCode, supplier.country);
 
 	return (
-		<Card title={'Details'} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'supplier-details-card'}>
+		<Card title={'Details'} ctas={[{text: 'Edit', action: editSupplier}]} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'supplier-details-card'}>
 			<DetailsItem category={'Name'} value={supplier.name} />
 			<DetailsItem category={'Country'} value={supplier.country} />
 			<DetailsItem category={'Address'} value={address} />

@@ -241,8 +241,8 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 		<Card title={'Details'} ctas={ctas} className="w-[406px] min-w-[406px] h-fit" overflowHidden={false}>
       <TextInputForEntityEdit<EditableMaterial> {...inputProps('name')} label={'Name'} required={true} preexistingValues={preexistingMaterialNames} />
 			<TextInputForEntityEdit<EditableMaterial> {...inputProps('description')} label={'Description'} />
-			<DropdownInputForEntityEdit<EditableMaterial> {...inputProps('organizationFacility')} label={'Tier 2 Supplier'} options={suppliers} allowNone={true}  />
-			<DropdownInputForEntityEdit<EditableMaterial> {...inputProps('materialClassification')} label={classificationLabel} options={materialClassifications} />
+			<DropdownInputForEntityEdit<EditableMaterial> {...inputProps('organizationFacility')} label={'Tier 2 Supplier'} fieldType={'object'} options={suppliers} allowNone={true}  />
+			<DropdownInputForEntityEdit<EditableMaterial> {...inputProps('materialClassification')} label={classificationLabel} fieldType={'object'}  options={materialClassifications} />
 			<TextInputForEntityEdit<EditableMaterial> {...inputProps('materialCategory')} label={'Category'} />
 			<TextInputForEntityEdit<EditableMaterial> {...inputProps('materialSubcategory')} label={'Sub-Category'} />
 			<TextInputForEntityEdit<EditableMaterial> {...inputProps('brandMaterialId')} label={'Brand Material ID'} />

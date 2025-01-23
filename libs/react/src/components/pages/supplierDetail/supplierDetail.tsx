@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   DeleteEntityModal,
+  EditSupplierDetails,
   EditSustainabilityAttributesForEntity, EllipsisMenu,
   ErrorFallback,
   ErrorPage,
@@ -24,6 +25,7 @@ export const _SupplierDetail = () => {
 	const { logBrowser } = useColdContext();
 	const [showUpdateAttributesModal, setShowUpdateAttributesModal] = React.useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = React.useState<boolean>(false);
+  const [editSupplier, setEditSupplier] = React.useState<boolean>(false);
 	const supplierQuery = useGraphQLSWR<{
 		organizationFacility: SupplierGraphQL | null;
 	}>('GET_SUPPLIER', {
@@ -64,7 +66,16 @@ export const _SupplierDetail = () => {
 				/>
 			)}
 			<div className="w-full h-full flex gap-6 items-start mt-4 mb-20">
-				<SupplierDetailsCard supplier={supplier} />
+        {editSupplier ? (
+          <EditSupplierDetails
+            key={supplier.id}
+            supplier={supplier}
+            onClose={() => setEditSupplier(false)}
+            refreshSupplier={supplierQuery.mutate}
+          />
+        ) : (
+          <SupplierDetailsCard supplier={supplier} editSupplier={() => setEditSupplier(true)} />
+        )}
 				<SupplierSustainabilityAttributesCard supplier={supplier} showUpdateAttributesModal={() => setShowUpdateAttributesModal(true)} />
 			</div>
 		</>

@@ -122,6 +122,27 @@ export const ShowDeleteModal: Story = {
     fireEvent.click(deleteButton);
 
   },
+};
 
+export const ShowEdit: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider memoryRouterProps={{
+        initialEntries: [`/products/op_c0y7e5zsg09r0kxxlw2ha9cm`],
+      }}>
+        <Routes>
+          <Route path={'/products/:id'} element={<ProductDetail />} />
+        </Routes>
+      </StoryMockProvider>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
+
+    const editButton = canvas.getByText('Edit');
+    fireEvent.click(editButton);
+  },
 };
 

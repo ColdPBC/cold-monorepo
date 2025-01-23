@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { SupplierDetail } from '@coldpbc/components';
-import { defaultGraphqlMocks, getSupplierGraphQLMock, StoryMockProvider } from '@coldpbc/mocks';
+import { MaterialDetail, SupplierDetail } from '@coldpbc/components';
+import { defaultGraphqlMocks, getMaterialGraphQLMock, getSupplierGraphQLMock, StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
 import {fireEvent, waitForElementToBeRemoved, within} from "@storybook/testing-library";
 
@@ -71,5 +71,28 @@ export const ShowDeleteModal: Story = {
     const deleteButton = await within(menu).findByTestId('supplier-details-menu-Delete Supplier');
     fireEvent.click(deleteButton);
 
+  },
+};
+
+export const ShowEdit: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider
+        memoryRouterProps={{ initialEntries: ['/suppliers/1']}}
+        graphqlMocks={getSupplierGraphQLMock(1)}
+      >
+        <Routes>
+          <Route path={'/suppliers/:id'} element={<SupplierDetail />} />
+        </Routes>
+      </StoryMockProvider>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
+
+    const editButton = canvas.getByText('Edit');
+    fireEvent.click(editButton);
   },
 };

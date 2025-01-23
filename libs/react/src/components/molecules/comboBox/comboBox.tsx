@@ -13,10 +13,11 @@ export interface ComboBoxProps extends SelectProps {
   dropdownDirection?: 'down' | 'up'; // undefined will implicitly default to down
   id?: string;
   buttonClassName?: string;
+  disabled?: boolean;
 }
 
 export const ComboBox = (props: ComboBoxProps) => {
-  const { options, name, label, value, onChange, className, buttonClassName = '', dropdownDirection, id } = props;
+  const { options, name, label, value, onChange, className, buttonClassName = '', dropdownDirection, id, disabled = false } = props;
 
   const [query, setQuery] = useState('')
   const [tempOption, setTempOption] = useState<InputOption>(value)
@@ -54,6 +55,7 @@ export const ComboBox = (props: ComboBoxProps) => {
 			onChange={onValueChange}
 			name={name}
       nullable={true}
+      disabled={disabled}
     >
 			<div className="relative" data-testid={name}>
 				<Combobox.Button

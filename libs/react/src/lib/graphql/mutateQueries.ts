@@ -121,6 +121,14 @@ export const UPDATE_MATERIAL = gql`
   }
 `;
 
+export const UPDATE_SUPPLIER = gql`
+  mutation UpdateSupplier($input: OrganizationFacilityUpdateInput!) {
+    updateOrganizationFacility(input: $input) {
+      id
+    }
+  }
+`;
+
 export const DELETE_MATERIAL = gql`
   mutation DeleteMaterial($filter: DeleteOneFilterInput!) {
     deleteMaterial(filter: $filter)

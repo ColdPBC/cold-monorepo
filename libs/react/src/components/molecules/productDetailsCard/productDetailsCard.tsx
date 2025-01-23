@@ -6,10 +6,11 @@ import { Card, DetailsItem } from '@coldpbc/components';
 
 interface ProductDetailsCardProps {
   product: ProductsQuery;
+  editProduct: () => void;
 }
 
-const _ProductDetailsCard: React.FC<ProductDetailsCardProps> = ({ product }) => (
-  <Card title={'Details'} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'product-details-card'}>
+const _ProductDetailsCard: React.FC<ProductDetailsCardProps> = ({ product, editProduct }) => (
+  <Card title={'Details'}  ctas={[{text: 'Edit', action: editProduct}]} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'product-details-card'}>
 		<DetailsItem category={'Name'} value={product.name} />
 		<DetailsItem category={'Description'} value={product.description} />
     <DetailsItem
