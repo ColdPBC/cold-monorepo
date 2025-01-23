@@ -1,12 +1,6 @@
 import {
   GridColDef,
   GridColumnHeaderParams,
-  GridRenderCellParams,
-  GridToolbarColumnsButton,
-  GridToolbarContainer,
-  GridToolbarExport,
-  GridToolbarQuickFilter,
-  GridTreeNodeWithRender,
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import { IconNames } from '@coldpbc/enums';
@@ -14,14 +8,12 @@ import {
   ColdIcon,
   BubbleList,
   MuiDataGrid,
-  Spinner,
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
 import React, { useEffect, useState } from 'react';
 import {
   EntityWithAttributeAssurances,
-  SuppliersWithAssurances,
-  SustainabilityAttributeAssuranceGraphQL,
+  SuppliersDataGridGraphQL,
 } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
@@ -31,10 +23,10 @@ import { listFilterOperators, listSortComparator, processEntityLevelAssurances }
 export const SuppliersDataGrid = (props: { tier: number }) => {
   const { tier } = props;
   const navigate = useNavigate();
-  const [suppliers, setSuppliers] = useState<SuppliersWithAssurances[]>([]);
+  const [suppliers, setSuppliers] = useState<SuppliersDataGridGraphQL[]>([]);
   const { orgId } = useAuth0Wrapper();
   const suppliersQuery = useGraphQLSWR<{
-    organizationFacilities: SuppliersWithAssurances[];
+    organizationFacilities: SuppliersDataGridGraphQL[];
   }>(orgId ? 'GET_ALL_SUPPLIERS_FOR_ORG' : null, {
     filter: {
       organization: {
@@ -50,7 +42,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
         setSuppliers([]);
       } else {
         const suppliers = get(suppliersQuery.data, 'data.organizationFacilities', []).filter(
-          (supplier: SuppliersWithAssurances) => supplier.supplierTier === tier,
+          (supplier: SuppliersDataGridGraphQL) => supplier.supplierTier === tier,
         )
         setSuppliers(suppliers);
       }
