@@ -55,6 +55,7 @@ export const ColdRoutes = () => {
         // Temporary redirects from old route until we're certain that the seeds are updated to the new sidebar.
         <Route path={'/questionnaires'} element={<Navigate to={'/assessments'} replace={true} />} />
         <Route path={'/sustainability'} element={<Navigate to={'/sustainability_claims'} replace={true} />} />
+        <Route path={'/questionnaire'} element={<Navigate to={'/assessment'} replace={true} />} />
       </>
     );
   };
