@@ -237,6 +237,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 		// Separate the items into top and bottom nav items
 		logBrowser('Sidebar data loaded', 'info', { data, filteredSidebarItems });
 		const topItems: NavbarItem[] = clone(filteredSidebarItems);
+    const orgSelector = getOrgSelector();
     if (ldFlags.showNewSidebarCold1354) {
       return (
         <div
@@ -245,7 +246,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
             'text-tc-primary fixed left-0 top-0 h-[100vh] w-[241px] overflow-auto justify-between flex flex-col items-center ' +
             'bg-bgc-elevated z-20 gap-[32px]'
           }>
-          <div className={'flex flex-col gap-[32px] w-full'}>
+          <div className={'flex flex-col gap-[32px] w-full pb-10'}>
             <div className={'py-[24px] px-[16px]'}>
               {getSidebarLogo()}
             </div>
@@ -266,8 +267,12 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
               )
             })}
           </div>
-          {/* put org selector at the bottom of the nav bar */}
-          <div className={'flex px-[18px] items-center justify-center w-full'}>{getOrgSelector()}</div>
+          {/* Sticky Org Selector */}
+          {
+            orgSelector && (
+              <div className={'sticky bottom-0 left-0 right-0 bg-bgc-elevated p-4'}>{orgSelector}</div>
+            )
+          }
         </div>
       );
     } else {
