@@ -1,3 +1,15 @@
+# [1.524.0](https://github.com/coldPBC/cold-monorepo/compare/v1.523.0...v1.524.0) (2025-01-23)
+
+
+### Bug Fixes
+
+* review feedback ([5bd2608](https://github.com/coldPBC/cold-monorepo/commit/5bd2608218f27738c15d32451a1b455b59f1052d))
+
+
+### Features
+
+* ability to edit supplier details ([1e1a130](https://github.com/coldPBC/cold-monorepo/commit/1e1a130fc84027e890fbd0c32229793f941123f6))
+
 # [1.523.0](https://github.com/coldPBC/cold-monorepo/compare/v1.522.0...v1.523.0) (2025-01-23)
 
 
