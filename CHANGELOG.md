@@ -1,3 +1,11 @@
+# [1.525.0](https://github.com/coldPBC/cold-monorepo/compare/v1.524.0...v1.525.0) (2025-01-23)
+
+
+### Features
+
+* Refactor Sidebar to include sticky Org Selector. ([002693b](https://github.com/coldPBC/cold-monorepo/commit/002693b8cacabf6e3ae9352fed7c8727325826fb))
+* Update sidebar padding conditionally based on orgSelector ([4dcaa84](https://github.com/coldPBC/cold-monorepo/commit/4dcaa84823fcf4d62ccaacf3b6e005cc4070a498))
+
 # [1.524.0](https://github.com/coldPBC/cold-monorepo/compare/v1.523.0...v1.524.0) (2025-01-23)
 
 
