@@ -66,7 +66,7 @@ const _ComplianceManagerOverviewSection = ({ section, groupId, collapseOpen }: {
               if (!canNavigateToQuestionnaire()) {
                 return;
               }
-              navigate(`/questionnaire/${name}?section=${section.key}`);
+              navigate(`/assessment/${name}?section=${section.key}`);
             }}>
             <ArrowRightIcon className={'w-[24px] h-[24px] text-tc-primary'} />
           </div>

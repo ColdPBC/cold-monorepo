@@ -18,9 +18,9 @@ export const Default: Story = {
   render: args => {
     return (
       <div className={'h-screen w-screen'}>
-        <StoryMockProvider memoryRouterProps={{ initialEntries: ['/questionnaire/rei_pia_2024'] }}>
+        <StoryMockProvider memoryRouterProps={{ initialEntries: ['/assessment/rei_pia_2024'] }}>
           <Routes>
-            <Route path={'/questionnaire'}>
+            <Route path={'/assessment'}>
               <Route path={':complianceName'} element={<ComplianceQuestionnaire />} />
             </Route>
           </Routes>

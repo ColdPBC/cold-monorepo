@@ -89,7 +89,7 @@ const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus, isNa
           }}
           onClick={() => {
             if (isNavigable) {
-              navigate(`/questionnaire/${name}?question=${question.key}`);
+              navigate(`/assessment/${name}?question=${question.key}`);
             }
           }}></div>
       </Tooltip>
