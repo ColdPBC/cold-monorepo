@@ -1,16 +1,14 @@
 import { ComboBox } from '@coldpbc/components';
 import React, { ReactNode, useMemo } from 'react';
 
-type EntityOption = { id: string; name: string };
-type ValueOption = { value: number };
-
-type BaseProps<T> = {
+type DropdownInputProps<T> = {
 	fieldName: keyof T;
-	fieldType?: 'object' | 'value';
-	label: string | ReactNode;
+  fieldType: 'object' | 'value';
+  label: string | ReactNode;
 	setEntityState: (state: T) => void;
 	entityState: T;
 	setError: (error?: string) => void;
+  options: { id: string; name: string }[];
 	error?: string;
 	originalEntity: T;
 	allowNone?: boolean;
@@ -18,18 +16,6 @@ type BaseProps<T> = {
 	disabled?: boolean;
 	disabledMessage?: string;
 };
-
-type ObjectProps<T> = BaseProps<T> & {
-	fieldType: 'object';
-	options: EntityOption[];
-};
-
-type ValueProps<T> = BaseProps<T> & {
-	fieldType: 'value';
-	options: ValueOption[];
-};
-
-type DropdownInputProps<T> = ObjectProps<T> | ValueProps<T>;
 
 export const DropdownInputForEntityEdit = <T,>({
 	fieldName,
@@ -53,8 +39,8 @@ export const DropdownInputForEntityEdit = <T,>({
 		const formattedOptions = options
 			.map((option, index) => ({
 				id: index,
-				value: fieldType === 'object' ? (option as EntityOption).id || (option as EntityOption).name : String((option as ValueOption).value),
-				name: fieldType === 'object' ? (option as EntityOption).name : String((option as ValueOption).value),
+				value: option.id,
+				name: option.name,
 			}))
 			.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -84,9 +70,11 @@ export const DropdownInputForEntityEdit = <T,>({
 						value={
 							dropdownOptions.find(option => {
 								if (fieldType === 'object') {
+                  // E.g. if this is a supplier
 									const fieldValue = entityState[fieldName] as { id: string } | null;
 									return option.value === fieldValue?.id;
 								} else {
+                  // E.g. if this is a supplierTier, which is stored on entity state as a number
 									return option.value === String(entityState[fieldName]);
 								}
 							}) ?? dropdownOptions[0]

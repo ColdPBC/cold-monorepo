@@ -143,8 +143,8 @@ const _EditSupplierDetails: React.FC<EditSupplierDetailsProps> = ({ supplier, on
 				{...inputProps('supplierTier')}
 				label={'Supplier Tier'}
 				required={true}
-				options={[{ value: 1 }, { value: 2 }]}
-				fieldType={'value'}
+				options={[{ id: '1', name: 'Tier 1' }, { id: '2', name: 'Tier 2' }]}
+        fieldType={'value'}
 				disabled={tierSelectorIsDisabled}
 				disabledMessage={'Cannot change tier of supplier once products have been added'}
 			/>
