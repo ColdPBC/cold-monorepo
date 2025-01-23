@@ -1,3 +1,15 @@
+# [1.523.0](https://github.com/coldPBC/cold-monorepo/compare/v1.522.0...v1.523.0) (2025-01-23)
+
+
+### Bug Fixes
+
+* Rename "questionnaire" routes and paths to "assessment". ([1342703](https://github.com/coldPBC/cold-monorepo/commit/13427037a07a76b22b28f952465ac8aedb692044))
+
+
+### Features
+
+* Update route to include dynamic complianceName parameter ([3c6fad4](https://github.com/coldPBC/cold-monorepo/commit/3c6fad4479e22a23978e595efd59d08d15c10e1b))
+
 # [1.522.0](https://github.com/coldPBC/cold-monorepo/compare/v1.521.2...v1.522.0) (2025-01-22)
 
 
