@@ -1,6 +1,7 @@
 import { Claims } from './claims';
 import { EntityLevel } from '@coldpbc/enums';
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
+import { PaginatedProductsQuery } from './products';
 
 export interface Suppliers {
   id: string;
@@ -87,7 +88,8 @@ export interface SuppliersWithAssurances {
   }[]
 }
 
-export interface SupplierGraphQL {
+// More basic version for the Suppliers DataGrid
+export interface SuppliersDataGridGraphQL {
   id: string;
   name: string;
   addressLine1: string | null;
@@ -106,33 +108,27 @@ export interface SupplierGraphQL {
     material: {
       id: string;
       name: string;
-      materialCategory: string | null;
-      materialSubcategory: string | null;
       attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
     }
   }[];
   products: {
     id: string;
     name: string;
-    description: string | null;
-    seasonCode: string | null;
-    upcCode: string | null;
-    brandProductId: string | null;
-    supplierProductId: string | null;
+  }[];
+}
+
+// Additional attribute assurance information pulled for SuppliersDetail page
+export interface SupplierGraphQL extends SuppliersDataGridGraphQL {
+  materialSuppliers: Array<SuppliersDataGridGraphQL['materialSuppliers'][0] & {
+    material: SuppliersDataGridGraphQL['materialSuppliers'][0]['material'] & {
+      materialCategory: string | null;
+      materialSubcategory: string | null;
+      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
+    }
+  }>;
+  products: Array<SuppliersDataGridGraphQL['products'][0] & {
     productCategory: string | null;
     productSubcategory: string | null;
-    attributeAssurances: {
-      id: string;
-      effectiveEndDate: string | null;
-      organizationFile: {
-        id: string;
-      } | null;
-      sustainabilityAttribute: {
-        id: string;
-        name: string;
-        level: EntityLevel;
-        logoUrl?: string;
-      };
-    }[];
-  }[];
+    attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
+  }>;
 }

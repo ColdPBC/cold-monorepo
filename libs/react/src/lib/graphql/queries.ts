@@ -235,19 +235,6 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
       products {
         id
         name
-        attributeAssurances {
-          id
-          effectiveEndDate
-          organizationFile {
-            id
-          }
-          sustainabilityAttribute {
-            id
-            level
-            logoUrl
-            name
-          }
-        }
       }
     }
   }
@@ -438,11 +425,6 @@ export const GET_SUPPLIER = gql`
       products {
         id
         name
-        description
-        seasonCode
-        upcCode
-        brandProductId
-        supplierProductId
         productCategory
         productSubcategory
         attributeAssurances {
