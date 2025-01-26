@@ -71,8 +71,8 @@ const _ProductDetail = () => {
 
 	const subTitle = [product.productCategory, product.productSubcategory, product.seasonCode].filter(val => !!val).join(' | ');
 
-  const getSelectedMaterialId = () => {
-    return searchParams.get('selectedMaterialId');
+  const getSelectedMaterialId = (): string | undefined => {
+    return searchParams.get('selectedMaterialId') || undefined;
   }
 
   const closeBomDetailSidebar = () => {
