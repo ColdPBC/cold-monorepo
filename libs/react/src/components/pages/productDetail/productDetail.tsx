@@ -8,11 +8,12 @@ import {
   ProductDocumentsTab,
   Spinner,
   Tabs, EllipsisMenu, DeleteEntityModal,
+  ProductBOMTabSidebar,
 } from '@coldpbc/components';
 import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import {FilesWithAssurances, ProductsQuery} from '@coldpbc/interfaces';
-import {cloneDeep, get, isError} from 'lodash';
+import { cloneDeep, get, isError, set } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import {parseDocumentsForProductDetails} from "@coldpbc/lib";
@@ -24,6 +25,8 @@ const _ProductDetail = () => {
   const { logBrowser } = useColdContext();
   const [deleteModalOpen, setDeleteModalOpen] = React.useState<boolean>(false);
   const [showUpdateAttributesModal, setShowUpdateAttributesModal] = React.useState<boolean>(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
 	const productQuery = useGraphQLSWR<{
 		product: ProductsQuery | null;
 	}>('GET_PRODUCT', {
@@ -68,6 +71,31 @@ const _ProductDetail = () => {
 
 	const subTitle = [product.productCategory, product.productSubcategory, product.seasonCode].filter(val => !!val).join(' | ');
 
+  const getSelectedMaterialId = () => {
+    return searchParams.get('selectedMaterialId');
+  }
+
+  const closeBomDetailSidebar = () => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.delete('selectedMaterialId');
+      return newParams;
+    });
+  }
+
+  const openSidebar = (id: string) => {
+    const selectedMaterialId = searchParams.get('selectedMaterialId');
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      if(id === selectedMaterialId) {
+        newParams.delete('selectedMaterialId');
+      } else {
+        newParams.set('selectedMaterialId', id);
+      }
+      return newParams;
+    });
+  }
+
 	return (
     <MainContent
       title={product.name}
@@ -103,7 +131,7 @@ const _ProductDetail = () => {
           },
           {
             label: 'BOM',
-            content: <ProductBOMTab product={product} />,
+            content: <ProductBOMTab product={product} openBomDetailSidebar={openSidebar} />,
           },
           {
             label: 'Documents',
@@ -117,6 +145,7 @@ const _ProductDetail = () => {
         entityId={product.id}
         entityLevel={EntityLevel.PRODUCT}
       />
+      <ProductBOMTabSidebar productId={product.id} selectedMaterialId={getSelectedMaterialId()} closeSidebar={closeBomDetailSidebar} refresh={productQuery.mutate} />
     </MainContent>
 	);
 };

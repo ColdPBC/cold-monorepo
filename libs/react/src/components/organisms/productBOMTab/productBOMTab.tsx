@@ -14,11 +14,10 @@ export const DEFAULT_GRID_COL_DEF = {
   flex: 1,
 };
 
-const _ProductBOMTab = (props: { product: ProductsQuery }) => {
+const _ProductBOMTab = (props: { product: ProductsQuery, openBomDetailSidebar: (id: string) => void }) => {
   const ldFlags = useFlags();
-  const navigate = useNavigate();
 
-  const { product } = props;
+  const { product, openBomDetailSidebar } = props;
 
   const renderName = (params: any) => {
     const name = get(params, 'row.material', '')
@@ -175,9 +174,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 			<MuiDataGrid
 				rows={rows}
         onRowClick={(params) => {
-          if(ldFlags.materialDetailPageCold997){
-            navigate(`/materials/${params.id}`)
-          }
+          openBomDetailSidebar(params.row.id);
         }}
 				columns={columns}
 				showSearch

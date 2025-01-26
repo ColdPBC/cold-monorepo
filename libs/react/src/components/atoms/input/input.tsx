@@ -32,6 +32,16 @@ export const Input = (props: IInputProps) => {
           prefix="$"
           thousandSeparator={numeric_input_props?.thousandSeparator || ','}
         />
+        {
+          numeric_input_props && numeric_input_props.showError && (numeric_input_props.error ? (
+            <div className="text-red-100 text-eyebrow mt-[8px]" key={`error_${key}`} data-testid={`input_error_${numeric_input_props.name}`}>
+              {numeric_input_props.error}
+            </div>
+          ) : (
+            <div className={'h-5'} key={`error_${key}`} data-testid={`input_error_space_${numeric_input_props.name}`}>
+            </div>
+          ))
+        }
       </div>
     );
   }
@@ -60,6 +70,16 @@ export const Input = (props: IInputProps) => {
           value={numeric_input_props?.value}
           thousandSeparator={numeric_input_props?.thousandSeparator || ','}
         />
+        {
+          numeric_input_props && numeric_input_props.showError && (numeric_input_props.error ? (
+            <div className="text-red-100 text-eyebrow mt-[8px]" key={`error_${key}`} data-testid={`input_error_${numeric_input_props.name}`}>
+              {numeric_input_props.error}
+            </div>
+          ) : (
+            <div className={'h-5'} key={`error_${key}`} data-testid={`input_error_space_${numeric_input_props.name}`}>
+            </div>
+          ))
+        }
       </div>
     );
   }
