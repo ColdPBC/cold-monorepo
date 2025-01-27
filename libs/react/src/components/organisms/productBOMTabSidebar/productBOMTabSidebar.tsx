@@ -82,13 +82,25 @@ const _ProductBOMTabSidebar = (
     return !isEqual(initialState, productMaterialState);
   }
 
+  const getYieldError = (productMaterialState: ProductMaterialBOMState) => {
+    // if they select a UOM, yield must be not be null
+    // if they select pcs as UOM, yield must be a whole number
+    if(productMaterialState.unitOfMeasure && productMaterialState.yield === null) {
+      return 'Yield is required';
+    } else if(productMaterialState.unitOfMeasure === UnitOfMeasurement.pcs && productMaterialState.yield !== null && !Number.isInteger(productMaterialState.yield)) {
+      return 'Yield must be a whole number';
+    } else {
+      return undefined;
+    }
+  }
+
   useEffect(() => {
     const initialState = getInitialMaterialState();
     setProductMaterialState(initialState);
   }, [material]);
 
   useEffect(() => {
-    const yieldError = productMaterialState.unitOfMeasure === UnitOfMeasurement.pcs && productMaterialState.yield !== null && !Number.isInteger(productMaterialState.yield) ? 'Yield must be a whole number' : undefined;
+    const yieldError = getYieldError(productMaterialState);
     const newErrors = {
       ...errors,
       yield: yieldError
