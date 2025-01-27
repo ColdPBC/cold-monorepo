@@ -70,7 +70,6 @@ export const PiecesWholeNumberError: Story = {
 },
   play: async ({canvasElement, step}) => {
     const canvas = within(canvasElement);
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
     await step('Show yield input error with pcs uom', async () => {
       const combobox = canvas.getByTestId('uom');
       const button = within(combobox).getByTestId('uom_input')
