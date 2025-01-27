@@ -54,6 +54,7 @@ const ComboBoxStory = (props: ComboBoxProps) => {
 
   const addNewOption = (newOption: InputOption) => {
     setOptions([...options, newOption]);
+    setStateValue(newOption);
     console.log('Add new option:', newOption);
   }
 
