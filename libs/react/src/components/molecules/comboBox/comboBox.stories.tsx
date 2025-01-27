@@ -20,9 +20,9 @@ export const Default: Story = {
   },
   args: {
     options: [
-      { id: 1, name: 'Option 1', value: 'value_1' },
-      { id: 2, name: 'Option 2', value: 'value_2' },
-      { id: 3, name: 'Option 3', value: 'value_3' },
+      { id: 0, name: 'Option 1', value: 'value_1' },
+      { id: 1, name: 'Option 2', value: 'value_2' },
+      { id: 2, name: 'Option 3', value: 'value_3' },
     ],
     name: 'name',
     label: 'Label',
@@ -36,9 +36,9 @@ export const AddNewOption: Story = {
   },
   args: {
     options: [
-      { id: 1, name: 'Option 1', value: 'value_1' },
-      { id: 2, name: 'Option 2', value: 'value_2' },
-      { id: 3, name: 'Option 3', value: 'value_3' },
+      { id: 0, name: 'Option 1', value: 'value_1' },
+      { id: 1, name: 'Option 2', value: 'value_2' },
+      { id: 2, name: 'Option 3', value: 'value_3' },
     ],
     name: 'name',
     label: 'Label',
@@ -48,7 +48,7 @@ export const AddNewOption: Story = {
 };
 
 const ComboBoxStory = (props: ComboBoxProps) => {
-  const {name, label, value, onChange, className, buttonClassName = '', allowAddNewOption, onAddNewOption } = props;
+  const {value, allowAddNewOption, onAddNewOption } = props;
   const [stateValue, setStateValue] = useState<InputOption>(value);
   const [options, setOptions] = useState<InputOption[]>(props.options);
 
@@ -57,6 +57,8 @@ const ComboBoxStory = (props: ComboBoxProps) => {
     setStateValue(newOption);
     console.log('Add new option:', newOption);
   }
+
+  console.log(options)
 
   return (
     <div
@@ -68,6 +70,7 @@ const ComboBoxStory = (props: ComboBoxProps) => {
         onAddNewOption={allowAddNewOption ? addNewOption : onAddNewOption}
         value={stateValue}
         onChange={(selectedOption) => {
+          console.log('Onchange', selectedOption);
           setStateValue(selectedOption);
         }}
       />
