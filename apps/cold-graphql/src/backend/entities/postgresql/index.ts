@@ -51,6 +51,7 @@ import { SustainabilityAttributeClassifcationAssignment } from './sustainability
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
+import { OrganizationProductMaterialEmissions } from './organization-product-material-emissions';
 
 export * from './prisma-migration';
 export * from './action-template';
@@ -105,6 +106,7 @@ export * from './sustainability-attribute-classifcation-assignment';
 export * from './sustainability-attribute';
 export * from './utility-bill';
 export * from './vector-record';
+export * from './organization-product-material-emissions';
 
 export const entities = [
 	PrismaMigration,
@@ -160,4 +162,5 @@ export const entities = [
 	SustainabilityAttribute,
 	UtilityBill,
 	VectorRecord,
+	OrganizationProductMaterialEmissions,
 ];
