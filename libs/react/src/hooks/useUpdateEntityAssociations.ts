@@ -64,30 +64,6 @@ export const useUpdateEntityAssociations = () => {
         }
       }
     },
-    [EntityLevel.PRODUCT]: {
-      [EntityLevel.MATERIAL]: {
-        add: {
-          mutation: createProductMaterial,
-          variables: (entityToAddId: string, entityBeingAddedToId: string, orgId: string | undefined) => ({
-            input: {
-              product: { id: entityToAddId },
-              material: { id: entityBeingAddedToId },
-              organization: { id: orgId }
-            }
-          })
-        },
-        delete: {
-          mutation: deleteProductMaterials,
-          variables: (entityToAddId: string, entityBeingAddedToId: string, orgId: string | undefined) => ({
-            filter: {
-              product: { id: entityToAddId },
-              material: { id: entityBeingAddedToId },
-              organization: { id: orgId }
-            }
-          })
-        }
-      }
-    }
   };
 
 
