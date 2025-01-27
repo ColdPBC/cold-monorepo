@@ -60,6 +60,10 @@ export const ComboBox = (props: ComboBoxProps) => {
       setSelectedOption(value)
       setTempOption(value)
       onChange(value)
+      // call on add new option if the value is not in the options list. i.e. its new
+      if (onAddNewOption && !options.some(option => option.value.toLowerCase() === value.value.toLowerCase())) {
+        onAddNewOption(value);
+      }
     } else {
       onChange(tempOption)
     }
@@ -67,11 +71,11 @@ export const ComboBox = (props: ComboBoxProps) => {
 
   useEffect(() => {
     if (query && !filteredOptions.some(option => option.name.toLowerCase() === query.toLowerCase())) {
-      setNewOption({ id: filteredOptions.length, name: query, value: query });
+      setNewOption({ id: options.length, name: query, value: query });
     } else {
       setNewOption(null);
     }
-  }, [query, filteredOptions]);
+  }, [query]);
 
 
   const handleAddNewOption = (option: InputOption) => {
