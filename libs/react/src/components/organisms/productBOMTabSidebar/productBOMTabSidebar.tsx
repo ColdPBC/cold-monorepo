@@ -1,7 +1,7 @@
 import { BaseButton, ColdIcon, ComboBox, ErrorFallback, Input, Spinner } from '@coldpbc/components';
 import { IconNames, InputTypes, UnitOfMeasurement } from '@coldpbc/enums';
 import { get, isEqual, toArray } from 'lodash';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAddToastMessage, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
 import { withErrorBoundary } from 'react-error-boundary';
 import { InputOption, ProductMaterialsQuery, ToastMessage } from '@coldpbc/interfaces';
@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface ProductMaterialBOMState {
   id: string;
+  materialId: string;
   yield: number | null;
   unitOfMeasure: string | null;
   weight: number | null;
@@ -34,15 +35,15 @@ const _ProductBOMTabSidebar = (
   const [saveDisabled, setSaveDisabled] = React.useState<boolean>(false);
   const [saveButtonLoading, setSaveButtonLoading] = React.useState<boolean>(false);
   const [productMaterialState, setProductMaterialState] = React.useState<ProductMaterialBOMState>({
-      id: '',
-      yield: null,
-      unitOfMeasure: null,
-      weight: null,
+    id: '',
+    materialId: '',
+    yield: null,
+    unitOfMeasure: null,
+    weight: null,
   })
-
   const placeholderOption = {
     id: -1,
-    name: 'Select a UOM',
+    name: 'None',
     value: '',
   };
 
@@ -60,18 +61,21 @@ const _ProductBOMTabSidebar = (
   const getInitialMaterialState = useCallback(() => {
     let initialState: ProductMaterialBOMState = {
       id: '',
+      materialId: '',
       yield: null,
       unitOfMeasure: null,
       weight: null,
     }
     if(productMaterialQuery.data) {
       const prodMaterial = get(productMaterialQuery.data, 'data.material.productMaterials[0]', null)
+      const materialId = get(productMaterialQuery.data, 'data.material.id', null)
       initialState = {
         id: '',
         yield: null,
         unitOfMeasure: null,
         ...prodMaterial,
-        weight: prodMaterial?.weight ? prodMaterial.weight * 1000 : null
+        weight: prodMaterial?.weight ? prodMaterial.weight * 1000 : null,
+        materialId: materialId ? materialId : '',
       }
     }
     return initialState
@@ -83,32 +87,23 @@ const _ProductBOMTabSidebar = (
   }
 
   useEffect(() => {
-    if(productMaterialQuery.data){
-      const initialState = getInitialMaterialState();
-      setProductMaterialState(initialState);
-    }
-  }, [getInitialMaterialState, productMaterialQuery.data]);
+    const initialState = getInitialMaterialState();
+    setProductMaterialState(initialState);
+  }, [productMaterialQuery.data, selectedMaterialId]);
 
   useEffect(() => {
-    // check if the uom is pcs, then the yield should be null or a whole number
     const yieldError = productMaterialState.unitOfMeasure === UnitOfMeasurement.pcs && productMaterialState.yield !== null && !Number.isInteger(productMaterialState.yield) ? 'Yield must be a whole number' : undefined;
     const newErrors = {
       ...errors,
       yield: yieldError
-    }
-    setErrors(newErrors)
+    };
+    setErrors(newErrors);
 
-    // disable the save button if any of the required fields are empty or they are not changed
-    // also disable the save button if there are any errors
     setSaveDisabled(
       !isFormEdited(productMaterialState) ||
       Object.values(newErrors).some(error => error !== undefined)
-    )
+    );
   }, [productMaterialState]);
-
-  const selectedOption = uomOptions.find(option => option.value === productMaterialState?.unitOfMeasure)
-
-  const hasUomOption = productMaterialState?.unitOfMeasure !== null;
 
   const [errors, setErrors] = React.useState<Partial<Record<keyof ProductMaterialBOMState, string>>>({});
 
@@ -154,6 +149,20 @@ const _ProductBOMTabSidebar = (
     }
   }
 
+  const selectedOption = React.useMemo(() =>
+      uomOptions.find(option => option.value === productMaterialState.unitOfMeasure) || placeholderOption
+    , [placeholderOption, productMaterialState.unitOfMeasure, uomOptions])
+
+  logBrowser('Product BOM Sidebar', 'info', {
+    productMaterialState,
+    productId,
+    selectedMaterialId,
+    productMaterialQueryData: productMaterialQuery.data,
+    productMaterialQueryError: productMaterialQuery.error,
+    uomOptions: [placeholderOption, ...uomOptions],
+    selectedOption,
+  });
+
   return (
     <div
       className={'flex flex-col h-screen fixed top-0 right-0 bottom-0 overflow-y-scroll text-tc-primary bg-bgc-elevated z-20'}
@@ -165,7 +174,7 @@ const _ProductBOMTabSidebar = (
         padding: selectedMaterialId ? '40px' : '0px',
       }}>
       {selectedMaterialId ? (
-        (productMaterialQuery.isLoading || productMaterialState.id === '') ?
+        (productMaterialQuery.isLoading) ?
           (
             <Spinner />
           )
@@ -217,7 +226,7 @@ const _ProductBOMTabSidebar = (
                         }}
                         numeric_input_props={{
                           name: 'yield',
-                          value: productMaterialState?.yield,
+                          value: productMaterialState.yield || '',
                           thousandSeparator: ',',
                           onValueChange: values => {
                             setProductMaterialState(prev => {
@@ -236,8 +245,8 @@ const _ProductBOMTabSidebar = (
                       <div className={'flex flex-col w-1/2 mb-[20px]'}>
                         <div className={'text-eyebrow leading-6'}>Yield UOM</div>
                         <ComboBox
-                          options={hasUomOption ? uomOptions : [placeholderOption, ...uomOptions]}
-                          value={selectedOption || placeholderOption}
+                          options={[placeholderOption, ...uomOptions]}
+                          value={selectedOption}
                           name={'uom'}
                           onChange={(selectedOption) => {
                             setProductMaterialState(prev => {
@@ -260,7 +269,7 @@ const _ProductBOMTabSidebar = (
                         }}
                         numeric_input_props={{
                           name: 'weight',
-                          value: productMaterialState?.weight,
+                          value: productMaterialState.weight || '',
                           thousandSeparator: '',
                           onValueChange: values => {
                             setProductMaterialState(prev => {

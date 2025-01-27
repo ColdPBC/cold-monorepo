@@ -1,12 +1,18 @@
 import { ProductsQuery, SustainabilityAttribute } from '@coldpbc/interfaces';
-import { Card, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumnList } from '@coldpbc/components';
+import {
+  Card,
+  ErrorFallback,
+  MuiDataGrid,
+  ProductBOMTabSidebar,
+  SustainabilityAttributeColumnList,
+} from '@coldpbc/components';
 import { GridColDef } from '@mui/x-data-grid';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useFlags} from "launchdarkly-react-client-sdk";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import numeral from 'numeral';
 
 export const DEFAULT_GRID_COL_DEF = {
@@ -14,10 +20,12 @@ export const DEFAULT_GRID_COL_DEF = {
   flex: 1,
 };
 
-const _ProductBOMTab = (props: { product: ProductsQuery, openBomDetailSidebar: (id: string) => void }) => {
+const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => void }) => {
   const ldFlags = useFlags();
 
-  const { product, openBomDetailSidebar } = props;
+  const { product, refreshProduct } = props;
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const renderName = (params: any) => {
     const name = get(params, 'row.material', '')
@@ -169,12 +177,48 @@ const _ProductBOMTab = (props: { product: ProductsQuery, openBomDetailSidebar: (
 			};
 		});
 
-	return (
+
+  const getSelectedMaterialId = (): string | undefined => {
+    return searchParams.get('selectedMaterialId') || undefined;
+  }
+
+  const closeBomDetailSidebar = () => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.delete('selectedMaterialId');
+      return newParams;
+    });
+  }
+
+  const openSidebar = (id: string) => {
+    const selectedMaterialId = searchParams.get('selectedMaterialId');
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      if(id === selectedMaterialId) {
+        newParams.delete('selectedMaterialId');
+      } else {
+        newParams.set('selectedMaterialId', id);
+      }
+      return newParams;
+    });
+  }
+
+  const materialId = getSelectedMaterialId()
+
+  useEffect(() => {
+    // if the tab is not BOM remove the selectedMaterialId from the URL
+    const tab = searchParams.get('tab');
+    if(tab !== 'BOM' && materialId) {
+      closeBomDetailSidebar();
+    }
+  }, [searchParams, materialId]);
+
+  return (
 		<Card title={'Bill of Materials'} className={'w-full'} data-testid={'product-bom-tab-card'}>
 			<MuiDataGrid
 				rows={rows}
         onRowClick={(params) => {
-          openBomDetailSidebar(params.row.id);
+          openSidebar(params.row.id);
         }}
 				columns={columns}
 				showSearch
@@ -188,6 +232,11 @@ const _ProductBOMTab = (props: { product: ProductsQuery, openBomDetailSidebar: (
         }}
         searchKey={`${product.id}productBOMSearchValue`}
 			/>
+      {
+        materialId && (
+          <ProductBOMTabSidebar productId={product.id} selectedMaterialId={getSelectedMaterialId()} closeSidebar={closeBomDetailSidebar} refresh={refreshProduct} />
+        )
+      }
 		</Card>
 	);
 };
