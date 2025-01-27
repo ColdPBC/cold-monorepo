@@ -14,14 +14,30 @@ export interface ComboBoxProps extends SelectProps {
   id?: string;
   buttonClassName?: string;
   disabled?: boolean;
+  allowAddNewOption?: boolean;
+  onAddNewOption?: (newOption: InputOption) => void;
 }
 
 export const ComboBox = (props: ComboBoxProps) => {
-  const { options, name, label, value, onChange, className, buttonClassName = '', dropdownDirection, id, disabled = false } = props;
+  const {
+    options,
+    name,
+    label,
+    value,
+    onChange,
+    className,
+    buttonClassName = '',
+    dropdownDirection,
+    id,
+    disabled = false,
+    allowAddNewOption = false,
+    onAddNewOption = (value: InputOption) => {},
+  } = props;
 
   const [query, setQuery] = useState('')
   const [tempOption, setTempOption] = useState<InputOption>(value)
   const [selectedOption, setSelectedOption] = useState<InputOption | null>(value)
+  const [newOption, setNewOption] = useState<InputOption | null>(null);
 
   const filteredOptions =
     query === ''
@@ -48,6 +64,24 @@ export const ComboBox = (props: ComboBoxProps) => {
       onChange(tempOption)
     }
   }
+
+  useEffect(() => {
+    if (query && !filteredOptions.some(option => option.name.toLowerCase() === query.toLowerCase())) {
+      setNewOption({ id: filteredOptions.length, name: query, value: query });
+    } else {
+      setNewOption(null);
+    }
+  }, [query, filteredOptions]);
+
+
+  const handleAddNewOption = (option: InputOption) => {
+    if (onAddNewOption) {
+      onAddNewOption(option);
+    }
+    setSelectedOption(option);
+    setTempOption(option);
+    onChange(option);
+  };
 
   return (
 		<Combobox
@@ -93,8 +127,10 @@ export const ComboBox = (props: ComboBoxProps) => {
             `}
             data-testid={name + '_options'}
           >
-						{filteredOptions.length === 0 && query !== '' ? (
-							<div className="relative cursor-default select-none p-4 text-white">Nothing found.</div>
+						{filteredOptions.length === 0 && query !== '' && !allowAddNewOption ? (
+							<div className="relative cursor-default select-none p-4 text-white">
+                Nothing found.
+              </div>
 						) : (
 							filteredOptions.map(option => (
 								<Combobox.Option
@@ -113,6 +149,22 @@ export const ComboBox = (props: ComboBoxProps) => {
 								</Combobox.Option>
 							))
 						)}
+            {allowAddNewOption && newOption && (
+              <Combobox.Option
+                key={newOption.id}
+                className={({ active }) => clsx(active ? 'bg-bgc-accent' : 'bg-bgc-elevated', 'relative cursor-pointer select-none p-4 text-body rounded-lg min-h-[53px]')}
+                value={newOption}
+                onClick={() => handleAddNewOption(newOption)}>
+                {({ active }) => (
+                  <>
+                    <span data-testid={`option_${newOption.id}`} className={clsx(newOption.name ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                      Add "{newOption.name}"
+                    </span>
+                    {newOption.name ? <span className={clsx(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}></span> : null}
+                  </>
+                )}
+              </Combobox.Option>
+            )}
 					</Combobox.Options>
 				</Transition>
 			</div>
