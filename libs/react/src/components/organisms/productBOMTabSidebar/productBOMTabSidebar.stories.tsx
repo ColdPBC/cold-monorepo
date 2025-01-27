@@ -78,7 +78,6 @@ export const PiecesWholeNumberError: Story = {
       const pcsOption = within(combobox).getByTestId('option_6');
       await userEvent.click(pcsOption);
       const saveButton = canvas.getByTestId('save_button');
-      await expect(saveButton).toBeEnabled();
 
       // enter non integer value into the yield input
       const input = canvas.getByTestId('input_yield');
@@ -89,10 +88,36 @@ export const PiecesWholeNumberError: Story = {
       // find the error
       const error = canvas.getByTestId('input_error_yield');
       await expect(error).toHaveTextContent('Yield must be a whole number');
+    });
+  }
+}
 
+export const YieldNoUoMError: Story = {
+  render: (args) => <SidebarStory {...args} />,
+  args: {
+    productId: getProductsMock()[0].id,
+    closeSidebar: () => {},
+    refresh: () => {},
+  },
+  play: async ({canvasElement, step}) => {
+    const canvas = within(canvasElement);
+    await step('Show yield input error with no yield with uom selected', async () => {
+      const combobox = canvas.getByTestId('uom');
+      const button = within(combobox).getByTestId('uom_input')
+      await userEvent.click(button);
+      // select the pcs option
+      const pcsOption = within(combobox).getByTestId('option_2');
+      await userEvent.click(pcsOption);
+      const saveButton = canvas.getByTestId('save_button');
+
+      // enter non integer value into the yield input
+      const input = canvas.getByTestId('input_yield');
       await userEvent.clear(input);
-      await userEvent.type(input, '1');
-      await expect(saveButton).toBeEnabled();
+      await expect(saveButton).toBeDisabled();
+
+      // find the error
+      const error = canvas.getByTestId('input_error_yield');
+      await expect(error).toHaveTextContent('Yield is required');
     });
   }
 }
