@@ -54,7 +54,9 @@ export const Input = (props: IInputProps) => {
           <label
             {...input_label_props}
             htmlFor={numeric_input_props?.name}
-            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}
+            data-testid={`input_label_${numeric_input_props?.name}`}
+          >
             {input_label}
           </label>
         )}
@@ -69,6 +71,7 @@ export const Input = (props: IInputProps) => {
           name={numeric_input_props?.name}
           value={numeric_input_props?.value}
           thousandSeparator={numeric_input_props?.thousandSeparator || ','}
+          data-testid={`input_${numeric_input_props?.name}`}
         />
         {
           numeric_input_props && numeric_input_props.showError && (numeric_input_props.error ? (

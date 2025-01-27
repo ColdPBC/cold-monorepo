@@ -181,6 +181,7 @@ const _ProductBOMTabSidebar = (
                   label={'Save'}
                   disabled={saveDisabled || saveButtonLoading}
                   loading={saveButtonLoading}
+                  data-testid={'save_button'}
                 />
               </div>
               <div className={'flex-1 overflow-y-auto pb-20'}>
