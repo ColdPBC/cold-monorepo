@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { ProductBOMTabSidebar } from '@coldpbc/components';
 import { useState } from 'react';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { getProductsMock, getProductsMockById, StoryMockProvider } from '@coldpbc/mocks';
 import { userEvent, waitForElementToBeRemoved, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 
@@ -16,16 +16,37 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const SidebarStory = (args: any) => {
-  const [materialId, setMaterialId] = useState<string | undefined>("mat_1234");
-
+  const productMaterialMock = getProductsMockById(args.productId)?.productMaterials[0];
+  const materialMock = productMaterialMock?.material;
+  const [material, setMaterial] = useState<{
+      id: string;
+      name: string;
+      productMaterial: {
+        id: string;
+        yield: number | null;
+        unitOfMeasure: string | null;
+        weight: number | null;
+      };
+    }
+    | undefined
+  >({
+    id: materialMock?.id || '',
+    name: materialMock?.name || '',
+    productMaterial: {
+      id: productMaterialMock?.id || '',
+      yield: productMaterialMock?.yield || null,
+      unitOfMeasure: productMaterialMock?.unitOfMeasure || null,
+      weight: productMaterialMock?.weight || null,
+    },
+  });
   return (
     <StoryMockProvider>
       <ProductBOMTabSidebar
       {...args}
       closeSidebar={() => {
-        setMaterialId(undefined);
+        setMaterial(undefined);
       }}
-      selectedMaterialId={materialId}
+      material={material}
     />
     </StoryMockProvider>
   );
@@ -34,7 +55,7 @@ const SidebarStory = (args: any) => {
 export const Default: Story = {
   render: (args) => <SidebarStory {...args} />,
   args: {
-    productId: 'op_wvjr8v3tdzk6j3wl2x8a26bw',
+    productId: getProductsMock()[0].id,
     closeSidebar: () => {},
     refresh: () => {}
   }
@@ -43,10 +64,10 @@ export const Default: Story = {
 export const PiecesWholeNumberError: Story = {
   render: (args) => <SidebarStory {...args} />,
   args: {
-    productId: 'op_wvjr8v3tdzk6j3wl2x8a26bw',
+    productId: getProductsMock()[0].id,
     closeSidebar: () => {},
-    refresh: () => {}
-  },
+    refresh: () => {},
+},
   play: async ({canvasElement, step}) => {
     const canvas = within(canvasElement);
     await waitForElementToBeRemoved(() => canvas.queryByRole('status'));

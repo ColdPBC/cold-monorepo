@@ -29,7 +29,7 @@ import {
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
   GET_PRODUCT_CARBON_FOOTPRINT_DATA,
   GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-  GET_ALL_MATERIAL_CLASSIFICATIONS, GET_PRODUCT_BOM_DATA_FOR_SIDEBAR,
+  GET_ALL_MATERIAL_CLASSIFICATIONS,
 } from '@coldpbc/lib';
 import {
 	filesProcessedWithDatesMock,
@@ -637,28 +637,6 @@ export const defaultGraphqlMocks: {
       });
     }
   },
-  {
-    query: GET_PRODUCT_BOM_DATA_FOR_SIDEBAR,
-    handler: (variables) => {
-      const {productId, materialId} = variables as {productId: string , materialId: string};
-      return Promise.resolve({
-        data: {
-          material: {
-            id: materialId,
-            name: 'Material 1',
-            productMaterials: [
-              {
-                id: `pm_${productId}`,
-                weight: 1 / 100,
-                yield: 1,
-                unitOfMeasure: 'yd',
-              }
-            ]
-          }
-        },
-      });
-    }
-  }
 ];
 
 export const getSupplierGraphQLMock = (tier: number) => (

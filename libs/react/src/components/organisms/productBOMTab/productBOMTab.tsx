@@ -24,8 +24,18 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
   const ldFlags = useFlags();
 
   const { product, refreshProduct } = props;
-
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedMaterial, setSelectedMaterial] = React.useState<
+    {
+      id: string;
+      name: string;
+      productMaterial: {
+        id: string;
+        yield: number | null;
+        unitOfMeasure: string | null;
+        weight: number | null;
+      };
+    }
+    | undefined>(undefined);
 
   const renderName = (params: any) => {
     const name = get(params, 'row.material', '')
@@ -147,6 +157,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
 
 	const rows: {
 		id: string;
+    productMaterialId: string;
 		material: string;
     materialCategory: string;
     materialSubcategory: string;
@@ -163,6 +174,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
 			const tier2Supplier = get(material.materialSuppliers, '[0].organizationFacility.name', '');
 			return {
 				id: material.id,
+        productMaterialId: productMaterial.id,
 				material: material.name,
         materialCategory: material.materialCategory || '',
         materialSubcategory: material.materialSubcategory || '',
@@ -177,48 +189,32 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
 			};
 		});
 
-
-  const getSelectedMaterialId = (): string | undefined => {
-    return searchParams.get('selectedMaterialId') || undefined;
-  }
-
   const closeBomDetailSidebar = () => {
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      newParams.delete('selectedMaterialId');
-      return newParams;
-    });
+    setSelectedMaterial(undefined);
   }
 
-  const openSidebar = (id: string) => {
-    const selectedMaterialId = searchParams.get('selectedMaterialId');
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      if(id === selectedMaterialId) {
-        newParams.delete('selectedMaterialId');
-      } else {
-        newParams.set('selectedMaterialId', id);
-      }
-      return newParams;
-    });
-  }
-
-  const materialId = getSelectedMaterialId()
-
-  useEffect(() => {
-    // if the tab is not BOM remove the selectedMaterialId from the URL
-    const tab = searchParams.get('tab');
-    if(tab !== 'BOM' && materialId) {
-      closeBomDetailSidebar();
+  const openSidebar = (productMaterialId: string) => {
+    const productMaterial = product.productMaterials.find(pm => pm.id === productMaterialId);
+    if(productMaterial) {
+      setSelectedMaterial({
+        id: productMaterial.material?.id || '',
+        name: productMaterial.material?.name || '',
+        productMaterial: {
+          id: productMaterial.id,
+          yield: productMaterial.yield,
+          unitOfMeasure: productMaterial.unitOfMeasure,
+          weight: productMaterial.weight,
+        },
+      });
     }
-  }, [searchParams, materialId]);
+  }
 
   return (
 		<Card title={'Bill of Materials'} className={'w-full'} data-testid={'product-bom-tab-card'}>
 			<MuiDataGrid
 				rows={rows}
         onRowClick={(params) => {
-          openSidebar(params.row.id);
+          openSidebar(params.row.productMaterialId);
         }}
 				columns={columns}
 				showSearch
@@ -233,8 +229,13 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
         searchKey={`${product.id}productBOMSearchValue`}
 			/>
       {
-        materialId && (
-          <ProductBOMTabSidebar productId={product.id} selectedMaterialId={getSelectedMaterialId()} closeSidebar={closeBomDetailSidebar} refresh={refreshProduct} />
+        selectedMaterial && (
+          <ProductBOMTabSidebar
+            productId={product.id}
+            material={selectedMaterial}
+            closeSidebar={closeBomDetailSidebar}
+            refresh={refreshProduct}
+          />
         )
       }
 		</Card>

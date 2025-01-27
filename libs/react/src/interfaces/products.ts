@@ -101,18 +101,3 @@ export interface ProductCarbonFootprintData extends Products {
     }
   }[]
 }
-
-export interface ProductMaterial {
-  id: string;
-  yield: number | null;
-  unitOfMeasure: string | null;
-  weight: number | null;
-}
-
-export interface ProductMaterialsQuery {
-  material: {
-    id: string;
-    name: string;
-    productMaterials: ProductMaterial[]
-  }
-}
