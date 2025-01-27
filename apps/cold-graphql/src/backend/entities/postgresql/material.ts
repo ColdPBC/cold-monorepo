@@ -5,6 +5,7 @@ import { Collection, Entity, Index, ManyToOne, OneToMany, PrimaryKey, Property, 
 import { AttributeAssurance } from './attribute-assurance';
 import { MaterialClassification } from './material-classification';
 import { MaterialSupplier } from './material-supplier';
+import { MaterialTagAssignment } from './material-tag-assignment';
 import { Organization } from './organization';
 import { ProductMaterial } from './product-material';
 
@@ -83,6 +84,9 @@ export class Material {
 
 	@OneToMany({ entity: () => MaterialSupplier, mappedBy: 'material' })
 	materialSuppliers = new Collection<MaterialSupplier>(this);
+
+	@OneToMany({ entity: () => MaterialTagAssignment, mappedBy: 'material' })
+	materialTagAssignments = new Collection<MaterialTagAssignment>(this);
 
 	@OneToMany({ entity: () => ProductMaterial, mappedBy: 'material' })
 	productMaterials = new Collection<ProductMaterial>(this);
