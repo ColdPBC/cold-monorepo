@@ -8,14 +8,13 @@ import {
   ProductDocumentsTab,
   Spinner,
   Tabs, EllipsisMenu, DeleteEntityModal,
-  ProductBOMTabSidebar,
 } from '@coldpbc/components';
 import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {FilesWithAssurances, ProductsQuery} from '@coldpbc/interfaces';
-import { cloneDeep, get, isError, set } from 'lodash';
+import { cloneDeep, get, isError } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {parseDocumentsForProductDetails} from "@coldpbc/lib";
 import { EntityLevel } from '@coldpbc/enums';
 
