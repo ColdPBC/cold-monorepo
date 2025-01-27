@@ -24,6 +24,7 @@ export const Input = (props: IInputProps) => {
           className={twMerge(
             'text-body not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
             numeric_input_props?.className,
+            numeric_input_props?.showError ? (numeric_input_props?.error ? 'border-red-100 focus:border-red-100' : 'border-gray-90 focus:border-gray-90') : '',
           )}
           id={numeric_input_props?.name}
           key={`input_${key}`}
@@ -65,6 +66,7 @@ export const Input = (props: IInputProps) => {
           className={twMerge(
             'text-body not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
             numeric_input_props?.className,
+            numeric_input_props?.showError ? (numeric_input_props?.error ? 'border-red-100 focus:border-red-100' : 'border-gray-90 focus:border-gray-90') : '',
           )}
           id={numeric_input_props?.name}
           key={`input_${key}`}
