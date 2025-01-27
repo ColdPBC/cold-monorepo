@@ -137,7 +137,6 @@ const _ProductBOMTabSidebar = (
         material,
         state: productMaterialState,
         uomOptions,
-        selectedOption
       });
       refresh()
     } catch (error) {
@@ -156,16 +155,11 @@ const _ProductBOMTabSidebar = (
     }
   }
 
-  const selectedOption = React.useMemo(() =>
-      uomOptions.find(option => option.value === productMaterialState.unitOfMeasure) || placeholderOption
-    , [placeholderOption, productMaterialState.unitOfMeasure, uomOptions])
-
   logBrowser('Product BOM Sidebar', 'info', {
     productMaterialState,
     productId,
     material,
     uomOptions: [placeholderOption, ...uomOptions],
-    selectedOption,
   });
 
   return (
@@ -246,7 +240,7 @@ const _ProductBOMTabSidebar = (
                     <div className={'text-eyebrow leading-6'}>Yield UOM</div>
                     <ComboBox
                       options={[placeholderOption, ...uomOptions]}
-                      value={selectedOption}
+                      value={uomOptions.find(option => option.value === productMaterialState.unitOfMeasure) || placeholderOption}
                       name={'uom'}
                       onChange={(selectedOption) => {
                         setProductMaterialState(prev => {
