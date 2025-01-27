@@ -645,10 +645,10 @@ export const defaultGraphqlMocks: {
         data: {
           material: {
             id: materialId,
-            name: 'Material Name',
+            name: 'Material 1',
             productMaterials: [
               {
-                id: `pm_${materialId}`,
+                id: `pm_${productId}`,
                 weight: 1 / 100,
                 yield: 1,
                 unitOfMeasure: 'yd',

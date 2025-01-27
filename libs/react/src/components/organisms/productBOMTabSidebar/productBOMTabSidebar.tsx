@@ -1,61 +1,11 @@
 import { BaseButton, ColdIcon, ComboBox, ErrorFallback, Input, Spinner } from '@coldpbc/components';
-import { EntityLevel, IconNames, InputTypes, UnitOfMeasurement } from '@coldpbc/enums';
+import { IconNames, InputTypes, UnitOfMeasurement } from '@coldpbc/enums';
 import { get, isEqual, toArray } from 'lodash';
 import React, { useCallback, useEffect } from 'react';
 import { useAddToastMessage, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
 import { withErrorBoundary } from 'react-error-boundary';
-import { InputOption, ToastMessage } from '@coldpbc/interfaces';
+import { InputOption, ProductMaterialsQuery, ToastMessage } from '@coldpbc/interfaces';
 import { useNavigate } from 'react-router-dom';
-
-interface MaterialClassification {
-  id: string;
-  name: string;
-}
-
-interface OrganizationFacility {
-  id: string;
-  name: string;
-}
-
-interface MaterialSupplier {
-  id: string;
-  organizationFacility: OrganizationFacility;
-}
-
-interface OrganizationFile {
-  id: string;
-  originalName: string;
-}
-
-interface SustainabilityAttribute {
-  id: string;
-  level: EntityLevel;
-  logoUrl: string | undefined;
-  name: string;
-}
-
-interface AttributeAssurance {
-  id: string;
-  effectiveEndDate: string | null;
-  effectiveStartDate: string | null;
-  organizationFile: OrganizationFile | null,
-  sustainabilityAttribute: SustainabilityAttribute;
-}
-
-interface ProductMaterial {
-  id: string;
-  yield: number | null;
-  unitOfMeasure: string | null;
-  weight: number | null;
-}
-
-interface ProductMaterialsQuery {
-  material: {
-    id: string;
-    name: string;
-    productMaterials: ProductMaterial[]
-  }
-}
 
 interface ProductMaterialBOMState {
   id: string;

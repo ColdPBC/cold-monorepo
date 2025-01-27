@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { ProductBOMTabSidebar } from '@coldpbc/components';
 import { useState } from 'react';
+import { StoryMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof ProductBOMTabSidebar> = {
   title: "Organisms/ProductBOMTabSidebar",
@@ -25,11 +26,15 @@ export const Default: Story = {
 const SidebarStory = (args: any) => {
   const [materialId, setMaterialId] = useState<string | undefined>("mat_1234");
 
-  return <ProductBOMTabSidebar
-    {...args}
-    closeSidebar={() => {
-      setMaterialId(undefined);
-    }}
-    selectedMaterialId={materialId}
-  />;
+  return (
+    <StoryMockProvider>
+      <ProductBOMTabSidebar
+      {...args}
+      closeSidebar={() => {
+        setMaterialId(undefined);
+      }}
+      selectedMaterialId={materialId}
+    />
+    </StoryMockProvider>
+  );
 }
