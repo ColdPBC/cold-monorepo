@@ -147,7 +147,8 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
             buttonText={'Edit Materials'}
             refresh={refreshData}
             title={'Edit Materials'}
-            entityLevel={EntityLevel.MATERIAL}
+            entityLevelToAdd={EntityLevel.MATERIAL}
+            entityLevelToBeAddedTo={EntityLevel.SUPPLIER}
             entityToBeAddedId={supplier.id}
             saveButtonText={'Save'}
             idsSelected={rows.map(r => r.id)}

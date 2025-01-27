@@ -103,7 +103,7 @@ const _ProductDetail = () => {
           },
           {
             label: 'BOM',
-            content: <ProductBOMTab product={product} />,
+            content: <ProductBOMTab product={product} refreshProduct={productQuery.mutate} />,
           },
           {
             label: 'Documents',

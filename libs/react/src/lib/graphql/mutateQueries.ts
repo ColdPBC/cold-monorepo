@@ -183,3 +183,9 @@ export const CREATE_PRODUCT = gql`
     }
   }
 `;
+
+export const DELETE_PRODUCT_MATERIALS = gql`
+  mutation DeleteProductMaterials($filter: ProductMaterialsListFilter!) {
+    deleteProductMaterials(filter: $filter)
+  }
+`;

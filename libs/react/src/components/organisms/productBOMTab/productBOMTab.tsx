@@ -1,5 +1,11 @@
 import { ProductsQuery, SustainabilityAttribute } from '@coldpbc/interfaces';
-import { Card, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumnList } from '@coldpbc/components';
+import {
+  Card,
+  EditEntityAssociationsModal,
+  ErrorFallback,
+  MuiDataGrid,
+  SustainabilityAttributeColumnList,
+} from '@coldpbc/components';
 import { GridColDef } from '@mui/x-data-grid';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import {get, uniq} from 'lodash';
@@ -8,17 +14,18 @@ import React from 'react';
 import {useFlags} from "launchdarkly-react-client-sdk";
 import { useNavigate } from 'react-router-dom';
 import numeral from 'numeral';
+import { EntityLevel } from '@coldpbc/enums';
 
 export const DEFAULT_GRID_COL_DEF = {
 	headerClassName: 'bg-gray-30 text-body',
   flex: 1,
 };
 
-const _ProductBOMTab = (props: { product: ProductsQuery }) => {
+const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => void }) => {
   const ldFlags = useFlags();
   const navigate = useNavigate();
 
-  const { product } = props;
+  const { product, refreshProduct } = props;
 
   const renderName = (params: any) => {
     const name = get(params, 'row.material', '')
@@ -171,7 +178,25 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 		});
 
 	return (
-		<Card title={'Bill of Materials'} className={'w-full'} data-testid={'product-bom-tab-card'}>
+		<Card
+      title={'Bill of Materials'}
+      className={'w-full'}
+      data-testid={'product-bom-tab-card'}
+      ctas={[
+        {
+          child: <EditEntityAssociationsModal
+            buttonText={'Edit Materials'}
+            refresh={refreshProduct}
+            title={'Edit Materials'}
+            entityLevelToAdd={EntityLevel.MATERIAL}
+            entityLevelToBeAddedTo={EntityLevel.PRODUCT}
+            entityToBeAddedId={product.id}
+            saveButtonText={'Save'}
+            idsSelected={rows.map(r => r.id)}
+          />
+        }
+      ]}
+    >
 			<MuiDataGrid
 				rows={rows}
         onRowClick={(params) => {
