@@ -3,6 +3,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import {ComboBox, ComboBoxProps} from "./comboBox";
 import {InputOption} from "@coldpbc/interfaces";
+import { userEvent, within } from '@storybook/testing-library';
 
 const meta: Meta<typeof ComboBox> = {
   title: 'Molecules/ComboBox',
@@ -45,6 +46,23 @@ export const AddNewOption: Story = {
     value: { id: 1, name: 'Option 1', value: 'value_1' },
     allowAddNewOption: true,
   },
+  play: async ({canvasElement, step}) => {
+    // select the input type
+    const canvas = within(canvasElement);
+    const combobox = canvas.getByTestId('name');
+    const input = within(combobox).getByTestId('name_input')
+    // type in
+    await userEvent.type(input, 'Option 4');
+
+    const newOption = within(combobox).getByTestId('option_new_option');
+    await userEvent.click(newOption);
+
+    await userEvent.click(input);
+
+    // make sure the new option is there
+    const option4 = await within(combobox).findByTestId('option_3');
+    await userEvent.click(option4);
+  }
 };
 
 const ComboBoxStory = (props: ComboBoxProps) => {

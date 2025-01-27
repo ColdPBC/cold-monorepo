@@ -161,7 +161,7 @@ export const ComboBox = (props: ComboBoxProps) => {
                 onClick={() => handleAddNewOption(newOption)}>
                 {({ active }) => (
                   <>
-                    <span data-testid={`option_${newOption.id}`} className={clsx(newOption.name ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                    <span data-testid={`option_new_option`} className={clsx(newOption.name ? 'font-semibold' : 'font-normal', 'block truncate')}>
                       Add "{newOption.name}"
                     </span>
                     {newOption.name ? <span className={clsx(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}></span> : null}
