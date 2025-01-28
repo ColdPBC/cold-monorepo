@@ -49,6 +49,11 @@ export const ComboBox = (props: ComboBoxProps) => {
     }
   }
 
+  useEffect(() => {
+    setTempOption(value)
+    setSelectedOption(value)
+  }, [value]);
+
   return (
 		<Combobox
 			value={selectedOption}
