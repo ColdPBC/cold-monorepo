@@ -1,17 +1,26 @@
 import { SupplierGraphQL, SustainabilityAttribute } from '@coldpbc/interfaces';
-import { Card, DEFAULT_GRID_COL_DEF, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumnList } from '@coldpbc/components';
+import {
+  Card,
+  DEFAULT_GRID_COL_DEF,
+  EditEntityAssociationsModal,
+  ErrorFallback,
+  MuiDataGrid,
+  SustainabilityAttributeColumnList,
+} from '@coldpbc/components';
 import { GridColDef } from '@mui/x-data-grid';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import { uniq } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { EntityLevel } from '@coldpbc/enums';
 
 interface ProductsSuppliedTabProps {
   supplier: SupplierGraphQL;
+  refreshData: () => void;
 }
 
-const _ProductsSuppliedTab: React.FC<ProductsSuppliedTabProps> = ({ supplier }) => {
+const _ProductsSuppliedTab: React.FC<ProductsSuppliedTabProps> = ({ supplier, refreshData }) => {
   const navigate = useNavigate();
 
   const uniqCategories = uniq(supplier.products.map(product => product.productCategory || ''))
@@ -104,7 +113,25 @@ const _ProductsSuppliedTab: React.FC<ProductsSuppliedTabProps> = ({ supplier }) 
   }), [supplier]);
 
   return (
-    <Card title={'Products Supplied'} className={'w-full'} data-testid={'products-supplied-tab-card'}>
+    <Card
+      title={'Products Supplied'}
+      className={'w-full'}
+      data-testid={'products-supplied-tab-card'}
+      ctas={[
+          {
+            child: <EditEntityAssociationsModal
+              buttonText={'Edit Products'}
+              refresh={refreshData}
+              title={'Edit Products'}
+              entityLevelToAdd={EntityLevel.PRODUCT}
+              entityLevelToBeAddedTo={EntityLevel.SUPPLIER}
+              entityToBeAddedId={supplier.id}
+              saveButtonText={'Save'}
+              idsSelected={rows.map(r => r.id)}
+            />
+          },
+        ]}
+    >
       <MuiDataGrid
         rows={rows}
         onRowClick={params => {
