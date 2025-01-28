@@ -5,6 +5,7 @@ import {
   ErrorFallback,
   MuiDataGrid,
   SustainabilityAttributeColumnList,
+  ProductBOMTabSidebar,
 } from '@coldpbc/components';
 import { GridColDef } from '@mui/x-data-grid';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
