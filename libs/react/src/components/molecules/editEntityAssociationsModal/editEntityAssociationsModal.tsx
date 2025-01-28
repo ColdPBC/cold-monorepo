@@ -105,7 +105,20 @@ export const EditEntityAssociationsModal = (
         promises.push(callMutateFunction(entityLevelToAdd, entityLevelToBeAddedTo, row, entityToBeAddedId, orgId, 'delete'))
       });
 
-      await Promise.all(promises)
+      const responses = await Promise.all(promises)
+      logBrowser(`Updated ${lowerCase(entityLevelToAdd)}s successfully`, 'info', {
+        orgId,
+        entityLevelToAdd,
+        entityLevelToBeAddedTo,
+        entityToBeAddedId,
+        idsSelected,
+        rowsSelected,
+        responses
+      });
+      addToastMessage({
+        message: `Updated ${lowerCase(entityLevelToBeAddedTo)} successfully`,
+        type: ToastMessage.SUCCESS
+      })
       refresh();
       setShowEntityAssociationModal(false);
     } catch (error) {
