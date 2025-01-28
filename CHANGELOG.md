@@ -1,3 +1,11 @@
+# [1.528.0](https://github.com/coldPBC/cold-monorepo/compare/v1.527.0...v1.528.0) (2025-01-28)
+
+
+### Features
+
+* Add support for adding new options in ComboBox ([82c6e25](https://github.com/coldPBC/cold-monorepo/commit/82c6e25b8729f7b2a6952663581471f00531846c))
+* Add support for adding new options to ComboBox ([363353e](https://github.com/coldPBC/cold-monorepo/commit/363353e29308f830a8dcd79d1261239d45c36036))
+
 # [1.527.0](https://github.com/coldPBC/cold-monorepo/compare/v1.526.0...v1.527.0) (2025-01-28)
 
 
