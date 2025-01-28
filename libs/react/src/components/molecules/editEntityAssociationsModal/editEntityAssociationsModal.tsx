@@ -105,39 +105,11 @@ export const EditEntityAssociationsModal = (
         promises.push(callMutateFunction(entityLevelToAdd, entityLevelToBeAddedTo, row, entityToBeAddedId, orgId, 'delete'))
       });
 
-      Promise.all(promises).then((responses) => {
-        logBrowser(`Updated ${lowerCase(entityLevelToAdd)}s successfully`, 'info', {
-          orgId,
-          entityLevelToAdd,
-          entityLevelToBeAddedTo,
-          entityToBeAddedId,
-          idsSelected,
-          rowsSelected,
-          responses
-        });
-        addToastMessage({
-          message: `Updated ${lowerCase(entityLevelToAdd)}s successfully`,
-          type: ToastMessage.SUCCESS
-        })
-        refresh();
-        setShowEntityAssociationModal(false);
-      }).catch((error) => {
-        logBrowser(`Error updating ${lowerCase(entityLevelToAdd)}s`, 'error', {
-          orgId,
-          entityLevelToAdd,
-          entityLevelToBeAddedTo,
-          entityToBeAddedId,
-          idsSelected,
-          rowsSelected,
-          error
-        }, error)
-        addToastMessage({
-          message: `Error updating ${lowerCase(entityLevelToAdd)}s`,
-          type: ToastMessage.FAILURE
-        })
-      })
+      await Promise.all(promises)
+      refresh();
+      setShowEntityAssociationModal(false);
     } catch (error) {
-      logBrowser(`Error updating ${lowerCase(entityLevelToAdd)}s`, 'error', {
+      logBrowser(`Error updating ${lowerCase(entityLevelToBeAddedTo)}`, 'error', {
         orgId,
         entityLevelToAdd,
         entityLevelToBeAddedTo,
@@ -147,7 +119,7 @@ export const EditEntityAssociationsModal = (
         error
       }, error)
       addToastMessage({
-        message: `Error updating ${lowerCase(entityLevelToAdd)}s`,
+        message: `Error updating ${lowerCase(entityLevelToBeAddedTo)}`,
         type: ToastMessage.FAILURE
       })
     } finally {
@@ -193,8 +165,6 @@ export const EditEntityAssociationsModal = (
               label="Cancel"
               onClick={() => setShowEntityAssociationModal(false)}
               variant={ButtonTypes.secondary}
-              disabled={isLoading}
-              loading={isLoading}
             />
 						<div className="flex flex-row gap-[16px] items-center">
 							<div className="text-body font-bold text-tc-secondary">
