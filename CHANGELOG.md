@@ -1,3 +1,11 @@
+## [1.528.1](https://github.com/coldPBC/cold-monorepo/compare/v1.528.0...v1.528.1) (2025-01-28)
+
+
+### Bug Fixes
+
+* divide by products with a percent, not all products in category ([65fc556](https://github.com/coldPBC/cold-monorepo/commit/65fc5568fb854310c54ff5da019e03630f70719b))
+* divide by products with a percent, not all products in category ([#759](https://github.com/coldPBC/cold-monorepo/issues/759)) ([f218808](https://github.com/coldPBC/cold-monorepo/commit/f21880883950b4ea802dae860f807aef0313317e))
+
 # [1.528.0](https://github.com/coldPBC/cold-monorepo/compare/v1.527.0...v1.528.0) (2025-01-28)
 
 
