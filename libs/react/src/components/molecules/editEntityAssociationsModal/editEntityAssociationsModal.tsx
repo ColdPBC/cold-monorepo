@@ -6,7 +6,7 @@ import { flowbiteThemeOverride } from '@coldpbc/themes';
 import {useAddToastMessage, useAuth0Wrapper, useColdContext, useEntityData, useUpdateEntityAssociations} from '@coldpbc/hooks';
 import {GridCellParams, GridColDef, GridToolbarContainer, GridToolbarQuickFilter} from '@mui/x-data-grid';
 import { Checkbox } from '@mui/material';
-import {isEqual, sortBy} from 'lodash';
+import { isEqual, lowerCase, sortBy } from 'lodash';
 import { FetchResult } from '@apollo/client';
 import { ToastMessage } from '@coldpbc/interfaces';
 
@@ -92,7 +92,7 @@ export const EditEntityAssociationsModal = (
     },
   ];
 
-  const onEntitiesUpdate = () => {
+  const onEntitiesUpdate = async () => {
     setIsLoading(true);
     const removedRows = idsSelected.filter(id => !rowsSelected.includes(id));
     const addedRows = rowsSelected.filter(id => !idsSelected.includes(id));
@@ -106,7 +106,7 @@ export const EditEntityAssociationsModal = (
       });
 
       Promise.all(promises).then((responses) => {
-        logBrowser(`Updated entity associations successfully`, 'info', {
+        logBrowser(`Updated ${lowerCase(entityLevelToAdd)}s successfully`, 'info', {
           orgId,
           entityLevelToAdd,
           entityLevelToBeAddedTo,
@@ -116,13 +116,13 @@ export const EditEntityAssociationsModal = (
           responses
         });
         addToastMessage({
-          message: 'Associations updated successfully',
+          message: `Updated ${lowerCase(entityLevelToAdd)}s successfully`,
           type: ToastMessage.SUCCESS
         })
         refresh();
         setShowEntityAssociationModal(false);
       }).catch((error) => {
-        logBrowser(`Error updating entity associations`, 'error', {
+        logBrowser(`Error updating ${lowerCase(entityLevelToAdd)}s`, 'error', {
           orgId,
           entityLevelToAdd,
           entityLevelToBeAddedTo,
@@ -132,12 +132,12 @@ export const EditEntityAssociationsModal = (
           error
         }, error)
         addToastMessage({
-          message: 'Error updating associations',
+          message: `Error updating ${lowerCase(entityLevelToAdd)}s`,
           type: ToastMessage.FAILURE
         })
       })
     } catch (error) {
-      logBrowser(`Error updating entity associations`, 'error', {
+      logBrowser(`Error updating ${lowerCase(entityLevelToAdd)}s`, 'error', {
         orgId,
         entityLevelToAdd,
         entityLevelToBeAddedTo,
@@ -147,7 +147,7 @@ export const EditEntityAssociationsModal = (
         error
       }, error)
       addToastMessage({
-        message: 'Error updating associations',
+        message: `Error updating ${lowerCase(entityLevelToAdd)}s`,
         type: ToastMessage.FAILURE
       })
     } finally {
@@ -189,7 +189,13 @@ export const EditEntityAssociationsModal = (
 						</div>
 					</div>
 					<div className="w-full flex flex-row justify-between">
-						<BaseButton label="Cancel" onClick={() => setShowEntityAssociationModal(false)} variant={ButtonTypes.secondary} disabled={isLoading} />
+						<BaseButton
+              label="Cancel"
+              onClick={() => setShowEntityAssociationModal(false)}
+              variant={ButtonTypes.secondary}
+              disabled={isLoading}
+              loading={isLoading}
+            />
 						<div className="flex flex-row gap-[16px] items-center">
 							<div className="text-body font-bold text-tc-secondary">
 								{rowsSelected.length}/{rows.length} Selected

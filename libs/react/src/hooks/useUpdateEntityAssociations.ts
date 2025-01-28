@@ -1,6 +1,7 @@
 import {useGraphQLMutation} from "./useGraphqlMutation";
 import {EntityLevel} from "@coldpbc/enums";
 import {FetchResult} from "@apollo/client";
+import { axiosFetcher } from '@coldpbc/fetchers';
 
 
 
@@ -12,6 +13,20 @@ export const useUpdateEntityAssociations = () => {
   const { mutateGraphQL: deleteMaterialSuppliers } = useGraphQLMutation('DELETE_MATERIAL_SUPPLIERS')
   const { mutateGraphQL: createProductMaterial } = useGraphQLMutation('CREATE_PRODUCT_MATERIAL')
   const { mutateGraphQL: deleteProductMaterials } = useGraphQLMutation('DELETE_PRODUCT_MATERIALS')
+
+  // use axios for removing/updating product associations to suppliers
+  const deleteProduct = (variables: {
+    productId: string,
+    supplierId: string | null,
+    orgId: string | undefined
+  }) => {
+    const {productId, supplierId, orgId} = variables;
+
+    return axiosFetcher([`/organizations/${orgId}/products/${productId}`, 'PATCH', {
+      id: productId,
+      supplier_id: supplierId,
+    }])
+  }
 
   const mutationMap = {
     [EntityLevel.MATERIAL]: {
@@ -64,6 +79,27 @@ export const useUpdateEntityAssociations = () => {
         }
       }
     },
+    [EntityLevel.PRODUCT]: {
+      [EntityLevel.SUPPLIER]: {
+        add: {
+          mutation: updateProduct,
+          variables: (entityToAddId: string, entityBeingAddedToId: string, orgId: string | undefined) => ({
+            input: {
+              id: entityToAddId,
+              organizationFacility: { id: entityBeingAddedToId }
+            }
+          })
+        },
+        delete: {
+          mutation: deleteProduct,
+          variables: (entityToAddId: string, entityBeingAddedToId: string, orgId: string | undefined) => ({
+            productId: entityToAddId,
+            supplierId: null,
+            orgId
+          })
+        }
+      }
+    }
   };
 
 
