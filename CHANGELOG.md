@@ -1,3 +1,24 @@
+# [1.526.0](https://github.com/coldPBC/cold-monorepo/compare/v1.525.0...v1.526.0) (2025-01-28)
+
+
+### Bug Fixes
+
+* Refactor getSelectedMaterialId to ensure proper typing ([d613279](https://github.com/coldPBC/cold-monorepo/commit/d6132794c0174bfc8dcad30797da0641361e0c1f))
+
+
+### Features
+
+* Add BOM sidebar and editing functionality to product details ([246031d](https://github.com/coldPBC/cold-monorepo/commit/246031dd7e784821bc790064905b119f4a3cf144))
+* Add data-testid attributes to improve component testing ([4351881](https://github.com/coldPBC/cold-monorepo/commit/43518812daa56e4b9c7dbc9c170ac5c77a722289))
+* Enhance input error handling with conditional border styles ([b5afc37](https://github.com/coldPBC/cold-monorepo/commit/b5afc37909b52ac2bfcd32d4ba7ead9fef9c5b5c))
+* Refactor BOM sidebar state management and improve UX ([0e15e56](https://github.com/coldPBC/cold-monorepo/commit/0e15e56ecd9e7ad82855da9a1bd087ef398049cd))
+* Refactor BOM tab and sidebar state handling. ([af7defc](https://github.com/coldPBC/cold-monorepo/commit/af7defce657c9b86f574af7d381b17341306c568))
+* Refactor ProductBOMTabSidebar and organize interfaces. ([102becc](https://github.com/coldPBC/cold-monorepo/commit/102becc887942bb2cb213d06a940354d506a3a0f))
+* Refactor ProductBOMTabSidebar to remove redundant variable. ([241d1a6](https://github.com/coldPBC/cold-monorepo/commit/241d1a60930af11ec69abcf3d7c7f3c380b08994))
+* Refactor yield error logic into a separate function ([ff19695](https://github.com/coldPBC/cold-monorepo/commit/ff19695884e50ed78d89679e20e52edcf5bc978b))
+* Remove unused GET_PRODUCT_BOM_DATA_FOR_SIDEBAR query ([4ad699d](https://github.com/coldPBC/cold-monorepo/commit/4ad699d374cc90a0cb5783979df1b862bca5d4b9))
+* Set comboBox state when value prop changes ([68a405a](https://github.com/coldPBC/cold-monorepo/commit/68a405a37917f53c6df85bc958a7170874599c50))
+
 # [1.525.0](https://github.com/coldPBC/cold-monorepo/compare/v1.524.0...v1.525.0) (2025-01-23)
 
 
