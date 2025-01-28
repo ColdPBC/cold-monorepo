@@ -15,16 +15,15 @@ export const useUpdateEntityAssociations = () => {
   const { mutateGraphQL: deleteProductMaterials } = useGraphQLMutation('DELETE_PRODUCT_MATERIALS')
 
   // use axios for removing/updating product associations to suppliers
-  const deleteProduct = (variables: {
+  const removeSupplierFromProduct = (variables: {
     productId: string,
-    supplierId: string | null,
     orgId: string | undefined
   }) => {
-    const {productId, supplierId, orgId} = variables;
+    const {productId, orgId} = variables;
 
     return axiosFetcher([`/organizations/${orgId}/products/${productId}`, 'PATCH', {
       id: productId,
-      supplier_id: supplierId,
+      supplier_id: null,
     }])
   }
 
@@ -91,10 +90,9 @@ export const useUpdateEntityAssociations = () => {
           })
         },
         delete: {
-          mutation: deleteProduct,
+          mutation: removeSupplierFromProduct,
           variables: (entityToAddId: string, entityBeingAddedToId: string, orgId: string | undefined) => ({
             productId: entityToAddId,
-            supplierId: null,
             orgId
           })
         }
