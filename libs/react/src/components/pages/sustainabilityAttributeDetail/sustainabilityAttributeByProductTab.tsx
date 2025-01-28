@@ -97,14 +97,15 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 		const groupByKey = selectedView === 'category' ? 'productCategory' : 'productSubcategory';
 		const categoryGroups = groupBy(products, groupByKey);
 		const rawData = Object.entries(categoryGroups).map(([category, items]) => {
-			const hasAttributeAggregatePercent = items.filter(item => item.materialPercentByWeight != null).reduce((total, item) => total + item.materialPercentByWeight!, 0);
-			const totalCount = items.length;
+			const itemsWithData = items.filter(item => item.materialPercentByWeight !== null)
+      const aggregatePercent = itemsWithData.reduce((total, item) => total + item.materialPercentByWeight!, 0);
+			const totalCount = itemsWithData.length;
 
 			return {
 				category: category || 'No Category',
-				hasAttributeAggregatePercent,
+        hasAttributeAggregatePercent: aggregatePercent,
 				totalCount,
-				percentage: hasAttributeAggregatePercent / totalCount,
+				percentage: aggregatePercent / totalCount,
 			};
 		});
 
