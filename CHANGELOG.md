@@ -1,3 +1,11 @@
+# [1.527.0](https://github.com/coldPBC/cold-monorepo/compare/v1.526.0...v1.527.0) (2025-01-28)
+
+
+### Features
+
+* Add ProductBOMTabSidebar to productBOMTab component ([8943cba](https://github.com/coldPBC/cold-monorepo/commit/8943cba10c1484548fd942dc774874ce5d3f7a18))
+* Enable dynamic entity associations management ([756a10c](https://github.com/coldPBC/cold-monorepo/commit/756a10c227001ac0d7eb5ef05d0acc8202e185d5))
+
 # [1.526.0](https://github.com/coldPBC/cold-monorepo/compare/v1.525.0...v1.526.0) (2025-01-28)
 
 
