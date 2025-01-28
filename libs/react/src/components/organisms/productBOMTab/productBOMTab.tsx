@@ -1,10 +1,11 @@
 import { ProductsQuery, SustainabilityAttribute } from '@coldpbc/interfaces';
 import {
   Card,
+  EditEntityAssociationsModal,
   ErrorFallback,
   MuiDataGrid,
-  ProductBOMTabSidebar,
   SustainabilityAttributeColumnList,
+  ProductBOMTabSidebar,
 } from '@coldpbc/components';
 import { GridColDef } from '@mui/x-data-grid';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
@@ -13,6 +14,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import {useFlags} from "launchdarkly-react-client-sdk";
 import numeral from 'numeral';
+import { EntityLevel } from '@coldpbc/enums';
 
 export const DEFAULT_GRID_COL_DEF = {
 	headerClassName: 'bg-gray-30 text-body',
@@ -209,7 +211,25 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
   }
 
   return (
-		<Card title={'Bill of Materials'} className={'w-full'} data-testid={'product-bom-tab-card'}>
+    <Card
+      title={'Bill of Materials'}
+      className={'w-full'}
+      data-testid={'product-bom-tab-card'}
+      ctas={[
+        {
+          child: <EditEntityAssociationsModal
+            buttonText={'Edit Materials'}
+            refresh={refreshProduct}
+            title={'Edit Materials'}
+            entityLevelToAdd={EntityLevel.MATERIAL}
+            entityLevelToBeAddedTo={EntityLevel.PRODUCT}
+            entityToBeAddedId={product.id}
+            saveButtonText={'Save'}
+            idsSelected={rows.map(r => r.id)}
+          />
+        }
+      ]}
+    >
 			<MuiDataGrid
 				rows={rows}
         onRowClick={(params) => {

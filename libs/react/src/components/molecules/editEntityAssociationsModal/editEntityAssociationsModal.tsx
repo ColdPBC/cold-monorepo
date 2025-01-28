@@ -14,7 +14,8 @@ interface EditEntityAssociationsModalProps {
 	buttonText: string;
 	refresh: () => void;
 	title: string;
-	entityLevel: EntityLevel;
+	entityLevelToAdd: EntityLevel;
+  entityLevelToBeAddedTo: EntityLevel;
 	idsSelected: string[];
 	saveButtonText: string;
 	entityToBeAddedId: string;
@@ -22,13 +23,13 @@ interface EditEntityAssociationsModalProps {
 }
 
 export const EditEntityAssociationsModal = (
-  {buttonText, refresh, title, entityLevel, idsSelected, entityToBeAddedId}: EditEntityAssociationsModalProps
+  {buttonText, refresh, title, entityLevelToAdd, entityLevelToBeAddedTo, idsSelected, entityToBeAddedId}: EditEntityAssociationsModalProps
 ) => {
   const {orgId} = useAuth0Wrapper();
   const [showEntityAssociationModal, setShowEntityAssociationModal] = useState<boolean>(false);
   const [rowsSelected, setRowsSelected] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const entities = useEntityData(entityLevel === EntityLevel.ORGANIZATION ? undefined : entityLevel, orgId);
+  const entities = useEntityData(entityLevelToAdd === EntityLevel.ORGANIZATION ? undefined : entityLevelToAdd, orgId);
   const {addToastMessage} = useAddToastMessage();
   const {logBrowser} = useColdContext();
   const {callMutateFunction} = useUpdateEntityAssociations();
@@ -98,16 +99,17 @@ export const EditEntityAssociationsModal = (
     try {
       const promises: (Promise<void> | Promise<FetchResult<any>>)[] = []
       addedRows.forEach(row => {
-        promises.push(callMutateFunction(entityLevel, row, entityToBeAddedId, orgId, true))
+        promises.push(callMutateFunction(entityLevelToAdd, entityLevelToBeAddedTo, row, entityToBeAddedId, orgId, 'add'))
       })
       removedRows.forEach(row => {
-        promises.push(callMutateFunction(entityLevel, row, entityToBeAddedId, orgId, false))
+        promises.push(callMutateFunction(entityLevelToAdd, entityLevelToBeAddedTo, row, entityToBeAddedId, orgId, 'delete'))
       });
 
       Promise.all(promises).then((responses) => {
         logBrowser(`Updated entity associations successfully`, 'info', {
           orgId,
-          entityLevel,
+          entityLevelToAdd,
+          entityLevelToBeAddedTo,
           entityToBeAddedId,
           idsSelected,
           rowsSelected,
@@ -122,7 +124,8 @@ export const EditEntityAssociationsModal = (
       }).catch((error) => {
         logBrowser(`Error updating entity associations`, 'error', {
           orgId,
-          entityLevel,
+          entityLevelToAdd,
+          entityLevelToBeAddedTo,
           entityToBeAddedId,
           idsSelected,
           rowsSelected,
@@ -136,7 +139,8 @@ export const EditEntityAssociationsModal = (
     } catch (error) {
       logBrowser(`Error updating entity associations`, 'error', {
         orgId,
-        entityLevel,
+        entityLevelToAdd,
+        entityLevelToBeAddedTo,
         entityToBeAddedId,
         idsSelected,
         rowsSelected,
