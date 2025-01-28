@@ -10,4 +10,5 @@ export enum UnitOfMeasurement {
   pcs = 'pcs',
   m = 'm',
   m2 = 'm2',
+  kg = 'kg',
 }
