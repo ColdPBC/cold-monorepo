@@ -70,6 +70,11 @@ export const ComboBox = (props: ComboBoxProps) => {
   }
 
   useEffect(() => {
+    setTempOption(value)
+    setSelectedOption(value)
+  }, [value]);
+
+  useEffect(() => {
     if (query && !filteredOptions.some(option => option.name.toLowerCase() === query.toLowerCase())) {
       setNewOption({ id: options.length, name: query, value: query });
     } else {

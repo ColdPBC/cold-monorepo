@@ -21,8 +21,8 @@ import {
   DELETE_MATERIAL_SUPPLIERS,
   UPDATE_PRODUCTS,
   DELETE_AND_CREATE_MATERIAL_SUPPLIER,
-  CREATE_PRODUCT,
-} from "./mutateQueries";
+  CREATE_PRODUCT, UPDATE_PRODUCT_MATERIAL,
+} from './mutateQueries';
 
 export const GET_ALL_ORGS = gql`
   query GetAllOrganizations {
@@ -700,7 +700,6 @@ export const GET_ALL_MATERIAL_CLASSIFICATIONS = gql`
     }
 `;
 
-
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -749,4 +748,5 @@ export const queries: {
   UPDATE_PRODUCTS: UPDATE_PRODUCTS,
   DELETE_AND_CREATE_MATERIAL_SUPPLIER: DELETE_AND_CREATE_MATERIAL_SUPPLIER,
   CREATE_PRODUCT: CREATE_PRODUCT,
+  UPDATE_PRODUCT_MATERIAL: UPDATE_PRODUCT_MATERIAL,
 };

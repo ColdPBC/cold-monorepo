@@ -183,3 +183,11 @@ export const CREATE_PRODUCT = gql`
     }
   }
 `;
+
+export const UPDATE_PRODUCT_MATERIAL = gql`
+  mutation UpdateProductMaterial($input: ProductMaterialUpdateInput!) {
+    updateProductMaterial(input: $input) {
+      id
+    }
+  }
+`;

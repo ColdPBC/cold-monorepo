@@ -24,6 +24,7 @@ export const Input = (props: IInputProps) => {
           className={twMerge(
             'text-body not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
             numeric_input_props?.className,
+            numeric_input_props?.showError ? (numeric_input_props?.error ? 'border-red-100 focus:border-red-100' : 'border-gray-90 focus:border-gray-90') : '',
           )}
           id={numeric_input_props?.name}
           key={`input_${key}`}
@@ -32,6 +33,16 @@ export const Input = (props: IInputProps) => {
           prefix="$"
           thousandSeparator={numeric_input_props?.thousandSeparator || ','}
         />
+        {
+          numeric_input_props && numeric_input_props.showError && (numeric_input_props.error ? (
+            <div className="text-red-100 text-eyebrow mt-[8px]" key={`error_${key}`} data-testid={`input_error_${numeric_input_props.name}`}>
+              {numeric_input_props.error}
+            </div>
+          ) : (
+            <div className={'h-5'} key={`error_${key}`} data-testid={`input_error_space_${numeric_input_props.name}`}>
+            </div>
+          ))
+        }
       </div>
     );
   }
@@ -44,7 +55,9 @@ export const Input = (props: IInputProps) => {
           <label
             {...input_label_props}
             htmlFor={numeric_input_props?.name}
-            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}>
+            className={twMerge('block text-eyebrow font-medium leading-6 text-tc-primary text-nowrap', input_label_props?.className)}
+            data-testid={`input_label_${numeric_input_props?.name}`}
+          >
             {input_label}
           </label>
         )}
@@ -53,13 +66,25 @@ export const Input = (props: IInputProps) => {
           className={twMerge(
             'text-body not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
             numeric_input_props?.className,
+            numeric_input_props?.showError ? (numeric_input_props?.error ? 'border-red-100 focus:border-red-100' : 'border-gray-90 focus:border-gray-90') : '',
           )}
           id={numeric_input_props?.name}
           key={`input_${key}`}
           name={numeric_input_props?.name}
           value={numeric_input_props?.value}
           thousandSeparator={numeric_input_props?.thousandSeparator || ','}
+          data-testid={`input_${numeric_input_props?.name}`}
         />
+        {
+          numeric_input_props && numeric_input_props.showError && (numeric_input_props.error ? (
+            <div className="text-red-100 text-eyebrow mt-[8px]" key={`error_${key}`} data-testid={`input_error_${numeric_input_props.name}`}>
+              {numeric_input_props.error}
+            </div>
+          ) : (
+            <div className={'h-5'} key={`error_${key}`} data-testid={`input_error_space_${numeric_input_props.name}`}>
+            </div>
+          ))
+        }
       </div>
     );
   }
