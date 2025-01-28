@@ -1,3 +1,13 @@
+# [1.530.0](https://github.com/coldPBC/cold-monorepo/compare/v1.529.0...v1.530.0) (2025-01-28)
+
+
+### Features
+
+* Add dynamic product-supplier association editing ([85bd65b](https://github.com/coldPBC/cold-monorepo/commit/85bd65bc134f99f04fce31885b7ee6ca6960c411))
+* Log updates and add success toast in entity associations modal ([f1c9fff](https://github.com/coldPBC/cold-monorepo/commit/f1c9fff00dfd428eafb9ccb1b2741a40f89ee250))
+* Refactor error handling and remove redundant button props. ([5820058](https://github.com/coldPBC/cold-monorepo/commit/5820058b979b35664e7b1e26e0e8dd3e267f9e3b))
+* Rename and update supplier removal logic ([6f12836](https://github.com/coldPBC/cold-monorepo/commit/6f12836b528bea70488e152288eefb28765defd8))
+
 # [1.529.0](https://github.com/coldPBC/cold-monorepo/compare/v1.528.1...v1.529.0) (2025-01-28)
 
 
