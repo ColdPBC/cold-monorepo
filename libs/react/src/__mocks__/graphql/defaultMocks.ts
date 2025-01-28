@@ -636,7 +636,7 @@ export const defaultGraphqlMocks: {
         },
       });
     }
-  }
+  },
 ];
 
 export const getSupplierGraphQLMock = (tier: number) => (

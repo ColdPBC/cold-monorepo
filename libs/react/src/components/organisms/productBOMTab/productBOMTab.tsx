@@ -12,7 +12,6 @@ import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import {useFlags} from "launchdarkly-react-client-sdk";
-import { useNavigate } from 'react-router-dom';
 import numeral from 'numeral';
 import { EntityLevel } from '@coldpbc/enums';
 
@@ -23,9 +22,20 @@ export const DEFAULT_GRID_COL_DEF = {
 
 const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => void }) => {
   const ldFlags = useFlags();
-  const navigate = useNavigate();
 
   const { product, refreshProduct } = props;
+  const [selectedMaterial, setSelectedMaterial] = React.useState<
+    {
+      id: string;
+      name: string;
+      productMaterial: {
+        id: string;
+        yield: number | null;
+        unitOfMeasure: string | null;
+        weight: number | null;
+      };
+    }
+    | undefined>(undefined);
 
   const renderName = (params: any) => {
     const name = get(params, 'row.material', '')
@@ -147,6 +157,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
 
 	const rows: {
 		id: string;
+    productMaterialId: string;
 		material: string;
     materialCategory: string;
     materialSubcategory: string;
@@ -163,6 +174,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
 			const tier2Supplier = get(material.materialSuppliers, '[0].organizationFacility.name', '');
 			return {
 				id: material.id,
+        productMaterialId: productMaterial.id,
 				material: material.name,
         materialCategory: material.materialCategory || '',
         materialSubcategory: material.materialSubcategory || '',
@@ -177,8 +189,28 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
 			};
 		});
 
-	return (
-		<Card
+  const closeBomDetailSidebar = () => {
+    setSelectedMaterial(undefined);
+  }
+
+  const openSidebar = (productMaterialId: string) => {
+    const productMaterial = product.productMaterials.find(pm => pm.id === productMaterialId);
+    if(productMaterial) {
+      setSelectedMaterial({
+        id: productMaterial.material?.id || '',
+        name: productMaterial.material?.name || '',
+        productMaterial: {
+          id: productMaterial.id,
+          yield: productMaterial.yield,
+          unitOfMeasure: productMaterial.unitOfMeasure,
+          weight: productMaterial.weight,
+        },
+      });
+    }
+  }
+
+  return (
+    <Card
       title={'Bill of Materials'}
       className={'w-full'}
       data-testid={'product-bom-tab-card'}
@@ -200,9 +232,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
 			<MuiDataGrid
 				rows={rows}
         onRowClick={(params) => {
-          if(ldFlags.materialDetailPageCold997){
-            navigate(`/materials/${params.id}`)
-          }
+          openSidebar(params.row.productMaterialId);
         }}
 				columns={columns}
 				showSearch
@@ -216,6 +246,16 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
         }}
         searchKey={`${product.id}productBOMSearchValue`}
 			/>
+      {
+        selectedMaterial && (
+          <ProductBOMTabSidebar
+            productId={product.id}
+            material={selectedMaterial}
+            closeSidebar={closeBomDetailSidebar}
+            refresh={refreshProduct}
+          />
+        )
+      }
 		</Card>
 	);
 };

@@ -9,8 +9,13 @@ export interface IInputProps {
   input_label_props?: LabelProps;
   type?: InputTypes;
   container_classname?: string;
-  numeric_input_props?: NumericInputProps;
+  numeric_input_props?: NumericProps;
   textarea_props?: TextAreaProps;
+}
+
+export interface NumericProps extends NumericInputProps {
+  error?: string;
+  showError?: boolean;
 }
 
 export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
