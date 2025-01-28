@@ -1,3 +1,10 @@
+# [1.529.0](https://github.com/coldPBC/cold-monorepo/compare/v1.528.1...v1.529.0) (2025-01-28)
+
+
+### Features
+
+* Add 'kg' to PCF enum ([1d97d22](https://github.com/coldPBC/cold-monorepo/commit/1d97d227125b9073e1a26c654efb57821030542b))
+
 ## [1.528.1](https://github.com/coldPBC/cold-monorepo/compare/v1.528.0...v1.528.1) (2025-01-28)
 
 
