@@ -36,7 +36,7 @@ export const ColdRoutes = () => {
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
         <Route path={'/sustainability_claims'} element={<SustainabilityPage />} />
-        {ldFlags.cold1220SustainabilityAttributePage && <Route path={'/sustainability_claims/:id'} element={<SustainabilityAttributeDetail />} />}
+        <Route path={'/sustainability_claims/:id'} element={<SustainabilityAttributeDetail />} />
         <Route path={'/carbon_footprint'} element={<CarbonFootprint />} />
         <Route path={'/documents'} element={<DocumentsPage />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />

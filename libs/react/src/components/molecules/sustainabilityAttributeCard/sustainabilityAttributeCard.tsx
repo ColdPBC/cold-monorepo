@@ -62,15 +62,9 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
         );
       case SustainabilityAttributeCardStyle.GRAPH:
       default:
-        if (ldFlags.cold1220SustainabilityAttributePage) {
-          return (
-            <AttributeAssuranceCountGraph sustainabilityAttribute={sustainabilityAttribute} />
-          );
-        } else {
-          return (
-            <AttributeAssuranceStatusGraph sustainabilityAttribute={sustainabilityAttribute} />
-          );
-        }
+        return (
+          <AttributeAssuranceCountGraph sustainabilityAttribute={sustainabilityAttribute} />
+        );
     }
   };
 
