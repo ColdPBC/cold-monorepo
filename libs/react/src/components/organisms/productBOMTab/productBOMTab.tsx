@@ -1,24 +1,42 @@
 import { ProductsQuery, SustainabilityAttribute } from '@coldpbc/interfaces';
-import { Card, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumnList } from '@coldpbc/components';
+import {
+  Card,
+  EditEntityAssociationsModal,
+  ErrorFallback,
+  MuiDataGrid,
+  SustainabilityAttributeColumnList,
+  ProductBOMTabSidebar,
+} from '@coldpbc/components';
 import { GridColDef } from '@mui/x-data-grid';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import {useFlags} from "launchdarkly-react-client-sdk";
-import { useNavigate } from 'react-router-dom';
 import numeral from 'numeral';
+import { EntityLevel } from '@coldpbc/enums';
 
 export const DEFAULT_GRID_COL_DEF = {
 	headerClassName: 'bg-gray-30 text-body',
   flex: 1,
 };
 
-const _ProductBOMTab = (props: { product: ProductsQuery }) => {
+const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => void }) => {
   const ldFlags = useFlags();
-  const navigate = useNavigate();
 
-  const { product } = props;
+  const { product, refreshProduct } = props;
+  const [selectedMaterial, setSelectedMaterial] = React.useState<
+    {
+      id: string;
+      name: string;
+      productMaterial: {
+        id: string;
+        yield: number | null;
+        unitOfMeasure: string | null;
+        weight: number | null;
+      };
+    }
+    | undefined>(undefined);
 
   const renderName = (params: any) => {
     const name = get(params, 'row.material', '')
@@ -140,6 +158,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 
 	const rows: {
 		id: string;
+    productMaterialId: string;
 		material: string;
     materialCategory: string;
     materialSubcategory: string;
@@ -156,6 +175,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 			const tier2Supplier = get(material.materialSuppliers, '[0].organizationFacility.name', '');
 			return {
 				id: material.id,
+        productMaterialId: productMaterial.id,
 				material: material.name,
         materialCategory: material.materialCategory || '',
         materialSubcategory: material.materialSubcategory || '',
@@ -170,14 +190,50 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
 			};
 		});
 
-	return (
-		<Card title={'Bill of Materials'} className={'w-full'} data-testid={'product-bom-tab-card'}>
+  const closeBomDetailSidebar = () => {
+    setSelectedMaterial(undefined);
+  }
+
+  const openSidebar = (productMaterialId: string) => {
+    const productMaterial = product.productMaterials.find(pm => pm.id === productMaterialId);
+    if(productMaterial) {
+      setSelectedMaterial({
+        id: productMaterial.material?.id || '',
+        name: productMaterial.material?.name || '',
+        productMaterial: {
+          id: productMaterial.id,
+          yield: productMaterial.yield,
+          unitOfMeasure: productMaterial.unitOfMeasure,
+          weight: productMaterial.weight,
+        },
+      });
+    }
+  }
+
+  return (
+    <Card
+      title={'Bill of Materials'}
+      className={'w-full'}
+      data-testid={'product-bom-tab-card'}
+      ctas={[
+        {
+          child: <EditEntityAssociationsModal
+            buttonText={'Edit Materials'}
+            refresh={refreshProduct}
+            title={'Edit Materials'}
+            entityLevelToAdd={EntityLevel.MATERIAL}
+            entityLevelToBeAddedTo={EntityLevel.PRODUCT}
+            entityToBeAddedId={product.id}
+            saveButtonText={'Save'}
+            idsSelected={rows.map(r => r.id)}
+          />
+        }
+      ]}
+    >
 			<MuiDataGrid
 				rows={rows}
         onRowClick={(params) => {
-          if(ldFlags.materialDetailPageCold997){
-            navigate(`/materials/${params.id}`)
-          }
+          openSidebar(params.row.productMaterialId);
         }}
 				columns={columns}
 				showSearch
@@ -191,6 +247,16 @@ const _ProductBOMTab = (props: { product: ProductsQuery }) => {
         }}
         searchKey={`${product.id}productBOMSearchValue`}
 			/>
+      {
+        selectedMaterial && (
+          <ProductBOMTabSidebar
+            productId={product.id}
+            material={selectedMaterial}
+            closeSidebar={closeBomDetailSidebar}
+            refresh={refreshProduct}
+          />
+        )
+      }
 		</Card>
 	);
 };

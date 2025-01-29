@@ -137,10 +137,10 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
         if (newSupplierId !== oldSupplierId) {
           if (newSupplierId) {
             // Update or create new one
-            await callMutateFunction(EntityLevel.MATERIAL, editedMaterial.id, newSupplierId, orgId, true);
+            await callMutateFunction(EntityLevel.MATERIAL, EntityLevel.SUPPLIER, editedMaterial.id, newSupplierId, orgId, 'add');
           } else {
             // Delete old one
-            await callMutateFunction(EntityLevel.MATERIAL, editedMaterial.id, oldSupplierId, orgId, false);
+            await callMutateFunction(EntityLevel.MATERIAL, EntityLevel.SUPPLIER, editedMaterial.id, oldSupplierId, orgId, 'delete');
           }
         }
 

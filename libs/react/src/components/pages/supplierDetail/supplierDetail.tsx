@@ -83,7 +83,7 @@ export const _SupplierDetail = () => {
 
   const tabs = [
     { label: 'Summary', content: summaryContent },
-    ...(supplier.supplierTier === 1 ? [{ label: 'Products', content: <ProductsSuppliedTab supplier={supplier} /> }] : []),
+    ...(supplier.supplierTier === 1 ? [{ label: 'Products', content: <ProductsSuppliedTab supplier={supplier} refreshData={supplierQuery.mutate} /> }] : [] ),
     { label: 'Materials', content: <MaterialsSuppliedTab supplier={supplier} refreshData={supplierQuery.mutate} /> }
   ]
 

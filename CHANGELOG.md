@@ -1,3 +1,65 @@
+# [1.530.0](https://github.com/coldPBC/cold-monorepo/compare/v1.529.0...v1.530.0) (2025-01-28)
+
+
+### Features
+
+* Add dynamic product-supplier association editing ([85bd65b](https://github.com/coldPBC/cold-monorepo/commit/85bd65bc134f99f04fce31885b7ee6ca6960c411))
+* Log updates and add success toast in entity associations modal ([f1c9fff](https://github.com/coldPBC/cold-monorepo/commit/f1c9fff00dfd428eafb9ccb1b2741a40f89ee250))
+* Refactor error handling and remove redundant button props. ([5820058](https://github.com/coldPBC/cold-monorepo/commit/5820058b979b35664e7b1e26e0e8dd3e267f9e3b))
+* Rename and update supplier removal logic ([6f12836](https://github.com/coldPBC/cold-monorepo/commit/6f12836b528bea70488e152288eefb28765defd8))
+
+# [1.529.0](https://github.com/coldPBC/cold-monorepo/compare/v1.528.1...v1.529.0) (2025-01-28)
+
+
+### Features
+
+* Add 'kg' to PCF enum ([1d97d22](https://github.com/coldPBC/cold-monorepo/commit/1d97d227125b9073e1a26c654efb57821030542b))
+
+## [1.528.1](https://github.com/coldPBC/cold-monorepo/compare/v1.528.0...v1.528.1) (2025-01-28)
+
+
+### Bug Fixes
+
+* divide by products with a percent, not all products in category ([65fc556](https://github.com/coldPBC/cold-monorepo/commit/65fc5568fb854310c54ff5da019e03630f70719b))
+* divide by products with a percent, not all products in category ([#759](https://github.com/coldPBC/cold-monorepo/issues/759)) ([f218808](https://github.com/coldPBC/cold-monorepo/commit/f21880883950b4ea802dae860f807aef0313317e))
+
+# [1.528.0](https://github.com/coldPBC/cold-monorepo/compare/v1.527.0...v1.528.0) (2025-01-28)
+
+
+### Features
+
+* Add support for adding new options in ComboBox ([82c6e25](https://github.com/coldPBC/cold-monorepo/commit/82c6e25b8729f7b2a6952663581471f00531846c))
+* Add support for adding new options to ComboBox ([363353e](https://github.com/coldPBC/cold-monorepo/commit/363353e29308f830a8dcd79d1261239d45c36036))
+
+# [1.527.0](https://github.com/coldPBC/cold-monorepo/compare/v1.526.0...v1.527.0) (2025-01-28)
+
+
+### Features
+
+* Add ProductBOMTabSidebar to productBOMTab component ([8943cba](https://github.com/coldPBC/cold-monorepo/commit/8943cba10c1484548fd942dc774874ce5d3f7a18))
+* Enable dynamic entity associations management ([756a10c](https://github.com/coldPBC/cold-monorepo/commit/756a10c227001ac0d7eb5ef05d0acc8202e185d5))
+
+# [1.526.0](https://github.com/coldPBC/cold-monorepo/compare/v1.525.0...v1.526.0) (2025-01-28)
+
+
+### Bug Fixes
+
+* Refactor getSelectedMaterialId to ensure proper typing ([d613279](https://github.com/coldPBC/cold-monorepo/commit/d6132794c0174bfc8dcad30797da0641361e0c1f))
+
+
+### Features
+
+* Add BOM sidebar and editing functionality to product details ([246031d](https://github.com/coldPBC/cold-monorepo/commit/246031dd7e784821bc790064905b119f4a3cf144))
+* Add data-testid attributes to improve component testing ([4351881](https://github.com/coldPBC/cold-monorepo/commit/43518812daa56e4b9c7dbc9c170ac5c77a722289))
+* Enhance input error handling with conditional border styles ([b5afc37](https://github.com/coldPBC/cold-monorepo/commit/b5afc37909b52ac2bfcd32d4ba7ead9fef9c5b5c))
+* Refactor BOM sidebar state management and improve UX ([0e15e56](https://github.com/coldPBC/cold-monorepo/commit/0e15e56ecd9e7ad82855da9a1bd087ef398049cd))
+* Refactor BOM tab and sidebar state handling. ([af7defc](https://github.com/coldPBC/cold-monorepo/commit/af7defce657c9b86f574af7d381b17341306c568))
+* Refactor ProductBOMTabSidebar and organize interfaces. ([102becc](https://github.com/coldPBC/cold-monorepo/commit/102becc887942bb2cb213d06a940354d506a3a0f))
+* Refactor ProductBOMTabSidebar to remove redundant variable. ([241d1a6](https://github.com/coldPBC/cold-monorepo/commit/241d1a60930af11ec69abcf3d7c7f3c380b08994))
+* Refactor yield error logic into a separate function ([ff19695](https://github.com/coldPBC/cold-monorepo/commit/ff19695884e50ed78d89679e20e52edcf5bc978b))
+* Remove unused GET_PRODUCT_BOM_DATA_FOR_SIDEBAR query ([4ad699d](https://github.com/coldPBC/cold-monorepo/commit/4ad699d374cc90a0cb5783979df1b862bca5d4b9))
+* Set comboBox state when value prop changes ([68a405a](https://github.com/coldPBC/cold-monorepo/commit/68a405a37917f53c6df85bc958a7170874599c50))
+
 # [1.525.0](https://github.com/coldPBC/cold-monorepo/compare/v1.524.0...v1.525.0) (2025-01-23)
 
 
