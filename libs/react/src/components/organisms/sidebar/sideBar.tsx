@@ -136,16 +136,20 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 	const { logBrowser } = useColdContext();
 
 	const filterSidebar = (item: NavbarItem) => {
+    if (item.items) {
+      item.items = item.items.filter(filterSidebar);
+    }
+
     // if the flag is set, return true to show all items
     if(ldFlags.showNewSidebarCold1354){
+      if (item.key === 'settings_billing_key') {
+        return ldFlags.showBillingPageCold957;
+      }
+
       return true;
     }
 
-		if (item.items) {
-			item.items = item.items.filter(filterSidebar);
-		}
-
-		if (item.key === 'actions_key') {
+    if (item.key === 'actions_key') {
 			const hasActions = actionsData && actionsData?.length > 0;
 
 			return ldFlags.showActions261 && hasActions;

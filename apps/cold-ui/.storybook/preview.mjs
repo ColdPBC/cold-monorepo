@@ -110,6 +110,7 @@ export default {
         supplierDetailPageCold1195: true,
         cold1220SustainabilityAttributePage: true,
         productCarbonFootprintMvp: true,
+        showBillingPageCold957: true,
       },
     },
   },
