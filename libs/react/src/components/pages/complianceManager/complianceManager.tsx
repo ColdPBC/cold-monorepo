@@ -167,12 +167,10 @@ const _ComplianceManager = () => {
     content: <ComplianceManagerOverview />
   }];
 
-  if (ldFlags.showNewComplianceManagerPreviewCold713) {
-    tabs.push({
-      label: 'Preview',
-      content: <ComplianceManagerPreview />,
-    });
-  }
+  tabs.push({
+    label: 'Preview',
+    content: <ComplianceManagerPreview />,
+  });
 
   return (
     <ColdComplianceManagerContext.Provider

@@ -150,8 +150,6 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 			// TODO: Delete this once we replace the journey page completely
 			item.label = 'Gaps';
 			return true;
-		} else if (item.key === 'assessments_key') {
-			return !ldFlags.showNewComplianceManagerPreviewCold713;
 		} else if (item.key === 'settings_billing_key') {
       return ldFlags.showBillingPageCold957;
     } else {
