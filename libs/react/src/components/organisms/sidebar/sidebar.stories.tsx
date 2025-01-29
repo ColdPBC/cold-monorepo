@@ -32,13 +32,6 @@ export const NoActions: Story = {
       </StoryMockProvider>
     );
   },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showActions261: false,
-      },
-    },
-  },
 };
 
 export const ColdAdmin: Story = {

@@ -8,15 +8,11 @@ import {
   DashboardLayout,
   DocumentsPage,
   DocumentUpload,
-  Footprint,
   Interceptor,
-  MaterialDetail,
   MaterialRoutes,
-  MaterialsPage,
   ProtectedRoute,
   Signup,
-  SupplierDetail, SupplierRoutes,
-  SuppliersPage,
+  SupplierRoutes,
   SustainabilityPage,
   SustainabilityAttributeDetail,
   Terms,
@@ -41,7 +37,7 @@ export const ColdRoutes = () => {
         {QuestionnaireRoutes()}
         <Route path={'/sustainability_claims'} element={<SustainabilityPage />} />
         {ldFlags.cold1220SustainabilityAttributePage && <Route path={'/sustainability_claims/:id'} element={<SustainabilityAttributeDetail />} />}
-        <Route path={'/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
+        <Route path={'/carbon_footprint'} element={<CarbonFootprint />} />
         <Route path={'/documents'} element={ldFlags.showNewDocumentsPage ? <DocumentsPage /> : <DocumentUpload />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />
         <Route path={'/settings/users'} element={<UserSettingsPage />} />

@@ -129,9 +129,6 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 		isLoading: boolean;
 	} = useSWR(ldFlags.showNewSidebarCold1354 ? ['/components/sidebar_navigation', 'GET'] : null, axiosFetcher);
 
-	// Fetch actions if actions feature flag is present
-	const { data: actionsData, error: actionsError } = useOrgSWR<ActionPayload[], any>(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
-
 	const auth0 = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
 
@@ -149,11 +146,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
       return true;
     }
 
-    if (item.key === 'actions_key') {
-			const hasActions = actionsData && actionsData?.length > 0;
-
-			return ldFlags.showActions261 && hasActions;
-		} else if (item.key === 'documents_key') {
+    if (item.key === 'documents_key') {
 			return ldFlags.showDocumentsUploadModuleCold492;
 		} else if (item.key === 'compliance_key' || item.key === 'questionnaires_key') {
 			return ldFlags.showComplianceModule;
@@ -216,14 +209,10 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 			</div>
 		);
 
-	if (error || actionsError || auth0.error) {
+	if (error || auth0.error) {
 		if (error) {
 			logBrowser('Error loading sidebar data', 'error', { ...error }, error);
 			logError(error, ErrorType.SWRError);
-		}
-		if (actionsError) {
-			logBrowser('Error loading actions data', 'error', { ...actionsError }, actionsError);
-			logError(actionsError, ErrorType.SWRError);
 		}
 		if (auth0.error) {
 			logBrowser('Error loading auth0 data', 'error', { ...auth0.error }, auth0.error);

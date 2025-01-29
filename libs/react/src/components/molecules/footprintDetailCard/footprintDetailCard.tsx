@@ -22,7 +22,6 @@ function _FootprintDetailCard(props: PropsWithChildren<FootprintDetailCardProps>
   const ldFlags = useFlags();
   const navigate = useNavigate();
   const [isEmpty, setIsEmpty] = useState(false);
-  const { data: actionsData, error: actionsError } = useOrgSWR<ActionPayload[], any>(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
   const { data, error } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);
   const { logError, logBrowser } = useColdContext();
 
@@ -47,32 +46,18 @@ function _FootprintDetailCard(props: PropsWithChildren<FootprintDetailCardProps>
       variant?: ButtonTypes;
       child?: ReactNode;
     }[] = [];
-    if (ldFlags.showActions261) {
-      // if there are no actions for this subcategory, navigate to the /actions page
-      if (!actionsData?.some(action => action.action.subcategory === props.subcategory_key)) {
-        ctas.push({
-          text: `View ${subcategoryName} Actions`,
-          action: () => {
-            navigate(`/actions`);
-          },
-        });
-      } else {
-        ctas.push({
-          text: `View ${subcategoryName} Actions`,
-          action: () => {
-            navigate(`/actions/${props.subcategory_key}`);
-          },
-        });
-      }
-    }
+    ctas.push({
+      text: `View ${subcategoryName} Actions`,
+      action: () => {
+        navigate(`/actions/${props.subcategory_key}`);
+      },
+    });
     return ctas;
   };
 
   logBrowser('Footprint data loaded', 'info', {
     isEmpty,
     data,
-    actionsData,
-    actionsError,
   });
 
   return (
