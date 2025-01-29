@@ -49,7 +49,7 @@ const _SustainabilityPage = () => {
   }
 
   return (
-		<MainContent title="Sustainability Attributes" className={'w-[calc(100%-100px)]'}>
+		<MainContent title={ldFlags.showNewSidebarCold1354 ? 'Sustainability Claims' : 'Sustainability Attributes'} className={'w-[calc(100%-100px)]'}>
       <Tabs
         tabs={[
           {

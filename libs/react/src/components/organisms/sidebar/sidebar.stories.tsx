@@ -73,6 +73,7 @@ export const NewSidebar: Story = {
   parameters: {
     launchdarkly: {
       flags: {
+        showBillingPageCold957: true,
         showNewSidebarCold1354: true,
       },
     },

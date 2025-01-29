@@ -136,16 +136,20 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 	const { logBrowser } = useColdContext();
 
 	const filterSidebar = (item: NavbarItem) => {
+    if (item.items) {
+      item.items = item.items.filter(filterSidebar);
+    }
+
     // if the flag is set, return true to show all items
     if(ldFlags.showNewSidebarCold1354){
+      if (item.key === 'settings_billing_key') {
+        return ldFlags.showBillingPageCold957;
+      }
+
       return true;
     }
 
-		if (item.items) {
-			item.items = item.items.filter(filterSidebar);
-		}
-
-		if (item.key === 'actions_key') {
+    if (item.key === 'actions_key') {
 			const hasActions = actionsData && actionsData?.length > 0;
 
 			return ldFlags.showActions261 && hasActions;
@@ -244,7 +248,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
           data-testid={'sidebar'}
           className={
             'text-tc-primary fixed left-0 top-0 h-[100vh] w-[241px] overflow-auto justify-between flex flex-col items-center ' +
-            'bg-bgc-elevated z-20 gap-[32px]'
+            'bg-bgc-elevated z-20 gap-[32px] scrollbar-hide'
           }>
           <div className={`flex flex-col gap-[32px] w-full ${orgSelector ? 'pb-10' : ''}`}>
             <div className={'py-[24px] px-[16px]'}>
