@@ -105,7 +105,7 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 				category: category || 'No Category',
         hasAttributeAggregatePercent: aggregatePercent,
 				totalCount,
-				percentage: aggregatePercent / totalCount,
+				percentage: totalCount > 0 ? aggregatePercent / totalCount : 0,
 			};
 		});
 
