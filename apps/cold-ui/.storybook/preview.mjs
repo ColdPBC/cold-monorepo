@@ -89,10 +89,6 @@ export default {
     },
     launchdarkly: {
       flags: {
-        showNewsModuleCold310: true,
-        showNextStepsCard: true,
-        showComplianceModule: true,
-        showDocumentsUploadModuleCold492: true,
         showREIComplianceMVPSidebarCold506: true,
         showNewHomePageComplianceReiMvp: true,
         complianceSetFlowMarkdown:
