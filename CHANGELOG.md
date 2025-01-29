@@ -1,3 +1,10 @@
+# [1.532.0](https://github.com/coldPBC/cold-monorepo/compare/v1.531.0...v1.532.0) (2025-01-29)
+
+
+### Features
+
+* Refactor sidebar filtering logic for better flag handling ([7409605](https://github.com/coldPBC/cold-monorepo/commit/74096057aa8e1e16cb42bdd8d0c7603c16d8ca92))
+
 # [1.531.0](https://github.com/coldPBC/cold-monorepo/compare/v1.530.1...v1.531.0) (2025-01-29)
 
 
