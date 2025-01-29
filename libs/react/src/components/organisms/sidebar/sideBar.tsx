@@ -244,7 +244,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
           data-testid={'sidebar'}
           className={
             'text-tc-primary fixed left-0 top-0 h-[100vh] w-[241px] overflow-auto justify-between flex flex-col items-center ' +
-            'bg-bgc-elevated z-20 gap-[32px]'
+            'bg-bgc-elevated z-20 gap-[32px] scrollbar-hide'
           }>
           <div className={`flex flex-col gap-[32px] w-full ${orgSelector ? 'pb-10' : ''}`}>
             <div className={'py-[24px] px-[16px]'}>
