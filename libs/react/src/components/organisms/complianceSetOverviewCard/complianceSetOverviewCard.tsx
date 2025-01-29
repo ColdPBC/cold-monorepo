@@ -48,10 +48,7 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
   }
 
   const getComplianceLogo = () => {
-    let imageClassName = 'max-w-[60px] max-h-[60px]';
-    if (ldFlags.showNewCompliancePageHomeCold671) {
-      imageClassName += ' invert';
-    }
+    const imageClassName = 'max-w-[60px] max-h-[60px] invert';
     const img = <img src={complianceSet.logo_url} alt={`${complianceSet.name}-logo`} className={imageClassName}></img>;
     if (!isNotActive) {
       return <div className={'rounded-full min-w-[80px] min-h-[80px] max-w-[80px] max-h-[80px] bg-gray-50 flex justify-center items-center'}>{img}</div>;
