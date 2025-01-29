@@ -1,3 +1,10 @@
+# [1.531.0](https://github.com/coldPBC/cold-monorepo/compare/v1.530.1...v1.531.0) (2025-01-29)
+
+
+### Features
+
+* Update page title dynamically based on feature flag ([49984c9](https://github.com/coldPBC/cold-monorepo/commit/49984c903fe90dfd4ae3b786a348b54ce9bb2f54))
+
 ## [1.530.1](https://github.com/coldPBC/cold-monorepo/compare/v1.530.0...v1.530.1) (2025-01-29)
 
 
