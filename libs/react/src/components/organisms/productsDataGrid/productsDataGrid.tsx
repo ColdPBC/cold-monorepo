@@ -321,9 +321,7 @@ export const _ProductsDataGrid = () => {
         rows={rows}
         rowHeight={72}
         onRowClick={(params) => {
-          if(ldFlags.showProductDetailPageCold1140){
-            navigate(`/products/${params.id}`)
-          }
+          navigate(`/products/${params.id}`)
         }}
         showManageColumns
         showExport
