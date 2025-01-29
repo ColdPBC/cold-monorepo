@@ -14,41 +14,40 @@ import React, { useContext } from 'react';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { isAxiosError } from 'axios';
 import { useColdContext } from '@coldpbc/hooks';
+import { isArray } from 'lodash';
 
 export const EmissionsCarbonFootprintBase = () => {
   const { logBrowser } = useColdContext();
   const { data, setSelectedFacility, selectedFacility, isSingleYear, selectedYear, setSelectedYear } = useContext(ColdEmissionsContext);
   const { facilityOptions, yearOptions, emissions } = data;
 
-  if (isAxiosError(emissions) && emissions?.response?.status === 404) {
+  if ((isAxiosError(emissions) && emissions?.response?.status === 404) || (isArray(emissions) && emissions.length === 0)) {
     logBrowser('No emissions data found', 'error', { data }, data);
     return (
-      <AppContent title="Carbon Footprint">
-        <CenterColumnContent>
-          <div className={'flex flex-col space-y-[35px]'}>
-            <DismissableInfoCard
-              text="Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e."
-              onDismiss={() => {}}
-              dismissKey="footprint-page"
+      <MainContent title="Carbon Footprint" className={'w-[calc(100%-100px)] min-w-[1129px]'}>
+        <div className={'w-full flex flex-col space-y-[35px]'}>
+          <DismissableInfoCard
+            text="Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e."
+            onDismiss={() => {}}
+            dismissKey="footprint-page"
+          />
+          <Card>
+            <EmissionsDonutChart
+              isEmptyData={true}
+              subcategoryTotals={[]}
+              variant={EmissionsDonutChartVariants.horizontal}
+              chartData={{
+                labels: [],
+                datasets: [],
+              }}
             />
-            <Card>
-              <EmissionsDonutChart
-                isEmptyData={true}
-                subcategoryTotals={[]}
-                variant={EmissionsDonutChartVariants.horizontal}
-                chartData={{
-                  labels: [],
-                  datasets: [],
-                }}
-              />
-              <div className="m-auto table w-1">
-                <h4 className="text-h4 text-center whitespace-nowrap m-4">{'We need more data to show your footprint'}</h4>
-                <p className="text-center text-sm leading-normal">We'll be in touch soon to collect info needed for your latest footprint</p>
-              </div>
-            </Card>
-          </div>
-        </CenterColumnContent>
-      </AppContent>
+            <div className="m-auto table w-1">
+              <h4 className="text-h4 text-center whitespace-nowrap m-4">{'We need more data to show your footprint'}</h4>
+              <p className="text-center text-sm leading-normal">We'll be in touch soon to collect info needed for your latest footprint</p>
+            </div>
+          </Card>
+        </div>
+      </MainContent>
     );
   }
 
@@ -72,8 +71,8 @@ export const EmissionsCarbonFootprintBase = () => {
   };
 
   return (
-    <MainContent>
-      <div className={'flex flex-row justify-between py-[36px] fixed top-0 shadow-2xl bg-bgc-main z-10 w-[1129px]'}>
+    <MainContent className={'relative gap-0 py-0'}>
+      <div className={'flex flex-row justify-between py-[36px] sticky top-0 shadow-2xl bg-bgc-main z-10 w-full'}>
         <div className={'text-h1 text-tc-primary'}>Carbon Footprint</div>
         <div className={'flex flex-row gap-[5px]'}>
           <Select
@@ -89,7 +88,7 @@ export const EmissionsCarbonFootprintBase = () => {
           {getFilters()}
         </div>
       </div>
-      <div className={'flex flex-col space-y-[35px] pt-[136px] justify-start w-full'}>
+      <div className={'flex flex-col space-y-[35px] justify-start w-full'}>
         {!isSingleYear && <EmissionsYearlyCarbonFootprintChart />}
         <EmissionsCarbonFootprintCharts />
       </div>
