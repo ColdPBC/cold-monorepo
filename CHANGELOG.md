@@ -1,3 +1,11 @@
+## [1.530.1](https://github.com/coldPBC/cold-monorepo/compare/v1.530.0...v1.530.1) (2025-01-29)
+
+
+### Bug Fixes
+
+* handle new case of divide by zero ([52a5e19](https://github.com/coldPBC/cold-monorepo/commit/52a5e19667f0da8bd4b832360a363b7bccd2c5a3))
+* handle new case of divide by zero ([#763](https://github.com/coldPBC/cold-monorepo/issues/763)) ([af4ec69](https://github.com/coldPBC/cold-monorepo/commit/af4ec6923eac45b7a0747ca5364f978c546750df))
+
 # [1.530.0](https://github.com/coldPBC/cold-monorepo/compare/v1.529.0...v1.530.0) (2025-01-28)
 
 
