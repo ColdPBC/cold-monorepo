@@ -8,7 +8,7 @@ export const ComplianceRoutes = () => {
   return (
     <Route path={'/assessments'}>
       <Route index element={<CompliancePage />} />
-      {ldFlags.showNewComplianceManagerCold711 && <Route path={':name'} element={<ComplianceManager />} />}
+      <Route path={':name'} element={<ComplianceManager />} />
     </Route>
   );
 };

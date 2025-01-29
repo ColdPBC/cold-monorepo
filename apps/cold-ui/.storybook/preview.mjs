@@ -90,8 +90,6 @@ export default {
     launchdarkly: {
       flags: {
         swrKeepPreviousData: true,
-        showNewNavigationCold698: true,
-        showNewComplianceManagerCold711: true,
         showNewComplianceManagerPreviewCold713: true,
         showNewDocumentsPage: true,
         showProductDetailPageCold1140: true,
