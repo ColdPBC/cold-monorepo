@@ -89,7 +89,6 @@ export default {
     },
     launchdarkly: {
       flags: {
-        showTeamMemberTable: true,
         showNewsModuleCold310: true,
         showNextStepsCard: true,
         showComplianceModule: true,
