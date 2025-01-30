@@ -11,7 +11,7 @@ import { GridColDef } from '@mui/x-data-grid';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {useFlags} from "launchdarkly-react-client-sdk";
 import numeral from 'numeral';
 import { EntityLevel } from '@coldpbc/enums';
