@@ -207,6 +207,9 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
           weight: productMaterial.weight,
         },
       });
+    } else {
+      // in case the product material is removed from the product
+      setSelectedMaterial(undefined);
     }
   }
 
