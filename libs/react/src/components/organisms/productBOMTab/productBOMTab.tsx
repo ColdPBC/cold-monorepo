@@ -11,7 +11,7 @@ import { GridColDef } from '@mui/x-data-grid';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useFlags} from "launchdarkly-react-client-sdk";
 import numeral from 'numeral';
 import { EntityLevel } from '@coldpbc/enums';
@@ -209,6 +209,13 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
       });
     }
   }
+
+  useEffect(() => {
+    // any updates to the product update the selected material to avoid stale states
+    if(selectedMaterial && selectedMaterial.productMaterial.id) {
+      openSidebar(selectedMaterial.productMaterial.id);
+    }
+  }, [product]);
 
   return (
     <Card
