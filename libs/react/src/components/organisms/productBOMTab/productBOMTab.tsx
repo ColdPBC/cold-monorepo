@@ -208,11 +208,18 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
           weight: productMaterial.weight,
         },
       });
-    } else {
-      // in case the product material is removed from the product
-      setSelectedMaterial(undefined);
     }
   }
+
+  useEffect(() => {
+    // make sure the selected material still exists if product is updated
+    if(selectedMaterial) {
+      const productMaterial = product.productMaterials.find(pm => pm.id === selectedMaterial.productMaterial.id);
+      if(!productMaterial) {
+        setSelectedMaterial(undefined);
+      }
+    }
+  }, [product]);
 
   return (
     <Card
