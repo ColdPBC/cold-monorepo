@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { clone, get, upperCase } from 'lodash';
+import { clone, upperCase } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useLocation } from 'react-router-dom';
 import { ActionPayload, NavbarItem, NavbarItemWithRoute } from '@coldpbc/interfaces';
@@ -17,103 +17,6 @@ import {
   Spinner,
   ColdDollarSignIcon,
 } from '@coldpbc/components';
-
-const OLD_ITEMS: NavbarItem[] = [
-  {
-    "key": "sustainability_key",
-    "icon": {
-      "name": IconNames.ColdSustainabilityIcon,
-    },
-    "label": "Sustainability",
-    "route": "/sustainability_claims"
-  },
-  {
-    "key": "questionnaires_key",
-    "icon": {
-      "name": IconNames.ColdQuestionnaireIcon
-    },
-    "label": "Questionnaires",
-    "route": "/assessments"
-  },
-  {
-    "key": "materials_key",
-    "icon": {
-      "name": IconNames.ColdMaterialsNavIcon,
-    },
-    "label": "Materials",
-    "route": "/materials"
-  },
-  {
-    "key": "products_key",
-    "icon": {
-      "name": IconNames.ColdProductsNavIcon
-    },
-    "label": "Products",
-    "route": "/products"
-  },
-  {
-    "key": "suppliers_key",
-    "icon": {
-      "name": IconNames.ColdSuppliersNavIcon
-    },
-    "label": "Suppliers",
-    "route": "/suppliers"
-  },
-  {
-    "key": "actions_key",
-    "icon": {
-      "name": IconNames.ColdActionsIcon
-    },
-    "label": "Actions",
-    "route": "/actions"
-  },
-  {
-    "key": "carbon_footprint_key",
-    "icon": {
-      "name": IconNames.ColdChartIcon
-    },
-    "label": "Carbon Footprint",
-    "route": "/carbon_footprint"
-  },
-  {
-    "key": "documents_key",
-    "icon": {
-      "name": IconNames.ColdDocumentsIcon
-    },
-    "label": "Documents",
-    "route": "/documents"
-  },
-  {
-    "key": "settings_key",
-    "icon": {
-      "name": IconNames.ColdSettingsIcon
-    },
-    "items": [
-      {
-        "key": "settings_account_key",
-        "label": "Account",
-        "route": "/settings/account"
-      },
-      {
-        "key": "settings_user_key",
-        "label": "Users",
-        "route": "/settings/users"
-      },
-      {
-        "key": "settings_billing_key",
-        "label": "Billing",
-        "route": "/settings/billing"
-      }
-    ],
-    "label": "Settings",
-    "roles": [
-      "cold:admin",
-      "company:admin",
-      "company:owner"
-    ],
-    "route": "/settings"
-  }
-]
 
 const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Element => {
 	const ldFlags = useFlags();
@@ -136,11 +39,11 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
       item.items = item.items.filter(filterSidebar);
     }
 
-    if (item.key === 'settings_billing_key') {
+		if (item.key === 'settings_billing_key') {
       return ldFlags.showBillingPageCold957;
     } else {
-      return true;
-    }
+			return true;
+		}
 	};
 
 	const location = useLocation();
@@ -175,7 +78,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 				}
 			});
 		}
-	}, [location.pathname, data, OLD_ITEMS]);
+	}, [location.pathname, data, activeItem?.key]);
 
 	if (isLoading || auth0.isLoading)
 		return (
@@ -204,6 +107,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 		logBrowser('Sidebar data loaded', 'info', { data, filteredSidebarItems });
 		const topItems: NavbarItem[] = clone(filteredSidebarItems);
     const orgSelector = getOrgSelector();
+
     return (
       <div
         data-testid={'sidebar'}

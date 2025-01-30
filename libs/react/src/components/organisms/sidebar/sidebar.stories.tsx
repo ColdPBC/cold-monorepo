@@ -24,16 +24,6 @@ export const Default: Story = {
   },
 };
 
-export const NoActions: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <SideBar />
-      </StoryMockProvider>
-    );
-  },
-};
-
 export const ColdAdmin: Story = {
   render: args => {
     return (
@@ -54,4 +44,3 @@ export const ColdAdmin: Story = {
     },
   },
 };
-
