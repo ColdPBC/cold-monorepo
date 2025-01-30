@@ -37,8 +37,14 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
       item.items = item.items.filter(filterSidebar);
     }
 
-		if (item.key === 'settings_billing_key') {
+    if (item.key === 'settings_billing_key') {
       return ldFlags.showBillingPageCold957;
+    } else if (item.key === 'assurance_documents_key' || item.key === 'uploads_key') {
+      // Show new documents items when FF is on
+      return ldFlags.showNewDocumentUploadUxCold1410;
+    } else if (item.key === 'documents_key') {
+      // Hide old Documents item when FF is on
+      return !ldFlags.showNewDocumentUploadUxCold1410;
     } else {
 			return true;
 		}
