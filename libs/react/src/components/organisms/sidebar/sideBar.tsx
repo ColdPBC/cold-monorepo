@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { clone, upperCase } from 'lodash';
+import { clone, get, upperCase } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useLocation } from 'react-router-dom';
-import { ActionPayload, NavbarItem, NavbarItemWithRoute } from '@coldpbc/interfaces';
+import { NavbarItem, NavbarItemWithRoute } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
-import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
-import { ErrorType, IconNames } from '@coldpbc/enums';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 import {
   ColdLogoAnimation,
   OrganizationSelector,
-  SideBarCollapse,
   SideBarItem,
   ErrorFallback,
   Spinner,
-  ColdDollarSignIcon,
 } from '@coldpbc/components';
 
 const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Element => {
