@@ -1,13 +1,11 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   AccountSettingsPage,
-  ActionsOverview,
   BillingPage,
   CarbonFootprint,
   ComplianceRoutes,
   DashboardLayout,
   DocumentsPage,
-  DocumentUpload,
   Interceptor,
   MaterialRoutes,
   ProtectedRoute,

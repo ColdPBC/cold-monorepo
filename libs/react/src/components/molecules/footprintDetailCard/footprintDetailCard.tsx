@@ -3,13 +3,11 @@ import { Card } from '../card/card';
 import { useNavigate } from 'react-router-dom';
 import { FootprintDetailChart } from '../footprintDetailChart';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { useColdContext } from '@coldpbc/hooks';
 import { ButtonTypes, ErrorType } from '@coldpbc/enums';
-import { ActionPayload } from '@coldpbc/interfaces';
 
 export interface FootprintDetailCardProps {
   colors: string[];
@@ -19,7 +17,6 @@ export interface FootprintDetailCardProps {
 }
 
 function _FootprintDetailCard(props: PropsWithChildren<FootprintDetailCardProps>) {
-  const ldFlags = useFlags();
   const navigate = useNavigate();
   const [isEmpty, setIsEmpty] = useState(false);
   const { data, error } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);

@@ -13,7 +13,6 @@ import { processEntityLevelAssurances } from '@coldpbc/lib';
 import { uniq } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React, { useState } from 'react';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useNavigate } from 'react-router-dom';
 import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
 import { Checkbox } from '@mui/material';
@@ -26,7 +25,6 @@ interface MaterialsSuppliedTabProps {
 const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, refreshData }) => {
   const [showBulkEditAttributesModal, setShowBulkEditAttributesModal] = React.useState<boolean>(false);
   const [rowsSelected, setRowsSelected] = useState<GridRowSelectionModel>([]);
-	const ldFlags = useFlags();
 	const navigate = useNavigate();
 
 	const uniqCategories = uniq(supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.materialCategory || ''))
@@ -169,9 +167,7 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
           if (params.field === 'checkbox') {
             return;
           }
-          if (ldFlags.materialDetailPageCold997) {
-            navigate(`/materials/${params.id}`);
-          }
+          navigate(`/materials/${params.id}`);
         }}
 				columns={columns}
 				showSearch

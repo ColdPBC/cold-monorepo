@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { EmptyState, SustainabilityAttributeCard } from '@coldpbc/components';
 import type { SustainabilityAttribute } from '@coldpbc/interfaces';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useNavigate } from 'react-router-dom';
 
 interface SustainabilityAttributeTabProps {
@@ -43,7 +42,6 @@ const OTHER_ATTRIBUTES_EMPTY_STATE_PROPS = {
 export const SustainabilityAttributeTab: React.FC<SustainabilityAttributeTabProps> = ({ tab, sustainabilityAttributes }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [columnCount, setColumnCount] = useState(1);
-  const ldFlags = useFlags();
   const navigate = useNavigate();
 
   useEffect(() => {

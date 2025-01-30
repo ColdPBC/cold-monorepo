@@ -7,7 +7,6 @@ import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export interface FootprintOverviewCardProps {
   headerless?: boolean;
@@ -18,7 +17,6 @@ const PERIOD = 2023;
 
 function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardProps>) {
   const navigate = useNavigate();
-  const ldFlags = useFlags();
 
   // Get footprint data from SWR
   const { data, isLoading, error } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);

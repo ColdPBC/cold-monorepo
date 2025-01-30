@@ -9,14 +9,12 @@ import { differenceInDays, format, intlFormatDistance } from 'date-fns';
 import { isAxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { get, isArray } from 'lodash';
 import { getTermString } from '@coldpbc/lib';
 import { isDefined } from 'class-validator';
 
 const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompliance }) => {
   const navigate = useNavigate();
-  const ldFlags = useFlags();
   const { orgId } = useAuth0Wrapper();
   const { logBrowser } = useColdContext();
   const { addToastMessage } = useAddToastMessage();
