@@ -32,7 +32,7 @@ export const CompliancePageWrapper = () => {
   };
 
   return (
-    <MainContent title={ldFlags.showNewSidebarCold1354 ? 'Assessments' : 'Questionnaires'} headerElement={getFilter()}>
+    <MainContent title={'Assessments'} headerElement={getFilter()}>
       <div className={'w-full space-y-[24px]'}>
         {allComplianceSets
           ?.sort((a, b) => {

@@ -31,7 +31,7 @@ const _SustainabilityPage = () => {
 
   if (sustainabilityAttributesQuery.isLoading) {
     return (
-      <MainContent title={ldFlags.showNewSidebarCold1354 ? 'Sustainability Claims' : 'Sustainability Attributes'} className={'w-[calc(100%-100px)]'}>
+      <MainContent title={'Sustainability Claims'} className={'w-[calc(100%-100px)]'}>
         <Spinner />
       </MainContent>
     );
@@ -49,7 +49,7 @@ const _SustainabilityPage = () => {
   }
 
   return (
-		<MainContent title={ldFlags.showNewSidebarCold1354 ? 'Sustainability Claims' : 'Sustainability Attributes'} className={'w-[calc(100%-100px)]'}>
+		<MainContent title={'Sustainability Claims'} className={'w-[calc(100%-100px)]'}>
       <Tabs
         tabs={[
           {

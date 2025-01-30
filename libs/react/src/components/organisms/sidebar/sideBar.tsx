@@ -127,7 +127,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 		data: any;
 		error: any;
 		isLoading: boolean;
-	} = useSWR(ldFlags.showNewSidebarCold1354 ? ['/components/sidebar_navigation', 'GET'] : null, axiosFetcher);
+	} = useSWR(['/components/sidebar_navigation', 'GET'], axiosFetcher);
 
 	const auth0 = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
@@ -137,24 +137,9 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
       item.items = item.items.filter(filterSidebar);
     }
 
-    // if the flag is set, return true to show all items
-    if(ldFlags.showNewSidebarCold1354){
-      if (item.key === 'settings_billing_key') {
-        return ldFlags.showBillingPageCold957;
-      }
-
-      return true;
-    }
-
-    if (item.key === 'journey_key') {
-			// TODO: Delete this once we replace the journey page completely
-			item.label = 'Gaps';
-			return true;
-		} else if (item.key === 'settings_billing_key') {
+    if (item.key === 'settings_billing_key') {
       return ldFlags.showBillingPageCold957;
-    } else {
-			return true;
-		}
+    }
 	};
 
 	const location = useLocation();
@@ -163,7 +148,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 
 	const getOrgSelector = () => {
 		if (auth0.user && auth0.user.coldclimate_claims.roles.includes('cold:admin')) {
-			return <OrganizationSelector sidebarExpanded={ldFlags.showNewSidebarCold1354 || expanded} />;
+			return <OrganizationSelector sidebarExpanded={true} />;
 		} else {
 			return null;
 		}

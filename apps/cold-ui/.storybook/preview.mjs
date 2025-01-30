@@ -90,7 +90,6 @@ export default {
     launchdarkly: {
       flags: {
         swrKeepPreviousData: true,
-        cold1220SustainabilityAttributePage: true,
         productCarbonFootprintMvp: true,
         showBillingPageCold957: true,
       },

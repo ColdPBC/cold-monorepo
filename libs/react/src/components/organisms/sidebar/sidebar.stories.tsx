@@ -55,20 +55,3 @@ export const ColdAdmin: Story = {
   },
 };
 
-export const NewSidebar: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <SideBar />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showBillingPageCold957: true,
-        showNewSidebarCold1354: true,
-      },
-    },
-  },
-};
