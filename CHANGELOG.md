@@ -1,3 +1,11 @@
+# [1.533.0](https://github.com/coldPBC/cold-monorepo/compare/v1.532.0...v1.533.0) (2025-01-30)
+
+
+### Features
+
+* create new uploads page ([3e193ed](https://github.com/coldPBC/cold-monorepo/commit/3e193ed0c5efd2319a9d8b77559518bda2d5f028))
+* update sidebar with new items when FF is on ([9291535](https://github.com/coldPBC/cold-monorepo/commit/929153519bfcf6d2cad79e7923c3d6a718dd6170))
+
 # [1.532.0](https://github.com/coldPBC/cold-monorepo/compare/v1.531.0...v1.532.0) (2025-01-29)
 
 
