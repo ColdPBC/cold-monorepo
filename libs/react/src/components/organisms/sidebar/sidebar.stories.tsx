@@ -24,23 +24,6 @@ export const Default: Story = {
   },
 };
 
-export const NoActions: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <SideBar />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showActions261: false,
-      },
-    },
-  },
-};
-
 export const ColdAdmin: Story = {
   render: args => {
     return (
@@ -57,24 +40,6 @@ export const ColdAdmin: Story = {
           ...auth0UserMock.coldclimate_claims,
           roles: ['cold:admin'],
         },
-      },
-    },
-  },
-};
-
-export const NewSidebar: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <SideBar />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showBillingPageCold957: true,
-        showNewSidebarCold1354: true,
       },
     },
   },
