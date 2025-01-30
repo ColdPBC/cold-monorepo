@@ -516,6 +516,7 @@ const _DocumentDetailsSidebar = (props: {
 						});
 					});
 				setSaveButtonLoading(false);
+        closeSidebar();
 				return;
 			}
 
