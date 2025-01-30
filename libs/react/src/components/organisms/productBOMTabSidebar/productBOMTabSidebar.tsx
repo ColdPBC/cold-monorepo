@@ -17,7 +17,6 @@ interface ProductMaterialBOMState {
 interface ProductBOMTabSidebarProps {
   productId: string;
   closeSidebar: () => void;
-  refresh: () => void;
   material: {
     id: string;
     name: string;
@@ -34,7 +33,6 @@ const _ProductBOMTabSidebar = (
   {
     productId,
     closeSidebar,
-    refresh,
     material
   }: ProductBOMTabSidebarProps) => {
   const {logBrowser} = useColdContext();
@@ -138,7 +136,7 @@ const _ProductBOMTabSidebar = (
         state: productMaterialState,
         uomOptions,
       });
-      refresh()
+      closeSidebar()
     } catch (error) {
       await addToastMessage({
         message: 'Error updating product material',

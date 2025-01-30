@@ -191,6 +191,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
 		});
 
   const closeBomDetailSidebar = () => {
+    refreshProduct();
     setSelectedMaterial(undefined);
   }
 
@@ -212,13 +213,6 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
       setSelectedMaterial(undefined);
     }
   }
-
-  useEffect(() => {
-    // any updates to the product update the selected material to avoid stale states
-    if(selectedMaterial && selectedMaterial.productMaterial.id) {
-      openSidebar(selectedMaterial.productMaterial.id);
-    }
-  }, [product]);
 
   return (
     <Card
@@ -263,7 +257,6 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
             productId={product.id}
             material={selectedMaterial}
             closeSidebar={closeBomDetailSidebar}
-            refresh={refreshProduct}
           />
         )
       }
