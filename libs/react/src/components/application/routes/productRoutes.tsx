@@ -1,4 +1,3 @@
-import {useFlags} from "launchdarkly-react-client-sdk";
 import {Route} from "react-router-dom";
 import {ProductDetail, ProductsPage, CreateProductPage} from "@coldpbc/components";
 

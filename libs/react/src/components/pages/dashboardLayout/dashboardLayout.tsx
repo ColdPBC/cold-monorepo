@@ -1,7 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { Outlet } from 'react-router-dom';
 import { SideBar, ApplicationToaster } from '@coldpbc/components';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { twMerge } from 'tailwind-merge';
 
 export const DashboardLayout = (props: PropsWithChildren<any>) => {

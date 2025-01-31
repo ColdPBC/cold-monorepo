@@ -7,7 +7,6 @@ import { ErrorType, IconNames } from '@coldpbc/enums';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { find, parseInt } from 'lodash';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { ComboBox } from '@coldpbc/components';
 import { useNavigate } from 'react-router-dom';
 import { InputOption } from '@coldpbc/interfaces';
