@@ -9,7 +9,6 @@ import {
 } from '@coldpbc/components';
 import { SustainabilityAttribute } from '@coldpbc/interfaces';
 import { EntityLevel } from '@coldpbc/enums';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 interface SustainabilityAttributeCardProps {
   sustainabilityAttribute: SustainabilityAttribute;
@@ -26,7 +25,6 @@ export enum SustainabilityAttributeCardStyle {
 export const DEFAULT_ICON_URL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/NoImage.png';
 
 const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> = ({ sustainabilityAttribute, cardStyle, displayedOnEntityLevel }) => {
-  const ldFlags = useFlags();
 
   // If we don't get a logo image from the backend, we'll use the default
 	const [imgSrc, setImgSrc] = useState<string>(sustainabilityAttribute.logoUrl || DEFAULT_ICON_URL);
@@ -62,15 +60,9 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
         );
       case SustainabilityAttributeCardStyle.GRAPH:
       default:
-        if (ldFlags.cold1220SustainabilityAttributePage) {
-          return (
-            <AttributeAssuranceCountGraph sustainabilityAttribute={sustainabilityAttribute} />
-          );
-        } else {
-          return (
-            <AttributeAssuranceStatusGraph sustainabilityAttribute={sustainabilityAttribute} />
-          );
-        }
+        return (
+          <AttributeAssuranceCountGraph sustainabilityAttribute={sustainabilityAttribute} />
+        );
     }
   };
 

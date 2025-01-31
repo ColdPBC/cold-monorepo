@@ -1,22 +1,16 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   AccountSettingsPage,
-  ActionsOverview,
   BillingPage,
   CarbonFootprint,
   ComplianceRoutes,
   DashboardLayout,
   DocumentsPage,
-  DocumentUpload,
-  Footprint,
   Interceptor,
-  MaterialDetail,
   MaterialRoutes,
-  MaterialsPage,
   ProtectedRoute,
   Signup,
-  SupplierDetail, SupplierRoutes,
-  SuppliersPage,
+  SupplierRoutes,
   SustainabilityPage,
   SustainabilityAttributeDetail,
   Terms,
@@ -40,8 +34,8 @@ export const ColdRoutes = () => {
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
         <Route path={'/sustainability_claims'} element={<SustainabilityPage />} />
-        {ldFlags.cold1220SustainabilityAttributePage && <Route path={'/sustainability_claims/:id'} element={<SustainabilityAttributeDetail />} />}
-        <Route path={'/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
+        <Route path={'/sustainability_claims/:id'} element={<SustainabilityAttributeDetail />} />
+        <Route path={'/carbon_footprint'} element={<CarbonFootprint />} />
         <Route path={'/documents'} element={<DocumentsPage />} />
         <Route path={'/uploads'} element={ldFlags.showNewDocumentUploadUxCold1410 ? <UploadsPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />

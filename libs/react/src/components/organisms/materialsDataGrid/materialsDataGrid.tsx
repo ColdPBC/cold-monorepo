@@ -16,11 +16,9 @@ import {
 import { get, has, uniq } from 'lodash';
 import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
-import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from 'react-router-dom';
 
 const _MaterialsDataGrid = () => {
-  const ldFlags = useFlags();
   const navigate = useNavigate();
   const { orgId } = useAuth0Wrapper();
 
@@ -269,9 +267,7 @@ const _MaterialsDataGrid = () => {
         sortingMode="server"
         rowCount={totalRows}
         onRowClick={(params) => {
-          if(ldFlags.materialDetailPageCold997){
-            navigate(`/materials/${params.id}`)
-          }
+          navigate(`/materials/${params.id}`)
         }}
         // Search props
         filterMode="server"

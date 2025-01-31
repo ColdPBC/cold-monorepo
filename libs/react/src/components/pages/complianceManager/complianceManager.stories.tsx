@@ -10,13 +10,6 @@ const meta: Meta<typeof ComplianceManager> = {
   component: ComplianceManager,
   tags: ['autodocs'],
   decorators: [withKnobs],
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showNewComplianceManagerCold711: true,
-      },
-    },
-  },
 };
 
 export default meta;
