@@ -92,6 +92,7 @@ export default {
         swrKeepPreviousData: true,
         productCarbonFootprintMvp: true,
         showBillingPageCold957: true,
+        showNewDocumentUploadUxCold1410: true,
       },
     },
   },

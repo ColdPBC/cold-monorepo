@@ -1,3 +1,23 @@
+# [1.534.0](https://github.com/coldPBC/cold-monorepo/compare/v1.533.0...v1.534.0) (2025-01-31)
+
+
+### Features
+
+* Add useEffect to handle product updates in BOM tab ([baade4f](https://github.com/coldPBC/cold-monorepo/commit/baade4ff98f59bb74cc3ac2bb748cc2ed84f0276))
+* Ensure selected material validity on product update ([531a3c1](https://github.com/coldPBC/cold-monorepo/commit/531a3c104ab404f3aca64b63889013336970c662))
+* Make addToastMessage calls awaitable ([fa8f8f1](https://github.com/coldPBC/cold-monorepo/commit/fa8f8f10276f67bf6d160e4f3d49723c95a2c61a))
+* Refactor product BOM tab to streamline state handling. ([68e408f](https://github.com/coldPBC/cold-monorepo/commit/68e408f97abb20e38380750162e88960aac87cf0))
+* Remove unnecessary refresh logic from BOM components ([d0d3e02](https://github.com/coldPBC/cold-monorepo/commit/d0d3e028497f849e33038af52c8660537329c0d3))
+* Set selectedMaterial to undefined when material is removed ([99f4b7b](https://github.com/coldPBC/cold-monorepo/commit/99f4b7ba435361bd91634b268134136e6df0c3a2))
+
+# [1.533.0](https://github.com/coldPBC/cold-monorepo/compare/v1.532.0...v1.533.0) (2025-01-30)
+
+
+### Features
+
+* create new uploads page ([3e193ed](https://github.com/coldPBC/cold-monorepo/commit/3e193ed0c5efd2319a9d8b77559518bda2d5f028))
+* update sidebar with new items when FF is on ([9291535](https://github.com/coldPBC/cold-monorepo/commit/929153519bfcf6d2cad79e7923c3d6a718dd6170))
+
 # [1.532.0](https://github.com/coldPBC/cold-monorepo/compare/v1.531.0...v1.532.0) (2025-01-29)
 
 
