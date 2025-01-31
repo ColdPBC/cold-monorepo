@@ -40,7 +40,7 @@ function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardPr
 
   let cardProps: CardProps = {};
   if (!props.headerless) {
-    const footprintRoute = '/reports/carbon_footprint';
+    const footprintRoute = '/carbon_footprint';
     cardProps = {
       title: props.chartVariant === EmissionsDonutChartVariants.vertical && isEmptyFootprintData ? 'Footprint Breakdown' : `${PERIOD} Company Footprint`,
       ctas:
