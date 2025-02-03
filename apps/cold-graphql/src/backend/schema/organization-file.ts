@@ -7,11 +7,10 @@ import { Organization } from './organization';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
 import { OrganizationComplianceNoteFile } from './organization-compliance-note-file';
 import { VectorRecord } from './vector-record';
-import { OrganizationFilesProcessingStatus, OrganizationFilesType, OrganizationFile as OrmOrganizationFile } from '../entities';
+import { OrganizationFilesType, OrganizationFile as OrmOrganizationFile } from '../entities';
 import { connection } from '../database';
 
 graphweaverMetadata.collectEnumInformation({ target: OrganizationFilesType, name: 'OrganizationFilesType' });
-graphweaverMetadata.collectEnumInformation({ target: OrganizationFilesProcessingStatus, name: 'OrganizationFilesProcessingStatus' });
 
 @Entity<OrganizationFile>('OrganizationFile', {
 	provider: new MikroBackendProvider(OrmOrganizationFile, connection),
@@ -100,9 +99,6 @@ export class OrganizationFile {
 
 	@Field(() => Boolean)
 	visible = true;
-
-	@Field(() => OrganizationFilesProcessingStatus, { nullable: true })
-	processingStatus?: string;
 
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'organizationFile' })
 	attributeAssurances!: AttributeAssurance[];
