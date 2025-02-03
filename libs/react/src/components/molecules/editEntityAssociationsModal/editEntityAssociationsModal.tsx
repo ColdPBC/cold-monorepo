@@ -51,7 +51,6 @@ export const EditEntityAssociationsModal = (
   useEffect(() => {
     if (showEntityAssociationModal) {
       setRowsSelected(idsSelected);
-      setFilterModel({items: [], quickFilterValues: []});
     }
   }, [showEntityAssociationModal, idsSelected]);
 
@@ -103,8 +102,8 @@ export const EditEntityAssociationsModal = (
       ),
       renderHeader: params => (
         <Checkbox
-          checked={filteredSelectedIds.length === filteredRows.length}
-          indeterminate={filteredSelectedIds.length < filteredRows.length && filteredSelectedIds.length > 0}
+          checked={filteredSelectedIds.length === filteredRows.length && filteredRows.length > 0}
+          indeterminate={filteredSelectedIds.length < filteredRows.length && filteredSelectedIds.length > 0 && filteredRows.length > 0}
           onClick={clickSelectAll}
         />
       ),
