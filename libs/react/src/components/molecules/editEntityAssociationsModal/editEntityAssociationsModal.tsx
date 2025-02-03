@@ -103,7 +103,7 @@ export const EditEntityAssociationsModal = (
       ),
       renderHeader: params => (
         <Checkbox
-          checked={filteredSelectedIds.every(id => rowsSelected.includes(id)) && filteredSelectedIds.length === filteredRows.length}
+          checked={filteredSelectedIds.length === filteredRows.length}
           indeterminate={filteredSelectedIds < filteredRows && filteredSelectedIds.length > 0}
           onClick={clickSelectAll}
         />
