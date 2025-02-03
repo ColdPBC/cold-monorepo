@@ -104,7 +104,7 @@ export const EditEntityAssociationsModal = (
       renderHeader: params => (
         <Checkbox
           checked={filteredSelectedIds.length === filteredRows.length}
-          indeterminate={filteredSelectedIds < filteredRows && filteredSelectedIds.length > 0}
+          indeterminate={filteredSelectedIds.length < filteredRows.length && filteredSelectedIds.length > 0}
           onClick={clickSelectAll}
         />
       ),
@@ -172,6 +172,14 @@ export const EditEntityAssociationsModal = (
       setIsLoading(false);
     }
   }
+
+  console.log({
+    indeterminate: filteredSelectedIds.length < filteredRows.length && filteredSelectedIds.length > 0,
+    checked: filteredSelectedIds.length === filteredRows.length,
+    rowsSelected,
+    filteredSelectedIds,
+    filteredRows,
+  })
 
 	return (
 		<div data-testid={`${buttonText}`}>
