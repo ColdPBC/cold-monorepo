@@ -34,6 +34,7 @@ export const EditEntityAssociationsModal = (
   const {orgId} = useAuth0Wrapper();
   const [showEntityAssociationModal, setShowEntityAssociationModal] = useState<boolean>(false);
   const [rowsSelected, setRowsSelected] = useState<string[]>([]);
+  const [previousRowsSelected, setPreviousRowsSelected] = useState<string[]>([]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>({items: [], quickFilterValues: []});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const entities = useEntityData(entityLevelToAdd === EntityLevel.ORGANIZATION ? undefined : entityLevelToAdd, orgId);
@@ -59,15 +60,13 @@ export const EditEntityAssociationsModal = (
     if (filterModel.quickFilterValues?.length) {
       const filteredRows = rows.filter(row => row.name.toLowerCase().includes(filterModel.quickFilterValues?.join(' ').toLowerCase() || ''));
       setFilteredRows(filteredRows);
-      // update the rowsSelected to only include the filtered rows
       const filteredRowsIds = filteredRows.map(row => row.id);
+      setPreviousRowsSelected(prev => uniq([...prev, ...rowsSelected]));
       setRowsSelected(prev => prev.filter(id => filteredRowsIds.includes(id)));
     } else {
       setFilteredRows(rows);
-      // when you remove a filter, set the rowsSelected to the original idsSelected + the prev ones
-      setRowsSelected(prev =>
-        uniq([...prev, ...idsSelected])
-      );
+      setRowsSelected(prev => uniq([...prev, ...previousRowsSelected, ...idsSelected]));
+      setPreviousRowsSelected([]);
     }
   }, [filterModel.quickFilterValues]);
 
@@ -122,12 +121,20 @@ export const EditEntityAssociationsModal = (
     setIsLoading(true);
     const removedRows = idsSelected.filter(id => !rowsSelected.includes(id));
     const addedRows = rowsSelected.filter(id => !idsSelected.includes(id));
+    if (filterModel.quickFilterValues?.length) {
+      // Include previous rows selected if filter is applied
+      addedRows.push(...previousRowsSelected.filter(id => !idsSelected.includes(id)));
+    }
+
+    // Ensure removedRows does not include any rows that were previously selected
+    const finalRemovedRows = removedRows.filter(id => !previousRowsSelected.includes(id));
+
     try {
       const promises: (Promise<void> | Promise<FetchResult<any>>)[] = []
       addedRows.forEach(row => {
         promises.push(callMutateFunction(entityLevelToAdd, entityLevelToBeAddedTo, row, entityToBeAddedId, orgId, 'add'))
       })
-      removedRows.forEach(row => {
+      finalRemovedRows.forEach(row => {
         promises.push(callMutateFunction(entityLevelToAdd, entityLevelToBeAddedTo, row, entityToBeAddedId, orgId, 'delete'))
       });
 
@@ -139,7 +146,10 @@ export const EditEntityAssociationsModal = (
         entityToBeAddedId,
         idsSelected,
         rowsSelected,
-        responses
+        responses,
+        finalRemovedRows,
+        addedRows,
+        previousRowsSelected,
       });
       addToastMessage({
         message: `Updated ${lowerCase(entityLevelToBeAddedTo)} successfully`,
@@ -155,6 +165,7 @@ export const EditEntityAssociationsModal = (
         entityToBeAddedId,
         idsSelected,
         rowsSelected,
+        previousRowsSelected,
         error
       }, error)
       addToastMessage({
