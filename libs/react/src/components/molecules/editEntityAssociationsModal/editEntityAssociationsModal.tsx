@@ -12,7 +12,7 @@ import {
   GridToolbarQuickFilter,
 } from '@mui/x-data-grid';
 import { Checkbox } from '@mui/material';
-import { isEqual, lowerCase, set, sortBy, uniq, uniqBy } from 'lodash';
+import { isEqual, lowerCase, sortBy, uniq } from 'lodash';
 import { FetchResult } from '@apollo/client';
 import { ToastMessage } from '@coldpbc/interfaces';
 
