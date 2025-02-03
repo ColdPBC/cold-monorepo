@@ -523,6 +523,7 @@ model organization_files {
   id                                        String                                      @id @default(cuid())
   integration_id                            String?
   mimetype                                  String?
+	processing_status													processing_status?
   size                                      Int?
   acl                                       String?
   contentType                               String?
@@ -551,6 +552,7 @@ model organization_files {
   @@unique([organization_id, openai_file_id], name: "openaiFileId")
   @@unique([organization_id, bucket, key], name: "s3Key")
   @@index([integration_id], map: "organization_files_integration_id_idx1")
+	@@index([organization_id, type, processing_status], map: "organization_files_organization_id_type_idx1")
 }
 
 model organization_compliances_old {
@@ -1302,6 +1304,13 @@ enum file_types {
   SCOPE_CERTIFICATE
   TRANSACTION_CERTIFICATE
   OTHER
+}
+
+enum processing_status {
+	IMPORT_COMPLETE
+	PROCESSING_ERROR
+	MANUAL_REVIEW
+	AI_PROCESSING
 }
 
 enum claim_types {

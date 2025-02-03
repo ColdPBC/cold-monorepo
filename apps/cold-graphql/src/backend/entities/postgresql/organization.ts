@@ -9,6 +9,8 @@ import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { Material } from './material';
 import { MaterialSupplier } from './material-supplier';
+import { MaterialTag } from './material-tag';
+import { MaterialTagAssignment } from './material-tag-assignment';
 import { OrganizationCompliance } from './organization-compliance';
 import { OrganizationComplianceAiResponse } from './organization-compliance-ai-response';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
@@ -17,6 +19,8 @@ import { OrganizationFacility } from './organization-facility';
 import { OrganizationFile } from './organization-file';
 import { Product } from './product';
 import { ProductMaterial } from './product-material';
+import { ProductTagAssignment } from './product-tag-assignment';
+import { ProductsTag } from './products-tag';
 import { SurveyDatum } from './survey-datum';
 import { SurveyStatus } from './survey-status';
 import { SustainabilityAttribute } from './sustainability-attribute';
@@ -95,6 +99,12 @@ export class Organization {
 	@OneToMany({ entity: () => MaterialSupplier, mappedBy: 'organization' })
 	materialSuppliers = new Collection<MaterialSupplier>(this);
 
+	@OneToMany({ entity: () => MaterialTagAssignment, mappedBy: 'organization' })
+	materialTagAssignments = new Collection<MaterialTagAssignment>(this);
+
+	@OneToMany({ entity: () => MaterialTag, mappedBy: 'organization' })
+	materialTags = new Collection<MaterialTag>(this);
+
 	@OneToMany({ entity: () => Material, mappedBy: 'organization' })
 	materials = new Collection<Material>(this);
 
@@ -119,8 +129,14 @@ export class Organization {
 	@OneToMany({ entity: () => ProductMaterial, mappedBy: 'organization' })
 	productMaterials = new Collection<ProductMaterial>(this);
 
+	@OneToMany({ entity: () => ProductTagAssignment, mappedBy: 'organization' })
+	productTagAssignments = new Collection<ProductTagAssignment>(this);
+
 	@OneToMany({ entity: () => Product, mappedBy: 'organization' })
 	products = new Collection<Product>(this);
+
+	@OneToMany({ entity: () => ProductsTag, mappedBy: 'organization' })
+	productsTags = new Collection<ProductsTag>(this);
 
 	@OneToMany({ entity: () => SurveyDatum, mappedBy: 'organization' })
 	surveyData = new Collection<SurveyDatum>(this);

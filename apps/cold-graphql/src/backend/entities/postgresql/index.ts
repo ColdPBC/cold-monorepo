@@ -19,6 +19,8 @@ import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { MaterialClassification } from './material-classification';
 import { MaterialSupplier } from './material-supplier';
+import { MaterialTagAssignment } from './material-tag-assignment';
+import { MaterialTag } from './material-tag';
 import { Material } from './material';
 import { News } from './news';
 import { OrganizationCompliance } from './organization-compliance';
@@ -37,7 +39,9 @@ import { Organization } from './organization';
 import { PolicyDatum } from './policy-datum';
 import { PolicyDefinition } from './policy-definition';
 import { ProductMaterial } from './product-material';
+import { ProductTagAssignment } from './product-tag-assignment';
 import { Product } from './product';
+import { ProductsTag } from './products-tag';
 import { ServiceDefinition } from './service-definition';
 import { SupportedUtility } from './supported-utility';
 import { SurveyDatum } from './survey-datum';
@@ -47,7 +51,6 @@ import { SustainabilityAttributeClassifcationAssignment } from './sustainability
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
-import { OrganizationProductMaterialEmissions } from './organization-product-material-emissions';
 
 export * from './prisma-migration';
 export * from './action-template';
@@ -70,6 +73,8 @@ export * from './facility-footprint';
 export * from './integration';
 export * from './material-classification';
 export * from './material-supplier';
+export * from './material-tag-assignment';
+export * from './material-tag';
 export * from './material';
 export * from './news';
 export * from './organization-compliance';
@@ -88,7 +93,9 @@ export * from './organization';
 export * from './policy-datum';
 export * from './policy-definition';
 export * from './product-material';
+export * from './product-tag-assignment';
 export * from './product';
+export * from './products-tag';
 export * from './service-definition';
 export * from './supported-utility';
 export * from './survey-datum';
@@ -98,7 +105,6 @@ export * from './sustainability-attribute-classifcation-assignment';
 export * from './sustainability-attribute';
 export * from './utility-bill';
 export * from './vector-record';
-export * from './organization-product-material-emissions';
 
 export const entities = [
 	PrismaMigration,
@@ -122,6 +128,8 @@ export const entities = [
 	Integration,
 	MaterialClassification,
 	MaterialSupplier,
+	MaterialTagAssignment,
+	MaterialTag,
 	Material,
 	News,
 	OrganizationCompliance,
@@ -140,7 +148,9 @@ export const entities = [
 	PolicyDatum,
 	PolicyDefinition,
 	ProductMaterial,
+	ProductTagAssignment,
 	Product,
+	ProductsTag,
 	ServiceDefinition,
 	SupportedUtility,
 	SurveyDatum,
@@ -150,5 +160,4 @@ export const entities = [
 	SustainabilityAttribute,
 	UtilityBill,
 	VectorRecord,
-	OrganizationProductMaterialEmissions,
 ];
