@@ -173,14 +173,6 @@ export const EditEntityAssociationsModal = (
     }
   }
 
-  console.log({
-    indeterminate: filteredSelectedIds.length < filteredRows.length && filteredSelectedIds.length > 0,
-    checked: filteredSelectedIds.length === filteredRows.length,
-    rowsSelected,
-    filteredSelectedIds,
-    filteredRows,
-  })
-
 	return (
 		<div data-testid={`${buttonText}`}>
 			<BaseButton label={buttonText} variant={ButtonTypes.secondary} onClick={() => setShowEntityAssociationModal(true)}
