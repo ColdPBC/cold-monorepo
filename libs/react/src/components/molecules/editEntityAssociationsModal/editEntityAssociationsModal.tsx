@@ -4,9 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { Modal as FBModal } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import {useAddToastMessage, useAuth0Wrapper, useColdContext, useEntityData, useUpdateEntityAssociations} from '@coldpbc/hooks';
-import {GridCellParams, GridColDef, GridToolbarContainer, GridToolbarQuickFilter} from '@mui/x-data-grid';
+import {
+  GridCellParams,
+  GridColDef,
+  GridFilterModel,
+  GridToolbarContainer,
+  GridToolbarQuickFilter,
+} from '@mui/x-data-grid';
 import { Checkbox } from '@mui/material';
-import { isEqual, lowerCase, sortBy } from 'lodash';
+import { isEqual, lowerCase, sortBy, uniq, uniqBy } from 'lodash';
 import { FetchResult } from '@apollo/client';
 import { ToastMessage } from '@coldpbc/interfaces';
 
@@ -28,6 +34,7 @@ export const EditEntityAssociationsModal = (
   const {orgId} = useAuth0Wrapper();
   const [showEntityAssociationModal, setShowEntityAssociationModal] = useState<boolean>(false);
   const [rowsSelected, setRowsSelected] = useState<string[]>([]);
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({items: [], quickFilterValues: []});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const entities = useEntityData(entityLevelToAdd === EntityLevel.ORGANIZATION ? undefined : entityLevelToAdd, orgId);
   const {addToastMessage} = useAddToastMessage();
@@ -36,14 +43,33 @@ export const EditEntityAssociationsModal = (
   // need to use materialSupplierId for materials
   const rows = entities.map(entity => ({
     id: entity.id,
-    name: entity.name
-  }))
+    name: entity.name,
+  }));
+
+  const [filteredRows, setFilteredRows] = useState<any[]>(rows);
 
   useEffect(() => {
     if (showEntityAssociationModal) {
       setRowsSelected(idsSelected);
+      setFilterModel({items: [], quickFilterValues: []});
     }
   }, [showEntityAssociationModal, idsSelected]);
+
+  useEffect(() => {
+    if (filterModel.quickFilterValues?.length) {
+      const filteredRows = rows.filter(row => row.name.toLowerCase().includes(filterModel.quickFilterValues?.join(' ').toLowerCase() || ''));
+      setFilteredRows(filteredRows);
+      // update the rowsSelected to only include the filtered rows
+      const filteredRowsIds = filteredRows.map(row => row.id);
+      setRowsSelected(prev => prev.filter(id => filteredRowsIds.includes(id)));
+    } else {
+      setFilteredRows(rows);
+      // when you remove a filter, set the rowsSelected to the original idsSelected + the prev ones
+      setRowsSelected(prev =>
+        uniq([...prev, ...idsSelected])
+      );
+    }
+  }, [filterModel.quickFilterValues]);
 
   const columns: GridColDef[] = [
     {
@@ -70,13 +96,13 @@ export const EditEntityAssociationsModal = (
       ),
       renderHeader: params => (
         <Checkbox
-          checked={rowsSelected.length === rows.length && rowsSelected.length > 0}
-          indeterminate={rowsSelected.length > 0 && rowsSelected.length < rows.length}
+          checked={rowsSelected.length === filteredRows.length && rowsSelected.length > 0}
+          indeterminate={rowsSelected.length > 0 && rowsSelected.length < filteredRows.length}
           onClick={() => {
-            if (rowsSelected.length === rows.length || rowsSelected.length > 0) {
+            if (rowsSelected.length === filteredRows.length || rowsSelected.length > 0) {
               setRowsSelected([]);
             } else {
-              setRowsSelected(rows.map(r => r.id));
+              setRowsSelected(filteredRows.map(r => r.id));
             }
           }}
         />
@@ -140,6 +166,12 @@ export const EditEntityAssociationsModal = (
     }
   }
 
+  console.log({
+    filteredRows,
+    rowsSelected,
+    idsSelected
+  })
+
 	return (
 		<div data-testid={`${buttonText}`}>
 			<BaseButton label={buttonText} variant={ButtonTypes.secondary} onClick={() => setShowEntityAssociationModal(true)}
@@ -160,7 +192,7 @@ export const EditEntityAssociationsModal = (
 						<div className="flex flex-row text-h3">{title}</div>
 						<div className="w-full h-[400px]">
 							<MuiDataGrid
-								rows={rows}
+								rows={filteredRows}
 								columns={columns}
 								sx={{
 									'--DataGrid-overlayHeight': '300px',
@@ -169,8 +201,23 @@ export const EditEntityAssociationsModal = (
 								autoHeight={false}
 								disableColumnMenu={true}
 								rowSelection={false}
-								showSearch={true}
-							/>
+                showSearch
+                filterDebounceMs={500}
+                filterModel={filterModel}
+                onFilterModelChange={(model) => {
+                  setFilterModel(model);
+                }}
+                slots={{
+                  toolbar: () => {
+                    return (
+                      <GridToolbarContainer>
+                        <GridToolbarQuickFilter
+                        />
+                      </GridToolbarContainer>
+                    );
+                  }
+                }}
+              />
 						</div>
 					</div>
 					<div className="w-full flex flex-row justify-between">
@@ -181,7 +228,7 @@ export const EditEntityAssociationsModal = (
             />
 						<div className="flex flex-row gap-[16px] items-center">
 							<div className="text-body font-bold text-tc-secondary">
-								{rowsSelected.length}/{rows.length} Selected
+								{rowsSelected.length}/{filteredRows.length} Selected
 							</div>
 							<BaseButton label={buttonText} loading={isLoading} onClick={onEntitiesUpdate} disabled={isEqual(sortBy(idsSelected), sortBy(rowsSelected)) || isLoading} />
 						</div>
