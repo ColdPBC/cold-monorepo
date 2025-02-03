@@ -21,7 +21,6 @@ import useSWRSubscription from 'swr/subscription';
 import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
 import { getTermString } from '@coldpbc/lib';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { isDefined } from 'class-validator';
 
 const _ComplianceManager = () => {
@@ -32,7 +31,6 @@ const _ComplianceManager = () => {
   const [showOverviewModal, setShowOverviewModal] = useState<boolean>(false);
   const [status, setStatus] = useState<ComplianceManagerStatus>(ComplianceManagerStatus.notActivated);
   const { logBrowser } = useColdContext();
-  const ldFlags = useFlags();
 
   const getSectionGroupDataUrl = () => {
     return [`/compliance/${name}/organizations/${orgId}/section_groups/responses`, 'GET'];
@@ -167,12 +165,10 @@ const _ComplianceManager = () => {
     content: <ComplianceManagerOverview />
   }];
 
-  if (ldFlags.showNewComplianceManagerPreviewCold713) {
-    tabs.push({
-      label: 'Preview',
-      content: <ComplianceManagerPreview />,
-    });
-  }
+  tabs.push({
+    label: 'Preview',
+    content: <ComplianceManagerPreview />,
+  });
 
   return (
     <ColdComplianceManagerContext.Provider

@@ -23,13 +23,6 @@ export const Default: Story = {
       </StoryMockProvider>
     );
   },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showTeamMemberTable: true,
-      },
-    },
-  },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement.parentElement === null ? canvasElement : canvasElement.parentElement);
     await step('Update First and Last Name', async () => {
@@ -66,12 +59,5 @@ export const NoInvitations: Story = {
         <AccountSettingsPage {...args} />
       </StoryMockProvider>
     );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showTeamMemberTable: true,
-      },
-    },
   },
 };

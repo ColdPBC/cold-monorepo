@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { clone, upperCase } from 'lodash';
+import { clone, get, upperCase } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useLocation } from 'react-router-dom';
 import { NavbarItem, NavbarItemWithRoute } from '@coldpbc/interfaces';
@@ -13,7 +13,7 @@ import {
   OrganizationSelector,
   SideBarItem,
   ErrorFallback,
-  Spinner
+  Spinner,
 } from '@coldpbc/components';
 
 const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Element => {
@@ -67,8 +67,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 	};
 
 	useEffect(() => {
-    const items = data?.definition.items;
-
+    const items: NavbarItem[] = get(data, 'definition.items', []);
 		if (items && items.length > 0) {
 			items.forEach((item: NavbarItem) => {
 				if (location.pathname === item.route && activeItem?.key !== item.key) {
@@ -104,10 +103,8 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 		return <></>;
 	}
 
-  const items = data.definition.items;
-
 	// filter top-level nav items
-	const filteredSidebarItems = items.filter(filterSidebar) ?? [];
+	const filteredSidebarItems = get(data, 'definition.items', []).filter(filterSidebar) ?? [];
 
 	if (filteredSidebarItems) {
 		// Separate the items into top and bottom nav items

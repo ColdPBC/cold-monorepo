@@ -1,3 +1,10 @@
+# [1.535.0](https://github.com/coldPBC/cold-monorepo/compare/v1.534.0...v1.535.0) (2025-01-31)
+
+
+### Features
+
+* Update carbon footprint route in components ([b1ea976](https://github.com/coldPBC/cold-monorepo/commit/b1ea9769758f8e68556f552731595fbec67423ef))
+
 # [1.534.0](https://github.com/coldPBC/cold-monorepo/compare/v1.533.0...v1.534.0) (2025-01-31)
 
 
