@@ -1305,6 +1305,10 @@ view suppliers_view {
   organization_facilities organization_facilities? @relation(fields: [id], references: [id])
 }
 
+enum delete_me {
+	TEST
+}
+
 enum facility_types {
   OFFICE
   LOCATION
