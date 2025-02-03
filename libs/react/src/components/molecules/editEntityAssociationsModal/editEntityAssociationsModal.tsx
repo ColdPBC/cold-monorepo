@@ -208,16 +208,6 @@ export const EditEntityAssociationsModal = (
                 onFilterModelChange={(model) => {
                   setFilterModel(model);
                 }}
-                slots={{
-                  toolbar: () => {
-                    return (
-                      <GridToolbarContainer>
-                        <GridToolbarQuickFilter
-                        />
-                      </GridToolbarContainer>
-                    );
-                  }
-                }}
               />
 						</div>
 					</div>
