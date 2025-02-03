@@ -62,6 +62,7 @@ ENV NODE_ENV=${NODE_ENV}
 ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 
+RUN npm install -g corepack@latest
 RUN corepack enable
 RUN yarn set version latest
 
@@ -110,6 +111,7 @@ ENV PUPPETEER_EXECUTABLE_PATH="/usr/bin/chromium"
 
 RUN npm uninstall -g yarn pnpm
 
+RUN npm install -g corepack@latest
 RUN corepack enable
 RUN yarn set version latest
 

@@ -62,6 +62,7 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
+RUN npm install -g corepack@latest
 RUN corepack enable
 RUN yarn set version latest
 
