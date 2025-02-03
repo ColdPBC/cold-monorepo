@@ -12,7 +12,7 @@ import {
   GridToolbarQuickFilter,
 } from '@mui/x-data-grid';
 import { Checkbox } from '@mui/material';
-import { isEqual, lowerCase, sortBy, uniq, uniqBy } from 'lodash';
+import { isEqual, lowerCase, set, sortBy, uniq, uniqBy } from 'lodash';
 import { FetchResult } from '@apollo/client';
 import { ToastMessage } from '@coldpbc/interfaces';
 
@@ -34,7 +34,6 @@ export const EditEntityAssociationsModal = (
   const {orgId} = useAuth0Wrapper();
   const [showEntityAssociationModal, setShowEntityAssociationModal] = useState<boolean>(false);
   const [rowsSelected, setRowsSelected] = useState<string[]>([]);
-  const [previousRowsSelected, setPreviousRowsSelected] = useState<string[]>([]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>({items: [], quickFilterValues: []});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const entities = useEntityData(entityLevelToAdd === EntityLevel.ORGANIZATION ? undefined : entityLevelToAdd, orgId);
@@ -58,17 +57,30 @@ export const EditEntityAssociationsModal = (
 
   useEffect(() => {
     if (filterModel.quickFilterValues?.length) {
-      const filteredRows = rows.filter(row => row.name.toLowerCase().includes(filterModel.quickFilterValues?.join(' ').toLowerCase() || ''));
-      setFilteredRows(filteredRows);
-      const filteredRowsIds = filteredRows.map(row => row.id);
-      setPreviousRowsSelected(prev => uniq([...prev, ...rowsSelected]));
-      setRowsSelected(prev => prev.filter(id => filteredRowsIds.includes(id)));
+      const newFilteredRows = rows.filter(row => row.name.toLowerCase().includes(filterModel.quickFilterValues?.join(' ').toLowerCase() || ''));
+      setFilteredRows(newFilteredRows);
     } else {
       setFilteredRows(rows);
-      setRowsSelected(prev => uniq([...prev, ...previousRowsSelected, ...idsSelected]));
-      setPreviousRowsSelected([]);
     }
   }, [filterModel.quickFilterValues]);
+
+  const clickSelectAll = () => {
+    // if all the rows are selected or some of the rows are selected, then unselect all the rows
+    const selectedIds = rowsSelected.filter(id => filteredRows.map(row => row.id).includes(id));
+    console.log({
+      selectedIds,
+      filteredRows
+    });
+    if(selectedIds.length === filteredRows.length || selectedIds.length > 0) {
+      setRowsSelected(prev => prev.filter(id => !filteredRows.map(row => row.id).includes(id)));
+    } else {
+      setRowsSelected(prev => {
+        return uniq([...prev, ...filteredRows.map(row => row.id)]);
+      })
+    }
+  }
+
+  const filteredSelectedIds = rowsSelected.filter(id => filteredRows.map(row => row.id).includes(id));
 
   const columns: GridColDef[] = [
     {
@@ -95,15 +107,9 @@ export const EditEntityAssociationsModal = (
       ),
       renderHeader: params => (
         <Checkbox
-          checked={rowsSelected.length === filteredRows.length && rowsSelected.length > 0}
-          indeterminate={rowsSelected.length > 0 && rowsSelected.length < filteredRows.length}
-          onClick={() => {
-            if (rowsSelected.length === filteredRows.length || rowsSelected.length > 0) {
-              setRowsSelected([]);
-            } else {
-              setRowsSelected(filteredRows.map(r => r.id));
-            }
-          }}
+          checked={filteredSelectedIds.every(id => rowsSelected.includes(id)) && filteredSelectedIds.length === filteredRows.length}
+          indeterminate={filteredSelectedIds < filteredRows && filteredSelectedIds.length > 0}
+          onClick={clickSelectAll}
         />
       ),
     },
@@ -121,20 +127,13 @@ export const EditEntityAssociationsModal = (
     setIsLoading(true);
     const removedRows = idsSelected.filter(id => !rowsSelected.includes(id));
     const addedRows = rowsSelected.filter(id => !idsSelected.includes(id));
-    if (filterModel.quickFilterValues?.length) {
-      // Include previous rows selected if filter is applied
-      addedRows.push(...previousRowsSelected.filter(id => !idsSelected.includes(id)));
-    }
-
-    // Ensure removedRows does not include any rows that were previously selected
-    const finalRemovedRows = removedRows.filter(id => !previousRowsSelected.includes(id));
 
     try {
       const promises: (Promise<void> | Promise<FetchResult<any>>)[] = []
       addedRows.forEach(row => {
         promises.push(callMutateFunction(entityLevelToAdd, entityLevelToBeAddedTo, row, entityToBeAddedId, orgId, 'add'))
       })
-      finalRemovedRows.forEach(row => {
+      removedRows.forEach(row => {
         promises.push(callMutateFunction(entityLevelToAdd, entityLevelToBeAddedTo, row, entityToBeAddedId, orgId, 'delete'))
       });
 
@@ -147,9 +146,9 @@ export const EditEntityAssociationsModal = (
         idsSelected,
         rowsSelected,
         responses,
-        finalRemovedRows,
         addedRows,
-        previousRowsSelected,
+        filteredSelectedIds,
+        filteredRows
       });
       addToastMessage({
         message: `Updated ${lowerCase(entityLevelToBeAddedTo)} successfully`,
@@ -165,8 +164,9 @@ export const EditEntityAssociationsModal = (
         entityToBeAddedId,
         idsSelected,
         rowsSelected,
-        previousRowsSelected,
-        error
+        error,
+        filteredSelectedIds,
+        filteredRows
       }, error)
       addToastMessage({
         message: `Error updating ${lowerCase(entityLevelToBeAddedTo)}`,
@@ -176,12 +176,6 @@ export const EditEntityAssociationsModal = (
       setIsLoading(false);
     }
   }
-
-  console.log({
-    filteredRows,
-    rowsSelected,
-    idsSelected
-  })
 
 	return (
 		<div data-testid={`${buttonText}`}>
