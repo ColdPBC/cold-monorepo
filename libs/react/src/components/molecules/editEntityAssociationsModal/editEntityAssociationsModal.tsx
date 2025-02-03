@@ -67,10 +67,6 @@ export const EditEntityAssociationsModal = (
   const clickSelectAll = () => {
     // if all the rows are selected or some of the rows are selected, then unselect all the rows
     const selectedIds = rowsSelected.filter(id => filteredRows.map(row => row.id).includes(id));
-    console.log({
-      selectedIds,
-      filteredRows
-    });
     if(selectedIds.length === filteredRows.length || selectedIds.length > 0) {
       setRowsSelected(prev => prev.filter(id => !filteredRows.map(row => row.id).includes(id)));
     } else {
