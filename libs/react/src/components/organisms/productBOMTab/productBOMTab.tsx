@@ -242,7 +242,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
 				rowHeight={72}
         initialState={{
           sorting: {
-            sortModel: [{ field: 'name', sort: 'asc' }],
+            sortModel: [{ field: 'material', sort: 'asc' }],
           },
         }}
         searchKey={`${product.id}productBOMSearchValue`}
