@@ -27,6 +27,9 @@ export interface MUIDataGridProps extends DataGridProps {
 
 const CustomDataGridToolbar = (props: GridToolbarProps & ToolbarPropsOverrides) => {
   const { showSearch, showExport, showManageColumns, quickFilterProps } = props;
+  if(!showSearch && !showExport && !showManageColumns) {
+    return null;
+  }
   return (
     <GridToolbarContainer>
       {showSearch && (
