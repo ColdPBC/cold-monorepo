@@ -26,14 +26,15 @@ export interface MUIDataGridProps extends DataGridProps {
 }
 
 const CustomDataGridToolbar = (props: GridToolbarProps & ToolbarPropsOverrides) => {
-  const { showSearch, showExport, showManageColumns, slotProps } = props;
+  const { showSearch, showExport, showManageColumns, quickFilterProps } = props;
+  console.log('props', props)
   return (
     <GridToolbarContainer>
       {showSearch && (
         <>
           <GridToolbarQuickFilter
-            {...slotProps?.toolbar?.quickFilterProps}
-            placeholder={slotProps?.toolbar?.quickFilterProps?.placeholder || 'Search...'}
+            {...quickFilterProps}
+            placeholder={quickFilterProps?.placeholder || 'Search...'}
           />
           <Box sx={{ flexGrow: 1 }} />
         </>
@@ -165,7 +166,7 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
         },
         ...slotProps,
         toolbar: {
-          slotProps: slotProps?.toolbar,
+          ...slotProps?.toolbar,
           showSearch,
           showExport,
           showManageColumns,
