@@ -208,6 +208,11 @@ export const EditEntityAssociationsModal = (
                 onFilterModelChange={(model) => {
                   setFilterModel(model);
                 }}
+                initialState={{
+                  sorting: {
+                    sortModel: [{ field: 'name', sort: 'asc' }],
+                  }
+                }}
               />
 						</div>
 					</div>
