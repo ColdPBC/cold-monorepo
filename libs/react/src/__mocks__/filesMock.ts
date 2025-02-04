@@ -1,6 +1,6 @@
 import { Files, FilesWithAssurances, UploadsQuery } from '@coldpbc/interfaces';
 import { addDays, subDays } from 'date-fns';
-import { DocumentTypesEnum, EntityLevel, ProcessingStatus } from '@coldpbc/enums';
+import { DocumentTypes, EntityLevel, ProcessingStatus } from '@coldpbc/enums';
 import { get } from 'lodash';
 
 export function getAllFilesMock() {
@@ -755,11 +755,11 @@ export function getUploadsMock(): UploadsQuery[] {
     id: file.id,
     originalName: file.originalName,
     createdAt: file.createdAt,
-    type: file.type as DocumentTypesEnum,
+    type: file.type as typeof DocumentTypes[keyof typeof DocumentTypes],
     processingStatus: ProcessingStatus.MANUAL_REVIEW,
   }))
   const processingStatuses = Object.values(ProcessingStatus);
-  const fileTypes = Object.values(DocumentTypesEnum)
+  const fileTypes = Object.values(DocumentTypes)
 
   // Ensure exactly 6 files by generating additional ones if needed
   const additionalFiles: UploadsQuery[] = Array.from({ length: 6 - baseFiles.length }, (_, i) => {
@@ -781,7 +781,7 @@ export function getUploadsMock(): UploadsQuery[] {
     id: file.id,
     originalName: file.originalName,
     createdAt: file.createdAt,
-    type: file.type as DocumentTypesEnum,
+    type: file.type,
     processingStatus: get(file, 'processingStatus', ProcessingStatus.MANUAL_REVIEW),
   }))
 }

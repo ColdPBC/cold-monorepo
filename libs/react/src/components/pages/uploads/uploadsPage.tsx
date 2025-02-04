@@ -1,12 +1,13 @@
 import { ColdIcon, DEFAULT_GRID_COL_DEF, MainContent, MuiDataGrid } from '@coldpbc/components';
 import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { UploadsQuery } from '@coldpbc/interfaces';
-import { get, lowerCase, startCase, toArray } from 'lodash';
+import { get, toArray } from 'lodash';
 import { GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import { format } from 'date-fns';
 import React from 'react';
-import { DocumentTypesEnum, IconNames, ProcessingStatus } from '@coldpbc/enums';
+import { DocumentTypes, IconNames, ProcessingStatus } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
+import { formatScreamingSnakeCase } from '@coldpbc/lib';
 
 export const UploadsPage = () => {
   const {logBrowser} = useColdContext();
@@ -99,18 +100,18 @@ export const UploadsPage = () => {
     );
   }
 
-  const fileTypes = toArray(DocumentTypesEnum).map((type) =>
-    startCase(lowerCase(type.replace(/_/g, ' ')))
+  const fileTypes = Object.values(DocumentTypes).map((type) =>
+    formatScreamingSnakeCase(type)
   )
 
   const statuses = toArray(ProcessingStatus).map((status) =>
-    startCase(lowerCase(status.replace(/_/g, ' ')))
+    formatScreamingSnakeCase(status)
   )
 
   const files = get(uploadsQuery, 'data.data.organizationFiles', []).map((file) => ({
     id: file.id,
     name: file.originalName,
-    type: startCase(lowerCase(file.type.replace(/_/g, ' '))),
+    type: formatScreamingSnakeCase(file.type),
     uploaded: file.createdAt,
     status: file.processingStatus || 'MANUAL_REVIEW'
   }));
@@ -154,6 +155,12 @@ export const UploadsPage = () => {
       minWidth: 218,
       type: 'singleSelect',
       valueOptions: statuses,
+      valueGetter: (value: string) => {
+        return formatScreamingSnakeCase(value);
+      },
+      valueFormatter: (value: string) => {
+        return formatScreamingSnakeCase(value);
+      },
     },
   ]
 

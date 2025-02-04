@@ -1,7 +1,7 @@
 import { Claims } from './claims';
 import { MaterialsWithCertifications } from './materials';
 import {SustainabilityAttributeWithoutAssurances} from "./sustainabilityAttribute";
-import { DocumentTypesEnum, ProcessingStatus } from '@coldpbc/enums';
+import { DocumentTypes, ProcessingStatus } from '@coldpbc/enums';
 
 export interface Files {
 	id: string;
@@ -78,6 +78,6 @@ export interface UploadsQuery {
   id: string;
   originalName: string;
   createdAt: string;
-  type: DocumentTypesEnum;
+  type: typeof DocumentTypes[keyof typeof DocumentTypes];
   processingStatus: ProcessingStatus | null;
 }
