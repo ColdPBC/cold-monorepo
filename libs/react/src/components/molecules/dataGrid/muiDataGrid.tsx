@@ -6,9 +6,9 @@ import {
   GridColDef, GridFilterModel,
   GridToolbarColumnsButton,
   GridToolbarContainer,
-  GridToolbarExport,
+  GridToolbarExport, GridToolbarProps,
   GridToolbarQuickFilter,
-  GridValidRowModel,
+  GridValidRowModel, ToolbarPropsOverrides,
 } from '@mui/x-data-grid';
 import { twMerge } from 'tailwind-merge';
 import React, {useEffect} from 'react';
@@ -24,6 +24,25 @@ export interface MUIDataGridProps extends DataGridProps {
 	showManageColumns?: boolean;
   searchKey?: string; // enabled controlled search
 }
+
+const CustomDataGridToolbar = (props: GridToolbarProps & ToolbarPropsOverrides) => {
+  const { showSearch, showExport, showManageColumns, slotProps } = props;
+  console.log(props)
+  return (
+    <GridToolbarContainer>
+      {showSearch && (
+        <>
+          <GridToolbarQuickFilter
+            placeholder={slotProps?.toolbar?.quickFilterProps?.placeholder || 'Search...'}
+          />
+          <Box sx={{ flexGrow: 1 }} />
+        </>
+      )}
+      {showManageColumns && <GridToolbarColumnsButton />}
+      {showExport && <GridToolbarExport />}
+    </GridToolbarContainer>
+  );
+};
 
 export const MuiDataGrid = (props: MUIDataGridProps) => {
   const { showSearch, showExport, showManageColumns, slotProps, searchKey } = props;
@@ -130,7 +149,7 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
 			}}
 			slots={{
 				noRowsOverlay: MUIDataGridNoRowsOverlay,
-				toolbar: toolbar,
+        toolbar: CustomDataGridToolbar,
 				...props.slots,
 			}}
 			slotProps={{
@@ -182,7 +201,13 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
 						},
 					},
 				},
-				...props.slotProps,
+        ...props.slotProps,
+        toolbar: {
+          ...slotProps?.toolbar,
+          showSearch,
+          showExport,
+          showManageColumns,
+        },
 			}}
 			className={twMerge('text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto', props.className)}
       filterDebounceMs={searchKey ? 500 : props.filterDebounceMs}
