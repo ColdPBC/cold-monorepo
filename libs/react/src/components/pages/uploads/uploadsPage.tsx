@@ -69,11 +69,7 @@ export const UploadsPage = () => {
     if (new Date(params.value).getTime() !== new Date(0).getTime()) {
       dateString = format(new Date(params.value), 'M/d/yy h:mm a');
     }
-    return (
-      <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-body text-tc-secondary'}>
-        {dateString}
-      </div>
-    );
+    return dateString
   };
 
   const renderStatus = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
@@ -158,6 +154,7 @@ export const UploadsPage = () => {
       ...DEFAULT_GRID_COL_DEF,
       field: 'uploaded',
       headerName: 'Uploaded',
+      cellClassName: 'text-tc-secondary text-body',
       renderCell: renderDate,
     },
     {
