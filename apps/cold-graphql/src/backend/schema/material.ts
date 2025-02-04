@@ -4,6 +4,7 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AttributeAssurance } from './attribute-assurance';
 import { MaterialClassification } from './material-classification';
 import { MaterialSupplier } from './material-supplier';
+import { MaterialTagAssignment } from './material-tag-assignment';
 import { Organization } from './organization';
 import { ProductMaterial } from './product-material';
 import { Material as OrmMaterial } from '../entities';
@@ -75,6 +76,9 @@ export class Material {
 
 	@RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'material' })
 	materialSuppliers!: MaterialSupplier[];
+
+	@RelationshipField<MaterialTagAssignment>(() => [MaterialTagAssignment], { relatedField: 'material' })
+	materialTagAssignments!: MaterialTagAssignment[];
 
 	@RelationshipField<ProductMaterial>(() => [ProductMaterial], { relatedField: 'material' })
 	productMaterials!: ProductMaterial[];

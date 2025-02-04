@@ -1,3 +1,49 @@
+# [1.538.0](https://github.com/coldPBC/cold-monorepo/compare/v1.537.0...v1.538.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* Refactor DataGrid toolbar for improved customization. ([43d72ee](https://github.com/coldPBC/cold-monorepo/commit/43d72eeef586f913f8a24cb7b25cb949f916cb14))
+
+
+### Features
+
+* Add support for custom quick filter props in DataGrid ([adb2766](https://github.com/coldPBC/cold-monorepo/commit/adb27663cb524f64adc809a3d26feb8a96aab978))
+* Prevent rendering toolbar when all options are disabled. ([a23b5ce](https://github.com/coldPBC/cold-monorepo/commit/a23b5ce1e5a8e635a6c6510194be950117b1c47c))
+* Refactor DataGrid toolbar props handling. ([16f94bc](https://github.com/coldPBC/cold-monorepo/commit/16f94bc9a3c229848f0a7d130a80b711ff6c1ff5))
+
+# [1.537.0](https://github.com/coldPBC/cold-monorepo/compare/v1.536.0...v1.537.0) (2025-02-04)
+
+
+### Features
+
+* **prisma:** add processing_status enum to organization_files and update pre-commit script ([a7ee098](https://github.com/coldPBC/cold-monorepo/commit/a7ee098e08e21675143a28ea7673de3e083ea1f0))
+* **prisma:** add processing_status field and index to organization_files model ([294d498](https://github.com/coldPBC/cold-monorepo/commit/294d4989fdb5b72e71be6bc29919dc8c387a3741))
+
+# [1.536.0](https://github.com/coldPBC/cold-monorepo/compare/v1.535.0...v1.536.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* revert commit ([3a353b2](https://github.com/coldPBC/cold-monorepo/commit/3a353b21741b09195171bdc9233e1bc1d8e9ac80))
+
+
+### Features
+
+* add material and product tag relationships to Organization entity ([4df22ab](https://github.com/coldPBC/cold-monorepo/commit/4df22ab353a338da116e36fc52690e439342dfaf))
+* add material and product tagging models to extend tagging capabilities ([b0f34f3](https://github.com/coldPBC/cold-monorepo/commit/b0f34f3793db59747be8ebc3d85ee459bf86aa9e))
+* add MaterialTag entity and schema with hooks in backend ([b26bb6d](https://github.com/coldPBC/cold-monorepo/commit/b26bb6d37666f38bb6173a7a03a26d3f27ccae99))
+* add MaterialTagAssignment entity with hooks and schema definition ([ca698f3](https://github.com/coldPBC/cold-monorepo/commit/ca698f3f5518bc1ca673c08f2187a7b164593de7))
+* add MaterialTagAssignment relationship to Material entity and schema ([3d7698b](https://github.com/coldPBC/cold-monorepo/commit/3d7698b70949a435285a027b190ddbc482da7cac))
+* add ProductsTag entity with schema, hooks, and ACL integration ([5a1bea2](https://github.com/coldPBC/cold-monorepo/commit/5a1bea2bc0060020681dd3ca230a65b25fa9dca2))
+* add ProductTagAssignment entity with hooks and schema integration ([7b53f79](https://github.com/coldPBC/cold-monorepo/commit/7b53f797f9abc384035e3b6866b8c209a8cd8132))
+* add ProductTagAssignment relationship to Product entity and schema ([ddd9431](https://github.com/coldPBC/cold-monorepo/commit/ddd9431edb9aa53e94fc7664bfd14461a37f2f12))
+* add support for material and product tags ([036826d](https://github.com/coldPBC/cold-monorepo/commit/036826d3f7f89686e2a061eae3d266f2f843c7cb))
+* add unique constraints to tag models ([4e513b3](https://github.com/coldPBC/cold-monorepo/commit/4e513b3768f44af34c12f6e50a404707188737c1))
+* create tagging models for materials and products ([22defb7](https://github.com/coldPBC/cold-monorepo/commit/22defb77cbea5ea226212a4c49a8c996cc26159e))
+* migrate material categories and subcategories to tags ([e580360](https://github.com/coldPBC/cold-monorepo/commit/e580360bd39722b8e43001670f5e046fcb6fe803))
+* migrate product categories and subcategories to tags ([8b625d9](https://github.com/coldPBC/cold-monorepo/commit/8b625d955f9e964dba7a1eb15c7fec0b82964f30))
+
 # [1.535.0](https://github.com/coldPBC/cold-monorepo/compare/v1.534.0...v1.535.0) (2025-01-31)
 
 

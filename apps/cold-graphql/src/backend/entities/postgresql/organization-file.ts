@@ -26,6 +26,14 @@ export enum OrganizationFilesType {
 	TRANSACTION_CERTIFICATE = 'TRANSACTION_CERTIFICATE',
 	SUPPLIER_STATEMENT = 'SUPPLIER_STATEMENT',
 	SUPPLIER_AGREEMENT = 'SUPPLIER_AGREEMENT',
+  SUSTAINABILITY_DATA = 'SUSTAINABILITY_DATA',
+}
+
+export enum OrganizationFilesProcessingStatus {
+	IMPORT_COMPLETE = 'IMPORT_COMPLETE',
+	PROCESSING_ERROR = 'PROCESSING_ERROR',
+	MANUAL_REVIEW = 'MANUAL_REVIEW',
+	AI_PROCESSING = 'AI_PROCESSING',
 }
 
 @ApplyAccessControlList(default_acl)
@@ -122,6 +130,9 @@ export class OrganizationFile {
 	@Property({ type: 'boolean', default: true })
 	visible = true;
 
+	@Enum({ type: 'string', items: () => OrganizationFilesProcessingStatus, nullable: true })
+	processingStatus?: OrganizationFilesProcessingStatus;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'organizationFile' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 
@@ -157,7 +168,7 @@ export class OrganizationFile {
 	  }
 	  return await this.sidecar.beforeReadHook(params);
 	}
-	
+
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHookParams<typeof OrganizationFile, OrgContext>) {
 	  if(!this.sidecar) {
@@ -165,7 +176,7 @@ export class OrganizationFile {
 	  }
 	  return await this.sidecar.afterReadHook(params);
 	}
-	
+
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHookParams<typeof OrganizationFile, OrgContext>) {
 	  if(!this.sidecar) {
@@ -173,7 +184,7 @@ export class OrganizationFile {
 	  }
 	  return await this.sidecar.beforeUpdateHook(params);
 	}
-	
+
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHookParams<typeof OrganizationFile, OrgContext>) {
 	  if(!this.sidecar) {
@@ -181,7 +192,7 @@ export class OrganizationFile {
 	  }
 	  return await this.sidecar.afterUpdateHook(params);
 	}
-	
+
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHookParams<typeof OrganizationFile, OrgContext>) {
 	  if(!this.sidecar) {
@@ -189,7 +200,7 @@ export class OrganizationFile {
 	  }
 	  return await this.sidecar.beforeDeleteHook(params);
 	}
-	
+
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHookParams<typeof OrganizationFile, OrgContext>) {
 	  if(!this.sidecar) {
