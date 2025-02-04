@@ -1,3 +1,17 @@
+# [1.538.0](https://github.com/coldPBC/cold-monorepo/compare/v1.537.0...v1.538.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* Refactor DataGrid toolbar for improved customization. ([43d72ee](https://github.com/coldPBC/cold-monorepo/commit/43d72eeef586f913f8a24cb7b25cb949f916cb14))
+
+
+### Features
+
+* Add support for custom quick filter props in DataGrid ([adb2766](https://github.com/coldPBC/cold-monorepo/commit/adb27663cb524f64adc809a3d26feb8a96aab978))
+* Prevent rendering toolbar when all options are disabled. ([a23b5ce](https://github.com/coldPBC/cold-monorepo/commit/a23b5ce1e5a8e635a6c6510194be950117b1c47c))
+* Refactor DataGrid toolbar props handling. ([16f94bc](https://github.com/coldPBC/cold-monorepo/commit/16f94bc9a3c229848f0a7d130a80b711ff6c1ff5))
+
 # [1.537.0](https://github.com/coldPBC/cold-monorepo/compare/v1.536.0...v1.537.0) (2025-02-04)
 
 
