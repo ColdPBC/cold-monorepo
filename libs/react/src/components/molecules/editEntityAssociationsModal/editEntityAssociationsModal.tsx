@@ -218,7 +218,7 @@ export const EditEntityAssociationsModal = (
             />
 						<div className="flex flex-row gap-[16px] items-center">
 							<div className="text-body font-bold text-tc-secondary">
-								{rowsSelected.length}/{filteredRows.length} Selected
+								{rowsSelected.length}/{rows.length} Selected
 							</div>
 							<BaseButton label={buttonText} loading={isLoading} onClick={onEntitiesUpdate} disabled={isEqual(sortBy(idsSelected), sortBy(rowsSelected)) || isLoading} />
 						</div>
