@@ -7,7 +7,7 @@
 # Check if schema.prisma in libs/nest/prisma/ has been edited
 if git diff --cached --name-only | grep -q 'libs/nest/prisma/schema.prisma'; then
   echo "schema.prisma has been edited. Running yarn sync in apps/cold-graphql..."
-  cd apps/cold-graphql && yarn sync && git add src/backend/entities && git add src/backend/schema
+  cd apps/cold-graphql && yarn sync && git add src/backend/entities && git reset ./src/backend/entities/postgresql/index.ts && git add src/backend/schema && git reset ./src/backend/schema/index.ts
 else
   echo "schema.prisma has not been edited. Skipping yarn sync."
 fi

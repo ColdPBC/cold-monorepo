@@ -12,6 +12,8 @@ WORKDIR /repo
 ADD . .
 
 RUN npm install -g nx
+RUN npm install -g corepack@latest
+
 RUN corepack enable
 RUN yarn set version latest
 RUN yarn
