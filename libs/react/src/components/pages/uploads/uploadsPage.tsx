@@ -155,9 +155,6 @@ export const UploadsPage = () => {
       minWidth: 218,
       type: 'singleSelect',
       valueOptions: statuses,
-      valueGetter: (value: string) => {
-        return formatScreamingSnakeCase(value);
-      },
       valueFormatter: (value: string) => {
         return formatScreamingSnakeCase(value);
       },
