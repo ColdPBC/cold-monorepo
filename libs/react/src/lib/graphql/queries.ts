@@ -702,6 +702,17 @@ export const GET_ALL_MATERIAL_CLASSIFICATIONS = gql`
     }
 `;
 
+export const GET_ALL_UPLOADS = gql`
+  query GetAllUploads($filter: OrganizationFilesListFilter) {
+    organizationFiles(filter: $filter) {
+      id
+      originalName
+      createdAt
+      type
+      processingStatus
+    }
+  }
+`;
 
 export const queries: {
   [key: string]: DocumentNode;
@@ -753,4 +764,5 @@ export const queries: {
   CREATE_PRODUCT: CREATE_PRODUCT,
   DELETE_PRODUCT_MATERIALS: DELETE_PRODUCT_MATERIALS,
   UPDATE_PRODUCT_MATERIAL: UPDATE_PRODUCT_MATERIAL,
+  GET_ALL_UPLOADS: GET_ALL_UPLOADS,
 };

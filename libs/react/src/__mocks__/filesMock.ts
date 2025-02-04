@@ -1,7 +1,7 @@
-import { Files, FilesWithAssurances } from '@coldpbc/interfaces';
-import {addDays, subDays} from 'date-fns';
-import {filesProcessedWithDatesMocks} from "./graphql";
-import {EntityLevel} from "@coldpbc/enums";
+import { Files, FilesWithAssurances, UploadsQuery } from '@coldpbc/interfaces';
+import { addDays, subDays } from 'date-fns';
+import { DocumentTypesEnum, EntityLevel, ProcessingStatus } from '@coldpbc/enums';
+import { get } from 'lodash';
 
 export function getAllFilesMock() {
 	return [
@@ -748,4 +748,40 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
       ],
     },
   ];
+}
+
+export function getUploadsMock(): UploadsQuery[] {
+  const baseFiles: UploadsQuery[] = getFilesWithAssurances().map((file, index) => ({
+    id: file.id,
+    originalName: file.originalName,
+    createdAt: file.createdAt,
+    type: file.type as DocumentTypesEnum,
+    processingStatus: ProcessingStatus.MANUAL_REVIEW,
+  }))
+  const processingStatuses = Object.values(ProcessingStatus);
+  const fileTypes = Object.values(DocumentTypesEnum)
+
+  // Ensure exactly 6 files by generating additional ones if needed
+  const additionalFiles: UploadsQuery[] = Array.from({ length: 6 - baseFiles.length }, (_, i) => {
+    const newId = (baseFiles.length + i + 1).toString();
+    const statusIndex = (baseFiles.length + i) % processingStatuses.length;
+
+    console.log(`File ${newId} assigned status:`, processingStatuses[statusIndex]); // Debugging
+
+    return {
+      id: newId,
+      originalName: `Generated-File-${newId}.pdf`,
+      createdAt: addDays(new Date(), i * 5).toISOString(),
+      type: fileTypes[i % fileTypes.length], // Cycle through enum values
+      processingStatus: processingStatuses[statusIndex], // Cycle through enum values
+    };
+  });
+
+  return [...baseFiles, ...additionalFiles].map((file) => ({
+    id: file.id,
+    originalName: file.originalName,
+    createdAt: file.createdAt,
+    type: file.type as DocumentTypesEnum,
+    processingStatus: get(file, 'processingStatus', ProcessingStatus.MANUAL_REVIEW),
+  }))
 }
