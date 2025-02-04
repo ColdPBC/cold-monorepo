@@ -39,19 +39,3 @@ export type InternalSustainabilityPolicyDocumentType = typeof InternalSustainabi
 export type SustainabilityDataDocumentType = typeof SustainabilityDataDocumentTypes[keyof typeof SustainabilityDataDocumentTypes];
 export type DocumentType = typeof DocumentTypes[keyof typeof DocumentTypes];
 
-export enum DocumentTypesEnum {
-  AuditReport = 'AUDIT_REPORT',
-  Certificate = 'CERTIFICATE',
-  Other = 'OTHER',
-  Policy = 'POLICY',
-  ScopeCertificate = 'SCOPE_CERTIFICATE',
-  Statement = 'STATEMENT',
-  SupplierAgreement = 'SUPPLIER_AGREEMENT',
-  SupplierStatement = 'SUPPLIER_STATEMENT',
-  TestReport = 'TEST_REPORT',
-  TransactionCertificate = 'TRANSACTION_CERTIFICATE',
-  BillOfMaterials = 'BILL_OF_MATERIALS',
-  PurchaseOrder = 'PURCHASE_ORDER',
-  Assessment = 'ASSESSMENT',
-  SustainabilityData = 'SUSTAINABILITY_DATA',
-}

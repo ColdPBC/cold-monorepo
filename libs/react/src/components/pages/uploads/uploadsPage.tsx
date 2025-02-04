@@ -5,9 +5,49 @@ import { get, toArray } from 'lodash';
 import { GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import { format } from 'date-fns';
 import React from 'react';
-import { DocumentTypes, IconNames, ProcessingStatus } from '@coldpbc/enums';
+import {
+  DocumentTypes,
+  IconNames,
+  ProcessingStatus,
+  UIProcessingStatus,
+  UIProcessingStatusMapping,
+} from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
-import { formatScreamingSnakeCase } from '@coldpbc/lib';
+import { formatScreamingSnakeCase, listFilterOperators } from '@coldpbc/lib';
+
+const ProcessingStatusConfig: Record<UIProcessingStatus, {
+  icon: IconNames;
+  color: string;
+  textColorClass: string;
+  iconClass: string;
+  containerExtraClass?: string;
+}> = {
+  [UIProcessingStatusMapping[ProcessingStatus.IMPORT_COMPLETE]]: {
+    icon: IconNames.ColdCheckIcon,
+    color: HexColors.green['200'],
+    textColorClass: 'text-green-200',
+    iconClass: 'w-6 h-6',
+  },
+  [UIProcessingStatusMapping[ProcessingStatus.PROCESSING_ERROR]]: {
+    icon: IconNames.ColdDangerIcon,
+    color: HexColors.red['100'],
+    textColorClass: 'text-red-100',
+    iconClass: 'w-6 h-6',
+  },
+  [UIProcessingStatusMapping[ProcessingStatus.MANUAL_REVIEW]]: {
+    icon: IconNames.ColdRightArrowIcon,
+    color: HexColors.lightblue['100'],
+    textColorClass: 'text-lightblue-100',
+    iconClass: 'w-6 h-6',
+  },
+  [UIProcessingStatusMapping[ProcessingStatus.AI_PROCESSING]]: {
+    icon: IconNames.ColdAiIcon,
+    color: HexColors.yellow['100'],
+    textColorClass: 'text-yellow-100',
+    iconClass: 'w-5 h-5',
+    containerExtraClass: 'p-1 w-6 h-6 flex items-center justify-center', // extra wrapper for AI
+  },
+};
 
 export const UploadsPage = () => {
   const {logBrowser} = useColdContext();
@@ -37,56 +77,26 @@ export const UploadsPage = () => {
   };
 
   const renderStatus = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    switch (params.value as ProcessingStatus) {
-      case ProcessingStatus.IMPORT_COMPLETE:
-        return (
-          <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-body text-green-200'}>
-            <ColdIcon
-              name={IconNames.ColdCheckIcon}
-              color={HexColors.green['200']}
-              className={'w-6 h-6'}
-              />
-            Import Complete
+    const status = params.value as typeof UIProcessingStatusMapping[keyof typeof UIProcessingStatusMapping];
+    const config = ProcessingStatusConfig[status];
+    if (!config) return null;
+
+    return (
+      <div
+        data-chromatic="ignore"
+        className={`w-full h-full flex flex-row justify-start items-center text-body ${config.textColorClass}`}
+      >
+        {status === UIProcessingStatusMapping[ProcessingStatus.AI_PROCESSING] ? (
+          <div className={config.containerExtraClass}>
+            <ColdIcon name={config.icon} color={config.color} className={config.iconClass} />
           </div>
-        );
-      case ProcessingStatus.PROCESSING_ERROR:
-        return (
-          <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-body text-red-100'}>
-            <ColdIcon
-              name={IconNames.ColdDangerIcon}
-              color={HexColors.red['100']}
-              className={'w-6 h-6'}
-            />
-            Error Processing
-          </div>
-        );
-      case ProcessingStatus.MANUAL_REVIEW:
-        return (
-          <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-body text-lightblue-100'}>
-            <ColdIcon
-              name={IconNames.ColdRightArrowIcon}
-              color={HexColors.lightblue['100']}
-              className={'w-6 h-6'}
-            />
-            Sent To Support Team
-          </div>
-        );
-      case ProcessingStatus.AI_PROCESSING:
-        return (
-          <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-body text-yellow-100'}>
-            <div className={'p-1 w-6 h-6 flex items-center justify-center'}>
-              <ColdIcon
-                name={IconNames.ColdAiIcon}
-                color={HexColors.yellow['100']}
-                className={'w-5 h-5'}
-              />
-            </div>
-            Cold AI Processing
-          </div>
-        );
-      default: return null;
-    }
-  }
+        ) : (
+          <ColdIcon name={config.icon} color={config.color} className={config.iconClass} />
+        )}
+        {status}
+      </div>
+    );
+  };
 
   const error = get(uploadsQuery, 'data.error', null);
   if(error){
@@ -104,16 +114,14 @@ export const UploadsPage = () => {
     formatScreamingSnakeCase(type)
   )
 
-  const statuses = toArray(ProcessingStatus).map((status) =>
-    formatScreamingSnakeCase(status)
-  )
+  const statuses = Object.values(UIProcessingStatusMapping)
 
   const files = get(uploadsQuery, 'data.data.organizationFiles', []).map((file) => ({
     id: file.id,
     name: file.originalName,
     type: formatScreamingSnakeCase(file.type),
     uploaded: file.createdAt,
-    status: file.processingStatus || 'MANUAL_REVIEW'
+    status: file.processingStatus ? file.processingStatus : ProcessingStatus.MANUAL_REVIEW,
   }));
 
   logBrowser(
@@ -138,7 +146,13 @@ export const UploadsPage = () => {
       headerName: 'Import Type',
       type: 'singleSelect',
       valueOptions: fileTypes,
-      cellClassName: 'text-tc-secondary text-body'
+      cellClassName: 'text-tc-secondary text-body',
+      valueFormatter: (value: string) => {
+        return formatScreamingSnakeCase(value);
+      },
+      valueGetter: (value: string) => {
+        return formatScreamingSnakeCase(value);
+      },
     },
     {
       ...DEFAULT_GRID_COL_DEF,
@@ -156,7 +170,10 @@ export const UploadsPage = () => {
       type: 'singleSelect',
       valueOptions: statuses,
       valueFormatter: (value: string) => {
-        return formatScreamingSnakeCase(value);
+        return UIProcessingStatusMapping[value as ProcessingStatus];
+      },
+      valueGetter: (value: string) => {
+        return UIProcessingStatusMapping[value as ProcessingStatus];
       },
     },
   ]
