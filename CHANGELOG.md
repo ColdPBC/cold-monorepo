@@ -1,3 +1,11 @@
+# [1.537.0](https://github.com/coldPBC/cold-monorepo/compare/v1.536.0...v1.537.0) (2025-02-04)
+
+
+### Features
+
+* **prisma:** add processing_status enum to organization_files and update pre-commit script ([a7ee098](https://github.com/coldPBC/cold-monorepo/commit/a7ee098e08e21675143a28ea7673de3e083ea1f0))
+* **prisma:** add processing_status field and index to organization_files model ([294d498](https://github.com/coldPBC/cold-monorepo/commit/294d4989fdb5b72e71be6bc29919dc8c387a3741))
+
 # [1.536.0](https://github.com/coldPBC/cold-monorepo/compare/v1.535.0...v1.536.0) (2025-02-04)
 
 
