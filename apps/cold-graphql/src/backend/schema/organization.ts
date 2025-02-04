@@ -8,6 +8,8 @@ import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { Material } from './material';
 import { MaterialSupplier } from './material-supplier';
+import { MaterialTag } from './material-tag';
+import { MaterialTagAssignment } from './material-tag-assignment';
 import { OrganizationCompliance } from './organization-compliance';
 import { OrganizationComplianceAiResponse } from './organization-compliance-ai-response';
 import { OrganizationComplianceAiResponseFile } from './organization-compliance-ai-response-file';
@@ -16,6 +18,8 @@ import { OrganizationFacility } from './organization-facility';
 import { OrganizationFile } from './organization-file';
 import { Product } from './product';
 import { ProductMaterial } from './product-material';
+import { ProductTagAssignment } from './product-tag-assignment';
+import { ProductsTag } from './products-tag';
 import { SurveyDatum } from './survey-datum';
 import { SurveyStatus } from './survey-status';
 import { SustainabilityAttribute } from './sustainability-attribute';
@@ -86,6 +90,12 @@ export class Organization {
 	@RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'organization' })
 	materialSuppliers!: MaterialSupplier[];
 
+	@RelationshipField<MaterialTagAssignment>(() => [MaterialTagAssignment], { relatedField: 'organization' })
+	materialTagAssignments!: MaterialTagAssignment[];
+
+	@RelationshipField<MaterialTag>(() => [MaterialTag], { relatedField: 'organization' })
+	materialTags!: MaterialTag[];
+
 	@RelationshipField<Material>(() => [Material], { relatedField: 'organization' })
 	materials!: Material[];
 
@@ -110,8 +120,14 @@ export class Organization {
 	@RelationshipField<ProductMaterial>(() => [ProductMaterial], { relatedField: 'organization' })
 	productMaterials!: ProductMaterial[];
 
+	@RelationshipField<ProductTagAssignment>(() => [ProductTagAssignment], { relatedField: 'organization' })
+	productTagAssignments!: ProductTagAssignment[];
+
 	@RelationshipField<Product>(() => [Product], { relatedField: 'organization' })
 	products!: Product[];
+
+	@RelationshipField<ProductsTag>(() => [ProductsTag], { relatedField: 'organization' })
+	productsTags!: ProductsTag[];
 
 	@RelationshipField<SurveyDatum>(() => [SurveyDatum], { relatedField: 'organization' })
 	surveyData!: SurveyDatum[];

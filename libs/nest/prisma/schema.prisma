@@ -346,6 +346,10 @@ model organizations {
   material_suppliers                                material_suppliers[]
   product_materials                                 product_materials[]
   sustainability_attribute_classifcation_assignment sustainability_attribute_classifcation_assignment[]
+  material_tags                                     material_tags[]
+  material_tag_assignments                          material_tag_assignments[]
+  product_tag_assignments                           product_tag_assignments[]
+  products_tags                                     products_tags[]
 
   @@index([name], map: "organizations_name_idx1")
 }
@@ -671,31 +675,32 @@ model attribute_assurances {
 }
 
 model products {
-  id                   String                   @id @default(cuid())
-  name                 String
-  created_at           DateTime?                @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime?                @updatedAt @db.Timestamptz(6)
-  deleted              Boolean?                 @default(false)
-  organization_id      String
-  plm_id               String?
-  description          String?
-  product_category     String?
-  product_subcategory  String?
-  metadata             Json?
-  gender               String?
-  season_code          String?
-  upc_code             String?
-  brand_product_sku    String?
-  brand_product_id     String?
-  supplier_product_id  String?
-  supplier_id          String?
-  style_code           String?
-  emission_stats       Json?
-  weight               Float?
-  materials            product_materials[]
-  organization         organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  supplier             organization_facilities? @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
-  attribute_assurances attribute_assurances[]
+  id                      String                    @id @default(cuid())
+  name                    String
+  created_at              DateTime?                 @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime?                 @updatedAt @db.Timestamptz(6)
+  deleted                 Boolean?                  @default(false)
+  organization_id         String
+  plm_id                  String?
+  description             String?
+  product_category        String?
+  product_subcategory     String?
+  metadata                Json?
+  gender                  String?
+  season_code             String?
+  upc_code                String?
+  brand_product_sku       String?
+  brand_product_id        String?
+  supplier_product_id     String?
+  supplier_id             String?
+  style_code              String?
+  emission_stats          Json?
+  weight                  Float?
+  materials               product_materials[]
+  organization            organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  supplier                organization_facilities?  @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+  attribute_assurances    attribute_assurances[]
+  product_tag_assignments product_tag_assignments[]
 
   @@unique([organization_id, upc_code, name], name: "orgIdNameUpc")
   @@unique([organization_id, name], name: "orgIdName")
@@ -755,11 +760,11 @@ model sustainability_attribute_classifcation_assignment {
 }
 
 model materials {
-  id                         String                   @id @default(cuid())
+  id                         String                     @id @default(cuid())
   name                       String
-  created_at                 DateTime?                @default(now()) @db.Timestamptz(6)
-  updated_at                 DateTime?                @updatedAt @db.Timestamptz(6)
-  deleted                    Boolean?                 @default(false)
+  created_at                 DateTime?                  @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime?                  @updatedAt @db.Timestamptz(6)
+  deleted                    Boolean?                   @default(false)
   organization_id            String
   brand_material_id          String?
   supplier_material_id       String?
@@ -772,18 +777,47 @@ model materials {
   emissions_factor           Float?
   activity_id                String?
   metadata                   Json?
-  organization               organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  organization               organizations              @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   attribute_assurances       attribute_assurances[]
   product_materials          product_materials[]
   data_source                String?
-  material_classification    material_classification? @relation(fields: [material_classification_id], references: [id])
+  material_classification    material_classification?   @relation(fields: [material_classification_id], references: [id])
   material_classification_id Int?
   emission_stats             Json?
+  material_tag_assignments   material_tag_assignments[]
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "materials_organization_id_idx1")
   @@index([material_classification_id], map: "materials_material_classification_id_idx1")
   @@index([name], map: "materials_name_idx1")
+}
+
+model material_tag_assignments {
+  id              Int      @id @default(autoincrement())
+  material_id     String
+  tag_id          Int
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  organization_id String
+
+  organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  material     materials     @relation(fields: [material_id], references: [id], onDelete: Cascade)
+
+  @@index([organization_id], map: "material_tag_assignments_organization_id_idx1")
+  @@index([material_id], map: "material_tag_assignments_material_id_idx1")
+}
+
+model material_tags {
+  id              Int      @id @default(autoincrement())
+  organization_id String
+  tag             String
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+	@@unique([organization_id, tag], name: "organization_material_tag_unique")
+	@@index([organization_id], map: "material_tags_organization_id_idx1")
 }
 
 model material_suppliers {
@@ -802,6 +836,34 @@ model material_suppliers {
   @@index([supplier_id], map: "material_suppliers_supplier_id_idx1")
   @@index([organization_id], map: "material_suppliers_organization_id_idx1")
   @@index([material_id], map: "material_suppliers_material_id_idx1")
+}
+
+model product_tag_assignments {
+  id              Int      @id @default(autoincrement())
+  product_id      String
+  tag_id          Int
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  organization_id String
+
+  organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  product      products      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([organization_id], map: "product_tag_assignments_organization_id_idx1")
+  @@index([product_id], map: "product_tag_assignments_product_id_idx1")
+}
+
+model products_tags {
+  id              Int      @id @default(autoincrement())
+  organization_id String
+  tag             String
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+	@@unique([organization_id, tag], name: "organization_product_tag_unique")
+	@@index([organization_id], map: "product_tags_organization_id_idx1")
 }
 
 model product_materials {

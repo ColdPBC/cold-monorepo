@@ -5,6 +5,7 @@ import { AttributeAssurance } from './attribute-assurance';
 import { Organization } from './organization';
 import { OrganizationFacility } from './organization-facility';
 import { ProductMaterial } from './product-material';
+import { ProductTagAssignment } from './product-tag-assignment';
 import { Product as OrmProduct } from '../entities';
 import { connection } from '../database';
 
@@ -80,4 +81,7 @@ export class Product {
 
 	@RelationshipField<ProductMaterial>(() => [ProductMaterial], { relatedField: 'product' })
 	productMaterials!: ProductMaterial[];
+
+	@RelationshipField<ProductTagAssignment>(() => [ProductTagAssignment], { relatedField: 'product' })
+	productTagAssignments!: ProductTagAssignment[];
 }
