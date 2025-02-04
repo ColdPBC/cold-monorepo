@@ -1,3 +1,38 @@
+# [1.539.0](https://github.com/coldPBC/cold-monorepo/compare/v1.538.0...v1.539.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* Fix selection count to show total rows instead of filtered rows ([95d8a26](https://github.com/coldPBC/cold-monorepo/commit/95d8a26af40f930270cfb6e726afe9a986b1ee55))
+
+
+### Features
+
+* Add filtering to editEntityAssociationsModal grid ([2136935](https://github.com/coldPBC/cold-monorepo/commit/21369354b8140ce8876950ba5f373bcedb414a35))
+* Fix checkbox behavior and remove redundant filter reset logic ([de4068c](https://github.com/coldPBC/cold-monorepo/commit/de4068c0bb553bc07f47780dd370b6ed066813e7))
+* Fix indeterminate checkbox logic in editEntityAssociationsModal ([7cf6b28](https://github.com/coldPBC/cold-monorepo/commit/7cf6b28f7c0f2c36d98817d4dcc26234207a6fef))
+* Improve handling of selected rows in entity associations modal ([f96daa5](https://github.com/coldPBC/cold-monorepo/commit/f96daa51c32e04b0e7f30916d5434e4ef552e858))
+* Refactor row selection logic in EditEntityAssociationsModal ([0819e75](https://github.com/coldPBC/cold-monorepo/commit/0819e757ca3b02b6f6e18c4beaf936412941b69b))
+* Refactor selection logic in editEntityAssociationsModal. ([b55b48a](https://github.com/coldPBC/cold-monorepo/commit/b55b48af2a7cc02fb6ef498a76f8b53f1d9f18cb))
+* Remove custom toolbar from EditEntityAssociationsModal. ([b2a8ed9](https://github.com/coldPBC/cold-monorepo/commit/b2a8ed9d98e57bb307125d5c2a8565ec859d67c7))
+* Set consistent initial sorting for tables. ([ae4a29b](https://github.com/coldPBC/cold-monorepo/commit/ae4a29b2efbad105b37e68023cdd3f6cce012808))
+* Set initial sorting state in EditEntityAssociationsModal ([b6d8eb3](https://github.com/coldPBC/cold-monorepo/commit/b6d8eb3aeed24be66536ad6dc4879319bf604b68))
+* Simplify header checkbox selection logic. ([9e0a0fc](https://github.com/coldPBC/cold-monorepo/commit/9e0a0fc9651494975b80a2443f30b0f3cd1e9db9))
+
+# [1.538.0](https://github.com/coldPBC/cold-monorepo/compare/v1.537.0...v1.538.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* Refactor DataGrid toolbar for improved customization. ([43d72ee](https://github.com/coldPBC/cold-monorepo/commit/43d72eeef586f913f8a24cb7b25cb949f916cb14))
+
+
+### Features
+
+* Add support for custom quick filter props in DataGrid ([adb2766](https://github.com/coldPBC/cold-monorepo/commit/adb27663cb524f64adc809a3d26feb8a96aab978))
+* Prevent rendering toolbar when all options are disabled. ([a23b5ce](https://github.com/coldPBC/cold-monorepo/commit/a23b5ce1e5a8e635a6c6510194be950117b1c47c))
+* Refactor DataGrid toolbar props handling. ([16f94bc](https://github.com/coldPBC/cold-monorepo/commit/16f94bc9a3c229848f0a7d130a80b711ff6c1ff5))
+
 # [1.537.0](https://github.com/coldPBC/cold-monorepo/compare/v1.536.0...v1.537.0) (2025-02-04)
 
 

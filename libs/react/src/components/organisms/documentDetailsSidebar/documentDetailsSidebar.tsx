@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import {
   Claims,
   FilesWithAssurances,
-  InputOption,
+  InputOption, ProductsQuery,
   ToastMessage,
 } from '@coldpbc/interfaces';
 import {
@@ -24,9 +24,9 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
-import { useSWRConfig } from 'swr';
+import { KeyedMutator, useSWRConfig } from 'swr';
 import { format, isSameDay, parseISO } from 'date-fns';
-import { isApolloError } from '@apollo/client';
+import { ApolloQueryResult, isApolloError } from '@apollo/client';
 import {
   addTZOffset,
   areArraysEqual, formatScreamingSnakeCase,
@@ -84,7 +84,7 @@ const _DocumentDetailsSidebar = (props: {
   setFileState: (fileState: DocumentDetailsSidebarFileState | undefined) => void;
 	sustainabilityAttributes: Claims[];
 	fileTypes: string[];
-	refreshFiles: () => void;
+	refreshFiles: KeyedMutator<ApolloQueryResult<{ organizationFiles: FilesWithAssurances[] | null }>>;
 	closeSidebar: () => void;
 	innerRef: React.RefObject<HTMLDivElement>;
 	deleteFile: (id: string) => void;
@@ -101,6 +101,7 @@ const _DocumentDetailsSidebar = (props: {
     fileState,
     setFileState,
     fileTypes,
+    refreshFiles,
     sustainabilityAttributes,
     closeSidebar,
     innerRef,
@@ -175,12 +176,7 @@ const _DocumentDetailsSidebar = (props: {
 		} else {
 			logBrowser('Assurance deleted successfully', 'info', { response });
 		}
-    await mutate(['GET_ALL_FILES', JSON.stringify({
-      filter: {
-        organization: { id: orgId },
-        visible: true
-      }
-    })]);
+    await refreshFiles();
 	};
 
 	const getInitialFileState = (file: FilesWithAssurances | undefined): DocumentDetailsSidebarFileState | undefined => {
@@ -494,12 +490,7 @@ const _DocumentDetailsSidebar = (props: {
 			if (ifOnlyTypeOrCertIdChanged(fileState, compareFileState)) {
 				await Promise.all(promises)
 					.then(responses => {
-            mutate(['GET_ALL_FILES', JSON.stringify({
-              filter: {
-                organization: { id: orgId },
-                visible: true
-              }
-            })]);
+            refreshFiles();
 						logBrowser('File updated successfully', 'info', {
 							responses,
 						});
@@ -552,12 +543,7 @@ const _DocumentDetailsSidebar = (props: {
 
 			await Promise.all(promises)
 				.then(responses => {
-          mutate(['GET_ALL_FILES', JSON.stringify({
-            filter: {
-              organization: { id: orgId },
-              visible: true
-            }
-          })]);
+          refreshFiles();
 					logBrowser('File and assurances updated successfully', 'info', {
 						responses,
 					});

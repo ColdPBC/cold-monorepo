@@ -57,6 +57,11 @@ const _DocumentMaterialsTable = (props: { materials: MaterialWithTier2Supplier[]
 			}}
 			className={'text-tc-primary border-[2px] rounded-[2px] border-gray-50 bg-transparent w-full h-auto'}
 			disableRowSelectionOnClick={true}
+      initialState={{
+        sorting: {
+          sortModel: [{ field: 'name', sort: 'asc' }],
+        },
+      }}
 		/>
 	);
 };

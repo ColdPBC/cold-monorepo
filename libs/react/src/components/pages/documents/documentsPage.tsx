@@ -14,10 +14,11 @@ import {
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { FilesWithAssurances, SchemaEnum, ToastMessage } from '@coldpbc/interfaces';
-import { ButtonTypes, IconNames } from '@coldpbc/enums';
+import { AssuranceDocumentTypes, ButtonTypes, IconNames } from '@coldpbc/enums';
 import {AxiosError, isAxiosError} from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
 import {get} from 'lodash';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export interface MaterialWithTier2Supplier {
   id: string;
@@ -45,12 +46,17 @@ const _DocumentsPage = () => {
 	const { addToastMessage } = useAddToastMessage();
 	const selectedFileURLSWR = useOrgSWR<string>(selectedDocument ? [`/files/${selectedDocument}/url`, 'GET'] : null, axiosFetcher);
 	const ref = React.useRef<HTMLDivElement>(null);
-	const allFiles = useGraphQLSWR('GET_ALL_FILES', {
+  const ldFlags = useFlags();
+  const docTypeFilter = ldFlags.showNewDocumentUploadUxCold1410 ? { type_in: Object.values(AssuranceDocumentTypes) } : {};
+	const allFiles = useGraphQLSWR<{
+    organizationFiles: FilesWithAssurances[] | null;
+  }>('GET_ALL_FILES', {
 		filter: {
 			organization: {
 				id: orgId,
 			},
       visible: true,
+      ...docTypeFilter
 		},
 	});
 	const allSustainabilityAttributes = useGraphQLSWR('GET_ALL_SUS_ATTRIBUTES', {
@@ -159,7 +165,7 @@ const _DocumentsPage = () => {
       <div className={'h-auto'}>
         <DocumentUploadButton
           buttonProps={{
-            label: 'Add New',
+            label: ldFlags.showNewDocumentUploadUxCold1410 ? 'Upload Assurance Doc' : 'Add New',
             iconLeft: IconNames.PlusIcon,
           }}
           mutateFunction={allFiles.mutate}
@@ -227,10 +233,6 @@ const _DocumentsPage = () => {
 		}
 	};
 
-	const updateFile = async () => {
-		await allFiles.mutate();
-	};
-
 	const onSidebarClose = () => {
 		setSelectedDocument(undefined);
     setEditDocumentFileState(undefined);
@@ -280,7 +282,7 @@ const _DocumentsPage = () => {
 
 	return (
 		<div className="relative overflow-y-auto h-full w-full">
-			<MainContent title="Documents" className={'gap-[40px] w-[calc(100%-100px)] min-w-[1129px]'} headerElement={getPageButtons()}>
+			<MainContent title={ldFlags.showNewDocumentUploadUxCold1410 ? "Assurance Documents" : "Documents"} className={'gap-[40px] w-[calc(100%-100px)] min-w-[1129px]'} headerElement={getPageButtons()}>
 				<DocumentsHeaderTypes files={files} />
 				<DocumentsTable files={files} selectDocument={selectDocument} />
 			</MainContent>
@@ -290,7 +292,7 @@ const _DocumentsPage = () => {
         setFileState={setEditDocumentFileState}
 				sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
         fileTypes={fileTypes}
-				refreshFiles={updateFile}
+				refreshFiles={allFiles.mutate}
 				closeSidebar={onSidebarClose}
 				innerRef={ref}
 				deleteFile={onDeleteClick}

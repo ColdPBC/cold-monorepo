@@ -144,6 +144,11 @@ export const _DocumentsEditMaterialsModal: React.FC<DocumentsEditMaterialsModalP
               }}
               disableColumnMenu={true}
               rowSelection={false}
+              initialState={{
+                sorting: {
+                  sortModel: [{ field: 'name', sort: 'asc' }],
+                },
+              }}
             />
           </div>
         </div>
