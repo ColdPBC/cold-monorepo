@@ -6,6 +6,7 @@ import { AttributeAssurance } from './attribute-assurance';
 import { Organization } from './organization';
 import { OrganizationFacility } from './organization-facility';
 import { ProductMaterial } from './product-material';
+import { ProductTagAssignment } from './product-tag-assignment';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl, OrgContext } from '../../libs/acls/acl_policies';
@@ -94,6 +95,9 @@ export class Product {
 
 	@OneToMany({ entity: () => ProductMaterial, mappedBy: 'product' })
 	productMaterials = new Collection<ProductMaterial>(this);
+
+	@OneToMany({ entity: () => ProductTagAssignment, mappedBy: 'product' })
+	productTagAssignments = new Collection<ProductTagAssignment>(this);
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
