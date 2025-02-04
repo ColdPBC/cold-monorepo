@@ -119,7 +119,7 @@ export const UploadsPage = () => {
   const files = get(uploadsQuery, 'data.data.organizationFiles', []).map((file) => ({
     id: file.id,
     name: file.originalName,
-    type: formatScreamingSnakeCase(file.type),
+    type: file.type,
     uploaded: file.createdAt,
     status: file.processingStatus ? file.processingStatus : ProcessingStatus.MANUAL_REVIEW,
   }));
