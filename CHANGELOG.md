@@ -1,3 +1,17 @@
+# [1.540.0](https://github.com/coldPBC/cold-monorepo/compare/v1.539.0...v1.540.0) (2025-02-05)
+
+
+### Features
+
+* Add error boundary to UploadsPage for improved error handling ([942505e](https://github.com/coldPBC/cold-monorepo/commit/942505eaf41c08ceca5af441403bd96ee414584d))
+* Add support for fetching and displaying uploaded files ([e8e7daa](https://github.com/coldPBC/cold-monorepo/commit/e8e7daac5794f122fc5c657dcd1caf0bf1cf030d))
+* Refactor status rendering logic and improve type handling ([46dc573](https://github.com/coldPBC/cold-monorepo/commit/46dc5730627e2d8d08ed1fcd46610fd27399c29e))
+* Refactor type formatting using `formatScreamingSnakeCase` ([da96658](https://github.com/coldPBC/cold-monorepo/commit/da96658c074d4500796861c070d7bf7f9033120c))
+* Refactor uploads page file handling and status rendering. ([414b942](https://github.com/coldPBC/cold-monorepo/commit/414b942dad6d6850332a5d663b251ce1781dd1e8))
+* Refactor uploadsPage renderDate and update cell styling ([d586723](https://github.com/coldPBC/cold-monorepo/commit/d5867232d654bd9a92b304749bbe0e60a9d75983))
+* Simplify file type handling in uploadsPage. ([8d1a760](https://github.com/coldPBC/cold-monorepo/commit/8d1a760a741ab88017b0d01c9d6a6b94e2aafab7))
+* Simplify value handling in uploadsPage column config ([af51433](https://github.com/coldPBC/cold-monorepo/commit/af514336d2f4838682ff77164508d4aa5239f745))
+
 # [1.539.0](https://github.com/coldPBC/cold-monorepo/compare/v1.538.0...v1.539.0) (2025-02-04)
 
 

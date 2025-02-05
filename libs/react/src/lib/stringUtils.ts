@@ -1,4 +1,4 @@
-import { startCase, toLower } from 'lodash';
+import { lowerCase, startCase, toLower } from 'lodash';
 
 export function toSentenceCase(str: string) {
   return startCase(toLower(str));
@@ -13,3 +13,7 @@ export const areArraysEqual = (arr1: string[], arr2: string[]) => {
   const set1 = new Set(arr1);
   return arr2.every(item => set1.has(item));
 };
+
+export const formatScreamingSnakeCase = (str: string) => {
+  return startCase(lowerCase(str.replace(/_/g, ' ')));
+}

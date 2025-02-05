@@ -38,3 +38,4 @@ export type BillOfMaterialDocumentType = typeof BillOfMaterialDocumentTypes[keyo
 export type InternalSustainabilityPolicyDocumentType = typeof InternalSustainabilityPolicyDocumentTypes[keyof typeof InternalSustainabilityPolicyDocumentTypes];
 export type SustainabilityDataDocumentType = typeof SustainabilityDataDocumentTypes[keyof typeof SustainabilityDataDocumentTypes];
 export type DocumentType = typeof DocumentTypes[keyof typeof DocumentTypes];
+

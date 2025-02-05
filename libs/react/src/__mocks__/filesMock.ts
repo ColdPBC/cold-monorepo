@@ -1,7 +1,7 @@
-import { Files, FilesWithAssurances } from '@coldpbc/interfaces';
-import {addDays, subDays} from 'date-fns';
-import {filesProcessedWithDatesMocks} from "./graphql";
-import {EntityLevel} from "@coldpbc/enums";
+import { Files, FilesWithAssurances, UploadsQuery } from '@coldpbc/interfaces';
+import { addDays, subDays } from 'date-fns';
+import { DocumentTypes, EntityLevel, ProcessingStatus } from '@coldpbc/enums';
+import { get } from 'lodash';
 
 export function getAllFilesMock() {
 	return [
@@ -748,4 +748,34 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
       ],
     },
   ];
+}
+
+export function getUploadsMock(): UploadsQuery[] {
+  const baseFiles: UploadsQuery[] = getFilesWithAssurances().map((file, index) => ({
+    id: file.id,
+    originalName: file.originalName,
+    createdAt: file.createdAt,
+    type: file.type as typeof DocumentTypes[keyof typeof DocumentTypes],
+    processingStatus: null,
+  }))
+  const processingStatuses = Object.values(ProcessingStatus);
+  const fileTypes = Object.values(DocumentTypes)
+
+  // Ensure exactly 6 files by generating additional ones if needed
+  const additionalFiles: UploadsQuery[] = Array.from({ length: 6 - baseFiles.length }, (_, i) => {
+    const newId = (baseFiles.length + i + 1).toString();
+    const statusIndex = (baseFiles.length + i) % processingStatuses.length;
+
+    console.log(`File ${newId} assigned status:`, processingStatuses[statusIndex]); // Debugging
+
+    return {
+      id: newId,
+      originalName: `Generated-File-${newId}.pdf`,
+      createdAt: new Date('01/25/2024').toISOString(),
+      type: fileTypes[i % fileTypes.length], // Cycle through enum values
+      processingStatus: processingStatuses[statusIndex], // Cycle through enum values
+    };
+  });
+
+  return [...baseFiles, ...additionalFiles];
 }
