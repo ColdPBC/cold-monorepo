@@ -29,15 +29,15 @@ import {
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
   GET_PRODUCT_CARBON_FOOTPRINT_DATA,
   GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-  GET_ALL_MATERIAL_CLASSIFICATIONS,
+  GET_ALL_MATERIAL_CLASSIFICATIONS, GET_ALL_UPLOADS,
 } from '@coldpbc/lib';
 import {
-	filesProcessedWithDatesMock,
-	filesWithTooManyRecordsMock,
-	getFilesProcessingMock,
-	getFilesWithAssurances,
-	getFilesWithoutAssurances,
-	suppliersForAssurancesMock,
+  filesProcessedWithDatesMock,
+  filesWithTooManyRecordsMock,
+  getFilesProcessingMock,
+  getFilesWithAssurances,
+  getFilesWithoutAssurances, getUploadsMock,
+  suppliersForAssurancesMock,
 } from '../filesMock';
 import { getClaimsMock } from '../claimsMock';
 import { DocumentNode } from '@apollo/client';
@@ -637,6 +637,16 @@ export const defaultGraphqlMocks: {
       });
     }
   },
+  {
+    query: GET_ALL_UPLOADS,
+    handler: () => {
+      return Promise.resolve({
+        data: {
+          organizationFiles: getUploadsMock(),
+        },
+      });
+    }
+  }
 ];
 
 export const getSupplierGraphQLMock = (tier: number) => (

@@ -11,7 +11,7 @@ import { HexColors } from '@coldpbc/themes';
 import { differenceInDays, format } from 'date-fns';
 import {capitalize, uniq} from 'lodash';
 import React, {ReactNode} from 'react';
-import {get, lowerCase, startCase, toArray, uniqWith} from 'lodash';
+import {get, toArray, uniqWith} from 'lodash';
 import {
   Claims,
   FilesWithAssurances,
@@ -19,12 +19,12 @@ import {
   SustainabilityAttributeWithoutAssurances
 } from '@coldpbc/interfaces';
 import {
-  addTZOffset,
+  addTZOffset, formatScreamingSnakeCase,
   getDateActiveStatus,
   getEffectiveEndDate,
   getFileProcessingStatus,
   listFilterOperators,
-  listSortComparator
+  listSortComparator,
 } from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useColdContext } from '@coldpbc/hooks';
@@ -200,7 +200,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
 
 	const allAssociatedRecords = uniqWith(files.map(file => getAssociatedRecords(file)).flat(), (a, b) => a === b);
 
-  const uniqFileTypes = uniqWith(files.map(file => startCase(lowerCase(file.type.replace(/_/g, ' ')))), (a, b) => a === b);
+  const uniqFileTypes = uniqWith(files.map(file => formatScreamingSnakeCase(file.type), (a, b) => a === b));
 
   const uniqSustainabilityAttributes = uniqWith(files.map(file => file.attributeAssurances.map(assurance => get(assurance, 'sustainabilityAttribute.name', ''))).flat()).filter(
     value => value !== '',
@@ -249,10 +249,10 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
 			width: 100,
 			type: 'singleSelect',
       valueGetter: (value: string) => {
-        return startCase(lowerCase(value.replace(/_/g, ' ')));
+        return formatScreamingSnakeCase(value);
       },
       valueFormatter: (value: string) => {
-        return startCase(lowerCase(value.replace(/_/g, ' ')));
+        return formatScreamingSnakeCase(value);
       },
       valueOptions: uniqFileTypes,
       renderCell: renderType,

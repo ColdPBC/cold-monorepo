@@ -19,7 +19,7 @@ import {
   SustainabilityAttributeSelect,
 } from '@coldpbc/components';
 import { ButtonTypes, EntityLevel, IconNames } from '@coldpbc/enums';
-import { forEach, get, has, lowerCase, startCase } from 'lodash';
+import { forEach, get, has } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
@@ -29,7 +29,7 @@ import { format, isSameDay, parseISO } from 'date-fns';
 import { ApolloQueryResult, isApolloError } from '@apollo/client';
 import {
   addTZOffset,
-  areArraysEqual,
+  areArraysEqual, formatScreamingSnakeCase,
   getEffectiveEndDate,
   getEffectiveStartDate,
   getEntity,
@@ -220,7 +220,7 @@ const _DocumentDetailsSidebar = (props: {
 
 	const documentTypeOptions: InputOption[] = fileTypes
 		.map((type, index) => {
-			const name = startCase(lowerCase(type.replace(/_/g, ' ')));
+			const name = formatScreamingSnakeCase(type);
 			return {
 				id: index,
 				name: name,
@@ -662,7 +662,7 @@ const _DocumentDetailsSidebar = (props: {
 									<Select
 										options={documentTypeOptions}
 										name={'type'}
-										value={startCase(lowerCase(fileState.type.replace(/_/g, ' ')))}
+										value={formatScreamingSnakeCase(fileState.type)}
 										onChange={(e: InputOption) => {
 											setFileState({ ...fileState, type: e.value });
 										}}
