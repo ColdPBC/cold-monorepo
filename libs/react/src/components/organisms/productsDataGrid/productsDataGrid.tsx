@@ -17,7 +17,7 @@ import { withErrorBoundary } from "react-error-boundary";
 import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
-import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
+import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid-pro';
 
 const getColumnRows = (
   products: PaginatedProductsQuery[],

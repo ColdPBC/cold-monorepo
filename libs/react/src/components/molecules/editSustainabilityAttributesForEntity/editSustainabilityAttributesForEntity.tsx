@@ -1,7 +1,7 @@
 import { BaseButton, Card, ErrorFallback, ErrorPage, MuiDataGrid, Spinner } from '@coldpbc/components';
 import { Modal as FBModal } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
-import { GridCellParams, GridColDef, GridRowSelectionModel, GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid';
+import { GridCellParams, GridColDef, GridRowSelectionModel, GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid-pro';
 import { ButtonTypes, EntityLevel, GlobalSizes } from '@coldpbc/enums';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Checkbox } from '@mui/material';

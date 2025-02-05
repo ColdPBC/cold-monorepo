@@ -8,7 +8,7 @@ import {BaseButton, Card, ErrorFallback, MuiDataGrid, SustainabilityAttributeCol
 import {find, forEach, get, has, isEqual, some} from "lodash";
 import {ButtonTypes} from "@coldpbc/enums";
 import React, {useEffect, useState} from "react";
-import {GridCellParams, GridColDef} from "@mui/x-data-grid";
+import {GridCellParams, GridColDef} from "@mui/x-data-grid-pro";
 import {Checkbox} from "@mui/material";
 import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR} from "@coldpbc/hooks";
 import {withErrorBoundary} from "react-error-boundary";

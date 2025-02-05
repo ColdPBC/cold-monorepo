@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
+import { DataGridPro, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid-pro';
 import { HexColors } from '@coldpbc/themes';
 import { ColdIcon, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import { ClaimStatus, IconNames } from '@coldpbc/enums';
@@ -124,7 +124,7 @@ export const SupplierDetailDocumentsTable = (props: {
   const rows: GridValidRowModel[] = newRows;
 
   return (
-    <DataGrid
+    <DataGridPro
       rows={rows}
       columns={columns}
       rowHeight={37}

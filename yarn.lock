@@ -11524,13 +11524,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-data-grid@npm:^7.10.0":
-  version: 7.22.1
-  resolution: "@mui/x-data-grid@npm:7.22.1"
+"@mui/x-data-grid-pro@npm:^7.25.0":
+  version: 7.25.0
+  resolution: "@mui/x-data-grid-pro@npm:7.25.0"
   dependencies:
     "@babel/runtime": "npm:^7.25.7"
     "@mui/utils": "npm:^5.16.6 || ^6.0.0"
-    "@mui/x-internals": "npm:7.21.0"
+    "@mui/x-data-grid": "npm:7.25.0"
+    "@mui/x-internals": "npm:7.25.0"
+    "@mui/x-license": "npm:7.25.0"
+    "@types/format-util": "npm:^1.0.4"
     clsx: "npm:^2.1.1"
     prop-types: "npm:^15.8.1"
     reselect: "npm:^5.1.1"
@@ -11539,14 +11542,40 @@ __metadata:
     "@emotion/styled": ^11.8.1
     "@mui/material": ^5.15.14 || ^6.0.0
     "@mui/system": ^5.15.14 || ^6.0.0
-    react: ^17.0.0 || ^18.0.0
-    react-dom: ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     "@emotion/react":
       optional: true
     "@emotion/styled":
       optional: true
-  checksum: 10/b06d7dcc85bfd08ff610cd9add5daa42dd5cc8cd3875a5a0ab4e16681946e7c647bb71b64fe0b0942424432f034e46e0d39cc6987ea62dcd8268da6a62fa6cec
+  checksum: 10/fbf9b18b0ff394591519075cb7887ea3508e18b83c50d50cc3565e46d56214494209abb16f0353bf90c6e9e7de079bcc279a5945c9d500d1196f005a2d128fd8
+  languageName: node
+  linkType: hard
+
+"@mui/x-data-grid@npm:7.25.0":
+  version: 7.25.0
+  resolution: "@mui/x-data-grid@npm:7.25.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.7"
+    "@mui/utils": "npm:^5.16.6 || ^6.0.0"
+    "@mui/x-internals": "npm:7.25.0"
+    clsx: "npm:^2.1.1"
+    prop-types: "npm:^15.8.1"
+    reselect: "npm:^5.1.1"
+  peerDependencies:
+    "@emotion/react": ^11.9.0
+    "@emotion/styled": ^11.8.1
+    "@mui/material": ^5.15.14 || ^6.0.0
+    "@mui/system": ^5.15.14 || ^6.0.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/react":
+      optional: true
+    "@emotion/styled":
+      optional: true
+  checksum: 10/751ca6dad1615a85ce83b6c989447d779e5bf257e5b71d9aa9ad9d9af86be9701f3d8a4c63e0b30a19ed50efae999248c77ce9f3db1b4ec7e4c1bd4c3433c4bb
   languageName: node
   linkType: hard
 
@@ -11607,6 +11636,31 @@ __metadata:
   peerDependencies:
     react: ^17.0.0 || ^18.0.0
   checksum: 10/57a91e67cff9f82fafe883ae0e54e56c43d3ba15f5f99652e66e25e65900f76a5c0b0a49aac27f0f3167e7f955438c987c0a6dae61117420a9b851258a3f7360
+  languageName: node
+  linkType: hard
+
+"@mui/x-internals@npm:7.25.0":
+  version: 7.25.0
+  resolution: "@mui/x-internals@npm:7.25.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.7"
+    "@mui/utils": "npm:^5.16.6 || ^6.0.0"
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/4f732d11a1623038641c07921ac2b62e287351df280b2246b31d7e1e285f765d015c106c8b20336987b001af06462c14211ee766e6644c84d305c06f5892c78d
+  languageName: node
+  linkType: hard
+
+"@mui/x-license@npm:7.25.0":
+  version: 7.25.0
+  resolution: "@mui/x-license@npm:7.25.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.7"
+    "@mui/utils": "npm:^5.16.6 || ^6.0.0"
+    "@mui/x-internals": "npm:7.25.0"
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/6a946645a410a38b0f7a016987f77892bea8985ece3726d8aef938ddd654ca1adeefe6e4ab58dc7ce31ee9314b7a3574529e4584265ef4befee496c0e0309c24
   languageName: node
   linkType: hard
 
@@ -21556,6 +21610,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/format-util@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@types/format-util@npm:1.0.4"
+  checksum: 10/2c0643203de286788986ef2a73d56e8b9609dbfa9cfe817792e8bf920c0fa72ff72beb502f5c53799b6752130a177e19afac0f0ae78d349f3bac7817ccbdaadc
+  languageName: node
+  linkType: hard
+
 "@types/glob@npm:*":
   version: 8.1.0
   resolution: "@types/glob@npm:8.1.0"
@@ -27825,7 +27886,7 @@ __metadata:
     "@mdx-js/rollup": "npm:^2.3.0"
     "@mui/icons-material": "npm:^5.11.11"
     "@mui/material": "npm:^5.16.1"
-    "@mui/x-data-grid": "npm:^7.10.0"
+    "@mui/x-data-grid-pro": "npm:^7.25.0"
     "@mui/x-date-pickers": "npm:^7.11.1"
     "@nestjs/axios": "npm:^3.0.0"
     "@nestjs/bull": "npm:^10.0.1"

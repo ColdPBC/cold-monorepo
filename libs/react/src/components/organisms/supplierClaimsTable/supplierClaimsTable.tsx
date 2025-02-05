@@ -1,6 +1,6 @@
 import { ColdIcon, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import { ClaimStatus, IconNames } from '@coldpbc/enums';
-import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
+import { DataGridPro, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid-pro';
 import { HexColors } from '@coldpbc/themes';
 import { forEach, orderBy, toArray, uniq } from 'lodash';
 import { differenceInDays } from 'date-fns';
@@ -134,7 +134,7 @@ export const SupplierClaimsTable = (props: {
       <div className={'w-full flex flex-row justify-between'}>
         <div className={'text-h3'}>Compliance Documents</div>
       </div>
-      <DataGrid
+      <DataGridPro
         rows={rows}
         columns={columns}
         rowHeight={37}

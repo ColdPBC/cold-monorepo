@@ -12,7 +12,7 @@ import {
   GridPaginationModel,
   GridSortModel,
   GridValidRowModel,
-} from '@mui/x-data-grid';
+} from '@mui/x-data-grid-pro';
 import { get, has, uniq } from 'lodash';
 import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';

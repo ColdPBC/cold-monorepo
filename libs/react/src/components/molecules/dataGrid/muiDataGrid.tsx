@@ -1,22 +1,22 @@
 import { HexColors } from '@coldpbc/themes';
 import { MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import {
-  DataGrid,
-  DataGridProps, GridCallbackDetails,
+  DataGridPro,
+  DataGridProProps, GridCallbackDetails,
   GridColDef, GridFilterModel,
   GridToolbarColumnsButton,
   GridToolbarContainer,
   GridToolbarExport, GridToolbarProps,
   GridToolbarQuickFilter,
   GridValidRowModel, ToolbarPropsOverrides,
-} from '@mui/x-data-grid';
+} from '@mui/x-data-grid-pro';
 import { twMerge } from 'tailwind-merge';
 import React, {useEffect} from 'react';
 import {Box} from "@mui/material";
 import {useAuth0Wrapper} from "@coldpbc/hooks";
 import {addToOrgStorage, getFromOrgStorage} from "@coldpbc/lib";
 
-export interface MUIDataGridProps extends DataGridProps {
+export interface MUIDataGridProps extends DataGridProProps {
   rows: GridValidRowModel[];
   columns: GridColDef[];
   showSearch?: boolean;
@@ -25,7 +25,14 @@ export interface MUIDataGridProps extends DataGridProps {
   searchKey?: string; // enabled controlled search
 }
 
-const CustomDataGridToolbar = (props: GridToolbarProps & ToolbarPropsOverrides) => {
+interface CustomDataGridToolbarProps extends GridToolbarProps {
+  showSearch?: boolean;
+  showExport?: boolean;
+  showManageColumns?: boolean;
+  // any additional custom props
+}
+
+const CustomDataGridToolbar = (props: CustomDataGridToolbarProps) => {
   const { showSearch, showExport, showManageColumns, quickFilterProps } = props;
   if(!showSearch && !showExport && !showManageColumns) {
     return null;
@@ -77,7 +84,7 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
   }
 
   return (
-    <DataGrid
+    <DataGridPro
       rowHeight={37}
       getRowClassName={() => {
         return 'text-tc-primary cursor-pointer bg-gray-10';
@@ -172,7 +179,7 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
           showSearch,
           showExport,
           showManageColumns,
-        },
+        } as CustomDataGridToolbarProps,
       }}
       className={twMerge('text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto', props.className)}
       filterDebounceMs={searchKey ? 500 : props.filterDebounceMs}

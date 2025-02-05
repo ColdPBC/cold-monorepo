@@ -8,7 +8,7 @@ import {
 	MuiDataGrid,
 	SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
-import { GridCellParams, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import { GridCellParams, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid-pro';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import { uniq } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';

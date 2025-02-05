@@ -1,4 +1,4 @@
-import {GridActionsCellItem, GridColDef} from "@mui/x-data-grid";
+import {GridActionsCellItem, GridColDef} from "@mui/x-data-grid-pro";
 import React from "react";
 import {ErrorFallback, MuiDataGrid} from "@coldpbc/components";
 import {withErrorBoundary} from "react-error-boundary";

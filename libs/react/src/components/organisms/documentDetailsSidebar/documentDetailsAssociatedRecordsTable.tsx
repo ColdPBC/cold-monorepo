@@ -1,7 +1,7 @@
 import { Files } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
 import { MUIDataGridNoRowsOverlay } from '@coldpbc/components';
-import { DataGrid, GridColDef, GridValidRowModel } from '@mui/x-data-grid';
+import { DataGridPro, GridColDef, GridValidRowModel } from '@mui/x-data-grid-pro';
 import React from 'react';
 import { get, isEqual, uniqWith } from 'lodash';
 
@@ -76,7 +76,7 @@ export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['o
   return (
     <div className={'w-full flex flex-col gap-[16px]'}>
       <div className={'w-full text-tc-primary text-h5'}>Associated Records</div>
-      <DataGrid
+      <DataGridPro
         rows={rows}
         columns={columns}
         rowHeight={37}

@@ -2,7 +2,7 @@ import { ColdIcon, DEFAULT_GRID_COL_DEF, ErrorFallback, MainContent, MuiDataGrid
 import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { UploadsQuery } from '@coldpbc/interfaces';
 import { get } from 'lodash';
-import { GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
+import { GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid-pro';
 import { format } from 'date-fns';
 import React, { ReactNode } from 'react';
 import {

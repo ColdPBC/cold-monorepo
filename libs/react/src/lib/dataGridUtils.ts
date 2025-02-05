@@ -1,4 +1,4 @@
-import { getGridSingleSelectOperators, GridCellParams, GridColDef, GridComparatorFn, GridFilterItem } from '@mui/x-data-grid';
+import { getGridSingleSelectOperators, GridCellParams, GridColDef, GridComparatorFn, GridFilterItem } from '@mui/x-data-grid-pro';
 import { toArray } from 'lodash';
 
 export const listSortComparator: GridComparatorFn<any> = (list1: any, list2: any) => {
