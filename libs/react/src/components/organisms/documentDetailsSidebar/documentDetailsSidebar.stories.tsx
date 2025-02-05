@@ -5,7 +5,7 @@ import {
   getClaimsMock,
   getFilesWithAssurances,
   getFilesWithoutAssurances,
-  getFileTypesMock, getMaterialsMock, getMaterialsMocksWithAssurances,
+  getMaterialsMocksWithAssurances,
   StoryMockProvider,
 } from '@coldpbc/mocks';
 import {
@@ -14,6 +14,8 @@ import {
   DocumentsEditMaterialsModal,
 } from '@coldpbc/components';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
+import { KeyedMutator } from 'swr';
+import { ApolloQueryResult, NetworkStatus } from '@apollo/client';
 
 const meta = {
 	title: 'Organisms/DocumentDetailsSidebar',
@@ -35,7 +37,6 @@ export const NoAssurances: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
 	},
 };
 
@@ -49,7 +50,6 @@ export const WithAssurancesSupplierClaim: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
 	},
 };
 
@@ -63,7 +63,6 @@ export const WithAssurancesMaterialClaim: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
 	},
 };
 
@@ -77,14 +76,12 @@ export const NonCertificateDocument: Story = {
     isLoading: false,
     signedUrl: '',
     sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
   },
 };
 
 const SidebarStory = (props: {
 	file: FilesWithAssurances | undefined;
 	sustainabilityAttributes: Claims[];
-  fileTypes: string[];
 	refreshFiles: () => void;
 	closeSidebar: () => void;
 	innerRef: React.RefObject<HTMLDivElement>;
@@ -93,7 +90,7 @@ const SidebarStory = (props: {
 	downloadFile: (url: string | undefined) => void;
 	signedUrl: string | undefined;
 }) => {
-	const { file, fileTypes, innerRef, sustainabilityAttributes } = props;
+	const { file, innerRef, sustainabilityAttributes } = props;
 	const [selectedFile, setSelectedFile] = React.useState<FilesWithAssurances | undefined>(file);
   const [ editDocumentFileState, setEditDocumentFileState ] = React.useState<DocumentDetailsSidebarFileState | undefined>(undefined);
   const [ editMaterialsModalIsOpen, setEditMaterialsModalIsOpen ] = React.useState(false);
@@ -101,6 +98,8 @@ const SidebarStory = (props: {
     const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
     return { id: material.id, name: material.name, tier2SupplierName: tier2Supplier?.name, tier2SupplierId: tier2Supplier?.id };
   })
+  const mockMutator: KeyedMutator<ApolloQueryResult<{ organizationFiles: FilesWithAssurances[] | null }>> =
+    async () => ({ data: { organizationFiles: null }, loading: false, networkStatus: NetworkStatus.ready });
 
 	return (
 		<StoryMockProvider>
@@ -110,8 +109,7 @@ const SidebarStory = (props: {
         fileState={editDocumentFileState}
         setFileState={setEditDocumentFileState}
 				sustainabilityAttributes={sustainabilityAttributes}
-        fileTypes={fileTypes}
-				refreshFiles={() => {}}
+				refreshFiles={mockMutator}
 				closeSidebar={() => setSelectedFile(undefined)}
 				innerRef={innerRef}
 				deleteFile={() => {

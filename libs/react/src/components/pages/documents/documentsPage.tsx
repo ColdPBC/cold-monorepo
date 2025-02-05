@@ -39,7 +39,6 @@ const _DocumentsPage = () => {
 	const [ editMaterialsModalIsOpen, setEditMaterialsModalIsOpen ] = React.useState(false);
 	const [deleteButtonLoading, setDeleteButtonLoading] = React.useState(false);
 	const [files, setFiles] = React.useState<FilesWithAssurances[]>([]);
-  const [fileTypes, setFileTypes] = React.useState<string[]>([]);
 	const [selectedDocumentURL, setSelectedDocumentURL] = React.useState<string | undefined>(undefined);
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
@@ -66,7 +65,6 @@ const _DocumentsPage = () => {
 			},
 		},
 	});
-  const allFileTypes = useGraphQLSWR('GET_ALL_SCHEMA_ENUMS');
 
   const materialsQuery = useGraphQLSWR<{
     materials: { id: string, name: string, materialSuppliers: { organizationFacility: { id: string } }[]; }[];
@@ -100,31 +98,11 @@ const _DocumentsPage = () => {
 		}
 	}, [selectedFileURLSWR]);
 
-  useEffect(() => {
-    if(!allFileTypes.data) return;
-    const fileTypes = get(allFileTypes.data, 'data._graphweaver.enums', []);
-    const errors = get(allFileTypes.data, 'errors', []);
-    if(!errors || (errors && errors.length === 0)) {
-      // find the enum with the name 'OrganizationFilesType'
-      const fileEnum = fileTypes.find((fileType: SchemaEnum) => fileType.name === 'OrganizationFilesType');
-      // get all the value fields from the values array
-      const typeValues = fileEnum?.values.map((value: {
-        name: string;
-        value: string;
-      }) => value.value);
-      if(typeValues) {
-        setFileTypes(typeValues);
-      }
-    } else {
-      setFileTypes([]);
-    }
-  }, [allFileTypes.data]);
-
 	if (allFiles.error) {
 		logBrowser('Error fetching files', 'error', { ...allFiles.error }, allFiles.error);
 	}
 
-	if (allFiles.isLoading || allSustainabilityAttributes.isLoading || allFileTypes.isLoading) {
+	if (allFiles.isLoading || allSustainabilityAttributes.isLoading) {
 		return <Spinner />;
 	}
 
@@ -278,7 +256,7 @@ const _DocumentsPage = () => {
 		);
 	};
 
-	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, documentToDelete, editDocumentFileState, files, allSustainabilityAttributes, fileTypes });
+	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, documentToDelete, editDocumentFileState, files, allSustainabilityAttributes });
 
 	return (
 		<div className="relative overflow-y-auto h-full w-full">
@@ -291,7 +269,6 @@ const _DocumentsPage = () => {
         fileState={editDocumentFileState}
         setFileState={setEditDocumentFileState}
 				sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
-        fileTypes={fileTypes}
 				refreshFiles={allFiles.mutate}
 				closeSidebar={onSidebarClose}
 				innerRef={ref}
