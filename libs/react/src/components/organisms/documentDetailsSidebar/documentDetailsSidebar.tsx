@@ -18,7 +18,7 @@ import {
   Spinner,
   SustainabilityAttributeSelect,
 } from '@coldpbc/components';
-import { ButtonTypes, EntityLevel, IconNames } from '@coldpbc/enums';
+import { AssuranceDocumentTypes, ButtonTypes, DocumentTypes, EntityLevel, IconNames } from '@coldpbc/enums';
 import { forEach, get, has, lowerCase, startCase } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
@@ -36,6 +36,7 @@ import {
   removeTZOffset,
   toSentenceCase,
 } from '@coldpbc/lib';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export interface DocumentDetailsSidebarFileState {
 	id: string;
@@ -83,7 +84,6 @@ const _DocumentDetailsSidebar = (props: {
   fileState: DocumentDetailsSidebarFileState | undefined;
   setFileState: (fileState: DocumentDetailsSidebarFileState | undefined) => void;
 	sustainabilityAttributes: Claims[];
-	fileTypes: string[];
 	refreshFiles: KeyedMutator<ApolloQueryResult<{ organizationFiles: FilesWithAssurances[] | null }>>;
 	closeSidebar: () => void;
 	innerRef: React.RefObject<HTMLDivElement>;
@@ -94,13 +94,11 @@ const _DocumentDetailsSidebar = (props: {
   openEditMaterials: (fileState: DocumentDetailsSidebarFileState) => void;
   allMaterials: MaterialWithTier2Supplier[];
 }) => {
-  const { mutate } = useSWRConfig();
   const { logBrowser } = useColdContext();
   const {
     file,
     fileState,
     setFileState,
-    fileTypes,
     refreshFiles,
     sustainabilityAttributes,
     closeSidebar,
@@ -120,6 +118,7 @@ const _DocumentDetailsSidebar = (props: {
   const { mutateGraphQL: deleteAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
   const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
   const { addToastMessage } = useAddToastMessage();
+  const ldFlags = useFlags();
 
   const updateAssuranceHelper = (assuranceId: string, fileState: DocumentDetailsSidebarFileState) => (
     updateAssurance({
@@ -218,6 +217,8 @@ const _DocumentDetailsSidebar = (props: {
 		setFileState(getInitialFileState(file));
 	}, [setFileState, file]);
 
+  // In the new document upload UX, this sidebar is for Assurance Documents only
+  const fileTypes = ldFlags.showNewDocumentUploadUxCold1410 ? Object.values(AssuranceDocumentTypes) : Object.values(DocumentTypes);
 	const documentTypeOptions: InputOption[] = fileTypes
 		.map((type, index) => {
 			const name = startCase(lowerCase(type.replace(/_/g, ' ')));
