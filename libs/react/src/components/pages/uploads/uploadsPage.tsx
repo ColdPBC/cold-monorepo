@@ -1,4 +1,4 @@
-import { ColdIcon, DEFAULT_GRID_COL_DEF, MainContent, MuiDataGrid } from '@coldpbc/components';
+import { ColdIcon, DEFAULT_GRID_COL_DEF, ErrorFallback, MainContent, MuiDataGrid } from '@coldpbc/components';
 import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { UploadsQuery } from '@coldpbc/interfaces';
 import { get, toArray } from 'lodash';
@@ -14,6 +14,7 @@ import {
 } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
 import { formatScreamingSnakeCase, listFilterOperators } from '@coldpbc/lib';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const ProcessingStatusConfig: Record<UIProcessingStatus, {
   icon: IconNames;
@@ -49,7 +50,7 @@ const ProcessingStatusConfig: Record<UIProcessingStatus, {
   },
 };
 
-export const UploadsPage = () => {
+export const _UploadsPage = () => {
   const {logBrowser} = useColdContext();
   const { orgId } = useAuth0Wrapper();
 
@@ -194,3 +195,10 @@ export const UploadsPage = () => {
     </MainContent>
   )
 };
+
+export const UploadsPage = withErrorBoundary(_UploadsPage, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in Upload Page: ', error);
+  },
+});
