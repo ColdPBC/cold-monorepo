@@ -4,7 +4,7 @@ import { UploadsQuery } from '@coldpbc/interfaces';
 import { get, toArray } from 'lodash';
 import { GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import { format } from 'date-fns';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   DocumentTypes,
   IconNames,
@@ -77,17 +77,28 @@ export const UploadsPage = () => {
     const config = ProcessingStatusConfig[status];
     if (!config) return null;
 
+    const coldIcon = (): ReactNode => {
+      return (
+        <ColdIcon
+          name={config.icon}
+          className={config.iconClass}
+          color={config.color}
+        />
+      )
+    }
+
     return (
       <div
-        data-chromatic="ignore"
         className={`w-full h-full flex flex-row justify-start items-center text-body ${config.textColorClass}`}
       >
         {status === UIProcessingStatusMapping[ProcessingStatus.AI_PROCESSING] ? (
           <div className={config.containerExtraClass}>
-            <ColdIcon name={config.icon} color={config.color} className={config.iconClass} />
+            {coldIcon()}
           </div>
         ) : (
-          <ColdIcon name={config.icon} color={config.color} className={config.iconClass} />
+          <>
+            {coldIcon()}
+          </>
         )}
         {status}
       </div>
@@ -112,13 +123,7 @@ export const UploadsPage = () => {
 
   const statuses = Object.values(UIProcessingStatusMapping)
 
-  const files = get(uploadsQuery, 'data.data.organizationFiles', []).map((file) => ({
-    id: file.id,
-    name: file.originalName,
-    type: file.type,
-    uploaded: file.createdAt,
-    status: file.processingStatus ? file.processingStatus : ProcessingStatus.MANUAL_REVIEW,
-  }));
+  const files = get(uploadsQuery, 'data.data.organizationFiles', []);
 
   logBrowser(
     'Uploads Page',
@@ -132,7 +137,7 @@ export const UploadsPage = () => {
   const columns: GridColDef[] = [
     {
       ...DEFAULT_GRID_COL_DEF,
-      field: 'name',
+      field: 'originalName',
       headerName: 'Name',
       cellClassName: 'text-tc-primary text-body'
     },
@@ -152,14 +157,14 @@ export const UploadsPage = () => {
     },
     {
       ...DEFAULT_GRID_COL_DEF,
-      field: 'uploaded',
+      field: 'createdAt',
       headerName: 'Uploaded',
       cellClassName: 'text-tc-secondary text-body',
       renderCell: renderDate,
     },
     {
       ...DEFAULT_GRID_COL_DEF,
-      field: 'status',
+      field: 'processingStatus',
       headerName: 'Status',
       cellClassName: 'text-body',
       renderCell: renderStatus,

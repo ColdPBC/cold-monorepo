@@ -756,7 +756,7 @@ export function getUploadsMock(): UploadsQuery[] {
     originalName: file.originalName,
     createdAt: file.createdAt,
     type: file.type as typeof DocumentTypes[keyof typeof DocumentTypes],
-    processingStatus: ProcessingStatus.MANUAL_REVIEW,
+    processingStatus: null,
   }))
   const processingStatuses = Object.values(ProcessingStatus);
   const fileTypes = Object.values(DocumentTypes)
@@ -771,17 +771,11 @@ export function getUploadsMock(): UploadsQuery[] {
     return {
       id: newId,
       originalName: `Generated-File-${newId}.pdf`,
-      createdAt: addDays(new Date(), i * 5).toISOString(),
+      createdAt: new Date('01/25/2024').toISOString(),
       type: fileTypes[i % fileTypes.length], // Cycle through enum values
       processingStatus: processingStatuses[statusIndex], // Cycle through enum values
     };
   });
 
-  return [...baseFiles, ...additionalFiles].map((file) => ({
-    id: file.id,
-    originalName: file.originalName,
-    createdAt: file.createdAt,
-    type: file.type,
-    processingStatus: get(file, 'processingStatus', ProcessingStatus.MANUAL_REVIEW),
-  }))
+  return [...baseFiles, ...additionalFiles];
 }
