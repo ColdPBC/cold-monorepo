@@ -250,6 +250,7 @@ const _MaterialsDataGrid = () => {
   return (
     <div className={'w-full'}>
       <MuiDataGrid
+        pagination
         loading={materialsQuery.isLoading}
         rows={rows}
         columns={columns}
@@ -281,7 +282,6 @@ const _MaterialsDataGrid = () => {
           toolbar: {
             quickFilterProps: {
               placeholder: 'Search by name...',
-              value: searchQuery,
             }
           }
         }}

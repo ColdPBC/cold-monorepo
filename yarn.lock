@@ -11524,15 +11524,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-data-grid-pro@npm:^7.25.0":
-  version: 7.25.0
-  resolution: "@mui/x-data-grid-pro@npm:7.25.0"
+"@mui/x-data-grid-pro@npm:7.24.1":
+  version: 7.24.1
+  resolution: "@mui/x-data-grid-pro@npm:7.24.1"
   dependencies:
     "@babel/runtime": "npm:^7.25.7"
     "@mui/utils": "npm:^5.16.6 || ^6.0.0"
-    "@mui/x-data-grid": "npm:7.25.0"
-    "@mui/x-internals": "npm:7.25.0"
-    "@mui/x-license": "npm:7.25.0"
+    "@mui/x-data-grid": "npm:7.24.1"
+    "@mui/x-internals": "npm:7.24.1"
+    "@mui/x-license": "npm:7.24.1"
     "@types/format-util": "npm:^1.0.4"
     clsx: "npm:^2.1.1"
     prop-types: "npm:^15.8.1"
@@ -11549,17 +11549,17 @@ __metadata:
       optional: true
     "@emotion/styled":
       optional: true
-  checksum: 10/fbf9b18b0ff394591519075cb7887ea3508e18b83c50d50cc3565e46d56214494209abb16f0353bf90c6e9e7de079bcc279a5945c9d500d1196f005a2d128fd8
+  checksum: 10/3bc3c1776e50387fabf4c96a172abc7308d7c3312035cb38a563f314ce985f1d2764b7e9202ef8ca4bb9efa648f899f6b72669941786db10fb244dab252e8dda
   languageName: node
   linkType: hard
 
-"@mui/x-data-grid@npm:7.25.0":
-  version: 7.25.0
-  resolution: "@mui/x-data-grid@npm:7.25.0"
+"@mui/x-data-grid@npm:7.24.1":
+  version: 7.24.1
+  resolution: "@mui/x-data-grid@npm:7.24.1"
   dependencies:
     "@babel/runtime": "npm:^7.25.7"
     "@mui/utils": "npm:^5.16.6 || ^6.0.0"
-    "@mui/x-internals": "npm:7.25.0"
+    "@mui/x-internals": "npm:7.24.1"
     clsx: "npm:^2.1.1"
     prop-types: "npm:^15.8.1"
     reselect: "npm:^5.1.1"
@@ -11575,7 +11575,7 @@ __metadata:
       optional: true
     "@emotion/styled":
       optional: true
-  checksum: 10/751ca6dad1615a85ce83b6c989447d779e5bf257e5b71d9aa9ad9d9af86be9701f3d8a4c63e0b30a19ed50efae999248c77ce9f3db1b4ec7e4c1bd4c3433c4bb
+  checksum: 10/c502eded88b56aa3fa2c4958952584517201e136517ba515fa2c400a860c732eff6ca68ba64c33d7ca645b5d02e0af3df3cf985488253aa8299351883587d1b7
   languageName: node
   linkType: hard
 
@@ -11639,6 +11639,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mui/x-internals@npm:7.24.1":
+  version: 7.24.1
+  resolution: "@mui/x-internals@npm:7.24.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.7"
+    "@mui/utils": "npm:^5.16.6 || ^6.0.0"
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/cd299136a323cf279fd5996b2ab7eefe1ace6205941cc39840fc018ce065ff81876af9c7037b0dc327869357424fbd6184dabdd5c031817c7814091108fe9aa5
+  languageName: node
+  linkType: hard
+
 "@mui/x-internals@npm:7.25.0":
   version: 7.25.0
   resolution: "@mui/x-internals@npm:7.25.0"
@@ -11651,7 +11663,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-license@npm:7.25.0":
+"@mui/x-license@npm:7.24.1":
+  version: 7.24.1
+  resolution: "@mui/x-license@npm:7.24.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.7"
+    "@mui/utils": "npm:^5.16.6 || ^6.0.0"
+    "@mui/x-internals": "npm:7.24.1"
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/b9b78780e91d6131556f01403ba51b483d711dbb4bbe1982e9876b797e1e24e9497deb9fcabd294728434cf11921eac140466b797cf42cb9288cbb06bae6fd20
+  languageName: node
+  linkType: hard
+
+"@mui/x-license@npm:^7.25.0":
   version: 7.25.0
   resolution: "@mui/x-license@npm:7.25.0"
   dependencies:
@@ -27886,8 +27911,9 @@ __metadata:
     "@mdx-js/rollup": "npm:^2.3.0"
     "@mui/icons-material": "npm:^5.11.11"
     "@mui/material": "npm:^5.16.1"
-    "@mui/x-data-grid-pro": "npm:^7.25.0"
+    "@mui/x-data-grid-pro": "npm:7.24.1"
     "@mui/x-date-pickers": "npm:^7.11.1"
+    "@mui/x-license": "npm:^7.25.0"
     "@nestjs/axios": "npm:^3.0.0"
     "@nestjs/bull": "npm:^10.0.1"
     "@nestjs/cache-manager": "npm:^2.1.0"

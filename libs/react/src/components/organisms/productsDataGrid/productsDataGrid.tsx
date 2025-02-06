@@ -316,6 +316,7 @@ export const _ProductsDataGrid = () => {
   return (
     <div className={'w-full'}>
       <MuiDataGrid
+        pagination
         loading={productsQuery.isLoading} // || footprintLoading}
         columns={columns}
         rows={rows}
@@ -348,7 +349,6 @@ export const _ProductsDataGrid = () => {
           toolbar: {
             quickFilterProps: {
               placeholder: 'Search by name...',
-              value: searchQuery,
             }
           }
         }}

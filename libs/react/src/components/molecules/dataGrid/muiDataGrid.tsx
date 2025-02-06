@@ -8,7 +8,7 @@ import {
   GridToolbarContainer,
   GridToolbarExport, GridToolbarProps,
   GridToolbarQuickFilter,
-  GridValidRowModel, ToolbarPropsOverrides,
+  GridValidRowModel,
 } from '@mui/x-data-grid-pro';
 import { twMerge } from 'tailwind-merge';
 import React, {useEffect} from 'react';
@@ -86,9 +86,6 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
   return (
     <DataGridPro
       rowHeight={37}
-      getRowClassName={() => {
-        return 'text-tc-primary cursor-pointer bg-gray-10';
-      }}
       columnHeaderHeight={40}
       autoHeight={true}
       {...props}
@@ -116,6 +113,9 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
         },
         '& .MuiDataGrid-columnHeader:focus-within': {
           outline: 'none',
+        },
+        '& .MuiDataGrid-row': {
+          cursor: 'pointer',
         },
         ...props.sx,
       }}
