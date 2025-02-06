@@ -11,7 +11,7 @@ import {
 import {
   DocumentDetailsSidebar,
   DocumentDetailsSidebarFileState,
-  DocumentsEditMaterialsModal,
+  DocumentsEditMaterialsModal, MaterialWithTier2Supplier,
 } from '@coldpbc/components';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
 import { KeyedMutator } from 'swr';
@@ -94,10 +94,12 @@ const SidebarStory = (props: {
 	const [selectedFile, setSelectedFile] = React.useState<FilesWithAssurances | undefined>(file);
   const [ editDocumentFileState, setEditDocumentFileState ] = React.useState<DocumentDetailsSidebarFileState | undefined>(undefined);
   const [ editMaterialsModalIsOpen, setEditMaterialsModalIsOpen ] = React.useState(false);
-  const allMaterials = getMaterialsMocksWithAssurances().map(material => {
-    const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
-    return { id: material.id, name: material.name, tier2SupplierName: tier2Supplier?.name, tier2SupplierId: tier2Supplier?.id };
-  })
+  const allMaterials: MaterialWithTier2Supplier[] = getMaterialsMocksWithAssurances().map(material => ({
+    id: material.id,
+    name: material.name,
+    tier2SupplierName: material.organizationFacility?.name || '',
+    tier2SupplierId: material.organizationFacility?.id || '',
+  }));
   const mockMutator: KeyedMutator<ApolloQueryResult<{ organizationFiles: FilesWithAssurances[] | null }>> =
     async () => ({ data: { organizationFiles: null }, loading: false, networkStatus: NetworkStatus.ready });
 

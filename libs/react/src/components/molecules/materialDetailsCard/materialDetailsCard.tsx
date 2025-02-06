@@ -12,7 +12,7 @@ interface MaterialDetailsCardProps {
 }
 
 const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material, editMaterial }) => {
-  const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
+  const tier2Supplier = material.organizationFacility;
 
   const classificationCategory = (
 		<div className={'flex items-center justify-start gap-1'}>

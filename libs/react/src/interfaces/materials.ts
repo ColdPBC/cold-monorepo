@@ -15,8 +15,21 @@ export interface MaterialBaseEntity extends Materials {
   } | null;
 }
 
+export interface MaterialWithSupplier extends Materials {
+  organizationFacility: {
+    id: string;
+  } | null;
+}
+
 export interface MaterialsWithCertifications extends Materials {
-  material_suppliers: MaterialSuppliers[];
+  organizationFacility: {
+    id: string;
+    name: string;
+    address_line_1: string;
+    address_line_2: string;
+    city: string;
+    country: string;
+  } | null;
   organization_claims: {
     id: string;
     claim: Claims;
@@ -32,26 +45,14 @@ export interface MaterialsWithCertifications extends Materials {
   }[];
 }
 
-export interface MaterialSuppliers {
-  id: string;
-  supplier: Suppliers;
-  material: {
-    id: string;
-    name: string;
-  };
-}
-
 export interface MaterialsWithRelations extends Materials {
   materialCategory: string | null;
   materialSubcategory: string | null;
-  materialSuppliers: {
+  organizationFacility: {
     id: string;
-    organizationFacility: {
-      id: string;
-      name: string;
-      supplierTier: number | null;
-    };
-  }[];
+    name: string;
+    supplierTier: number | null;
+  } | null;
   attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
   productMaterials: {
     id: string,
@@ -67,15 +68,9 @@ export interface MaterialsWithRelations extends Materials {
 
 // This is only used in mocks to serve as a super-set of Material data
 export interface MaterialsWithAssurances extends MaterialsWithRelations {
-  materialSuppliers: {
-    id: string;
-    organizationFacility: {
-      id: string;
-      name: string;
-      supplierTier: number | null;
-      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
-    };
-  }[];
+  organizationFacility: MaterialsWithRelations['organizationFacility'] & {
+    attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
+  } | null;
 }
 
 export interface MaterialGraphQL extends Materials {
@@ -89,12 +84,9 @@ export interface MaterialGraphQL extends Materials {
     id: string;
     name: string;
   } | null;
-  materialSuppliers: {
+  organizationFacility: {
     id: string;
-    organizationFacility: {
-      id: string;
-      name: string;
-      country: string;
-    };
-  }[];
+    name: string;
+    country: string;
+  } | null;
 }

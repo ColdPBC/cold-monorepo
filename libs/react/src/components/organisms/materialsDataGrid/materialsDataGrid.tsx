@@ -149,8 +149,8 @@ const _MaterialsDataGrid = () => {
 
   const uniqTier2Suppliers = uniq(
     materials
-      .map(material => material.materialSuppliers.filter(supplier => supplier.organizationFacility.supplierTier === 2).map(supplier => supplier.organizationFacility.name))
-      .flat(),
+      .filter(material => material.organizationFacility)
+      .map(material => material.organizationFacility!.name),
   );
 
   const uniqCategories = uniq(
@@ -240,7 +240,7 @@ const _MaterialsDataGrid = () => {
     materialCategory: material.materialCategory || '',
     materialSubcategory: material.materialSubcategory || '',
     sustainabilityAttributes: processEntityLevelAssurances([material]),
-    tier2Supplier: material.materialSuppliers[0]?.organizationFacility?.name || '',
+    tier2Supplier: material.organizationFacility?.name || '',
     usedBy: uniq(material.productMaterials
       .map(pm => pm.product.organizationFacility?.name)
       .filter(name => name !== undefined)

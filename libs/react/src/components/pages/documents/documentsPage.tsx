@@ -13,7 +13,7 @@ import {
 } from '@coldpbc/components';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { FilesWithAssurances, SchemaEnum, ToastMessage } from '@coldpbc/interfaces';
+import { FilesWithAssurances, MaterialWithSupplier, ToastMessage } from '@coldpbc/interfaces';
 import { AssuranceDocumentTypes, ButtonTypes, IconNames } from '@coldpbc/enums';
 import {AxiosError, isAxiosError} from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -28,7 +28,7 @@ export interface MaterialWithTier2Supplier {
 }
 
 const getTier2SupplierData = (material) => {
-  const tier2Supplier = material.materialSuppliers[0]?.organizationFacility
+  const tier2Supplier = material.organizationFacility
   return { tier2SupplierId: tier2Supplier?.id || '', tier2SupplierName: tier2Supplier?.name || '' }
 }
 
@@ -67,7 +67,7 @@ const _DocumentsPage = () => {
 	});
 
   const materialsQuery = useGraphQLSWR<{
-    materials: { id: string, name: string, materialSuppliers: { organizationFacility: { id: string } }[]; }[];
+    materials: MaterialWithSupplier[];
   }>(orgId ? 'GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT' : null, {
     organizationId: orgId,
   });
