@@ -320,6 +320,7 @@ export const _ProductsDataGrid = () => {
         loading={productsQuery.isLoading} // || footprintLoading}
         columns={columns}
         rows={rows}
+        columnHeaderHeight={55}
         rowHeight={72}
         onRowClick={(params) => {
           navigate(`/products/${params.id}`)
