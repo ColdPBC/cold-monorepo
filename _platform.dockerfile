@@ -1,6 +1,10 @@
 ARG NODE_VERSION=22.8
 FROM node:${NODE_VERSION} AS base
 
+RUN npm install -g corepack@latest
+RUN corepack enable
+RUN yarn set version latest
+
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -54,6 +58,7 @@ LABEL com.datadoghq.tags.env=${NODE_ENV}
 RUN corepack enable
 RUN yarn set version latest
 
+RUN yarn install
 RUN yarn dlx nx@latest run cold-nest-library:prisma-generate
 RUN yarn prebuild
 
@@ -96,8 +101,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH="/usr/bin/chromium"
 
-RUN npm uninstall -g yarn pnpm
-
+RUN npm install -g corepack@latest
 RUN corepack enable
 RUN yarn set version latest
 
