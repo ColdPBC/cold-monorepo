@@ -173,12 +173,9 @@ export const UploadModal = (props: UploadModalProps) => {
       show={openModal}
       onClose={() => setOpenModal(false)}
       theme={flowbiteThemeOverride.modal}
-      style={{
-        boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
-      }}
       data-testid={`upload-modal`}
     >
-      <Card className="relative p-4 w-[962px] bg-gray-30 gap-[40px]" glow={false}>
+      <Card className="p-4 w-[962px] bg-gray-30 gap-[40px]" glow={false}>
         <div className="flex flex-col gap-[24px] w-full">
           <div className="flex flex-row text-h3">What are you uploading?</div>
           <div className="w-full grid grid-cols-2 gap-4">
