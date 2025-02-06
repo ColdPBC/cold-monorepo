@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from "react";
 import { Tooltip } from '@mui/material';
 import {HexColors} from "@coldpbc/themes";
-import {GridRenderCellParams, GridTreeNodeWithRender} from "@mui/x-data-grid";
+import {GridRenderCellParams, GridTreeNodeWithRender} from "@mui/x-data-grid-pro";
 import {BubbleWithPopover} from "./bubbleWithPopover";
 
 const MAX_WIDTH = 200;

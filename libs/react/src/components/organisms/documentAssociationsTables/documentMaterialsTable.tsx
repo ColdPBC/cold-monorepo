@@ -1,6 +1,6 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { ErrorFallback, MaterialWithTier2Supplier, MuiDataGrid } from '@coldpbc/components';
-import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
+import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid-pro';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';

@@ -7,7 +7,7 @@ import {
   SustainabilityAttributeColumnList,
   ProductBOMTabSidebar,
 } from '@coldpbc/components';
-import { GridColDef } from '@mui/x-data-grid';
+import { GridColDef } from '@mui/x-data-grid-pro';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';

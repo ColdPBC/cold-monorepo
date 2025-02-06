@@ -8,9 +8,7 @@ import {
   GridCellParams,
   GridColDef,
   GridFilterModel,
-  GridToolbarContainer,
-  GridToolbarQuickFilter,
-} from '@mui/x-data-grid';
+} from '@mui/x-data-grid-pro';
 import { Checkbox } from '@mui/material';
 import { isEqual, lowerCase, sortBy, uniq } from 'lodash';
 import { FetchResult } from '@apollo/client';

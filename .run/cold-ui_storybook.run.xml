@@ -1,24 +1,36 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="cold-ui:storybook" type="js.build_tools.npm">
-    <package-json value="$PROJECT_DIR$/package.json"/>
-    <command value="run"/>
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
     <scripts>
-      <script value="storybook"/>
+      <script value="storybook" />
     </scripts>
-    <node-interpreter value="project"/>
+    <node-interpreter value="project" />
     <envs>
-      <env name="STORYBOOK_API_URL" value="https://api.coldclimate.storybook"/>
+      <env name="STORYBOOK_API_URL" value="https://api.coldclimate.storybook" />
+      <env name="STORYBOOK_MUI_LICENSE_KEY" value="37729e1d509fa34aa3ce5e48f703921aTz0xMDczNzksRT0xNzcwNDIyMzk5MDAwLFM9cHJvLExNPXN1YnNjcmlwdGlvbixQVj1RMy0yMDI0LEtWPTI=" />
     </envs>
     <method v="2">
       <option name="NpmBeforeRunTask" enabled="true">
-        <package-json value="$PROJECT_DIR$/package.json"/>
-        <command value="run"/>
+        <package-json value="$PROJECT_DIR$/package.json" />
+        <command value="run" />
         <scripts>
-          <script value="build-storybook"/>
+          <script value="build-storybook" />
         </scripts>
-        <node-interpreter value="project"/>
-        <envs/>
+        <node-interpreter value="project" />
+        <envs />
       </option>
     </method>
+  </configuration>
+  <configuration default="false" name="cold-ui:storybook" type="NxRunConfigurationType">
+    <option name="nx-projects" value="cold-ui" />
+    <option name="nx-targets" value="storybook" />
+    <option name="nx-target-configuration" value="" />
+    <envs>
+      <env name="STORYBOOK_API_URL" value="https://api.coldclimate.storybook" />
+      <env name="STORYBOOK_MUI_LICENSE_KEY" value="37729e1d509fa34aa3ce5e48f703921aTz0xMDczNzksRT0xNzcwNDIyMzk5MDAwLFM9cHJvLExNPXN1YnNjcmlwdGlvbixQVj1RMy0yMDI0LEtWPTI=" />
+    </envs>
+    <option name="arguments" value="" />
+    <method v="2" />
   </configuration>
 </component>

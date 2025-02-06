@@ -2,7 +2,7 @@ import {
   GridColDef,
   GridColumnHeaderParams,
   GridValidRowModel,
-} from '@mui/x-data-grid';
+} from '@mui/x-data-grid-pro';
 import { IconNames } from '@coldpbc/enums';
 import {
   ColdIcon,

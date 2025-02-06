@@ -11,7 +11,7 @@ import React, { useEffect } from 'react';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { get } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
-import { GridCellParams, GridColDef, GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid';
+import { GridCellParams, GridColDef, GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid-pro';
 import { Checkbox } from '@mui/material';
 import { Modal as FBModal } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';

@@ -1,6 +1,6 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { ErrorFallback, MuiDataGrid } from '@coldpbc/components';
-import { GridActionsCellItem, GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
+import { GridActionsCellItem, GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid-pro';
 import capitalize from 'lodash/capitalize';
 import React, { ReactNode } from 'react';
 import { HexColors } from '@coldpbc/themes';

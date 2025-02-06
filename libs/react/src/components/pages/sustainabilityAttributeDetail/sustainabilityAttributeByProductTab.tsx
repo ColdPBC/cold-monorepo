@@ -6,7 +6,7 @@ import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ProductForMaterialLevelSustainabilityReport, ProductForMaterialLevelSustainabilityReportGraphQL, SustainabilityAttribute } from '@coldpbc/interfaces';
 import { get, groupBy, isError } from 'lodash';
-import { GridColDef } from '@mui/x-data-grid';
+import { GridColDef } from '@mui/x-data-grid-pro';
 import { HexColors } from '@coldpbc/themes';
 
 const ACCENT_COLOR = HexColors.lightblue['300'];

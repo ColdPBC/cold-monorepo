@@ -9,7 +9,7 @@ import {
 import {
   GridColDef,
   GridValidRowModel,
-} from '@mui/x-data-grid';
+} from '@mui/x-data-grid-pro';
 import { withErrorBoundary } from 'react-error-boundary';
 import { toSentenceCase } from '@coldpbc/lib';
 import { EntityLevel, IconNames } from '@coldpbc/enums';

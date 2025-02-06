@@ -6,6 +6,7 @@ import {StyledEngineProvider, ThemeProvider} from "@mui/material";
 import {muiTheme} from "../../../libs/react/src/themes/muiTheme";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
+import { LicenseInfo } from '@mui/x-license';
 
 // Storybook executes this module in both bootstap phase (Node)
 // and a story's runtime (browser). However, we cannot call `setupWorker`
@@ -98,6 +99,7 @@ export default {
   },
   decorators: [
     Story => {
+      LicenseInfo.setLicenseKey(import.meta.env.STORYBOOK_MUI_LICENSE_KEY);
       return StyledEngineProvider({
         injectFirst: true,
         children: LocalizationProvider({
