@@ -26,6 +26,7 @@ export const readOnlyEntities: string[] = [
 	'survey_definitions',
 	'survey_status',
 	'utility_bills',
+	'material_classification',
 ];
 
 export const organizationEntity: string[] = ['organizations'];

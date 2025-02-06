@@ -1,3 +1,10 @@
+# [1.542.0](https://github.com/coldPBC/cold-monorepo/compare/v1.541.0...v1.542.0) (2025-02-06)
+
+
+### Features
+
+* extend ACL entity maps with material_classification ([868af28](https://github.com/coldPBC/cold-monorepo/commit/868af28468b402d1d251419dd18bea4d4e379af0))
+
 # [1.541.0](https://github.com/coldPBC/cold-monorepo/compare/v1.540.0...v1.541.0) (2025-02-06)
 
 
