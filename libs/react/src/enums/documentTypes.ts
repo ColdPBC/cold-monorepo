@@ -39,3 +39,9 @@ export type InternalSustainabilityPolicyDocumentType = typeof InternalSustainabi
 export type SustainabilityDataDocumentType = typeof SustainabilityDataDocumentTypes[keyof typeof SustainabilityDataDocumentTypes];
 export type DocumentType = typeof DocumentTypes[keyof typeof DocumentTypes];
 
+export enum MainDocumentCategory {
+  Assurance = 'ASSURANCE_DOCUMENT',
+  BillOfMaterial = 'BILL_OF_MATERIAL_DOCUMENT',
+  InternalSustainabilityPolicy = 'INTERNAL_SUSTAINABILITY_POLICY_DOCUMENT',
+  SustainabilityData = 'SUSTAINABILITY_DATA_DOCUMENT'
+}
