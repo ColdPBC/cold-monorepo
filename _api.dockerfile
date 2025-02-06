@@ -14,6 +14,10 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
+RUN npm install -g corepack@latest
+RUN corepack enable
+RUN yarn set version latest
+
 #RUN npm uninstall -g yarn pnpm
 RUN apt-get update
 RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake zlib1g-dev libicu-dev libpng-dev libjpeg-dev libtiff-dev libgif-dev python3 python3-pip python3-setuptools python3-wheel
@@ -62,10 +66,6 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
-RUN npm install -g corepack@latest
-RUN corepack enable
-RUN yarn set version latest
-
 RUN yarn dlx nx@latest run cold-nest-library:prisma-generate
 RUN yarn prebuild
 
@@ -89,8 +89,8 @@ FROM node:${NODE_VERSION} AS final
 USER root
 WORKDIR /home/node
 
+RUN npm install -g corepack@latest
 RUN npm uninstall -g yarn pnpm
-
 RUN corepack enable
 RUN yarn set version latest
 
