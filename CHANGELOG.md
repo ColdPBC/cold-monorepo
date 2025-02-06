@@ -1,3 +1,10 @@
+# [1.541.0](https://github.com/coldPBC/cold-monorepo/compare/v1.540.0...v1.541.0) (2025-02-06)
+
+
+### Features
+
+* add foreign key and index for materials linking to organization facilities ([0484803](https://github.com/coldPBC/cold-monorepo/commit/04848037cf1f86e245d05108c2cdb870ca4a0d0c))
+
 # [1.540.0](https://github.com/coldPBC/cold-monorepo/compare/v1.539.0...v1.540.0) (2025-02-05)
 
 
