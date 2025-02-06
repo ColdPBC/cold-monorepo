@@ -48,23 +48,19 @@ export interface AttributeAssurance {
     name: string;
     country: string | null;
     supplierTier: number | null;
-    materialSuppliers: {
-      material: {
-        id: string;
-        name: string;
-      };
+    materials: {
+      id: string;
+      name: string;
     }[];
   };
   material: null | {
     id: string;
     name: string;
-    materialSuppliers: {
-      organizationFacility: {
-        id: string;
-        name: string;
-        supplierTier: number | null;
-      };
-    }[];
+    organizationFacility: {
+      id: string;
+      name: string;
+      supplierTier: number | null;
+    } | null;
   };
   sustainabilityAttribute: SustainabilityAttributeWithoutAssurances;
   product: {

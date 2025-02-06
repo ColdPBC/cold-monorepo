@@ -43,15 +43,10 @@ export const Default: Story = {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: null,
-            materialSuppliers: [
-              {
-                id: 'ms_123',
-                organizationFacility: {
-                  id: 'ofac_123',
-                  name: 'Tier 2 Supplier',
-                }
-              }
-            ],
+            organizationFacility: {
+              id: 'ofac_123',
+              name: 'Tier 2 Supplier',
+            },
             attributeAssurances: [
               {
                 id: 'aa_123',
@@ -106,15 +101,10 @@ export const NoAssurances: Story = {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: null,
-            materialSuppliers: [
-              {
-                id: 'ms_123',
-                organizationFacility: {
-                  id: 'ofac_123',
-                  name: 'Tier 2 Supplier',
-                }
-              }
-            ],
+            organizationFacility: {
+              id: 'ofac_123',
+              name: 'Tier 2 Supplier',
+            },
             attributeAssurances: [],
             materialClassification: null,
           }

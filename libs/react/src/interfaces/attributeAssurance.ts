@@ -21,13 +21,10 @@ export interface SustainabilityAttributeAssurance {
 export interface EntityWithAttributeAssurances {
   id: string;
   name: string;
-  materialSuppliers?: {
+  organizationFacility?: { // not defined for suppliers
     id: string;
-    organizationFacility?: { // won't be defined when coming from supplier toward material
-      id: string;
-      name: string;
-    } | null;
-  }[];
+    name: string;
+  } | null;
   attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
 }
 
