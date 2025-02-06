@@ -11,7 +11,7 @@ import {
   GridValidRowModel,
 } from '@mui/x-data-grid-pro';
 import { twMerge } from 'tailwind-merge';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {Box} from "@mui/material";
 import {useAuth0Wrapper} from "@coldpbc/hooks";
 import {addToOrgStorage, getFromOrgStorage} from "@coldpbc/lib";
@@ -23,6 +23,7 @@ export interface MUIDataGridProps extends DataGridProProps {
   showExport?: boolean;
   showManageColumns?: boolean;
   searchKey?: string; // enabled controlled search
+  ref?: React.RefObject<HTMLDivElement>
 }
 
 interface CustomDataGridToolbarProps extends GridToolbarProps {

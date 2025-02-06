@@ -1,7 +1,7 @@
 import { Files } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
-import { MUIDataGridNoRowsOverlay } from '@coldpbc/components';
-import { DataGridPro, GridColDef, GridValidRowModel } from '@mui/x-data-grid-pro';
+import { MuiDataGrid } from '@coldpbc/components';
+import { GridColDef, GridValidRowModel } from '@mui/x-data-grid-pro';
 import React from 'react';
 import { get, isEqual, uniqWith } from 'lodash';
 
@@ -76,59 +76,15 @@ export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['o
   return (
     <div className={'w-full flex flex-col gap-[16px]'}>
       <div className={'w-full text-tc-primary text-h5'}>Associated Records</div>
-      <DataGridPro
+      <MuiDataGrid
         rows={rows}
         columns={columns}
-        rowHeight={37}
-        getRowClassName={() => {
-          return 'text-tc-primary cursor-pointer';
-        }}
         className={'text-tc-primary border-[2px] rounded-[2px] border-gray-90 bg-transparent w-full h-auto'}
         sx={{
-          '--DataGrid-overlayHeight': '300px',
           '--DataGrid-rowBorderColor': HexColors.gray[90],
-          '& .MuiTablePagination-root': {
-            color: HexColors.tc.primary,
-          },
           '& .MuiDataGrid-withBorderColor': {
             borderColor: HexColors.gray[90],
           },
-          '& .MuiDataGrid-columnHeaderTitle': {
-            fontWeight: 'bold',
-          },
-          '& .MuiDataGrid-cell:focus': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-cell:focus-within': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-columnHeader:focus': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-columnHeader:focus-within': {
-            outline: 'none',
-          },
-        }}
-        slotProps={{
-          filterPanel: {
-            sx: {
-              '& .MuiInput-input': {
-                backgroundColor: 'transparent',
-                fontFamily: 'Inter',
-                fontSize: '14px',
-                padding: '4px 0px 5px',
-                height: '32px',
-              },
-              '& .MuiDataGrid-filterFormColumnInput': {
-                backgroundColor: 'transparent',
-              },
-            },
-          },
-        }}
-        columnHeaderHeight={40}
-        autoHeight={true}
-        slots={{
-          noRowsOverlay: MUIDataGridNoRowsOverlay,
         }}
         disableColumnMenu={true}
         hideFooter={true}

@@ -1,6 +1,6 @@
-import { DataGridPro, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid-pro';
+import { GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid-pro';
 import { HexColors } from '@coldpbc/themes';
-import { ColdIcon, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
+import { ColdIcon, MuiDataGrid } from '@coldpbc/components';
 import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import { differenceInDays, format } from 'date-fns';
 import { forEach, toArray } from 'lodash';
@@ -124,59 +124,15 @@ export const SupplierDetailDocumentsTable = (props: {
   const rows: GridValidRowModel[] = newRows;
 
   return (
-    <DataGridPro
+    <MuiDataGrid
       rows={rows}
       columns={columns}
-      rowHeight={37}
-      getRowClassName={() => {
-        return 'text-tc-primary cursor-pointer';
-      }}
       className={'text-tc-primary border-[2px] rounded-[2px] border-gray-50 bg-transparent w-full h-auto'}
       sx={{
-        '--DataGrid-overlayHeight': '300px',
         '--DataGrid-rowBorderColor': HexColors.gray[50],
-        '& .MuiTablePagination-root': {
-          color: HexColors.tc.primary,
-        },
         '& .MuiDataGrid-withBorderColor': {
           borderColor: HexColors.gray[50],
         },
-        '& .MuiDataGrid-columnHeaderTitle': {
-          fontWeight: 'bold',
-        },
-        '& .MuiDataGrid-cell:focus': {
-          outline: 'none',
-        },
-        '& .MuiDataGrid-cell:focus-within': {
-          outline: 'none',
-        },
-        '& .MuiDataGrid-columnHeader:focus': {
-          outline: 'none',
-        },
-        '& .MuiDataGrid-columnHeader:focus-within': {
-          outline: 'none',
-        },
-      }}
-      slotProps={{
-        filterPanel: {
-          sx: {
-            '& .MuiInput-input': {
-              backgroundColor: 'transparent',
-              fontFamily: 'Inter',
-              fontSize: '14px',
-              padding: '4px 0px 5px',
-              height: '32px',
-            },
-            '& .MuiDataGrid-filterFormColumnInput': {
-              backgroundColor: 'transparent',
-            },
-          },
-        },
-      }}
-      columnHeaderHeight={40}
-      autoHeight={true}
-      slots={{
-        noRowsOverlay: MUIDataGridNoRowsOverlay,
       }}
       disableColumnMenu={true}
     />
