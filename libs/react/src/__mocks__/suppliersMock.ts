@@ -421,7 +421,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       supplierTier: 1,
       country: "US",
       attributeAssurances: [],
-      materialSuppliers: [],
+      materials: [],
       products: [],
     },
     {
@@ -430,7 +430,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       supplierTier: 1,
       country: "US",
       attributeAssurances: [],
-      materialSuppliers: [],
+      materials: [],
       products: [],
     },
     {
@@ -485,62 +485,53 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         }
       ],
-      materialSuppliers: [
+      materials: [
         {
-          id: 'abc',
-          material: {
-            id: 'a',
-            name: "Material 10",
-            attributeAssurances: [],
-          },
+          id: 'a',
+          name: "Material 10",
+          attributeAssurances: [],
         },
         {
-          id: 'def',
-          material: {
-            id: 'b',
-            name: "Material 2",
-            attributeAssurances: [],
-          },
+          id: 'b',
+          name: "Material 2",
+          attributeAssurances: [],
         },
         {
-          id: 'ghi',
-          material: {
-            id: 'c',
-            name: "Material 8",
-            attributeAssurances: [
-              {
-                id: "96ae4fab-9641-4488-b50e-da998dd786d6",
-                effectiveEndDate: null,
-                organizationFile: null,
-                sustainabilityAttribute: {
-                  id: "6ebfad9b-39de-4ad3-aa45-4af4d2232ba7",
-                  level: EntityLevel.PRODUCT,
-                  logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Bluesign+Product.png",
-                  name: "Bluesign Product",
-                },
+          id: 'c',
+          name: "Material 8",
+          attributeAssurances: [
+            {
+              id: "96ae4fab-9641-4488-b50e-da998dd786d6",
+              effectiveEndDate: null,
+              organizationFile: null,
+              sustainabilityAttribute: {
+                id: "6ebfad9b-39de-4ad3-aa45-4af4d2232ba7",
+                level: EntityLevel.PRODUCT,
+                logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Bluesign+Product.png",
+                name: "Bluesign Product",
               },
-              {
-                id: "6fbefc76-53d3-446d-bb0e-120a15ba3fce",
-                effectiveEndDate: null,
-                organizationFile: null,
-                sustainabilityAttribute: {
-                  id: "e200cb55-51b9-4851-82df-23b467c8aef4",
-                  level: EntityLevel.ORGANIZATION,
-                  name: "BSCI",
-                },
+            },
+            {
+              id: "6fbefc76-53d3-446d-bb0e-120a15ba3fce",
+              effectiveEndDate: null,
+              organizationFile: null,
+              sustainabilityAttribute: {
+                id: "e200cb55-51b9-4851-82df-23b467c8aef4",
+                level: EntityLevel.ORGANIZATION,
+                name: "BSCI",
               },
-              {
-                id: "aadc599d-5245-457c-9292-a95a3274322e",
-                effectiveEndDate: null,
-                organizationFile: null,
-                sustainabilityAttribute: {
-                  id: "057a266f-ab44-4b34-876f-14fc3edb92fc",
-                  level: EntityLevel.MATERIAL,
-                  name: "BPA",
-                },
-              }
-            ],
-          },
+            },
+            {
+              id: "aadc599d-5245-457c-9292-a95a3274322e",
+              effectiveEndDate: null,
+              organizationFile: null,
+              sustainabilityAttribute: {
+                id: "057a266f-ab44-4b34-876f-14fc3edb92fc",
+                level: EntityLevel.MATERIAL,
+                name: "BPA",
+              },
+            }
+          ],
         }
       ],
       products: [],
@@ -597,7 +588,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         }
       ],
-      materialSuppliers: [],
+      materials: [],
       products: [],
     },
     {
@@ -629,7 +620,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
           },
         }
       ],
-      materialSuppliers: [],
+      materials: [],
       products: [],
     },
     {
@@ -638,7 +629,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       supplierTier: 2,
       country: "Germany",
       attributeAssurances: [],
-      materialSuppliers: [],
+      materials: [],
       products: [],
     },
     {
@@ -647,7 +638,7 @@ export const getSupplierMocks = (): SuppliersWithAssurances[] => {
       supplierTier: 2,
       country: null,
       attributeAssurances: [],
-      materialSuppliers: [],
+      materials: [],
       products: [],
     },
   ];
@@ -669,12 +660,7 @@ export const getSupplierMock: (tier: number) => SupplierGraphQL = (
     category: 'Tannery',
     subcategory: null,
     brandFacilityId: 'brand_supplier_id_1',
-    materialSuppliers: tier !== 2 ? [] : [
-      {
-        id: 'material_supplier_1',
-        material: getMaterialMock,
-      }
-    ],
+    materials: tier !== 2 ? [] : [getMaterialMock],
     attributeAssurances: [
       // Not documented assurance
       {

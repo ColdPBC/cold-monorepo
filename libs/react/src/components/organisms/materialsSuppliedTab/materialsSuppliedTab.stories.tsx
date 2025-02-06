@@ -18,10 +18,7 @@ export const Default: Story = {
 	args: {
 		supplier: {
 			...getSupplierMock(2),
-			materialSuppliers: getMaterialsMocksWithAssurances().map((material, index) => ({
-				id: index.toString(),
-				material,
-			})),
+			materials: getMaterialsMocksWithAssurances(),
 		},
 	},
 	// Need to place the data grid in a parent component for correct rendering
@@ -45,10 +42,7 @@ export const SelectMaterialsOpenBulkEditModal: Story = {
   args: {
     supplier: {
       ...getSupplierMock(2),
-      materialSuppliers: getMaterialsMocksWithAssurances().map((material, index) => ({
-        id: index.toString(),
-        material,
-      })),
+      materials: getMaterialsMocksWithAssurances(),
     },
   },
   // Need to place the data grid in a parent component for correct rendering
@@ -86,10 +80,7 @@ export const SelectMaterialsOpenEditMaterialsModal: Story = {
   args: {
     supplier: {
       ...getSupplierMock(2),
-      materialSuppliers: getMaterialsMocksWithAssurances().map((material, index) => ({
-        id: index.toString(),
-        material,
-      })),
+      materials: getMaterialsMocksWithAssurances(),
     },
   },
   // Need to place the data grid in a parent component for correct rendering
