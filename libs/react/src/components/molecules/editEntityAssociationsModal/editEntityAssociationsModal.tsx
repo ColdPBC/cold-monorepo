@@ -38,7 +38,6 @@ export const EditEntityAssociationsModal = (
   const {addToastMessage} = useAddToastMessage();
   const {logBrowser} = useColdContext();
   const {callMutateFunction} = useUpdateEntityAssociations();
-  // need to use materialSupplierId for materials
   const rows = entities.map(entity => ({
     id: entity.id,
     name: entity.name,
