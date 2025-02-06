@@ -388,6 +388,7 @@ model organization_facilities {
   attribute_assurances attribute_assurances[]
   material_suppliers   material_suppliers[]
   products             products[]
+  materials            materials[]
 
   @@unique([organization_id, name], name: "orgFacilityName")
   @@index([organization_id], map: "organization_facilities_organization_id_idx1")
@@ -527,7 +528,7 @@ model organization_files {
   id                                        String                                      @id @default(cuid())
   integration_id                            String?
   mimetype                                  String?
-	processing_status													processing_status?
+  processing_status                         processing_status?
   size                                      Int?
   acl                                       String?
   contentType                               String?
@@ -556,7 +557,7 @@ model organization_files {
   @@unique([organization_id, openai_file_id], name: "openaiFileId")
   @@unique([organization_id, bucket, key], name: "s3Key")
   @@index([integration_id], map: "organization_files_integration_id_idx1")
-	@@index([organization_id, type, processing_status], map: "organization_files_organization_id_type_idx1")
+  @@index([organization_id, type, processing_status], map: "organization_files_organization_id_type_idx1")
 }
 
 model organization_compliances_old {
@@ -783,6 +784,7 @@ model materials {
   attribute_assurances       attribute_assurances[]
   product_materials          product_materials[]
   data_source                String?
+  organization_facility      organization_facilities?   @relation(fields: [organization_facility_id], references: [id], onDelete: Cascade)
   material_classification    material_classification?   @relation(fields: [material_classification_id], references: [id])
   material_classification_id Int?
   emission_stats             Json?
@@ -790,6 +792,7 @@ model materials {
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "materials_organization_id_idx1")
+  @@index([organization_facility_id], map: "materials_organization_facility_id_idx1")
   @@index([material_classification_id], map: "materials_material_classification_id_idx1")
   @@index([name], map: "materials_name_idx1")
 }
@@ -818,8 +821,8 @@ model material_tags {
 
   organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
-	@@unique([organization_id, tag], name: "organization_material_tag_unique")
-	@@index([organization_id], map: "material_tags_organization_id_idx1")
+  @@unique([organization_id, tag], name: "organization_material_tag_unique")
+  @@index([organization_id], map: "material_tags_organization_id_idx1")
 }
 
 model material_suppliers {
@@ -864,8 +867,8 @@ model products_tags {
 
   organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
-	@@unique([organization_id, tag], name: "organization_product_tag_unique")
-	@@index([organization_id], map: "product_tags_organization_id_idx1")
+  @@unique([organization_id, tag], name: "organization_product_tag_unique")
+  @@index([organization_id], map: "product_tags_organization_id_idx1")
 }
 
 model product_materials {
@@ -1370,10 +1373,10 @@ enum file_types {
 }
 
 enum processing_status {
-	IMPORT_COMPLETE
-	PROCESSING_ERROR
-	MANUAL_REVIEW
-	AI_PROCESSING
+  IMPORT_COMPLETE
+  PROCESSING_ERROR
+  MANUAL_REVIEW
+  AI_PROCESSING
 }
 
 enum claim_types {
