@@ -86,6 +86,7 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
 
   return (
     <DataGridPro
+      pagination
       rowHeight={37}
       columnHeaderHeight={40}
       autoHeight={true}

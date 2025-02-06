@@ -183,7 +183,6 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
   return (
     <div className={'w-full'}>
       <MuiDataGrid
-        pagination
         loading={suppliersQuery.isLoading}
         rows={rows}
         columns={columns}

@@ -250,7 +250,6 @@ const _MaterialsDataGrid = () => {
   return (
     <div className={'w-full'}>
       <MuiDataGrid
-        pagination
         loading={materialsQuery.isLoading}
         rows={rows}
         columns={columns}
