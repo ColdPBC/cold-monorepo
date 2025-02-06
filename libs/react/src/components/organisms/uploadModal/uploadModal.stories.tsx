@@ -35,6 +35,3 @@ export const Default: Story = {
   },
 };
 
-const UploadModalStory: Story = {
-
-}
