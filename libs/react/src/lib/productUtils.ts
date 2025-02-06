@@ -6,7 +6,7 @@ export const parseDocumentsForProductDetails = (product: ProductsQuery, files: F
   const productId = product.id;
   const materialIds = product.productMaterials.map(productMaterial => get(productMaterial, 'material.id', '')).filter(Boolean);
   const tier2SupplierIds = product.productMaterials
-    .map(productMaterial => get(productMaterial, 'material.materialSuppliers[0].organizationFacility.id', ''))
+    .map(productMaterial => productMaterial.material.organizationFacility?.id)
     .flat()
     .filter(Boolean);
   forEach(files, file => {
