@@ -1,14 +1,19 @@
 import { ButtonTypes, IconNames, MainDocumentCategory } from '@coldpbc/enums';
 import {Modal as FBModal} from 'flowbite-react'
 import { flowbiteThemeOverride } from '@coldpbc/themes';
-import { BaseButton, Card, ColdIcon, MuiDataGrid } from '@coldpbc/components';
+import {BaseButton, Card, ColdIcon, ComplianceOverviewFileUploaderItem, MuiDataGrid} from '@coldpbc/components';
 import React, { useEffect, useRef, useState } from 'react';
-import { filter, map, orderBy, set } from 'lodash';
+import {filter, forEach, map, orderBy, set} from 'lodash';
+import {AxiosError, AxiosRequestConfig, isAxiosError} from "axios";
+import {axiosFetcher} from "@coldpbc/fetchers";
+import {useAddToastMessage, useAuth0Wrapper, useColdContext} from "@coldpbc/hooks";
+import {KeyedMutator} from "swr";
+import {ApolloQueryResult} from "@apollo/client";
+import {ToastMessage, UploadsQuery} from "@coldpbc/interfaces";
 
 export interface UploadModalProps{
-  openModal: boolean;
-  closeModal: () => void;
   types: Array<MainDocumentCategory>
+  refreshData: KeyedMutator<ApolloQueryResult<{ organizationFiles: UploadsQuery[] }>>
 }
 
 const UPLOAD_MAP: {
@@ -25,7 +30,7 @@ const UPLOAD_MAP: {
 } = {
   [MainDocumentCategory.Assurance]: {
     title: 'Assurance Documents',
-    iconName: IconNames.ColdReportIcon,
+    iconName: IconNames.ColdQuestionnaireIcon,
     description: 'Assurance documents from suppliers including certifications, tests, or declarations.',
     subDescription: 'PDF, image file, or text file',
     aiProcessing: true,
@@ -45,7 +50,7 @@ const UPLOAD_MAP: {
   },
   [MainDocumentCategory.InternalSustainabilityPolicy]: {
     title: 'Internal Sustainability Policies & Docs',
-    iconName: IconNames.ColdReportIcon,
+    iconName: IconNames.ColdQuestionnaireIcon,
     description: 'Company policies, impact reports, or internal sustainability assessments.',
     subDescription: 'PDF, image file, or text file',
     aiProcessing: true,
@@ -66,24 +71,70 @@ const UPLOAD_MAP: {
 }
 
 export const UploadModal = (props: UploadModalProps) => {
-  const {openModal, closeModal, types} = props;
+  const { logBrowser } = useColdContext();
+  const { addToastMessage } = useAddToastMessage();
+  const { orgId } = useAuth0Wrapper();
+  const { types, refreshData} = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
   const [buttonLoading, setButtonLoading] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState<MainDocumentCategory | null>(null);
   const [filesToUpload, setFilesToUpload] = React.useState<File[]>([]);
+  const [openModal, setOpenModal] = React.useState(false);
 
   useEffect(() => {
     setButtonDisabled(selectedOption === null || filesToUpload.length === 0);
   }, [selectedOption, filesToUpload]);
 
   const uploadDocuments = async () => {
+    if(selectedOption === null) return;
 
+    setButtonLoading(true);
+    setButtonDisabled(true);
+    const formData = new FormData();
+    forEach(filesToUpload, file => {
+      formData.append('file', file);
+    })
+    const config = JSON.stringify({
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      timeout: 60000,
+    } as AxiosRequestConfig);
+    const response = await axiosFetcher([
+      `/organizations/${orgId}/files?searchable=${UPLOAD_MAP[selectedOption].aiProcessing}`,
+      'POST',
+      formData,
+      config
+    ]);
+    if (!isAxiosError(response)) {
+      logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData }, response });
+      await addToastMessage({
+        message: 'Upload successful',
+        type: ToastMessage.SUCCESS,
+      })
+      await refreshData()
+    } else {
+      const error: AxiosError = response;
+      if(error.response?.status === 409) {
+        await addToastMessage({
+          message: 'File already exists. Error Uploading',
+          type: ToastMessage.FAILURE,
+        });
+        logBrowser('Duplicate file uploaded', 'error', {orgId, formData: { ...formData }, response});
+      } else {
+        await addToastMessage({
+          type: ToastMessage.FAILURE,
+          message: 'Upload failed',
+        });
+        logBrowser('Upload failed', 'error', {orgId, formData: { ...formData }, response
+        });
+      }
+    }
+    setButtonLoading(false);
+    setButtonDisabled(false);
+    setOpenModal(false)
   }
-
-  const uploadedDocuments = filter(orderBy(files?.data || [], ['original_name', 'updated_at'], ['asc', 'desc']), document => {
-    return !newFiles.some(file => file.contents.name === document.original_name);
-  });
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(event.target.files || []);
@@ -108,20 +159,19 @@ export const UploadModal = (props: UploadModalProps) => {
     }
   };
 
-  const onNewFileUpload = (index: number) => {
-    // set the new file to uploaded
-    setNewFiles(prevFiles => {
-      const newFiles = [...prevFiles];
-      newFiles[index].uploaded = true;
-      return newFiles;
-    });
-  };
-
   return (
+    <>
+      <BaseButton
+        label={'Upload'}
+        onClick={() => setOpenModal(true)}
+        variant={ButtonTypes.primary}
+        iconLeft={IconNames.PlusIcon}
+        className={'self-center'}
+      />
     <FBModal
       dismissible
       show={openModal}
-      onClose={closeModal}
+      onClose={() => setOpenModal(false)}
       theme={flowbiteThemeOverride.modal}
       style={{
         boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
@@ -163,15 +213,15 @@ export const UploadModal = (props: UploadModalProps) => {
                   </div>
                   <div className={'flex flex-col gap-4 w-full'}>
                     <div className="text-body">{UPLOAD_MAP[type].description}</div>
-                    <div className="text-b4 text-tc-disabled">{UPLOAD_MAP[type].subDescription}</div>
+                    <div className="text-eyebrow text-tc-disabled">{UPLOAD_MAP[type].subDescription}</div>
                   </div>
                   <div
-                    className={`rounded-[30px] py-[4px] px-[8px] border-[1px] ${UPLOAD_MAP[type].aiProcessing ? 'border-bgc-menu' : 'border-yellow-800'}`}>
+                    className={`rounded-[30px] py-[4px] px-[8px] border-[1px] text-body ${UPLOAD_MAP[type].aiProcessing ? 'border-yellow-800' : 'border-bgc-menu'}`}>
                     {
                       UPLOAD_MAP[type].aiProcessing ? (
-                        <span role="img" className="text-b4 text-tc-success">✨Cold AI-Powered Processing</span>
+                        <span role="img" className="text-tc-secondary">✨Cold AI-Powered Processing</span>
                       ) : (
-                        <span className="text-b4 text-tc-disabled">No AI processing</span>
+                        <span className="text-tc-disabled">No AI processing</span>
                       )
                     }
                   </div>
@@ -182,7 +232,7 @@ export const UploadModal = (props: UploadModalProps) => {
         </div>
         <div className={'w-full h-[200px] flex flex-col self-stretch items-stretch gap-[8px]'}>
           <div
-            className={'h-full justify-self-stretch w-full rounded-[16px] border-dashed border-white border-[1px] p-[24px] flex flex-col gap-[32px] justify-center items-center'}
+            className={'h-full justify-self-stretch w-full rounded-[8px] border-dashed border-gray-90 border-[1px] p-[24px] flex flex-col gap-[32px] justify-center items-center'}
             onDrop={handleDrop}
             onDragOver={event => event.preventDefault()}>
             <div className={'text-h5'}>Drag & Drop Files Here or</div>
@@ -197,10 +247,12 @@ export const UploadModal = (props: UploadModalProps) => {
               return (
                 // eslint-disable-next-line react/jsx-no-undef
                 <ComplianceOverviewFileUploaderItem
-                  file={file}
-                  onFileUpload={() => {
-                    onNewFileUpload(index);
+                  file={{
+                    contents: file,
+                    uploaded: true,
+                    new: true,
                   }}
+                  onFileUpload={() => {}}
                 />
               );
             })}
@@ -209,7 +261,7 @@ export const UploadModal = (props: UploadModalProps) => {
         <div className="w-full flex flex-row justify-between">
           <BaseButton
             label="Cancel"
-            onClick={closeModal}
+            onClick={() => setOpenModal(false)}
             variant={ButtonTypes.secondary}
           />
           <BaseButton
@@ -221,5 +273,6 @@ export const UploadModal = (props: UploadModalProps) => {
         </div>
       </Card>
     </FBModal>
+  </>
   )
 }

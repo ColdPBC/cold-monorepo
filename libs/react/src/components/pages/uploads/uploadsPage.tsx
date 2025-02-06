@@ -1,4 +1,11 @@
-import { ColdIcon, DEFAULT_GRID_COL_DEF, ErrorFallback, MainContent, MuiDataGrid } from '@coldpbc/components';
+import {
+  ColdIcon,
+  DEFAULT_GRID_COL_DEF,
+  ErrorFallback,
+  MainContent,
+  MuiDataGrid,
+  UploadModal
+} from '@coldpbc/components';
 import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { UploadsQuery } from '@coldpbc/interfaces';
 import { get } from 'lodash';
@@ -7,7 +14,7 @@ import { format } from 'date-fns';
 import React, { ReactNode } from 'react';
 import {
   DocumentTypes,
-  IconNames,
+  IconNames, MainDocumentCategory,
   ProcessingStatus,
   UIProcessingStatus,
   UIProcessingStatusMapping,
@@ -186,6 +193,17 @@ export const _UploadsPage = () => {
       title = { 'Uploads' }
       isLoading={uploadsQuery.isLoading}
       className={'w-[calc(100%-100px)]'}
+      headerElement={
+      <UploadModal
+        refreshData={uploadsQuery.mutate}
+        types={[
+          MainDocumentCategory.BillOfMaterial,
+          MainDocumentCategory.Assurance,
+          MainDocumentCategory.InternalSustainabilityPolicy,
+          MainDocumentCategory.SustainabilityData,
+        ]}
+      />
+    }
     >
       <MuiDataGrid
         rows={files}
