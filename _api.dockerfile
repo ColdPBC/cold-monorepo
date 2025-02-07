@@ -39,13 +39,13 @@ USER root
 # Leverage a cache mount to /root/.yarn to speed up subsequent builds.
 # Leverage a bind mounts to package.json and yarn.lock to avoid having to copy them into
 # into this layer.
-#RUN #--mount=type=bind,source=package.json,target=package.json \
-    #--mount=type=bind,source=yarn.lock,target=yarn.lock,readwrite \
-RUN  --mount=type=cache,target=/root/.yarn
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=yarn.lock,target=yarn.lock,readwrite \
+    --mount=type=cache,target=/root/.yarn
 
 COPY package.json package.json ./
 
-RUN yarn
+RUN yarn workspaces focus cold-api --production
 
 #RUN yarn dedupe --strategy highest
 

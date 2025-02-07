@@ -10,10 +10,36 @@ WORKDIR /app
 # Add source files
 ADD . /app/
 
+RUN apt-get update
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  fonts-liberation \
+  libasound2 \
+  libatk-bridge2.0-0 \
+  libatk1.0-0 \
+  libcups2 \
+  libdrm2 \
+  libgbm1 \
+  libgtk-3-0 \
+  libnspr4 \
+  libnss3 \
+  libx11-xcb1 \
+  libxcomposite1 \
+  libxdamage1 \
+  libxrandr2 \
+  xdg-utils \
+  libu2f-udev \
+  libxshmfence1 \
+  libglu1-mesa \
+  chromium \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+
 # Install Dependencies
 
 FROM base AS dependencies
 WORKDIR /app
+
+RUN yarn workspaces focus cold-platform-openai
 
 FROM dependencies AS build
 WORKDIR /app
@@ -45,7 +71,7 @@ LABEL com.datadoghq.tags.env=${NODE_ENV}
 RUN corepack enable
 RUN yarn set version latest
 
-RUN yarn install
+RUN yarn workspaces focus ${DD_SERVICE}
 RUN yarn dlx nx@latest run cold-nest-library:prisma-generate
 RUN yarn prebuild
 
@@ -105,6 +131,8 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
+RUN yarn workspaces focus ${DD_SERVICE} --production
+
 LABEL com.datadoghq.ad.check_names='["postgres"]'
 LABEL com.datadoghq.ad.init_configs='[{}]'
 LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
@@ -143,4 +171,4 @@ RUN ls -la ./apps/${DD_SERVICE}/src
 EXPOSE 7001
 
 # Run the application.
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./apps/${DD_SERVICE}/src/main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=${FC_GIT_COMMIT_SHA} && node ./apps/${DD_SERVICE}/src/main.js"]
