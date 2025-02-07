@@ -227,7 +227,7 @@ export const UploadModal = (props: UploadModalProps) => {
                       UPLOAD_MAP[type].aiProcessing ? (
                         <span role="img" className="text-tc-secondary">✨Cold AI-Powered Processing</span>
                       ) : (
-                        <span className="text-tc-disabled">No AI processing</span>
+                        <span className="text-tc-disabled">Support Team Manual Processing</span>
                       )
                     }
                   </div>
