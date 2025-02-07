@@ -59,9 +59,9 @@ const UPLOAD_MAP: {
     }
   },
   [MainDocumentCategory.SustainabilityData]: {
-    title: 'Assurance Documents',
+    title: 'Sustainability Data',
     iconName: IconNames.ColdSustainabilityIcon,
-    description: 'Company policies, impact reports, or internal sustainability assessments.',
+    description: 'Spreadsheets tracking any sustainability data about company products, suppliers, or materials.',
     subDescription: 'CSV, XLS, or other spreadsheet',
     aiProcessing: false,
     queryParams: {
@@ -226,7 +226,7 @@ export const UploadModal = (props: UploadModalProps) => {
                         UPLOAD_MAP[type].aiProcessing ? (
                           <span role="img" className="text-tc-secondary">✨Cold AI-Powered Processing</span>
                         ) : (
-                          <span className="text-tc-disabled">No AI processing</span>
+                          <span className="text-tc-disabled">Support Team Manual Processing</span>
                         )
                       }
                     </div>
