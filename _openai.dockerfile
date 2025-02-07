@@ -40,7 +40,7 @@ RUN #--mount=type=bind,source=package.json,target=package.json \
 
 COPY package.json package.json ./
 
-RUN yarn
+RUN yarn install --frozen-lockfile
 
     #if [ "${NODE_ENV}" = "production" ] ; then echo "installing production dependencies..." && yarn workspaces focus cold-api ; else echo "installing dev dependencies..." && yarn ; fi \
 
@@ -49,8 +49,6 @@ RUN yarn
 FROM dependencies AS build
 WORKDIR /app
 USER root
-
-RUN npm uninstall -g yarn pnpm
 
 ARG NODE_ENV
 ARG DATABASE_URL
