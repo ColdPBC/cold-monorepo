@@ -100,9 +100,13 @@ export const UploadModal = (props: UploadModalProps) => {
         'Content-Type': 'multipart/form-data',
       },
       timeout: 60000,
+      params: {
+        ...UPLOAD_MAP[selectedOption].queryParams,
+      }
     } as AxiosRequestConfig);
+
     const response = await axiosFetcher([
-      `/organizations/${orgId}/files?searchable=${UPLOAD_MAP[selectedOption].aiProcessing}`,
+      `/organizations/${orgId}/files`,
       'POST',
       formData,
       config
