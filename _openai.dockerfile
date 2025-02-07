@@ -87,6 +87,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libatk-bridge2.0-0 \
   libatk1.0-0 \
   libcups2 \
+  libgif7 \
+  libgif-dev \
   libdrm2 \
   libgbm1 \
   libgtk-3-0 \
