@@ -1,3 +1,10 @@
+## [1.543.2](https://github.com/coldPBC/cold-monorepo/compare/v1.543.1...v1.543.2) (2025-02-07)
+
+
+### Bug Fixes
+
+* update yarn install command and remove unnecessary npm uninstall steps ([eade4f9](https://github.com/coldPBC/cold-monorepo/commit/eade4f9e3395617731cc03cc4225e4b48e4427bd))
+
 ## [1.543.1](https://github.com/coldPBC/cold-monorepo/compare/v1.543.0...v1.543.1) (2025-02-07)
 
 
