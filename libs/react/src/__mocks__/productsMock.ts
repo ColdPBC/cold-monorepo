@@ -954,10 +954,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
-            materialClassification: {
-              id: 'matclass_9',
-              name: 'Synthetic Leather',
-            },
+            materialClassification: null,
 					},
 				},
 			],
