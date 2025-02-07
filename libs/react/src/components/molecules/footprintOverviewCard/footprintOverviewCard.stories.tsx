@@ -1,7 +1,7 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { getFootprintHandler, StoryMockProvider } from '../../../';
+import { getFootprintHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { EmissionsDonutChartVariants, FootprintOverviewCard } from '@coldpbc/components';
 
 const meta: Meta<typeof FootprintOverviewCard> = {
