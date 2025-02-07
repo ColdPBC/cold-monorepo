@@ -1,3 +1,19 @@
+# [1.544.0](https://github.com/coldPBC/cold-monorepo/compare/v1.543.2...v1.544.0) (2025-02-07)
+
+
+### Features
+
+* "Remove unnecessary width class from modal inner element ([8abf835](https://github.com/coldPBC/cold-monorepo/commit/8abf8351154330dad9e3460f7fa28837ce3f7c74))
+* `Adjust modal content styles to improve layout consistency` ([36a5439](https://github.com/coldPBC/cold-monorepo/commit/36a54393890a8d9bafbc505595d9c196a384e96c))
+* Add query parameters to upload request configuration ([aa5ed7c](https://github.com/coldPBC/cold-monorepo/commit/aa5ed7cb48e4b01044de9121e966b1ace0967937))
+* Add UploadModal component and integrate it into UploadsPage ([da5ca08](https://github.com/coldPBC/cold-monorepo/commit/da5ca08aa18bd9216d379164b1cc2e1a909cc217))
+* Add UploadModal component and MainDocumentCategory enum ([10948a9](https://github.com/coldPBC/cold-monorepo/commit/10948a92d4b789d2f57a395510ea9b64478a3752))
+* Adjust upload modal layout styles for better responsiveness ([d0dd02a](https://github.com/coldPBC/cold-monorepo/commit/d0dd02ad167d583ef7768b575dba946cf486bcd8))
+* Fix indentation issues in UploadModal component ([094f1ac](https://github.com/coldPBC/cold-monorepo/commit/094f1acbf6944d24f49cdc81268e304e5d6b1fda))
+* Reset state on modal open and comment out confirm button. ([16a6496](https://github.com/coldPBC/cold-monorepo/commit/16a64966df717dca1403ca19c042eba72631b3fe))
+* Set default sorting by creation date in uploads table ([abaf9c4](https://github.com/coldPBC/cold-monorepo/commit/abaf9c42567557948fe3e92b72707dc0d855cbbc))
+* Update icon for Assurance Documents in upload modal ([9afbd98](https://github.com/coldPBC/cold-monorepo/commit/9afbd983340720c1d69519a4f24fae0e12ba65bc))
+
 ## [1.543.2](https://github.com/coldPBC/cold-monorepo/compare/v1.543.1...v1.543.2) (2025-02-07)
 
 
