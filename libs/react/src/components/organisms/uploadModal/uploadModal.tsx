@@ -86,6 +86,11 @@ export const UploadModal = (props: UploadModalProps) => {
     setButtonDisabled(selectedOption === null || filesToUpload.length === 0);
   }, [selectedOption, filesToUpload]);
 
+  useEffect(() => {
+    setSelectedOption(null);
+    setFilesToUpload([]);
+  }, [openModal]);
+
   const uploadDocuments = async () => {
     if(selectedOption === null) return;
 
@@ -137,7 +142,7 @@ export const UploadModal = (props: UploadModalProps) => {
     }
     setButtonLoading(false);
     setButtonDisabled(false);
-    setOpenModal(false)
+    setOpenModal(false);
   }
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -271,12 +276,13 @@ export const UploadModal = (props: UploadModalProps) => {
             onClick={() => setOpenModal(false)}
             variant={ButtonTypes.secondary}
           />
-          <BaseButton
-            label={"Confirm"}
-            loading={buttonLoading}
-            onClick={uploadDocuments}
-            disabled={buttonDisabled}
-          />
+          {/* TODO: Add back in this functionality and confirm its working once backend is configured*/}
+          {/*<BaseButton*/}
+          {/*  label={"Confirm"}*/}
+          {/*  loading={buttonLoading}*/}
+          {/*  onClick={uploadDocuments}*/}
+          {/*  disabled={buttonDisabled}*/}
+          {/*/>*/}
         </div>
       </Card>
     </FBModal>
