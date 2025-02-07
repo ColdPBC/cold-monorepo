@@ -30,7 +30,7 @@ const UPLOAD_MAP: {
 } = {
   [MainDocumentCategory.Assurance]: {
     title: 'Assurance Documents',
-    iconName: IconNames.ColdQuestionnaireIcon,
+    iconName: IconNames.ColdDocumentUploadIcon,
     description: 'Assurance documents from suppliers including certifications, tests, or declarations.',
     subDescription: 'PDF, image file, or text file',
     aiProcessing: true,
