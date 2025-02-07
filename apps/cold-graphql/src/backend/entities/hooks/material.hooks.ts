@@ -10,51 +10,19 @@ export class MaterialHooks extends BaseSidecar {
 		super(Material, 'materials');
 	}
 
-	// Overrride BeforeReadHook here:
+	// Overrride beforeReadHook here:
 
-	// Overrride AfterReadHook here:
+	// Overrride afterReadHook here:
 
-	// Overrride BeforeCreateHook here:
+	// Overrride beforeCreateHook here:
 
-	// Overrride AfterCreateHook here:
-	override async afterCreateHook(params: CreateOrUpdateHookParams<Material, OrgContext>) {
-		//await this.cache_emissions(params);
-		/*
-		const materials = params?.entities as Material[];
-		if (!materials || materials.length < 1) {
-			return params;
-		}
+	// Overrride afterCreateHook here:
 
-		const products = await get_product_args_from_material(materials[0]);
-		const prodParams: CreateOrUpdateHookParams<any, OrgContext> = {
-			context: params.context as OrgContext,
-			args: params.args,
-			entities: products,
-			fields: params.fields,
-			transactional: false,
-		};
-		await cache_product_emission_stats(prodParams);
-		await super.afterCreateHook(params);
-		*/
-		return params;
-	}
+	// Overrride beforeUpdateHook here:
 
-	// Overrride BeforeUpdateHook here:
+	// Overrride afterUpdateHook here:
 
-	// Overrride AfterUpdateHook here:
-	override async afterUpdateHook(params: CreateOrUpdateHookParams<Material, OrgContext>) {
-		// await cache_product_emission_stats(params);
-		// await super.afterUpdateHook(params);
+	// Overrride beforeDeleteHook here:
 
-		return params;
-	}
-	// Overrride BeforeDeleteHook here:
-
-	// Overrride AfterDeleteHook here:
-	override async afterDeleteHook(params: DeleteHookParams<Material, OrgContext>) {
-		// await cache_product_emission_stats(params);
-		// await super.afterDeleteHook(params);
-
-		return params;
-	}
+	// Overrride afterDeleteHook here:
 }

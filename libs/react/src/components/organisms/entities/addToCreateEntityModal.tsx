@@ -6,7 +6,7 @@ import {
   GridColDef,
   GridRowSelectionModel,
   GridToolbarContainer, GridToolbarQuickFilter
-} from "@mui/x-data-grid";
+} from "@mui/x-data-grid-pro";
 import {ButtonTypes} from "@coldpbc/enums";
 import React, {useEffect, useState} from "react";
 import {Checkbox} from "@mui/material";

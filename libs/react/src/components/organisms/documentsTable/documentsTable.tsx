@@ -1,4 +1,4 @@
-import { DataGrid, GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridValidRowModel, MuiEvent } from '@mui/x-data-grid';
+import { GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridValidRowModel, MuiEvent } from '@mui/x-data-grid-pro';
 import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import {
   ColdIcon,

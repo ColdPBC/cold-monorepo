@@ -21,7 +21,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { BaseEntity, SustainabilityAttributeGraphQL } from '@coldpbc/interfaces';
 import { get, groupBy, isError, toLower, uniq } from 'lodash';
 import { processSustainabilityAttributeDataFromGraphQL, toSentenceCase } from '@coldpbc/lib';
-import { GridCellParams, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import { GridCellParams, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid-pro';
 import { HexColors } from '@coldpbc/themes';
 import { Checkbox } from '@mui/material';
 import capitalize from 'lodash/capitalize';

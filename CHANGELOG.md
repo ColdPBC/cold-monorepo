@@ -1,3 +1,28 @@
+# [1.543.0](https://github.com/coldPBC/cold-monorepo/compare/v1.542.0...v1.543.0) (2025-02-06)
+
+
+### Features
+
+* Enable pagination in DataGrids and downgrade [@mui](https://github.com/mui) packages. ([1a37320](https://github.com/coldPBC/cold-monorepo/commit/1a37320ed3f103f2a601a3b17ceb31c116103cf0))
+* Remove pagination from individual DataGrids and centralize it. ([75e00bd](https://github.com/coldPBC/cold-monorepo/commit/75e00bd79cbd461ecc0d9d180d65b5395b36df75))
+* Replace DataGridPro with MuiDataGrid for consistency ([fa771ad](https://github.com/coldPBC/cold-monorepo/commit/fa771adfdc3804604e9b1e3ecba1a4f1e94e6285))
+* Set custom column header height in ProductsDataGrid ([db521a4](https://github.com/coldPBC/cold-monorepo/commit/db521a433dad9f5abf26f490216eb58bcb3600e6))
+* Upgrade to `@mui/x-data-grid-pro` and add required license key. ([9f06b7d](https://github.com/coldPBC/cold-monorepo/commit/9f06b7d303b3b3a79d7dc4f90c44172e3dbbafea))
+
+# [1.542.0](https://github.com/coldPBC/cold-monorepo/compare/v1.541.0...v1.542.0) (2025-02-06)
+
+
+### Features
+
+* extend ACL entity maps with material_classification ([868af28](https://github.com/coldPBC/cold-monorepo/commit/868af28468b402d1d251419dd18bea4d4e379af0))
+
+# [1.541.0](https://github.com/coldPBC/cold-monorepo/compare/v1.540.0...v1.541.0) (2025-02-06)
+
+
+### Features
+
+* add foreign key and index for materials linking to organization facilities ([0484803](https://github.com/coldPBC/cold-monorepo/commit/04848037cf1f86e245d05108c2cdb870ca4a0d0c))
+
 # [1.540.0](https://github.com/coldPBC/cold-monorepo/compare/v1.539.0...v1.540.0) (2025-02-05)
 
 

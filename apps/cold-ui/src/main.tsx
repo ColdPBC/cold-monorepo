@@ -9,6 +9,7 @@ import { SWRConfig } from 'swr';
 import { muiTheme } from '@coldpbc/themes';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { LicenseInfo } from '@mui/x-license';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -44,6 +45,8 @@ datadogLogs.init({
   version: import.meta.env.VITE_DD_VERSION,
   sessionSampleRate: 100,
 });
+
+LicenseInfo.setLicenseKey(import.meta.env.VITE_MUI_LICENSE_KEY)
 
 root.render(
   <StrictMode>

@@ -17,7 +17,7 @@ import { withErrorBoundary } from "react-error-boundary";
 import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
-import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
+import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid-pro';
 
 const getColumnRows = (
   products: PaginatedProductsQuery[],
@@ -319,6 +319,7 @@ export const _ProductsDataGrid = () => {
         loading={productsQuery.isLoading} // || footprintLoading}
         columns={columns}
         rows={rows}
+        columnHeaderHeight={55}
         rowHeight={72}
         onRowClick={(params) => {
           navigate(`/products/${params.id}`)
@@ -348,7 +349,6 @@ export const _ProductsDataGrid = () => {
           toolbar: {
             quickFilterProps: {
               placeholder: 'Search by name...',
-              value: searchQuery,
             }
           }
         }}
