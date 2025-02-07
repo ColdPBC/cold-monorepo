@@ -12,7 +12,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     if(emissions === 0) {
       return '';
     } else {
-      return `${(emissions/1000).toFixed(2)} kg CO2e`;
+      return `${(emissions).toFixed(2)} kg CO2e`;
     }
   }
 
@@ -74,7 +74,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       material: prodMaterial.material?.name,
       classification: prodMaterial.material.materialClassification?.name,
       yield_with_uom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
-      weight: prodMaterial.weight || 0,
+      weight: prodMaterial.weight ? prodMaterial.weight * 1000 : 0,
       emissions_factor: prodMaterial.material.emissionsFactor?.toFixed(1) || null,
       total_emissions: (prodMaterial.material.emissionsFactor && prodMaterial.weight)
         ? prodMaterial.material.emissionsFactor * prodMaterial.weight : 0,
