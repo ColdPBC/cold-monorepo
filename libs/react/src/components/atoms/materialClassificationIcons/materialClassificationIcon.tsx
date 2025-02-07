@@ -19,22 +19,26 @@ export interface MaterialClassificationIconProps extends React.SVGProps<SVGSVGEl
 	materialClassificationCategory: MaterialClassificationCategory;
 }
 
-export const MATERIAL_CLASSIFICATION_CATEGORY_ICON = {
-  [MaterialClassificationCategory.COATINGS_AND_LAMINATIONS]: CoatingsAndLaminationsIcon,
-  [MaterialClassificationCategory.FOAM]: FoamIcon,
-  [MaterialClassificationCategory.INSULATION_MATERIAL]: InsulationMaterialIcon,
-  [MaterialClassificationCategory.LEATHER]: LeatherIcon,
-  [MaterialClassificationCategory.LEATHER_ALTERNATIVES]: LeatherAlternativesIcon,
-  [MaterialClassificationCategory.METALS]: MetalsIcon,
-  [MaterialClassificationCategory.PLASTICS]: PlasticsIcon,
-  [MaterialClassificationCategory.RUBBERS_ELASTOMERS]: RubbersElastomersIcon,
-  [MaterialClassificationCategory.SYNTHETIC_LEATHER]: SyntheticLeatherIcon,
-  [MaterialClassificationCategory.TEXTILES]: TextilesIcon,
-  [MaterialClassificationCategory.WOOD_BASED_MATERIALS]: WoodBasedMaterialsIcon,
-};
+export const getIconForMaterialClassification = (materialClassificationCategory: MaterialClassificationCategory) => {
+  const MATERIAL_CLASSIFICATION_CATEGORY_ICON = {
+    [MaterialClassificationCategory.COATINGS_AND_LAMINATIONS]: CoatingsAndLaminationsIcon,
+    [MaterialClassificationCategory.FOAM]: FoamIcon,
+    [MaterialClassificationCategory.INSULATION_MATERIAL]: InsulationMaterialIcon,
+    [MaterialClassificationCategory.LEATHER]: LeatherIcon,
+    [MaterialClassificationCategory.LEATHER_ALTERNATIVES]: LeatherAlternativesIcon,
+    [MaterialClassificationCategory.METALS]: MetalsIcon,
+    [MaterialClassificationCategory.PLASTICS]: PlasticsIcon,
+    [MaterialClassificationCategory.RUBBERS_ELASTOMERS]: RubbersElastomersIcon,
+    [MaterialClassificationCategory.SYNTHETIC_LEATHER]: SyntheticLeatherIcon,
+    [MaterialClassificationCategory.TEXTILES]: TextilesIcon,
+    [MaterialClassificationCategory.WOOD_BASED_MATERIALS]: WoodBasedMaterialsIcon,
+  };
+
+  return MATERIAL_CLASSIFICATION_CATEGORY_ICON[materialClassificationCategory];
+}
 
 export const MaterialClassificationIcon: React.FC<MaterialClassificationIconProps> = ({ materialClassificationCategory, ...props }) => {
-  const Icon = MATERIAL_CLASSIFICATION_CATEGORY_ICON[materialClassificationCategory];
+  const Icon = getIconForMaterialClassification(materialClassificationCategory);
   const backgroundColor = MATERIAL_CLASSIFICATIONS_CATEGORY_COLORS[materialClassificationCategory];
 
 	if (!Icon || !backgroundColor) {
