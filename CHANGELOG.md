@@ -1,3 +1,15 @@
+# [1.545.0](https://github.com/coldPBC/cold-monorepo/compare/v1.544.0...v1.545.0) (2025-02-07)
+
+
+### Features
+
+* Add carbon accounting tab to product details ([a9bfa37](https://github.com/coldPBC/cold-monorepo/commit/a9bfa37b52f515b507096e52f610b3f987065f64))
+* Adjust emissions_factor precision to one decimal place. ([6cd69a0](https://github.com/coldPBC/cold-monorepo/commit/6cd69a0c1251f0c57041420992ea4ec0e274a432))
+* Fix carbon accounting unit conversion and weight calculation. ([e120f07](https://github.com/coldPBC/cold-monorepo/commit/e120f07db3c63a23d12e67e3a18557fe2d6d8fd4))
+* Format yield values to two decimal places if not null ([dd8b56f](https://github.com/coldPBC/cold-monorepo/commit/dd8b56fda22fd04d200c027254df7547058b5f0d))
+* Refactor tabs configuration in ProductDetail component. ([b6bfe9d](https://github.com/coldPBC/cold-monorepo/commit/b6bfe9d3b322bbf145599caf6584b632bcc9974b))
+* Remove unnecessary 'type' property from weight field definition ([660b940](https://github.com/coldPBC/cold-monorepo/commit/660b940017b6f5f48bba6629688ba9a8c482f77b))
+
 # [1.544.0](https://github.com/coldPBC/cold-monorepo/compare/v1.543.2...v1.544.0) (2025-02-07)
 
 
