@@ -220,16 +220,16 @@ export const UploadModal = (props: UploadModalProps) => {
                   <div className={'flex flex-col gap-4 w-full'}>
                     <div className="text-body">{UPLOAD_MAP[type].description}</div>
                     <div className="text-eyebrow text-tc-disabled">{UPLOAD_MAP[type].subDescription}</div>
-                  </div>
-                  <div
-                    className={`rounded-[30px] py-[4px] px-[8px] border-[1px] text-body ${UPLOAD_MAP[type].aiProcessing ? 'border-yellow-800' : 'border-bgc-menu'}`}>
-                    {
-                      UPLOAD_MAP[type].aiProcessing ? (
-                        <span role="img" className="text-tc-secondary">✨Cold AI-Powered Processing</span>
-                      ) : (
-                        <span className="text-tc-disabled">No AI processing</span>
-                      )
-                    }
+                    <div
+                      className={`rounded-[30px] py-[4px] px-[8px] border-[1px] text-body ${UPLOAD_MAP[type].aiProcessing ? 'border-yellow-800' : 'border-bgc-menu'}`}>
+                      {
+                        UPLOAD_MAP[type].aiProcessing ? (
+                          <span role="img" className="text-tc-secondary">✨Cold AI-Powered Processing</span>
+                        ) : (
+                          <span className="text-tc-disabled">No AI processing</span>
+                        )
+                      }
+                    </div>
                   </div>
                 </div>
               )
