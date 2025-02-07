@@ -1,3 +1,10 @@
+## [1.543.1](https://github.com/coldPBC/cold-monorepo/compare/v1.543.0...v1.543.1) (2025-02-07)
+
+
+### Bug Fixes
+
+* update start commands and watch paths for platform services ([b492832](https://github.com/coldPBC/cold-monorepo/commit/b492832d5b3b0d56b1a304c0a27594eb39ae3c7d))
+
 # [1.543.0](https://github.com/coldPBC/cold-monorepo/compare/v1.542.0...v1.543.0) (2025-02-06)
 
 
