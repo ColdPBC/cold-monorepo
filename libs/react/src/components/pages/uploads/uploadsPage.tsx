@@ -209,6 +209,14 @@ export const _UploadsPage = () => {
         rows={files}
         columns={columns}
         disableRowSelectionOnClick
+        initialState={{
+          sorting: {
+            sortModel:[{
+              field: 'createdAt',
+              sort: 'desc'
+            }]
+          }
+        }}
       />
     </MainContent>
   )
