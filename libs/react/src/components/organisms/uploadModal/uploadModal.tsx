@@ -59,7 +59,7 @@ const UPLOAD_MAP: {
     }
   },
   [MainDocumentCategory.SustainabilityData]: {
-    title: 'Assurance Documents',
+    title: 'Sustainability Data',
     iconName: IconNames.ColdSustainabilityIcon,
     description: 'Company policies, impact reports, or internal sustainability assessments.',
     subDescription: 'CSV, XLS, or other spreadsheet',
