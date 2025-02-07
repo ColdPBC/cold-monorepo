@@ -49,7 +49,6 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       field: 'weight',
       headerName: 'Weight',
       minWidth: 100,
-      type: 'number',
       renderCell: renderWeight,
     },
     {
