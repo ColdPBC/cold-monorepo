@@ -72,6 +72,30 @@ const _ProductDetail = () => {
 
 	const subTitle = [product.productCategory, product.productSubcategory, product.seasonCode].filter(val => !!val).join(' | ');
 
+  const tabs: {
+    label: string;
+    content: React.ReactNode;
+  }[] = [
+    {
+      label: 'Summary',
+      content: <ProductDetailsTab product={product} setShowUpdateAttributesModal={setShowUpdateAttributesModal} refreshProduct={productQuery.mutate} />,
+    },
+    {
+      label: 'BOM',
+      content: <ProductBOMTab product={product} refreshProduct={productQuery.mutate} />,
+    },
+    ...(
+      ldFlags.showNewPcfUiCold1450 ? [{
+        label: 'Carbon Accounting',
+        content: <ProductCarbonAccountingTab product={product} />,
+      }] : []
+    ),
+    {
+      label: 'Documents',
+      content: <ProductDocumentsTab files={parseDocumentsForProductDetails(product, cloneDeep(files))} />,
+    },
+  ]
+
 	return (
     <MainContent
       title={product.name}
@@ -100,24 +124,7 @@ const _ProductDetail = () => {
         />
       )}
       <Tabs
-        tabs={[
-          {
-            label: 'Summary',
-            content: <ProductDetailsTab product={product} setShowUpdateAttributesModal={setShowUpdateAttributesModal} refreshProduct={productQuery.mutate} />,
-          },
-          {
-            label: 'BOM',
-            content: <ProductBOMTab product={product} refreshProduct={productQuery.mutate} />,
-          },
-          ldFlags.showNewPcfUiCold1450 && {
-            label: 'Carbon Accounting',
-            content: <ProductCarbonAccountingTab product={product} />,
-          },
-          {
-            label: 'Documents',
-            content: <ProductDocumentsTab files={parseDocumentsForProductDetails(product, cloneDeep(files))} />,
-          },
-        ]}
+        tabs={tabs}
       />
       <DeleteEntityModal
         isOpen={deleteModalOpen}
