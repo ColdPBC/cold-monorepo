@@ -324,8 +324,8 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       },
     },
     content: {
-      base: 'relative h-full w-full m-auto md:h-auto rounded-2xl flex items-center justify-center',
-      inner: 'relative',
+      base: 'relative h-full w-full m-auto md:h-auto rounded-2xl',
+      inner: 'relative w-full',
     },
     body: {
       base: 'p-6',
