@@ -88,8 +88,6 @@
           "dockerContext": ".",
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
-          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-api:build:production",
-          "startCommand": "nx run cold-api:serve:production",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
             "repository": "api-docker-images",
@@ -219,9 +217,6 @@
           "dockerfilePath": "_graphql.dockerfile",
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
-          "installCommand": "corepack enable pnpm && pnpm install",
-          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
-          "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
           "watchPaths": [
             "apps/cold-graphql/src/backend/**",
@@ -448,8 +443,6 @@
           "dockerContext": ".",
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
-          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-api:build:staging",
-          "startCommand": "nx run cold-api:serve:staging",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
             "repository": "api-docker-images",
@@ -579,8 +572,6 @@
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
           "installCommand": "corepack enable pnpm && pnpm install",
-          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
-          "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
 	        "watchPaths": [
 		        "apps/cold-graphql/src/backend/**",
