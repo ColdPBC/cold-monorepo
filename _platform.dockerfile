@@ -5,19 +5,6 @@ RUN npm install -g corepack@latest
 RUN corepack enable
 RUN yarn set version latest
 
-# Install build dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libcairo2-dev \
-    libpango1.0-dev \
-    libjpeg-dev \
-    libgif-dev \
-    librsvg2-dev \
-    libtool \
-    autoconf \
-    automake && \
-    rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
 
 # Add source files

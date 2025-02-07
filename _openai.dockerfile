@@ -13,12 +13,6 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
-
-#RUN npm uninstall -g yarn pnpm
-RUN apt-get update
-RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake
-RUN rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
 # uninstall old yarn or pnpm
 
@@ -40,8 +34,6 @@ RUN #--mount=type=bind,source=package.json,target=package.json \
 
 COPY package.json package.json ./
 
-RUN yarn
-
     #if [ "${NODE_ENV}" = "production" ] ; then echo "installing production dependencies..." && yarn workspaces focus cold-api ; else echo "installing dev dependencies..." && yarn ; fi \
 
 #RUN yarn dedupe --strategy highest
@@ -49,8 +41,6 @@ RUN yarn
 FROM dependencies AS build
 WORKDIR /app
 USER root
-
-RUN npm uninstall -g yarn pnpm
 
 ARG NODE_ENV
 ARG DATABASE_URL
@@ -66,9 +56,10 @@ RUN npm install -g corepack@latest
 RUN corepack enable
 RUN yarn set version latest
 
+RUN yarn install
+
 RUN yarn dlx nx@latest run cold-nest-library:prisma-generate
 RUN yarn prebuild
-
 
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && yarn dlx nx@latest run --skip-nx-cache ${DD_SERVICE}:build:production ; else echo "building development..." && yarn dlx nx@latest run --skip-nx-cache ${DD_SERVICE}:build:development ; fi
 

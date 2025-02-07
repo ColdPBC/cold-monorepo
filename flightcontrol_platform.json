@@ -41,11 +41,11 @@
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
           "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
-          "startCommand": "nx run cold-platform-openai:serve:production",
-          "watchPaths": [
+	        "startCommand": "export DD_GIT_REPOSITORY_URL=github.com/ColdPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) && node ./apps/cold-platform-openai/src/main.js",
+	        "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "libs/nest/src/**",
-            "_platform.dockerfile"
+            "_openai.dockerfile"
           ],
           "healthCheckPath": "/health",
           "containerInsights": true,
@@ -160,7 +160,7 @@
 		      "includeEnvVariablesInBuild": true,
 		      "injectEnvVariablesInDockerfile": true,
 		      "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-climatiq:build:production",
-		      "startCommand": "nx run cold-platform-climatiq:serve:production",
+		      "startCommand": "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) && node ./apps/cold-platform-climatiq/src/main.js",
 		      "watchPaths": [
 			      "apps/cold-platform-climatiq/src/**",
 			      "libs/nest/src/**",
@@ -279,8 +279,8 @@
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
           "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-stripe:build:production",
-          "startCommand": "nx run cold-platform-stripe:serve:production",
-          "watchPaths": [
+	        "startCommand": "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) && node ./apps/cold-platform-stripe/src/main.js",
+	        "watchPaths": [
             "apps/cold-platform-stripe/src/**",
             "libs/nest/src/**",
             "_platform.dockerfile"
@@ -436,11 +436,11 @@
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
           "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
-          "startCommand": "nx run cold-platform-openai:serve:staging",
+          "startCommand": "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) && node ./apps/cold-platform-openai/src/main.js",
           "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "libs/nest/src/**",
-            "_platform.dockerfile"
+            "_openai.dockerfile"
           ],
           "healthCheckPath": "/health",
           "containerInsights": true,
@@ -554,7 +554,7 @@
 		      "includeEnvVariablesInBuild": true,
 		      "injectEnvVariablesInDockerfile": true,
 		      "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-climatiq:build:production",
-		      "startCommand": "nx run cold-platform-climatiq:serve:production",
+		      "startCommand": "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) && node ./apps/cold-platform-climatiq/src/main.js",
 		      "watchPaths": [
 			      "apps/cold-platform-climatiq/src/**",
 			      "libs/nest/src/**",
@@ -673,8 +673,8 @@
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
           "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-stripe:build:production",
-          "startCommand": "nx run cold-platform-stripe:serve:staging",
-          "watchPaths": [
+	        "startCommand": "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) && node ./apps/cold-platform-stripe/src/main.js",
+	        "watchPaths": [
             "apps/cold-platform-stripe/src/**",
             "libs/nest/src/**",
             "_platform.dockerfile"
@@ -830,12 +830,12 @@
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
           "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-openai:build:production",
-          "startCommand": "nx run cold-platform-openai:serve:staging",
+          "startCommand": "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) && node ./apps/cold-platform-openai/src/main.js",
           "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "apps/cold-platform-openai/test/**",
             "libs/nest/src/**",
-            "_platform.dockerfile"
+            "_openai.dockerfile"
           ],
           "maxInstances": 1,
           "minInstances": 1,
@@ -937,7 +937,7 @@
 		      "includeEnvVariablesInBuild": true,
 		      "injectEnvVariablesInDockerfile": true,
 		      "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-platform-climatiq:build:production",
-		      "startCommand": "nx run cold-platform-climatiq:serve:production",
+		      "startCommand": "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) && node ./apps/cold-platform-climatiq/src/main.js",
 		      "watchPaths": [
 			      "apps/cold-platform-climatiq/src/**",
 			      "libs/nest/src/**",
