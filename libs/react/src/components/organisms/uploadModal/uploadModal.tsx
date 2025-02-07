@@ -167,12 +167,16 @@ export const UploadModal = (props: UploadModalProps) => {
         variant={ButtonTypes.primary}
         iconLeft={IconNames.PlusIcon}
         className={'self-center'}
+        data-testid={'upload-button'}
       />
     <FBModal
       dismissible
       show={openModal}
       onClose={() => setOpenModal(false)}
       theme={flowbiteThemeOverride.modal}
+      style={{
+        boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
+      }}
       data-testid={`upload-modal`}
     >
       <Card className="p-4 w-[962px] bg-gray-30 gap-[40px]" glow={false}>

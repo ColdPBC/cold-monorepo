@@ -5,6 +5,7 @@ import { AttributeAssuranceMock, StoryMockProvider } from '@coldpbc/mocks';
 import {AttributeAssuranceStatus, EntityLevel, MainDocumentCategory} from '@coldpbc/enums';
 import {UploadModal} from "./uploadModal";
 import {NetworkStatus} from "@apollo/client";
+import {within} from "@storybook/testing-library";
 
 const meta: Meta<typeof UploadModal> = {
   title: 'Organisms/UploadModal',
@@ -33,5 +34,14 @@ export const Default: Story = {
       </StoryMockProvider>
     );
   },
+  play: async ({ canvasElement }) => {
+    if(!canvasElement.parentElement) return;
+
+    const canvas = within(canvasElement.parentElement);
+    // click the upload button
+    const uploadButton = canvas.getByTestId('upload-button');
+    uploadButton.click();
+    await canvas.findByText('What are you uploading?');
+  }
 };
 
