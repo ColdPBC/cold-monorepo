@@ -1,15 +1,15 @@
 import { ButtonTypes, IconNames, MainDocumentCategory } from '@coldpbc/enums';
-import {Modal as FBModal} from 'flowbite-react'
+import { Modal as FBModal } from 'flowbite-react'
 import { flowbiteThemeOverride } from '@coldpbc/themes';
-import {BaseButton, Card, ColdIcon, ComplianceOverviewFileUploaderItem, MuiDataGrid} from '@coldpbc/components';
-import React, { useEffect, useRef, useState } from 'react';
-import {filter, forEach, map, orderBy, set} from 'lodash';
-import {AxiosError, AxiosRequestConfig, isAxiosError} from "axios";
-import {axiosFetcher} from "@coldpbc/fetchers";
-import {useAddToastMessage, useAuth0Wrapper, useColdContext} from "@coldpbc/hooks";
-import {KeyedMutator} from "swr";
-import {ApolloQueryResult} from "@apollo/client";
-import {ToastMessage, UploadsQuery} from "@coldpbc/interfaces";
+import { BaseButton, Card, ColdIcon, ComplianceOverviewFileUploaderItem } from '@coldpbc/components';
+import React, { useEffect, useRef } from 'react';
+import { forEach, map, orderBy } from 'lodash';
+import { AxiosError, AxiosRequestConfig, isAxiosError } from "axios";
+import { axiosFetcher } from "@coldpbc/fetchers";
+import { useAddToastMessage, useAuth0Wrapper, useColdContext } from "@coldpbc/hooks";
+import { KeyedMutator } from "swr";
+import { ApolloQueryResult } from "@apollo/client";
+import { ToastMessage, UploadsQuery } from "@coldpbc/interfaces";
 
 export interface UploadModalProps{
   types: Array<MainDocumentCategory>
@@ -159,6 +159,7 @@ export const UploadModal = (props: UploadModalProps) => {
       const newFiles = Array.from(droppedFiles);
       setFilesToUpload(prevFiles => [
         ...prevFiles,
+        ...newFiles,
       ]);
     }
   };
@@ -252,6 +253,7 @@ export const UploadModal = (props: UploadModalProps) => {
               return (
                 // eslint-disable-next-line react/jsx-no-undef
                 <ComplianceOverviewFileUploaderItem
+                  key={index}
                   file={{
                     contents: file,
                     uploaded: true,
