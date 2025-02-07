@@ -495,6 +495,10 @@ export const GET_PRODUCT = gql`
               name
             }
           }
+          materialClassification {
+            id
+            name
+          }
         }
       }
       attributeAssurances {

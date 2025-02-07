@@ -1,7 +1,7 @@
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import {TemperatureCheckCard} from './temperatureCheckCard';
-import { StoryMockProvider, getFootprintHandler, RightColumnContent } from '../../../';
+import { RightColumnContent, TemperatureCheckCard } from '@coldpbc/components';
+import { StoryMockProvider } from "@coldpbc/mocks";
 
 const meta: Meta<typeof TemperatureCheckCard> = {
     title: "Molecules/TemperatureCheckCard",

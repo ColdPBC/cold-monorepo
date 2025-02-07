@@ -146,3 +146,22 @@ export const ShowEdit: Story = {
   },
 };
 
+export const CarbonAccountingTab: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider memoryRouterProps={{
+        initialEntries: [`/products/op_c0y7e5zsg09r0kxxlw2ha9cm`],
+      }}>
+        <Routes>
+          <Route path={'/products/:id'} element={<ProductDetail />} />
+        </Routes>
+      </StoryMockProvider>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
+    const carbonAccountingTab = await canvas.findByTestId('tab-Carbon Accounting');
+    carbonAccountingTab.click();
+  }
+};

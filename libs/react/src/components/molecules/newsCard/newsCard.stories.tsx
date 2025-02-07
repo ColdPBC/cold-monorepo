@@ -1,7 +1,8 @@
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
 import {NewsCard} from './newsCard';
-import { StoryMockProvider, CenterColumnContent, getNewsHandler } from '../../../';
+import { CenterColumnContent } from '@coldpbc/components';
+import {getNewsHandler, StoryMockProvider} from "@coldpbc/mocks";
 
 const meta: Meta<typeof NewsCard> = {
     title: "Molecules/NewsCard",
