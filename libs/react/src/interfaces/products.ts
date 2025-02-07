@@ -1,5 +1,6 @@
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
 import { gql } from '@apollo/client';
+import { string } from 'zod';
 
 export interface Products {
   id: string;
@@ -105,3 +106,5 @@ export interface ProductCarbonFootprintData extends Products {
     }
   }[]
 }
+
+

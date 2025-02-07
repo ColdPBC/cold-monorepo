@@ -55,7 +55,7 @@ const _ProductBOMTabSidebar = (
     value: '',
   };
 
-  const uomOptions: InputOption[] = toArray(UnitOfMeasurement).map((uom, index) => ({
+  const uomOptions: InputOption[] = Object.values(UnitOfMeasurement).map((uom, index) => ({
     id: index,
     name: uom,
     value: uom,
