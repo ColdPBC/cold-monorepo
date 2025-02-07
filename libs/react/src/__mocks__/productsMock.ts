@@ -33,11 +33,14 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_f20621xztckbtqirkjlc7qgy',
 									name: 'Global Apparel Ltd.',
-                  attributeAssurances: [],
 								},
 							},
 						],
 						attributeAssurances: [],
+            materialClassification: {
+              id: 'matclass_1',
+              name: 'Insulation Material',
+            }
 					},
 				},
 				{
@@ -57,7 +60,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 									name: 'Kerluke - Armstrong',
-                  attributeAssurances: [],
 								},
 							},
 						],
@@ -96,6 +98,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+            materialClassification: {
+              id: 'matclass_2',
+              name: 'Leather',
+            }
 					},
 				},
 				{
@@ -115,7 +121,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 									name: 'Kerluke - Armstrong',
-                  attributeAssurances: [],
 								},
 							},
 						],
@@ -156,6 +161,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+            materialClassification: {
+              id: 'matclass_3',
+              name: 'Coatings and Laminations',
+            }
 					},
 				},
 				{
@@ -175,7 +184,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_vd809v326es9yz3rygkeb14f',
 									name: 'Supplier Delta',
-                  attributeAssurances: [],
 								},
 							},
 						],
@@ -225,6 +233,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+            materialClassification: {
+              id: 'matclass_4',
+              name: 'Metals',
+            },
 					},
 				},
 			],
@@ -310,11 +322,14 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_f20621xztckbtqirkjlc7qgy',
 									name: 'Global Apparel Ltd.',
-                  attributeAssurances: [],
 								},
 							},
 						],
 						attributeAssurances: [],
+            materialClassification: {
+              id: 'matclass_1',
+              name: 'Insulation Material',
+            },
 					},
 				},
 				{
@@ -334,7 +349,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_vd809v326es9yz3rygkeb14f',
 									name: 'Supplier Delta',
-                  attributeAssurances: [],
 								},
 							},
 							{
@@ -342,7 +356,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_ziiewcq7wmehkgcnt6jhb6re',
 									name: 'Supplier 6',
-                  attributeAssurances: [],
 								},
 							},
 						],
@@ -381,6 +394,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+            materialClassification: {
+              id: 'matclass_2',
+              name: 'Plastics',
+            },
 					},
 				},
 				{
@@ -400,7 +417,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_c833b42yr2kv52p73oy0nuve',
 									name: 'Supplier 15',
-                  attributeAssurances: [],
 								},
 							},
 							{
@@ -408,7 +424,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_djkh7ccfbm738mkijm69gks8',
 									name: 'Supplier 3',
-                  attributeAssurances: [],
 								},
 							},
 							{
@@ -416,7 +431,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
 									name: 'Supplier 12',
-                  attributeAssurances: [],
 								},
 							},
 						],
@@ -444,6 +458,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+            materialClassification: {
+              id: 'matclass_2',
+              name: 'Synthetic Leather',
+            },
 					},
 				},
 				{
@@ -463,7 +481,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_vd809v326es9yz3rygkeb14f',
 									name: 'Supplier Delta',
-                  attributeAssurances: [],
 								},
 							},
 						],
@@ -513,6 +530,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+            materialClassification: {
+              id: 'matclass_2',
+              name: 'Wood-based Materials',
+            },
 					},
 				},
 			],
@@ -582,32 +603,35 @@ export const getProductsMock = (): ProductsQuery[] => {
 			productMaterials: [
 				{
 					id: 'opm_rrnqxqbnp2vlmb8278q0x29f',
-          yield: null,
-          unitOfMeasure: null,
-          weight: 52,
+          yield: 2,
+          unitOfMeasure: 'pcs',
+          weight: 300,
 					material: {
 						id: '5926bb4c-5cbc-4b14-970f-968249444415',
 						name: 'Material 1',
             materialCategory: 'Material Category 1',
             materialSubcategory: 'Material Subcategory 1',
-            emissionsFactor: 2.3,
+            emissionsFactor: 4,
 						materialSuppliers: [
 							{
 								id: 'matsup_ccwa08m14j91q4tjuzgz4zsv',
 								organizationFacility: {
 									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
 									name: 'Supplier 12',
-                  attributeAssurances: [],
 								},
 							},
 						],
 						attributeAssurances: [],
+            materialClassification: {
+              id: 'matclass_5',
+              name: 'Foam',
+            },
 					},
 				},
 				{
 					id: 'opm_ynpia336jl34ar26ikpje5sj',
-          yield: null,
-          unitOfMeasure: null,
+          yield: 3.3,
+          unitOfMeasure: 'm2',
           weight: 2,
 					material: {
 						id: 'mat_beq7hd4e7efg5vzrzpp1xcb9',
@@ -621,7 +645,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 									name: 'Kerluke - Armstrong',
-                  attributeAssurances: [],
 								},
 							},
 						],
@@ -666,12 +689,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+            materialClassification: {
+              id: 'matclass_6',
+              name: 'Insulation Material',
+            },
 					},
 				},
 				{
 					id: 'opm_an0ygchf305yo1b2faro7au6',
-          yield: null,
-          unitOfMeasure: null,
+          yield: 4.6,
+          unitOfMeasure: 'm',
           weight: 5.2,
 					material: {
 						id: 'mat_u9lckkyqyii41q3by2wdt86i',
@@ -685,7 +712,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_vd809v326es9yz3rygkeb14f',
 									name: 'Supplier Delta',
-                  attributeAssurances: [],
 								},
 							},
 							{
@@ -693,7 +719,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_ziiewcq7wmehkgcnt6jhb6re',
 									name: 'Supplier 6',
-                  attributeAssurances: [],
 								},
 							},
 						],
@@ -732,12 +757,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+            materialClassification: {
+              id: 'matclass_7',
+              name: 'Plastics',
+            },
 					},
 				},
 				{
 					id: 'opm_btmrnz0tujog6nq1lf86voyj',
-          yield: null,
-          unitOfMeasure: null,
+          yield: 3.75,
+          unitOfMeasure: 'm',
           weight: 1.1,
 					material: {
 						id: 'mat_x0x7th2m41zdgahmrbt9t58c',
@@ -751,7 +780,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 									name: 'Kerluke - Armstrong',
-                  attributeAssurances: [],
 								},
 							},
 						],
@@ -790,12 +818,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+            materialClassification: {
+              id: 'matclass_8',
+              name: 'Synthetic Leather',
+            },
 					},
 				},
 				{
 					id: 'opm_eppxah0jo1qm1pcl1ipctlty',
-          yield: null,
-          unitOfMeasure: null,
+          yield: 2,
+          unitOfMeasure: 'pcs',
           weight: 3.4,
 					material: {
 						id: 'mat_vctuajyeyeuwow0djuxwzb9g',
@@ -809,7 +841,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_c833b42yr2kv52p73oy0nuve',
 									name: 'Supplier 15',
-                  attributeAssurances: [],
 								},
 							},
 							{
@@ -817,7 +848,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_djkh7ccfbm738mkijm69gks8',
 									name: 'Supplier 3',
-                  attributeAssurances: [],
 								},
 							},
 							{
@@ -825,7 +855,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
 									name: 'Supplier 12',
-                  attributeAssurances: [],
 								},
 							},
 						],
@@ -853,6 +882,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+            materialClassification: {
+              id: 'matclass_8',
+              name: 'Wood-based Materials',
+            },
 					},
 				},
 				{
@@ -872,7 +905,6 @@ export const getProductsMock = (): ProductsQuery[] => {
 								organizationFacility: {
 									id: 'ofac_vd809v326es9yz3rygkeb14f',
 									name: 'Supplier Delta',
-                  attributeAssurances: [],
 								},
 							},
 						],
@@ -922,6 +954,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+            materialClassification: {
+              id: 'matclass_9',
+              name: 'Synthetic Leather',
+            },
 					},
 				},
 			],

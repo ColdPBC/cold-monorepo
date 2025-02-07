@@ -65,6 +65,7 @@ export const Default: Story = {
                 }
               },
             ],
+            materialClassification: null,
           }
         }
       ],
@@ -115,6 +116,7 @@ export const NoAssurances: Story = {
               }
             ],
             attributeAssurances: [],
+            materialClassification: null,
           }
         }
       ],

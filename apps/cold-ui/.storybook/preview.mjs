@@ -94,6 +94,7 @@ export default {
         productCarbonFootprintMvp: true,
         showBillingPageCold957: true,
         showNewDocumentUploadUxCold1410: true,
+        showNewPcfUiCold1450: true,
       },
     },
   },

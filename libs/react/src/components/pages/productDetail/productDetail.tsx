@@ -8,6 +8,7 @@ import {
   ProductDocumentsTab,
   Spinner,
   Tabs, EllipsisMenu, DeleteEntityModal,
+  ProductCarbonAccountingTab,
 } from '@coldpbc/components';
 import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
@@ -17,8 +18,10 @@ import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import {parseDocumentsForProductDetails} from "@coldpbc/lib";
 import { EntityLevel } from '@coldpbc/enums';
+import { useFlags } from "launchdarkly-react-client-sdk";
 
 const _ProductDetail = () => {
+  const ldFlags = useFlags();
   const { orgId } = useAuth0Wrapper();
 	const { id } = useParams();
   const { logBrowser } = useColdContext();
@@ -105,6 +108,10 @@ const _ProductDetail = () => {
           {
             label: 'BOM',
             content: <ProductBOMTab product={product} refreshProduct={productQuery.mutate} />,
+          },
+          ldFlags.showNewPcfUiCold1450 && {
+            label: 'Carbon Accounting',
+            content: <ProductCarbonAccountingTab product={product} />,
           },
           {
             label: 'Documents',

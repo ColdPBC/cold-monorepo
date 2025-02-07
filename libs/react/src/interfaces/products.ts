@@ -85,6 +85,10 @@ export interface ProductsQuery extends PaginatedProductsQuery {
           name: string;
         };
       }[];
+      materialClassification: {
+        id: string;
+        name: string;
+      } | null
     };
   }>;
 }
