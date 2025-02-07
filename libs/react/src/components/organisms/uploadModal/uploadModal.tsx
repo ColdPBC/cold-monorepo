@@ -236,9 +236,9 @@ export const UploadModal = (props: UploadModalProps) => {
             })}
           </div>
         </div>
-        <div className={'w-full h-[200px] flex flex-col self-stretch items-stretch gap-[8px]'}>
+        <div className={'w-full h-auto flex flex-col self-stretch items-stretch gap-[8px]'}>
           <div
-            className={'h-full justify-self-stretch w-full rounded-[8px] border-dashed border-gray-90 border-[1px] p-[24px] flex flex-col gap-[32px] justify-center items-center'}
+            className={'h-[180px] justify-self-stretch w-full rounded-[8px] border-dashed border-gray-90 border-[1px] p-[24px] flex flex-col gap-[32px] justify-center items-center'}
             onDrop={handleDrop}
             onDragOver={event => event.preventDefault()}>
             <div className={'text-h5'}>Drag & Drop Files Here or</div>
@@ -248,7 +248,7 @@ export const UploadModal = (props: UploadModalProps) => {
                      multiple />
             </div>
           </div>
-          <div className={'h-auto max-h-[100px] min-h-0 w-full overflow-x-auto flex flex-col gap-[8px]'}>
+          <div className={'h-auto w-full flex flex-col gap-[8px]'}>
             {map(orderBy(filesToUpload, ['lastModified', 'name'], ['desc', 'asc']), (file, index) => {
               return (
                 // eslint-disable-next-line react/jsx-no-undef
