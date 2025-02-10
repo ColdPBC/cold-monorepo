@@ -23,9 +23,7 @@ const UPLOAD_MAP: {
     description: string;
     subDescription: string;
     aiProcessing: boolean;
-    queryParams: {
-      searchable: boolean;
-    }
+    queryParams: any;
   }
 } = {
   [MainDocumentCategory.Assurance]: {
@@ -35,7 +33,7 @@ const UPLOAD_MAP: {
     subDescription: 'PDF, image file, or text file',
     aiProcessing: true,
     queryParams: {
-      searchable: true,
+      type: 'OTHER',
     }
   },
   [MainDocumentCategory.BillOfMaterial]: {
@@ -45,7 +43,7 @@ const UPLOAD_MAP: {
     subDescription: 'CSV, XLS, or other spreadsheet',
     aiProcessing: false,
     queryParams: {
-      searchable: false,
+      type: 'BILL_OF_MATERIALS',
     }
   },
   [MainDocumentCategory.InternalSustainabilityPolicy]: {
@@ -55,7 +53,7 @@ const UPLOAD_MAP: {
     subDescription: 'PDF, image file, or text file',
     aiProcessing: true,
     queryParams: {
-      searchable: true,
+      type: 'ASSESSMENT',
     }
   },
   [MainDocumentCategory.SustainabilityData]: {
@@ -65,7 +63,7 @@ const UPLOAD_MAP: {
     subDescription: 'CSV, XLS, or other spreadsheet',
     aiProcessing: false,
     queryParams: {
-      searchable: false,
+      type: 'SUSTAINABILITY_DATA',
     }
   },
 }
@@ -275,14 +273,14 @@ export const UploadModal = (props: UploadModalProps) => {
             label="Cancel"
             onClick={() => setOpenModal(false)}
             variant={ButtonTypes.secondary}
+            disabled={buttonLoading}
           />
-          {/* TODO: Add back in this functionality and confirm its working once backend is configured*/}
-          {/*<BaseButton*/}
-          {/*  label={"Confirm"}*/}
-          {/*  loading={buttonLoading}*/}
-          {/*  onClick={uploadDocuments}*/}
-          {/*  disabled={buttonDisabled}*/}
-          {/*/>*/}
+          <BaseButton
+            label={"Confirm"}
+            loading={buttonLoading}
+            onClick={uploadDocuments}
+            disabled={buttonDisabled}
+          />
         </div>
       </Card>
     </FBModal>
