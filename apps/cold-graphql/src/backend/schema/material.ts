@@ -6,6 +6,7 @@ import { MaterialClassification } from './material-classification';
 import { MaterialSupplier } from './material-supplier';
 import { MaterialTagAssignment } from './material-tag-assignment';
 import { Organization } from './organization';
+import { OrganizationFacility } from './organization-facility';
 import { ProductMaterial } from './product-material';
 import { Material as OrmMaterial } from '../entities';
 import { connection } from '../database';
@@ -44,8 +45,8 @@ export class Material {
 	@Field(() => String, { nullable: true })
 	supplierMaterialId?: string;
 
-	@Field(() => String, { nullable: true })
-	organizationFacilityId?: string;
+	@RelationshipField<Material>(() => OrganizationFacility, { id: (entity) => entity.organizationFacility?.id, nullable: true })
+	organizationFacility?: OrganizationFacility;
 
 	@Field(() => Number, { nullable: true })
 	emissionsFactor?: number;

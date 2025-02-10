@@ -7,6 +7,7 @@ import { MaterialClassification } from './material-classification';
 import { MaterialSupplier } from './material-supplier';
 import { MaterialTagAssignment } from './material-tag-assignment';
 import { Organization } from './organization';
+import { OrganizationFacility } from './organization-facility';
 import { ProductMaterial } from './product-material';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -52,8 +53,8 @@ export class Material {
 	@Property({ type: 'text', nullable: true })
 	supplierMaterialId?: string;
 
-	@Property({ type: 'text', nullable: true })
-	organizationFacilityId?: string;
+	@ManyToOne({ entity: () => OrganizationFacility, ref: true, nullable: true, index: 'materials_organization_facility_id_idx1' })
+	organizationFacility?: Ref<OrganizationFacility>;
 
 	@Property({ type: 'double', nullable: true })
 	emissionsFactor?: number;
