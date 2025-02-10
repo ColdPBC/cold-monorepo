@@ -1,3 +1,16 @@
+# [1.546.0](https://github.com/coldPBC/cold-monorepo/compare/v1.545.0...v1.546.0) (2025-02-10)
+
+
+### Bug Fixes
+
+* update access control list to use read-only permissions so that it doesn't require org scoped query. ([d887bd7](https://github.com/coldPBC/cold-monorepo/commit/d887bd7322f8bb2391e218d47308625c1de6c26c))
+
+
+### Features
+
+* add materials relationship to organization-facility entity and schema ([fe1905d](https://github.com/coldPBC/cold-monorepo/commit/fe1905d15e9f0b383978d3f14e04a50544b8237b))
+* update Material entity to reference OrganizationFacility relationship ([ae24870](https://github.com/coldPBC/cold-monorepo/commit/ae24870fa8c3b9e2c91be70ccc33476b455e4967))
+
 # [1.545.0](https://github.com/coldPBC/cold-monorepo/compare/v1.544.0...v1.545.0) (2025-02-07)
 
 
