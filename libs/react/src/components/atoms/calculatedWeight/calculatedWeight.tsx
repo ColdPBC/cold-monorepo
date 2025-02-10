@@ -16,9 +16,17 @@ export const CalculatedWeight: React.FC<CalculatedWeightProps> = ({ productMater
 		return <span className="text-tc-primary text-body">{result.weight}</span>;
 	} else if ('error' in result) {
 		return (
-			<div className={'h-full flex gap-1 items-center justify-start text-tc-disabled'}>
+			<div 
+				className={'h-full flex gap-1 items-center justify-start text-tc-disabled'}
+				role="status"
+				aria-live="polite"
+			>
 				<span className="text-body">Unknown</span>
-				<Popover contentClassName="max-w-[260px]" content={result.error}>
+				<Popover 
+					contentClassName="max-w-[260px]" 
+					content={result.error}
+					aria-label="Weight calculation error details"
+				>
 					<ColdIcon name={IconNames.ColdUnknownIcon} />
 				</Popover>
 			</div>
