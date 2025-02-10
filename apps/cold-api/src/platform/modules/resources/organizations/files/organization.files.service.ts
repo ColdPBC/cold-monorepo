@@ -518,7 +518,7 @@ export class OrganizationFilesService extends BaseWorker {
 
 				// set processing status to MANUAL_REVIEW for OTHER, SD, and BOM files
 				switch (type) {
-					case file_types.OTHER:
+					case file_types.PURCHASE_ORDER:
 					case file_types.SUSTAINABILITY_DATA:
 					case file_types.BILL_OF_MATERIALS:
 						status = processing_status.MANUAL_REVIEW;
