@@ -80,6 +80,15 @@ export class Material {
 	@Property({ type: 'json', nullable: true })
 	emissionStats?: Record<string, unknown>;
 
+	@Property({ type: 'double', nullable: true })
+	weightFactor?: number;
+
+	@Property({ type: 'text', nullable: true })
+	weightFactorUnitOfMeasure?: string;
+
+	@Property({ type: 'double', nullable: true })
+	width?: number;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'material' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 

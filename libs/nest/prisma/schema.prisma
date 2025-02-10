@@ -763,32 +763,35 @@ model sustainability_attribute_classifcation_assignment {
 }
 
 model materials {
-  id                         String                     @id @default(cuid())
-  name                       String
-  created_at                 DateTime?                  @default(now()) @db.Timestamptz(6)
-  updated_at                 DateTime?                  @updatedAt @db.Timestamptz(6)
-  deleted                    Boolean?                   @default(false)
-  organization_id            String
-  brand_material_id          String?
-  supplier_material_id       String?
-  description                String?
-  ai_description             String?
-  material_suppliers         material_suppliers[]
-  material_category          String?
-  material_subcategory       String?
-  organization_facility_id   String?
-  emissions_factor           Float?
-  activity_id                String?
-  metadata                   Json?
-  organization               organizations              @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  attribute_assurances       attribute_assurances[]
-  product_materials          product_materials[]
-  data_source                String?
-  organization_facility      organization_facilities?   @relation(fields: [organization_facility_id], references: [id], onDelete: Cascade)
-  material_classification    material_classification?   @relation(fields: [material_classification_id], references: [id])
-  material_classification_id Int?
-  emission_stats             Json?
-  material_tag_assignments   material_tag_assignments[]
+  id                            String                     @id @default(cuid())
+  name                          String
+  created_at                    DateTime?                  @default(now()) @db.Timestamptz(6)
+  updated_at                    DateTime?                  @updatedAt @db.Timestamptz(6)
+  deleted                       Boolean?                   @default(false)
+  organization_id               String
+  brand_material_id             String?
+  supplier_material_id          String?
+  description                   String?
+  ai_description                String?
+  material_suppliers            material_suppliers[]
+  material_category             String?
+  material_subcategory          String?
+  organization_facility_id      String?
+  emissions_factor              Float?
+  weight_factor                 Float?
+  weight_factor_unit_of_measure String?
+  width                         Float?
+  activity_id                   String?
+  metadata                      Json?
+  organization                  organizations              @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  attribute_assurances          attribute_assurances[]
+  product_materials             product_materials[]
+  data_source                   String?
+  organization_facility         organization_facilities?   @relation(fields: [organization_facility_id], references: [id], onDelete: Cascade)
+  material_classification       material_classification?   @relation(fields: [material_classification_id], references: [id])
+  material_classification_id    Int?
+  emission_stats                Json?
+  material_tag_assignments      material_tag_assignments[]
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "materials_organization_id_idx1")
