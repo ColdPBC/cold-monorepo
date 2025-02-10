@@ -46,7 +46,7 @@ export const MaterialClassificationIcon: React.FC<MaterialClassificationIconProp
 	}
 
 	return (
-		<div className={'w-6 h-6 rounded-sm flex items-center justify-center'} style={{ backgroundColor }} role="img" aria-label={materialClassificationCategory}>
+		<div className={'w-6 h-6 rounded-sm flex items-center justify-center shrink-0'} style={{ backgroundColor }} role="img" aria-label={materialClassificationCategory}>
 			<Icon {...props} aria-hidden="true" />
 		</div>
 	);
