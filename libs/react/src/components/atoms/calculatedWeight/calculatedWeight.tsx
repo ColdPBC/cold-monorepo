@@ -28,7 +28,7 @@ export const CalculatedWeight: React.FC<CalculatedWeightProps> = ({ productMater
 			<div className={'h-full flex gap-1 items-center justify-start'}>
 				<span className="text-body text-tc-primary">{result.calculatedWeight}</span>
 				<Popover contentClassName="max-w-[260px]" content={result.message}>
-					<ColdIcon className={'text-tc-disabled'} name={IconNames.ColdInfoIcon} />
+					<ColdIcon className={'text-tc-disabled'} name={IconNames.ColdCalculatorIcon} />
 				</Popover>
 			</div>
 		);
