@@ -35,6 +35,9 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
         'Content-Type': 'multipart/form-data',
       },
       timeout: 60000,
+      queryParams: {
+        type: 'OTHER',
+      },
     } as AxiosRequestConfig);
     const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, config]);
     if (isAxiosError(response)) {
