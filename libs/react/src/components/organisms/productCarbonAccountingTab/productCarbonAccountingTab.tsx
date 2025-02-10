@@ -42,7 +42,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       category: MaterialClassificationCategory;
     } | null = get(params, 'row.classification', null);
 
-    if(classification === null || classification === undefined) {
+    if(!classification) {
       return null;
     }
 
