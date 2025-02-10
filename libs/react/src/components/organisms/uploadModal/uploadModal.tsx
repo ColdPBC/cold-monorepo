@@ -3,7 +3,7 @@ import { Modal as FBModal } from 'flowbite-react'
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { BaseButton, Card, ColdIcon, ComplianceOverviewFileUploaderItem } from '@coldpbc/components';
 import React, { useEffect, useRef } from 'react';
-import { forEach, map, orderBy } from 'lodash';
+import {forEach, get, map, orderBy} from 'lodash';
 import { AxiosError, AxiosRequestConfig, isAxiosError } from "axios";
 import { axiosFetcher } from "@coldpbc/fetchers";
 import { useAddToastMessage, useAuth0Wrapper, useColdContext } from "@coldpbc/hooks";
@@ -114,14 +114,26 @@ export const UploadModal = (props: UploadModalProps) => {
       formData,
       config
     ]);
+
     if (!isAxiosError(response)) {
-      logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData }, response });
-      await addToastMessage({
-        message: 'Upload successful',
-        type: ToastMessage.SUCCESS,
-      })
+      // check if the response has any failed documents
+      const failed = get(response, 'failed', []);
+      if (failed.length > 0) {
+        await addToastMessage({
+          message: 'Some files failed to upload',
+          type: ToastMessage.FAILURE,
+        });
+        logBrowser('Some files failed to upload', 'error', { orgId, formData: { ...formData }, response });
+      } else {
+        logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData }, response });
+        await addToastMessage({
+          message: 'Upload successful',
+          type: ToastMessage.SUCCESS,
+        })
+      }
       await refreshData()
     } else {
+      // handle server response errors
       const error: AxiosError = response;
       if(error.response?.status === 409) {
         await addToastMessage({
