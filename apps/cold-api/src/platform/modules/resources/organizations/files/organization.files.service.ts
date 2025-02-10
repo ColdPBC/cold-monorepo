@@ -21,7 +21,7 @@ import { EventService } from '../../../utilities/events/event.service';
 import { omit, pick } from 'lodash';
 import { OrganizationHelper } from '../helpers/organization.helper';
 import helper from 'csvtojson';
-import { material_suppliers, materials, products } from '@prisma/client';
+import { file_types, material_suppliers, materials, processing_status, products } from '@prisma/client';
 
 @Span()
 @Injectable()
@@ -484,9 +484,9 @@ export class OrganizationFilesService extends BaseWorker {
 		});
 	}
 
-	async uploadFile(req: IRequest, orgId: string, files: Array<Express.Multer.File>, bpc?: boolean) {
+	async uploadFile(req: IRequest, orgId: string, files: Array<Express.Multer.File>, type?: file_types) {
 		const { user, url, organization } = req;
-		const org = await this.helper.getOrganizationById(orgId, req.user, bpc);
+		const org = await this.helper.getOrganizationById(orgId, req.user, true);
 		const failed: any = [];
 		const uploaded: any = [];
 
@@ -514,6 +514,19 @@ export class OrganizationFilesService extends BaseWorker {
 					},
 				});
 
+				let status: processing_status;
+
+				// set processing status to MANUAL_REVIEW for OTHER, SD, and BOM files
+				switch (type) {
+					case file_types.OTHER:
+					case file_types.SUSTAINABILITY_DATA:
+					case file_types.BILL_OF_MATERIALS:
+						status = processing_status.MANUAL_REVIEW;
+						break;
+					default:
+						status = processing_status.AI_PROCESSING;
+				}
+
 				if (existing) {
 					if (existing?.checksum === hash) {
 						this.logger.warn(`file ${file.originalname} already exists in db`, pick(file, ['id', 'originalname', 'mimetype', 'size']));
@@ -540,8 +553,9 @@ export class OrganizationFilesService extends BaseWorker {
 							encoding: file.encoding,
 							contentType: file.mimetype,
 							location: file.destination,
+							processing_status: status,
 							checksum: hash,
-							type: 'OTHER',
+							type: type || 'OTHER',
 							metadata: { ...(existing.metadata as any) },
 						},
 					});
@@ -562,16 +576,20 @@ export class OrganizationFilesService extends BaseWorker {
 							contentType: file.mimetype,
 							location: file.destination,
 							checksum: hash,
-							type: 'OTHER',
+							processing_status: status,
+							type: type || 'OTHER',
 							metadata: { status: 'uploaded' },
 						},
 					});
 				}
 
+				// only send event to openAI if the file status is AI_PROCESSING
+				if (existing.processing_status === processing_status.AI_PROCESSING) {
+					await this.events.sendIntegrationEvent(false, 'file.uploaded', { ...existing, organization }, user);
+				}
+
 				//const routingKey = get(this.openAI.definition, 'rabbitMQ.publishOptions.routing_key', 'dead_letter');
 				//await this.events.sendPlatformEvent(routingKey, 'file.uploaded', { existing, user, organization: org }, req);
-
-				await this.events.sendIntegrationEvent(false, 'file.uploaded', { ...existing, organization }, user);
 
 				if (!failed.find(f => f.file.originalname === existing.original_name)) {
 					uploaded.push(existing);
