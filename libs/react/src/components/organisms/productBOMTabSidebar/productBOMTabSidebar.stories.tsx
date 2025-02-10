@@ -75,7 +75,7 @@ export const PiecesWholeNumberError: Story = {
       const button = within(combobox).getByTestId('uom_input')
       await userEvent.click(button);
       // select the pcs option
-      const pcsOption = within(combobox).getByTestId('option_6');
+      const pcsOption = within(combobox).getByText('pcs');
       await userEvent.click(pcsOption);
       const saveButton = canvas.getByTestId('save_button');
 
@@ -106,7 +106,7 @@ export const YieldNoUoMError: Story = {
       const button = within(combobox).getByTestId('uom_input')
       await userEvent.click(button);
       // select the pcs option
-      const pcsOption = within(combobox).getByTestId('option_2');
+      const pcsOption = within(combobox).getByText('pcs');
       await userEvent.click(pcsOption);
       const saveButton = canvas.getByTestId('save_button');
 

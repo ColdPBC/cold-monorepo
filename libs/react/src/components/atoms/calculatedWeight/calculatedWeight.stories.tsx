@@ -1,0 +1,56 @@
+import { Meta, StoryObj } from '@storybook/react';
+import { CalculatedWeight } from '@coldpbc/components';
+import { withKnobs} from '@storybook/addon-knobs';
+import { ProductMaterialMock } from '../../../__mocks__/productMaterialMock';
+import { Length } from '@coldpbc/enums';
+
+const meta: Meta<typeof CalculatedWeight> = {
+  title: 'Atoms/CalculatedWeight',
+  component: CalculatedWeight,
+  tags: ['autodocs'],
+  decorators: [withKnobs],
+};
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  render: () => {
+    return (
+      <CalculatedWeight productMaterial={{...ProductMaterialMock, weight: 0.3}} />
+    );
+  },
+};
+
+export const MissingData: Story = {
+  render: () => {
+    return (
+      <CalculatedWeight productMaterial={ProductMaterialMock} />
+    );
+  },
+};
+
+export const Calculated: Story = {
+  render: () => {
+    return (
+      <CalculatedWeight
+        productMaterial={{
+          ...ProductMaterialMock,
+          yield: 2.7,
+          material: {
+            ...ProductMaterialMock.material,
+            unitOfMeasure: Length.m,
+            width: 58,
+            widthUnitOfMeasure: Length.in,
+            materialClassification: {
+              id: 'matclass_1',
+              name: 'Nylon fabric',
+              weightFactor: 0.3,
+            }
+          }
+        }}
+      />
+    );
+  },
+};
+

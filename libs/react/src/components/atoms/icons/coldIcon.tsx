@@ -48,6 +48,7 @@ import {
   SubtractIcon,
 } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
+import { ColdCalculatorIcon } from './coldCalculatorIcon';
 
 // TODO: Take the color attribute out of the IconProps
 export const ColdIcon = (props: IconProps) => {
@@ -146,7 +147,9 @@ export const ColdIcon = (props: IconProps) => {
     case IconNames.ColdEditPencilIcon:
       return <ColdEditPencilIcon {...props} />
     case IconNames.ColdDollarSignIcon:
-        return <ColdDollarSignIcon {...props} />
+        return <ColdDollarSignIcon {...props} />;
+    case IconNames.ColdCalculatorIcon:
+      return <ColdCalculatorIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;
