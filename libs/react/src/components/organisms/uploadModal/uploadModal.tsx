@@ -119,11 +119,13 @@ export const UploadModal = (props: UploadModalProps) => {
       // check if the response has any failed documents
       const failed = get(response, 'failed', []);
       if (failed.length > 0) {
+        const failedUploadFileNames = failed.map((failed: any) => get(failed, 'file.originalname', '')).join(', ');
         await addToastMessage({
-          message: 'Some files failed to upload',
+          // message: `Failed to upload ${failed.length} file`,
+          message: `Failed to upload: ${failedUploadFileNames}`,
           type: ToastMessage.FAILURE,
         });
-        logBrowser('Some files failed to upload', 'error', { orgId, formData: { ...formData }, response });
+        logBrowser(`Failed to upload ${failed.length} file`, 'error', { orgId, formData: { ...formData }, response });
       } else {
         logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData }, response });
         await addToastMessage({
@@ -133,7 +135,7 @@ export const UploadModal = (props: UploadModalProps) => {
       }
       await refreshData()
     } else {
-      // handle server response errors
+      // handle regular axios server response errors
       const error: AxiosError = response;
       if(error.response?.status === 409) {
         await addToastMessage({
