@@ -13,7 +13,16 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     if(emissions === 0) {
       return '';
     } else {
-      return `${(emissions).toFixed(2)} kg CO2e`;
+      return (
+        <div className={'text-body flex flex-row gap-1 justify-end'}>
+          <span className={'font-bold text-tc-primary'}>
+            {(emissions).toFixed(2)}
+          </span>
+          <span className={'text-tc-secondary'}>
+            kg CO2e
+          </span>
+        </div>
+      )
     }
   }
 
