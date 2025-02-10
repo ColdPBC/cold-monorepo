@@ -1,7 +1,8 @@
-import {Card, DEFAULT_GRID_COL_DEF, MuiDataGrid} from "@coldpbc/components"
+import {Card, DEFAULT_GRID_COL_DEF, MaterialClassificationIcon, MuiDataGrid} from "@coldpbc/components"
 import {ProductsQuery} from "@coldpbc/interfaces";
 import {GridColDef} from "@mui/x-data-grid-pro";
 import {get} from "lodash";
+import {MaterialClassificationCategory} from "@coldpbc/enums";
 
 
 export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) => {
@@ -25,6 +26,25 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     }
   }
 
+  const renderClassification = (params: any) => {
+    const classification: {
+      id: string;
+      name: string;
+      category: MaterialClassificationCategory;
+    } | null = get(params, 'row.classification', null);
+
+    if(classification === null || classification === undefined) {
+      return null;
+    }
+
+    return (
+      <div className={'flex items-center gap-[10px] w-full h-full'}>
+        <MaterialClassificationIcon materialClassificationCategory={classification.category}/>
+        <div className={'text-body truncate'}>{classification.name}</div>
+      </div>
+    );
+  }
+
   const columns: GridColDef[] = [
     {
       ...DEFAULT_GRID_COL_DEF,
@@ -37,6 +57,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       field: 'classification',
       headerName: 'Classification',
       minWidth: 200,
+      renderCell: renderClassification,
     },
     {
       ...DEFAULT_GRID_COL_DEF,
@@ -72,7 +93,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       id: prodMaterial.id,
       materialId: prodMaterial.material?.id,
       material: prodMaterial.material?.name,
-      classification: prodMaterial.material.materialClassification?.name,
+      classification: prodMaterial.material.materialClassification,
       yield_with_uom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
       weight: prodMaterial.weight ? prodMaterial.weight * 1000 : 0,
       emissions_factor: prodMaterial.material.emissionsFactor?.toFixed(1) || null,

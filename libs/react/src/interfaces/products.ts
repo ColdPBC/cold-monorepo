@@ -1,5 +1,5 @@
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
-import { gql } from '@apollo/client';
+import {MaterialClassificationCategory} from "@coldpbc/enums";
 
 export interface Products {
   id: string;
@@ -88,6 +88,7 @@ export interface ProductsQuery extends PaginatedProductsQuery {
       materialClassification: {
         id: string;
         name: string;
+        category: MaterialClassificationCategory;
       } | null
     };
   }>;

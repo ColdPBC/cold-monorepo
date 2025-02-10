@@ -1,5 +1,5 @@
 import { ProductsQuery } from '@coldpbc/interfaces';
-import { EntityLevel } from '@coldpbc/enums';
+import {EntityLevel, MaterialClassificationCategory} from '@coldpbc/enums';
 import { addDays } from 'date-fns';
 
 export const getProductsMock = (): ProductsQuery[] => {
@@ -39,7 +39,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						attributeAssurances: [],
             materialClassification: {
               id: 'matclass_1',
-              name: 'Insulation Material',
+              name: 'Sheep Wool insulation',
+              category: MaterialClassificationCategory.INSULATION_MATERIAL,
             }
 					},
 				},
@@ -100,7 +101,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						],
             materialClassification: {
               id: 'matclass_2',
-              name: 'Leather',
+              name: 'Kangaroo leather',
+              category: MaterialClassificationCategory.LEATHER,
             }
 					},
 				},
@@ -163,7 +165,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						],
             materialClassification: {
               id: 'matclass_3',
-              name: 'Coatings and Laminations',
+              name: 'Monolithic Laminate',
+              category: MaterialClassificationCategory.COATINGS_AND_LAMINATIONS,
             }
 					},
 				},
@@ -235,7 +238,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						],
             materialClassification: {
               id: 'matclass_4',
-              name: 'Metals',
+              name: 'Aluminum',
+              category: MaterialClassificationCategory.METALS,
             },
 					},
 				},
@@ -328,7 +332,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						attributeAssurances: [],
             materialClassification: {
               id: 'matclass_1',
-              name: 'Insulation Material',
+              name: 'Goose Down Insulation',
+              category: MaterialClassificationCategory.INSULATION_MATERIAL,
             },
 					},
 				},
@@ -396,7 +401,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						],
             materialClassification: {
               id: 'matclass_2',
-              name: 'Plastics',
+              name: 'Poly(methyl methacrylate) (PMMA) (Acrylic) plastic',
+              category: MaterialClassificationCategory.PLASTICS,
             },
 					},
 				},
@@ -460,7 +466,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						],
             materialClassification: {
               id: 'matclass_2',
-              name: 'Synthetic Leather',
+              name: 'Polyurethane (PU) synthetic leather',
+              category: MaterialClassificationCategory.SYNTHETIC_LEATHER,
             },
 					},
 				},
@@ -532,7 +539,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						],
             materialClassification: {
               id: 'matclass_2',
-              name: 'Wood-based Materials',
+              name: 'Cardboard',
+              category: MaterialClassificationCategory.WOOD_BASED_MATERIALS,
             },
 					},
 				},
@@ -624,7 +632,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						attributeAssurances: [],
             materialClassification: {
               id: 'matclass_5',
-              name: 'Foam',
+              name: 'Polyvinyl chloride (PVC) foam',
+              category: MaterialClassificationCategory.FOAM,
             },
 					},
 				},
@@ -691,7 +700,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						],
             materialClassification: {
               id: 'matclass_6',
-              name: 'Insulation Material',
+              name: 'Natural Rubber (NR)',
+              category: MaterialClassificationCategory.RUBBERS_ELASTOMERS,
             },
 					},
 				},
@@ -759,7 +769,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						],
             materialClassification: {
               id: 'matclass_7',
-              name: 'Plastics',
+              name: 'Polyethylene (PE) plastic',
+              category: MaterialClassificationCategory.PLASTICS,
             },
 					},
 				},
@@ -820,7 +831,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						],
             materialClassification: {
               id: 'matclass_8',
-              name: 'Synthetic Leather',
+              name: 'Wool fabric',
+              category: MaterialClassificationCategory.TEXTILES,
             },
 					},
 				},
@@ -884,7 +896,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						],
             materialClassification: {
               id: 'matclass_8',
-              name: 'Wood-based Materials',
+              name: 'Animal-based Leather Alternatives',
+              category: MaterialClassificationCategory.LEATHER_ALTERNATIVES,
             },
 					},
 				},

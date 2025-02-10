@@ -498,6 +498,7 @@ export const GET_PRODUCT = gql`
           materialClassification {
             id
             name
+            category
           }
         }
       }
