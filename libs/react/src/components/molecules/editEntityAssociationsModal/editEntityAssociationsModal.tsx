@@ -44,22 +44,22 @@ export const EditEntityAssociationsModal = (
     name: entity.name,
   }));
 
-  const [filteredRows, setFilteredRows] = useState<any[]>(rows);
+  const filteredRows = React.useMemo(() => {
+    if (filterModel.quickFilterValues?.length) {
+      return rows.filter(row =>
+        row.name.toLowerCase().includes(
+          filterModel.quickFilterValues?.join(' ').toLowerCase() || ''
+        )
+      );
+    }
+    return rows;
+  }, [rows, filterModel.quickFilterValues]);
 
   useEffect(() => {
     if (showEntityAssociationModal) {
       setRowsSelected(idsSelected);
     }
   }, [showEntityAssociationModal, idsSelected]);
-
-  useEffect(() => {
-    if (filterModel.quickFilterValues?.length) {
-      const newFilteredRows = rows.filter(row => row.name.toLowerCase().includes(filterModel.quickFilterValues?.join(' ').toLowerCase() || ''));
-      setFilteredRows(newFilteredRows);
-    } else {
-      setFilteredRows(rows);
-    }
-  }, [filterModel.quickFilterValues]);
 
   const clickSelectAll = () => {
     // if all the rows are selected or some of the rows are selected, then unselect all the rows
