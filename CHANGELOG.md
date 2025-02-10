@@ -1,3 +1,10 @@
+# [1.548.0](https://github.com/coldPBC/cold-monorepo/compare/v1.547.0...v1.548.0) (2025-02-10)
+
+
+### Features
+
+* update file upload handling to support processing status and file types ([ad2e53d](https://github.com/coldPBC/cold-monorepo/commit/ad2e53dead1c43b0e92c3708a7c54fab8afd0ead))
+
 # [1.547.0](https://github.com/coldPBC/cold-monorepo/compare/v1.546.0...v1.547.0) (2025-02-10)
 
 
