@@ -1,3 +1,10 @@
+## [1.548.1](https://github.com/coldPBC/cold-monorepo/compare/v1.548.0...v1.548.1) (2025-02-10)
+
+
+### Bug Fixes
+
+* **organization.files.service:** correct file type for manual review status ([e6e8a2a](https://github.com/coldPBC/cold-monorepo/commit/e6e8a2aeb5aa54a30632a71b8474cc7e59086c98))
+
 # [1.548.0](https://github.com/coldPBC/cold-monorepo/compare/v1.547.0...v1.548.0) (2025-02-10)
 
 
