@@ -5,6 +5,7 @@ import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { OrganizationFilesService } from './organization.files.service';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { file_types } from '@prisma/client';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -74,14 +75,14 @@ export class OrganizationFilesController implements OnModuleInit {
 	@UseInterceptors(AnyFilesInterceptor())
 	async uploadFile(
 		@Param('orgId') orgId: string,
-		@Query('bpc') bpc: boolean,
+		@Query('type') type: file_types,
 		@UploadedFiles()
 		file: Array<Express.Multer.File>,
 		@Req()
 		req: IRequest,
 	) {
 		try {
-			return this.orgFiles.uploadFile(req, orgId, file, bpc);
+			return this.orgFiles.uploadFile(req, orgId, file, type);
 		} catch (error) {
 			console.error('Error uploading file:', error.message);
 			throw new Error('Failed to process the uploaded file.');
@@ -93,7 +94,6 @@ export class OrganizationFilesController implements OnModuleInit {
 	@UseInterceptors(AnyFilesInterceptor())
 	async import(
 		@Param('orgId') orgId: string,
-		@Query('bpc') bpc: boolean,
 		@UploadedFiles()
 		file: Array<Express.Multer.File>,
 		@Req()
