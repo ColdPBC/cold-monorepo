@@ -8,9 +8,9 @@ import { SustainabilityAttribute } from './sustainability-attribute';
 import { SustainabilityAttributeClassifcationAssignment } from './sustainability-attribute-classifcation-assignment';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl, OrgContext } from '../../libs/acls/acl_policies';
+import { read_only_acl, OrgContext } from '../../libs/acls/acl_policies';
 
-@ApplyAccessControlList(default_acl)
+@ApplyAccessControlList(read_only_acl)
 @Entity({ tableName: 'material_classification' })
 export class MaterialClassification {
 	sidecar: MaterialClassificationHooks;
