@@ -20,7 +20,7 @@ RUN yarn set version latest
 
 #RUN npm uninstall -g yarn pnpm
 RUN apt-get update
-RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake zlib1g-dev libicu-dev libpng-dev libjpeg-dev libtiff-dev libgif-dev python3 python3-pip python3-setuptools python3-wheel
+RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libgif7 libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake zlib1g-dev libicu-dev libpng-dev libjpeg-dev libtiff-dev libgif-dev python3 python3-pip python3-setuptools python3-wheel
 RUN rm -rf /var/lib/apt/lists/*
 
 
@@ -45,8 +45,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 
 COPY package.json package.json ./
 
-RUN yarn workspaces focus cold-api --production
-
+RUN yarn install
 #RUN yarn dedupe --strategy highest
 
 FROM dependencies AS build
@@ -139,5 +138,5 @@ RUN ls -la ./apps/${DD_SERVICE}
 RUN ls -la ./apps/${DD_SERVICE}/src
 
 # Run the application.
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./apps/${DD_SERVICE}/src/main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./apps/${DD_SERVICE}/src/main.js"]
 
