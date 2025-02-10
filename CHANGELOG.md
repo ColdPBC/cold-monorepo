@@ -1,3 +1,12 @@
+# [1.547.0](https://github.com/coldPBC/cold-monorepo/compare/v1.546.0...v1.547.0) (2025-02-10)
+
+
+### Features
+
+* Add material classification category to products data ([b08c47e](https://github.com/coldPBC/cold-monorepo/commit/b08c47e1297082cd15788f3b885c2e4ed7523e42))
+* Refactor emission display to improve UI styling. ([4f45600](https://github.com/coldPBC/cold-monorepo/commit/4f456005b0a92fe143c5a04aa4161218f3bc0064))
+* Simplify null/undefined check for classification. ([73f3302](https://github.com/coldPBC/cold-monorepo/commit/73f33028cdfa8e9aa13f821c0cdd1696105d1396))
+
 # [1.546.0](https://github.com/coldPBC/cold-monorepo/compare/v1.545.0...v1.546.0) (2025-02-10)
 
 
