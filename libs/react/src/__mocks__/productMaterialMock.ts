@@ -3,6 +3,7 @@ import { ProductMaterial } from '@coldpbc/interfaces';
 export const ProductMaterialMock: ProductMaterial = ({
   id: 'id',
   yield: null,
+  unitOfMeasure: null,
   weight: null,
   material: {
     id: 'id',
@@ -12,7 +13,6 @@ export const ProductMaterialMock: ProductMaterial = ({
     materialCategory: null,
     materialSubcategory: null,
     materialClassification: null,
-    unitOfMeasure: null,
     weightFactor: null,
     weightFactorUnitOfMeasure: null,
     width: null,

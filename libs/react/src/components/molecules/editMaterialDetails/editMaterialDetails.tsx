@@ -30,14 +30,7 @@ interface EditMaterialDetailsProps {
 	refreshMaterial: KeyedMutator<ApolloQueryResult<{   material: MaterialGraphQL | null; }>>;
 }
 
-interface EditableMaterial extends MaterialGraphQL {
-	organizationFacility: {
-		id: string;
-		name: string;
-	} | null;
-}
-
-const isMaterialEdited = (originalMaterial: EditableMaterial, editedMaterial: EditableMaterial): boolean => {
+const isMaterialEdited = (originalMaterial: MaterialGraphQL, editedMaterial: MaterialGraphQL): boolean => {
 	const keysToCompare = [
 		'name',
 		'description',
@@ -59,12 +52,6 @@ const isMaterialEdited = (originalMaterial: EditableMaterial, editedMaterial: Ed
 	});
 };
 
-// This conversion is due to some legacy tech debt. Although we've required it throughout the code, we have not yet formalized in our data structure that there is only 1 supplier per Material.
-const convertMaterialGraphQLObjectToEditableMaterial = (material: MaterialGraphQL): EditableMaterial => ({
-	...material,
-	organizationFacility: material.materialSuppliers[0]?.organizationFacility,
-});
-
 const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, onClose, refreshMaterial }) => {
 	const { orgId } = useAuth0Wrapper();
 	const { callMutateFunction } = useUpdateEntityAssociations();
@@ -72,14 +59,14 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 	const { addToastMessage } = useAddToastMessage();
 	const [isLoading, setIsLoading] = useState(false);
 	const [isDisabled, setIsDisabled] = useState(false);
-	const [editedMaterial, setEditedMaterial] = useState<EditableMaterial>(convertMaterialGraphQLObjectToEditableMaterial(material));
-  const [errors, setErrors] = useState<Partial<Record<keyof EditableMaterial, string>>>({});
+	const [editedMaterial, setEditedMaterial] = useState<MaterialGraphQL>(material);
+  const [errors, setErrors] = useState<Partial<Record<keyof MaterialGraphQL, string>>>({});
   const existingMaterials = useEntityData(EntityLevel.MATERIAL, orgId);
   const preexistingMaterialNames = existingMaterials.filter(m => m.name !== material.name).map(m => m.name)
 
 	useEffect(() => {
     const hasErrors = Object.values(errors).some(error => error !== null && error !== undefined);
-    const isEdited = editedMaterial && isMaterialEdited(convertMaterialGraphQLObjectToEditableMaterial(material), editedMaterial);
+    const isEdited = editedMaterial && isMaterialEdited(material, editedMaterial);
 
     setIsDisabled(hasErrors || !isEdited);
 	}, [errors, material, editedMaterial]);
@@ -109,7 +96,7 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 	}, [suppliersQuery.data]);
 
 	const saveMaterialChange = useCallback(
-		async (editedMaterial: EditableMaterial) => {
+		async (editedMaterial: MaterialGraphQL) => {
 			setIsLoading(true);
 
 			try {
@@ -133,12 +120,12 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 
 				// Changes to supplier happen on the Material Supplier, not the Material itself
         const newSupplierId = editedMaterial.organizationFacility?.id;
-        const oldSupplierId = material.materialSuppliers[0]?.organizationFacility.id;
+        const oldSupplierId = material.organizationFacility?.id;
         if (newSupplierId !== oldSupplierId) {
           if (newSupplierId) {
             // Update or create new one
             await callMutateFunction(EntityLevel.MATERIAL, EntityLevel.SUPPLIER, editedMaterial.id, newSupplierId, orgId, 'add');
-          } else {
+          } else if (oldSupplierId) {
             // Delete old one
             await callMutateFunction(EntityLevel.MATERIAL, EntityLevel.SUPPLIER, editedMaterial.id, oldSupplierId, orgId, 'delete');
           }
@@ -217,11 +204,11 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 		},
 	];
 
-	const inputProps = (fieldName: keyof EditableMaterial) => ({
+	const inputProps = (fieldName: keyof MaterialGraphQL) => ({
 		fieldName: fieldName,
     setEntityState: setEditedMaterial,
 		entityState: editedMaterial,
-    originalEntity: convertMaterialGraphQLObjectToEditableMaterial(material),
+    originalEntity: material,
     error: errors[fieldName],
     setError: (error?: string) => {
       setErrors({...errors, [fieldName]: error})
@@ -239,14 +226,14 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 
 	return (
 		<Card title={'Details'} ctas={ctas} className="w-[406px] min-w-[406px] h-fit" overflowHidden={false}>
-      <TextInputForEntityEdit<EditableMaterial> {...inputProps('name')} label={'Name'} required={true} preexistingValues={preexistingMaterialNames} />
-			<TextInputForEntityEdit<EditableMaterial> {...inputProps('description')} label={'Description'} />
-			<DropdownInputForEntityEdit<EditableMaterial> {...inputProps('organizationFacility')} label={'Tier 2 Supplier'} fieldType={'object'} options={suppliers} allowNone={true}  />
-			<DropdownInputForEntityEdit<EditableMaterial> {...inputProps('materialClassification')} label={classificationLabel} fieldType={'object'}  options={materialClassifications} />
-			<TextInputForEntityEdit<EditableMaterial> {...inputProps('materialCategory')} label={'Category'} />
-			<TextInputForEntityEdit<EditableMaterial> {...inputProps('materialSubcategory')} label={'Sub-Category'} />
-			<TextInputForEntityEdit<EditableMaterial> {...inputProps('brandMaterialId')} label={'Brand Material ID'} />
-			<TextInputForEntityEdit<EditableMaterial> {...inputProps('supplierMaterialId')} label={'Supplier Material ID'} />
+      <TextInputForEntityEdit<MaterialGraphQL> {...inputProps('name')} label={'Name'} required={true} preexistingValues={preexistingMaterialNames} />
+			<TextInputForEntityEdit<MaterialGraphQL> {...inputProps('description')} label={'Description'} />
+			<DropdownInputForEntityEdit<MaterialGraphQL> {...inputProps('organizationFacility')} label={'Tier 2 Supplier'} fieldType={'object'} options={suppliers} allowNone={true}  />
+			<DropdownInputForEntityEdit<MaterialGraphQL> {...inputProps('materialClassification')} label={classificationLabel} fieldType={'object'}  options={materialClassifications} />
+			<TextInputForEntityEdit<MaterialGraphQL> {...inputProps('materialCategory')} label={'Category'} />
+			<TextInputForEntityEdit<MaterialGraphQL> {...inputProps('materialSubcategory')} label={'Sub-Category'} />
+			<TextInputForEntityEdit<MaterialGraphQL> {...inputProps('brandMaterialId')} label={'Brand Material ID'} />
+			<TextInputForEntityEdit<MaterialGraphQL> {...inputProps('supplierMaterialId')} label={'Supplier Material ID'} />
 		</Card>
 	);
 };

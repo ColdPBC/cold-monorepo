@@ -172,7 +172,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const material = productMaterial.material!;
 			const susAttributes = processEntityLevelAssurances([material]);
-			const tier2Supplier = get(material.materialSuppliers, '[0].organizationFacility.name', '');
+			const tier2Supplier = material.organizationFacility?.name || '';
 			return {
 				id: material.id,
         productMaterialId: productMaterial.id,

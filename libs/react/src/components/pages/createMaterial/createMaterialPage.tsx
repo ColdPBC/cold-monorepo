@@ -66,7 +66,6 @@ const _CreateMaterialPage = () => {
 
   const {mutateGraphQL: createMaterial} = useGraphQLMutation('CREATE_MATERIAL');
   const {mutateGraphQL: createAttributeAssurance} = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
-  const {mutateGraphQL: createMaterialSupplier} = useGraphQLMutation('CREATE_MATERIAL_SUPPLIER');
 
   const otherMaterials = useEntityData(EntityLevel.MATERIAL, orgId);
 
@@ -172,6 +171,9 @@ const _CreateMaterialPage = () => {
           organization: {
             id: orgId,
           },
+          organizationFacility: (supplier.id !== -1) ? {
+            id: supplier.value,
+          } : undefined,
           materialClassification: hasMaterialClassification ? {
             id: materialClassification.value,
           } : undefined,
@@ -179,22 +181,6 @@ const _CreateMaterialPage = () => {
       })
       const materialId = get(createMaterialResponse, 'data.createMaterial.id');
       if (materialId) {
-        if(supplier.id !== -1) {
-          await createMaterialSupplier({
-            input: {
-              material: {
-                id: materialId,
-              },
-              organizationFacility: {
-                id: supplier.value,
-              },
-							organization: {
-								id: orgId,
-							},
-            },
-          })
-        }
-
         if(attributesToAdd.length !== 0) {
           for (const attribute of attributesToAdd) {
             await createAttributeAssurance({

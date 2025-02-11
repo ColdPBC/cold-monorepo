@@ -1,0 +1,67 @@
+import { withKnobs } from '@storybook/addon-knobs';
+import { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
+import { EmissionsFactorBubble } from '@coldpbc/components';
+import { StoryMockProvider } from '@coldpbc/mocks';
+
+const meta: Meta<typeof EmissionsFactorBubble> = {
+  title: 'Molecules/EmissionsFactorBubble',
+  component: EmissionsFactorBubble,
+  tags: ['autodocs'],
+  decorators: [withKnobs],
+};
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    emissionsFactor: {
+      name: 'Sheep Wool Insulation',
+      emissions_factor: 3.2,
+    },
+  },
+  render: (args) => {
+    return (
+      <StoryMockProvider>
+        <div className={'w-[1000px]'}>
+          <EmissionsFactorBubble {...args} />
+        </div>
+      </StoryMockProvider>
+    );
+  },
+};
+
+export const WithoutEmissions: Story = {
+  args: {
+    emissionsFactor: null,
+  },
+  render: (args) => {
+    return (
+      <StoryMockProvider>
+        <div className={'w-[1000px]'}>
+          <EmissionsFactorBubble {...args} />
+        </div>
+      </StoryMockProvider>
+    );
+  },
+};
+
+
+export const WithLongName: Story = {
+  args: {
+    emissionsFactor: {
+      name: 'Antimicrobial Nylon Thread',
+      emissions_factor: 3.2,
+    },
+  },
+  render: (args) => {
+    return (
+      <StoryMockProvider>
+        <div className={'w-[1000px]'}>
+          <EmissionsFactorBubble {...args} />
+        </div>
+      </StoryMockProvider>
+    );
+  },
+};

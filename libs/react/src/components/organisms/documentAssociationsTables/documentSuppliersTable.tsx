@@ -90,7 +90,7 @@ const _DocumentSuppliersTable = (props: { assurances: FilesWithAssurances['attri
 			const supplierName = supplier?.name || '';
 			const supplierCountry = supplier?.country || '';
 			const supplierTier = supplier?.supplierTier || 0;
-			const associatedMaterials = supplier?.materialSuppliers.map(materialSupplier => materialSupplier.material.name) || [];
+			const associatedMaterials = supplier?.materials.map(material => material.name) || [];
 			return {
 				id: assurance.id,
 				name: supplierName,

@@ -1,7 +1,6 @@
 import {
   CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
   CREATE_MATERIAL,
-  CREATE_MATERIAL_SUPPLIER,
   CREATE_PRODUCT_MATERIAL,
   GET_ALL_FILES,
   GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
@@ -424,17 +423,6 @@ export const defaultGraphqlMocks: {
 				data: {
 					createMaterial: {
 						id: 'material_1',
-					},
-				},
-			}),
-	},
-	{
-		query: CREATE_MATERIAL_SUPPLIER,
-		handler: () =>
-			Promise.resolve({
-				data: {
-					createMaterialSupplier: {
-						id: 'material_supplier_1',
 					},
 				},
 			}),

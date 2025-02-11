@@ -129,9 +129,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
     });
   } else {
     const uniqMaterials = uniqWith(
-      suppliers
-        .map(supplier => supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.name))
-        .flat(),
+      suppliers.map(supplier => supplier.materials.map(material => material.name)),
       isEqual,
     );
     columns.push({
@@ -157,8 +155,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
     const entitiesWithAttributeAssurances: EntityWithAttributeAssurances[] = [supplier];
 
     if(tier === 2) {
-      const materials = supplier.materialSuppliers.map(materialSupplier => materialSupplier.material)
-      entitiesWithAttributeAssurances.push(...materials);
+      entitiesWithAttributeAssurances.push(...supplier.materials);
     }
 
     const sustainabilityAttributes = processEntityLevelAssurances(entitiesWithAttributeAssurances);
@@ -173,7 +170,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
     if (tier === 1) {
       row['products'] = supplier.products.map(product => product.name);
     } else {
-      row['materials'] = supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.name);
+      row['materials'] = supplier.materials.map(material => material.name);
     }
     newRows.push(row);
   });

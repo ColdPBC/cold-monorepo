@@ -11,23 +11,14 @@ export function getMaterialsMock(): MaterialsWithCertifications[] {
     {
       id: 'mat_qg9aabgn9a81mb90bijv9dtf',
       name: 'Small Cotton Ball',
-      material_suppliers: [
-        {
-          id: 'msup_s4k8zvnh7jfn2i4i86y85cwb',
-          supplier: {
-            id: 'ofac_rlpejwnhc2d7i3g28ize24rl',
-            name: 'Supplier Gamma',
-            city: 'Pittsburgh',
-            country: 'US',
-            address_line_2: '',
-            address_line_1: '',
-          },
-          material: {
-            id: 'mat_qg9aabgn9a81mb90bijv9dtf',
-            name: 'Small Cotton Ball',
-          },
-        },
-      ],
+      organizationFacility: {
+        id: 'ofac_rlpejwnhc2d7i3g28ize24rl',
+        name: 'Supplier Gamma',
+        city: 'Pittsburgh',
+        country: 'US',
+        address_line_2: '',
+        address_line_1: '',
+      },
       organization_claims: [
         {
           id: 'claim_lqk0k3b1p5iv8tbpdvducqdh',
@@ -63,38 +54,14 @@ export function getMaterialsMock(): MaterialsWithCertifications[] {
     {
       id: 'mat_ly6o0o0dfqqpz8vy1dcpefyl',
       name: 'Ergonomic Cotton Bacon',
-      material_suppliers: [
-        {
-          id: 'msup_jmkp6fnskwl75tzkx0xb6zmk',
-          supplier: {
-            id: 'ofac_rlpejwnhc2d7i3g28ize24rl',
-            name: 'Supplier Gamma',
-            city: 'Pittsburgh',
-            country: 'US',
-            address_line_2: '',
-            address_line_1: '',
-          },
-          material: {
-            id: 'mat_ly6o0o0dfqqpz8vy1dcpefyl',
-            name: 'Ergonomic Cotton Bacon',
-          },
-        },
-        {
-          id: 'msup_wbzcd58odxts3o2cs5oy9hvj',
-          supplier: {
-            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
-            name: 'KNK',
-            city: 'Pittsburgh',
-            country: 'US',
-            address_line_2: '',
-            address_line_1: '',
-          },
-          material: {
-            id: 'mat_ly6o0o0dfqqpz8vy1dcpefyl',
-            name: 'Ergonomic Cotton Bacon',
-          },
-        },
-      ],
+      organizationFacility: {
+        id: 'ofac_rlpejwnhc2d7i3g28ize24rl',
+        name: 'Supplier Gamma',
+        city: 'Pittsburgh',
+        country: 'US',
+        address_line_2: '',
+        address_line_1: '',
+      },
       organization_claims: [
         {
           id: 'claim_weeo1u7kox8l7lh2ggstrhgl',
@@ -130,25 +97,25 @@ export function getMaterialsMock(): MaterialsWithCertifications[] {
     {
       id: 'mat_cdvjpbctliv2b0afo9inys2y',
       name: 'Handcrafted Frozen Tuna',
-      material_suppliers: [],
+      organizationFacility: null,
       organization_claims: [],
     },
     {
       id: 'mat_j7xtvksv2jrlxdzrd2m6bvbt',
       name: 'Handmade Soft Shoes',
-      material_suppliers: [],
+      organizationFacility: null,
       organization_claims: [],
     },
     {
       id: 'mat_ibakmtajuny03w5m7s82r10y',
       name: 'Fantastic Cotton Mouse',
-      material_suppliers: [],
+      organizationFacility: null,
       organization_claims: [],
     },
     {
       id: 'mat_inry3efikrihb7yh2nr2zj9e',
       name: 'Generic Concrete Table',
-      material_suppliers: [],
+      organizationFacility: null,
       organization_claims: [],
     },
   ];
@@ -167,17 +134,12 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
       name: "Material 6",
       materialCategory: 'Category 1',
       materialSubcategory: 'Sub Category 1',
-      materialSuppliers: [
-        {
-          id: "msup_jhzunmfmnvq7knye5w5nwd2j",
-          organizationFacility: {
-            id: "ofac_vd809v326es9yz3rygkeb14f",
-            name: "Supplier Delta",
-            supplierTier: 2,
-            attributeAssurances: [],
-          },
-        }
-      ],
+      organizationFacility: {
+        id: "ofac_vd809v326es9yz3rygkeb14f",
+        name: "Supplier Delta",
+        supplierTier: 2,
+        attributeAssurances: [],
+      },
       attributeAssurances: [],
       productMaterials: [],
     },
@@ -186,72 +148,12 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
       name: "Material 8",
       materialCategory: 'Category 1',
       materialSubcategory: 'Sub Category 2',
-      materialSuppliers: [
-        {
-          id: "msup_sn673pues18vmk8l1d9jrehp",
-          organizationFacility: {
-            id: "ofac_vd809v326es9yz3rygkeb14f",
-            name: "Supplier Delta",
-            supplierTier: 2,
-            attributeAssurances: [],
-          },
-        },
-        {
-          id: "msup_qb1t60n4bce506eouvjkri8d",
-          organizationFacility: {
-            id: "ofac_ziiewcq7wmehkgcnt6jhb6re",
-            name: "Supplier 6",
-            supplierTier: 2,
-            attributeAssurances: [
-              {
-                id: "8ce77def-b624-4ce4-8b1b-f3ed0d6bd74e",
-                effectiveEndDate: addDays(new Date(), 75).toISOString(),
-                organizationFile: {
-                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
-                },
-                sustainabilityAttribute: {
-                  id: "24fd9960-7e35-45a1-8075-f99f2d841de6",
-                  name: "Adherence to ZDHC MRSL",
-                  level: EntityLevel.SUPPLIER,
-                  logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/ZDHC.png",
-                },
-              },
-              {
-                id: "16e53094-f98d-4051-9a39-8139e49f6acb",
-                effectiveEndDate: subDays(new Date(), 75).toISOString(),
-                organizationFile: {
-                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
-                },
-                sustainabilityAttribute: {
-                  id: "11739d63-10c6-4849-af49-e6a7f9e59f81",
-                  name: "Altitude Sports",
-                  level: EntityLevel.PRODUCT,
-                },
-              },
-              {
-                id: "b1a880e6-4c82-4b4d-bd84-cfe354c13129",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "9d148721-1bf0-4e6f-bf7e-d037a30b8718",
-                  name: "Arylamines",
-                  level: EntityLevel.MATERIAL,
-                },
-                organizationFile: null,
-              },
-              {
-                id: "5505336d-445f-4078-a25a-098f683a4710",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "da1bcee4-5118-4dc6-9fa5-cdec1e26827d",
-                  name: "B-Corp Certification",
-                  level: EntityLevel.ORGANIZATION,
-                },
-                organizationFile: null,
-              }
-            ],
-          },
-        }
-      ],
+      organizationFacility: {
+        id: "ofac_vd809v326es9yz3rygkeb14f",
+        name: "Supplier Delta",
+        supplierTier: 2,
+        attributeAssurances: [],
+      },
       attributeAssurances: [
         {
           id: "96ae4fab-9641-4488-b50e-da998dd786d6",
@@ -313,83 +215,69 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
       name: "Example Nylon 1234",
       materialCategory: 'Category 1',
       materialSubcategory: 'Sub Category 3',
-      materialSuppliers: [
-        {
-          id: "matsup_e04icuz1dctp13hndqpvi3o1",
-          organizationFacility: {
-            id: "ofac_kjs428hjf9exhe4jqvi1sbr1",
-            name: "Supplier 11",
-            supplierTier: 2,
-            attributeAssurances: [
-              {
-                id: "attrass_s3iebkcv577x77f697ujxo7d",
-                effectiveEndDate: addDays(new Date(), 75).toISOString(),
-                organizationFile: {
-                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
-                },
-                sustainabilityAttribute: {
-                  id: "7d061431-6c78-40e7-94ca-02bc55b32d9f",
-                  name: "Oeko-Tex STeP",
-                  level: EntityLevel.SUPPLIER,
-                  logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Okeo+Tex+STeP.png",
-                },
-              },
-              {
-                id: "attrass_mrq8zrxkwno9cc9kipog2kzf",
-                effectiveEndDate: addDays(new Date(), 15).toISOString(),
-                organizationFile: {
-                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
-                },
-                sustainabilityAttribute: {
-                  id: "b315a3e4-6cc2-4443-8c0e-09dc651b3ac8",
-                  name: "Recycled Down",
-                  level: EntityLevel.MATERIAL,
-                },
-              },
-              {
-                id: "attrass_po7apmssyulyanrti03n00xg",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "be6fa78a-0794-4604-8ea3-2a801c031ed6",
-                  name: "Recycled Claim Standard",
-                  level: EntityLevel.MATERIAL,
-                  logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Recycled+Claim+Standard.png",
-                },
-                organizationFile: null,
-              },
-              {
-                id: "attrass_ls1gtnhh2rx5jw1bahgpl9xo",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "d06f8c69-f03a-42f0-8f2e-d5ae310b45b2",
-                  name: "REACH (Registration, Evaluation, Authorisation and Restriction of Chemical)",
-                  level: EntityLevel.PRODUCT,
-                },
-                organizationFile: null,
-              },
-              {
-                id: "attrass_arg5b4fdkg5ubvfkgdzfd7s0",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "fff12187-2e23-455b-8f11-1a263baf000e",
-                  name: "Recycled Leather",
-                  level: EntityLevel.MATERIAL,
-                },
-                organizationFile: null,
-              }
-            ],
+      organizationFacility: {
+        id: "ofac_kjs428hjf9exhe4jqvi1sbr1",
+        name: "Supplier 11",
+        supplierTier: 2,
+        attributeAssurances: [
+          {
+            id: "attrass_s3iebkcv577x77f697ujxo7d",
+            effectiveEndDate: addDays(new Date(), 75).toISOString(),
+            organizationFile: {
+              id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+            },
+            sustainabilityAttribute: {
+              id: "7d061431-6c78-40e7-94ca-02bc55b32d9f",
+              name: "Oeko-Tex STeP",
+              level: EntityLevel.SUPPLIER,
+              logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Okeo+Tex+STeP.png",
+            },
           },
-        },
-        {
-          id: "msup_i3819gq1c53fygmlcn4qyz8w",
-          organizationFacility: {
-            id: "ofac_vd809v326es9yz3rygkeb14f",
-            name: "Supplier Delta",
-            supplierTier: 2,
-            attributeAssurances: [],
+          {
+            id: "attrass_mrq8zrxkwno9cc9kipog2kzf",
+            effectiveEndDate: addDays(new Date(), 15).toISOString(),
+            organizationFile: {
+              id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+            },
+            sustainabilityAttribute: {
+              id: "b315a3e4-6cc2-4443-8c0e-09dc651b3ac8",
+              name: "Recycled Down",
+              level: EntityLevel.MATERIAL,
+            },
           },
-        }
-      ],
+          {
+            id: "attrass_po7apmssyulyanrti03n00xg",
+            effectiveEndDate: null,
+            sustainabilityAttribute: {
+              id: "be6fa78a-0794-4604-8ea3-2a801c031ed6",
+              name: "Recycled Claim Standard",
+              level: EntityLevel.MATERIAL,
+              logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Recycled+Claim+Standard.png",
+            },
+            organizationFile: null,
+          },
+          {
+            id: "attrass_ls1gtnhh2rx5jw1bahgpl9xo",
+            effectiveEndDate: null,
+            sustainabilityAttribute: {
+              id: "d06f8c69-f03a-42f0-8f2e-d5ae310b45b2",
+              name: "REACH (Registration, Evaluation, Authorisation and Restriction of Chemical)",
+              level: EntityLevel.PRODUCT,
+            },
+            organizationFile: null,
+          },
+          {
+            id: "attrass_arg5b4fdkg5ubvfkgdzfd7s0",
+            effectiveEndDate: null,
+            sustainabilityAttribute: {
+              id: "fff12187-2e23-455b-8f11-1a263baf000e",
+              name: "Recycled Leather",
+              level: EntityLevel.MATERIAL,
+            },
+            organizationFile: null,
+          }
+        ],
+      },
       attributeAssurances: [
         {
           id: "0a16a219-8d92-43fe-9bde-1e2d1fae78bd",
@@ -473,7 +361,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
       name: "nylon test",
       materialCategory: 'Category 2',
       materialSubcategory: 'Sub Category 1',
-      materialSuppliers: [],
+      organizationFacility: null,
       attributeAssurances: [],
       productMaterials: [],
     },
@@ -482,31 +370,26 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
       name: "Material 7",
       materialCategory: null,
       materialSubcategory: null,
-      materialSuppliers: [
-        {
-          id: "msup_mvldtl3a1y1y27i6dpuz7qs2",
-          organizationFacility: {
-            id: "ofac_zhgx5abrfsxx39nb5cc18nr9",
-            name: "Kerluke - Armstrong",
-            supplierTier: 2,
-            attributeAssurances: [
-              {
-                id: "6fd8a117-76b3-431d-b766-556d0c437a3a",
-                effectiveEndDate: addDays(new Date(), 75).toISOString(),
-                organizationFile: {
-                  id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
-                },
-                sustainabilityAttribute: {
-                  id: "a99e4eff-72ee-40f4-a476-0385ac6f52d3",
-                  name: "Worldwide Responsible Accredited Production (WRAP)",
-                  level: EntityLevel.SUPPLIER,
-                  logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png",
-                },
-              }
-            ],
-          },
-        }
-      ],
+      organizationFacility: {
+        id: "ofac_zhgx5abrfsxx39nb5cc18nr9",
+        name: "Kerluke - Armstrong",
+        supplierTier: 2,
+        attributeAssurances: [
+          {
+            id: "6fd8a117-76b3-431d-b766-556d0c437a3a",
+            effectiveEndDate: addDays(new Date(), 75).toISOString(),
+            organizationFile: {
+              id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+            },
+            sustainabilityAttribute: {
+              id: "a99e4eff-72ee-40f4-a476-0385ac6f52d3",
+              name: "Worldwide Responsible Accredited Production (WRAP)",
+              level: EntityLevel.SUPPLIER,
+              logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/Worldwide+Responsible+Accredited+Production.png",
+            },
+          }
+        ],
+      },
       attributeAssurances: [
         {
           id: "381c0b18-d9df-4734-84b8-d30e95ef454c",
@@ -573,59 +456,54 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
       name: "Material 2",
       materialCategory: 'Category 2',
       materialSubcategory: 'Sub Category 2',
-      materialSuppliers: [
-        {
-          id: "msup_srmnw3c1k3kybgpic4govht9",
-          organizationFacility: {
-            id: "ofac_ziiewcq7wmehkgcnt6jhb6re",
-            name: "Supplier 6",
-            supplierTier: 2,
-            attributeAssurances: [
-              {
-                id: "8ce77def-b624-4ce4-8b1b-f3ed0d6bd74e",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "24fd9960-7e35-45a1-8075-f99f2d841de6",
-                  name: "Adherence to ZDHC MRSL",
-                  level: EntityLevel.SUPPLIER,
-                  logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/ZDHC.png",
-                },
-                organizationFile: null,
-              },
-              {
-                id: "16e53094-f98d-4051-9a39-8139e49f6acb",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "11739d63-10c6-4849-af49-e6a7f9e59f81",
-                  name: "Altitude Sports",
-                  level: EntityLevel.PRODUCT,
-                },
-                organizationFile: null,
-              },
-              {
-                id: "b1a880e6-4c82-4b4d-bd84-cfe354c13129",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "9d148721-1bf0-4e6f-bf7e-d037a30b8718",
-                  name: "Arylamines",
-                  level: EntityLevel.MATERIAL,
-                },
-                organizationFile: null,
-              },
-              {
-                id: "5505336d-445f-4078-a25a-098f683a4710",
-                effectiveEndDate: null,
-                sustainabilityAttribute: {
-                  id: "da1bcee4-5118-4dc6-9fa5-cdec1e26827d",
-                  name: "B-Corp Certification",
-                  level: EntityLevel.ORGANIZATION,
-                },
-                organizationFile: null,
-              }
-            ],
+      organizationFacility: {
+        id: "ofac_ziiewcq7wmehkgcnt6jhb6re",
+        name: "Supplier 6",
+        supplierTier: 2,
+        attributeAssurances: [
+          {
+            id: "8ce77def-b624-4ce4-8b1b-f3ed0d6bd74e",
+            effectiveEndDate: null,
+            sustainabilityAttribute: {
+              id: "24fd9960-7e35-45a1-8075-f99f2d841de6",
+              name: "Adherence to ZDHC MRSL",
+              level: EntityLevel.SUPPLIER,
+              logoUrl: "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/sustainability_attributes/ZDHC.png",
+            },
+            organizationFile: null,
           },
-        }
-      ],
+          {
+            id: "16e53094-f98d-4051-9a39-8139e49f6acb",
+            effectiveEndDate: null,
+            sustainabilityAttribute: {
+              id: "11739d63-10c6-4849-af49-e6a7f9e59f81",
+              name: "Altitude Sports",
+              level: EntityLevel.PRODUCT,
+            },
+            organizationFile: null,
+          },
+          {
+            id: "b1a880e6-4c82-4b4d-bd84-cfe354c13129",
+            effectiveEndDate: null,
+            sustainabilityAttribute: {
+              id: "9d148721-1bf0-4e6f-bf7e-d037a30b8718",
+              name: "Arylamines",
+              level: EntityLevel.MATERIAL,
+            },
+            organizationFile: null,
+          },
+          {
+            id: "5505336d-445f-4078-a25a-098f683a4710",
+            effectiveEndDate: null,
+            sustainabilityAttribute: {
+              id: "da1bcee4-5118-4dc6-9fa5-cdec1e26827d",
+              name: "B-Corp Certification",
+              level: EntityLevel.ORGANIZATION,
+            },
+            organizationFile: null,
+          }
+        ],
+      },
       attributeAssurances: [],
       productMaterials: [],
     },
@@ -639,16 +517,11 @@ export const getMaterialMock: MaterialGraphQL = (
     brandMaterialId: 'brand_id_1',
     supplierMaterialId: 'supplier_id_1',
     description: 'This wool is a revolutionary organic wool fiber harvested from heritage Merino sheep raised in New Zealand\'s Southern Alps. This proprietary wool undergoes a unique enzyme-based treatment that enhances its natural water-repellent properties while maintaining exceptional breathability. The result is an ultra-fine 15.5-micron fiber that provides superior warmth-to-weight ratio and remarkable temperature regulation, even in extreme alpine conditions. The wool naturally resists odors and retains 90% of its insulating properties even when damp.',
-    materialSuppliers: [
-      {
-        id: 'material_supplier_1',
-        organizationFacility: {
-          id: 'tier_2_supplier_1',
-          name: 'Wool Factory',
-          country: 'New Zealand',
-        },
-      },
-    ],
+    organizationFacility: {
+      id: 'tier_2_supplier_1',
+      name: 'Wool Factory',
+      country: 'New Zealand',
+    },
     materialClassification: {
       id: 'mat_class_1',
       name: 'Wool',

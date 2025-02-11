@@ -80,13 +80,10 @@ export interface PaginatedProductsQuery {
 export interface ProductsQuery extends PaginatedProductsQuery {
   productMaterials: Array<PaginatedProductsQuery['productMaterials'][0] & {
     material: PaginatedProductsQuery['productMaterials'][0]['material'] & {
-      materialSuppliers: {
+      organizationFacility: {
         id: string;
-        organizationFacility: {
-          id: string;
-          name: string;
-        };
-      }[];
+        name: string;
+      };
       materialClassification: {
         id: string;
         name: string;

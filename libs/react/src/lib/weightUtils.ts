@@ -1,5 +1,5 @@
 import { ProductMaterial } from '../interfaces';
-import { Area, Count, Length, Weight } from '../enums';
+import { Area, Count, Length, Weight, WeightFactorUnits } from '../enums';
 import numeral from 'numeral';
 
 const GRAMS_TO_KG = 0.001
@@ -39,7 +39,7 @@ export const getCalculatedWeight = (
     }
   }
 
-  const unitOfMeasure = productMaterial.material.unitOfMeasure;
+  const unitOfMeasure = productMaterial.unitOfMeasure;
 
   if (!productMaterial.yield || !unitOfMeasure) {
     return {
@@ -47,8 +47,15 @@ export const getCalculatedWeight = (
     };
   }
 
-  const defaultWeightFactor = productMaterial.material.unitOfMeasure === 'pcs' ? GLOBAL_PIECES_WEIGHT_FACTOR : productMaterial.material.materialClassification?.weightFactor;
-  const weightFactor = productMaterial.material.weightFactor || defaultWeightFactor;
+  let weightFactor: number | undefined;
+
+  if (unitOfMeasure === 'pcs') {
+    const weightFactorOverride = productMaterial.material.weightFactorUnitOfMeasure === WeightFactorUnits.KG_PER_PCS ? productMaterial.material.weightFactor : undefined;
+    weightFactor = weightFactorOverride || GLOBAL_PIECES_WEIGHT_FACTOR;
+  } else {
+    const weightFactorOverride = productMaterial.material.weightFactorUnitOfMeasure === WeightFactorUnits.KG_PER_M2 ? productMaterial.material.weightFactor : undefined;
+    weightFactor = weightFactorOverride || productMaterial.material.materialClassification?.weightFactor;
+  }
 
   if (!weightFactor) {
     return {

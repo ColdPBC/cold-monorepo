@@ -1,3 +1,5 @@
+import { MaterialClassificationCategory } from './materialClassificationCategories';
+
 export const Length = {
   in: 'in',
   ft: 'ft',
@@ -32,3 +34,13 @@ export type Area = typeof Area[keyof typeof Area];
 export type Weight = typeof Weight[keyof typeof Weight];
 export type Count = typeof Count[keyof typeof Count];
 export type UnitOfMeasurement = typeof UnitOfMeasurement[keyof typeof UnitOfMeasurement];
+
+export enum WeightFactorUnits {
+  KG_PER_M2 = 'kg per m2',
+  KG_PER_PCS = 'kg per pcs',
+}
+
+export interface PcfGraphData {
+  classificationCategory: MaterialClassificationCategory;
+  emissions: number;
+}

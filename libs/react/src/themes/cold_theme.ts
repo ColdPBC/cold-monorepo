@@ -122,6 +122,20 @@ export const HexColors = {
     warning: FoundationalHexColors.yellow['300'],
     critical: FoundationalHexColors.red['300'],
     onaccent: FoundationalHexColors.gray['10'],
+    link: {
+      primary: {
+        DEFAULT: FoundationalHexColors.primary['300'], // rgba(72, 92, 234, 1)
+        press: FoundationalHexColors.primary['200'], // rgba(112, 125, 219, 1)
+      },
+      secondary: {
+        DEFAULT: FoundationalHexColors.gray['120'], // rgba(194, 196, 214, 1)
+        press: FoundationalHexColors.white, // rgba(255, 255, 255, 1)
+      },
+    },
+    linkPrimaryDefault: FoundationalHexColors.primary['300'], // rgba(72, 92, 234, 1)
+    linkPrimaryPress: FoundationalHexColors.primary['200'], // rgba(112, 125, 219, 1)
+    linkSecondaryDefault: FoundationalHexColors.gray['120'], // rgba(194, 196, 214, 1)
+    linkSecondaryPress: FoundationalHexColors.white, // rgba(255, 255, 255, 1)
   },
   link: {
     primary: {
