@@ -18,7 +18,7 @@ export const EmissionsFactorBubble = (props: {
       </div>
       <div className={('w-[1px] h-full' + backgroundColor)}>
       </div>
-      <div className={'text-tc-secondary text-body shrink-0 text-nowrap w-[32px] pl-[8px]'}>
+      <div className={'text-tc-secondary shrink-0 text-nowrap w-[32px] pl-[8px]'}>
         {emissionsFactorValue}
       </div>
     </div>
