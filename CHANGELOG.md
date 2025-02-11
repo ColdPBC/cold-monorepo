@@ -1,3 +1,11 @@
+# [1.552.0](https://github.com/coldPBC/cold-monorepo/compare/v1.551.0...v1.552.0) (2025-02-11)
+
+
+### Features
+
+* Add support for missing material emissions handling ([9b67c13](https://github.com/coldPBC/cold-monorepo/commit/9b67c13262e529dbba0f565465811aa935e62b63))
+* Use pluralize for materials count in MissingMaterialEmissionsCard. ([40d5b80](https://github.com/coldPBC/cold-monorepo/commit/40d5b808dedb0369ab4c8cd7f4f7af0f341f337b))
+
 # [1.551.0](https://github.com/coldPBC/cold-monorepo/compare/v1.550.0...v1.551.0) (2025-02-11)
 
 
