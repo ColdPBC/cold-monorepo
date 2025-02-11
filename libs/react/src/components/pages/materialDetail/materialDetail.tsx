@@ -49,7 +49,7 @@ const _MaterialDetail: React.FC = () => {
 		return null;
 	}
 
-  const tier2SupplierName = material.materialSuppliers[0]?.organizationFacility.name
+  const tier2SupplierName = material.organizationFacility?.name
 	const subTitle = [material.materialCategory, material.materialSubcategory, tier2SupplierName].filter(val => !!val).join(' | ');
 
   return (

@@ -158,13 +158,11 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 						name: 'Supplier',
 						country: 'US',
 						supplierTier: 2,
-						materialSuppliers: [
-							{
-								material: {
-									id: '1',
-									name: 'Material',
-								},
-							},
+						materials: [
+              {
+                id: '1',
+                name: 'Material',
+              },
 						],
 					},
 					material: null,
@@ -198,15 +196,11 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 					material: {
 						id: '1',
 						name: 'Material 1',
-						materialSuppliers: [
-							{
-								organizationFacility: {
-									id: '1',
-									name: 'Supplier',
-									supplierTier: 2,
-								},
-							},
-						],
+						organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 2,
+            },
 					},
           organization: null,
           organizationFacility: null,
@@ -224,15 +218,11 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 					material: {
 						id: '2',
 						name: 'Material 2',
-						materialSuppliers: [
-							{
-								organizationFacility: {
-									id: '1',
-									name: 'Supplier',
-									supplierTier: 1,
-								},
-							},
-						],
+						organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 1,
+            },
 					},
           organization: null,
 					organizationFacility: null,
@@ -291,13 +281,11 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 						name: 'Supplier',
 						country: 'US',
 						supplierTier: 2,
-						materialSuppliers: [
+						materials: [
 							{
-								material: {
-									id: '1',
-									name: 'Material',
-								},
-							},
+                id: '1',
+                name: 'Material',
+              },
 						],
 					},
 					material: null,
@@ -330,15 +318,11 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 					material: {
 						id: '1',
 						name: 'Material 1',
-						materialSuppliers: [
-							{
-								organizationFacility: {
-									id: '1',
-									name: 'Supplier',
-									supplierTier: 2,
-								},
-							},
-						],
+						organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 2,
+            },
 					},
           organization: null,
 					organizationFacility: null,
@@ -356,15 +340,11 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 					material: {
 						id: '2',
 						name: 'Material 2',
-						materialSuppliers: [
-							{
-								organizationFacility: {
-									id: '1',
-									name: 'Supplier',
-									supplierTier: 1,
-								},
-							},
-						],
+						organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 1,
+            },
 					},
           organization: null,
 					organizationFacility: null,
@@ -449,15 +429,11 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           material: {
             id: '1',
             name: 'Material 1',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 2,
-                },
-              },
-            ],
+            organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 2,
+            },
           },
           organization: null,
           organizationFacility: null,
@@ -475,15 +451,11 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           material: {
             id: '2',
             name: 'Material 2',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 1,
-                },
-              },
-            ],
+            organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 1,
+            },
           },
           organization: null,
           organizationFacility: null,
@@ -501,15 +473,11 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           material: {
             id: '2',
             name: 'Material 3',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 1,
-                },
-              },
-            ],
+            organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 1,
+            },
           },
           organization: null,
           organizationFacility: null,
@@ -527,15 +495,11 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           material: {
             id: '2',
             name: 'Material 4',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 1,
-                },
-              },
-            ],
+            organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 1,
+            },
           },
           organization: null,
           organizationFacility: null,
@@ -605,7 +569,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           material: {
             id: '0e9135c9-c91d-45fd-8256-89e1c3fba854',
             name: 'Material 4',
-            materialSuppliers: [],
+            organizationFacility: null,
           },
           product: null,
         },
@@ -701,24 +665,18 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
             name: 'Supplier 12',
             country: '',
             supplierTier: 2,
-            materialSuppliers: [
+            materials: [
               {
-                material: {
-                  id: '5926bb4c-5cbc-4b14-970f-968249444415',
-                  name: 'Material 1',
-                },
+                id: '5926bb4c-5cbc-4b14-970f-968249444415',
+                name: 'Material 1',
               },
               {
-                material: {
-                  id: 'mat_bj8zsf2imw9uvjjvk09h7ci0',
-                  name: 'Material 10',
-                },
+                id: 'mat_bj8zsf2imw9uvjjvk09h7ci0',
+                name: 'Material 10',
               },
               {
-                material: {
-                  id: 'mat_vctuajyeyeuwow0djuxwzb9g',
-                  name: 'Material 11',
-                },
+                id: 'mat_vctuajyeyeuwow0djuxwzb9g',
+                name: 'Material 11',
               },
             ],
           },
@@ -740,7 +698,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
             name: 'Supplier 10',
             country: '',
             supplierTier: 1,
-            materialSuppliers: [],
+            materials: [],
           },
           material: null,
           product: null,

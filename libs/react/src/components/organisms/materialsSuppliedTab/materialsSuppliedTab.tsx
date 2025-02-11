@@ -27,11 +27,11 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
   const [rowsSelected, setRowsSelected] = useState<GridRowSelectionModel>([]);
 	const navigate = useNavigate();
 
-	const uniqCategories = uniq(supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.materialCategory || ''))
+	const uniqCategories = uniq(supplier.materials.map(material => material.materialCategory || ''))
 		.filter(Boolean)
 		.sort((a, b) => a.localeCompare(b));
 
-	const uniqSubCategories = uniq(supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.materialSubcategory || ''))
+	const uniqSubCategories = uniq(supplier.materials.map(material => material.materialSubcategory || ''))
 		.filter(Boolean)
 		.sort((a, b) => a.localeCompare(b));
 
@@ -41,9 +41,7 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
 		materialCategory: string;
 		materialSubcategory: string;
 		sustainabilityAttributes: SustainabilityAttribute[];
-	}[] = supplier.materialSuppliers.map(materialSupplier => {
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		const material = materialSupplier.material!;
+	}[] = supplier.materials.map(material => {
 		const susAttributes = processEntityLevelAssurances([material]);
 		return {
 			id: material.id,

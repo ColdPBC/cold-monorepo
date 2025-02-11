@@ -27,15 +27,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: 11.2,
-						materialSuppliers: [
-							{
-								id: 'matsup_ty7un10erbcr9ruvuwye02e6',
-								organizationFacility: {
-									id: 'ofac_f20621xztckbtqirkjlc7qgy',
-									name: 'Global Apparel Ltd.',
-								},
-							},
-						],
+            organizationFacility: {
+              id: 'ofac_f20621xztckbtqirkjlc7qgy',
+              name: 'Global Apparel Ltd.',
+            },
 						attributeAssurances: [],
             materialClassification: {
               id: 'matclass_1',
@@ -55,15 +50,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: 2,
-						materialSuppliers: [
-							{
-								id: 'msup_mvldtl3a1y1y27i6dpuz7qs2',
-								organizationFacility: {
-									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
-									name: 'Kerluke - Armstrong',
-								},
-							},
-						],
+						organizationFacility: {
+              id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
+              name: 'Kerluke - Armstrong',
+            },
 						attributeAssurances: [
 							{
 								id: '381c0b18-d9df-4734-84b8-d30e95ef454c',
@@ -117,15 +107,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: 5,
-						materialSuppliers: [
-							{
-								id: 'msup_v1092i9nodjiixmgf1ze4zfm',
-								organizationFacility: {
-									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
-									name: 'Kerluke - Armstrong',
-								},
-							},
-						],
+            organizationFacility: {
+              id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
+              name: 'Kerluke - Armstrong',
+            },
 						attributeAssurances: [
 							{
 								id: '7610a434-cb02-4206-83ca-75632fa1dc6e',
@@ -181,15 +166,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: 4,
-						materialSuppliers: [
-							{
-								id: 'msup_i3819gq1c53fygmlcn4qyz8w',
-								organizationFacility: {
-									id: 'ofac_vd809v326es9yz3rygkeb14f',
-									name: 'Supplier Delta',
-								},
-							},
-						],
+            organizationFacility: {
+              id: 'ofac_vd809v326es9yz3rygkeb14f',
+              name: 'Supplier Delta',
+            },
 						attributeAssurances: [
 							{
 								id: '0a16a219-8d92-43fe-9bde-1e2d1fae78bd',
@@ -320,15 +300,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: null,
-						materialSuppliers: [
-							{
-								id: 'matsup_ty7un10erbcr9ruvuwye02e6',
-								organizationFacility: {
-									id: 'ofac_f20621xztckbtqirkjlc7qgy',
-									name: 'Global Apparel Ltd.',
-								},
-							},
-						],
+            organizationFacility: {
+              id: 'ofac_f20621xztckbtqirkjlc7qgy',
+              name: 'Global Apparel Ltd.',
+            },
 						attributeAssurances: [],
             materialClassification: {
               id: 'matclass_1',
@@ -348,22 +323,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: null,
-						materialSuppliers: [
-							{
-								id: 'msup_sn673pues18vmk8l1d9jrehp',
-								organizationFacility: {
-									id: 'ofac_vd809v326es9yz3rygkeb14f',
-									name: 'Supplier Delta',
-								},
-							},
-							{
-								id: 'msup_qb1t60n4bce506eouvjkri8d',
-								organizationFacility: {
-									id: 'ofac_ziiewcq7wmehkgcnt6jhb6re',
-									name: 'Supplier 6',
-								},
-							},
-						],
+            organizationFacility: {
+              id: 'ofac_vd809v326es9yz3rygkeb14f',
+              name: 'Supplier Delta',
+            },
 						attributeAssurances: [
 							{
 								id: '96ae4fab-9641-4488-b50e-da998dd786d6',
@@ -417,29 +380,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: null,
-						materialSuppliers: [
-							{
-								id: 'matsup_v2uj0x6hlvhqvmv2wqyszpd2',
-								organizationFacility: {
-									id: 'ofac_c833b42yr2kv52p73oy0nuve',
-									name: 'Supplier 15',
-								},
-							},
-							{
-								id: 'msup_cs23eebzc4l1zkp1ipkaryup',
-								organizationFacility: {
-									id: 'ofac_djkh7ccfbm738mkijm69gks8',
-									name: 'Supplier 3',
-								},
-							},
-							{
-								id: 'matsup_kj0rpuh0v5qap4l32r6f52pa',
-								organizationFacility: {
-									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
-									name: 'Supplier 12',
-								},
-							},
-						],
+            organizationFacility: {
+              id: 'ofac_c833b42yr2kv52p73oy0nuve',
+              name: 'Supplier 15',
+            },
 						attributeAssurances: [
 							{
 								id: '40bf1d37-dba2-45a3-a646-71f94ce6040b',
@@ -482,15 +426,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: null,
-						materialSuppliers: [
-							{
-								id: 'msup_i3819gq1c53fygmlcn4qyz8w',
-								organizationFacility: {
-									id: 'ofac_vd809v326es9yz3rygkeb14f',
-									name: 'Supplier Delta',
-								},
-							},
-						],
+						organizationFacility: {
+              id: 'ofac_vd809v326es9yz3rygkeb14f',
+              name: 'Supplier Delta',
+            },
 						attributeAssurances: [
 							{
 								id: '0a16a219-8d92-43fe-9bde-1e2d1fae78bd',
@@ -619,16 +558,11 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 1',
             materialCategory: 'Material Category 1',
             materialSubcategory: 'Material Subcategory 1',
-            emissionsFactor: 4,
-						materialSuppliers: [
-							{
-								id: 'matsup_ccwa08m14j91q4tjuzgz4zsv',
-								organizationFacility: {
-									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
-									name: 'Supplier 12',
-								},
-							},
-						],
+            emissionsFactor: 2.3,
+            organizationFacility: {
+              id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
+              name: 'Supplier 12',
+            },
 						attributeAssurances: [],
             materialClassification: {
               id: 'matclass_5',
@@ -648,15 +582,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: 'Material Category 1',
             materialSubcategory: 'Material Subcategory 2',
             emissionsFactor: 3.5,
-						materialSuppliers: [
-							{
-								id: 'msup_mvldtl3a1y1y27i6dpuz7qs2',
-								organizationFacility: {
-									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
-									name: 'Kerluke - Armstrong',
-								},
-							},
-						],
+						organizationFacility: {
+              id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
+              name: 'Kerluke - Armstrong',
+            },
 						attributeAssurances: [
 							{
 								id: '381c0b18-d9df-4734-84b8-d30e95ef454c',
@@ -716,22 +645,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: 'Material Category 2',
             materialSubcategory: 'Material Subcategory 1',
             emissionsFactor: 4.5,
-						materialSuppliers: [
-							{
-								id: 'msup_sn673pues18vmk8l1d9jrehp',
-								organizationFacility: {
-									id: 'ofac_vd809v326es9yz3rygkeb14f',
-									name: 'Supplier Delta',
-								},
-							},
-							{
-								id: 'msup_qb1t60n4bce506eouvjkri8d',
-								organizationFacility: {
-									id: 'ofac_ziiewcq7wmehkgcnt6jhb6re',
-									name: 'Supplier 6',
-								},
-							},
-						],
+						organizationFacility: {
+              id: 'ofac_vd809v326es9yz3rygkeb14f',
+              name: 'Supplier Delta',
+            },
 						attributeAssurances: [
 							{
 								id: '96ae4fab-9641-4488-b50e-da998dd786d6',
@@ -785,15 +702,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: 'Material Category 1',
             materialSubcategory: 'Material Subcategory 2',
             emissionsFactor: 20.1,
-						materialSuppliers: [
-							{
-								id: 'msup_v1092i9nodjiixmgf1ze4zfm',
-								organizationFacility: {
-									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
-									name: 'Kerluke - Armstrong',
-								},
-							},
-						],
+						organizationFacility: {
+              id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
+              name: 'Kerluke - Armstrong',
+            },
 						attributeAssurances: [
 							{
 								id: '7610a434-cb02-4206-83ca-75632fa1dc6e',
@@ -847,29 +759,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: 'Material Category 2',
             materialSubcategory: 'Material Subcategory 2',
             emissionsFactor: 14.5,
-						materialSuppliers: [
-							{
-								id: 'matsup_v2uj0x6hlvhqvmv2wqyszpd2',
-								organizationFacility: {
-									id: 'ofac_c833b42yr2kv52p73oy0nuve',
-									name: 'Supplier 15',
-								},
-							},
-							{
-								id: 'msup_cs23eebzc4l1zkp1ipkaryup',
-								organizationFacility: {
-									id: 'ofac_djkh7ccfbm738mkijm69gks8',
-									name: 'Supplier 3',
-								},
-							},
-							{
-								id: 'matsup_kj0rpuh0v5qap4l32r6f52pa',
-								organizationFacility: {
-									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
-									name: 'Supplier 12',
-								},
-							},
-						],
+						organizationFacility: {
+              id: 'ofac_c833b42yr2kv52p73oy0nuve',
+              name: 'Supplier 15',
+            },
 						attributeAssurances: [
 							{
 								id: '40bf1d37-dba2-45a3-a646-71f94ce6040b',
@@ -912,15 +805,10 @@ export const getProductsMock = (): ProductsQuery[] => {
             materialCategory: 'Material Category 3',
             materialSubcategory: 'Material Subcategory 1',
             emissionsFactor: null,
-						materialSuppliers: [
-							{
-								id: 'msup_i3819gq1c53fygmlcn4qyz8w',
-								organizationFacility: {
-									id: 'ofac_vd809v326es9yz3rygkeb14f',
-									name: 'Supplier Delta',
-								},
-							},
-						],
+						organizationFacility: {
+              id: 'ofac_vd809v326es9yz3rygkeb14f',
+              name: 'Supplier Delta',
+            },
 						attributeAssurances: [
 							{
 								id: '0a16a219-8d92-43fe-9bde-1e2d1fae78bd',

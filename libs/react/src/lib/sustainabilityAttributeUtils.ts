@@ -232,7 +232,7 @@ export const processEntityLevelAssurances = (
           id: entity.id,
           name: entity.name,
           // For materials, we try to grab the Tier 2 supplier name
-          supplierName: (entity.materialSuppliers || [])[0]?.organizationFacility?.name,
+          supplierName: entity.organizationFacility?.name,
         },
         status: assuranceStatus
       });

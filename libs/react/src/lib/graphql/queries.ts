@@ -3,7 +3,6 @@ import {
   CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
   CREATE_ATTRIBUTE_ASSURANCES,
   CREATE_MATERIAL,
-  CREATE_MATERIAL_SUPPLIER,
   CREATE_PRODUCT_MATERIAL,
   CREATE_SUPPLIER,
   DELETE_ATTRIBUTE_ASSURANCE,
@@ -17,10 +16,7 @@ import {
   DELETE_MATERIAL,
   DELETE_PRODUCT,
   DELETE_SUPPLIER,
-  DELETE_MATERIAL_SUPPLIER,
-  DELETE_MATERIAL_SUPPLIERS,
   UPDATE_PRODUCTS,
-  DELETE_AND_CREATE_MATERIAL_SUPPLIER,
   CREATE_PRODUCT,
   DELETE_PRODUCT_MATERIALS,
   UPDATE_PRODUCT_MATERIAL
@@ -63,24 +59,18 @@ export const GET_ALL_FILES = gql`
           name
           country
           supplierTier
-          materialSuppliers {
+          materials {
             id
-            material {
-              id
-              name
-            }
+            name
           }
         }
         material {
           id
           name
-          materialSuppliers {
+          organizationFacility {
             id
-            organizationFacility {
-              id
-              name
-              supplierTier
-            }
+            name
+            supplierTier
           }
         }
         product {
@@ -127,11 +117,9 @@ export const GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT = gql`
     materials(filter: { organization: { id: $organizationId } }) {
       id
       name
-      materialSuppliers {
-        organizationFacility {
-          id
-          name
-        }
+      organizationFacility {
+        id
+        name
       }
     }
   }
@@ -144,13 +132,10 @@ query GET_PAGINATED_MATERIALS_FOR_ORG($filter: MaterialsListFilter!, $pagination
     name
     materialCategory
     materialSubcategory
-    materialSuppliers {
+    organizationFacility {
       id
-      organizationFacility {
-        id
-        name
-        supplierTier
-      }
+      name
+      supplierTier
     }
     attributeAssurances {
       id
@@ -216,22 +201,20 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
           name
         }
       }
-      materialSuppliers {
-        material {
+      materials {
+        id
+        name
+        attributeAssurances {
           id
-          name
-          attributeAssurances {
+          effectiveEndDate
+          organizationFile {
             id
-            effectiveEndDate
-            organizationFile {
-              id
-            }
-            sustainabilityAttribute {
-              id
-              level
-              logoUrl
-              name
-            }
+          }
+          sustainabilityAttribute {
+            id
+            level
+            logoUrl
+            name
           }
         }
       }
@@ -406,25 +389,22 @@ export const GET_SUPPLIER = gql`
           name
         }
       }
-      materialSuppliers {
+      materials {
         id
-        material {
+        name
+        materialCategory
+        materialSubcategory
+        attributeAssurances {
           id
-          name
-          materialCategory
-          materialSubcategory
-          attributeAssurances {
+          effectiveEndDate
+          organizationFile {
             id
-            effectiveEndDate
-            organizationFile {
-              id
-            }
-            sustainabilityAttribute {
-              id
-              level
-              logoUrl
-              name
-            }
+          }
+          sustainabilityAttribute {
+            id
+            level
+            logoUrl
+            name
           }
         }
       }
@@ -475,12 +455,9 @@ export const GET_PRODUCT = gql`
           materialCategory
           materialSubcategory
           emissionsFactor
-          materialSuppliers {
+          organizationFacility {
             id
-            organizationFacility {
-              id
-              name
-            }
+            name
           }
           attributeAssurances {
             id
@@ -559,13 +536,10 @@ export const GET_MATERIAL = gql`
           name
         }
       }
-      materialSuppliers {
+      organizationFacility {
         id
-        organizationFacility {
-          id
-          name
-          country
-        }
+        name
+        country
       }
       materialClassification {
         id
@@ -739,7 +713,6 @@ export const queries: {
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG,
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS: GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_PRODUCTS,
   CREATE_MATERIAL: CREATE_MATERIAL,
-  CREATE_MATERIAL_SUPPLIER: CREATE_MATERIAL_SUPPLIER,
   GET_PAGINATED_PRODUCTS_FOR_ORG: GET_PAGINATED_PRODUCTS_FOR_ORG,
   CREATE_PRODUCT_MATERIAL: CREATE_PRODUCT_MATERIAL,
   CREATE_SUPPLIER: CREATE_SUPPLIER,
@@ -762,10 +735,7 @@ export const queries: {
   DELETE_MATERIAL: DELETE_MATERIAL,
   DELETE_PRODUCT: DELETE_PRODUCT,
   DELETE_SUPPLIER: DELETE_SUPPLIER,
-  DELETE_MATERIAL_SUPPLIER: DELETE_MATERIAL_SUPPLIER,
-  DELETE_MATERIAL_SUPPLIERS: DELETE_MATERIAL_SUPPLIERS,
   UPDATE_PRODUCTS: UPDATE_PRODUCTS,
-  DELETE_AND_CREATE_MATERIAL_SUPPLIER: DELETE_AND_CREATE_MATERIAL_SUPPLIER,
   CREATE_PRODUCT: CREATE_PRODUCT,
   DELETE_PRODUCT_MATERIALS: DELETE_PRODUCT_MATERIALS,
   UPDATE_PRODUCT_MATERIAL: UPDATE_PRODUCT_MATERIAL,
