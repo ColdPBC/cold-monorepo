@@ -1,3 +1,10 @@
+# [1.553.0](https://github.com/coldPBC/cold-monorepo/compare/v1.552.0...v1.553.0) (2025-02-11)
+
+
+### Features
+
+* add weightFactor to material classifications ([d55cef3](https://github.com/coldPBC/cold-monorepo/commit/d55cef3154e28276434d6db70aa5215dd2d631f6))
+
 # [1.552.0](https://github.com/coldPBC/cold-monorepo/compare/v1.551.0...v1.552.0) (2025-02-11)
 
 
