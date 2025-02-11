@@ -1,3 +1,13 @@
+# [1.549.0](https://github.com/coldPBC/cold-monorepo/compare/v1.548.1...v1.549.0) (2025-02-11)
+
+
+### Features
+
+* Add queryParams to document upload axios request ([f291015](https://github.com/coldPBC/cold-monorepo/commit/f291015b25b17839dd0e730a04cc65eaf8b60e32))
+* Handle partial upload failures in upload modal. ([4edd280](https://github.com/coldPBC/cold-monorepo/commit/4edd28020fa5f0d922c128a2920f8d4f36032da1))
+* Improve upload failure messaging with specific file names ([13c7d6f](https://github.com/coldPBC/cold-monorepo/commit/13c7d6f7ffd48dd3af9ce96d6b35701eb61646ca))
+* Refactor queryParams and restore Confirm button functionality ([cb8559c](https://github.com/coldPBC/cold-monorepo/commit/cb8559c64b1a2b0de1c1ce2708d48d5b248f34c7))
+
 ## [1.548.1](https://github.com/coldPBC/cold-monorepo/compare/v1.548.0...v1.548.1) (2025-02-10)
 
 
