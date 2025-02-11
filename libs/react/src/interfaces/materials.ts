@@ -1,6 +1,7 @@
 import { Suppliers } from './suppliers';
 import { Claims } from './claims';
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
+import { Length, WeightFactorUnits } from '@coldpbc/enums';
 
 export interface Materials {
   id: string;
@@ -89,4 +90,8 @@ export interface MaterialGraphQL extends Materials {
     name: string;
     country: string;
   } | null;
+  width: number | null;
+  widthUnitOfMeasure: Length | null;
+  weightFactor: number | null;
+  weightFactorUnitOfMeasure: WeightFactorUnits | null;
 }

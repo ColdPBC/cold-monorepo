@@ -545,6 +545,10 @@ export const GET_MATERIAL = gql`
         id
         name
       }
+      width
+      widthUnitOfMeasure
+      weightFactor
+      weightFactorUnitOfMeasure
     }
   }
 `;
