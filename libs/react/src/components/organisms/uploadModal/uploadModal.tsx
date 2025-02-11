@@ -3,7 +3,7 @@ import { Modal as FBModal } from 'flowbite-react'
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { BaseButton, Card, ColdIcon, ComplianceOverviewFileUploaderItem } from '@coldpbc/components';
 import React, { useEffect, useRef } from 'react';
-import { forEach, map, orderBy } from 'lodash';
+import {forEach, get, map, orderBy} from 'lodash';
 import { AxiosError, AxiosRequestConfig, isAxiosError } from "axios";
 import { axiosFetcher } from "@coldpbc/fetchers";
 import { useAddToastMessage, useAuth0Wrapper, useColdContext } from "@coldpbc/hooks";
@@ -23,9 +23,7 @@ const UPLOAD_MAP: {
     description: string;
     subDescription: string;
     aiProcessing: boolean;
-    queryParams: {
-      searchable: boolean;
-    }
+    queryParams: any;
   }
 } = {
   [MainDocumentCategory.Assurance]: {
@@ -35,7 +33,7 @@ const UPLOAD_MAP: {
     subDescription: 'PDF, image file, or text file',
     aiProcessing: true,
     queryParams: {
-      searchable: true,
+      type: 'OTHER',
     }
   },
   [MainDocumentCategory.BillOfMaterial]: {
@@ -45,7 +43,7 @@ const UPLOAD_MAP: {
     subDescription: 'CSV, XLS, or other spreadsheet',
     aiProcessing: false,
     queryParams: {
-      searchable: false,
+      type: 'BILL_OF_MATERIALS',
     }
   },
   [MainDocumentCategory.InternalSustainabilityPolicy]: {
@@ -55,7 +53,7 @@ const UPLOAD_MAP: {
     subDescription: 'PDF, image file, or text file',
     aiProcessing: true,
     queryParams: {
-      searchable: true,
+      type: 'ASSESSMENT',
     }
   },
   [MainDocumentCategory.SustainabilityData]: {
@@ -65,7 +63,7 @@ const UPLOAD_MAP: {
     subDescription: 'CSV, XLS, or other spreadsheet',
     aiProcessing: false,
     queryParams: {
-      searchable: false,
+      type: 'SUSTAINABILITY_DATA',
     }
   },
 }
@@ -116,14 +114,28 @@ export const UploadModal = (props: UploadModalProps) => {
       formData,
       config
     ]);
+
     if (!isAxiosError(response)) {
-      logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData }, response });
-      await addToastMessage({
-        message: 'Upload successful',
-        type: ToastMessage.SUCCESS,
-      })
+      // check if the response has any failed documents
+      const failed = get(response, 'failed', []);
+      if (failed.length > 0) {
+        const failedUploadFileNames = failed.map((failed: any) => get(failed, 'file.originalname', '')).join(', ');
+        await addToastMessage({
+          // message: `Failed to upload ${failed.length} file`,
+          message: `Failed to upload: ${failedUploadFileNames}`,
+          type: ToastMessage.FAILURE,
+        });
+        logBrowser(`Failed to upload ${failed.length} file`, 'error', { orgId, formData: { ...formData }, response });
+      } else {
+        logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData }, response });
+        await addToastMessage({
+          message: 'Upload successful',
+          type: ToastMessage.SUCCESS,
+        })
+      }
       await refreshData()
     } else {
+      // handle regular axios server response errors
       const error: AxiosError = response;
       if(error.response?.status === 409) {
         await addToastMessage({
@@ -275,14 +287,14 @@ export const UploadModal = (props: UploadModalProps) => {
             label="Cancel"
             onClick={() => setOpenModal(false)}
             variant={ButtonTypes.secondary}
+            disabled={buttonLoading}
           />
-          {/* TODO: Add back in this functionality and confirm its working once backend is configured*/}
-          {/*<BaseButton*/}
-          {/*  label={"Confirm"}*/}
-          {/*  loading={buttonLoading}*/}
-          {/*  onClick={uploadDocuments}*/}
-          {/*  disabled={buttonDisabled}*/}
-          {/*/>*/}
+          <BaseButton
+            label={"Confirm"}
+            loading={buttonLoading}
+            onClick={uploadDocuments}
+            disabled={buttonDisabled}
+          />
         </div>
       </Card>
     </FBModal>
