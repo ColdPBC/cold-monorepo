@@ -18,7 +18,7 @@ export const Default: Story = {
       classificationCategory: materialClassificationCategory,
       emissions: (index + 1) * 10,
     })),
-    style: 'pcfTab',
+    displayStyle: 'pcfTab',
   },
 };
 
@@ -28,7 +28,7 @@ export const ProductDetails: Story = {
       classificationCategory: materialClassificationCategory,
       emissions: (index + 1) * 10,
     })),
-    style: 'productDetails',
+    displayStyle: 'productDetails',
   },
 };
 
@@ -36,6 +36,6 @@ export const ProductDetails: Story = {
 export const NoData: Story = {
 	args: {
 		data: [],
-    style: 'pcfTab',
+    displayStyle: 'pcfTab',
 	},
 };
