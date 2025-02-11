@@ -1,3 +1,11 @@
+# [1.551.0](https://github.com/coldPBC/cold-monorepo/compare/v1.550.0...v1.551.0) (2025-02-11)
+
+
+### Features
+
+* add weight_factor, weight_factor_unit_of_measure, and width fields to materials model ([0a639b1](https://github.com/coldPBC/cold-monorepo/commit/0a639b193165a0c19b95fbb7800f58fcf1b5ce98))
+* add widthUnitOfMeasure field to materials schema and related entities ([f0e110c](https://github.com/coldPBC/cold-monorepo/commit/f0e110c2a613ddd5b35b09da0f45514461853cfd))
+
 # [1.550.0](https://github.com/coldPBC/cold-monorepo/compare/v1.549.0...v1.550.0) (2025-02-11)
 
 
