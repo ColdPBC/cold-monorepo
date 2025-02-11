@@ -39,6 +39,9 @@ export class MaterialClassification {
 	@ManyToOne({ entity: () => CoreClassification, ref: true, nullable: true })
 	coreClassification?: Ref<CoreClassification>;
 
+	@Property({ type: 'double', nullable: true })
+	weightFactor?: number;
+
 	@OneToMany({ entity: () => Material, mappedBy: 'materialClassification' })
 	materials = new Collection<Material>(this);
 
