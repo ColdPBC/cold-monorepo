@@ -37,9 +37,9 @@ export const Calculated: Story = {
         productMaterial={{
           ...ProductMaterialMock,
           yield: 2.7,
+          unitOfMeasure: Length.m,
           material: {
             ...ProductMaterialMock.material,
-            unitOfMeasure: Length.m,
             width: 58,
             widthUnitOfMeasure: Length.in,
             materialClassification: {
