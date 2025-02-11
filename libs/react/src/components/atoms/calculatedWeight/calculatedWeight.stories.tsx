@@ -1,8 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { CalculatedWeight } from '@coldpbc/components';
-import { withKnobs} from '@storybook/addon-knobs';
+import { withKnobs } from '@storybook/addon-knobs';
 import { ProductMaterialMock } from '../../../__mocks__/productMaterialMock';
-import { Length } from '@coldpbc/enums';
+import { Length, MaterialClassificationCategory } from '@coldpbc/enums';
 
 const meta: Meta<typeof CalculatedWeight> = {
   title: 'Atoms/CalculatedWeight',
@@ -45,6 +45,7 @@ export const Calculated: Story = {
             materialClassification: {
               id: 'matclass_1',
               name: 'Nylon fabric',
+              category: MaterialClassificationCategory.TEXTILES,
               weightFactor: 0.3,
             }
           }
