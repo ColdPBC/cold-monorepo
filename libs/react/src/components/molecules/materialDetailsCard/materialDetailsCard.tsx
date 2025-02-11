@@ -3,12 +3,22 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { MaterialGraphQL } from '@coldpbc/interfaces';
 import { Card, ColdIcon, DetailsItem, Popover } from '@coldpbc/components';
-import { IconNames } from '@coldpbc/enums';
+import { IconNames, WeightFactorUnits } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
 
 interface MaterialDetailsCardProps {
 	material: MaterialGraphQL;
   editMaterial: () => void;
+}
+
+const getWeightFactorValue = (material) => {
+  if (material.weightFactor && material.weightFactorUnitOfMeasure) {
+    return `${material.weightFactor.toFixed(2)} ${material.weightFactorUnitOfMeasure}`;
+  } else if (material.materialClassification?.weightFactor) {
+    return `✨ ${material.materialClassification.weightFactor.toFixed(2)} ${WeightFactorUnits.KG_PER_M2}`;
+  } else {
+    return undefined;
+  }
 }
 
 const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material, editMaterial }) => {
@@ -34,6 +44,8 @@ const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material, ed
 			<DetailsItem category={'Sub-Category'} value={material.materialSubcategory} />
 			<DetailsItem category={'Brand Material ID'} value={material.brandMaterialId} />
 			<DetailsItem category={'Supplier Material ID'} value={material.supplierMaterialId} />
+      <DetailsItem category={'Weight Factor'} value={getWeightFactorValue(material)} />
+      <DetailsItem category={'Width'} value={(material.width && material.widthUnitOfMeasure) ? `${material.width.toFixed(2)} ${material.widthUnitOfMeasure}` : undefined} />
 		</Card>
 	);
 };

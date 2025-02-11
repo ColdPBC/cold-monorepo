@@ -544,6 +544,7 @@ export const GET_MATERIAL = gql`
       materialClassification {
         id
         name
+        weightFactor
       }
       width
       widthUnitOfMeasure
