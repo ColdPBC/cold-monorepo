@@ -1,3 +1,13 @@
+# [1.550.0](https://github.com/coldPBC/cold-monorepo/compare/v1.549.0...v1.550.0) (2025-02-11)
+
+
+### Features
+
+* Add EmissionsFactorBubble component with Storybook examples ([d6a01e6](https://github.com/coldPBC/cold-monorepo/commit/d6a01e68f2f21283b88c7b6d87151e8d9bed91b3))
+* Add EmissionsFactorDetailedExpandedView component and stories ([b9fe6dc](https://github.com/coldPBC/cold-monorepo/commit/b9fe6dc015950e9168493de27c805ea1692f2974))
+* Add link color tokens to cold_theme ([da39f90](https://github.com/coldPBC/cold-monorepo/commit/da39f90fbc97a3ba64585c055df5d78e5c2e619c))
+* Remove redundant text-body class from emission factor bubble ([5968bf9](https://github.com/coldPBC/cold-monorepo/commit/5968bf9f7a231d1ea3c94125fc8a6ebfedca886e))
+
 # [1.549.0](https://github.com/coldPBC/cold-monorepo/compare/v1.548.1...v1.549.0) (2025-02-11)
 
 
