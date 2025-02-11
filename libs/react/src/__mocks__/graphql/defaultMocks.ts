@@ -44,7 +44,7 @@ import { RequestHandler } from 'mock-apollo-client';
 import { get } from 'lodash';
 import { getSchemaMocks } from '../schemaMocks';
 import { getSupplierMock, getSupplierMocks } from '../suppliersMock';
-import {getProductsMock, getProductsMockById} from '../productsMock';
+import {getProductMockWithOutEmissionFactor, getProductsMock, getProductsMockById} from '../productsMock';
 import { getMaterialsMocksWithAssurances } from '../materialsMock';
 import { addDays } from 'date-fns';
 
@@ -982,5 +982,23 @@ export const filesWithTooManyRecordsMocks: {
           organizationFiles: filesWithTooManyRecordsMock(),
         },
       }),
+  },
+];
+
+
+export const productWithoutEmissionsFactor: {
+  query: DocumentNode;
+  handler: RequestHandler;
+}[] = [
+  {
+    query: GET_PRODUCT,
+    handler: (variables) => {
+      const id = variables.id as string;
+      return Promise.resolve({
+        data: {
+          product: getProductMockWithOutEmissionFactor(id),
+        },
+      });
+    }
   },
 ];

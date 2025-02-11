@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import {ProductDetail} from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
-import {fileWithProductMocks, StoryMockProvider} from '@coldpbc/mocks';
+import {fileWithProductMocks, productWithoutEmissionsFactor, StoryMockProvider} from '@coldpbc/mocks';
 import {Route, Routes} from "react-router-dom";
 import {fireEvent, waitForElementToBeRemoved, within} from "@storybook/testing-library";
 import {GET_ALL_FILES} from "@coldpbc/lib";
@@ -152,6 +152,29 @@ export const CarbonAccountingTab: Story = {
       <StoryMockProvider memoryRouterProps={{
         initialEntries: [`/products/op_c0y7e5zsg09r0kxxlw2ha9cm`],
       }}>
+        <Routes>
+          <Route path={'/products/:id'} element={<ProductDetail />} />
+        </Routes>
+      </StoryMockProvider>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
+    const carbonAccountingTab = await canvas.findByTestId('tab-Carbon Accounting');
+    carbonAccountingTab.click();
+  }
+};
+
+export const CarbonAccountingTabWithoutEmissionsFactor: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider
+        memoryRouterProps={{
+          initialEntries: [`/products/op_c0y7e5zsg09r0kxxlw2ha9cm`],
+        }}
+        graphqlMocks={productWithoutEmissionsFactor}
+      >
         <Routes>
           <Route path={'/products/:id'} element={<ProductDetail />} />
         </Routes>

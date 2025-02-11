@@ -804,7 +804,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Example Nylon 1234',
             materialCategory: 'Material Category 3',
             materialSubcategory: 'Material Subcategory 1',
-            emissionsFactor: null,
+            emissionsFactor: 3.2,
 						organizationFacility: {
               id: 'ofac_vd809v326es9yz3rygkeb14f',
               name: 'Supplier Delta',
@@ -930,3 +930,11 @@ export const getProductsMock = (): ProductsQuery[] => {
 export const getProductsMockById = (id: string): ProductsQuery | null => {
 	return getProductsMock().find(product => product.id === id) || null;
 };
+
+export const getProductMockWithOutEmissionFactor = (id: string): ProductsQuery | null => {
+  const productsWithOutEmissionFactors = getProductsMock().find(product => product.id === id) || null;
+  if(productsWithOutEmissionFactors && productsWithOutEmissionFactors.productMaterials.length > 0) {
+    productsWithOutEmissionFactors.productMaterials[0].material.emissionsFactor = null;
+  }
+  return productsWithOutEmissionFactors;
+}
