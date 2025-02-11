@@ -1,4 +1,10 @@
-import {Card, DEFAULT_GRID_COL_DEF, MaterialClassificationIcon, MuiDataGrid} from "@coldpbc/components"
+import {
+  Card,
+  DEFAULT_GRID_COL_DEF,
+  MaterialClassificationIcon,
+  MissingMaterialEmissionsCard,
+  MuiDataGrid
+} from "@coldpbc/components"
 import {ProductsQuery} from "@coldpbc/interfaces";
 import {GridColDef} from "@mui/x-data-grid-pro";
 import {get} from "lodash";
@@ -112,20 +118,23 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
   })
 
   return (
-    <Card
-      title={'Emissions By Material'}
-      className={'w-full'}
-      glow={false}
-    >
-      <MuiDataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          sorting: {
-            sortModel: [{ field: 'total_emissions', sort: 'desc' }],
-          },
-        }}
-      />
-    </Card>
+    <div className={'w-full flex flex-col gap-[40px]'}>
+      <MissingMaterialEmissionsCard productMaterials={product.productMaterials}/>
+      <Card
+        title={'Emissions By Material'}
+        className={'w-full'}
+        glow={false}
+      >
+        <MuiDataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'total_emissions', sort: 'desc' }],
+            },
+          }}
+        />
+      </Card>
+    </div>
   )
 }
