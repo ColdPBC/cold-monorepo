@@ -72,6 +72,18 @@ export class Material {
 	@Field(() => GraphQLJSON, { nullable: true })
 	emissionStats?: Record<string, unknown>;
 
+	@Field(() => Number, { nullable: true })
+	weightFactor?: number;
+
+	@Field(() => String, { nullable: true })
+	weightFactorUnitOfMeasure?: string;
+
+	@Field(() => Number, { nullable: true })
+	width?: number;
+
+	@Field(() => String, { nullable: true })
+	widthUnitOfMeasure?: string;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'material' })
 	attributeAssurances!: AttributeAssurance[];
 
