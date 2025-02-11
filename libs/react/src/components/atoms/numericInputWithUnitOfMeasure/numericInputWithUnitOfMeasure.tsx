@@ -73,12 +73,12 @@ export const NumericInputWithUnitOfMeasure = <T,>({
             onChange(fieldName, Number(e.value))
           },
           className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-          showError: true,
+          showError: !!error,
           error,
         }}
         container_classname={'w-1/2'}
       />
-      <div className={'flex flex-col w-1/2 mb-[20px]'}>
+      <div className={'flex flex-col w-1/2'}>
         <div className={'text-eyebrow leading-6'}>{label} UOM</div>
         <ComboBox
           options={[placeholderOption, ...uomOptions]}
