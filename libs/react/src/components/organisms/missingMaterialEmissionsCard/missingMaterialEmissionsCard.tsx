@@ -2,6 +2,7 @@ import { ColdIcon } from "@coldpbc/components"
 import {IconNames} from "@coldpbc/enums";
 import {HexColors} from "@coldpbc/themes";
 import {ProductsQuery} from "@coldpbc/interfaces";
+import {pluralize} from "@coldpbc/lib";
 
 
 export const MissingMaterialEmissionsCard = (props: {
@@ -22,7 +23,7 @@ export const MissingMaterialEmissionsCard = (props: {
         color={HexColors.red["100"]}
       />
       <div className={'text-h5 w-full'}>
-        Missing emissions factor for {materialsMissingEmissions} material.
+        Missing emissions factor for {pluralize('material', materialsMissingEmissions)}.
       </div>
     </div>
   )
