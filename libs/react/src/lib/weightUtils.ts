@@ -39,7 +39,7 @@ export const getCalculatedWeight = (
     }
   }
 
-  const unitOfMeasure = productMaterial.material.unitOfMeasure;
+  const unitOfMeasure = productMaterial.unitOfMeasure;
 
   if (!productMaterial.yield || !unitOfMeasure) {
     return {
@@ -49,7 +49,7 @@ export const getCalculatedWeight = (
 
   let weightFactor: number | undefined;
 
-  if (productMaterial.material.unitOfMeasure === 'pcs') {
+  if (unitOfMeasure === 'pcs') {
     const weightFactorOverride = productMaterial.material.weightFactorUnitOfMeasure === WeightFactorUnits.KG_PER_PCS ? productMaterial.material.weightFactor : undefined;
     weightFactor = weightFactorOverride || GLOBAL_PIECES_WEIGHT_FACTOR;
   } else {

@@ -5,6 +5,7 @@ import { Length, UnitOfMeasurement, WeightFactorUnits } from '@coldpbc/enums';
 export interface ProductMaterial {
   id: string
   yield: number | null;
+  unitOfMeasure: UnitOfMeasurement | null;
   weight: number | null;
   material: {
     id: string
@@ -18,7 +19,6 @@ export interface ProductMaterial {
     } | null;
     emissionsFactor: number | null;
     attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
-    unitOfMeasure: UnitOfMeasurement | null;
     weightFactor: number | null;
     weightFactorUnitOfMeasure: WeightFactorUnits | null;
     width: number | null;
