@@ -27,7 +27,7 @@ export const NumericInputWithUnitOfMeasure = <T,>({
 }: NumericInputWithUnitOfMeasureProps<T>) => {
   const placeholderOption = {
     id: -1,
-    name: 'None',
+    name: '',
     value: '',
   };
 
