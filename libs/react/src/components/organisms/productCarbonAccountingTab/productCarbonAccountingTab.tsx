@@ -1,14 +1,17 @@
 import {
+  CalculatedWeight,
   Card,
   DEFAULT_GRID_COL_DEF,
   MaterialClassificationIcon,
   MissingMaterialEmissionsCard,
-  MuiDataGrid
-} from "@coldpbc/components"
+  MuiDataGrid,
+} from '@coldpbc/components';
 import {ProductsQuery} from "@coldpbc/interfaces";
 import {GridColDef} from "@mui/x-data-grid-pro";
 import {get} from "lodash";
 import {MaterialClassificationCategory} from "@coldpbc/enums";
+import { getCalculatedWeight } from '@coldpbc/lib';
+import React from 'react';
 
 
 export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) => {
@@ -29,15 +32,6 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
           </span>
         </div>
       )
-    }
-  }
-
-  const renderWeight = (params: any) => {
-    const weight: number = get(params, 'row.weight', 0);
-    if(weight === 0) {
-      return '';
-    } else {
-      return `${weight} g`;
     }
   }
 
@@ -85,7 +79,9 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       field: 'weight',
       headerName: 'Weight',
       minWidth: 100,
-      renderCell: renderWeight,
+      renderCell: params => {
+        return <CalculatedWeight weightResult={params.row.weightResult} />;
+      },
     },
     {
       ...DEFAULT_GRID_COL_DEF,
@@ -104,16 +100,20 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
   ]
 
   const rows = product.productMaterials.map((prodMaterial) => {
+    const weightResult = getCalculatedWeight(prodMaterial);
+    const calculatedWeight = get(weightResult, 'weightInKg');
+
     return {
       id: prodMaterial.id,
       materialId: prodMaterial.material?.id,
       material: prodMaterial.material?.name,
       classification: prodMaterial.material.materialClassification,
       yield_with_uom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
-      weight: prodMaterial.weight ? prodMaterial.weight * 1000 : 0,
+      weight: calculatedWeight,
+      weightResult: weightResult,
       emissions_factor: prodMaterial.material.emissionsFactor?.toFixed(1) || null,
-      total_emissions: (prodMaterial.material.emissionsFactor && prodMaterial.weight)
-        ? prodMaterial.material.emissionsFactor * prodMaterial.weight : 0,
+      total_emissions: (prodMaterial.material.emissionsFactor && calculatedWeight)
+        ? prodMaterial.material.emissionsFactor * calculatedWeight : 0,
     }
   })
 
