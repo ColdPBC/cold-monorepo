@@ -45,7 +45,7 @@ export const EmissionsFactorDetailedExpandedView = (
           <div className={'flex flex-row gap-[10px]'}>
             <LightBulbIcon className={'w-[15px] h-[15px] self-center'} color={'white'}/>
             <div className={'text-tc-secondary text-body'}>
-              Tip: Look wrong? To match to a different factor, select a new material classification and re-run the AI.
+              Tip: Look wrong? To match to a different factor, select a new material classification and refresh.
             </div>
           </div>
         </div>
