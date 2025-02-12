@@ -14,54 +14,56 @@ const meta: Meta<typeof AttributeAssuranceEntityDetail> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const renderInContainer = (args: any) => {
+  return (
+    <div className="w-[800px]">
+      <AttributeAssuranceEntityDetail {...args} />
+    </div>
+  )
+};
+
+const defaultMaterialAttribute = {
+  id: 'a',
+  name: 'Default Material Attribute',
+  attributeAssurances: [
+    ...Array(7).fill(null).map((_, index) => AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.ACTIVE, index })),
+    ...Array(8).fill(null).map((_, index) => AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.EXPIRED, index: (index + 7) })),
+    ...Array(12).fill(null).map((_, index) => AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: (index + 15) }))
+  ],
+  level: EntityLevel.MATERIAL,
+}
+
 export const Default: Story = {
   args: {
-    sustainabilityAttribute: {
-      id: 'a',
-      name: 'Default Material Attribute',
-      attributeAssurances: [
-        ...Array(7).fill(null).map((_, index) => AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.ACTIVE, index })),
-        ...Array(8).fill(null).map((_, index) => AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.EXPIRED, index: (index + 7) })),
-        ...Array(12).fill(null).map((_, index) => AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: (index + 15) }))
-      ],
-      level: EntityLevel.MATERIAL,
-    },
+    sustainabilityAttribute: defaultMaterialAttribute,
     displayedOnEntityLevel: EntityLevel.PRODUCT,
     expanded: false,
     onClick: () => {},
-  }
+  },
+  render: (args) => renderInContainer(args),
 };
 
 export const MaterialsOnASuppliersPage: Story = {
   args: {
-    sustainabilityAttribute: {
-      id: 'a',
-      name: 'Default Material Attribute',
-      attributeAssurances: [
-        ...Array(7).fill(null).map((_, index) => AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.ACTIVE, index })),
-        ...Array(8).fill(null).map((_, index) => AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.EXPIRED, index: (index + 7) })),
-        ...Array(12).fill(null).map((_, index) => AttributeAssuranceMock({ entity: EntityLevel.MATERIAL, status: AttributeAssuranceStatus.NOT_DOCUMENTED, index: (index + 15) }))
-      ],
-      level: EntityLevel.MATERIAL,
-    },
+    sustainabilityAttribute: defaultMaterialAttribute,
     displayedOnEntityLevel: EntityLevel.SUPPLIER,
     expanded: false,
     onClick: () => {},
-  }
+  },
+  render: (args) => renderInContainer(args),
 };
 
 export const EmptyList: Story = {
   args: {
     sustainabilityAttribute: {
-      id: 'a',
-      name: 'Default Material Attribute',
+      ...defaultMaterialAttribute,
       attributeAssurances: [],
-      level: EntityLevel.MATERIAL,
     },
     displayedOnEntityLevel: EntityLevel.PRODUCT,
     expanded: false,
     onClick: () => {},
-  }
+  },
+  render: (args) => renderInContainer(args),
 };
 
 export const OnlyNotDocumented: Story = {
@@ -75,5 +77,6 @@ export const OnlyNotDocumented: Story = {
     displayedOnEntityLevel: EntityLevel.PRODUCT,
     expanded: false,
     onClick: () => {},
-  }
+  },
+  render: (args) => renderInContainer(args),
 };
