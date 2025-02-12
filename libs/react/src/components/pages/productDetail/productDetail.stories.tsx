@@ -188,3 +188,59 @@ export const CarbonAccountingTabWithoutEmissionsFactor: Story = {
     carbonAccountingTab.click();
   }
 };
+
+export const CarbonAccountingTabOpenDetailExpandedView: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider
+        memoryRouterProps={{
+          initialEntries: [`/products/op_c0y7e5zsg09r0kxxlw2ha9cm`],
+        }}
+      >
+        <Routes>
+          <Route path={'/products/:id'} element={<ProductDetail />} />
+        </Routes>
+      </StoryMockProvider>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
+    const carbonAccountingTab = await canvas.findByTestId('tab-Carbon Accounting');
+    carbonAccountingTab.click();
+
+    // find buttons with aria-label Expand
+    const expandButtons = await canvas.findAllByLabelText('Expand');
+    if(expandButtons.length > 0) {
+      expandButtons[0].click();
+    }
+  }
+};
+
+export const CarbonAccountingTabOpenDetailExpandedViewUnknownFactor: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider
+        memoryRouterProps={{
+          initialEntries: [`/products/op_c0y7e5zsg09r0kxxlw2ha9cm`],
+        }}
+      >
+        <Routes>
+          <Route path={'/products/:id'} element={<ProductDetail />} />
+        </Routes>
+      </StoryMockProvider>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
+    const carbonAccountingTab = await canvas.findByTestId('tab-Carbon Accounting');
+    carbonAccountingTab.click();
+
+    // find buttons with aria-label Expand
+    const expandButtons = await canvas.findAllByLabelText('Expand');
+    if(expandButtons.length > 0) {
+      expandButtons[expandButtons.length - 1].click();
+    }
+  }
+};
