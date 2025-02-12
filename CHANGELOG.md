@@ -1,3 +1,10 @@
+# [1.555.0](https://github.com/coldPBC/cold-monorepo/compare/v1.554.0...v1.555.0) (2025-02-12)
+
+
+### Features
+
+* show/use calculated weight on PCF tab ([8d3f785](https://github.com/coldPBC/cold-monorepo/commit/8d3f785c25e4457f8514a571f4f8a30a9e4ce7cc))
+
 # [1.554.0](https://github.com/coldPBC/cold-monorepo/compare/v1.553.0...v1.554.0) (2025-02-12)
 
 

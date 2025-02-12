@@ -249,6 +249,12 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
           name
           materialCategory
           materialSubcategory
+          materialClassification {
+            id
+            name
+            category
+            weightFactor
+          }
           emissionsFactor {
             id
             name
@@ -268,6 +274,10 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
               name
             }
           }
+          weightFactor
+          weightFactorUnitOfMeasure
+          width
+          widthUnitOfMeasure
         }
       }
       attributeAssurances {
@@ -486,7 +496,12 @@ export const GET_PRODUCT = gql`
             id
             name
             category
+            weightFactor
           }
+          weightFactor
+          weightFactorUnitOfMeasure
+          width
+          widthUnitOfMeasure
         }
       }
       attributeAssurances {
@@ -669,12 +684,7 @@ export const GET_PRODUCT_CARBON_FOOTPRINT_DATA = gql`
         material {
           id
           name
-          emissionsFactor {
-            id
-            name
-            emissionsFactor
-            description
-          }
+          emissionsFactor
         }
       }
     }

@@ -5,10 +5,10 @@ import {
   ErrorFallback,
   MuiDataGrid,
   SustainabilityAttributeColumnList,
-  ProductBOMTabSidebar,
+  ProductBOMTabSidebar, CalculatedWeight,
 } from '@coldpbc/components';
 import { GridColDef } from '@mui/x-data-grid-pro';
-import { processEntityLevelAssurances } from '@coldpbc/lib';
+import { getCalculatedWeight, processEntityLevelAssurances } from '@coldpbc/lib';
 import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
@@ -61,7 +61,18 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
     )
   }
 
-  const totalWeight = product.productMaterials.reduce((total, pm) => total + (pm.weight || 0), 0);
+  // Pre-calculate weights for all materials
+  const materialWeights = React.useMemo(() => {
+    return product.productMaterials.map(pm => ({
+      productMaterialId: pm.id,
+      weightResult: getCalculatedWeight(pm),
+    }));
+  }, [product.productMaterials]);
+
+  // Calculate total weight once
+  const totalWeight = React.useMemo(() => {
+    return materialWeights.reduce((total, { weightResult }) => total + (get(weightResult, 'weightInKg') || 0), 0);
+  }, [materialWeights]);
 
   const uniqCategories = uniq(
     product.productMaterials.map(productMaterial => productMaterial.material?.materialCategory || ''),
@@ -119,8 +130,11 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
     {
       ...DEFAULT_GRID_COL_DEF,
       field: 'weight',
-      headerName: 'Weight (g)',
+      headerName: 'Weight',
       minWidth: 100,
+      renderCell: params => {
+        return <CalculatedWeight weightResult={params.row.weightResult} />;
+      },
     },
     {
       ...DEFAULT_GRID_COL_DEF,
@@ -156,39 +170,33 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
     },
 	];
 
-	const rows: {
-		id: string;
-    productMaterialId: string;
-		material: string;
-    materialCategory: string;
-    materialSubcategory: string;
-		tier2Supplier: string;
-    yield: string;
-    unitOfMeasure: string;
-		sustainabilityAttributes: SustainabilityAttribute[];
-	}[] = product.productMaterials
-		.filter(productMaterial => productMaterial.material !== null)
-		.map(productMaterial => {
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			const material = productMaterial.material!;
-			const susAttributes = processEntityLevelAssurances([material]);
-			const tier2Supplier = material.organizationFacility?.name || '';
-			return {
-				id: material.id,
-        productMaterialId: productMaterial.id,
-				material: material.name,
-        materialCategory: material.materialCategory || '',
-        materialSubcategory: material.materialSubcategory || '',
-				tier2Supplier: tier2Supplier,
-        yield: productMaterial.yield ? productMaterial.yield.toString() : '',
-        unitOfMeasure: productMaterial.unitOfMeasure || '',
-        weight: productMaterial.weight ? `${numeral(productMaterial.weight * 1_000).format('0,0')} g` : null, // convert from kg to g for display
-        percent_weight: productMaterial.weight && totalWeight > 0 ? `${(productMaterial.weight / totalWeight * 100).toFixed(0)}%` : null,
-        emissionsFactor: material.emissionsFactor?.emissionsFactor,
-        emissions: productMaterial.weight && material.emissionsFactor ? (productMaterial.weight * material.emissionsFactor.emissionsFactor).toFixed(2) : null,
-				sustainabilityAttributes: susAttributes,
-			};
-		});
+  const rows = React.useMemo(() => {
+    return product.productMaterials
+      .filter(productMaterial => productMaterial.material !== null)
+      .map(productMaterial => {
+        const material = productMaterial.material;
+        const susAttributes = processEntityLevelAssurances([material]);
+        const tier2Supplier = material.organizationFacility?.name || '';
+        const weightResult = materialWeights.find(w => w.productMaterialId === productMaterial.id)?.weightResult;
+
+        return {
+          id: material.id,
+          productMaterialId: productMaterial.id,
+          material: material.name,
+          materialCategory: material.materialCategory || '',
+          materialSubcategory: material.materialSubcategory || '',
+          tier2Supplier: tier2Supplier,
+          yield: productMaterial.yield ? productMaterial.yield.toString() : '',
+          unitOfMeasure: productMaterial.unitOfMeasure || '',
+          weight: get(weightResult, 'weightInKg'),
+          weightResult: weightResult,
+          percent_weight: weightResult && 'weightInKg' in weightResult && totalWeight > 0 ? `${((weightResult.weightInKg / totalWeight) * 100).toFixed(0)}%` : null,
+          emissionsFactor: material.emissionsFactor,
+          emissions: weightResult && 'weightInKg' in weightResult && material.emissionsFactor ? (weightResult.weightInKg * material.emissionsFactor).toFixed(2) : null,
+          sustainabilityAttributes: susAttributes,
+        };
+      });
+  }, [product.productMaterials, materialWeights, totalWeight]);
 
   const closeBomDetailSidebar = () => {
     setSelectedMaterial(undefined);

@@ -1,5 +1,8 @@
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
-import {MaterialClassificationCategory} from "@coldpbc/enums";
+import { MaterialClassificationCategory, UnitOfMeasurement } from '@coldpbc/enums';
+import { gql } from '@apollo/client';
+import { string } from 'zod';
+import { ProductMaterial } from './productMaterials';
 
 export interface Products {
   id: string;
@@ -48,25 +51,7 @@ export interface PaginatedProductsQuery {
   description: string | null;
   productCategory: string | null;
   productSubcategory: string | null;
-  productMaterials: {
-    id: string
-    yield: number | null;
-    unitOfMeasure: string | null;
-    weight: number | null;
-    material: {
-      id: string
-      name: string
-      materialCategory: string | null;
-      materialSubcategory: string | null;
-      emissionsFactor: {
-        id: string;
-        name: string;
-        emissionsFactor: number;
-        description: string;
-      } | null;
-      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
-    };
-  }[];
+  productMaterials: ProductMaterial[];
   organizationFacility: {
     id: string
     name: string
@@ -87,11 +72,6 @@ export interface ProductsQuery extends PaginatedProductsQuery {
         id: string;
         name: string;
       };
-      materialClassification: {
-        id: string;
-        name: string;
-        category: MaterialClassificationCategory;
-      } | null
     };
   }>;
 }
