@@ -486,7 +486,12 @@ export const GET_PRODUCT = gql`
             id
             name
             category
+            weightFactor
           }
+          weightFactor
+          weightFactorUnitOfMeasure
+          width
+          widthUnitOfMeasure
         }
       }
       attributeAssurances {
