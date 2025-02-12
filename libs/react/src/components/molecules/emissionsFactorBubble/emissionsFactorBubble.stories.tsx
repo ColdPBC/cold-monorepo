@@ -18,7 +18,9 @@ export const Default: Story = {
   args: {
     emissionsFactor: {
       name: 'Sheep Wool Insulation',
-      emissions_factor: 3.2,
+      emissionsFactor: 3.2,
+      id: '1',
+      description: 'This is a long description that should wrap and show ellipsis if it is too long to fit in the bubble.',
     },
   },
   render: (args) => {
@@ -52,7 +54,9 @@ export const WithLongName: Story = {
   args: {
     emissionsFactor: {
       name: 'Antimicrobial Nylon Thread',
-      emissions_factor: 3.2,
+      emissionsFactor: 3.2,
+      id: '1',
+      description: 'This is a long description that should wrap and show ellipsis if it is too long to fit in the bubble.',
     },
   },
   render: (args) => {

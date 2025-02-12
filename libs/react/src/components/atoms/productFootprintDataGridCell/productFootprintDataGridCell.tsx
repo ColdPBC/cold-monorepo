@@ -65,7 +65,7 @@ export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCell
       return;
     }
 
-    const materialFootprint = materialItem.weight * materialItem.material.emissionsFactor;
+    const materialFootprint = materialItem.weight * materialItem.material.emissionsFactor.emissionsFactor;
     totalFootprint += materialFootprint;
   });
 

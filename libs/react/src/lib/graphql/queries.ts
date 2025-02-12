@@ -249,7 +249,12 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
           name
           materialCategory
           materialSubcategory
-          emissionsFactor
+          emissionsFactor {
+            id
+            name
+            emissionsFactor
+            description
+          }
           attributeAssurances {
             id
             effectiveEndDate
@@ -454,7 +459,12 @@ export const GET_PRODUCT = gql`
           name
           materialCategory
           materialSubcategory
-          emissionsFactor
+          emissionsFactor {
+            id
+            name
+            emissionsFactor
+            description
+          }
           organizationFacility {
             id
             name
@@ -654,7 +664,12 @@ export const GET_PRODUCT_CARBON_FOOTPRINT_DATA = gql`
         material {
           id
           name
-          emissionsFactor
+          emissionsFactor {
+            id
+            name
+            emissionsFactor
+            description
+          }
         }
       }
     }

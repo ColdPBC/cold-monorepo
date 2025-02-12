@@ -1,7 +1,6 @@
 import { Claims } from './claims';
 import { EntityLevel } from '@coldpbc/enums';
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
-import { PaginatedProductsQuery } from './products';
 
 export interface Suppliers {
   id: string;

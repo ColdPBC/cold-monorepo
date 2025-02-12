@@ -1,15 +1,14 @@
 import React from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { ProductsQuery } from '@coldpbc/interfaces';
+import {PaginatedProductsQuery, ProductsQuery} from '@coldpbc/interfaces';
 import { darkTableTheme, HexColors } from '@coldpbc/themes';
 import { Chart } from 'react-chartjs-2';
 import { ChartOptions } from 'chart.js';
 import { Plugin as PluginType } from 'chart.js/dist/types';
 import { useActiveSegment } from '@coldpbc/hooks';
 import { Table } from 'flowbite-react';
-import { capitalize, map } from 'lodash';
-import numeral from 'numeral';
+import { map } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Card } from '../card';
 
@@ -33,15 +32,8 @@ const COLORS = [
 	HexColors.lightblue['700'],
 ];
 
-interface ProductMaterial {
-  weight: number | null,
-  material: {
-    emissionsFactor: number | null,
-  },
-}
-
-const emissionsForProductMaterial = (productMaterial: ProductMaterial) => {
-  return ((productMaterial.weight || 0) * (productMaterial.material.emissionsFactor || 0))
+const emissionsForProductMaterial = (productMaterial: PaginatedProductsQuery['productMaterials'][0]) => {
+  return ((productMaterial.weight || 0) * (productMaterial.material.emissionsFactor?.emissionsFactor || 0))
 };
 
 const _ProductCarbonFootprintDonut: React.FC<ProductDetailsCardProps> = ({ product }) => {

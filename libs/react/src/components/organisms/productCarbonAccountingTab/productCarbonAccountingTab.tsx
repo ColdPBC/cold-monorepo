@@ -1,14 +1,16 @@
 import {
   Card,
-  DEFAULT_GRID_COL_DEF,
+  DEFAULT_GRID_COL_DEF, EmissionsFactorBubble, EmissionsFactorDetailedExpandedView,
   MaterialClassificationIcon,
   MissingMaterialEmissionsCard,
   MuiDataGrid
 } from "@coldpbc/components"
 import {ProductsQuery} from "@coldpbc/interfaces";
-import {GridColDef} from "@mui/x-data-grid-pro";
+import {DataGridProProps, GridColDef} from "@mui/x-data-grid-pro";
 import {get} from "lodash";
 import {MaterialClassificationCategory} from "@coldpbc/enums";
+import {useCallback} from "react";
+import {HexColors} from "@coldpbc/themes";
 
 
 export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) => {
@@ -20,13 +22,13 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       return '';
     } else {
       return (
-        <div className={'text-body flex flex-row gap-1 justify-end'}>
-          <span className={'font-bold text-tc-primary'}>
+        <div className={'text-body flex flex-row gap-1 justify-end h-full'}>
+          <div className={'font-bold text-tc-primary self-center'}>
             {(emissions).toFixed(2)}
-          </span>
-          <span className={'text-tc-secondary'}>
+          </div>
+          <div className={'text-tc-secondary self-center'}>
             kg CO2e
-          </span>
+          </div>
         </div>
       )
     }
@@ -58,6 +60,15 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
         <div className={'text-body truncate'}>{classification.name}</div>
       </div>
     );
+  }
+
+  const renderEmissionsFactor = (params: any) => {
+    const emissionsFactor: ProductsQuery['productMaterials'][0]['material']['emissionsFactor'] = get(params, 'row.emissions_factor', 0);
+    return (
+      <div className={'h-full w-full flex items-center'}>
+        <EmissionsFactorBubble emissionsFactor={emissionsFactor}/>
+      </div>
+    )
   }
 
   const columns: GridColDef[] = [
@@ -92,6 +103,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       field: 'emissions_factor',
       headerName: 'Emissions Factor',
       minWidth: 200,
+      renderCell: renderEmissionsFactor,
     },
     {
       ...DEFAULT_GRID_COL_DEF,
@@ -111,11 +123,26 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       classification: prodMaterial.material.materialClassification,
       yield_with_uom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
       weight: prodMaterial.weight ? prodMaterial.weight * 1000 : 0,
-      emissions_factor: prodMaterial.material.emissionsFactor?.toFixed(1) || null,
+      emissions_factor: prodMaterial.material.emissionsFactor,
       total_emissions: (prodMaterial.material.emissionsFactor && prodMaterial.weight)
-        ? prodMaterial.material.emissionsFactor * prodMaterial.weight : 0,
+        ? prodMaterial.material.emissionsFactor.emissionsFactor * prodMaterial.weight : 0,
     }
   })
+
+  const getDetailPanelContent = useCallback<NonNullable<DataGridProProps['getDetailPanelContent']>>(({row}) => {
+    const id = row.id;
+    const productMaterial = product.productMaterials.find(pm => pm.id === id);
+    return (
+      <EmissionsFactorDetailedExpandedView
+        emissionsFactor={productMaterial?.material.emissionsFactor || null}
+        weight={productMaterial?.weight || null}
+        />
+    )
+  }, [])
+
+  const getDetailPanelHeight = useCallback<NonNullable<DataGridProProps['getDetailPanelHeight']>>(({ row }) => {
+    return 'auto';
+  }, [])
 
   return (
     <div className={'w-full flex flex-col gap-[40px]'}>
@@ -133,6 +160,15 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
               sortModel: [{ field: 'total_emissions', sort: 'desc' }],
             },
           }}
+          getDetailPanelContent={getDetailPanelContent}
+          getDetailPanelHeight={getDetailPanelHeight}
+          sx={{
+            '& .MuiDataGrid-columnHeader' : {
+              backgroundColor: HexColors.gray["30"]
+            }
+          }}
+          columnHeaderHeight={55}
+          rowHeight={72}
         />
       </Card>
     </div>

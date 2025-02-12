@@ -184,8 +184,8 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
         unitOfMeasure: productMaterial.unitOfMeasure || '',
         weight: productMaterial.weight ? `${numeral(productMaterial.weight * 1_000).format('0,0')} g` : null, // convert from kg to g for display
         percent_weight: productMaterial.weight && totalWeight > 0 ? `${(productMaterial.weight / totalWeight * 100).toFixed(0)}%` : null,
-        emissionsFactor: material.emissionsFactor,
-        emissions: productMaterial.weight && material.emissionsFactor ? (productMaterial.weight * material.emissionsFactor).toFixed(2) : null,
+        emissionsFactor: material.emissionsFactor?.emissionsFactor,
+        emissions: productMaterial.weight && material.emissionsFactor ? (productMaterial.weight * material.emissionsFactor.emissionsFactor).toFixed(2) : null,
 				sustainabilityAttributes: susAttributes,
 			};
 		});
