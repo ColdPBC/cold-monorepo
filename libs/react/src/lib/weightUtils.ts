@@ -37,7 +37,7 @@ const formatGrams = (weightInKg: number): string => {
 };
 
 export const getCalculatedWeight = (productMaterial: ProductMaterialForWeightCalculation): CalculatedWeightResult => {
-	if (productMaterial.weight) {
+  if (typeof productMaterial.weight === 'number') {
 		return {
 			weightInKg: productMaterial.weight,
 			displayWeight: formatGrams(productMaterial.weight),
@@ -46,7 +46,7 @@ export const getCalculatedWeight = (productMaterial: ProductMaterialForWeightCal
 
 	const unitOfMeasure = productMaterial.unitOfMeasure;
 
-	if (!productMaterial.yield || !unitOfMeasure) {
+	if (!(typeof productMaterial.yield === 'number') || !unitOfMeasure) {
 		return {
 			error: 'Missing yield or unit of measure',
 		};
