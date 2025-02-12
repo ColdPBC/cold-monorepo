@@ -1,5 +1,5 @@
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
-import { Length, UnitOfMeasurement, WeightFactorUnits } from '@coldpbc/enums';
+import { Length, MaterialClassificationCategory, UnitOfMeasurement, WeightFactorUnits } from '@coldpbc/enums';
 
 // This will eventually be used in PaginatedProductsQuery
 export interface ProductMaterial {
@@ -15,6 +15,7 @@ export interface ProductMaterial {
     materialClassification: {
       id: string;
       name: string;
+      category: MaterialClassificationCategory;
       weightFactor: number;
     } | null;
     emissionsFactor: number | null;

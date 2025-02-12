@@ -1,8 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { CalculatedWeight } from '@coldpbc/components';
-import { withKnobs} from '@storybook/addon-knobs';
+import { withKnobs } from '@storybook/addon-knobs';
 import { ProductMaterialMock } from '../../../__mocks__/productMaterialMock';
-import { Length } from '@coldpbc/enums';
+import { Length, MaterialClassificationCategory } from '@coldpbc/enums';
+import { getCalculatedWeight } from '@coldpbc/lib';
 
 const meta: Meta<typeof CalculatedWeight> = {
   title: 'Atoms/CalculatedWeight',
@@ -17,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => {
     return (
-      <CalculatedWeight productMaterial={{...ProductMaterialMock, weight: 0.3}} />
+      <CalculatedWeight weightResult={getCalculatedWeight({...ProductMaterialMock, weight: 0.3})} />
     );
   },
 };
@@ -25,7 +26,7 @@ export const Default: Story = {
 export const MissingData: Story = {
   render: () => {
     return (
-      <CalculatedWeight productMaterial={ProductMaterialMock} />
+      <CalculatedWeight weightResult={getCalculatedWeight(ProductMaterialMock)} />
     );
   },
 };
@@ -34,7 +35,7 @@ export const Calculated: Story = {
   render: () => {
     return (
       <CalculatedWeight
-        productMaterial={{
+        weightResult={getCalculatedWeight({
           ...ProductMaterialMock,
           yield: 2.7,
           unitOfMeasure: Length.m,
@@ -45,10 +46,11 @@ export const Calculated: Story = {
             materialClassification: {
               id: 'matclass_1',
               name: 'Nylon fabric',
+              category: MaterialClassificationCategory.TEXTILES,
               weightFactor: 0.3,
             }
           }
-        }}
+        })}
       />
     );
   },
