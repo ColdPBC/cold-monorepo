@@ -618,7 +618,12 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 1',
 						materialCategory: 'Material Category 1',
 						materialSubcategory: 'Material Subcategory 1',
-						emissionsFactor: 2.3,
+            emissionsFactor: {
+              id: 'emfac_5',
+              name: 'Polyvinyl chloride (PVC) foam',
+              emissionsFactor: 2.3,
+              description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+            },
 						organizationFacility: {
 							id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
 							name: 'Supplier 12',

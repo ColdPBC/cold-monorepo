@@ -13,7 +13,6 @@ import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import {useFlags} from "launchdarkly-react-client-sdk";
-import numeral from 'numeral';
 import { EntityLevel } from '@coldpbc/enums';
 
 export const DEFAULT_GRID_COL_DEF = {
@@ -192,7 +191,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
           weightResult: weightResult,
           percent_weight: weightResult && 'weightInKg' in weightResult && totalWeight > 0 ? `${((weightResult.weightInKg / totalWeight) * 100).toFixed(0)}%` : null,
           emissionsFactor: material.emissionsFactor,
-          emissions: weightResult && 'weightInKg' in weightResult && material.emissionsFactor ? (weightResult.weightInKg * material.emissionsFactor).toFixed(2) : null,
+          emissions: weightResult && 'weightInKg' in weightResult && material.emissionsFactor ? (weightResult.weightInKg * material.emissionsFactor.emissionsFactor).toFixed(2) : null,
           sustainabilityAttributes: susAttributes,
         };
       });

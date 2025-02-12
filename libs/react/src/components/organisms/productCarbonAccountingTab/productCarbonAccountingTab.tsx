@@ -1,14 +1,25 @@
 import {
+  CalculatedWeight,
   Card,
-  DEFAULT_GRID_COL_DEF,
+  DEFAULT_GRID_COL_DEF, EmissionsFactorBubble, EmissionsFactorDetailedExpandedView,
   MaterialClassificationIcon,
   MissingMaterialEmissionsCard,
   MuiDataGrid
 } from "@coldpbc/components"
 import {ProductsQuery} from "@coldpbc/interfaces";
-import {GridColDef} from "@mui/x-data-grid-pro";
+import {
+  DataGridProProps,
+  GRID_DETAIL_PANEL_TOGGLE_COL_DEF,
+  GRID_DETAIL_PANEL_TOGGLE_FIELD,
+  GridColDef
+} from "@mui/x-data-grid-pro";
 import {get} from "lodash";
 import {MaterialClassificationCategory} from "@coldpbc/enums";
+import {HexColors} from "@coldpbc/themes";
+import {useCallback} from "react";
+import {getCalculatedWeight} from "@coldpbc/lib";
+import {ChevronDownIcon} from "@heroicons/react/20/solid";
+import {twMerge} from "tailwind-merge";
 
 
 export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) => {
@@ -140,9 +151,9 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       yield_with_uom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
       weight: calculatedWeight,
       weightResult: weightResult,
-      emissions_factor: prodMaterial.material.emissionsFactor?.toFixed(1) || null,
+      emissions_factor: prodMaterial.material.emissionsFactor?.emissionsFactor.toFixed(1) || null,
       total_emissions: (prodMaterial.material.emissionsFactor && calculatedWeight)
-        ? prodMaterial.material.emissionsFactor * calculatedWeight : 0,
+        ? prodMaterial.material.emissionsFactor.emissionsFactor * calculatedWeight : 0,
     }
   })
 
@@ -157,7 +168,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     )
   }, [])
 
-  const getDetailPanelHeight = useCallback<NonNullable<DataGridProProps['getDetailPanelHeight']>>(({ row }) => {
+  const getDetailPanelHeight = useCallback<NonNullable<DataGridProProps['getDetailPanelHeight']>>(() => {
     return 'auto';
   }, [])
 

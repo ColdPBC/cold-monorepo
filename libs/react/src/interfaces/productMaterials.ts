@@ -18,11 +18,16 @@ export interface ProductMaterial {
       category: MaterialClassificationCategory;
       weightFactor: number;
     } | null;
-    emissionsFactor: number | null;
+    emissionsFactor: {
+      id: string;
+      name: string;
+      emissionsFactor: number;
+      description: string;
+    } | null;
     attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
     weightFactor: number | null;
     weightFactorUnitOfMeasure: WeightFactorUnits | null;
     width: number | null;
     widthUnitOfMeasure: Length | null;
   };
-};
+}
