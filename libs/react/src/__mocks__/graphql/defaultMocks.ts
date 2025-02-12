@@ -47,6 +47,7 @@ import { getSupplierMock, getSupplierMocks } from '../suppliersMock';
 import {getProductMockWithOutEmissionFactor, getProductsMock, getProductsMockById} from '../productsMock';
 import { getMaterialsMocksWithAssurances } from '../materialsMock';
 import { addDays } from 'date-fns';
+import { Length, UnitOfMeasurement } from '@coldpbc/enums';
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
@@ -879,8 +880,20 @@ export const sustainabilityAttributesMocks = ({
               name: 'Example Product',
               productMaterials: getMaterialsMocksWithAssurances().map((material, index) => ({
                 id: `pm_${material.id}`,
-                weight: includeWeights ? index / 100 : null,
-                material,
+                yield: includeWeights ? (index + 1) / 100 : null,
+                unitOfMeasure: UnitOfMeasurement.yd,
+                weight: null,
+                material: {
+                  ...material,
+                  materialClassification: {
+                    id: 'matclass_1',
+                    weightFactor: 1,
+                  },
+                  weightFactor: null,
+                  weightFactorUnitOfMeasure: null,
+                  width: 58,
+                  widthUnitOfMeasure: Length.in,
+                },
               }))
             }
           ] : [],
