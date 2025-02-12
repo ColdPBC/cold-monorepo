@@ -1,4 +1,4 @@
-import { ProductMaterial } from '../interfaces';
+import { ProductMaterial, ProductMaterialForWeightCalculation } from '../interfaces';
 import { Area, Count, Length, Weight, WeightFactorUnits } from '../enums';
 import numeral from 'numeral';
 
@@ -36,7 +36,7 @@ const formatGrams = (weightInKg: number): string => {
 	return `${numeral(roundedGrams).format('0,0')} g`;
 };
 
-export const getCalculatedWeight = (productMaterial: ProductMaterial): CalculatedWeightResult => {
+export const getCalculatedWeight = (productMaterial: ProductMaterialForWeightCalculation): CalculatedWeightResult => {
 	if (productMaterial.weight) {
 		return {
 			weightInKg: productMaterial.weight,

@@ -8,6 +8,7 @@ import { ProductForMaterialLevelSustainabilityReport, ProductForMaterialLevelSus
 import { get, groupBy, isError } from 'lodash';
 import { GridColDef } from '@mui/x-data-grid-pro';
 import { HexColors } from '@coldpbc/themes';
+import { getCalculatedWeight } from '@coldpbc/lib';
 
 const ACCENT_COLOR = HexColors.lightblue['300'];
 
@@ -46,16 +47,18 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 			const materialNamesWithAttribute: string[] = [];
 
 			productGraphQL.productMaterials.forEach(productMaterial => {
-				if (productMaterial.weight === null) {
+				const weightResult = getCalculatedWeight(productMaterial);
+
+        if (!('weightInKg' in weightResult)) {
 					// If any material is missing weight, we'll hide the % calculation
 					hasMaterialWithMissingWeight = true;
 				} else {
-					totalWeight += productMaterial.weight;
+					totalWeight += weightResult.weightInKg;
 				}
 
 				if (uniqueMaterialIds.has(productMaterial.material.id)) {
 					materialCount += 1;
-					weightWithAttribute += productMaterial.weight || 0;
+					weightWithAttribute += get(weightResult, 'weightInKg') || 0;
 					materialNamesWithAttribute.push(productMaterial.material.name);
 				}
 			});

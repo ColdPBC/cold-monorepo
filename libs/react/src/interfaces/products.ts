@@ -1,8 +1,8 @@
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
-import { MaterialClassificationCategory, UnitOfMeasurement } from '@coldpbc/enums';
+import { Length, MaterialClassificationCategory, UnitOfMeasurement, WeightFactorUnits } from '@coldpbc/enums';
 import { gql } from '@apollo/client';
 import { string } from 'zod';
-import { ProductMaterial } from './productMaterials';
+import { ProductMaterial, ProductMaterialForWeightCalculation } from './productMaterials';
 
 export interface Products {
   id: string;
@@ -23,14 +23,11 @@ export interface ProductForMaterialLevelSustainabilityReportGraphQL extends Prod
     id: string;
     name: string;
   } | null;
-  productMaterials: {
-    id: string;
-    weight: number | null;
-    material: {
-      id: string;
+  productMaterials: Array<ProductMaterialForWeightCalculation & {
+    material: ProductMaterialForWeightCalculation['material'] & {
       name: string;
     }
-  }[];
+  }>;
 }
 
 export interface ProductForMaterialLevelSustainabilityReport extends ProductBaseEntity {
