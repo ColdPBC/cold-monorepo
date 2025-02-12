@@ -19,18 +19,28 @@ const AREA_TO_M2 = {
 	[Area.m2]: LENGTH_TO_M[Length.m] * LENGTH_TO_M[Length.m],
 };
 
-// All weights returned formatted in grams
-export type CalculatedWeightResult = { calculatedWeight: string; message: string } | { weight: string } | { error: string };
+export type WeightResult = {
+	weightInKg: number;
+	displayWeight: string;
+	explanation?: string;
+};
+
+export type WeightError = {
+	error: string;
+};
+
+export type CalculatedWeightResult = WeightResult | WeightError;
 
 const formatGrams = (weightInKg: number): string => {
 	const roundedGrams = Math.round(weightInKg * 1000);
-	return numeral(roundedGrams).format('0,0');
+	return `${numeral(roundedGrams).format('0,0')} g`;
 };
 
-export const getCalculatedWeight = (productMaterial: ProductMaterial) => {
+export const getCalculatedWeight = (productMaterial: ProductMaterial): CalculatedWeightResult => {
 	if (productMaterial.weight) {
 		return {
-			weight: `${formatGrams(productMaterial.weight)} g`,
+			weightInKg: productMaterial.weight,
+			displayWeight: formatGrams(productMaterial.weight),
 		};
 	}
 
@@ -61,7 +71,8 @@ export const getCalculatedWeight = (productMaterial: ProductMaterial) => {
 	switch (unitOfMeasure) {
 		case Weight.kg:
 			return {
-				weight: `${formatGrams(productMaterial.yield)} g`,
+				weightInKg: productMaterial.yield,
+				displayWeight: formatGrams(productMaterial.yield),
 			};
 		case Count.pcs:
 			return calculateWeightFromPieces(productMaterial.yield, weightFactor);
@@ -80,28 +91,42 @@ export const getCalculatedWeight = (productMaterial: ProductMaterial) => {
 	}
 };
 
-const calculateWeightFromPieces = (yieldValue: number, weightFactor: number) => {
+const calculateWeightFromPieces = (yieldValue: number, weightFactor: number): WeightResult => {
+	const weightInKg = yieldValue * weightFactor;
 	return {
-		calculatedWeight: `${formatGrams(yieldValue * weightFactor)} g`,
-		message: `Weight estimated using a yield of ${yieldValue} pieces and a weight factor of ${weightFactor.toFixed(3)} kg per piece`,
+		weightInKg,
+		displayWeight: formatGrams(weightInKg),
+		explanation: `Weight estimated using a yield of ${yieldValue} pieces and a weight factor of ${weightFactor.toFixed(3)} kg per piece`,
 	};
 };
 
-const calculateWeightFromArea = (yieldValue: number, unitOfMeasure: Area, weightFactor: number) => ({
-	calculatedWeight: `${formatGrams(yieldValue * AREA_TO_M2[unitOfMeasure] * weightFactor)} g`,
-	message: `Weight estimated using a yield of ${yieldValue.toFixed(2)} ${unitOfMeasure} and a weight factor of ${weightFactor.toFixed(3)} kg per m2`,
-});
+const calculateWeightFromArea = (yieldValue: number, unitOfMeasure: Area, weightFactor: number): WeightResult => {
+	const weightInKg = yieldValue * AREA_TO_M2[unitOfMeasure] * weightFactor;
+	return {
+		weightInKg,
+		displayWeight: formatGrams(weightInKg),
+		explanation: `Weight estimated using a yield of ${yieldValue.toFixed(2)} ${unitOfMeasure} and a weight factor of ${weightFactor.toFixed(3)} kg per m2`,
+	};
+};
 
-const calculateWeightFromLength = (yieldValue: number, unitOfMeasure: Length, width: number | null, widthUnitOfMeasure: Length | null, weightFactor: number) => {
+const calculateWeightFromLength = (
+	yieldValue: number,
+	unitOfMeasure: Length,
+	width: number | null,
+	widthUnitOfMeasure: Length | null,
+	weightFactor: number,
+): WeightResult | WeightError => {
 	if (!width || !widthUnitOfMeasure) {
 		return {
 			error: 'Missing width or width unit of measure',
 		};
 	}
 
+	const weightInKg = yieldValue * LENGTH_TO_M[unitOfMeasure] * width * LENGTH_TO_M[widthUnitOfMeasure] * weightFactor;
 	return {
-		calculatedWeight: `${formatGrams(yieldValue * LENGTH_TO_M[unitOfMeasure] * width * LENGTH_TO_M[widthUnitOfMeasure] * weightFactor)} g`,
-		message: `Weight estimated using a yield of ${yieldValue.toFixed(2)} ${unitOfMeasure}, a width of ${width.toFixed(
+		weightInKg,
+		displayWeight: formatGrams(weightInKg),
+		explanation: `Weight estimated using a yield of ${yieldValue.toFixed(2)} ${unitOfMeasure}, a width of ${width.toFixed(
 			2,
 		)} ${widthUnitOfMeasure}, and a weight factor of ${weightFactor.toFixed(3)} kg per m2`,
 	};
