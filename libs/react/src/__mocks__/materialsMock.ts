@@ -4,7 +4,7 @@ import {
   MaterialsWithCertifications,
 } from '@coldpbc/interfaces';
 import { addDays, subDays } from 'date-fns';
-import { EntityLevel } from '@coldpbc/enums';
+import { EntityLevel, UnitOfMeasurement } from '@coldpbc/enums';
 
 export function getMaterialsMock(): MaterialsWithCertifications[] {
   return [
@@ -524,7 +524,8 @@ export const getMaterialMock: MaterialGraphQL = (
     },
     materialClassification: {
       id: 'mat_class_1',
-      name: 'Wool',
+      name: 'Wool fabric',
+      weightFactor: 300,
     },
     materialCategory: 'Fabrics',
     materialSubcategory: 'Wools',
@@ -570,6 +571,10 @@ export const getMaterialMock: MaterialGraphQL = (
         },
       },
     ],
+    width: 58,
+    widthUnitOfMeasure: UnitOfMeasurement.in,
+    weightFactor: null,
+    weightFactorUnitOfMeasure: null,
   }
 )
 
