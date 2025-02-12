@@ -120,8 +120,8 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
         '& .MuiDataGrid-row': {
           cursor: 'pointer',
         },
-        '& .MuiDataGrid-virtualScrollerContent .MuiDataGrid-row:hover .MuiDataGrid-cell--pinnedRight' : {
-          backgroundColor: 'transparent',
+        '& .MuiDataGrid-cell--pinnedRight' : {
+          backgroundColor: HexColors.bgc.elevated,
         },
         ...props.sx,
       }}
