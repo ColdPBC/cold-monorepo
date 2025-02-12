@@ -1,3 +1,10 @@
+# [1.554.0](https://github.com/coldPBC/cold-monorepo/compare/v1.553.0...v1.554.0) (2025-02-12)
+
+
+### Features
+
+* Enable new PCF UI feature flag in productsDataGrid ([7f6a11e](https://github.com/coldPBC/cold-monorepo/commit/7f6a11e10c60cd5518c0414e0940ad16c76dbd4d))
+
 # [1.553.0](https://github.com/coldPBC/cold-monorepo/compare/v1.552.0...v1.553.0) (2025-02-11)
 
 

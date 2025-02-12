@@ -20,10 +20,8 @@ import { useNavigate } from "react-router-dom";
 import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid-pro';
 
 const getColumnRows = (
-  products: PaginatedProductsQuery[],
-  flags: {
-    [key: string]: boolean
-  }) => {
+  products: PaginatedProductsQuery[]
+) => {
   return products.map(product => {
     const tier1Supplier = product.organizationFacility
 
@@ -159,7 +157,7 @@ export const _ProductsDataGrid = () => {
         setTotalRows(0);
       } else {
         const products = get(productsQuery.data, 'data.products', []);
-        const rows = getColumnRows(products, ldFlags)
+        const rows = getColumnRows(products)
         const total = get(productsQuery.data, 'data.products_aggregate.count', 0);
         setRows(rows);
         setTotalRows(total);
@@ -206,7 +204,7 @@ export const _ProductsDataGrid = () => {
   }
 
   const productFootprintColumn =
-		ldFlags.productCarbonFootprintMvp
+    (ldFlags.productCarbonFootprintMvp || ldFlags.showNewPcfUiCold1450)
 			? [
 					{
 						...defaultColumnProperties,
