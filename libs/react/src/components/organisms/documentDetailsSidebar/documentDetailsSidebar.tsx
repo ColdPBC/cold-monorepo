@@ -478,8 +478,8 @@ const _DocumentDetailsSidebar = (props: {
 				};
         // only send metadata if needed
         if(
-          fileState.startDate !== compareFileState.startDate ||
-          fileState.endDate !== compareFileState.endDate ||
+          isSameDay(compareFileState.startDate || 0, fileState.startDate || 0) ||
+          isSameDay(compareFileState.endDate || 0, fileState.endDate || 0) ||
           fileState.certificate_number !== compareFileState.certificate_number
         ) {
           // update the file metadata
