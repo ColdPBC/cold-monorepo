@@ -17,7 +17,7 @@ import {get} from "lodash";
 import {MaterialClassificationCategory} from "@coldpbc/enums";
 import {HexColors} from "@coldpbc/themes";
 import {useCallback} from "react";
-import {getCalculatedWeight} from "@coldpbc/lib";
+import {CalculatedWeightResult, getCalculatedWeight} from "@coldpbc/lib";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import {twMerge} from "tailwind-merge";
 
@@ -160,10 +160,12 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
   const getDetailPanelContent = useCallback<NonNullable<DataGridProProps['getDetailPanelContent']>>(({row}) => {
     const id = row.id;
     const productMaterial = product.productMaterials.find(pm => pm.id === id);
+    const weight = get(row, 'weight',null)
+
     return (
       <EmissionsFactorDetailedExpandedView
         emissionsFactor={productMaterial?.material.emissionsFactor || null}
-        weight={productMaterial?.weight || null}
+        weight={weight}
         />
     )
   }, [])
