@@ -1,3 +1,10 @@
+# [1.557.0](https://github.com/coldPBC/cold-monorepo/compare/v1.556.0...v1.557.0) (2025-02-13)
+
+
+### Features
+
+* Improve error handling and feedback for file deletion ([8713388](https://github.com/coldPBC/cold-monorepo/commit/8713388c6ce40900183b3f5af71761d1bae0baf7))
+
 # [1.556.0](https://github.com/coldPBC/cold-monorepo/compare/v1.555.0...v1.556.0) (2025-02-13)
 
 
