@@ -1,4 +1,4 @@
-import { ProductMaterial } from '../interfaces';
+import { ProductMaterial, ProductMaterialForWeightCalculation } from '../interfaces';
 import { Area, Count, Length, Weight, WeightFactorUnits } from '../enums';
 import numeral from 'numeral';
 
@@ -36,8 +36,8 @@ const formatGrams = (weightInKg: number): string => {
 	return `${numeral(roundedGrams).format('0,0')} g`;
 };
 
-export const getCalculatedWeight = (productMaterial: ProductMaterial): CalculatedWeightResult => {
-	if (productMaterial.weight) {
+export const getCalculatedWeight = (productMaterial: ProductMaterialForWeightCalculation): CalculatedWeightResult => {
+  if (typeof productMaterial.weight === 'number') {
 		return {
 			weightInKg: productMaterial.weight,
 			displayWeight: formatGrams(productMaterial.weight),
@@ -46,7 +46,7 @@ export const getCalculatedWeight = (productMaterial: ProductMaterial): Calculate
 
 	const unitOfMeasure = productMaterial.unitOfMeasure;
 
-	if (!productMaterial.yield || !unitOfMeasure) {
+	if (!(typeof productMaterial.yield === 'number') || !unitOfMeasure) {
 		return {
 			error: 'Missing yield or unit of measure',
 		};

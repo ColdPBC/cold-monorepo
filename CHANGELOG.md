@@ -1,3 +1,17 @@
+# [1.557.0](https://github.com/coldPBC/cold-monorepo/compare/v1.556.0...v1.557.0) (2025-02-13)
+
+
+### Features
+
+* Improve error handling and feedback for file deletion ([8713388](https://github.com/coldPBC/cold-monorepo/commit/8713388c6ce40900183b3f5af71761d1bae0baf7))
+
+# [1.556.0](https://github.com/coldPBC/cold-monorepo/compare/v1.555.0...v1.556.0) (2025-02-13)
+
+
+### Features
+
+* use calculated weights on product-level sustainability attribute report ([3786eea](https://github.com/coldPBC/cold-monorepo/commit/3786eea4fff63c1fee27d69d1cf7119384ea7d16))
+
 # [1.555.0](https://github.com/coldPBC/cold-monorepo/compare/v1.554.0...v1.555.0) (2025-02-12)
 
 

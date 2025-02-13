@@ -652,10 +652,20 @@ export const GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT = gql`
       }
       productMaterials {
         id
+        yield
+        unitOfMeasure
         weight
         material {
           id
           name
+          materialClassification {
+            id
+            weightFactor
+          }
+          weightFactor
+          weightFactorUnitOfMeasure
+          width
+          widthUnitOfMeasure
         }
       }
     }
