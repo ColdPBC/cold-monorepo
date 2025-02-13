@@ -184,14 +184,14 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 		);
 	}
 
-  const rows = [...sustainabilityAttributes].sort((a, b) => {
+  const rows = React.useMemo(() => ([...sustainabilityAttributes].sort((a, b) => {
     const aIsSelected = previouslySelectedAttributes.includes(a.id);
     const bIsSelected = previouslySelectedAttributes.includes(b.id);
     if (aIsSelected === bIsSelected) {
       return a.name.localeCompare(b.name);
     }
     return aIsSelected ? -1 : 1;
-  });
+  })), [sustainabilityAttributes, previouslySelectedAttributes]);
 
   const filterRows = React.useMemo(() => {
     if (filterModel.quickFilterValues?.length) {
