@@ -422,13 +422,13 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
       attributeAssurances: [],
       metadata: {
         summary: 'This is a summary',
-        effective_end_date: '2024-05-01',
-        effective_start_date: '2024-05-01',
+        effective_end_date: subDays(new Date(), 20).toISOString(),
+        effective_start_date: subDays(new Date(), 20).toISOString(),
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
-      effective_end_date: '2024-05-01',
-      effective_start_date: '2024-05-01',
+      effective_end_date: subDays(new Date(), 20).toISOString(),
+      effective_start_date: subDays(new Date(), 20).toISOString(),
     },
     {
       id: '2',
@@ -527,13 +527,13 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
       ],
       metadata: {
         summary: 'This is a summary',
-        effective_end_date: '2024-04-20',
-        effective_start_date: '2024-04-20',
+        effective_end_date: addDays(new Date(), 70).toISOString(),
+        effective_start_date: addDays(new Date(), 70).toISOString(),
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
-      effective_end_date: '2024-04-20',
-      effective_start_date: '2024-04-20',
+      effective_end_date: addDays(new Date(), 70).toISOString(),
+      effective_start_date: addDays(new Date(), 70).toISOString(),
     },
   ];
 }
@@ -612,8 +612,8 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           },
         },
       ],
-      effective_end_date: '2024-04-20',
-      effective_start_date: '2024-04-20',
+      effective_end_date: null,
+      effective_start_date: null,
     },
     {
       id: 'ofile_xtu8n9rqlgko4v1nu8v8v5cg',
@@ -729,8 +729,8 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           product: null,
         },
       ],
-      effective_end_date: '2024-04-20',
-      effective_start_date: '2024-04-20',
+      effective_end_date: null,
+      effective_start_date: null,
     },
   ];
 }
