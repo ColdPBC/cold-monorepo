@@ -480,17 +480,13 @@ const _DocumentDetailsSidebar = (props: {
 				};
         // only send metadata if needed
         if(
-          isSameDay(compareFileState.startDate || 0, fileState.startDate || 0) ||
-          isSameDay(compareFileState.endDate || 0, fileState.endDate || 0) ||
-          fileState.certificate_number !== compareFileState.certificate_number
+          fileState.certificate_number !== compareFileState.certificate_number &&
+          fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE'
         ) {
           // update the file metadata
-          if (fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
-            variables.input.metadata = {
-              ...(file.metadata || {}),
-              certificate_number: fileState.certificate_number
-            };
-          }
+          variables.input.metadata = {
+            certificate_number: fileState.certificate_number
+          };
         }
 
 				promises.push(updateDocument(variables));

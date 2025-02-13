@@ -2,7 +2,7 @@ import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { find, get } from 'lodash';
 
 export const getEffectiveEndDate = (file: FilesWithAssurances): string | null => {
-  if(file.effective_end_date) return file.effective_end_date;
+  if(file.effectiveEndDate) return file.effectiveEndDate;
   // find the first assurance with an effective end date
   const assurance = find(file.attributeAssurances, assurance => assurance.effectiveEndDate !== null);
   if (assurance && assurance.effectiveEndDate) {
@@ -17,7 +17,7 @@ export const getEffectiveEndDate = (file: FilesWithAssurances): string | null =>
 };
 
 export const getEffectiveStartDate = (file: FilesWithAssurances): string | null => {
-  if(file.effective_start_date) return file.effective_start_date;
+  if(file.effectiveStartDate) return file.effectiveStartDate;
   // find the first assurance with an effective start date
   const assurance = file.attributeAssurances.find(assurance => assurance.effectiveStartDate !== null);
   if (assurance && assurance.effectiveStartDate) {

@@ -115,8 +115,8 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
-      effective_end_date: null,
-      effective_start_date: null,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 		{
 			id: '2',
@@ -125,8 +125,8 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
-      effective_end_date: null,
-      effective_start_date: null,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 		{
 			id: '3',
@@ -135,8 +135,8 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
-      effective_end_date: null,
-      effective_start_date: null,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 	];
 }
@@ -182,8 +182,8 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 				status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
-      effective_end_date: null,
-      effective_start_date: null,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 		{
 			id: '2',
@@ -243,8 +243,8 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 				status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
-      effective_end_date: null,
-      effective_start_date: null,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 	];
 }
@@ -308,8 +308,8 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 				status: 'uploaded',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
-      effective_end_date: null,
-      effective_start_date: null,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 		{
 			id: '2',
@@ -369,8 +369,8 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 				status: 'uploaded',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
-      effective_end_date: null,
-      effective_start_date: null,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 	];
 }
@@ -390,8 +390,8 @@ export function filesProcessedWithDatesMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
-      effective_end_date: '2024-05-01',
-      effective_start_date: '2024-05-01',
+      effectiveEndDate: '2024-05-01',
+      effectiveStartDate: '2024-05-01',
     },
     {
       id: '2',
@@ -406,8 +406,8 @@ export function filesProcessedWithDatesMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
-      effective_end_date: '2024-04-20',
-      effective_start_date: '2024-04-20',
+      effectiveEndDate: '2024-04-20',
+      effectiveStartDate: '2024-04-20',
     },
   ];
 }
@@ -427,8 +427,8 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
-      effective_end_date: subDays(new Date(), 20).toISOString(),
-      effective_start_date: subDays(new Date(), 20).toISOString(),
+      effectiveEndDate: subDays(new Date(), 20).toISOString(),
+      effectiveStartDate: subDays(new Date(), 20).toISOString(),
     },
     {
       id: '2',
@@ -532,8 +532,8 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
-      effective_end_date: addDays(new Date(), 70).toISOString(),
-      effective_start_date: addDays(new Date(), 70).toISOString(),
+      effectiveEndDate: addDays(new Date(), 70).toISOString(),
+      effectiveStartDate: addDays(new Date(), 70).toISOString(),
     },
   ];
 }
@@ -612,8 +612,8 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           },
         },
       ],
-      effective_end_date: null,
-      effective_start_date: null,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
     },
     {
       id: 'ofile_xtu8n9rqlgko4v1nu8v8v5cg',
@@ -651,8 +651,8 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           product: null,
         },
       ],
-      effective_end_date: '2024-04-20',
-      effective_start_date: '2024-04-20',
+      effectiveEndDate: '2024-04-20',
+      effectiveStartDate: '2024-04-20',
     },
     {
       id: 'ofile_jqohnz87bn2fi2es7suhqb48',
@@ -729,8 +729,8 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           product: null,
         },
       ],
-      effective_end_date: null,
-      effective_start_date: null,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
     },
   ];
 }
