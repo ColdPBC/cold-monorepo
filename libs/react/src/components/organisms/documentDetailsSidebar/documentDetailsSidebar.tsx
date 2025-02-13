@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import {
   Claims,
   FilesWithAssurances,
-  InputOption, ProductsQuery,
+  InputOption,
   ToastMessage,
 } from '@coldpbc/interfaces';
 import {
@@ -23,8 +23,8 @@ import { forEach, get, has } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
-import { KeyedMutator, useSWRConfig } from 'swr';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation } from '@coldpbc/hooks';
+import { KeyedMutator } from 'swr';
 import { format, isSameDay, parseISO } from 'date-fns';
 import { ApolloQueryResult, isApolloError } from '@apollo/client';
 import {
@@ -476,6 +476,7 @@ const _DocumentDetailsSidebar = (props: {
 						type: fileState.type,
 					},
 				};
+        // only send metadata if needed
         if(
           fileState.startDate !== compareFileState.startDate ||
           fileState.endDate !== compareFileState.endDate ||
