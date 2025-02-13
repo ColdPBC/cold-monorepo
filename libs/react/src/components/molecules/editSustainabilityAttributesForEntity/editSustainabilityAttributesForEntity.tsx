@@ -158,15 +158,18 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 	);
 
   const clickSelectAll = () => {
-    // if all the rows are selected or some of the rows are selected, then unselect all the rows
-    const filteredIds = filterRows.map(row => row.id);
-    const selectedIds = rowsSelected.filter((id) => filteredIds.includes(id as string));
-    if(selectedIds.length === filterRows.length || selectedIds.length > 0) {
-      setRowsSelected(prev => prev.filter(id => !filteredIds.includes(id as string)));
-    } else {
+      const filteredIds = filterRows.map(row => row.id);
+      
       setRowsSelected(prev => {
-        return uniq([...prev, ...filteredIds]);
-      })
+        const selectedIds = prev.filter((id) => filteredIds.includes(id as string));
+        
+        // if all the rows are selected or some of the rows are selected, then unselect all the rows
+        if(selectedIds.length === filterRows.length || selectedIds.length > 0) {
+          return prev.filter(id => !filteredIds.includes(id as string)));
+        } else {
+          return uniq([...prev, ...filteredIds];
+        }
+      });
     }
   }
 
