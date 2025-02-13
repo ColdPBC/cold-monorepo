@@ -117,25 +117,9 @@ export class LinearService extends BaseWorker {
 	async createIssue(labels: string[], data: { organization: organizations; user: IAuthenticatedUser; orgFile: organization_files }): Promise<Issue> {
 		try {
 			if (!data.organization.linear_webhook_id) {
-				const webhookResponse = await this.client.createWebhook({
-					url: `https://${process.env.NODE_ENV === 'staging' ? 'api.coldclimate.online' : 'api.coldclimate.com'}/linear/webhook/organizations/${data.organization.id}`,
-					resourceTypes: ['Issue'],
-					label: `${data.organization.display_name} Webhook`,
-					secret: data.organization.linear_secret,
-					teamId: this.customer_success_team_id,
-				});
-
-				const webhook = await webhookResponse.webhook;
-
-				if (!webhook?.id) {
-					throw new Error('Failed to create webhook');
-				}
-
-				await this.prisma.organizations.update({
-					where: { id: data.organization.id },
-					data: { linear_webhook_id: webhook?.id },
-				});
+				await this.createWebhook(data);
 			}
+
 			const payload = {
 				teamId: this.customer_success_team_id,
 				projectIds: [this.ingestion_project_id],
@@ -195,6 +179,29 @@ export class LinearService extends BaseWorker {
 			this.logger.error(e.message);
 			throw e;
 		}
+	}
+
+	private async createWebhook(data: { organization: organizations; user: IAuthenticatedUser; orgFile: organization_files }) {
+		const webhookResponse = await this.client.createWebhook({
+			url: `https://${process.env.NODE_ENV === 'staging' ? 'api.coldclimate.online' : 'api.coldclimate.com'}/linear/webhook/organizations/${data.organization.id}`,
+			resourceTypes: ['Issue'],
+			label: `${data.organization.display_name} Webhook`,
+			secret: data.organization.linear_secret,
+			teamId: this.customer_success_team_id,
+		});
+
+		const webhook = await webhookResponse.webhook;
+
+		if (!webhook?.id) {
+			throw new Error('Failed to create webhook');
+		}
+
+		await this.prisma.organizations.update({
+			where: { id: data.organization.id },
+			data: { linear_webhook_id: webhook?.id },
+		});
+
+		return webhook;
 	}
 
 	getLabel(type: string) {
