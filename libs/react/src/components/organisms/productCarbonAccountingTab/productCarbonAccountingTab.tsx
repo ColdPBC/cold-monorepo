@@ -151,7 +151,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       yield_with_uom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
       weight: calculatedWeight,
       weightResult: weightResult,
-      emissions_factor: prodMaterial.material.emissionsFactor?.emissionsFactor.toFixed(1) || null,
+      emissions_factor: prodMaterial.material.emissionsFactor,
       total_emissions: (prodMaterial.material.emissionsFactor && calculatedWeight)
         ? prodMaterial.material.emissionsFactor.emissionsFactor * calculatedWeight : 0,
     }
