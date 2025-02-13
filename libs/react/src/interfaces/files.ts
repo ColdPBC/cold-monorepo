@@ -24,6 +24,8 @@ export interface FilesWithAssurances {
 	id: string;
 	originalName: string;
 	createdAt: string;
+  effective_start_date: string | null;
+  effective_end_date: string | null;
 	type: string;
 	attributeAssurances: AttributeAssurance[];
   metadata: {

@@ -40,6 +40,8 @@ export const GET_ALL_FILES = gql`
       createdAt
       type
       metadata
+      effectiveStartDate
+      effectiveEndDate
       attributeAssurances {
         id
         effectiveStartDate

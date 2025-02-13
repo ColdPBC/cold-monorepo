@@ -450,8 +450,8 @@ const _DocumentDetailsSidebar = (props: {
 			<div className={'w-auto flex justify-end'}>
 				<BaseButton
 					label={'Save'}
-					onClick={() => {
-						updateFileAndAssurances(fileState);
+					onClick={async () => {
+						await updateFileAndAssurances(fileState);
 					}}
 					variant={ButtonTypes.primary}
 					disabled={disabled}
@@ -474,8 +474,8 @@ const _DocumentDetailsSidebar = (props: {
 					input: {
 						id: fileState.id,
 						type: fileState.type,
-            effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-            effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+            effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+            effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
           },
 				};
         // only send metadata if needed

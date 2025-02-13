@@ -1,7 +1,6 @@
 import { Files, FilesWithAssurances, UploadsQuery } from '@coldpbc/interfaces';
 import { addDays, subDays } from 'date-fns';
 import { DocumentTypes, EntityLevel, ProcessingStatus } from '@coldpbc/enums';
-import { get } from 'lodash';
 
 export function getAllFilesMock() {
 	return [
@@ -116,6 +115,8 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
+      effective_end_date: null,
+      effective_start_date: null,
 		},
 		{
 			id: '2',
@@ -124,6 +125,8 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
+      effective_end_date: null,
+      effective_start_date: null,
 		},
 		{
 			id: '3',
@@ -132,6 +135,8 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
+      effective_end_date: null,
+      effective_start_date: null,
 		},
 	];
 }
@@ -177,6 +182,8 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 				status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      effective_end_date: null,
+      effective_start_date: null,
 		},
 		{
 			id: '2',
@@ -236,6 +243,8 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 				status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      effective_end_date: null,
+      effective_start_date: null,
 		},
 	];
 }
@@ -299,6 +308,8 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 				status: 'uploaded',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      effective_end_date: null,
+      effective_start_date: null,
 		},
 		{
 			id: '2',
@@ -358,6 +369,8 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 				status: 'uploaded',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      effective_end_date: null,
+      effective_start_date: null,
 		},
 	];
 }
@@ -377,6 +390,8 @@ export function filesProcessedWithDatesMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      effective_end_date: '2024-05-01',
+      effective_start_date: '2024-05-01',
     },
     {
       id: '2',
@@ -391,6 +406,8 @@ export function filesProcessedWithDatesMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      effective_end_date: '2024-04-20',
+      effective_start_date: '2024-04-20',
     },
   ];
 }
@@ -410,6 +427,8 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      effective_end_date: '2024-05-01',
+      effective_start_date: '2024-05-01',
     },
     {
       id: '2',
@@ -513,6 +532,8 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      effective_end_date: '2024-04-20',
+      effective_start_date: '2024-04-20',
     },
   ];
 }
@@ -591,6 +612,8 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           },
         },
       ],
+      effective_end_date: '2024-04-20',
+      effective_start_date: '2024-04-20',
     },
     {
       id: 'ofile_xtu8n9rqlgko4v1nu8v8v5cg',
@@ -628,6 +651,8 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           product: null,
         },
       ],
+      effective_end_date: '2024-04-20',
+      effective_start_date: '2024-04-20',
     },
     {
       id: 'ofile_jqohnz87bn2fi2es7suhqb48',
@@ -704,12 +729,14 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           product: null,
         },
       ],
+      effective_end_date: '2024-04-20',
+      effective_start_date: '2024-04-20',
     },
   ];
 }
 
 export function getUploadsMock(): UploadsQuery[] {
-  const baseFiles: UploadsQuery[] = getFilesWithAssurances().map((file, index) => ({
+  const baseFiles: UploadsQuery[] = getFilesWithAssurances().map((file) => ({
     id: file.id,
     originalName: file.originalName,
     createdAt: file.createdAt,
