@@ -6,7 +6,7 @@ import {
   Spinner,
   TextInputForEntityEdit,
 } from '@coldpbc/components';
-import { ButtonTypes, EntityLevel, GlobalSizes, IconNames } from '@coldpbc/enums';
+import { ButtonTypes, EntityLevel, GlobalSizes, IconNames, Length, WeightFactorUnits } from '@coldpbc/enums';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { MaterialGraphQL, SuppliersWithAssurances, ToastMessage } from '@coldpbc/interfaces';
@@ -23,6 +23,7 @@ import {
 import { HexColors } from '@coldpbc/themes';
 import { ApolloQueryResult } from '@apollo/client';
 import { KeyedMutator } from 'swr';
+import { NumericInputWithUnitOfMeasure } from '../../atoms/numericInputWithUnitOfMeasure/numericInputWithUnitOfMeasure';
 
 interface EditMaterialDetailsProps {
 	material: MaterialGraphQL;
@@ -40,6 +41,10 @@ const isMaterialEdited = (originalMaterial: MaterialGraphQL, editedMaterial: Mat
 		'supplierMaterialId',
 		['materialClassification', 'id'],
 		['organizationFacility', 'id'],
+    'weightFactor',
+    'weightFactorUnitOfMeasure',
+    'width',
+    'widthUnitOfMeasure',
 	];
 
 	return keysToCompare.some(key => {
@@ -115,6 +120,10 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 									id: editedMaterial.materialClassification?.id,
 							  }
 							: undefined,
+            weightFactor: editedMaterial.weightFactor,
+            weightFactorUnitOfMeasure: editedMaterial.weightFactorUnitOfMeasure,
+            width: editedMaterial.width,
+            widthUnitOfMeasure: editedMaterial.widthUnitOfMeasure,
 					},
 				});
 
@@ -234,6 +243,8 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 			<TextInputForEntityEdit<MaterialGraphQL> {...inputProps('materialSubcategory')} label={'Sub-Category'} />
 			<TextInputForEntityEdit<MaterialGraphQL> {...inputProps('brandMaterialId')} label={'Brand Material ID'} />
 			<TextInputForEntityEdit<MaterialGraphQL> {...inputProps('supplierMaterialId')} label={'Supplier Material ID'} />
+      <NumericInputWithUnitOfMeasure<MaterialGraphQL> {...inputProps('weightFactor')} label={'Weight Factor'} unitOfMeasureFieldName={'weightFactorUnitOfMeasure'} unitOfMeasureOptions={Object.values(WeightFactorUnits)} />
+      <NumericInputWithUnitOfMeasure<MaterialGraphQL> {...inputProps('width')} label={'Width'} unitOfMeasureFieldName={'widthUnitOfMeasure'} unitOfMeasureOptions={Object.values(Length)} />
 		</Card>
 	);
 };

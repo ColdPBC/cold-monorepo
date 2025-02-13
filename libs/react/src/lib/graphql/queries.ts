@@ -249,6 +249,12 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
           name
           materialCategory
           materialSubcategory
+          materialClassification {
+            id
+            name
+            category
+            weightFactor
+          }
           emissionsFactor
           attributeAssurances {
             id
@@ -263,6 +269,10 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
               name
             }
           }
+          weightFactor
+          weightFactorUnitOfMeasure
+          width
+          widthUnitOfMeasure
         }
       }
       attributeAssurances {
@@ -476,7 +486,12 @@ export const GET_PRODUCT = gql`
             id
             name
             category
+            weightFactor
           }
+          weightFactor
+          weightFactorUnitOfMeasure
+          width
+          widthUnitOfMeasure
         }
       }
       attributeAssurances {
@@ -544,7 +559,12 @@ export const GET_MATERIAL = gql`
       materialClassification {
         id
         name
+        weightFactor
       }
+      width
+      widthUnitOfMeasure
+      weightFactor
+      weightFactorUnitOfMeasure
     }
   }
 `;
@@ -622,10 +642,20 @@ export const GET_ALL_PRODUCTS_FOR_MATERIAL_LEVEL_SUSTAINABILITY_REPORT = gql`
       }
       productMaterials {
         id
+        yield
+        unitOfMeasure
         weight
         material {
           id
           name
+          materialClassification {
+            id
+            weightFactor
+          }
+          weightFactor
+          weightFactorUnitOfMeasure
+          width
+          widthUnitOfMeasure
         }
       }
     }

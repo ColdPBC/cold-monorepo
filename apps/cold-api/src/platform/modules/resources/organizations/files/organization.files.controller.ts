@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, OnModuleInit, Param, Patch, Post, Query, Req, UploadedFiles, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import multerS3 from 'multer-s3';
-import { allRoles, coldAndCompanyAdmins, HttpExceptionFilter, IAuthenticatedUser, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
+import { allRoles, HttpExceptionFilter, IAuthenticatedUser, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { OrganizationFilesService } from './organization.files.service';
@@ -60,7 +60,7 @@ export class OrganizationFilesController implements OnModuleInit {
 	}
 
 	@Delete(':id')
-	@Roles(...coldAndCompanyAdmins)
+	@Roles(...allRoles)
 	async deleteFile(
 		@Param('orgId') orgId: string,
 		@Param('id') fileId: string,
