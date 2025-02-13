@@ -45,8 +45,6 @@ export const Calculated: Story = {
             widthUnitOfMeasure: Length.in,
             materialClassification: {
               id: 'matclass_1',
-              name: 'Nylon fabric',
-              category: MaterialClassificationCategory.TEXTILES,
               weightFactor: 0.3,
             }
           }
