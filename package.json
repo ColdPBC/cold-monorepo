@@ -79,6 +79,7 @@
 		"@langchain/community": "^0.3.16",
 		"@langchain/pinecone": "^0.0.3",
 		"@launchdarkly/node-server-sdk": "^8.1.0",
+		"@linear/sdk": "^38.0.0",
 		"@mdx-js/rollup": "^2.3.0",
 		"@mui/icons-material": "^5.11.11",
 		"@mui/material": "^5.16.1",
