@@ -1,3 +1,12 @@
+# [1.558.0](https://github.com/coldPBC/cold-monorepo/compare/v1.557.0...v1.558.0) (2025-02-13)
+
+
+### Features
+
+* Add filtered select-all functionality to data grid ([99d45b2](https://github.com/coldPBC/cold-monorepo/commit/99d45b24d7729e87602ea3c944ceaffe3ab0b221))
+* Fix syntax errors in clickSelectAll function logic ([c1d921f](https://github.com/coldPBC/cold-monorepo/commit/c1d921fbf6b552d0819c38724ec89389b399c1fa))
+* Optimize attribute sorting by wrapping it in useMemo ([6e4e56b](https://github.com/coldPBC/cold-monorepo/commit/6e4e56b1a83ea2841b48c5af92a59ef9e741b8b2))
+
 # [1.557.0](https://github.com/coldPBC/cold-monorepo/compare/v1.556.0...v1.557.0) (2025-02-13)
 
 
