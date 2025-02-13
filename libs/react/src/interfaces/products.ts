@@ -1,7 +1,8 @@
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
-import {MaterialClassificationCategory} from "@coldpbc/enums";
+import { Length, MaterialClassificationCategory, UnitOfMeasurement, WeightFactorUnits } from '@coldpbc/enums';
 import { gql } from '@apollo/client';
 import { string } from 'zod';
+import { ProductMaterial, ProductMaterialForWeightCalculation } from './productMaterials';
 
 export interface Products {
   id: string;
@@ -22,14 +23,11 @@ export interface ProductForMaterialLevelSustainabilityReportGraphQL extends Prod
     id: string;
     name: string;
   } | null;
-  productMaterials: {
-    id: string;
-    weight: number | null;
-    material: {
-      id: string;
+  productMaterials: Array<ProductMaterialForWeightCalculation & {
+    material: ProductMaterialForWeightCalculation['material'] & {
       name: string;
     }
-  }[];
+  }>;
 }
 
 export interface ProductForMaterialLevelSustainabilityReport extends ProductBaseEntity {
@@ -50,20 +48,7 @@ export interface PaginatedProductsQuery {
   description: string | null;
   productCategory: string | null;
   productSubcategory: string | null;
-  productMaterials: {
-    id: string
-    yield: number | null;
-    unitOfMeasure: string | null;
-    weight: number | null;
-    material: {
-      id: string
-      name: string
-      materialCategory: string | null;
-      materialSubcategory: string | null;
-      emissionsFactor: number | null;
-      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
-    };
-  }[];
+  productMaterials: ProductMaterial[];
   organizationFacility: {
     id: string
     name: string
@@ -84,11 +69,6 @@ export interface ProductsQuery extends PaginatedProductsQuery {
         id: string;
         name: string;
       };
-      materialClassification: {
-        id: string;
-        name: string;
-        category: MaterialClassificationCategory;
-      } | null
     };
   }>;
 }

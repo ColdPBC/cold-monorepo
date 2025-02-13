@@ -6,7 +6,7 @@ import { IconNames } from '@coldpbc/enums';
 
 interface DetailsItemProps {
   category: string | ReactNode;
-  value: string | null | undefined;
+  value: string | null | undefined | ReactNode;
   href?: string;
   cta?: () => void;
   ctaIconName?: IconNames;

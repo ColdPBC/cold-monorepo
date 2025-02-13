@@ -1,3 +1,31 @@
+# [1.556.0](https://github.com/coldPBC/cold-monorepo/compare/v1.555.0...v1.556.0) (2025-02-13)
+
+
+### Features
+
+* use calculated weights on product-level sustainability attribute report ([3786eea](https://github.com/coldPBC/cold-monorepo/commit/3786eea4fff63c1fee27d69d1cf7119384ea7d16))
+
+# [1.555.0](https://github.com/coldPBC/cold-monorepo/compare/v1.554.0...v1.555.0) (2025-02-12)
+
+
+### Features
+
+* show/use calculated weight on PCF tab ([8d3f785](https://github.com/coldPBC/cold-monorepo/commit/8d3f785c25e4457f8514a571f4f8a30a9e4ce7cc))
+
+# [1.554.0](https://github.com/coldPBC/cold-monorepo/compare/v1.553.0...v1.554.0) (2025-02-12)
+
+
+### Features
+
+* Enable new PCF UI feature flag in productsDataGrid ([7f6a11e](https://github.com/coldPBC/cold-monorepo/commit/7f6a11e10c60cd5518c0414e0940ad16c76dbd4d))
+
+# [1.553.0](https://github.com/coldPBC/cold-monorepo/compare/v1.552.0...v1.553.0) (2025-02-11)
+
+
+### Features
+
+* add weightFactor to material classifications ([d55cef3](https://github.com/coldPBC/cold-monorepo/commit/d55cef3154e28276434d6db70aa5215dd2d631f6))
+
 # [1.552.0](https://github.com/coldPBC/cold-monorepo/compare/v1.551.0...v1.552.0) (2025-02-11)
 
 
