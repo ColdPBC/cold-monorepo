@@ -106,38 +106,6 @@ const _DocumentsPage = () => {
 		return <Spinner />;
 	}
 
-  const handleFileUpload = async (response: any, context: any) => {
-    if (isAxiosError(response)) {
-      logBrowser('Upload failed', 'error', {...context, response});
-      const error: AxiosError = response;
-      if(error.response?.status === 409) {
-        await addToastMessage({
-          type: ToastMessage.FAILURE,
-          message: 'File already exists. Error Uploading',
-          position: 'bottomRight',
-        });
-      } else {
-        await addToastMessage({
-          type: ToastMessage.FAILURE,
-          message: 'Upload failed',
-          position: 'bottomRight',
-        });
-      }
-    } else {
-      await addToastMessage({
-        type: ToastMessage.SUCCESS,
-        message: (
-          <div className={'flex flex-col gap-[10px]'}>
-            <div className={'font-bold'}>Upload Complete</div>
-            <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
-          </div>
-        ),
-        position: 'bottomRight',
-      });
-      logBrowser('File Upload successful', 'info', {...context, response});
-    }
-  }
-
   const getPageButtons = () => {
     return (
       <div className={'h-auto'}>
@@ -169,12 +137,22 @@ const _DocumentsPage = () => {
 		const response = await axiosFetcher([`/organizations/${orgId}/files/${documentToDelete.id}`, 'DELETE']);
 		await allFiles.mutate();
 		if (isAxiosError(response)) {
-			logBrowser('Error deleting file', 'error', { ...response }, response);
-			addToastMessage({
-				message: 'Error deleting file',
-				type: ToastMessage.FAILURE,
-			});
+      const axiosError: AxiosError = response;
+      if(axiosError.status === 401) {
+        logBrowser('Unauthorized to delete file', 'error', { axiosError }, axiosError);
+        addToastMessage({
+          message: 'Unauthorized to delete file',
+          type: ToastMessage.FAILURE,
+        });
+      } else {
+        logBrowser('Error deleting file', 'error', { axiosError }, axiosError);
+        addToastMessage({
+          message: 'Error deleting file',
+          type: ToastMessage.FAILURE,
+        });
+      }
 		} else {
+      logBrowser('File deleted', 'info', { response });
 			addToastMessage({
 				message: 'File deleted successfully',
 				type: ToastMessage.SUCCESS,

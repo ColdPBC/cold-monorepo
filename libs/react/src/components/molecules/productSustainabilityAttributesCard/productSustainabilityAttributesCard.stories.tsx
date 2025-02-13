@@ -61,6 +61,10 @@ export const Default: Story = {
               },
             ],
             materialClassification: null,
+            weightFactor: null,
+            weightFactorUnitOfMeasure: null,
+            width: null,
+            widthUnitOfMeasure: null,
           }
         }
       ],
@@ -107,7 +111,11 @@ export const NoAssurances: Story = {
             },
             attributeAssurances: [],
             materialClassification: null,
-          }
+            weightFactor: null,
+            weightFactorUnitOfMeasure: null,
+            width: null,
+            widthUnitOfMeasure: null,
+          },
         }
       ],
       organizationFacility: {

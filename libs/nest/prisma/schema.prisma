@@ -734,6 +734,7 @@ model material_classification {
   created_at                                        DateTime                                            @default(now())
   updated_at                                        DateTime                                            @updatedAt
   materials                                         materials[]
+  weight_factor                                     Float?
   core_classification_id                            Int?
   core_classification                               core_classifications?                               @relation(fields: [core_classification_id], references: [id], onDelete: Cascade)
   sustainability_attributes                         sustainability_attributes[]
@@ -781,7 +782,7 @@ model materials {
   weight_factor                 Float?
   weight_factor_unit_of_measure String?
   width                         Float?
-	width_unit_of_measure				  String?
+  width_unit_of_measure         String?
   activity_id                   String?
   metadata                      Json?
   organization                  organizations              @relation(fields: [organization_id], references: [id], onDelete: Cascade)
