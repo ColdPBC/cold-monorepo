@@ -480,13 +480,21 @@ const _DocumentDetailsSidebar = (props: {
 				};
         // only send metadata if needed
         if(
-          fileState.certificate_number !== compareFileState.certificate_number &&
-          fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE'
+          isSameDay(fileState.startDate || 0, compareFileState.startDate || 0) ||
+          isSameDay(fileState.endDate || 0, compareFileState.endDate || 0) ||
+          fileState.certificate_number !== compareFileState.certificate_number
         ) {
           // update the file metadata
           variables.input.metadata = {
-            certificate_number: fileState.certificate_number
+            ...fileState.metadata,
+            effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+            effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
           };
+
+          if(fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
+            // if the file type is certificate or scope certificate, then send the certificate number
+            variables.input.metadata.certificate_number = fileState.certificate_number
+          }
         }
 
 				promises.push(updateDocument(variables));
