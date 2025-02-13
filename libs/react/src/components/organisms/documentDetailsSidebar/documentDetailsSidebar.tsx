@@ -474,7 +474,9 @@ const _DocumentDetailsSidebar = (props: {
 					input: {
 						id: fileState.id,
 						type: fileState.type,
-					},
+            effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+            effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+          },
 				};
         // only send metadata if needed
         if(
@@ -483,13 +485,11 @@ const _DocumentDetailsSidebar = (props: {
           fileState.certificate_number !== compareFileState.certificate_number
         ) {
           // update the file metadata
-          variables.input.metadata = {
-            ...(file.metadata || {}),
-            effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-            effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
-          };
           if (fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
-            variables.input.metadata.certificate_number = fileState.certificate_number;
+            variables.input.metadata = {
+              ...(file.metadata || {}),
+              certificate_number: fileState.certificate_number
+            };
           }
         }
 
