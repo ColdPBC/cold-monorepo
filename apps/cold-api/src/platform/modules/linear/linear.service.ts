@@ -12,14 +12,16 @@ import { set } from 'lodash';
 export class LinearService extends BaseWorker {
 	client: LinearClient;
 
+	test_team_id = 'eed21186-e0f7-4b88-8028-1ab405ffed6d';
 	customer_success_team_id = 'acf2cbe2-7dff-47ce-a58f-39a2dcc0d447';
-	ingestion_other_label_id = '776a38d7-414c-47c8-be2a-25fef39985d4';
-	ingestion_po_label_id = 'fdbe95a3-f7e9-449d-bc56-718cf7b2f9f3';
-	ingestion_sustainability_label_id = 'a377d813-82d0-4ea2-a57c-ae434cb0ad42';
-	ingestion_bom_label_id = '601879c3-f580-4f17-a940-4eb776c29bb0';
 	initial_workflow_state_id = '5dfae45e-3518-4bcb-ad4c-b94c6c7f894d';
-	ai_processing_failed_label_id = '173beec3-684b-4d86-a4c0-8785dce455a8';
 	ingestion_project_id = 'e79c1550-2cf2-4e3e-b6d2-51fec4685c52';
+	ingestion_other_label_id = 'ca2fe1a5-f5e0-46ef-85e8-92eabf9cef8f';
+	ingestion_po_label_id = 'f1029d39-746c-4024-ab20-34f634ec3644';
+	ingestion_sustainability_label_id = 'a377d813-82d0-4ea2-a57c-ae434cb0ad42';
+	ingestion_costing_label_id = '46e03286-da88-4998-800f-893e35d95d35';
+	ingestion_bom_label_id = 'bb111c92-da6a-474d-a80d-1ba87511fbf5';
+	ai_processing_failed_label_id = 'd10fc7c7-4bfb-4cfe-88f5-4d5946f05a67';
 
 	constructor(private readonly configService: ConfigService, readonly s3: S3Service, readonly prisma: PrismaService) {
 		super(LinearService.name);
@@ -130,16 +132,16 @@ export class LinearService extends BaseWorker {
 
 			if (data.error) {
 				const error = JSON.parse(data.error);
-				title = `Review Failed Ingestion for ${data.organization.display_name}`;
-				description = `The file failed to process due to the following error: ${error.message}`;
+				title = `Review Failed Ingestion for ${data.organization.display_name} : ${data.orgFile.original_name} | ${data.orgFile.type}`;
+				description = `The file uploaded by ${data.user.coldclimate_claims.email} failed to process due to the following error: ${error.message}`;
 			} else {
 				title = `Manual Review Request from ${data.organization.display_name} : ${data.orgFile.original_name} | ${data.orgFile.type}`;
 				description = `User ${data.user.coldclimate_claims.email} from ${data.organization.display_name} uploaded a file with a ${data.orgFile.type} type for ingestion.`;
 			}
 
 			const payload = {
-				teamId: this.customer_success_team_id,
-				projectId: this.ingestion_project_id,
+				// Use the customer success team for production and the test team for development or staging
+				teamId: process.env.NODE_ENV === 'production' ? this.customer_success_team_id : this.test_team_id,
 				title: title,
 				description:
 					description +
@@ -152,8 +154,13 @@ export class LinearService extends BaseWorker {
 				- MimeType: ${data.orgFile.mimetype}
 				- Metadata: ${JSON.stringify(data.orgFile?.metadata)}`,
 				labelIds: labels,
-				stateId: this.initial_workflow_state_id,
 			};
+
+			// only set these for production
+			if (process.env.NODE_ENV === 'production') {
+				set(payload, 'projectId', this.ingestion_project_id);
+				set(payload, 'stateId', this.initial_workflow_state_id);
+			}
 
 			// we need to first create the issue before we attach a file to it.
 			const issueResponse = await this.client.createIssue(payload);
