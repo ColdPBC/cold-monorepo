@@ -4,7 +4,6 @@ import { Nack, RabbitRPC, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { AppService } from './app.service';
-import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
 import { PineconeService } from './pinecone/pinecone.service';
 import { ChatService } from './chat/chat.service';
@@ -21,7 +20,6 @@ export class RabbitService extends BaseWorker {
 		readonly appService: AppService,
 		readonly prisma: PrismaService,
 		readonly s3: S3Service,
-		readonly files: FileService,
 		readonly cache: CacheService,
 		readonly pc: PineconeService,
 		readonly chatService: ChatService,
@@ -98,7 +96,6 @@ export class RabbitService extends BaseWorker {
 					break;
 				}
 				case 'organization.created': {
-					const response = await this.appService.createAssistant(parsed);
 					if (parsed.organization.website) {
 						await this.crawlerQueue.add(
 							event,
@@ -110,7 +107,7 @@ export class RabbitService extends BaseWorker {
 							},
 						);
 					}
-					return response;
+					return {};
 				}
 				case 'organization.deleted': {
 					let assistant, pinecone;
@@ -127,12 +124,9 @@ export class RabbitService extends BaseWorker {
 					return { assistant, pinecone };
 				}
 				case 'file.uploaded': {
-					const uploader = new FileService(this.config, this.appService, this.prisma, this.s3);
-					await this.pc.ingestData(parsed.user, parsed.organization, parsed.payload);
-					return await uploader.uploadOrgFilesToOpenAI(parsed);
-				}
-				case 'organization_files.get': {
-					return await this.files.listAssistantFiles(parsed.user, parsed.organization.id);
+					//await this.pc.ingestData(parsed.user, parsed.organization, parsed.payload);
+					//return await this.files.uploadOrgFilesToOpenAI(parsed);
+					return;
 				}
 			}
 		} catch (e) {
@@ -173,7 +167,7 @@ export class RabbitService extends BaseWorker {
 			case 'organization.created': {
 				try {
 					const pcResponse = await this.pc.getIndexDetails();
-					const response = await this.appService.createAssistant(parsed);
+					//const response = await this.appService.createAssistant(parsed);
 					if (parsed.organization.website) {
 						let url = parsed.organization.website;
 						if (url.indexOf('/') === url.length - 1) {
@@ -190,7 +184,7 @@ export class RabbitService extends BaseWorker {
 							{ removeOnFail: true, removeOnComplete: true },
 						);
 					}
-					return { pinecone: pcResponse, assistant: response };
+					return { pinecone: pcResponse, assistant: {} };
 				} catch (e) {
 					this.logger.error('Failed to create Pinecone index', e);
 					throw e;

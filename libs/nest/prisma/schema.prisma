@@ -323,7 +323,9 @@ model organizations {
   isTest                                            Boolean                                             @default(false)
   website                                           String?
   deleted                                           Boolean                                             @default(false)
-  actions                                           actions[]
+  linear_secret																		  String?
+	linear_webhook_id																	String?
+	actions                                           actions[]
   category_data                                     category_data[]
   integrations                                      integrations[]
   organization_compliance                           organization_compliance[]
