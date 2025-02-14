@@ -190,8 +190,8 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
           weight: get(weightResult, 'weightInKg'),
           weightResult: weightResult,
           percent_weight: weightResult && 'weightInKg' in weightResult && totalWeight > 0 ? `${((weightResult.weightInKg / totalWeight) * 100).toFixed(0)}%` : null,
-          emissionsFactor: material.emissionsFactor?.emissionsFactor,
-          emissions: weightResult && 'weightInKg' in weightResult && material.emissionsFactor ? (weightResult.weightInKg * material.emissionsFactor.emissionsFactor).toFixed(2) : null,
+          emissionsFactor: material.emissionsFactor,
+          emissions: weightResult && 'weightInKg' in weightResult && material.emissionsFactor ? (weightResult.weightInKg * material.emissionsFactor).toFixed(2) : null,
           sustainabilityAttributes: susAttributes,
         };
       });
