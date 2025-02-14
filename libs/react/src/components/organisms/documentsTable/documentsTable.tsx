@@ -1,34 +1,31 @@
-import { GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridValidRowModel, MuiEvent } from '@mui/x-data-grid-pro';
-import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import {
-  ColdIcon,
-  BubbleList,
-  ErrorFallback, MuiDataGrid,
-  MUIDataGridNoRowsOverlay,
-  SustainabilityAttributeColumn
-} from '@coldpbc/components';
-import { HexColors } from '@coldpbc/themes';
-import { differenceInDays, format } from 'date-fns';
-import {capitalize, uniq} from 'lodash';
-import React, {ReactNode} from 'react';
-import {get, toArray, uniqWith} from 'lodash';
+  GridCallbackDetails,
+  GridColDef,
+  GridRenderCellParams,
+  GridRowParams,
+  GridTreeNodeWithRender,
+  GridValidRowModel,
+  MuiEvent
+} from '@mui/x-data-grid-pro';
+import {ClaimStatus, IconNames, ProcessingStatus} from '@coldpbc/enums';
+import {BubbleList, ColdIcon, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumn} from '@coldpbc/components';
+import {HexColors} from '@coldpbc/themes';
+import {differenceInDays, format} from 'date-fns';
+import {get, toArray, uniq, uniqWith} from 'lodash';
+import React from 'react';
+import {FilesWithAssurances, SustainabilityAttributeWithoutAssurances} from '@coldpbc/interfaces';
 import {
-  Claims,
-  FilesWithAssurances,
-  SustainabilityAttribute,
-  SustainabilityAttributeWithoutAssurances
-} from '@coldpbc/interfaces';
-import {
-  addTZOffset, formatScreamingSnakeCase,
+  addTZOffset,
+  formatScreamingSnakeCase,
   getDateActiveStatus,
   getEffectiveEndDate,
   getFileProcessingStatus,
   listFilterOperators,
   listSortComparator,
 } from '@coldpbc/lib';
-import { withErrorBoundary } from 'react-error-boundary';
-import { useColdContext } from '@coldpbc/hooks';
-import { twMerge } from 'tailwind-merge';
+import {withErrorBoundary} from 'react-error-boundary';
+import {useColdContext} from '@coldpbc/hooks';
+import {twMerge} from 'tailwind-merge';
 
 const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: (id: string) => void }) => {
 	const { files, selectDocument } = props;
@@ -38,7 +35,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
     const file = files.find(file => file.id === params.row.id);
     const fileStatus = getFileProcessingStatus(file);
     let className = 'text-tc-primary font-bold';
-    if (fileStatus === 'uploaded') {
+    if (fileStatus === ProcessingStatus.AI_PROCESSING) {
       className = 'text-tc-disabled font-bold';
     }
     return <div className={twMerge('overflow-hidden text-ellipsis ', className)}>{params.value}</div>;
@@ -48,7 +45,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
     const file = files.find(file => file.id === params.row.id);
     const fileStatus = getFileProcessingStatus(file);
     let className = 'text-tc-secondary';
-    if (fileStatus === 'uploaded') {
+    if (fileStatus === ProcessingStatus.AI_PROCESSING) {
       className = 'text-tc-disabled';
     }
     let dateString = '--';
@@ -65,7 +62,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
   const fileProcessingStatusElement = (fileId: string, component: () => JSX.Element) => {
     const file = files.find(file => file.id === fileId);
     const fileStatus = getFileProcessingStatus(file);
-    if (fileStatus === 'uploaded') {
+    if (fileStatus === ProcessingStatus.AI_PROCESSING) {
       return (
       <div className={'w-full h-full py-[16px] px-[0px]'}>
         <div
