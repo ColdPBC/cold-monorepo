@@ -1,3 +1,11 @@
+# [1.561.0](https://github.com/coldPBC/cold-monorepo/compare/v1.560.0...v1.561.0) (2025-02-14)
+
+
+### Features
+
+* Add processingStatus field and integrate with file handling ([ecf8353](https://github.com/coldPBC/cold-monorepo/commit/ecf83537f2a5103a1aa50fb9906f48d37b7842a0))
+* Refactor `mqttMappings` and add URL mapping support ([d57d0cc](https://github.com/coldPBC/cold-monorepo/commit/d57d0cc390d23a7db96601732bbd0fce551ca0b6))
+
 # [1.560.0](https://github.com/coldPBC/cold-monorepo/compare/v1.559.0...v1.560.0) (2025-02-14)
 
 
