@@ -1,3 +1,25 @@
+# [1.559.0](https://github.com/coldPBC/cold-monorepo/compare/v1.558.0...v1.559.0) (2025-02-14)
+
+
+### Bug Fixes
+
+* set organization type to any as workaround for type issue ([e641215](https://github.com/coldPBC/cold-monorepo/commit/e6412154a1d300a22c23c0d16cbaa8b33d4644de))
+
+
+### Features
+
+* add 'WebhookSecret' to compliance.enums ([da0ea4d](https://github.com/coldPBC/cold-monorepo/commit/da0ea4d3bceaac75747bdd958631bf55a462451c))
+* add @linear/sdk dependency to project ([1ca5d4a](https://github.com/coldPBC/cold-monorepo/commit/1ca5d4a14f270aafaee8044c2a12d8e82030ed9e))
+* add custom rawBody handling for Linear webhook requests ([2ec6be9](https://github.com/coldPBC/cold-monorepo/commit/2ec6be931b771b08d584a9442adb3d32a815a44e))
+* add LinearController with incoming webhook support for file status updates ([5daf7b5](https://github.com/coldPBC/cold-monorepo/commit/5daf7b5ad00608094847bbf755eaf5b44253a87a))
+* add LinearModule to app module for modular functionality ([0555d66](https://github.com/coldPBC/cold-monorepo/commit/0555d66e9e5f6e07ac0545490b528ed725992b60))
+* add linearSecret and linearWebhookId to organization model ([30becca](https://github.com/coldPBC/cold-monorepo/commit/30becca1cc4a54bf0385117213aa33969944a60d))
+* add LinearService for managing Linear API integrations ([c71aa14](https://github.com/coldPBC/cold-monorepo/commit/c71aa143ea7ceee1c5a1343c44219a480c2f4883))
+* add RabbitMQ message subscription for linear events in LinearRabbitService ([615ca56](https://github.com/coldPBC/cold-monorepo/commit/615ca56c4d320d27e7e432dea40158f955ef26f6))
+* enhance classification processor with status updates and error handling ([28ae591](https://github.com/coldPBC/cold-monorepo/commit/28ae5914eed0b2bad22416eae2a338fb8eb75a5b))
+* enhance file upload handling with Linear webhook support and utility methods ([2bc575d](https://github.com/coldPBC/cold-monorepo/commit/2bc575d805b8e41de4c5765a1db46a762dcd2462))
+* enhance Linear service and controller for webhook handling and error reporting ([673ea74](https://github.com/coldPBC/cold-monorepo/commit/673ea74766b894a607fd8ed5537a7a497d03d82a))
+
 # [1.558.0](https://github.com/coldPBC/cold-monorepo/compare/v1.557.0...v1.558.0) (2025-02-13)
 
 
