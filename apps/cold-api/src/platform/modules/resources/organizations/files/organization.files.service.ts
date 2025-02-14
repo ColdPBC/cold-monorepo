@@ -487,6 +487,16 @@ export class OrganizationFilesService extends BaseWorker {
 	async uploadFile(req: IRequest, orgId: string, files: Array<Express.Multer.File>, type?: file_types) {
 		const { user, url, organization } = req;
 		const org = await this.helper.getOrganizationById(orgId, req.user, true);
+
+		// Add Secret for processing linear webhooks
+		if (!org.linear_secret) {
+			org.linear_secret = new Cuid2Generator(GuidPrefixes.WebhookSecret).scopedId;
+			this.prisma.organizations.update({
+				where: { id: org.id },
+				data: { linear_secret: org.linear_secret },
+			});
+		}
+
 		const failed: any = [];
 		const uploaded: any = [];
 
@@ -583,16 +593,19 @@ export class OrganizationFilesService extends BaseWorker {
 					});
 				}
 
-				// only send event to openAI if the file status is AI_PROCESSING
-				if (existing.processing_status === processing_status.AI_PROCESSING) {
-					await this.events.sendIntegrationEvent(false, 'file.uploaded', { ...existing, organization }, user);
-				}
-
-				//const routingKey = get(this.openAI.definition, 'rabbitMQ.publishOptions.routing_key', 'dead_letter');
-				//await this.events.sendPlatformEvent(routingKey, 'file.uploaded', { existing, user, organization: org }, req);
-
 				if (!failed.find(f => f.file.originalname === existing.original_name)) {
 					uploaded.push(existing);
+				}
+
+				// only send event to openAI if the file status is AI_PROCESSING otherwise create MANUAL_REVIEW issue in linear
+				if (existing.processing_status === processing_status.AI_PROCESSING) {
+					await this.events.sendIntegrationEvent(false, 'file.uploaded', { ...existing, organization }, user);
+				} else {
+					if (existing.bucket && existing.key) {
+						const issue = await this.events.sendRPCEvent('cold.core.linear.events', processing_status.MANUAL_REVIEW, { orgFile: existing, organization, user });
+
+						this.logger.info(`Issue created for file ${existing.original_name}`, { issue });
+					}
 				}
 
 				this.metrics.increment('cold.file.uploaded', 1, {
@@ -602,6 +615,7 @@ export class OrganizationFilesService extends BaseWorker {
 					user_email: user.coldclimate_claims.email,
 					isTestOrg: organization.isTest.toString(),
 				});
+
 				this.metrics.event(
 					'File Uploaded',
 					`A file was uploaded by ${user.coldclimate_claims.email} for ${organization.name}`,

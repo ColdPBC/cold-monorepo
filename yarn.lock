@@ -8389,7 +8389,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-typed-document-node/core@npm:3.2.0, @graphql-typed-document-node/core@npm:^3.1.1, @graphql-typed-document-node/core@npm:^3.2.0":
+"@graphql-typed-document-node/core@npm:3.2.0, @graphql-typed-document-node/core@npm:^3.1.0, @graphql-typed-document-node/core@npm:^3.1.1, @graphql-typed-document-node/core@npm:^3.2.0":
   version: 3.2.0
   resolution: "@graphql-typed-document-node/core@npm:3.2.0"
   peerDependencies:
@@ -10465,6 +10465,17 @@ __metadata:
   version: 0.2.2
   resolution: "@levischuck/tiny-cbor@npm:0.2.2"
   checksum: 10/edf03428ec17bc4939b6bb2f7d22067daaae2efff6f8fa3e4be59538ea3a4136c40add8fdce083ef68123d7b021bd198982447aec9d310e1d8d032f2a435e039
+  languageName: node
+  linkType: hard
+
+"@linear/sdk@npm:^38.0.0":
+  version: 38.0.0
+  resolution: "@linear/sdk@npm:38.0.0"
+  dependencies:
+    "@graphql-typed-document-node/core": "npm:^3.1.0"
+    graphql: "npm:^15.4.0"
+    isomorphic-unfetch: "npm:^3.1.0"
+  checksum: 10/da7c713d6573347a1366aebdf07a6305ba6d0d7bb5795ed007936b83627c398f1cdb691b5e9ce8b4c60be3da124af6ecd9053aa284030ae743d6a70e3da6ce2c
   languageName: node
   linkType: hard
 
@@ -27908,6 +27919,7 @@ __metadata:
     "@langchain/community": "npm:^0.3.16"
     "@langchain/pinecone": "npm:^0.0.3"
     "@launchdarkly/node-server-sdk": "npm:^8.1.0"
+    "@linear/sdk": "npm:^38.0.0"
     "@mdx-js/rollup": "npm:^2.3.0"
     "@mui/icons-material": "npm:^5.11.11"
     "@mui/material": "npm:^5.16.1"
@@ -35928,6 +35940,13 @@ __metadata:
   version: 16.9.0
   resolution: "graphql@npm:16.9.0"
   checksum: 10/5833f82bb6c31bec120bbf9cd400eda873e1bb7ef5c17974fa262cd82dc68728fda5d4cb859dc8aaa4c4fe4f6fe1103a9c47efc01a12c02ae5cb581d8e4029e2
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^15.4.0":
+  version: 15.10.1
+  resolution: "graphql@npm:15.10.1"
+  checksum: 10/49177f52c1fbac022866d39bb15040122da4c3ccd12644233b20edfcb1f76aa92aa92f2a82af4668101d8f726112fda111cb11a12feb05635cd689443a7aafb8
   languageName: node
   linkType: hard
 
