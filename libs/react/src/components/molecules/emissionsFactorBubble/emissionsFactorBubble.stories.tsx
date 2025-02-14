@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    emissionsFactor: {
+    emissionFactor: {
       name: 'Sheep Wool Insulation',
       emissionsFactor: 3.2,
       id: '1',
@@ -36,7 +36,7 @@ export const Default: Story = {
 
 export const WithoutEmissions: Story = {
   args: {
-    emissionsFactor: null,
+    emissionFactor: null,
   },
   render: (args) => {
     return (
@@ -52,7 +52,7 @@ export const WithoutEmissions: Story = {
 
 export const WithLongName: Story = {
   args: {
-    emissionsFactor: {
+    emissionFactor: {
       name: 'Antimicrobial Nylon Thread',
       emissionsFactor: 3.2,
       id: '1',

@@ -3,21 +3,21 @@ import {LightBulbIcon} from "@heroicons/react/20/solid";
 import {ColdIcon} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
 import {IconNames} from "@coldpbc/enums";
-import {ProductsQuery} from "@coldpbc/interfaces";
+import {EmissionFactor} from "@coldpbc/interfaces";
 
 
 export const EmissionsFactorDetailedExpandedView = (
   props : {
-    emissionsFactor: ProductsQuery['productMaterials'][0]['material']['emissionsFactor']
+    emissionFactor: EmissionFactor | null
     weight: number | null
   }
 ) => {
-  const { emissionsFactor, weight } = props;
+  const { emissionFactor, weight } = props;
 
   let element: ReactNode;
   let className: string;
 
-  if(!emissionsFactor || !weight) {
+  if(!emissionFactor || !weight) {
     className = ' flex flex-col'
     element = (
       <>
@@ -32,15 +32,15 @@ export const EmissionsFactorDetailedExpandedView = (
     )
   } else {
     className = ' flex flex-row justify-between'
-    const totalEmissions = emissionsFactor.emissionsFactor * weight;
+    const totalEmissions = emissionFactor.emissionsFactor * weight;
     element = (
       <>
         <div className={'flex flex-col gap-4 w-full'}>
           <div className={'text-h5'}>
-            {emissionsFactor.name} | {emissionsFactor.emissionsFactor}
+            {emissionFactor.name} | {emissionFactor.emissionsFactor}
           </div>
           <div className={'text-body text-wrap'}>
-            {emissionsFactor.description}
+            {emissionFactor.description}
           </div>
           <div className={'flex flex-row gap-[10px]'}>
             <LightBulbIcon className={'w-[15px] h-[15px] self-center'} color={'white'}/>
@@ -71,7 +71,7 @@ export const EmissionsFactorDetailedExpandedView = (
               name={IconNames.CloseModalIcon}
             />
             <div>
-              {emissionsFactor.emissionsFactor.toFixed(1)}
+              {emissionFactor.emissionsFactor.toFixed(1)}
             </div>
           </div>
           <div className={'h-[1px] w-full bg-gray-80'}></div>

@@ -10,6 +10,7 @@ export const ProductMaterialMock: ProductMaterial = ({
     name: 'Material',
     attributeAssurances: [],
     emissionsFactor: null,
+    emissionFactor: null,
     materialCategory: null,
     materialSubcategory: null,
     materialClassification: null,

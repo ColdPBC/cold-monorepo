@@ -26,7 +26,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 15',
 						materialCategory: null,
 						materialSubcategory: null,
-            emissionsFactor: {
+            emissionsFactor: 11.2,
+            emissionFactor: {
               id: 'emfac_1',
               name: 'Wool insulation',
               emissionsFactor: 11.2,
@@ -59,7 +60,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 7',
 						materialCategory: null,
 						materialSubcategory: null,
-            emissionsFactor: {
+            emissionsFactor: 2,
+            emissionFactor: {
               id: 'emfac_2',
               name: 'Polyester',
               emissionsFactor: 2,
@@ -126,7 +128,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 9',
 						materialCategory: null,
 						materialSubcategory: null,
-            emissionsFactor: {
+            emissionsFactor: 5,
+            emissionFactor: {
               id: 'emfac_3',
               name: 'Cotton',
               emissionsFactor: 5,
@@ -195,7 +198,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Example Nylon 1234',
 						materialCategory: null,
 						materialSubcategory: null,
-            emissionsFactor: {
+            emissionsFactor: 4,
+            emissionFactor: {
               id: 'emfac_4',
               name: 'Polyester',
               emissionsFactor: 4,
@@ -340,6 +344,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						materialCategory: null,
 						materialSubcategory: null,
 						emissionsFactor: null,
+            emissionFactor: null,
 						organizationFacility: {
 							id: 'ofac_f20621xztckbtqirkjlc7qgy',
 							name: 'Global Apparel Ltd.',
@@ -368,6 +373,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						materialCategory: null,
 						materialSubcategory: null,
 						emissionsFactor: null,
+            emissionFactor: null,
 						organizationFacility: {
 							id: 'ofac_vd809v326es9yz3rygkeb14f',
 							name: 'Supplier Delta',
@@ -430,6 +436,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						materialCategory: null,
 						materialSubcategory: null,
 						emissionsFactor: null,
+            emissionFactor: null,
 						organizationFacility: {
 							id: 'ofac_c833b42yr2kv52p73oy0nuve',
 							name: 'Supplier 15',
@@ -481,6 +488,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						materialCategory: null,
 						materialSubcategory: null,
 						emissionsFactor: null,
+            emissionFactor: null,
 						organizationFacility: {
 							id: 'ofac_vd809v326es9yz3rygkeb14f',
 							name: 'Supplier Delta',
@@ -618,7 +626,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 1',
 						materialCategory: 'Material Category 1',
 						materialSubcategory: 'Material Subcategory 1',
-            emissionsFactor: {
+            emissionsFactor: 2.3,
+            emissionFactor: {
               id: 'emfac_5',
               name: 'Polyvinyl chloride (PVC) foam',
               emissionsFactor: 2.3,
@@ -651,7 +660,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 7',
 						materialCategory: 'Material Category 1',
 						materialSubcategory: 'Material Subcategory 2',
-            emissionsFactor: {
+            emissionsFactor: 3.5,
+            emissionFactor: {
               id: 'emfac_6',
               name: 'Polyester',
               emissionsFactor: 3.5,
@@ -724,7 +734,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 8',
 						materialCategory: 'Material Category 2',
 						materialSubcategory: 'Material Subcategory 1',
-            emissionsFactor: {
+            emissionsFactor: null,
+            emissionFactor: {
               id: 'emfac_7',
               name: 'Polyester',
               emissionsFactor: 4.5,
@@ -791,7 +802,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 9',
 						materialCategory: 'Material Category 1',
 						materialSubcategory: 'Material Subcategory 2',
-            emissionsFactor: {
+            emissionsFactor: 20.1,
+            emissionFactor: {
               id: 'emfac_8',
               name: 'Polyester',
               emissionsFactor: 20.1,
@@ -858,7 +870,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 11',
 						materialCategory: 'Material Category 2',
 						materialSubcategory: 'Material Subcategory 2',
-            emissionsFactor: {
+            emissionsFactor: 14.5,
+            emissionFactor: {
               id: 'emfac_9',
               name: 'Polyester',
               emissionsFactor: 14.5,
@@ -914,7 +927,8 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Example Nylon 1234',
 						materialCategory: 'Material Category 3',
 						materialSubcategory: 'Material Subcategory 1',
-            emissionsFactor: {
+            emissionsFactor: 3.2,
+            emissionFactor: {
               id: 'emfac_10',
               name: 'Polyester',
               emissionsFactor: 3.2,

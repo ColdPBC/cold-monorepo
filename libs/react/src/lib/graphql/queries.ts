@@ -255,7 +255,8 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
             category
             weightFactor
           }
-          emissionsFactor {
+          emissionsFactor
+          emissionFactor {
             id
             name
             emissionsFactor
@@ -469,7 +470,8 @@ export const GET_PRODUCT = gql`
           name
           materialCategory
           materialSubcategory
-          emissionsFactor {
+          emissionsFactor
+          emissionFactor {
             id
             name
             emissionsFactor

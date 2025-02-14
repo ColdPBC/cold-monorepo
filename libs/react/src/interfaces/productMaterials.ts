@@ -29,12 +29,8 @@ export interface ProductMaterial extends ProductMaterialForWeightCalculation {
       name: string;
       category: MaterialClassificationCategory;
     } | null;
-    emissionsFactor: {
-      id: string;
-      name: string;
-      emissionsFactor: number;
-      description: string;
-    } | null;
+    emissionsFactor: number | null;
+    emissionFactor: EmissionFactor | null;
     attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
   };
 }
