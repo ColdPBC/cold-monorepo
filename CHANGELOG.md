@@ -1,3 +1,10 @@
+# [1.562.0](https://github.com/coldPBC/cold-monorepo/compare/v1.561.0...v1.562.0) (2025-02-14)
+
+
+### Features
+
+* Improve UploadModal customization and replace DocumentUploadButton ([ddb6cb9](https://github.com/coldPBC/cold-monorepo/commit/ddb6cb9ec44523e977fc21fc824c94c485f5d4e4))
+
 # [1.561.0](https://github.com/coldPBC/cold-monorepo/compare/v1.560.0...v1.561.0) (2025-02-14)
 
 
