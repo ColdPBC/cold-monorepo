@@ -9,12 +9,14 @@ import {
   Modal,
   Spinner,
   DocumentDetailsSidebarFileState,
-  DocumentsEditMaterialsModal, UploadModal,
+  DocumentsEditMaterialsModal,
+  UploadModal,
+  AiProcessingDocumentsBanner
 } from '@coldpbc/components';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { FilesWithAssurances, MaterialWithSupplier, ToastMessage } from '@coldpbc/interfaces';
-import {AssuranceDocumentTypes, ButtonTypes, IconNames, MainDocumentCategory} from '@coldpbc/enums';
+import { AssuranceDocumentTypes, ButtonTypes, IconNames, MainDocumentCategory, ProcessingStatus} from '@coldpbc/enums';
 import {AxiosError, isAxiosError} from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
 import {get} from 'lodash';
@@ -268,6 +270,7 @@ const _DocumentsPage = () => {
 		<div className="relative overflow-y-auto h-full w-full">
 			<MainContent title={ldFlags.showNewDocumentUploadUxCold1410 ? "Assurance Documents" : "Documents"} className={'gap-[40px] w-[calc(100%-100px)] min-w-[1129px]'} headerElement={getPageButtons()}>
 				<DocumentsHeaderTypes files={files} />
+        <AiProcessingDocumentsBanner count={files.filter(file => file.processingStatus === ProcessingStatus.AI_PROCESSING).length} />
 				<DocumentsTable files={files} selectDocument={selectDocument} />
 			</MainContent>
 			<DocumentDetailsSidebar
