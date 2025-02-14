@@ -38,3 +38,11 @@ export interface ProductMaterial extends ProductMaterialForWeightCalculation {
     attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
   };
 }
+
+export interface EmissionFactor {
+  id: string;
+  name: string;
+  emissionsFactor: number;
+  description: string;
+}
+
