@@ -734,7 +734,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 8',
 						materialCategory: 'Material Category 2',
 						materialSubcategory: 'Material Subcategory 1',
-            emissionsFactor: null,
+            emissionsFactor: 4.5,
             emissionFactor: {
               id: 'emfac_7',
               name: 'Polyester',
