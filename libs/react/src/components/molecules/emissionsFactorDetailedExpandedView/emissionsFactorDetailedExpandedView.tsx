@@ -58,7 +58,7 @@ export const EmissionsFactorDetailedExpandedView = (
               Weight
             </div>
             <div>
-              {parseFloat(weight.toFixed(2))} kg
+              {weight} kg
             </div>
           </div>
           <div className={'text-body flex flex-row justify-between'}>
