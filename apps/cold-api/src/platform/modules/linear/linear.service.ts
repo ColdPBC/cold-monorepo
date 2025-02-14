@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Issue, LinearClient } from '@linear/sdk';
 import { ConfigService } from '@nestjs/config';
-import { BaseWorker, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
+import { BaseWorker, Cuid2Generator, GuidPrefixes, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
 import { file_types, organization_files, organizations, processing_status } from '@prisma/client';
 import { buffer } from 'stream/consumers';
 import { Readable } from 'stream';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { merge } from 'lodash';
+import { set } from 'lodash';
 
 @Injectable()
 export class LinearService extends BaseWorker {
@@ -29,19 +29,20 @@ export class LinearService extends BaseWorker {
 	}
 
 	/** Update the file processing_status in the database whenever an issue is marked done. **/
-	async updateFileStatus(issueId: string, status: string) {
+	async updateFileStatus(req: any) {
 		let file_status: any;
 
+		const issueId = req.body.data.id;
+
 		// Set the file status based on the issue status
-		switch (status) {
-			case 'done':
+		switch (req.body.data.state.name) {
+			case 'Queued':
+				return;
+			case 'Done':
 				file_status = processing_status.IMPORT_COMPLETE;
-				break;
-			case 'failed':
-				file_status = processing_status.PROCESSING_ERROR;
 				break;
 			default:
-				file_status = processing_status.IMPORT_COMPLETE;
+				file_status = processing_status.MANUAL_REVIEW;
 		}
 
 		// Update all files with the same linear_issue_id
@@ -114,26 +115,38 @@ export class LinearService extends BaseWorker {
 	}
 
 	/** Creates an issue in Linear. @throws */
-	async createIssue(labels: string[], data: { organization: organizations; user: IAuthenticatedUser; orgFile: organization_files }): Promise<Issue> {
+	async createIssue(labels: string[], data: { organization: organizations; user: IAuthenticatedUser; orgFile: organization_files; error?: string }): Promise<Issue> {
 		try {
 			if (!data.organization.linear_webhook_id) {
 				await this.createWebhook(data);
 			}
 
+			let title: string;
+			let description: string;
+
+			if (data.error) {
+				const error = JSON.parse(data.error);
+				title = `Review Failed Ingestion for ${data.organization.display_name}`;
+				description = `The file failed to process due to the following error: ${error.message}`;
+			} else {
+				title = `Manual Review Request from ${data.organization.display_name} : ${data.orgFile.original_name} | ${data.orgFile.type}`;
+				description = `User ${data.user.coldclimate_claims.email} from ${data.organization.display_name} uploaded a file with a ${data.orgFile.type} type for ingestion.`;
+			}
+
 			const payload = {
 				teamId: this.customer_success_team_id,
-				projectIds: [this.ingestion_project_id],
-				title: `Manual Review Request from ${data.organization.display_name} : ${data.orgFile.original_name} | ${data.orgFile.type}`,
-				description: `User ${data.user.coldclimate_claims.email} from ${data.organization.display_name} uploaded a file with a ${data.orgFile.type} type for ingestion.
-			
+				projectId: this.ingestion_project_id,
+				title: title,
+				description:
+					description +
+					`
 				File Details:
 				- Id: ${data.orgFile.id}
 				- Name: ${data.orgFile.original_name}
 				- Size: ${data.orgFile.size}
 				- FileType: ${data.orgFile.type}
 				- MimeType: ${data.orgFile.mimetype}
-				- Metadata: ${data.orgFile?.metadata?.toString()}
-				`,
+				- Metadata: ${JSON.stringify(data.orgFile?.metadata)}`,
 				labelIds: labels,
 				stateId: this.initial_workflow_state_id,
 			};
@@ -149,11 +162,13 @@ export class LinearService extends BaseWorker {
 
 			this.logger.info('Issue created', { issue });
 
-			this.prisma.organization_files.update({
+			set(data, 'orgFile.metadata.linear_issue_id', issue.id);
+
+			await this.prisma.organization_files.update({
 				where: {
 					id: data.orgFile.id,
 				},
-				data: { metadata: merge(data.orgFile.metadata, { linear_issue_id: issue.id }) },
+				data: { metadata: data.orgFile.metadata as object },
 			});
 			// Get the File object from S3 bucket
 			const file = await this.getFile(data.orgFile);
@@ -182,26 +197,40 @@ export class LinearService extends BaseWorker {
 	}
 
 	private async createWebhook(data: { organization: organizations; user: IAuthenticatedUser; orgFile: organization_files }) {
-		const webhookResponse = await this.client.createWebhook({
-			url: `https://${process.env.NODE_ENV === 'staging' ? 'api.coldclimate.online' : 'api.coldclimate.com'}/linear/webhook/organizations/${data.organization.id}`,
-			resourceTypes: ['Issue'],
-			label: `${data.organization.display_name} Webhook`,
-			secret: data.organization.linear_secret,
-			teamId: this.customer_success_team_id,
-		});
+		try {
+			// Add Secret for processing linear webhooks
+			if (!data.organization.linear_secret) {
+				data.organization.linear_secret = new Cuid2Generator(GuidPrefixes.WebhookSecret).scopedId;
+				await this.prisma.organizations.update({
+					where: { id: data.organization.id },
+					data: { linear_secret: data.organization.linear_secret },
+				});
+			}
+			const webhookResponse = await this.client.createWebhook({
+				enabled: true,
+				url: `https://${process.env.NODE_ENV === 'staging' ? 'api.coldclimate.online' : 'api.coldclimate.com'}/linear/webhook/organizations/${data.organization.id}`,
+				resourceTypes: ['Issue'],
+				label: `${data.organization.display_name} Webhook`,
+				secret: data.organization.linear_secret,
+				teamId: this.customer_success_team_id,
+			});
 
-		const webhook = await webhookResponse.webhook;
+			const webhook = await webhookResponse.webhook;
 
-		if (!webhook?.id) {
-			throw new Error('Failed to create webhook');
+			if (!webhook?.id) {
+				throw new Error('Failed to create webhook');
+			}
+
+			await this.prisma.organizations.update({
+				where: { id: data.organization.id },
+				data: { linear_webhook_id: webhook?.id },
+			});
+
+			return webhook;
+		} catch (e) {
+			this.logger.error(e.message);
+			return;
 		}
-
-		await this.prisma.organizations.update({
-			where: { id: data.organization.id },
-			data: { linear_webhook_id: webhook?.id },
-		});
-
-		return webhook;
 	}
 
 	getLabel(type: string) {
