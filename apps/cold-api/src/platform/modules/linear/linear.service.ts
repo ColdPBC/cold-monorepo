@@ -36,8 +36,7 @@ export class LinearService extends BaseWorker {
 
 		// Set the file status based on the issue status
 		switch (req.body.data.state.name) {
-			case 'Queued':
-				return;
+			case 'Canceled':
 			case 'Done':
 				file_status = processing_status.IMPORT_COMPLETE;
 				break;
