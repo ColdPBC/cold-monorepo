@@ -22,7 +22,6 @@ import { omit, pick } from 'lodash';
 import { OrganizationHelper } from '../helpers/organization.helper';
 import helper from 'csvtojson';
 import { file_types, material_suppliers, materials, processing_status, products } from '@prisma/client';
-import { GetObjectCommandOutput } from '@aws-sdk/client-s3';
 
 @Span()
 @Injectable()
@@ -603,12 +602,6 @@ export class OrganizationFilesService extends BaseWorker {
 					await this.events.sendIntegrationEvent(false, 'file.uploaded', { ...existing, organization }, user);
 				} else {
 					if (existing.bucket && existing.key) {
-						const s3File = await this.s3.getObject(user, existing.bucket, existing.key);
-
-						if (!s3File.Body) {
-							throw new Error('No body in S3 file');
-						}
-
 						const issue = await this.events.sendRPCEvent('cold.core.linear.events', processing_status.MANUAL_REVIEW, { orgFile: existing, organization, user });
 
 						this.logger.info(`Issue created for file ${existing.original_name}`, { issue });
@@ -685,11 +678,6 @@ export class OrganizationFilesService extends BaseWorker {
 		return { failed, uploaded };
 	}
 
-	bufferToFile(buffer: Buffer, fileName: string, mimeType = 'application/octet-stream'): File {
-		const blob = new Blob([buffer], { type: mimeType });
-		return new File([blob], fileName, { type: mimeType });
-	}
-
 	async deleteFile(req: IRequest, orgId: string, fileIds: string[]) {
 		const { user, url, organization } = req;
 		try {
@@ -755,21 +743,6 @@ export class OrganizationFilesService extends BaseWorker {
 
 			return e;
 		}
-	}
-
-	async getObjectCommandOutputToFile(output: GetObjectCommandOutput, fileName: string): Promise<File> {
-		const streamToBlob = (stream: ReadableStream<Uint8Array>): Promise<Blob> => {
-			return new Response(stream).blob();
-		};
-
-		if (!output.Body) {
-			throw new Error('No body in output');
-		}
-
-		const data = await streamToBlob(output.Body.transformToWebStream()); //await streamToBlob(output.Body as ReadableStream<Uint8Array>);
-		const file = new File([data], fileName, { type: output.ContentType || 'application/octet-stream' });
-
-		return file;
 	}
 
 	async getUrl(req: IRequest, fileId: string) {
