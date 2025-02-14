@@ -34,121 +34,86 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
   const renderName = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
     const file = files.find(file => file.id === params.row.id);
     const fileStatus = getFileProcessingStatus(file);
-    let className = 'text-tc-primary font-bold';
-    if (fileStatus === ProcessingStatus.AI_PROCESSING) {
-      className = 'text-tc-disabled font-bold';
-    }
-    return <div className={twMerge('overflow-hidden text-ellipsis ', className)}>{params.value}</div>;
+    return <div className={'flex items-center justify-start gap-1'}>
+      {fileStatus === ProcessingStatus.AI_PROCESSING ? <span role={'img'} aria-label={'Sparkles emoji'}>✨</span> : null}
+      <span className={'overflow-hidden text-ellipsis whitespace-nowrap text-tc-primary font-bold'}>{params.value}</span>
+    </div>;
   };
 
   const renderUploadDate = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    const file = files.find(file => file.id === params.row.id);
-    const fileStatus = getFileProcessingStatus(file);
-    let className = 'text-tc-secondary';
-    if (fileStatus === ProcessingStatus.AI_PROCESSING) {
-      className = 'text-tc-disabled';
-    }
     let dateString = '--';
     if (params.value.getTime() !== new Date(0).getTime()) {
       dateString = format(new Date(params.value), 'M/d/yy h:mm a');
     }
     return (
-      <div data-chromatic="ignore" className={twMerge('w-full h-full flex flex-row justify-start items-center', className)}>
+      <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
         {dateString}
       </div>
     );
   };
 
-  const fileProcessingStatusElement = (fileId: string, component: () => JSX.Element) => {
-    const file = files.find(file => file.id === fileId);
-    const fileStatus = getFileProcessingStatus(file);
-    if (fileStatus === ProcessingStatus.AI_PROCESSING) {
-      return (
-      <div className={'w-full h-full py-[16px] px-[0px]'}>
-        <div
-          className={'w-full h-full flex flex-row rounded-lg animate-pulsate'}
-          style={{
-            background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
-          }}></div>
-      </div>
-      )
-    } else {
-      return component();
-    }
-  }
-
   const renderStatus = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    return fileProcessingStatusElement(params.row.id, () => {
-      const expirationDate: string | null = params.row.expiration_date;
-      let diff = 0;
-      switch (params.value) {
-        case ClaimStatus.Expired:
-          return (
-            <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px] text-tc-secondary'}>
-              <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.tc.disabled} />
-              <span className={'text-tc-disabled'}>Expired</span>
+    const expirationDate: string | null = params.row.expiration_date;
+    let diff = 0;
+    switch (params.value) {
+      case ClaimStatus.Expired:
+        return (
+          <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px] text-tc-secondary'}>
+            <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.tc.disabled} />
+            <span className={'text-tc-disabled'}>Expired</span>
+          </div>
+        );
+      case ClaimStatus.ExpiringSoon:
+        if (expirationDate) {
+          diff = differenceInDays(addTZOffset(expirationDate), new Date());
+        }
+        return (
+          <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[4px] pl-[4px] text-tc-secondary'}>
+            <ColdIcon name={IconNames.ColdExpiringIcon} color={HexColors.yellow['200']} />
+            <span className={'text-yellow-200'}>{diff + 1} days</span>
+          </div>
+        );
+      case ClaimStatus.Active:
+        return (
+          <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px] text-tc-secondary'}>
+            <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} />
+            <span className={'text-green-200'}>Active</span>
+          </div>
+        );
+      default:
+      case ClaimStatus.Inactive:
+        return (
+          <div className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
+            <div className={'w-[24px] h-[24px] flex flex-row justify-center items-center'}>
+              <div className={'w-[13px] h-[13px] bg-gray-70 rounded-full'}></div>
             </div>
-          );
-        case ClaimStatus.ExpiringSoon:
-          if (expirationDate) {
-            diff = differenceInDays(addTZOffset(expirationDate), new Date());
-          }
-          return (
-            <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[4px] pl-[4px] text-tc-secondary'}>
-              <ColdIcon name={IconNames.ColdExpiringIcon} color={HexColors.yellow['200']} />
-              <span className={'text-yellow-200'}>{diff + 1} days</span>
-            </div>
-          );
-        case ClaimStatus.Active:
-          return (
-            <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px] text-tc-secondary'}>
-              <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} />
-              <span className={'text-green-200'}>Active</span>
-            </div>
-          );
-        default:
-        case ClaimStatus.Inactive:
-          return (
-            <div className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
-              <div className={'w-[24px] h-[24px] flex flex-row justify-center items-center'}>
-                <div className={'w-[13px] h-[13px] bg-gray-70 rounded-full'}></div>
-              </div>
-            </div>
-          );
-      }
-    });
+          </div>
+        );
+    }
   };
 
   const renderDate = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    return fileProcessingStatusElement(params.row.id, () => {
-      let dateString = '--';
-      if (params.value.getTime() !== new Date(0).getTime()) {
-        dateString = format(new Date(params.value), 'M/d/yy');
-      }
-      return (
-        <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
-          {dateString}
-        </div>
-      );
-    })
+    let dateString = '--';
+    if (params.value.getTime() !== new Date(0).getTime()) {
+      dateString = format(new Date(params.value), 'M/d/yy');
+    }
+    return (
+      <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
+        {dateString}
+      </div>
+    );
   };
 
   const renderType = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    return fileProcessingStatusElement(params.row.id, () => {
-      return <div className={'text-tc-secondary overflow-hidden text-ellipsis'}>{params.value}</div>;
-    });
+    return <div className={'text-tc-secondary overflow-hidden text-ellipsis'}>{params.value}</div>;
   };
 
   const renderSustainabilityAttribute = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    return fileProcessingStatusElement(params.row.id, () => {
-      return <SustainabilityAttributeColumn sustainabilityAttribute={params.value as SustainabilityAttributeWithoutAssurances | null} />;
-    });
+    return <SustainabilityAttributeColumn sustainabilityAttribute={params.value as SustainabilityAttributeWithoutAssurances | null} />;
   };
 
   const renderAssociatedRecords = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    return fileProcessingStatusElement(params.row.id, () => {
-      return <BubbleList values={params.value as string[]} color={HexColors.purple["200"]} />
-    });
+    return <BubbleList values={params.value as string[]} color={HexColors.purple["200"]} />
   };
 
   const onRowClick = (params: GridRowParams, event: MuiEvent<React.MouseEvent>, details: GridCallbackDetails) => {
