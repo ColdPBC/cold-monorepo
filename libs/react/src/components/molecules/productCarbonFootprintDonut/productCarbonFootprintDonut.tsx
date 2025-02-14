@@ -1,7 +1,7 @@
 import React from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import {PaginatedProductsQuery, ProductsQuery} from '@coldpbc/interfaces';
+import {PaginatedProductsQuery, ProductMaterial, ProductsQuery} from '@coldpbc/interfaces';
 import { darkTableTheme, HexColors } from '@coldpbc/themes';
 import { Chart } from 'react-chartjs-2';
 import { ChartOptions } from 'chart.js';
@@ -32,8 +32,8 @@ const COLORS = [
 	HexColors.lightblue['700'],
 ];
 
-const emissionsForProductMaterial = (productMaterial: PaginatedProductsQuery['productMaterials'][0]) => {
-  return ((productMaterial.weight || 0) * (productMaterial.material.emissionsFactor?.emissionsFactor || 0))
+const emissionsForProductMaterial = (productMaterial: ProductMaterial) => {
+  return ((productMaterial.weight || 0) * (productMaterial.material.emissionsFactor || 0))
 };
 
 const _ProductCarbonFootprintDonut: React.FC<ProductDetailsCardProps> = ({ product }) => {
