@@ -56,6 +56,11 @@ export class LinearService extends BaseWorker {
 			data: { processing_status: file_status },
 		});
 
+		// archive the issue in Linear if we are in development or staging
+		if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
+			this.logger.info('Archiving issue', { issue: req.body.data });
+			await this.client.archiveIssue(issueId);
+		}
 		return updated;
 	}
 
@@ -210,7 +215,7 @@ export class LinearService extends BaseWorker {
 				enabled: true,
 				url: `https://${process.env.NODE_ENV === 'staging' ? 'api.coldclimate.online' : 'api.coldclimate.com'}/linear/webhook/organizations/${data.organization.id}`,
 				resourceTypes: ['Issue'],
-				label: `${data.organization.display_name} Webhook`,
+				label: `${process.env.NODE_ENV} : ${data.organization.display_name} Webhook`,
 				secret: data.organization.linear_secret,
 				teamId: this.customer_success_team_id,
 			});
