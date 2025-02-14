@@ -116,6 +116,7 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
 		},
 		{
 			id: '2',
@@ -124,6 +125,7 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
 		},
 		{
 			id: '3',
@@ -132,6 +134,7 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
 		},
 	];
 }
@@ -177,6 +180,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 				status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
 		},
 		{
 			id: '2',
@@ -236,6 +240,7 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 				status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
 		},
 	];
 }
@@ -299,6 +304,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 				status: 'uploaded',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      processingStatus: ProcessingStatus.AI_PROCESSING,
 		},
 		{
 			id: '2',
@@ -358,6 +364,7 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 				status: 'uploaded',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      processingStatus: ProcessingStatus.AI_PROCESSING,
 		},
 	];
 }
@@ -377,6 +384,7 @@ export function filesProcessedWithDatesMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
     },
     {
       id: '2',
@@ -391,6 +399,7 @@ export function filesProcessedWithDatesMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
     },
   ];
 }
@@ -410,6 +419,7 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
     },
     {
       id: '2',
@@ -513,6 +523,7 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
     },
   ];
 }
@@ -591,6 +602,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           },
         },
       ],
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
     },
     {
       id: 'ofile_xtu8n9rqlgko4v1nu8v8v5cg',
@@ -628,6 +640,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           product: null,
         },
       ],
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
     },
     {
       id: 'ofile_jqohnz87bn2fi2es7suhqb48',
@@ -704,6 +717,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           product: null,
         },
       ],
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
     },
   ];
 }
