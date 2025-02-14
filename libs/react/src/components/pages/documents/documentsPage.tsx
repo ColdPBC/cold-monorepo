@@ -9,12 +9,12 @@ import {
   Modal,
   Spinner,
   DocumentDetailsSidebarFileState,
-  DocumentsEditMaterialsModal,
+  DocumentsEditMaterialsModal, UploadModal,
 } from '@coldpbc/components';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { FilesWithAssurances, MaterialWithSupplier, ToastMessage } from '@coldpbc/interfaces';
-import { AssuranceDocumentTypes, ButtonTypes, IconNames } from '@coldpbc/enums';
+import {AssuranceDocumentTypes, ButtonTypes, IconNames, MainDocumentCategory} from '@coldpbc/enums';
 import {AxiosError, isAxiosError} from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
 import {get} from 'lodash';
@@ -109,25 +109,53 @@ const _DocumentsPage = () => {
   const getPageButtons = () => {
     return (
       <div className={'h-auto'}>
-        <DocumentUploadButton
-          buttonProps={{
-            label: ldFlags.showNewDocumentUploadUxCold1410 ? 'Upload Assurance Doc' : 'Add New',
-            iconLeft: IconNames.PlusIcon,
-          }}
-          mutateFunction={allFiles.mutate}
-          successfulToastMessage={{
-            message: (
-              <div className={'flex flex-col gap-[10px]'}>
-                <div className={'font-bold'}>Upload Complete</div>
-                <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
-              </div>
-            ),
-            position: 'bottomRight',
-          }}
-          failureToastMessage={{
-            position: 'bottomRight',
-          }}
-        />
+        {
+          ldFlags.showNewDocumentUploadUxCold1410 ?
+            (
+              <UploadModal
+                refreshData={allFiles.mutate}
+                types={[
+                  MainDocumentCategory.Assurance,
+                ]}
+                successfulToastMessage={{
+                  message: (
+                    <div className={'flex flex-col gap-[10px]'}>
+                      <div className={'font-bold'}>Upload Complete</div>
+                      <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
+                    </div>
+                  ),
+                  position: 'bottomRight',
+                }}
+                failureToastMessage={{
+                  position: 'bottomRight',
+                }}
+                buttonProps={{
+                  label: 'Upload Assurance Doc',
+                  iconLeft: IconNames.PlusIcon,
+                }}
+              />
+            ) : (
+              <DocumentUploadButton
+                buttonProps={{
+                  label: 'Add New',
+                  iconLeft: IconNames.PlusIcon,
+                }}
+                mutateFunction={allFiles.mutate}
+                successfulToastMessage={{
+                  message: (
+                    <div className={'flex flex-col gap-[10px]'}>
+                      <div className={'font-bold'}>Upload Complete</div>
+                      <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
+                    </div>
+                  ),
+                  position: 'bottomRight',
+                }}
+                failureToastMessage={{
+                  position: 'bottomRight',
+                }}
+              />
+            )
+        }
       </div>
     );
   };
