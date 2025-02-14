@@ -9,11 +9,15 @@ import { axiosFetcher } from "@coldpbc/fetchers";
 import { useAddToastMessage, useAuth0Wrapper, useColdContext } from "@coldpbc/hooks";
 import { KeyedMutator } from "swr";
 import { ApolloQueryResult } from "@apollo/client";
-import { ToastMessage, UploadsQuery } from "@coldpbc/interfaces";
+import {FilesWithAssurances, IButtonProps, ToastMessage, ToastMessageType, UploadsQuery} from "@coldpbc/interfaces";
+import {twMerge} from "tailwind-merge";
 
 export interface UploadModalProps{
   types: Array<MainDocumentCategory>
-  refreshData: KeyedMutator<ApolloQueryResult<{ organizationFiles: UploadsQuery[] }>>
+  refreshData: KeyedMutator<ApolloQueryResult<{ organizationFiles: UploadsQuery[] }>> | KeyedMutator<ApolloQueryResult<{ organizationFiles: FilesWithAssurances[] | null }>>
+  successfulToastMessage?: Partial<ToastMessageType>;
+  failureToastMessage?: Partial<ToastMessageType>;
+  buttonProps?: IButtonProps;
 }
 
 const UPLOAD_MAP: {
@@ -72,7 +76,7 @@ export const UploadModal = (props: UploadModalProps) => {
   const { logBrowser } = useColdContext();
   const { addToastMessage } = useAddToastMessage();
   const { orgId } = useAuth0Wrapper();
-  const { types, refreshData} = props;
+  const { types, refreshData, successfulToastMessage, failureToastMessage, buttonProps} = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
   const [buttonLoading, setButtonLoading] = React.useState(false);
@@ -131,6 +135,7 @@ export const UploadModal = (props: UploadModalProps) => {
         await addToastMessage({
           message: 'Upload successful',
           type: ToastMessage.SUCCESS,
+          ...successfulToastMessage,
         })
       }
       await refreshData()
@@ -147,6 +152,7 @@ export const UploadModal = (props: UploadModalProps) => {
         await addToastMessage({
           type: ToastMessage.FAILURE,
           message: 'Upload failed',
+          ...failureToastMessage,
         });
         logBrowser('Upload failed', 'error', {orgId, formData: { ...formData }, response
         });
@@ -190,6 +196,7 @@ export const UploadModal = (props: UploadModalProps) => {
         iconLeft={IconNames.PlusIcon}
         className={'self-center'}
         data-testid={'upload-button'}
+        {...buttonProps}
       />
     <FBModal
       dismissible
@@ -204,7 +211,7 @@ export const UploadModal = (props: UploadModalProps) => {
       <Card className="p-4 w-[962px] bg-gray-30 gap-[40px]" glow={false}>
         <div className="flex flex-col gap-[24px] w-full">
           <div className="flex flex-row text-h3">What are you uploading?</div>
-          <div className="w-full grid grid-cols-2 gap-4">
+          <div className={twMerge('w-full grid gap-4', types.length === 1 ? 'grid-cols-1' : 'grid-cols-2')}>
             {types.map((type) => {
               const isActive = selectedOption === type;
               const borderColorClassName = isActive ? 'border-white' : 'border-gray-90';
@@ -290,7 +297,7 @@ export const UploadModal = (props: UploadModalProps) => {
             disabled={buttonLoading}
           />
           <BaseButton
-            label={"Confirm"}
+            label={selectedOption && UPLOAD_MAP[selectedOption].aiProcessing ? "Confirm & Start AI Processing" : "Confirm"}
             loading={buttonLoading}
             onClick={uploadDocuments}
             disabled={buttonDisabled}
