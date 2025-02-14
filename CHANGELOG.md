@@ -1,3 +1,15 @@
+# [1.560.0](https://github.com/coldPBC/cold-monorepo/compare/v1.559.0...v1.560.0) (2025-02-14)
+
+
+### Bug Fixes
+
+* support for test team in linear to stop spamming slack ([ddd765c](https://github.com/coldPBC/cold-monorepo/commit/ddd765c6c6b3bcbdb48b84334636c64aaca7f1e0))
+
+
+### Features
+
+* archive completed issues if in staging or development ([2b01a53](https://github.com/coldPBC/cold-monorepo/commit/2b01a5389beb4315ee8b56fe2fe0cbe5c1ff9993))
+
 # [1.559.0](https://github.com/coldPBC/cold-monorepo/compare/v1.558.0...v1.559.0) (2025-02-14)
 
 
