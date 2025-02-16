@@ -1,6 +1,7 @@
 import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { EmissionFactor } from './emission-factor';
 import { Integration } from './integration';
 import { OrganizationFacility } from './organization-facility';
 import { Emission as OrmEmission } from '../entities';
@@ -60,4 +61,7 @@ export class Emission {
 
 	@Field(() => Boolean)
 	deleted = false;
+
+	@RelationshipField<Emission>(() => EmissionFactor, { id: (entity) => entity.emissionFactor?.id, nullable: true })
+	emissionFactor?: EmissionFactor;
 }

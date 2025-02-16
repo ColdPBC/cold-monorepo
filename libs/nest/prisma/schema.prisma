@@ -323,9 +323,9 @@ model organizations {
   isTest                                            Boolean                                             @default(false)
   website                                           String?
   deleted                                           Boolean                                             @default(false)
-  linear_secret																		  String?
-	linear_webhook_id																	String?
-	actions                                           actions[]
+  linear_secret                                     String?
+  linear_webhook_id                                 String?
+  actions                                           actions[]
   category_data                                     category_data[]
   integrations                                      integrations[]
   organization_compliance                           organization_compliance[]
@@ -497,6 +497,8 @@ model emissions {
   deleted                 Boolean                 @default(false)
   facility                organization_facilities @relation(fields: [facility_id], references: [id], onDelete: Cascade)
   integrations            integrations            @relation(fields: [integration_id], references: [id], onDelete: Cascade)
+  emission_factors        emission_factors?       @relation(fields: [emission_factorsId], references: [id])
+  emission_factorsId      String?
 }
 
 /// @namespace Utility Bills
@@ -780,6 +782,7 @@ model materials {
   material_category             String?
   material_subcategory          String?
   organization_facility_id      String?
+  emission_factor_id            String?
   emissions_factor              Float?
   weight_factor                 Float?
   weight_factor_unit_of_measure String?
@@ -791,6 +794,7 @@ model materials {
   attribute_assurances          attribute_assurances[]
   product_materials             product_materials[]
   data_source                   String?
+  emission_factor               emission_factors?          @relation(fields: [emission_factor_id], references: [id], onDelete: Cascade)
   organization_facility         organization_facilities?   @relation(fields: [organization_facility_id], references: [id], onDelete: Cascade)
   material_classification       material_classification?   @relation(fields: [material_classification_id], references: [id])
   material_classification_id    Int?
@@ -802,6 +806,18 @@ model materials {
   @@index([organization_facility_id], map: "materials_organization_facility_id_idx1")
   @@index([material_classification_id], map: "materials_material_classification_id_idx1")
   @@index([name], map: "materials_name_idx1")
+}
+
+model emission_factors {
+  id          String      @id @default(cuid())
+  name        String
+  description String
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  emissions   emissions[]
+  materials   materials[]
+
+	@@index([name], map: "emission_factors_name_idx1")
 }
 
 model material_tag_assignments {

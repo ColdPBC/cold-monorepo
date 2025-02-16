@@ -3,6 +3,7 @@ import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHoo
 
 import { Collection, Entity, Index, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { AttributeAssurance } from './attribute-assurance';
+import { EmissionFactor } from './emission-factor';
 import { MaterialClassification } from './material-classification';
 import { MaterialSupplier } from './material-supplier';
 import { MaterialTagAssignment } from './material-tag-assignment';
@@ -91,6 +92,9 @@ export class Material {
 
 	@Property({ type: 'text', nullable: true })
 	widthUnitOfMeasure?: string;
+
+	@ManyToOne({ entity: () => EmissionFactor, ref: true, nullable: true })
+	emissionFactor?: Ref<EmissionFactor>;
 
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'material' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
