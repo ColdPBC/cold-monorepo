@@ -13,6 +13,7 @@ import './compliance-section-group';
 import './compliance-section';
 import './component-definition';
 import './core-classification';
+import './emission-factor';
 import './emission-scope';
 import './emission';
 import './facility-footprint';

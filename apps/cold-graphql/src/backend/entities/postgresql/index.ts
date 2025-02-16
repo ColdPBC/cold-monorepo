@@ -13,6 +13,7 @@ import { ComplianceSectionGroup } from './compliance-section-group';
 import { ComplianceSection } from './compliance-section';
 import { ComponentDefinition } from './component-definition';
 import { CoreClassification } from './core-classification';
+import { EmissionFactor } from './emission-factor';
 import { EmissionScope } from './emission-scope';
 import { Emission } from './emission';
 import { FacilityFootprint } from './facility-footprint';
@@ -67,6 +68,7 @@ export * from './compliance-section-group';
 export * from './compliance-section';
 export * from './component-definition';
 export * from './core-classification';
+export * from './emission-factor';
 export * from './emission-scope';
 export * from './emission';
 export * from './facility-footprint';
@@ -122,6 +124,7 @@ export const entities = [
 	ComplianceSection,
 	ComponentDefinition,
 	CoreClassification,
+	EmissionFactor,
 	EmissionScope,
 	Emission,
 	FacilityFootprint,
