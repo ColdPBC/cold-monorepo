@@ -809,6 +809,7 @@ model materials {
 model emission_factors {
   id          String      @id @default(cuid())
   name        String
+	value			  Float
   description String
   created_at  DateTime    @default(now())
   updated_at  DateTime    @updatedAt

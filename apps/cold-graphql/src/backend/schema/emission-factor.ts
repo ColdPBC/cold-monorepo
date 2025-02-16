@@ -24,6 +24,9 @@ export class EmissionFactor {
 	@Field(() => ISODateStringScalar)
 	updatedAt!: Date;
 
+	@Field(() => Number)
+	value!: number;
+
 	@RelationshipField<Material>(() => [Material], { relatedField: 'emissionFactor' })
 	materials!: Material[];
 }

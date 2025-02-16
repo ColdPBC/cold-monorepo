@@ -32,6 +32,9 @@ export class EmissionFactor {
 	@Property({ type: 'datetime', length: 3 })
 	updatedAt!: Date;
 
+	@Property({ type: 'double' })
+	value!: number;
+
 	@OneToMany({ entity: () => Material, mappedBy: 'emissionFactor' })
 	materials = new Collection<Material>(this);
 
