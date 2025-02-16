@@ -766,11 +766,11 @@ model sustainability_attribute_classifcation_assignment {
 }
 
 model materials {
-  id                            String                     @id @default(cuid())
+  id                            String                      @id @default(cuid())
   name                          String
-  created_at                    DateTime?                  @default(now()) @db.Timestamptz(6)
-  updated_at                    DateTime?                  @updatedAt @db.Timestamptz(6)
-  deleted                       Boolean?                   @default(false)
+  created_at                    DateTime?                   @default(now()) @db.Timestamptz(6)
+  updated_at                    DateTime?                   @updatedAt @db.Timestamptz(6)
+  deleted                       Boolean?                    @default(false)
   organization_id               String
   brand_material_id             String?
   supplier_material_id          String?
@@ -780,7 +780,6 @@ model materials {
   material_category             String?
   material_subcategory          String?
   organization_facility_id      String?
-  emission_factor_id            String?
   emissions_factor              Float?
   weight_factor                 Float?
   weight_factor_unit_of_measure String?
@@ -788,16 +787,16 @@ model materials {
   width_unit_of_measure         String?
   activity_id                   String?
   metadata                      Json?
-  organization                  organizations              @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  organization                  organizations               @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   attribute_assurances          attribute_assurances[]
   product_materials             product_materials[]
   data_source                   String?
-  emission_factor               emission_factors?          @relation(fields: [emission_factor_id], references: [id], onDelete: Cascade)
-  organization_facility         organization_facilities?   @relation(fields: [organization_facility_id], references: [id], onDelete: Cascade)
-  material_classification       material_classification?   @relation(fields: [material_classification_id], references: [id])
+  organization_facility         organization_facilities?    @relation(fields: [organization_facility_id], references: [id], onDelete: Cascade)
+  material_classification       material_classification?    @relation(fields: [material_classification_id], references: [id])
   material_classification_id    Int?
   emission_stats                Json?
   material_tag_assignments      material_tag_assignments[]
+  material_emission_factors     material_emission_factors[]
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "materials_organization_id_idx1")
@@ -806,16 +805,32 @@ model materials {
   @@index([name], map: "materials_name_idx1")
 }
 
-model emission_factors {
-  id          String      @id @default(cuid())
-  name        String
-	value			  Float
-  description String
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @updatedAt
-  materials   materials[]
+model material_emission_factors {
+  id                 String   @id @default(cuid())
+  material_id        String
+  emission_factor_id String
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
 
-	@@index([name], map: "emission_factors_name_idx1")
+  material         materials        @relation(fields: [material_id], references: [id], onDelete: Cascade)
+  emission_factors emission_factors @relation(fields: [emission_factor_id], references: [id], onDelete: Cascade)
+
+	@@unique([material_id, emission_factor_id], name: "materialEmissionFactorKey")
+	@@index([emission_factor_id], map: "material_emission_factors_emission_factor_id_idx1")
+	@@index([material_id], map: "material_emission_factors_material_id_idx1")
+}
+
+model emission_factors {
+  id                        String                      @id @default(cuid())
+  name                      String
+  value                     Float
+  description               String?
+  created_at                DateTime                    @default(now())
+  updated_at                DateTime                    @updatedAt
+  material_emission_factors material_emission_factors[]
+
+	@@unique([name], name: "emissionFactorName")
+  @@index([name], map: "emission_factors_name_idx1")
 }
 
 model material_tag_assignments {

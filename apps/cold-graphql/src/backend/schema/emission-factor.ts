@@ -1,7 +1,7 @@
 import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { Material } from './material';
+import { MaterialEmissionFactor } from './material-emission-factor';
 import { EmissionFactor as OrmEmissionFactor } from '../entities';
 import { connection } from '../database';
 
@@ -15,8 +15,8 @@ export class EmissionFactor {
 	@Field(() => String, { adminUIOptions: {summaryField:true} })
 	name!: string;
 
-	@Field(() => String)
-	description!: string;
+	@Field(() => String, { nullable: true })
+	description?: string;
 
 	@Field(() => ISODateStringScalar)
 	createdAt!: Date;
@@ -27,6 +27,6 @@ export class EmissionFactor {
 	@Field(() => Number)
 	value!: number;
 
-	@RelationshipField<Material>(() => [Material], { relatedField: 'emissionFactor' })
-	materials!: Material[];
+	@RelationshipField<MaterialEmissionFactor>(() => [MaterialEmissionFactor], { relatedField: 'emissionFactor' })
+	materialEmissionFactors!: MaterialEmissionFactor[];
 }

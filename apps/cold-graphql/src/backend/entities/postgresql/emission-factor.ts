@@ -1,8 +1,8 @@
 import { EmissionFactorHooks } from '../hooks/emission-factor.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Collection, Entity, Index, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
-import { Material } from './material';
+import { Collection, Entity, Index, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { MaterialEmissionFactor } from './material-emission-factor';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl, OrgContext } from '../../libs/acls/acl_policies';
@@ -20,11 +20,12 @@ export class EmissionFactor {
 	id!: string;
 
 	@Index({ name: 'emission_factors_name_idx1' })
+	@Unique({ name: 'emission_factors_name_key' })
 	@Property({ type: 'text' })
 	name!: string;
 
-	@Property({ type: 'text' })
-	description!: string;
+	@Property({ type: 'text', nullable: true })
+	description?: string;
 
 	@Property({ type: 'datetime', length: 3 })
 	createdAt!: Date;
@@ -35,8 +36,8 @@ export class EmissionFactor {
 	@Property({ type: 'double' })
 	value!: number;
 
-	@OneToMany({ entity: () => Material, mappedBy: 'emissionFactor' })
-	materials = new Collection<Material>(this);
+	@OneToMany({ entity: () => MaterialEmissionFactor, mappedBy: 'emissionFactor' })
+	materialEmissionFactors = new Collection<MaterialEmissionFactor>(this);
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof EmissionFactor, OrgContext>) {

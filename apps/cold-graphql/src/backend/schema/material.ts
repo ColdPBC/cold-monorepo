@@ -2,8 +2,8 @@ import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AttributeAssurance } from './attribute-assurance';
-import { EmissionFactor } from './emission-factor';
 import { MaterialClassification } from './material-classification';
+import { MaterialEmissionFactor } from './material-emission-factor';
 import { MaterialSupplier } from './material-supplier';
 import { MaterialTagAssignment } from './material-tag-assignment';
 import { Organization } from './organization';
@@ -85,11 +85,11 @@ export class Material {
 	@Field(() => String, { nullable: true })
 	widthUnitOfMeasure?: string;
 
-	@RelationshipField<Material>(() => EmissionFactor, { id: (entity) => entity.emissionFactor?.id, nullable: true })
-	emissionFactor?: EmissionFactor;
-
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'material' })
 	attributeAssurances!: AttributeAssurance[];
+
+	@RelationshipField<MaterialEmissionFactor>(() => [MaterialEmissionFactor], { relatedField: 'material' })
+	materialEmissionFactors!: MaterialEmissionFactor[];
 
 	@RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'material' })
 	materialSuppliers!: MaterialSupplier[];
