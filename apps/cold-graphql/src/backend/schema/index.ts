@@ -19,6 +19,7 @@ import './emission';
 import './facility-footprint';
 import './integration';
 import './material-classification';
+import './material-emission-factor';
 import './material-supplier';
 import './material-tag-assignment';
 import './material-tag';
