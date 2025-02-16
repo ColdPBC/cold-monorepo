@@ -497,8 +497,6 @@ model emissions {
   deleted                 Boolean                 @default(false)
   facility                organization_facilities @relation(fields: [facility_id], references: [id], onDelete: Cascade)
   integrations            integrations            @relation(fields: [integration_id], references: [id], onDelete: Cascade)
-  emission_factors        emission_factors?       @relation(fields: [emission_factorsId], references: [id])
-  emission_factorsId      String?
 }
 
 /// @namespace Utility Bills
@@ -814,7 +812,6 @@ model emission_factors {
   description String
   created_at  DateTime    @default(now())
   updated_at  DateTime    @updatedAt
-  emissions   emissions[]
   materials   materials[]
 
 	@@index([name], map: "emission_factors_name_idx1")

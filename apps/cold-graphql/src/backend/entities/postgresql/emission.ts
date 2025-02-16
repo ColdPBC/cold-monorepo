@@ -2,7 +2,6 @@ import { EmissionHooks } from '../hooks/emission.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
-import { EmissionFactor } from './emission-factor';
 import { Integration } from './integration';
 import { OrganizationFacility } from './organization-facility';
 
@@ -68,9 +67,6 @@ export class Emission {
 
 	@Property({ type: 'boolean', default: false })
 	deleted = false;
-
-	@ManyToOne({ entity: () => EmissionFactor, ref: true, fieldName: 'emission_factorsId', nullable: true })
-	emissionFactor?: Ref<EmissionFactor>;
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof Emission, OrgContext>) {

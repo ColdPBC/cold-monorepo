@@ -2,7 +2,6 @@ import { EmissionFactorHooks } from '../hooks/emission-factor.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, Index, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
-import { Emission } from './emission';
 import { Material } from './material';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -32,9 +31,6 @@ export class EmissionFactor {
 
 	@Property({ type: 'datetime', length: 3 })
 	updatedAt!: Date;
-
-	@OneToMany({ entity: () => Emission, mappedBy: 'emissionFactor' })
-	emissions = new Collection<Emission>(this);
 
 	@OneToMany({ entity: () => Material, mappedBy: 'emissionFactor' })
 	materials = new Collection<Material>(this);
