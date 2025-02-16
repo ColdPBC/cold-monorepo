@@ -83,7 +83,7 @@ export class BaseSidecar {
 		}
 
 		const payload = {
-			action: MqttActionEnum.DELETE,
+			action: MqttActionEnum.CREATE,
 			status: MqttStatusEnum.COMPLETE,
 			data: params as any,
 			swr_key: this.entity.name,
@@ -119,7 +119,7 @@ export class BaseSidecar {
 		}
 
 		const payload = {
-			action: MqttActionEnum.DELETE,
+			action: MqttActionEnum.UPDATE,
 			status: MqttStatusEnum.COMPLETE,
 			data: params as any,
 			swr_key: this.entity.name,
