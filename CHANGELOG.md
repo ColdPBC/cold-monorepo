@@ -1,3 +1,18 @@
+# [1.566.0](https://github.com/coldPBC/cold-monorepo/compare/v1.565.0...v1.566.0) (2025-02-18)
+
+
+### Bug Fixes
+
+* add `value` field to `emission_factors` model and schema ([79faa1c](https://github.com/coldPBC/cold-monorepo/commit/79faa1c374eb8b0a376986c70df9c79a2dc555ee))
+
+
+### Features
+
+* add emission factor model and relationships ([e40b7ad](https://github.com/coldPBC/cold-monorepo/commit/e40b7ada4e28f5abc7c6d4185586400ef84bcfe6))
+* add material emission factors and tag assignments ([0dc0c72](https://github.com/coldPBC/cold-monorepo/commit/0dc0c72c3741b3e1a78d023146566f5a9b8a069d))
+* add MaterialEmissionFactor entity to schema and PostgreSQL index ([7d83048](https://github.com/coldPBC/cold-monorepo/commit/7d83048ea5611f91cea6c2faa4def5dbefde40c4))
+* add support for EmissionFactor entity ([89a7a4b](https://github.com/coldPBC/cold-monorepo/commit/89a7a4b61bd594de29afe0dfc4e240ab1b38c87b))
+
 # [1.565.0](https://github.com/coldPBC/cold-monorepo/compare/v1.564.0...v1.565.0) (2025-02-18)
 
 
