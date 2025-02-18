@@ -1,3 +1,15 @@
+# [1.564.0](https://github.com/coldPBC/cold-monorepo/compare/v1.563.0...v1.564.0) (2025-02-18)
+
+
+### Bug Fixes
+
+* relocate MQTT publishToUI to end of function ([1c4de05](https://github.com/coldPBC/cold-monorepo/commit/1c4de05b66334679bf4ac40b2570ab6cbc0116c8))
+
+
+### Features
+
+* add MQTT UI update on file extraction completion ([ff9350f](https://github.com/coldPBC/cold-monorepo/commit/ff9350f7429ac3e75f3824e6663022b7af9f89ae))
+
 # [1.563.0](https://github.com/coldPBC/cold-monorepo/compare/v1.562.2...v1.563.0) (2025-02-18)
 
 
