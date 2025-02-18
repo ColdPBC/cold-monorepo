@@ -1115,7 +1115,7 @@ export const getProductsMockById = (id: string): ProductsQuery | null => {
 export const getProductMockWithOutEmissionFactor = (id: string): ProductsQuery | null => {
   const productsWithOutEmissionFactors = getProductsMock().find(product => product.id === id) || null;
   if(productsWithOutEmissionFactors && productsWithOutEmissionFactors.productMaterials.length > 0) {
-    productsWithOutEmissionFactors.productMaterials[0].material.emissionsFactor = null;
+    productsWithOutEmissionFactors.productMaterials[0].material.materialEmissionFactors = [];
   }
   return productsWithOutEmissionFactors;
 }
