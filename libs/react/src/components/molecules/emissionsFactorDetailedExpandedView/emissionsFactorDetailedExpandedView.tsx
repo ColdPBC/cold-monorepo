@@ -4,6 +4,7 @@ import {ColdIcon} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
 import {IconNames} from "@coldpbc/enums";
 import {EmissionFactor, EmissionFactorDisplay} from "@coldpbc/interfaces";
+import { capitalize } from "lodash";
 
 
 export const EmissionsFactorDetailedExpandedView = (
@@ -37,18 +38,17 @@ export const EmissionsFactorDetailedExpandedView = (
       <>
         <div className={'flex flex-col gap-4 w-full'}>
           <div className={'text-h5'}>
-            {aggregateEmissionsFactors.value}
+            What Goes into the Emissions Factor Value
           </div>
           <div className={'max-h-[200px] overflow-y-auto scrollbar-hide'}>
-            <ul className={'ml-4 list-disc text-wrap'}>
-              {
-                aggregateEmissionsFactors.emissionFactors.map((ef: EmissionFactor, index: number) => (
-                  <li key={index}>
-                    {ef.name} : {ef.description}
-                  </li>
-                ))
-              }
+            <ul className="list-disc pl-5">
+              {aggregateEmissionsFactors.emissionFactors.map((ef, index) => (
+                <li key={index}>
+                  <span className="font-bold text-nowrap">{capitalize(ef.name)}:</span> {ef.description}
+                </li>
+              ))}
             </ul>
+
           </div>
           <div className={'flex flex-row gap-[10px]'}>
             <LightBulbIcon className={'w-[15px] h-[15px] self-center'} color={'white'}/>
