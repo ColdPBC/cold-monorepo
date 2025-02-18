@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import {
   Claims,
   FilesWithAssurances,
-  InputOption, ProductsQuery,
+  InputOption,
   ToastMessage,
 } from '@coldpbc/interfaces';
 import {
@@ -23,8 +23,8 @@ import { forEach, get, has } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
-import { KeyedMutator, useSWRConfig } from 'swr';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation } from '@coldpbc/hooks';
+import { KeyedMutator } from 'swr';
 import { format, isSameDay, parseISO } from 'date-fns';
 import { ApolloQueryResult, isApolloError } from '@apollo/client';
 import {
@@ -450,8 +450,8 @@ const _DocumentDetailsSidebar = (props: {
 			<div className={'w-auto flex justify-end'}>
 				<BaseButton
 					label={'Save'}
-					onClick={() => {
-						updateFileAndAssurances(fileState);
+					onClick={async () => {
+						await updateFileAndAssurances(fileState);
 					}}
 					variant={ButtonTypes.primary}
 					disabled={disabled}
@@ -474,17 +474,28 @@ const _DocumentDetailsSidebar = (props: {
 					input: {
 						id: fileState.id,
 						type: fileState.type,
-					},
+            effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+            effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+          },
 				};
-				// update the file metadata
-				variables.input.metadata = {
-					...(file.metadata || {}),
-					effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-					effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
-				};
-				if (fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
-					variables.input.metadata.certificate_number = fileState.certificate_number;
-				}
+        // only send metadata if needed
+        if(
+          !isSameDay(fileState.startDate || 0, compareFileState.startDate || 0) ||
+          !isSameDay(fileState.endDate || 0, compareFileState.endDate || 0) ||
+          fileState.certificate_number !== compareFileState.certificate_number
+        ) {
+          // update the file metadata
+          variables.input.metadata = {
+            effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+            effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+          };
+
+          if(fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
+            // if the file type is certificate or scope certificate, then send the certificate number
+            variables.input.metadata.certificate_number = fileState.certificate_number
+          }
+        }
+
 				promises.push(updateDocument(variables));
 			}
 

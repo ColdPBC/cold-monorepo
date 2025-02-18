@@ -3,6 +3,7 @@ import { find, get } from 'lodash';
 import {ProcessingStatus} from "@coldpbc/enums";
 
 export const getEffectiveEndDate = (file: FilesWithAssurances): string | null => {
+  if(file.effectiveEndDate) return file.effectiveEndDate;
   // find the first assurance with an effective end date
   const assurance = find(file.attributeAssurances, assurance => assurance.effectiveEndDate !== null);
   if (assurance && assurance.effectiveEndDate) {
@@ -17,6 +18,7 @@ export const getEffectiveEndDate = (file: FilesWithAssurances): string | null =>
 };
 
 export const getEffectiveStartDate = (file: FilesWithAssurances): string | null => {
+  if(file.effectiveStartDate) return file.effectiveStartDate;
   // find the first assurance with an effective start date
   const assurance = file.attributeAssurances.find(assurance => assurance.effectiveStartDate !== null);
   if (assurance && assurance.effectiveStartDate) {

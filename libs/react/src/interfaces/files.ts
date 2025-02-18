@@ -24,6 +24,8 @@ export interface FilesWithAssurances {
 	id: string;
 	originalName: string;
 	createdAt: string;
+  effectiveStartDate: string | null;
+  effectiveEndDate: string | null;
 	type: string;
 	attributeAssurances: AttributeAssurance[];
   processingStatus: ProcessingStatus | null;
