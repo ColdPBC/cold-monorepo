@@ -1,5 +1,6 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { find, get } from 'lodash';
+import {ProcessingStatus} from "@coldpbc/enums";
 
 export const getEffectiveEndDate = (file: FilesWithAssurances): string | null => {
   if(file.effectiveEndDate) return file.effectiveEndDate;
@@ -53,7 +54,7 @@ export const getEffectiveStartDateFromAssurances = (file: FilesWithAssurances | 
   }
 };
 
-export const getFileProcessingStatus = (file: FilesWithAssurances | undefined): string | null => {
+export const getFileProcessingStatus = (file: FilesWithAssurances | undefined): ProcessingStatus | null => {
   if (!file) return null;
-  return get(file, 'metadata.status', null);
+  return file.processingStatus;
 };

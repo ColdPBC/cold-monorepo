@@ -33,4 +33,5 @@ export enum GuidPrefixes {
 	'SurveyStatus' = 'sstatus',
 	'SurveyData' = 'sdata',
 	'Integrations' = 'int',
+	'WebhookSecret' = 'whs',
 }

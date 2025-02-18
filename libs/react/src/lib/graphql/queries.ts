@@ -39,6 +39,7 @@ export const GET_ALL_FILES = gql`
       originalName
       createdAt
       type
+      processingStatus
       metadata
       effectiveStartDate
       effectiveEndDate

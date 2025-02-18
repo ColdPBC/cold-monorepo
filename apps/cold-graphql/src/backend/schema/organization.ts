@@ -72,6 +72,12 @@ export class Organization {
 	@Field(() => GraphQLJSON, { nullable: true })
 	metadata?: Record<string, unknown>;
 
+	@Field(() => String, { nullable: true })
+	linearSecret?: string;
+
+	@Field(() => String, { nullable: true })
+	linearWebhookId?: string;
+
 	@RelationshipField<Action>(() => [Action], { relatedField: 'organization' })
 	actions!: Action[];
 

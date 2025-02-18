@@ -28,6 +28,7 @@ export interface FilesWithAssurances {
   effectiveEndDate: string | null;
 	type: string;
 	attributeAssurances: AttributeAssurance[];
+  processingStatus: ProcessingStatus | null;
   metadata: {
     effective_start_date: string | null;
     effective_end_date: string | null;

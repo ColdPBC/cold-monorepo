@@ -2,11 +2,12 @@ import { Injectable, Scope } from '@nestjs/common';
 import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import { ClassificationService } from './classification.service';
 import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
-import { BaseWorker, S3Service } from '@coldpbc/nest';
+import { BaseWorker, ColdRabbitService, EventService, PrismaService, S3Service } from '@coldpbc/nest';
 import { Queue } from 'bull';
 import { ExtractionService } from '../extraction/extraction.service';
 import { ExtractionJobPayload } from '../extraction/extraction.processor.service';
 import { isImage } from '../utility';
+import { processing_status } from '@prisma/client';
 
 @Injectable()
 @Processor({ name: 'openai:classification' })
@@ -16,6 +17,8 @@ export class ClassificationProcessorService extends BaseWorker {
 		readonly classification: ClassificationService,
 		readonly extraction: ExtractionService,
 		readonly s3: S3Service,
+		readonly events: EventService,
+		readonly prisma: PrismaService,
 	) {
 		super(ClassificationProcessorService.name);
 	}
@@ -25,6 +28,18 @@ export class ClassificationProcessorService extends BaseWorker {
 		const { filePayload, user, organization } = job.data;
 		try {
 			this.logger.info(`Classifying content for ${filePayload.original_name}`, { filePayload, user, organization });
+
+			if (filePayload.processing_status !== processing_status.AI_PROCESSING) {
+				await this.prisma.organization_files.update({
+					where: {
+						organization_id: organization.id,
+						id: filePayload.id,
+					},
+					data: {
+						processing_status: processing_status.AI_PROCESSING,
+					},
+				});
+			}
 
 			let openAiImageUrlContent: OpenAiBase64ImageUrl[] = [
 				{
@@ -82,12 +97,36 @@ export class ClassificationProcessorService extends BaseWorker {
 				extractionJobData = { extension, isImage: isImage(extension), classification, filePayload, user, organization, attributes: this.classification.sus_attributes };
 			}
 
+			if (filePayload.processing_status !== processing_status.AI_PROCESSING) {
+				await this.prisma.organization_files.update({
+					where: {
+						organization_id: organization.id,
+						id: filePayload.id,
+					},
+					data: {
+						processing_status: processing_status.IMPORT_COMPLETE,
+					},
+				});
+			}
+
 			await this.extractionQueue.add('extract', extractionJobData, { removeOnComplete: true, removeOnFail: true });
 			this.logger.info(`Classification job for ${filePayload.original_name} completed`, { filePayload, user, organization });
 			// done
 			return {};
 		} catch (e) {
 			this.logger.info(e.message, e);
+
+			await this.events.sendAsyncEvent('cold.core.linear.events', processing_status.PROCESSING_ERROR, { error: JSON.stringify(e), orgFile: filePayload, user, organization });
+
+			await this.prisma.organization_files.update({
+				where: {
+					organization_id: organization.id,
+					id: filePayload.id,
+				},
+				data: {
+					processing_status: processing_status.PROCESSING_ERROR,
+				},
+			});
 
 			return e;
 		}

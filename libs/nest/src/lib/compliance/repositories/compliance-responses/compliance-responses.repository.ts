@@ -40,7 +40,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
 		super(ComplianceResponsesRepository.name);
 	}
 
-	getCacheKey(org: organizations, name: string, options?: ComplianceResponseOptions) {
+	getCacheKey(org: any, name: string, options?: ComplianceResponseOptions) {
 		return options
 			? `organizations:${org.id}:compliance:${name}:responses:${options.responses}:references:${options.references}:bookmarks:${options.bookmarks}:take:${options.take}:skip:${options.skip}`
 			: `organizations:${org.id}:compliance:${name}:responses`;

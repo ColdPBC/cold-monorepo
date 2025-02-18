@@ -81,6 +81,12 @@ export class Organization {
 	@Property({ type: 'json', nullable: true })
 	metadata?: Record<string, unknown>;
 
+	@Property({ type: 'text', nullable: true })
+	linearSecret?: string;
+
+	@Property({ type: 'text', nullable: true })
+	linearWebhookId?: string;
+
 	@OneToMany({ entity: () => Action, mappedBy: 'organization' })
 	actions = new Collection<Action>(this);
 

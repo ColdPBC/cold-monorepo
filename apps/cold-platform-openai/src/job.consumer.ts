@@ -3,9 +3,7 @@ import { InjectQueue, OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueuePro
 import { Job, Queue } from 'bull';
 import OpenAI, { UnprocessableEntityError } from 'openai';
 import { AppService } from './app.service';
-import { AssistantService } from './assistant/assistant.service';
 import { BaseWorker, CacheService, ComplianceSectionsCacheRepository, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
-import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
 import { ChatService } from './chat/chat.service';
 import { PineconeService } from './pinecone/pinecone.service';
@@ -23,8 +21,6 @@ export class JobConsumer extends BaseWorker {
 		@InjectQueue('openai:classification') readonly classification: Queue,
 		readonly config: ConfigService,
 		readonly appService: AppService,
-		readonly assistant: AssistantService,
-		readonly fileService: FileService,
 		readonly cache: CacheService,
 		readonly loader: PineconeService,
 		readonly extraction: ExtractionService,
@@ -65,7 +61,7 @@ export class JobConsumer extends BaseWorker {
 	@Process('organization.created')
 	async processOrganizationCreated(job: Job) {
 		this.logger.info(`Received ${job.name} job: ${job.id} `);
-		return this.appService.createAssistant(job.data);
+		//return this.appService.createAssistant(job.data);
 	}
 
 	@Process('file.uploaded')
@@ -97,7 +93,7 @@ export class JobConsumer extends BaseWorker {
 				deleted.push(vector.id);
 			}
 		}
-		return this.fileService.deleteFile(job.data.user, job.data.integration.id, job.data.payload.key);
+		//return this.fileService.deleteFile(job.data.user, job.data.integration.id, job.data.payload.key);
 	}
 
 	@Process('compliance_flow.enabled')
