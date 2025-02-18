@@ -43,7 +43,7 @@ export const Default: Story = {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: null,
-            emissionFactor: null,
+            materialEmissionFactors: [],
             organizationFacility: {
               id: 'ofac_123',
               name: 'Tier 2 Supplier',
@@ -106,7 +106,7 @@ export const NoAssurances: Story = {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: null,
-            emissionFactor: null,
+            materialEmissionFactors: [],
             organizationFacility: {
               id: 'ofac_123',
               name: 'Tier 2 Supplier',

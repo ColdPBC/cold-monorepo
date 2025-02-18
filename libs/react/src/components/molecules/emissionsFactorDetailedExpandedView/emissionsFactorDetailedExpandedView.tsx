@@ -3,12 +3,12 @@ import {LightBulbIcon} from "@heroicons/react/20/solid";
 import {ColdIcon} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
 import {IconNames} from "@coldpbc/enums";
-import {EmissionFactor} from "@coldpbc/interfaces";
+import {EmissionFactor, EmissionFactorDisplay} from "@coldpbc/interfaces";
 
 
 export const EmissionsFactorDetailedExpandedView = (
   props : {
-    emissionFactor: EmissionFactor | null
+    emissionFactor: EmissionFactorDisplay | null
     weight: number | null
   }
 ) => {
@@ -32,15 +32,21 @@ export const EmissionsFactorDetailedExpandedView = (
     )
   } else {
     className = ' flex flex-row justify-between'
-    const totalEmissions = emissionFactor.emissionsFactor * weight;
+    const totalEmissions = emissionFactor.value * weight;
     element = (
       <>
         <div className={'flex flex-col gap-4 w-full'}>
           <div className={'text-h5'}>
-            {emissionFactor.name} | {emissionFactor.emissionsFactor}
+            {emissionFactor.value}
           </div>
-          <div className={'text-body text-wrap'}>
-            {emissionFactor.description}
+          <div className={'list-disc text-wrap'}>
+            {
+              emissionFactor.emissionFactors.map((ef: EmissionFactor, index: number) => (
+                <div key={index}>
+                  {ef.name} : {ef.description}
+                </div>
+              ))
+            }
           </div>
           <div className={'flex flex-row gap-[10px]'}>
             <LightBulbIcon className={'w-[15px] h-[15px] self-center'} color={'white'}/>
@@ -71,7 +77,7 @@ export const EmissionsFactorDetailedExpandedView = (
               name={IconNames.CloseModalIcon}
             />
             <div>
-              {emissionFactor.emissionsFactor.toFixed(1)}
+              {emissionFactor.value.toFixed(1)}
             </div>
           </div>
           <div className={'h-[1px] w-full bg-gray-80'}></div>

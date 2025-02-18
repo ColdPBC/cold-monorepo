@@ -259,11 +259,14 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
             weightFactor
           }
           emissionsFactor
-          emissionFactor {
+          materialEmissionFactor {
             id
-            name
-            emissionsFactor
-            description
+            emissionFactor {
+              id
+              name
+              value
+              description
+            }
           }
           attributeAssurances {
             id
@@ -474,11 +477,14 @@ export const GET_PRODUCT = gql`
           materialCategory
           materialSubcategory
           emissionsFactor
-          emissionFactor {
+          materialEmissionFactor {
             id
-            name
-            emissionsFactor
-            description
+            emissionFactor {
+              id
+              name
+              value
+              description
+            }
           }
           organizationFacility {
             id

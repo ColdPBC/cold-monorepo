@@ -1,7 +1,7 @@
 import {
   CalculatedWeight,
   Card,
-  DEFAULT_GRID_COL_DEF, EmissionsFactorBubble, EmissionsFactorDetailedExpandedView,
+  DEFAULT_GRID_COL_DEF, EmissionsFactorDetailedExpandedView,
   MaterialClassificationIcon,
   MissingMaterialEmissionsCard,
   MuiDataGrid
@@ -17,7 +17,7 @@ import {get} from "lodash";
 import {MaterialClassificationCategory} from "@coldpbc/enums";
 import {HexColors} from "@coldpbc/themes";
 import {useCallback} from "react";
-import {getCalculatedWeight} from "@coldpbc/lib";
+import {getCalculatedWeight, getEmissionFactor} from "@coldpbc/lib";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import {twMerge} from "tailwind-merge";
 
@@ -66,7 +66,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     const emissionFactor: EmissionFactor | null = get(params, 'row.emissions_factor', 0);
     return (
       <div className={'h-full w-full flex items-center'}>
-        <EmissionsFactorBubble emissionFactor={emissionFactor}/>
+        {emissionFactor ? emissionFactor.value : '--'}
       </div>
     )
   }
@@ -142,7 +142,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
   const rows = product.productMaterials.map((prodMaterial) => {
     const weightResult = getCalculatedWeight(prodMaterial);
     const calculatedWeight = get(weightResult, 'weightInKg');
-
+    const emissionFactor = getEmissionFactor(prodMaterial.material.materialEmissionFactors)
     return {
       id: prodMaterial.id,
       materialId: prodMaterial.material?.id,
@@ -151,9 +151,9 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       yield_with_uom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
       weight: calculatedWeight,
       weightResult: weightResult,
-      emissions_factor: prodMaterial.material.emissionFactor,
-      total_emissions: (prodMaterial.material.emissionFactor && calculatedWeight)
-        ? prodMaterial.material.emissionFactor.emissionsFactor * calculatedWeight : 0,
+      emissions_factor: emissionFactor?.value || null,
+      total_emissions: (emissionFactor && calculatedWeight)
+        ? emissionFactor.value * calculatedWeight : 0,
     }
   })
 
@@ -164,7 +164,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
 
     return (
       <EmissionsFactorDetailedExpandedView
-        emissionFactor={productMaterial?.material.emissionFactor || null}
+        emissionFactor={getEmissionFactor(productMaterial?.material.materialEmissionFactors)}
         weight={weight}
         />
     )

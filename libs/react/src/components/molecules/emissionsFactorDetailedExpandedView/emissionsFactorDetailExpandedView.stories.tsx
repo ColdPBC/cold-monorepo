@@ -17,10 +17,13 @@ type Story = StoryObj<typeof meta>;
 export const WithEmissions: Story = {
   args: {
     emissionFactor: {
-      id: '1',
-      name: 'Sheep Wool Insulation',
-      description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
-      emissionsFactor: 3.2,
+      value: 3.2,
+      emissionFactors: [{
+        id: '1',
+        name: 'Sheep Wool Insulation',
+        description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+        value: 3.2
+      }],
     },
     weight: 0.176,
   },
@@ -54,10 +57,13 @@ export const WithOutEmissions: Story = {
 export const WithOutWeight: Story = {
   args: {
     emissionFactor: {
-      id: '1',
-      name: 'Sheep Wool Insulation',
-      description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
-      emissionsFactor: 3.2,
+      value: 3.2,
+      emissionFactors: [{
+        id: '1',
+        name: 'Sheep Wool Insulation',
+        description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+        value: 3.2,
+      }]
     },
     weight: null,
   },

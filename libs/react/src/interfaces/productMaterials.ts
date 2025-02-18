@@ -30,7 +30,7 @@ export interface ProductMaterial extends ProductMaterialForWeightCalculation {
       category: MaterialClassificationCategory;
     } | null;
     emissionsFactor: number | null;
-    emissionFactor: EmissionFactor | null;
+    materialEmissionFactors: MaterialEmissionFactor[]
     attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
   };
 }
@@ -38,7 +38,17 @@ export interface ProductMaterial extends ProductMaterialForWeightCalculation {
 export interface EmissionFactor {
   id: string;
   name: string;
-  emissionsFactor: number;
-  description: string;
+  value: number;
+  description: string | null;
 }
 
+export interface MaterialEmissionFactor {
+  id: string;
+  emissionFactor: EmissionFactor;
+}
+
+
+export interface EmissionFactorDisplay {
+  value: number;
+  emissionFactors: EmissionFactor[];
+}

@@ -10,7 +10,7 @@ export const MissingMaterialEmissionsCard = (props: {
 }) => {
   const { productMaterials } = props;
 
-  const materialsMissingEmissions = productMaterials.filter(productMaterial => !productMaterial.material.emissionFactor).length;
+  const materialsMissingEmissions = productMaterials.filter(productMaterial => productMaterial.material.materialEmissionFactors.length === 0).length;
 
   if(materialsMissingEmissions === 0) {
     return null;

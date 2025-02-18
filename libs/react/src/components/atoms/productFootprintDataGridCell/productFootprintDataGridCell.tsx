@@ -4,7 +4,7 @@
 // import { HexColors } from '@coldpbc/themes';
 import React from 'react';
 import { PaginatedProductsQuery } from '@coldpbc/interfaces';
-import { getCalculatedWeight } from '@coldpbc/lib';
+import {getCalculatedWeight, getEmissionFactor} from '@coldpbc/lib';
 
 interface ProductFootprintDataGridCellProps {
   product: PaginatedProductsQuery;
@@ -72,10 +72,11 @@ export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCell
     }
 
     if(useNewEmissionFactor) {
-      if (!productMaterial.material.emissionFactor) {
+      const emissionFactor = getEmissionFactor(productMaterial.material.materialEmissionFactors)
+      if (!emissionFactor) {
         return;
       }
-      materialFootprint = weightResult.weightInKg * productMaterial.material.emissionFactor.emissionsFactor;
+      materialFootprint = weightResult.weightInKg * emissionFactor.value;
     } else {
       if (!productMaterial.material.emissionsFactor) {
         return;
