@@ -16,7 +16,7 @@ import {
 import {get} from "lodash";
 import {MaterialClassificationCategory} from "@coldpbc/enums";
 import {HexColors} from "@coldpbc/themes";
-import {useCallback} from "react";
+import {useCallback, useMemo} from "react";
 import {getCalculatedWeight, getAggregateEmissionFactors} from "@coldpbc/lib";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import {twMerge} from "tailwind-merge";
@@ -139,23 +139,27 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     },
   ]
 
-  const rows = product.productMaterials.map((prodMaterial) => {
-    const weightResult = getCalculatedWeight(prodMaterial);
-    const calculatedWeight = get(weightResult, 'weightInKg');
-    const emissionFactor = getAggregateEmissionFactors(prodMaterial.material.materialEmissionFactors)
-    return {
-      id: prodMaterial.id,
-      materialId: prodMaterial.material?.id,
-      material: prodMaterial.material?.name,
-      classification: prodMaterial.material.materialClassification,
-      yield_with_uom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
-      weight: calculatedWeight,
-      weightResult: weightResult,
-      emissions_factor: emissionFactor?.value || null,
-      total_emissions: (emissionFactor && calculatedWeight)
-        ? emissionFactor.value * calculatedWeight : 0,
-    }
-  })
+  const rows = useMemo(() => {
+    return product.productMaterials.map((prodMaterial) => {
+      const weightResult = getCalculatedWeight(prodMaterial);
+      const calculatedWeight = get(weightResult, 'weightInKg');
+      const emissionFactor = getAggregateEmissionFactors(prodMaterial.material.materialEmissionFactors);
+      const emissionsFactorValue = emissionFactor?.value || null;
+      const totalEmissions = (emissionFactor && calculatedWeight) ? emissionFactor.value * calculatedWeight : 0
+
+      return {
+        id: prodMaterial.id,
+        materialId: prodMaterial.material?.id,
+        material: prodMaterial.material?.name,
+        classification: prodMaterial.material.materialClassification,
+        yield_with_uom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
+        weight: calculatedWeight,
+        weightResult: weightResult,
+        emissions_factor: emissionsFactorValue,
+        total_emissions: totalEmissions,
+      };
+    });
+  }, [product.productMaterials]);
 
   const getDetailPanelContent = useCallback<NonNullable<DataGridProProps['getDetailPanelContent']>>(({row}) => {
     const id = row.id;
