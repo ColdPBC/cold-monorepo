@@ -17,7 +17,7 @@ import {get} from "lodash";
 import {MaterialClassificationCategory} from "@coldpbc/enums";
 import {HexColors} from "@coldpbc/themes";
 import {useCallback} from "react";
-import {getCalculatedWeight, getEmissionFactor} from "@coldpbc/lib";
+import {getCalculatedWeight, getAggregateEmissionFactors} from "@coldpbc/lib";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import {twMerge} from "tailwind-merge";
 
@@ -142,7 +142,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
   const rows = product.productMaterials.map((prodMaterial) => {
     const weightResult = getCalculatedWeight(prodMaterial);
     const calculatedWeight = get(weightResult, 'weightInKg');
-    const emissionFactor = getEmissionFactor(prodMaterial.material.materialEmissionFactors)
+    const emissionFactor = getAggregateEmissionFactors(prodMaterial.material.materialEmissionFactors)
     return {
       id: prodMaterial.id,
       materialId: prodMaterial.material?.id,
@@ -164,7 +164,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
 
     return (
       <EmissionsFactorDetailedExpandedView
-        emissionFactor={getEmissionFactor(productMaterial?.material.materialEmissionFactors)}
+        aggregateEmissionsFactors={getAggregateEmissionFactors(productMaterial?.material.materialEmissionFactors)}
         weight={weight}
         />
     )

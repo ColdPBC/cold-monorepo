@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 
 export const WithEmissions: Story = {
   args: {
-    emissionFactor: {
+    aggregateEmissionsFactors: {
       value: 3.2,
       emissionFactors: [{
         id: '1',
@@ -40,7 +40,7 @@ export const WithEmissions: Story = {
 
 export const WithOutEmissions: Story = {
   args: {
-    emissionFactor: null,
+    aggregateEmissionsFactors: null,
     weight: 0.176,
   },
   render: (args) => {
@@ -56,7 +56,7 @@ export const WithOutEmissions: Story = {
 
 export const WithOutWeight: Story = {
   args: {
-    emissionFactor: {
+    aggregateEmissionsFactors: {
       value: 3.2,
       emissionFactors: [{
         id: '1',

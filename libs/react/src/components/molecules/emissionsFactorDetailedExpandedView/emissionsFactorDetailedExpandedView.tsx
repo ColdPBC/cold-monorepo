@@ -8,16 +8,16 @@ import {EmissionFactor, EmissionFactorDisplay} from "@coldpbc/interfaces";
 
 export const EmissionsFactorDetailedExpandedView = (
   props : {
-    emissionFactor: EmissionFactorDisplay | null
+    aggregateEmissionsFactors: EmissionFactorDisplay | null
     weight: number | null
   }
 ) => {
-  const { emissionFactor, weight } = props;
+  const { aggregateEmissionsFactors, weight } = props;
 
   let element: ReactNode;
   let className: string;
 
-  if(!emissionFactor || !weight) {
+  if(!aggregateEmissionsFactors || !weight) {
     className = ' flex flex-col'
     element = (
       <>
@@ -32,17 +32,17 @@ export const EmissionsFactorDetailedExpandedView = (
     )
   } else {
     className = ' flex flex-row justify-between'
-    const totalEmissions = emissionFactor.value * weight;
+    const totalEmissions = aggregateEmissionsFactors.value * weight;
     element = (
       <>
         <div className={'flex flex-col gap-4 w-full'}>
           <div className={'text-h5'}>
-            {emissionFactor.value}
+            {aggregateEmissionsFactors.value}
           </div>
           <div className={'max-h-[200px] overflow-y-auto scrollbar-hide'}>
             <ul className={'ml-4 list-disc text-wrap'}>
               {
-                emissionFactor.emissionFactors.map((ef: EmissionFactor, index: number) => (
+                aggregateEmissionsFactors.emissionFactors.map((ef: EmissionFactor, index: number) => (
                   <li key={index}>
                     {ef.name} : {ef.description}
                   </li>
@@ -79,7 +79,7 @@ export const EmissionsFactorDetailedExpandedView = (
               name={IconNames.CloseModalIcon}
             />
             <div>
-              {emissionFactor.value.toFixed(1)}
+              {aggregateEmissionsFactors.value.toFixed(1)}
             </div>
           </div>
           <div className={'h-[1px] w-full bg-gray-80'}></div>
