@@ -26,7 +26,7 @@ export class OrganizationFileHooks extends BaseSidecar {
 				const em = this.entity.prototype.__factory.em as EntityManager;
 				const response = await em.findOneOrFail(OrganizationFile, { id: item.id });
 				//const orgFile = await params.entities[0].(item.id);
-				item.metadata = merge(response.metadata, JSON.parse(item.metadata));
+				item.metadata = merge(response.metadata, typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata);
 			}
 		}
 
