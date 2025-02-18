@@ -486,7 +486,6 @@ const _DocumentDetailsSidebar = (props: {
         ) {
           // update the file metadata
           variables.input.metadata = {
-            ...fileState.metadata,
             effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
             effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
           };
