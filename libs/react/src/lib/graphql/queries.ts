@@ -41,6 +41,8 @@ export const GET_ALL_FILES = gql`
       type
       processingStatus
       metadata
+      effectiveStartDate
+      effectiveEndDate
       attributeAssurances {
         id
         effectiveStartDate
