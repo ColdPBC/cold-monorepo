@@ -42,6 +42,12 @@ export class BackboneService extends BaseWorker {
 	product_packaging_dimensions = '5e90a66e5b9d8b00327d59e7';
 	product_sustainability_notes_field_id = '5e31c25c56f58f003e3cc4ff';
 
+	customFields = {
+		material_supplier_field_id: '5e2a079c9556da0033a23232',
+		material_yield_field_id: '5e4ecd88a369020033942cbd',
+		product_supplier_field_id: '5e31c0dd56f58f003e3cc4e8',
+		product_weight_field_id: '5e31c26f56f58f003e3cc501',
+	};
 	async authenticate(req: IRequest) {
 		try {
 			if (!req.body || !req.body['api_key']) {
