@@ -63,10 +63,10 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
   }
 
   const renderEmissionsFactor = (params: any) => {
-    const emissionFactor: EmissionFactor | null = get(params, 'row.emissions_factor', 0);
+    const emissionFactor: number | null = get(params, 'row.emissions_factor', 0);
     return (
       <div className={'h-full w-full flex items-center'}>
-        {emissionFactor ? emissionFactor.value : '--'}
+        {emissionFactor ? emissionFactor : '--'}
       </div>
     )
   }

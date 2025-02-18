@@ -39,14 +39,16 @@ export const EmissionsFactorDetailedExpandedView = (
           <div className={'text-h5'}>
             {emissionFactor.value}
           </div>
-          <div className={'list-disc text-wrap'}>
-            {
-              emissionFactor.emissionFactors.map((ef: EmissionFactor, index: number) => (
-                <div key={index}>
-                  {ef.name} : {ef.description}
-                </div>
-              ))
-            }
+          <div className={'max-h-[200px] overflow-y-auto scrollbar-hide'}>
+            <ul className={'ml-4 list-disc text-wrap'}>
+              {
+                emissionFactor.emissionFactors.map((ef: EmissionFactor, index: number) => (
+                  <li key={index}>
+                    {ef.name} : {ef.description}
+                  </li>
+                ))
+              }
+            </ul>
           </div>
           <div className={'flex flex-row gap-[10px]'}>
             <LightBulbIcon className={'w-[15px] h-[15px] self-center'} color={'white'}/>
