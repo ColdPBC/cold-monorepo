@@ -2,7 +2,7 @@ import { Injectable, Scope } from '@nestjs/common';
 import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import { ExtractionService } from './extraction.service';
 import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
-import { BaseWorker, EventService, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
+import { BaseWorker, EventService, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import { Queue } from 'bull';
 import { organization_files, organizations, processing_status, sustainability_attributes } from '@prisma/client';
 
@@ -29,6 +29,7 @@ export class ExtractionProcessorService extends BaseWorker {
 		readonly s3: S3Service,
 		readonly events: EventService,
 		readonly prisma: PrismaService,
+		readonly mqtt: MqttService,
 	) {
 		super(ExtractionProcessorService.name);
 	}
@@ -72,6 +73,17 @@ export class ExtractionProcessorService extends BaseWorker {
 					},
 				});
 			}
+
+			this.mqtt.publishToUI({
+				action: 'update',
+				status: 'complete',
+				event: 'extract-file-data',
+				resource: 'organization_files',
+				data: filePayload,
+				user,
+				swr_key: `organization_files.${(filePayload?.metadata as any).status}`,
+				org_id: organization.id,
+			});
 
 			return {};
 		} catch (e) {
