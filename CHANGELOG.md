@@ -1,3 +1,10 @@
+# [1.563.0](https://github.com/coldPBC/cold-monorepo/compare/v1.562.2...v1.563.0) (2025-02-18)
+
+
+### Features
+
+* Add spinner to AIProcessingDocumentsBanner ([e5be6a7](https://github.com/coldPBC/cold-monorepo/commit/e5be6a7b4604ae567cf9108100d6da018f2efe4d))
+
 ## [1.562.2](https://github.com/coldPBC/cold-monorepo/compare/v1.562.1...v1.562.2) (2025-02-18)
 
 
