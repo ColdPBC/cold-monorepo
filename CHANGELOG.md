@@ -1,3 +1,18 @@
+# [1.565.0](https://github.com/coldPBC/cold-monorepo/compare/v1.564.0...v1.565.0) (2025-02-18)
+
+
+### Features
+
+* Add support for effective start and end dates in files ([3d334b2](https://github.com/coldPBC/cold-monorepo/commit/3d334b288cb70be88152b8685bcd313b37a16738))
+* Fix date comparison logic in document details sidebar. ([4ce99e7](https://github.com/coldPBC/cold-monorepo/commit/4ce99e701503fe20e451baa1da3880b043f4c885))
+* Fix metadata condition logic in document sidebar ([7cf3b60](https://github.com/coldPBC/cold-monorepo/commit/7cf3b60dd60f441a6f867ea57c19f25bb83ebd62))
+* Only send metadata when dates or certificate number is changed to reduce payload size. ([e732b3c](https://github.com/coldPBC/cold-monorepo/commit/e732b3c9e8e167f2fcdd61cf38fd7bfcb299bdc6))
+* Optimize metadata sending in document details sidebar. ([a3bc170](https://github.com/coldPBC/cold-monorepo/commit/a3bc1707e9065d7361b4ff62ff8d67f562df4dfa))
+* Refactor metadata update logic in document sidebar. ([d2e639e](https://github.com/coldPBC/cold-monorepo/commit/d2e639e1e71834ee1d33fdd1cd43c9f9b3e6b961))
+* Refine metadata update logic in document sidebar. ([c5a4763](https://github.com/coldPBC/cold-monorepo/commit/c5a47637489cff9920aad6d9348add8af4505f77))
+* Remove unnecessary spread operator from metadata update. ([ef29b89](https://github.com/coldPBC/cold-monorepo/commit/ef29b8914f70cee2226080d00c6185c9e6c7f7fa))
+* Update handling of effective dates in document sidebar ([74aa507](https://github.com/coldPBC/cold-monorepo/commit/74aa507a978055f1affe8dffe5dad7d26271f15f))
+
 # [1.564.0](https://github.com/coldPBC/cold-monorepo/compare/v1.563.0...v1.564.0) (2025-02-18)
 
 
