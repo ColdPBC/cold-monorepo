@@ -465,17 +465,6 @@ export class ExtractionService extends BaseWorker {
 
 			this.logger.info('file metadata updated', { file: orgFile, organization, user });
 
-			this.mqtt.publishToUI({
-				action: 'update',
-				status: 'complete',
-				event: 'extract-file-data',
-				resource: 'organization_files',
-				data: orgFile,
-				user,
-				swr_key: `organization_files.${(orgFile?.metadata as any).status}`,
-				org_id: organization.id,
-			});
-
 			// if the classification does not contain a sustainability attribute, return the parsed response
 			if (!attributes?.find(item => item.name === classification.sustainability_attribute)) {
 				this.sendMetrics('organization.files', 'cold-openai', 'no-sustainability-attribute', 'completed', {
@@ -527,6 +516,17 @@ export class ExtractionService extends BaseWorker {
 					file_type: orgFile.type,
 					file_id: orgFile.id,
 				},
+			});
+
+			this.mqtt.publishToUI({
+				action: 'update',
+				status: 'complete',
+				event: 'extract-file-data',
+				resource: 'organization_files',
+				data: orgFile,
+				user,
+				swr_key: `organization_files.${(orgFile?.metadata as any).status}`,
+				org_id: organization.id,
 			});
 
 			return parsedResponse;

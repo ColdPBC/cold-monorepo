@@ -11,8 +11,8 @@ interface NumericInputWithUnitOfMeasureProps<T> {
   label: string;
   setEntityState: (state: T) => void;
   entityState: T;
-  setError: (error?: string) => void;
-  error?: string;
+  setErrors: (errors: { [key: string]: string | undefined }) => void;
+  errors: { [key: string]: string | undefined };
 }
 
 export const NumericInputWithUnitOfMeasure = <T,>({
@@ -22,8 +22,8 @@ export const NumericInputWithUnitOfMeasure = <T,>({
   label,
   setEntityState,
   entityState,
-  setError,
-  error
+  setErrors,
+  errors,
 }: NumericInputWithUnitOfMeasureProps<T>) => {
   const placeholderOption = {
     id: -1,
@@ -37,24 +37,39 @@ export const NumericInputWithUnitOfMeasure = <T,>({
     value: uom,
   }));
 
-  const validate = () => {
-    // if they select a UOM, numeric value must be not be null
-    // if they select pcs as UOM, numeric value must be a whole number
-    if(entityState[unitOfMeasureFieldName] && entityState[fieldName] === null) {
-      setError(`${label} is required`);
-    } else if(entityState[unitOfMeasureFieldName] === UnitOfMeasurement.pcs && entityState[fieldName] !== null && !Number.isInteger(entityState[fieldName])) {
-      setError(`${label} must be a whole number`);
-    } else {
-      return undefined;
+  const validate = (newState: T) => {
+    // Clear both errors initially
+    let valueError: string | undefined;
+    let uomError: string | undefined;
+
+    // Check if we have a UOM but no value
+    if (newState[unitOfMeasureFieldName] && newState[fieldName] === null) {
+      valueError = `${label} is required`;
     }
+    // Check if we have a value but no UOM
+    else if ((newState[fieldName] !== null || newState[fieldName] === 0) && !newState[unitOfMeasureFieldName]) {
+      uomError = 'Unit of measure is required';
+    }
+    // Check for pcs validation
+    else if (newState[unitOfMeasureFieldName] === UnitOfMeasurement.pcs && newState[fieldName] !== null && !Number.isInteger(newState[fieldName])) {
+      valueError = `${label} must be a whole number`;
+    }
+
+    setErrors({
+      ...errors,
+      [fieldName]: valueError,
+      [unitOfMeasureFieldName]: uomError,
+    })
   }
 
   const onChange = (fieldName, newValue) => {
-    validate();
-    setEntityState({
+    const newState = {
       ...entityState,
       [fieldName]: newValue,
-    });
+    };
+
+    setEntityState(newState);
+    validate(newState);
   }
 
   return (
@@ -67,14 +82,16 @@ export const NumericInputWithUnitOfMeasure = <T,>({
         }}
         numeric_input_props={{
           name: String(fieldName),
-          value: entityState[fieldName] ? Number(entityState[fieldName]) : '',
+          value: (entityState[fieldName] || entityState[fieldName] === 0) ? Number(entityState[fieldName]) : '',
           thousandSeparator: ',',
-          onValueChange: e => {
-            onChange(fieldName, Number(e.value))
+          onValueChange: values => {
+            const value = values.value;
+            const valueToSet = value === '' ? null : Number(value);
+            onChange(fieldName, valueToSet)
           },
           className: 'text-body p-4 rounded-[8px] border-[1.5px] border-gray-90 w-full focus:border-[1.5px] focus:border-gray-90 focus:ring-0',
-          showError: !!error,
-          error,
+          showError: !!errors[fieldName as string],
+          error: errors[fieldName as string],
         }}
         container_classname={'w-1/2'}
       />
@@ -87,7 +104,9 @@ export const NumericInputWithUnitOfMeasure = <T,>({
           onChange={(selectedOption) => {
             onChange(unitOfMeasureFieldName, selectedOption.value);
           }}
+          buttonClassName={errors[unitOfMeasureFieldName as string] ? 'border-red-100' : ''}
         />
+        {errors[unitOfMeasureFieldName as string] && <div className="text-red-100 text-eyebrow mt-[8px]">{errors[unitOfMeasureFieldName as string]}</div>}
       </div>
     </div>
   );

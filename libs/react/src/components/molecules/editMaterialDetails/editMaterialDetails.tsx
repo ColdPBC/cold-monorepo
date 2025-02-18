@@ -243,8 +243,8 @@ const _EditMaterialDetails: React.FC<EditMaterialDetailsProps> = ({ material, on
 			<TextInputForEntityEdit<MaterialGraphQL> {...inputProps('materialSubcategory')} label={'Sub-Category'} />
 			<TextInputForEntityEdit<MaterialGraphQL> {...inputProps('brandMaterialId')} label={'Brand Material ID'} />
 			<TextInputForEntityEdit<MaterialGraphQL> {...inputProps('supplierMaterialId')} label={'Supplier Material ID'} />
-      <NumericInputWithUnitOfMeasure<MaterialGraphQL> {...inputProps('weightFactor')} label={'Weight Factor'} unitOfMeasureFieldName={'weightFactorUnitOfMeasure'} unitOfMeasureOptions={Object.values(WeightFactorUnits)} />
-      <NumericInputWithUnitOfMeasure<MaterialGraphQL> {...inputProps('width')} label={'Width'} unitOfMeasureFieldName={'widthUnitOfMeasure'} unitOfMeasureOptions={Object.values(Length)} />
+      <NumericInputWithUnitOfMeasure<MaterialGraphQL> {...inputProps('weightFactor')} label={'Weight Factor'} unitOfMeasureFieldName={'weightFactorUnitOfMeasure'} unitOfMeasureOptions={Object.values(WeightFactorUnits)} errors={errors} setErrors={setErrors} />
+      <NumericInputWithUnitOfMeasure<MaterialGraphQL> {...inputProps('width')} label={'Width'} unitOfMeasureFieldName={'widthUnitOfMeasure'} unitOfMeasureOptions={Object.values(Length)} errors={errors} setErrors={setErrors} />
 		</Card>
 	);
 };
