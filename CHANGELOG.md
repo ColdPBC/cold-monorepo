@@ -1,3 +1,10 @@
+## [1.562.2](https://github.com/coldPBC/cold-monorepo/compare/v1.562.1...v1.562.2) (2025-02-18)
+
+
+### Bug Fixes
+
+* handle metadata parsing properly in organization-file hook ([26969dc](https://github.com/coldPBC/cold-monorepo/commit/26969dcc4c1f84b3d8730b6cebc0fced6df19d90))
+
 ## [1.562.1](https://github.com/coldPBC/cold-monorepo/compare/v1.562.0...v1.562.1) (2025-02-18)
 
 
