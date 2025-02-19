@@ -1,3 +1,10 @@
+## [1.568.2](https://github.com/coldPBC/cold-monorepo/compare/v1.568.1...v1.568.2) (2025-02-19)
+
+
+### Bug Fixes
+
+* clean up redundant logic across entity hooks ([f28866f](https://github.com/coldPBC/cold-monorepo/commit/f28866fee432205272350b978b3e985360ee2758))
+
 ## [1.568.1](https://github.com/coldPBC/cold-monorepo/compare/v1.568.0...v1.568.1) (2025-02-19)
 
 
