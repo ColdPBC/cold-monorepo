@@ -4,7 +4,7 @@ import { ErrorFallback } from '../../application';
 import { PcfGraphData, ProductsQuery } from '@coldpbc/interfaces';
 import {
   BaseButton,
-  Card, handleTabChange,
+  Card,
   PcfGraphByClassificationCategory,
   SustainabilityAttributeCard,
   SustainabilityAttributeCardStyle,
@@ -13,12 +13,13 @@ import {
   filterAttributes,
   getAggregateEmissionFactors,
   getCalculatedWeight,
+  handleTabChange,
   processEntityLevelAssurances,
 } from '@coldpbc/lib';
 import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { get, snakeCase } from 'lodash';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { get } from 'lodash';
+import { useSearchParams } from 'react-router-dom';
 
 interface ProductSustainabilityAttributesCardProps {
 	product: ProductsQuery;
