@@ -259,7 +259,7 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
             weightFactor
           }
           emissionsFactor
-          materialEmissionFactor {
+          materialEmissionFactors {
             id
             emissionFactor {
               id
@@ -477,7 +477,7 @@ export const GET_PRODUCT = gql`
           materialCategory
           materialSubcategory
           emissionsFactor
-          materialEmissionFactor {
+          materialEmissionFactors {
             id
             emissionFactor {
               id
