@@ -51,10 +51,6 @@ export class BaseSidecar {
 	}
 
 	async afterReadHook(params: ReadHookParams<typeof this.entity, OrgContext>) {
-		if (this.secrets) {
-			await this.mqtt.connect();
-		}
-
 		this.logger.log(`after read ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 		return params;
 	}
@@ -78,31 +74,27 @@ export class BaseSidecar {
 	}
 
 	async afterCreateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
-		if (this.secrets) {
-			await this.mqtt.connect();
+		if (params.args.items.length > 0) {
+			const payload = {
+				action: MqttActionEnum.CREATE,
+				status: MqttStatusEnum.COMPLETE,
+				data: params as any,
+				swr_key: this.entity.name,
+				org_id: params.context.user.organization.id,
+				user: params.context.user.email,
+			};
+
+			await this.mqtt.publishMQTT(payload, params);
+
+			this.logger.info(`Created ${this.entityName}`, { params, payload });
+			return params;
 		}
 
-		const payload = {
-			action: MqttActionEnum.CREATE,
-			status: MqttStatusEnum.COMPLETE,
-			data: params as any,
-			swr_key: this.entity.name,
-			org_id: params.context.user.organization.id,
-			user: params.context.user.email,
-		};
-
-		await this.mqtt.publishMQTT(payload, params);
-
-		this.logger.info(`Created ${this.entityName}`, { params, payload });
 		return params;
 	}
 
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
 		this.logger.log(`before update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
-
-		if (this.secrets) {
-			await this.mqtt.connect();
-		}
 
 		for (const item of params.args.items) {
 			set(item, 'updatedAt', new Date());
@@ -113,10 +105,6 @@ export class BaseSidecar {
 
 	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
 		this.logger.log(`after update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
-
-		if (this.secrets) {
-			await this.mqtt.connect();
-		}
 
 		const payload = {
 			action: MqttActionEnum.UPDATE,
@@ -142,10 +130,6 @@ export class BaseSidecar {
 
 	async afterDeleteHook(params: DeleteHookParams<typeof this.entity, OrgContext>) {
 		this.logger.log(`after delete ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
-
-		if (this.secrets) {
-			await this.mqtt.connect();
-		}
 
 		const payload = {
 			action: MqttActionEnum.DELETE,

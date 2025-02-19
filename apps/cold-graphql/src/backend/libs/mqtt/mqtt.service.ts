@@ -73,15 +73,28 @@ export class MqttService {
 	 * @param entity
 	 */
 	async connect(context?: any): Promise<mqtt.MqttClient> {
+		if (!process.env.MQTT_PRIVATE_KEY) {
+			throw new Error('MQTT_PRIVATE_KEY is missing');
+		}
+		if (!process.env.MQTT_CA_ROOT_1) {
+			throw new Error('MQTT_CA_ROOT_1 is missing');
+		}
+		if (!process.env.MQTT_CA_ROOT_3) {
+			throw new Error('MQTT_CA_ROOT_3 is missing');
+		}
+		if (!process.env.MQTT_CERT) {
+			throw new Error('MQTT_CERT is missing');
+		}
+
 		if (this.mqttClient && this.mqttClient.connected) {
 			return this.mqttClient;
 		}
 
-		const privateKey = this.secrets.MQTT_PRIVATE_KEY;
-		const caRoot1 = this.secrets.MQTT_CA_ROOT_1;
-		const caRoot3 = this.secrets.MQTT_CA_ROOT_3;
-		const mqttcert = this.secrets.MQTT_CERT;
-		const auth0Domain = this.secrets.AUTH0_DOMAIN || 'dev-6qt527e13qyo4ls6.us.auth0.com';
+		const privateKey = process.env.MQTT_PRIVATE_KEY;
+		const caRoot1 = process.env.MQTT_CA_ROOT_1;
+		const caRoot3 = process.env.MQTT_CA_ROOT_3;
+		const mqttcert = process.env.MQTT_CERT;
+		const auth0Domain = process.env.AUTH0_DOMAIN || 'dev-6qt527e13qyo4ls6.us.auth0.com';
 
 		if (!auth0Domain) {
 			this.logger.warn('Auth0 domain environment variable is missing; defaulting to dev domain');
@@ -202,13 +215,15 @@ export class MqttService {
 	 */
 	async publishMQTT(payload: MQTTPayloadType, context: any, topic?: string): Promise<void> {
 		try {
+			if (!this.mqttClient || !this.mqttClient.connected) {
+				this.mqttClient = await this.connect(context);
+				while (!this.mqttClient.connected) {
+					await new Promise(resolve => setTimeout(resolve, 3000));
+				}
+			}
 			const inputs = this.validate(payload);
 
-			topic = topic ? topic : `ui/${process.env.NODE_ENV || 'development'}/${get(payload, 'org_id')}/${get(context.token, 'coldclimate_claims.email')}`;
-
-			if (!this.mqttClient) {
-				this.mqttClient = await this.connect(context);
-			}
+			topic = topic ? topic : `ui/${process.env.NODE_ENV || 'development'}/${get(payload, 'org_id')}/${inputs.user}`;
 
 			this.mqttClient.publish(topic, JSON.stringify(inputs));
 
