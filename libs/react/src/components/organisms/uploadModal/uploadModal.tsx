@@ -146,7 +146,6 @@ export const UploadModal = (props: UploadModalProps) => {
         await addToastMessage({
           message: 'File already exists. Error Uploading',
           type: ToastMessage.FAILURE,
-          timeout: 10000,
         });
         logBrowser('Duplicate file uploaded', 'error', {orgId, formData: { ...formData }, response});
       } else {
