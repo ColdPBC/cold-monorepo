@@ -108,11 +108,10 @@ export class BaseSidecar {
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
 		if (params.args.items.length > 0) {
 			this.logger.log(`before update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
-
+			const em = this.entity.prototype.__factory.em as EntityManager;
+			em.clear(); //clear EM cache
 			for (const item of params.args.items as (typeof this.entity)[]) {
 				if (item.metadata) {
-					const em = this.entity.prototype.__factory.em as EntityManager;
-					em.clear(); //clear EM cache
 					const response = await em.findOneOrFail(Organization, { id: item.id });
 					// parse the metadata only if it's type is a string which must be in order to send from postman
 					const source = typeof response?.metadata === 'string' ? JSON.parse(response?.metadata) : response.metadata;
