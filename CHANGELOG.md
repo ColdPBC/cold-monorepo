@@ -1,3 +1,13 @@
+# [1.568.0](https://github.com/coldPBC/cold-monorepo/compare/v1.567.0...v1.568.0) (2025-02-19)
+
+
+### Features
+
+* Add `self-start` class to upload modal button ([419a24e](https://github.com/coldPBC/cold-monorepo/commit/419a24e761725cb58e711aaa5fe8c6a45cda22b3))
+* Add drag-and-drop functionality with visual feedback ([d4501d6](https://github.com/coldPBC/cold-monorepo/commit/d4501d61bd3c67f0133b6a473a622eda83763451))
+* Remove unnecessary timeout property from toast message ([84a6ce4](https://github.com/coldPBC/cold-monorepo/commit/84a6ce43d9ff9e39673fd32df78a3ee6de6bb34f))
+* Update drag-and-drop styling in UploadModal ([36baeee](https://github.com/coldPBC/cold-monorepo/commit/36baeeea68344239a2fb2e0b076ea6e22701562e))
+
 # [1.567.0](https://github.com/coldPBC/cold-monorepo/compare/v1.566.0...v1.567.0) (2025-02-18)
 
 
