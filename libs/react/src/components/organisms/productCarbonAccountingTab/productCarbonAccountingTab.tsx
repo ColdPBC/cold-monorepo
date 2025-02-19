@@ -4,17 +4,17 @@ import {
   DEFAULT_GRID_COL_DEF, EmissionsFactorDetailedExpandedView,
   MaterialClassificationIcon,
   MissingMaterialEmissionsCard,
-  MuiDataGrid
-} from "@coldpbc/components"
-import {EmissionFactor, AggregatedEmissionFactor, ProductsQuery} from "@coldpbc/interfaces";
+  MuiDataGrid, PcfSummaryCard,
+} from '@coldpbc/components';
+import { AggregatedEmissionFactor, PcfGraphData, ProductsQuery} from "@coldpbc/interfaces";
 import {
   DataGridProProps,
   GRID_DETAIL_PANEL_TOGGLE_COL_DEF,
   GRID_DETAIL_PANEL_TOGGLE_FIELD,
   GridColDef
 } from "@mui/x-data-grid-pro";
-import {get} from "lodash";
-import {MaterialClassificationCategory} from "@coldpbc/enums";
+import { get } from 'lodash';
+import { MaterialClassificationCategory } from '@coldpbc/enums';
 import {HexColors} from "@coldpbc/themes";
 import {useCallback, useMemo} from "react";
 import {getCalculatedWeight, getAggregateEmissionFactors} from "@coldpbc/lib";
@@ -162,6 +162,27 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     });
   }, [product.productMaterials]);
 
+  const categoryEmissions = useMemo(() => {
+    return rows.reduce<PcfGraphData[]>((acc, row) => {
+      if (row.totalEmissions === 0) return acc;
+
+      const category = row.classification?.category || 'No Category';
+
+      const existingCategory = acc.find(item => item.classificationCategory === category);
+
+      if (existingCategory) {
+        existingCategory.emissions += row.totalEmissions;
+      } else {
+        acc.push({
+          classificationCategory: category,
+          emissions: row.totalEmissions
+        });
+      }
+
+      return acc;
+    }, []);
+  }, [rows]);
+
   const getDetailPanelContent = useCallback<NonNullable<DataGridProProps['getDetailPanelContent']>>(({row}) => {
     const aggregatedEmissionFactor: AggregatedEmissionFactor | null = get(row, 'aggregatedEmissionFactors', null);
     const weight = get(row, 'weight',null)
@@ -181,6 +202,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
   return (
     <div className={'w-full flex flex-col gap-[40px]'}>
       <MissingMaterialEmissionsCard productMaterials={product.productMaterials}/>
+      <PcfSummaryCard data={categoryEmissions} />
       <Card
         title={'Emissions By Material'}
         className={'w-full'}

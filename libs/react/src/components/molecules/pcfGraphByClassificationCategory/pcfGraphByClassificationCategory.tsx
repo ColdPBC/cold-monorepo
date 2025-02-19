@@ -1,11 +1,7 @@
 import React from 'react';
-import { EntityLevel, MaterialClassificationCategory, PcfGraphData } from '@coldpbc/enums';
-import { MATERIAL_CLASSIFICATIONS_CATEGORY_COLORS, pluralize, processSustainabilityAttributeForGraph, toSentenceCase } from '@coldpbc/lib';
-import { SustainabilityAttribute } from '@coldpbc/interfaces';
-import { useAuth0Wrapper, useEntityData } from '@coldpbc/hooks';
-import { useFlags } from 'launchdarkly-react-client-sdk';
-import { get } from 'lodash';
-import { classificationsByGroup, materialClassificationGroupByAttributeId } from '@coldpbc/components';
+import { PcfGraphData } from '@coldpbc/interfaces';
+import { MATERIAL_CLASSIFICATIONS_CATEGORY_COLORS } from '@coldpbc/lib';
+import { HexColors } from '@coldpbc/themes';
 
 const styles = {
   'pcfTab': {
@@ -38,7 +34,7 @@ export const PcfGraphByClassificationCategory: React.FC<PcfGraphByClassification
 				{sortedData.map(datum => (
 					<div
 						style={{
-							backgroundColor: MATERIAL_CLASSIFICATIONS_CATEGORY_COLORS[datum.classificationCategory],
+							backgroundColor: MATERIAL_CLASSIFICATIONS_CATEGORY_COLORS[datum.classificationCategory] || HexColors.gray['90'],
 							width: `${(datum.emissions / totalEmissions) * 100}%`,
 							height: styles[displayStyle].graphHeight,
 						}}
@@ -49,7 +45,7 @@ export const PcfGraphByClassificationCategory: React.FC<PcfGraphByClassification
 			<div className="flex flex-wrap items-start gap-x-6 gap-y-1 text-label text-tc-secondary" style={{ paddingTop: styles[displayStyle].padding }}>
 				{sortedData.map(datum => (
 					<div className="flex items-center shrink-0">
-						<div className="w-2 h-2 rounded-full mr-1" style={{ backgroundColor: MATERIAL_CLASSIFICATIONS_CATEGORY_COLORS[datum.classificationCategory] }} />
+						<div className="w-2 h-2 rounded-full mr-1" style={{ backgroundColor: MATERIAL_CLASSIFICATIONS_CATEGORY_COLORS[datum.classificationCategory] || HexColors.gray['90'] }} />
 						<span>
 							{((datum.emissions / totalEmissions) * 100).toFixed(1)}% {datum.classificationCategory}
 						</span>
