@@ -106,15 +106,20 @@ export class BaseSidecar {
 	}
 
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
-		if (params.args.items.length === 0) {
+		if (params.args.items.length > 0) {
 			this.logger.log(`before update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 
 			for (const item of params.args.items as (typeof this.entity)[]) {
 				if (item.metadata) {
 					const em = this.entity.prototype.__factory.em as EntityManager;
+					em.clear(); //clear EM cache
 					const response = await em.findOneOrFail(Organization, { id: item.id });
-					// parse the metadata only if it's type is a string
-					item.metadata = merge(response.metadata, typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata);
+					// parse the metadata only if it's type is a string which must be in order to send from postman
+					const source = typeof response?.metadata === 'string' ? JSON.parse(response?.metadata) : response.metadata;
+					const update = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata;
+					item.metadata = merge({}, source, update);
+
+					this.logger.log(`Updated metadata for ${this.entityName}`, { metadata: item.metadata });
 				}
 
 				set(item, 'updatedAt', new Date());
