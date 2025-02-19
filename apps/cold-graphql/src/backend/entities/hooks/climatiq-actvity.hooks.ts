@@ -28,16 +28,6 @@ export class ClimatiqActvityHooks extends BaseSidecar {
 	
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof ClimatiqActvity, OrgContext>) {
 		this.logger.log(`before create ClimatiqActvity`, { user: params.context.user, arguments: params.args });
-		for (const item of params.args.items) {
-			if(GuidPrefixes["ClimatiqActvity"]) {
-				set(item, 'id', new Cuid2Generator(GuidPrefixes["ClimatiqActvity"]).generate().scopedId);
-			}
-			
-			set(item, 'organization.id', params.context.user.organization.id);
-			
-			set(item, 'updatedAt', new Date());
-			set(item, 'createdAt', new Date());
-		}
 	
 	  return super.beforeCreateHook(params);    
 	}
@@ -51,9 +41,6 @@ export class ClimatiqActvityHooks extends BaseSidecar {
 	
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof ClimatiqActvity, OrgContext>) {
 		this.logger.log('before ClimatiqActvity update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
-		for (const item of params.args.items) {
-			set(item, 'updatedAt', new Date());
-		}
 		return await super.beforeUpdateHook(params);
 	}
 

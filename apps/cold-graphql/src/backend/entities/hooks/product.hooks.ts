@@ -28,16 +28,6 @@ export class ProductHooks extends BaseSidecar {
 	
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
 		this.logger.log(`before create Product`, { user: params.context.user, arguments: params.args });
-		for (const item of params.args.items) {
-			if(GuidPrefixes["Product"]) {
-				set(item, 'id', new Cuid2Generator(GuidPrefixes["Product"]).generate().scopedId);
-			}
-			
-			set(item, 'organization.id', params.context.user.organization.id);
-			
-			set(item, 'updatedAt', new Date());
-			set(item, 'createdAt', new Date());
-		}
 	
 	  return super.beforeCreateHook(params);    
 	}
@@ -51,9 +41,6 @@ export class ProductHooks extends BaseSidecar {
 	
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
 		this.logger.log('before Product update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
-		for (const item of params.args.items) {
-			set(item, 'updatedAt', new Date());
-		}
 		return await super.beforeUpdateHook(params);
 	}
 

@@ -37,11 +37,6 @@ export class OrganizationHooks extends BaseSidecar {
 			if (item.name) {
 				item.name = kebabCase(item.name).toLowerCase();
 			}
-
-			set(item, 'organization.id', params.context.user.organization.id);
-
-			set(item, 'updatedAt', new Date());
-			set(item, 'createdAt', new Date());
 		}
 
 		return super.beforeCreateHook(params);
@@ -67,8 +62,13 @@ export class OrganizationHooks extends BaseSidecar {
 
 	async beforeDeleteHook(params: DeleteHookParams<typeof Organization, OrgContext>) {
 		this.logger.log('before Organization delete hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		const em = this.entity.prototype.__factory.em as EntityManager;
+		const response = await em.findOneOrFail(Organization, { id: params.args.filter['id'] });
 
 		const protectedOrgs = ['cold-climate-development', 'cold-climate-staging', 'cold-climate-production'];
+		if (protectedOrgs.includes(response.name)) {
+			throw new Error(`Cannot delete protected organization: ${response.name}`);
+		}
 		return super.beforeDeleteHook(params);
 	}
 

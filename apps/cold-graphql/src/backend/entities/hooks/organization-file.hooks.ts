@@ -31,9 +31,6 @@ export class OrganizationFileHooks extends BaseSidecar {
 			}
 
 			set(item, 'organization.id', params.context.user.organization.id);
-
-			set(item, 'updatedAt', new Date());
-			set(item, 'createdAt', new Date());
 		}
 
 		return super.beforeCreateHook(params);
@@ -47,7 +44,6 @@ export class OrganizationFileHooks extends BaseSidecar {
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof OrganizationFile, OrgContext>) {
 		this.logger.log('before OrganizationFile update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
 		for (const item of params.args.items as OrganizationFile[]) {
-			set(item, 'updatedAt', new Date());
 			if (item.metadata) {
 				const em = this.entity.prototype.__factory.em as EntityManager;
 				const response = await em.findOneOrFail(OrganizationFile, { id: item.id });

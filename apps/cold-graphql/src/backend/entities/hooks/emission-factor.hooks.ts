@@ -28,16 +28,6 @@ export class EmissionFactorHooks extends BaseSidecar {
 	
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof EmissionFactor, OrgContext>) {
 		this.logger.log(`before create EmissionFactor`, { user: params.context.user, arguments: params.args });
-		for (const item of params.args.items) {
-			if(GuidPrefixes["EmissionFactor"]) {
-				set(item, 'id', new Cuid2Generator(GuidPrefixes["EmissionFactor"]).generate().scopedId);
-			}
-			
-			set(item, 'organization.id', params.context.user.organization.id);
-			
-			set(item, 'updatedAt', new Date());
-			set(item, 'createdAt', new Date());
-		}
 	
 	  return super.beforeCreateHook(params);    
 	}
@@ -51,9 +41,6 @@ export class EmissionFactorHooks extends BaseSidecar {
 	
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof EmissionFactor, OrgContext>) {
 		this.logger.log('before EmissionFactor update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
-		for (const item of params.args.items) {
-			set(item, 'updatedAt', new Date());
-		}
 		return await super.beforeUpdateHook(params);
 	}
 

@@ -4,6 +4,7 @@ import { Cuid2Generator } from '../libs/cuid/cuid2-generator.service';
 import { CreateOrUpdateHookParams, DeleteHookParams, ReadHookParams } from '@exogee/graphweaver';
 import { OrgContext } from '../libs/acls/acl_policies';
 import { set } from 'lodash';
+import { v4 } from 'uuid';
 import { GuidPrefixes } from '../libs/cuid/compliance.enums';
 
 export class BaseSidecar {
@@ -56,16 +57,25 @@ export class BaseSidecar {
 	}
 
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
-		this.logger.log(`before create ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
+		if (params.args.items.length > 0) {
+			this.logger.log(`before create ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 
-		for (const item of params.args.items) {
-			set(item, 'id', new Cuid2Generator(GuidPrefixes[`${this.entity.name}` as keyof typeof GuidPrefixes]).scopedId);
-			set(item, 'updatedAt', new Date());
-			set(item, 'createdAt', new Date());
+			for (const item of params.args.items) {
+				let id: string;
+				if (GuidPrefixes[`${this.entity.name}` as keyof typeof GuidPrefixes]) {
+					id = new Cuid2Generator(GuidPrefixes[`${this.entity.name}` as keyof typeof GuidPrefixes]).scopedId;
+				} else {
+					id = v4();
+				}
 
-			if (this.isOrgScoped) {
-				if (!params.context.user.isColdAdmin && item.organization?.id !== params.context.user.organization?.id) {
-					set(item, 'organization.id', params.context.user.organization?.id);
+				set(item, 'id', id);
+				set(item, 'updatedAt', new Date());
+				set(item, 'createdAt', new Date());
+
+				if (this.isOrgScoped) {
+					if (!params.context.user.isColdAdmin && item.organization?.id !== params.context.user.organization?.id) {
+						set(item, 'organization.id', params.context.user.organization?.id);
+					}
 				}
 			}
 		}
@@ -94,31 +104,34 @@ export class BaseSidecar {
 	}
 
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
-		this.logger.log(`before update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
+		if (params.args.items.length === 0) {
+			this.logger.log(`before update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 
-		for (const item of params.args.items) {
-			set(item, 'updatedAt', new Date());
+			for (const item of params.args.items) {
+				set(item, 'updatedAt', new Date());
+			}
 		}
 
 		return params;
 	}
 
 	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
-		this.logger.log(`after update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
+		if (params.args.items.length > 0) {
+			this.logger.log(`after update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 
-		const payload = {
-			action: MqttActionEnum.UPDATE,
-			status: MqttStatusEnum.COMPLETE,
-			data: params as any,
-			swr_key: this.entity.name,
-			org_id: params.context.user.organization.id,
-			user: params.context.user.email,
-		};
+			const payload = {
+				action: MqttActionEnum.UPDATE,
+				status: MqttStatusEnum.COMPLETE,
+				data: params as any,
+				swr_key: this.entity.name,
+				org_id: params.context.user.organization.id,
+				user: params.context.user.email,
+			};
 
-		await this.mqtt.publishMQTT(payload, params);
+			await this.mqtt.publishMQTT(payload, params);
 
-		this.logger.info(`Sent MQTT Message: Updated ${params.args.items.length} ${this.entityName}`);
-
+			this.logger.info(`Sent MQTT Message: Updated ${params.args.items.length} ${this.entityName}`);
+		}
 		return params;
 	}
 

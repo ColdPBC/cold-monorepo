@@ -32,16 +32,6 @@ export class ${entityClassName}Hooks extends BaseSidecar {
 export const BEFORE_CREATE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync beforeCreateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
 \t	this.logger.log(\`before create ${entityClassName}\`, { user: params.context.user, arguments: params.args });
-\t	for (const item of params.args.items) {
-\t		if(GuidPrefixes["${entityClassName}"]) {
-\t			set(item, 'id', new Cuid2Generator(GuidPrefixes["${entityClassName}"]).generate().scopedId);
-\t		}
-\t		
-\t		set(item, 'organization.id', params.context.user.organization.id);
-\t		
-\t		set(item, 'updatedAt', new Date());
-\t		set(item, 'createdAt', new Date());
-\t	}
 \t
 \t  return super.beforeCreateHook(params);    
 \t}
@@ -72,9 +62,6 @@ export const AFTER_READ_HOOK_FUNCTION = (entityClassName: string) => `
 export const BEFORE_UPDATE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync beforeUpdateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
 	\tthis.logger.log('before ${entityClassName} update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
-	\tfor (const item of params.args.items) {
-		\tset(item, 'updatedAt', new Date());
-	\t}
 	\treturn await super.beforeUpdateHook(params);
 \t}
 `;

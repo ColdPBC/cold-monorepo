@@ -28,16 +28,6 @@ export class CategoryDefinitionHooks extends BaseSidecar {
 	
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof CategoryDefinition, OrgContext>) {
 		this.logger.log(`before create CategoryDefinition`, { user: params.context.user, arguments: params.args });
-		for (const item of params.args.items) {
-			if(GuidPrefixes["CategoryDefinition"]) {
-				set(item, 'id', new Cuid2Generator(GuidPrefixes["CategoryDefinition"]).generate().scopedId);
-			}
-			
-			set(item, 'organization.id', params.context.user.organization.id);
-			
-			set(item, 'updatedAt', new Date());
-			set(item, 'createdAt', new Date());
-		}
 	
 	  return super.beforeCreateHook(params);    
 	}
@@ -51,9 +41,6 @@ export class CategoryDefinitionHooks extends BaseSidecar {
 	
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof CategoryDefinition, OrgContext>) {
 		this.logger.log('before CategoryDefinition update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
-		for (const item of params.args.items) {
-			set(item, 'updatedAt', new Date());
-		}
 		return await super.beforeUpdateHook(params);
 	}
 

@@ -28,16 +28,6 @@ export class SustainabilityAttributeClassifcationAssignmentHooks extends BaseSid
 	
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof SustainabilityAttributeClassifcationAssignment, OrgContext>) {
 		this.logger.log(`before create SustainabilityAttributeClassifcationAssignment`, { user: params.context.user, arguments: params.args });
-		for (const item of params.args.items) {
-			if(GuidPrefixes["SustainabilityAttributeClassifcationAssignment"]) {
-				set(item, 'id', new Cuid2Generator(GuidPrefixes["SustainabilityAttributeClassifcationAssignment"]).generate().scopedId);
-			}
-			
-			set(item, 'organization.id', params.context.user.organization.id);
-			
-			set(item, 'updatedAt', new Date());
-			set(item, 'createdAt', new Date());
-		}
 	
 	  return super.beforeCreateHook(params);    
 	}
@@ -51,9 +41,6 @@ export class SustainabilityAttributeClassifcationAssignmentHooks extends BaseSid
 	
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof SustainabilityAttributeClassifcationAssignment, OrgContext>) {
 		this.logger.log('before SustainabilityAttributeClassifcationAssignment update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
-		for (const item of params.args.items) {
-			set(item, 'updatedAt', new Date());
-		}
 		return await super.beforeUpdateHook(params);
 	}
 
