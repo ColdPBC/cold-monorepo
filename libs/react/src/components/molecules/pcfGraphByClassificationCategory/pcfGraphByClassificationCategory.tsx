@@ -1,11 +1,6 @@
 import React from 'react';
-import { EntityLevel, MaterialClassificationCategory, PcfGraphData } from '@coldpbc/enums';
-import { MATERIAL_CLASSIFICATIONS_CATEGORY_COLORS, pluralize, processSustainabilityAttributeForGraph, toSentenceCase } from '@coldpbc/lib';
-import { SustainabilityAttribute } from '@coldpbc/interfaces';
-import { useAuth0Wrapper, useEntityData } from '@coldpbc/hooks';
-import { useFlags } from 'launchdarkly-react-client-sdk';
-import { get } from 'lodash';
-import { classificationsByGroup, materialClassificationGroupByAttributeId } from '@coldpbc/components';
+import { PcfGraphData } from '@coldpbc/interfaces';
+import { MATERIAL_CLASSIFICATIONS_CATEGORY_COLORS } from '@coldpbc/lib';
 
 const styles = {
   'pcfTab': {

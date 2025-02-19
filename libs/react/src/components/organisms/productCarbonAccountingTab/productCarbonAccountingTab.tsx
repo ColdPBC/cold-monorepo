@@ -4,22 +4,23 @@ import {
   DEFAULT_GRID_COL_DEF, EmissionsFactorDetailedExpandedView,
   MaterialClassificationIcon,
   MissingMaterialEmissionsCard,
-  MuiDataGrid
-} from "@coldpbc/components"
-import {EmissionFactor, AggregatedEmissionFactor, ProductsQuery} from "@coldpbc/interfaces";
+  MuiDataGrid, PcfSummaryCard,
+} from '@coldpbc/components';
+import { AggregatedEmissionFactor, PcfGraphData, ProductsQuery} from "@coldpbc/interfaces";
 import {
   DataGridProProps,
   GRID_DETAIL_PANEL_TOGGLE_COL_DEF,
   GRID_DETAIL_PANEL_TOGGLE_FIELD,
   GridColDef
 } from "@mui/x-data-grid-pro";
-import {get} from "lodash";
-import {MaterialClassificationCategory} from "@coldpbc/enums";
+import { get } from 'lodash';
+import { MaterialClassificationCategory } from '@coldpbc/enums';
 import {HexColors} from "@coldpbc/themes";
 import {useCallback, useMemo} from "react";
 import {getCalculatedWeight, getAggregateEmissionFactors} from "@coldpbc/lib";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import {twMerge} from "tailwind-merge";
+import { useCategoryEmissions } from '@coldpbc/hooks';
 
 
 export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) => {
@@ -48,7 +49,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       id: string;
       name: string;
       category: MaterialClassificationCategory;
-    } | null = get(params, 'row.classification', null);
+    } | null = get(params, 'row.materialClassification', null);
 
     if(!classification) {
       return null;
@@ -98,7 +99,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     },
     {
       ...DEFAULT_GRID_COL_DEF,
-      field: 'classification',
+      field: 'materialClassification',
       headerName: 'Classification',
       minWidth: 200,
       renderCell: renderClassification,
@@ -151,7 +152,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
         id: prodMaterial.id,
         materialId: prodMaterial.material?.id,
         material: prodMaterial.material?.name,
-        classification: prodMaterial.material.materialClassification,
+        materialClassification: prodMaterial.material.materialClassification,
         yieldWithUom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
         weight: calculatedWeight,
         weightResult: weightResult,
@@ -161,6 +162,8 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       };
     });
   }, [product.productMaterials]);
+
+  const categoryEmissions = useCategoryEmissions(rows);
 
   const getDetailPanelContent = useCallback<NonNullable<DataGridProProps['getDetailPanelContent']>>(({row}) => {
     const aggregatedEmissionFactor: AggregatedEmissionFactor | null = get(row, 'aggregatedEmissionFactors', null);
@@ -181,6 +184,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
   return (
     <div className={'w-full flex flex-col gap-[40px]'}>
       <MissingMaterialEmissionsCard productMaterials={product.productMaterials}/>
+      <PcfSummaryCard data={categoryEmissions} />
       <Card
         title={'Emissions By Material'}
         className={'w-full'}

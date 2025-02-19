@@ -39,8 +39,3 @@ export enum WeightFactorUnits {
   KG_PER_M2 = 'kg per m2',
   KG_PER_PCS = 'kg per pcs',
 }
-
-export interface PcfGraphData {
-  classificationCategory: MaterialClassificationCategory;
-  emissions: number;
-}

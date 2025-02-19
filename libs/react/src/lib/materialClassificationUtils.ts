@@ -13,4 +13,5 @@ export const MATERIAL_CLASSIFICATIONS_CATEGORY_COLORS = {
   [MaterialClassificationCategory.SYNTHETIC_LEATHER]: HexColors.purple['200'],
   [MaterialClassificationCategory.TEXTILES]: HexColors.lightblue['200'],
   [MaterialClassificationCategory.WOOD_BASED_MATERIALS]: HexColors.yellow['200'],
+  'No Category': HexColors.gray['90'],
 };
