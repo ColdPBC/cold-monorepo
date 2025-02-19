@@ -1,3 +1,10 @@
+## [1.568.3](https://github.com/coldPBC/cold-monorepo/compare/v1.568.2...v1.568.3) (2025-02-19)
+
+
+### Bug Fixes
+
+* made metadata merge logic generic and moved it to base.sidecar so that all updates to metadata will behave the same ([6a02d25](https://github.com/coldPBC/cold-monorepo/commit/6a02d2551f9a4e8dd2541fb734684cbec4d178d2))
+
 ## [1.568.2](https://github.com/coldPBC/cold-monorepo/compare/v1.568.1...v1.568.2) (2025-02-19)
 
 
