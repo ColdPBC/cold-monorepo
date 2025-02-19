@@ -12,7 +12,7 @@ export const DashboardLayout = (props: PropsWithChildren<any>) => {
       <>
         <Outlet />
         <ApplicationToaster />
-        <SustainabiliBuddy />
+        {ldFlags.showAiSustainabilibuddyCold1464 && <SustainabiliBuddy />}
       </>
     </div>
   );
