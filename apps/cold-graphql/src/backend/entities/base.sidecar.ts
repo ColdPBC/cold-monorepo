@@ -3,9 +3,11 @@ import { MqttActionEnum, MqttService, mqttService, MqttStatusEnum } from '../lib
 import { Cuid2Generator } from '../libs/cuid/cuid2-generator.service';
 import { CreateOrUpdateHookParams, DeleteHookParams, ReadHookParams } from '@exogee/graphweaver';
 import { OrgContext } from '../libs/acls/acl_policies';
-import { set } from 'lodash';
+import { merge, set } from 'lodash';
 import { v4 } from 'uuid';
 import { GuidPrefixes } from '../libs/cuid/compliance.enums';
+import { Organization } from './postgresql';
+import { EntityManager } from '@mikro-orm/core';
 
 export class BaseSidecar {
 	logger;
@@ -107,7 +109,14 @@ export class BaseSidecar {
 		if (params.args.items.length === 0) {
 			this.logger.log(`before update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 
-			for (const item of params.args.items) {
+			for (const item of params.args.items as (typeof this.entity)[]) {
+				if (item.metadata) {
+					const em = this.entity.prototype.__factory.em as EntityManager;
+					const response = await em.findOneOrFail(Organization, { id: item.id });
+					// parse the metadata only if it's type is a string
+					item.metadata = merge(response.metadata, typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata);
+				}
+
 				set(item, 'updatedAt', new Date());
 			}
 		}

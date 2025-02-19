@@ -49,9 +49,6 @@ export class OrganizationHooks extends BaseSidecar {
 
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
 		this.logger.log('before Organization update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
-		for (const item of params.args.items) {
-			set(item, 'updatedAt', new Date());
-		}
 		return await super.beforeUpdateHook(params);
 	}
 
