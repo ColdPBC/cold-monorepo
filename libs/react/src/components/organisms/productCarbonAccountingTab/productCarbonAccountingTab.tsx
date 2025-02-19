@@ -20,6 +20,7 @@ import {useCallback, useMemo} from "react";
 import {getCalculatedWeight, getAggregateEmissionFactors} from "@coldpbc/lib";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import {twMerge} from "tailwind-merge";
+import { useCategoryEmissions } from '@coldpbc/hooks';
 
 
 export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) => {
@@ -48,7 +49,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       id: string;
       name: string;
       category: MaterialClassificationCategory;
-    } | null = get(params, 'row.classification', null);
+    } | null = get(params, 'row.materialClassification', null);
 
     if(!classification) {
       return null;
@@ -98,7 +99,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     },
     {
       ...DEFAULT_GRID_COL_DEF,
-      field: 'classification',
+      field: 'materialClassification',
       headerName: 'Classification',
       minWidth: 200,
       renderCell: renderClassification,
@@ -151,7 +152,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
         id: prodMaterial.id,
         materialId: prodMaterial.material?.id,
         material: prodMaterial.material?.name,
-        classification: prodMaterial.material.materialClassification,
+        materialClassification: prodMaterial.material.materialClassification,
         yieldWithUom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
         weight: calculatedWeight,
         weightResult: weightResult,
@@ -162,26 +163,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     });
   }, [product.productMaterials]);
 
-  const categoryEmissions = useMemo(() => {
-    return rows.reduce<PcfGraphData[]>((acc, row) => {
-      if (row.totalEmissions === 0) return acc;
-
-      const category = row.classification?.category || 'No Category';
-
-      const existingCategory = acc.find(item => item.classificationCategory === category);
-
-      if (existingCategory) {
-        existingCategory.emissions += row.totalEmissions;
-      } else {
-        acc.push({
-          classificationCategory: category,
-          emissions: row.totalEmissions
-        });
-      }
-
-      return acc;
-    }, []);
-  }, [rows]);
+  const categoryEmissions = useCategoryEmissions(rows);
 
   const getDetailPanelContent = useCallback<NonNullable<DataGridProProps['getDetailPanelContent']>>(({row}) => {
     const aggregatedEmissionFactor: AggregatedEmissionFactor | null = get(row, 'aggregatedEmissionFactors', null);

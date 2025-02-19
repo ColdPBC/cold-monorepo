@@ -20,6 +20,7 @@ import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { get } from 'lodash';
 import { useSearchParams } from 'react-router-dom';
+import { useCategoryEmissions } from '@coldpbc/hooks';
 
 interface ProductSustainabilityAttributesCardProps {
 	product: ProductsQuery;
@@ -57,31 +58,21 @@ const _ProductSustainabilityAttributesCard: React.FC<ProductSustainabilityAttrib
     },
   ];
 
-  const categoryEmissions = useMemo(() => {
-    return product.productMaterials.reduce<PcfGraphData[]>((acc, productMaterial) => {
+  const productMaterialEmissionsData = useMemo(() => {
+    return product.productMaterials.map(productMaterial => {
       const weightResult = getCalculatedWeight(productMaterial);
       const calculatedWeight = get(weightResult, 'weightInKg');
       const emissionFactor = getAggregateEmissionFactors(productMaterial.material.materialEmissionFactors);
       const totalEmissions = (emissionFactor && calculatedWeight) ? emissionFactor.value * calculatedWeight : 0
 
-      if (totalEmissions === 0) return acc;
-
-      const category = productMaterial.material.materialClassification?.category || 'No Category';
-
-      const existingCategory = acc.find(item => item.classificationCategory === category);
-
-      if (existingCategory) {
-        existingCategory.emissions += totalEmissions;
-      } else {
-        acc.push({
-          classificationCategory: category,
-          emissions: totalEmissions
-        });
-      }
-
-      return acc;
-    }, []);
+      return ({
+        materialClassification: productMaterial.material.materialClassification,
+        totalEmissions,
+      })
+    });
   }, [product.productMaterials]);
+
+  const categoryEmissions = useCategoryEmissions(productMaterialEmissionsData);
 
   const totalProductEmissions = categoryEmissions.length > 0 ? categoryEmissions.reduce((sum, pcfGraphData) => sum + pcfGraphData.emissions, 0).toFixed(1) : '--';
 
