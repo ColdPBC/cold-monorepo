@@ -288,8 +288,8 @@ export const UploadModal = (props: UploadModalProps) => {
           <div
             className={
               twMerge(
-                'h-[180px] justify-self-stretch w-full rounded-[8px] border-dashed border-gray-90 border-[1px] p-[24px] flex flex-col gap-[32px] justify-center items-center',
-                isDragging && 'bg-gray-50'
+                'h-[180px] justify-self-stretch w-full rounded-[8px] border-dashed border-[1px] p-[24px] flex flex-col gap-[32px] justify-center items-center',
+                isDragging ? 'bg-gray-50 border-white' : 'border-gray-90'
               )
             }
             onDrop={handleDrop}
