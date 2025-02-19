@@ -1,3 +1,10 @@
+# [1.569.0](https://github.com/coldPBC/cold-monorepo/compare/v1.568.3...v1.569.0) (2025-02-19)
+
+
+### Features
+
+* add uuid dependency to cold-graphql package ([33f8b52](https://github.com/coldPBC/cold-monorepo/commit/33f8b52ad6df8491042ae3c7a0e62cd5cd122e18))
+
 ## [1.568.3](https://github.com/coldPBC/cold-monorepo/compare/v1.568.2...v1.568.3) (2025-02-19)
 
 
