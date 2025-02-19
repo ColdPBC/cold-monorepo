@@ -245,7 +245,7 @@ export const UploadModal = (props: UploadModalProps) => {
                     <div className="text-body">{UPLOAD_MAP[type].description}</div>
                     <div className="text-eyebrow text-tc-disabled">{UPLOAD_MAP[type].subDescription}</div>
                     <div
-                      className={`rounded-[30px] py-[4px] px-[8px] border-[1px] text-body ${UPLOAD_MAP[type].aiProcessing ? 'border-yellow-800' : 'border-bgc-menu'}`}>
+                      className={`self-start rounded-[30px] py-[4px] px-[8px] border-[1px] text-body ${UPLOAD_MAP[type].aiProcessing ? 'border-yellow-800' : 'border-bgc-menu'}`}>
                       {
                         UPLOAD_MAP[type].aiProcessing ? (
                           <span role="img" className="text-tc-secondary">✨Cold AI-Powered Processing</span>
