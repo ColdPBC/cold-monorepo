@@ -83,6 +83,7 @@ export const UploadModal = (props: UploadModalProps) => {
   const [selectedOption, setSelectedOption] = React.useState<MainDocumentCategory | null>(null);
   const [filesToUpload, setFilesToUpload] = React.useState<File[]>([]);
   const [openModal, setOpenModal] = React.useState(false);
+  const [isDragging, setIsDragging] = React.useState(false);
 
   useEffect(() => {
     setButtonDisabled(selectedOption === null || filesToUpload.length === 0);
@@ -125,7 +126,6 @@ export const UploadModal = (props: UploadModalProps) => {
       if (failed.length > 0) {
         const failedUploadFileNames = failed.map((failed: any) => get(failed, 'file.originalname', '')).join(', ');
         await addToastMessage({
-          // message: `Failed to upload ${failed.length} file`,
           message: `Failed to upload: ${failedUploadFileNames}`,
           type: ToastMessage.FAILURE,
         });
@@ -177,6 +177,7 @@ export const UploadModal = (props: UploadModalProps) => {
 
   const handleDrop = (event: React.DragEvent) => {
     event.preventDefault();
+    setIsDragging(false);
     const droppedFiles = event.dataTransfer.files;
     if (droppedFiles.length > 0) {
       const newFiles = Array.from(droppedFiles);
@@ -185,6 +186,29 @@ export const UploadModal = (props: UploadModalProps) => {
         ...newFiles,
       ]);
     }
+  };
+
+  const handleDragEnter = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    // Check if the dragged items are files
+    if (event.dataTransfer.items && event.dataTransfer.items[0].kind === 'file') {
+      setIsDragging(true);
+    }
+  };
+
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    // When leaving the element, reset the dragging state
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    // Explicitly show the drop effect
+    event.dataTransfer.dropEffect = 'copy';
   };
 
   return (
@@ -245,7 +269,7 @@ export const UploadModal = (props: UploadModalProps) => {
                     <div className="text-body">{UPLOAD_MAP[type].description}</div>
                     <div className="text-eyebrow text-tc-disabled">{UPLOAD_MAP[type].subDescription}</div>
                     <div
-                      className={`rounded-[30px] py-[4px] px-[8px] border-[1px] text-body ${UPLOAD_MAP[type].aiProcessing ? 'border-yellow-800' : 'border-bgc-menu'}`}>
+                      className={`self-start rounded-[30px] py-[4px] px-[8px] border-[1px] text-body ${UPLOAD_MAP[type].aiProcessing ? 'border-yellow-800' : 'border-bgc-menu'}`}>
                       {
                         UPLOAD_MAP[type].aiProcessing ? (
                           <span role="img" className="text-tc-secondary">✨Cold AI-Powered Processing</span>
@@ -262,9 +286,17 @@ export const UploadModal = (props: UploadModalProps) => {
         </div>
         <div className={'w-full h-auto flex flex-col self-stretch items-stretch gap-[8px]'}>
           <div
-            className={'h-[180px] justify-self-stretch w-full rounded-[8px] border-dashed border-gray-90 border-[1px] p-[24px] flex flex-col gap-[32px] justify-center items-center'}
+            className={
+              twMerge(
+                'h-[180px] justify-self-stretch w-full rounded-[8px] border-dashed border-[1px] p-[24px] flex flex-col gap-[32px] justify-center items-center',
+                isDragging ? 'bg-gray-50 border-white' : 'border-gray-90'
+              )
+            }
             onDrop={handleDrop}
-            onDragOver={event => event.preventDefault()}>
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+          >
             <div className={'text-h5'}>Drag & Drop Files Here or</div>
             <div>
               <BaseButton label={'Browse & Upload'} variant={ButtonTypes.secondary} onClick={uploadButton} />
