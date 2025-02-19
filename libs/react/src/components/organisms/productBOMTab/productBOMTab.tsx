@@ -81,7 +81,7 @@ const _ProductBOMTab = (props: { product: ProductsQuery, refreshProduct: () => v
     product.productMaterials.map(productMaterial => productMaterial.material?.materialSubcategory || ''),
   ).filter(Boolean).sort( (a, b) => a.localeCompare(b));
 
-  const productCarbonFootprintColumns: GridColDef[] = ldFlags.productCarbonFootprintMvp ? (
+  const productCarbonFootprintColumns: GridColDef[] = (ldFlags.productCarbonFootprintMvp || !ldFlags.showNewPcfUiCold1450) ? (
     [
       {
         ...DEFAULT_GRID_COL_DEF,
