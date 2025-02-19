@@ -3,7 +3,8 @@ import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exo
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
 import { OrganizationFile } from '../postgresql';
-import { Cuid2Generator, GuidPrefixes } from '@coldpbc/nest';
+import { GuidPrefixes } from '../../libs/cuid/compliance.enums';
+import { Cuid2Generator } from '../../libs/cuid/cuid2-generator.service';
 import { merge, set } from 'lodash';
 import { EntityManager } from '@mikro-orm/core';
 

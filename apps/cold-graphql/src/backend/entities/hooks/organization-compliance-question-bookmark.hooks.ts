@@ -4,7 +4,8 @@ import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exo
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
 import { OrganizationComplianceQuestionBookmark } from '../postgresql';
-import { Cuid2Generator, GuidPrefixes } from '@coldpbc/nest';
+import { GuidPrefixes } from '../../libs/cuid/compliance.enums';
+import { Cuid2Generator } from '../../libs/cuid/cuid2-generator.service';
 import { set } from 'lodash';
 
 export class OrganizationComplianceQuestionBookmarkHooks extends BaseSidecar {

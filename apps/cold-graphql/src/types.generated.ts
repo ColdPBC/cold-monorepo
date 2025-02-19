@@ -20,8 +20,6 @@ export type Scalars = {
   ISOString: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
-  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
-  JSONObject: { input: any; output: any; }
 };
 
 export type Action = {
@@ -3136,6 +3134,140 @@ export type EmissionCreateOrUpdateInput = {
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
+export type EmissionFactor = {
+  __typename?: 'EmissionFactor';
+  createdAt: Scalars['ISOString']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  materialEmissionFactors: Array<MaterialEmissionFactor>;
+  materialEmissionFactors_aggregate?: Maybe<AggregationResult>;
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['ISOString']['output'];
+  value: Scalars['Float']['output'];
+};
+
+
+export type EmissionFactorMaterialEmissionFactorsArgs = {
+  filter?: InputMaybe<MaterialEmissionFactorsListFilter>;
+};
+
+
+export type EmissionFactorMaterialEmissionFactors_AggregateArgs = {
+  filter?: InputMaybe<MaterialEmissionFactorsListFilter>;
+};
+
+/** Data needed to create or update EmissionFactors. If an ID is passed, this is an update, otherwise it's an insert. */
+export type EmissionFactorCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  value?: InputMaybe<Scalars['Float']['input']>;
+};
+
+/** Data needed to create EmissionFactors. */
+export type EmissionFactorInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
+  name: Scalars['String']['input'];
+  updatedAt: Scalars['ISOString']['input'];
+  value: Scalars['Float']['input'];
+};
+
+/** Data needed to update EmissionFactors. An ID must be passed. */
+export type EmissionFactorUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  value?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type EmissionFactorsListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_gt?: InputMaybe<Scalars['String']['input']>;
+  description_gte?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_lt?: InputMaybe<Scalars['String']['input']>;
+  description_lte?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  description_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  materialEmissionFactors?: InputMaybe<MaterialEmissionFactorsListFilter>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  value?: InputMaybe<Scalars['Float']['input']>;
+  value_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  value_ne?: InputMaybe<Scalars['Float']['input']>;
+  value_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  value_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  value_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type EmissionFactorsOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
+  description?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+  value?: InputMaybe<Sort>;
+};
+
+/** Pagination options for EmissionFactors. */
+export type EmissionFactorsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EmissionFactorsOrderByInput>;
+};
+
 /** Data needed to create Emissions. */
 export type EmissionInsertInput = {
   activityData: Scalars['JSON']['input'];
@@ -3866,18 +3998,27 @@ export type Material = {
   materialCategory?: Maybe<Scalars['String']['output']>;
   materialClassification?: Maybe<MaterialClassification>;
   materialClassification_aggregate?: Maybe<AggregationResult>;
+  materialEmissionFactors: Array<MaterialEmissionFactor>;
+  materialEmissionFactors_aggregate?: Maybe<AggregationResult>;
   materialSubcategory?: Maybe<Scalars['String']['output']>;
   materialSuppliers: Array<MaterialSupplier>;
   materialSuppliers_aggregate?: Maybe<AggregationResult>;
+  materialTagAssignments: Array<MaterialTagAssignment>;
+  materialTagAssignments_aggregate?: Maybe<AggregationResult>;
   metadata?: Maybe<Scalars['JSON']['output']>;
   name: Scalars['String']['output'];
   organization: Organization;
-  organizationFacilityId?: Maybe<Scalars['String']['output']>;
+  organizationFacility?: Maybe<OrganizationFacility>;
+  organizationFacility_aggregate?: Maybe<AggregationResult>;
   organization_aggregate?: Maybe<AggregationResult>;
   productMaterials: Array<ProductMaterial>;
   productMaterials_aggregate?: Maybe<AggregationResult>;
   supplierMaterialId?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['ISOString']['output']>;
+  weightFactor?: Maybe<Scalars['Float']['output']>;
+  weightFactorUnitOfMeasure?: Maybe<Scalars['String']['output']>;
+  width?: Maybe<Scalars['Float']['output']>;
+  widthUnitOfMeasure?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -3901,6 +4042,16 @@ export type MaterialMaterialClassification_AggregateArgs = {
 };
 
 
+export type MaterialMaterialEmissionFactorsArgs = {
+  filter?: InputMaybe<MaterialEmissionFactorsListFilter>;
+};
+
+
+export type MaterialMaterialEmissionFactors_AggregateArgs = {
+  filter?: InputMaybe<MaterialEmissionFactorsListFilter>;
+};
+
+
 export type MaterialMaterialSuppliersArgs = {
   filter?: InputMaybe<MaterialSuppliersListFilter>;
 };
@@ -3911,8 +4062,28 @@ export type MaterialMaterialSuppliers_AggregateArgs = {
 };
 
 
+export type MaterialMaterialTagAssignmentsArgs = {
+  filter?: InputMaybe<MaterialTagAssignmentsListFilter>;
+};
+
+
+export type MaterialMaterialTagAssignments_AggregateArgs = {
+  filter?: InputMaybe<MaterialTagAssignmentsListFilter>;
+};
+
+
 export type MaterialOrganizationArgs = {
   filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+
+export type MaterialOrganizationFacilityArgs = {
+  filter?: InputMaybe<OrganizationFacilitiesListFilter>;
+};
+
+
+export type MaterialOrganizationFacility_AggregateArgs = {
+  filter?: InputMaybe<OrganizationFacilitiesListFilter>;
 };
 
 
@@ -3945,6 +4116,7 @@ export type MaterialClassification = {
   sustainabilityAttributes: Array<SustainabilityAttribute>;
   sustainabilityAttributes_aggregate?: Maybe<AggregationResult>;
   updatedAt: Scalars['ISOString']['output'];
+  weightFactor?: Maybe<Scalars['Float']['output']>;
 };
 
 
@@ -3998,6 +4170,7 @@ export type MaterialClassificationCreateOrUpdateInput = {
   sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  weightFactor?: InputMaybe<Scalars['Float']['input']>;
 };
 
 /** Data needed to create MaterialClassifications. */
@@ -4010,6 +4183,7 @@ export type MaterialClassificationInsertInput = {
   sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
   updatedAt: Scalars['ISOString']['input'];
+  weightFactor?: InputMaybe<Scalars['Float']['input']>;
 };
 
 /** Data needed to update MaterialClassifications. An ID must be passed. */
@@ -4023,6 +4197,7 @@ export type MaterialClassificationUpdateInput = {
   sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
   sustainabilityAttributes?: InputMaybe<Array<SustainabilityAttributeCreateOrUpdateInput>>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  weightFactor?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type MaterialClassificationsListFilter = {
@@ -4084,6 +4259,12 @@ export type MaterialClassificationsListFilter = {
   updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
   updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  weightFactor?: InputMaybe<Scalars['Float']['input']>;
+  weightFactor_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  weightFactor_ne?: InputMaybe<Scalars['Float']['input']>;
+  weightFactor_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  weightFactor_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  weightFactor_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type MaterialClassificationsOrderByInput = {
@@ -4092,6 +4273,7 @@ export type MaterialClassificationsOrderByInput = {
   id?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
+  weightFactor?: InputMaybe<Sort>;
 };
 
 /** Pagination options for MaterialClassifications. */
@@ -4116,15 +4298,126 @@ export type MaterialCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   materialCategory?: InputMaybe<Scalars['String']['input']>;
   materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
+  materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
   materialSubcategory?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  materialTagAssignments?: InputMaybe<Array<MaterialTagAssignmentCreateOrUpdateInput>>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
-  organizationFacilityId?: InputMaybe<Scalars['String']['input']>;
+  organizationFacility?: InputMaybe<OrganizationFacilityCreateOrUpdateInput>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   supplierMaterialId?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  weightFactor?: InputMaybe<Scalars['Float']['input']>;
+  weightFactorUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
+  width?: InputMaybe<Scalars['Float']['input']>;
+  widthUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MaterialEmissionFactor = {
+  __typename?: 'MaterialEmissionFactor';
+  createdAt: Scalars['ISOString']['output'];
+  emissionFactor: EmissionFactor;
+  emissionFactor_aggregate?: Maybe<AggregationResult>;
+  id: Scalars['ID']['output'];
+  material: Material;
+  material_aggregate?: Maybe<AggregationResult>;
+  updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type MaterialEmissionFactorEmissionFactorArgs = {
+  filter?: InputMaybe<EmissionFactorsListFilter>;
+};
+
+
+export type MaterialEmissionFactorEmissionFactor_AggregateArgs = {
+  filter?: InputMaybe<EmissionFactorsListFilter>;
+};
+
+
+export type MaterialEmissionFactorMaterialArgs = {
+  filter?: InputMaybe<MaterialsListFilter>;
+};
+
+
+export type MaterialEmissionFactorMaterial_AggregateArgs = {
+  filter?: InputMaybe<MaterialsListFilter>;
+};
+
+/** Data needed to create or update MaterialEmissionFactors. If an ID is passed, this is an update, otherwise it's an insert. */
+export type MaterialEmissionFactorCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  emissionFactor?: InputMaybe<EmissionFactorCreateOrUpdateInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  material?: InputMaybe<MaterialCreateOrUpdateInput>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to create MaterialEmissionFactors. */
+export type MaterialEmissionFactorInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  emissionFactor?: InputMaybe<EmissionFactorCreateOrUpdateInput>;
+  material?: InputMaybe<MaterialCreateOrUpdateInput>;
+  updatedAt: Scalars['ISOString']['input'];
+};
+
+/** Data needed to update MaterialEmissionFactors. An ID must be passed. */
+export type MaterialEmissionFactorUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  emissionFactor?: InputMaybe<EmissionFactorCreateOrUpdateInput>;
+  id: Scalars['ID']['input'];
+  material?: InputMaybe<MaterialCreateOrUpdateInput>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type MaterialEmissionFactorsListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  emissionFactor?: InputMaybe<EmissionFactorsListFilter>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  material?: InputMaybe<MaterialsListFilter>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type MaterialEmissionFactorsOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for MaterialEmissionFactors. */
+export type MaterialEmissionFactorsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<MaterialEmissionFactorsOrderByInput>;
 };
 
 /** Data needed to create Materials. */
@@ -4141,15 +4434,21 @@ export type MaterialInsertInput = {
   emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
   materialCategory?: InputMaybe<Scalars['String']['input']>;
   materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
+  materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
   materialSubcategory?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  materialTagAssignments?: InputMaybe<Array<MaterialTagAssignmentCreateOrUpdateInput>>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
-  organizationFacilityId?: InputMaybe<Scalars['String']['input']>;
+  organizationFacility?: InputMaybe<OrganizationFacilityCreateOrUpdateInput>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   supplierMaterialId?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  weightFactor?: InputMaybe<Scalars['Float']['input']>;
+  weightFactorUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
+  width?: InputMaybe<Scalars['Float']['input']>;
+  widthUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MaterialSupplier = {
@@ -4290,6 +4589,228 @@ export type MaterialSuppliersPaginationInput = {
   orderBy?: InputMaybe<MaterialSuppliersOrderByInput>;
 };
 
+export type MaterialTag = {
+  __typename?: 'MaterialTag';
+  createdAt: Scalars['ISOString']['output'];
+  id: Scalars['ID']['output'];
+  organization: Organization;
+  organization_aggregate?: Maybe<AggregationResult>;
+  tag: Scalars['String']['output'];
+  updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type MaterialTagOrganizationArgs = {
+  filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+
+export type MaterialTagOrganization_AggregateArgs = {
+  filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+export type MaterialTagAssignment = {
+  __typename?: 'MaterialTagAssignment';
+  createdAt: Scalars['ISOString']['output'];
+  id: Scalars['ID']['output'];
+  material: Material;
+  material_aggregate?: Maybe<AggregationResult>;
+  organization: Organization;
+  organization_aggregate?: Maybe<AggregationResult>;
+  tagId: Scalars['Float']['output'];
+  updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type MaterialTagAssignmentMaterialArgs = {
+  filter?: InputMaybe<MaterialsListFilter>;
+};
+
+
+export type MaterialTagAssignmentMaterial_AggregateArgs = {
+  filter?: InputMaybe<MaterialsListFilter>;
+};
+
+
+export type MaterialTagAssignmentOrganizationArgs = {
+  filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+
+export type MaterialTagAssignmentOrganization_AggregateArgs = {
+  filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+/** Data needed to create or update MaterialTagAssignments. If an ID is passed, this is an update, otherwise it's an insert. */
+export type MaterialTagAssignmentCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  material?: InputMaybe<MaterialCreateOrUpdateInput>;
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  tagId?: InputMaybe<Scalars['Float']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to create MaterialTagAssignments. */
+export type MaterialTagAssignmentInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  material?: InputMaybe<MaterialCreateOrUpdateInput>;
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  tagId: Scalars['Float']['input'];
+  updatedAt: Scalars['ISOString']['input'];
+};
+
+/** Data needed to update MaterialTagAssignments. An ID must be passed. */
+export type MaterialTagAssignmentUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id: Scalars['ID']['input'];
+  material?: InputMaybe<MaterialCreateOrUpdateInput>;
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  tagId?: InputMaybe<Scalars['Float']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type MaterialTagAssignmentsListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  material?: InputMaybe<MaterialsListFilter>;
+  organization?: InputMaybe<OrganizationsListFilter>;
+  tagId?: InputMaybe<Scalars['Float']['input']>;
+  tagId_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  tagId_ne?: InputMaybe<Scalars['Float']['input']>;
+  tagId_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  tagId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  tagId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type MaterialTagAssignmentsOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  tagId?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for MaterialTagAssignments. */
+export type MaterialTagAssignmentsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<MaterialTagAssignmentsOrderByInput>;
+};
+
+/** Data needed to create or update MaterialTags. If an ID is passed, this is an update, otherwise it's an insert. */
+export type MaterialTagCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  tag?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to create MaterialTags. */
+export type MaterialTagInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  tag: Scalars['String']['input'];
+  updatedAt: Scalars['ISOString']['input'];
+};
+
+/** Data needed to update MaterialTags. An ID must be passed. */
+export type MaterialTagUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id: Scalars['ID']['input'];
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  tag?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type MaterialTagsListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  organization?: InputMaybe<OrganizationsListFilter>;
+  tag?: InputMaybe<Scalars['String']['input']>;
+  tag_gt?: InputMaybe<Scalars['String']['input']>;
+  tag_gte?: InputMaybe<Scalars['String']['input']>;
+  tag_ilike?: InputMaybe<Scalars['String']['input']>;
+  tag_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  tag_like?: InputMaybe<Scalars['String']['input']>;
+  tag_lt?: InputMaybe<Scalars['String']['input']>;
+  tag_lte?: InputMaybe<Scalars['String']['input']>;
+  tag_ne?: InputMaybe<Scalars['String']['input']>;
+  tag_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  tag_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  tag_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type MaterialTagsOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  tag?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for MaterialTags. */
+export type MaterialTagsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<MaterialTagsOrderByInput>;
+};
+
 /** Data needed to update Materials. An ID must be passed. */
 export type MaterialUpdateInput = {
   activityId?: InputMaybe<Scalars['String']['input']>;
@@ -4305,15 +4826,21 @@ export type MaterialUpdateInput = {
   id: Scalars['ID']['input'];
   materialCategory?: InputMaybe<Scalars['String']['input']>;
   materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
+  materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
   materialSubcategory?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  materialTagAssignments?: InputMaybe<Array<MaterialTagAssignmentCreateOrUpdateInput>>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
-  organizationFacilityId?: InputMaybe<Scalars['String']['input']>;
+  organizationFacility?: InputMaybe<OrganizationFacilityCreateOrUpdateInput>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   supplierMaterialId?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  weightFactor?: InputMaybe<Scalars['Float']['input']>;
+  weightFactorUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
+  width?: InputMaybe<Scalars['Float']['input']>;
+  widthUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MaterialsListFilter = {
@@ -4429,6 +4956,7 @@ export type MaterialsListFilter = {
   materialCategory_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   materialCategory_null?: InputMaybe<Scalars['Boolean']['input']>;
   materialClassification?: InputMaybe<MaterialClassificationsListFilter>;
+  materialEmissionFactors?: InputMaybe<MaterialEmissionFactorsListFilter>;
   materialSubcategory?: InputMaybe<Scalars['String']['input']>;
   materialSubcategory_gt?: InputMaybe<Scalars['String']['input']>;
   materialSubcategory_gte?: InputMaybe<Scalars['String']['input']>;
@@ -4442,6 +4970,7 @@ export type MaterialsListFilter = {
   materialSubcategory_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   materialSubcategory_null?: InputMaybe<Scalars['Boolean']['input']>;
   materialSuppliers?: InputMaybe<MaterialSuppliersListFilter>;
+  materialTagAssignments?: InputMaybe<MaterialTagAssignmentsListFilter>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   metadata_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   metadata_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -4461,18 +4990,7 @@ export type MaterialsListFilter = {
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
   organization?: InputMaybe<OrganizationsListFilter>;
-  organizationFacilityId?: InputMaybe<Scalars['String']['input']>;
-  organizationFacilityId_gt?: InputMaybe<Scalars['String']['input']>;
-  organizationFacilityId_gte?: InputMaybe<Scalars['String']['input']>;
-  organizationFacilityId_ilike?: InputMaybe<Scalars['String']['input']>;
-  organizationFacilityId_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  organizationFacilityId_like?: InputMaybe<Scalars['String']['input']>;
-  organizationFacilityId_lt?: InputMaybe<Scalars['String']['input']>;
-  organizationFacilityId_lte?: InputMaybe<Scalars['String']['input']>;
-  organizationFacilityId_ne?: InputMaybe<Scalars['String']['input']>;
-  organizationFacilityId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  organizationFacilityId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  organizationFacilityId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  organizationFacility?: InputMaybe<OrganizationFacilitiesListFilter>;
   productMaterials?: InputMaybe<ProductMaterialsListFilter>;
   supplierMaterialId?: InputMaybe<Scalars['String']['input']>;
   supplierMaterialId_gt?: InputMaybe<Scalars['String']['input']>;
@@ -4496,6 +5014,42 @@ export type MaterialsListFilter = {
   updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
   updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  weightFactor?: InputMaybe<Scalars['Float']['input']>;
+  weightFactorUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
+  weightFactorUnitOfMeasure_gt?: InputMaybe<Scalars['String']['input']>;
+  weightFactorUnitOfMeasure_gte?: InputMaybe<Scalars['String']['input']>;
+  weightFactorUnitOfMeasure_ilike?: InputMaybe<Scalars['String']['input']>;
+  weightFactorUnitOfMeasure_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  weightFactorUnitOfMeasure_like?: InputMaybe<Scalars['String']['input']>;
+  weightFactorUnitOfMeasure_lt?: InputMaybe<Scalars['String']['input']>;
+  weightFactorUnitOfMeasure_lte?: InputMaybe<Scalars['String']['input']>;
+  weightFactorUnitOfMeasure_ne?: InputMaybe<Scalars['String']['input']>;
+  weightFactorUnitOfMeasure_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  weightFactorUnitOfMeasure_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  weightFactorUnitOfMeasure_null?: InputMaybe<Scalars['Boolean']['input']>;
+  weightFactor_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  weightFactor_ne?: InputMaybe<Scalars['Float']['input']>;
+  weightFactor_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  weightFactor_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  weightFactor_null?: InputMaybe<Scalars['Boolean']['input']>;
+  width?: InputMaybe<Scalars['Float']['input']>;
+  widthUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
+  widthUnitOfMeasure_gt?: InputMaybe<Scalars['String']['input']>;
+  widthUnitOfMeasure_gte?: InputMaybe<Scalars['String']['input']>;
+  widthUnitOfMeasure_ilike?: InputMaybe<Scalars['String']['input']>;
+  widthUnitOfMeasure_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  widthUnitOfMeasure_like?: InputMaybe<Scalars['String']['input']>;
+  widthUnitOfMeasure_lt?: InputMaybe<Scalars['String']['input']>;
+  widthUnitOfMeasure_lte?: InputMaybe<Scalars['String']['input']>;
+  widthUnitOfMeasure_ne?: InputMaybe<Scalars['String']['input']>;
+  widthUnitOfMeasure_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  widthUnitOfMeasure_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  widthUnitOfMeasure_null?: InputMaybe<Scalars['Boolean']['input']>;
+  width_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  width_ne?: InputMaybe<Scalars['Float']['input']>;
+  width_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  width_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  width_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type MaterialsOrderByInput = {
@@ -4513,9 +5067,12 @@ export type MaterialsOrderByInput = {
   materialSubcategory?: InputMaybe<Sort>;
   metadata?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
-  organizationFacilityId?: InputMaybe<Sort>;
   supplierMaterialId?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
+  weightFactor?: InputMaybe<Sort>;
+  weightFactorUnitOfMeasure?: InputMaybe<Sort>;
+  width?: InputMaybe<Sort>;
+  widthUnitOfMeasure?: InputMaybe<Sort>;
 };
 
 /** Pagination options for Materials. */
@@ -4641,104 +5198,6 @@ export type MultipleNewsPaginationInput = {
   orderBy?: InputMaybe<MultipleNewsOrderByInput>;
 };
 
-export type MultipleOrganizationProductMaterialEmissionsListFilter = {
-  emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
-  emissionsFactor_in?: InputMaybe<Array<Scalars['Float']['input']>>;
-  emissionsFactor_ne?: InputMaybe<Scalars['Float']['input']>;
-  emissionsFactor_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
-  emissionsFactor_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  emissionsFactor_null?: InputMaybe<Scalars['Boolean']['input']>;
-  materialId?: InputMaybe<Scalars['String']['input']>;
-  materialId_gt?: InputMaybe<Scalars['String']['input']>;
-  materialId_gte?: InputMaybe<Scalars['String']['input']>;
-  materialId_ilike?: InputMaybe<Scalars['String']['input']>;
-  materialId_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  materialId_like?: InputMaybe<Scalars['String']['input']>;
-  materialId_lt?: InputMaybe<Scalars['String']['input']>;
-  materialId_lte?: InputMaybe<Scalars['String']['input']>;
-  materialId_ne?: InputMaybe<Scalars['String']['input']>;
-  materialId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  materialId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  materialId_null?: InputMaybe<Scalars['Boolean']['input']>;
-  materialName?: InputMaybe<Scalars['String']['input']>;
-  materialName_gt?: InputMaybe<Scalars['String']['input']>;
-  materialName_gte?: InputMaybe<Scalars['String']['input']>;
-  materialName_ilike?: InputMaybe<Scalars['String']['input']>;
-  materialName_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  materialName_like?: InputMaybe<Scalars['String']['input']>;
-  materialName_lt?: InputMaybe<Scalars['String']['input']>;
-  materialName_lte?: InputMaybe<Scalars['String']['input']>;
-  materialName_ne?: InputMaybe<Scalars['String']['input']>;
-  materialName_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  materialName_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  materialName_null?: InputMaybe<Scalars['Boolean']['input']>;
-  organizationId?: InputMaybe<Scalars['String']['input']>;
-  organizationId_gt?: InputMaybe<Scalars['String']['input']>;
-  organizationId_gte?: InputMaybe<Scalars['String']['input']>;
-  organizationId_ilike?: InputMaybe<Scalars['String']['input']>;
-  organizationId_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  organizationId_like?: InputMaybe<Scalars['String']['input']>;
-  organizationId_lt?: InputMaybe<Scalars['String']['input']>;
-  organizationId_lte?: InputMaybe<Scalars['String']['input']>;
-  organizationId_ne?: InputMaybe<Scalars['String']['input']>;
-  organizationId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  organizationId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  organizationId_null?: InputMaybe<Scalars['Boolean']['input']>;
-  productCategory?: InputMaybe<Scalars['String']['input']>;
-  productCategory_gt?: InputMaybe<Scalars['String']['input']>;
-  productCategory_gte?: InputMaybe<Scalars['String']['input']>;
-  productCategory_ilike?: InputMaybe<Scalars['String']['input']>;
-  productCategory_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  productCategory_like?: InputMaybe<Scalars['String']['input']>;
-  productCategory_lt?: InputMaybe<Scalars['String']['input']>;
-  productCategory_lte?: InputMaybe<Scalars['String']['input']>;
-  productCategory_ne?: InputMaybe<Scalars['String']['input']>;
-  productCategory_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  productCategory_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  productCategory_null?: InputMaybe<Scalars['Boolean']['input']>;
-  productId?: InputMaybe<Scalars['String']['input']>;
-  productId_gt?: InputMaybe<Scalars['String']['input']>;
-  productId_gte?: InputMaybe<Scalars['String']['input']>;
-  productId_ilike?: InputMaybe<Scalars['String']['input']>;
-  productId_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  productId_like?: InputMaybe<Scalars['String']['input']>;
-  productId_lt?: InputMaybe<Scalars['String']['input']>;
-  productId_lte?: InputMaybe<Scalars['String']['input']>;
-  productId_ne?: InputMaybe<Scalars['String']['input']>;
-  productId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  productId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  productId_null?: InputMaybe<Scalars['Boolean']['input']>;
-  productSubcategory?: InputMaybe<Scalars['String']['input']>;
-  productSubcategory_gt?: InputMaybe<Scalars['String']['input']>;
-  productSubcategory_gte?: InputMaybe<Scalars['String']['input']>;
-  productSubcategory_ilike?: InputMaybe<Scalars['String']['input']>;
-  productSubcategory_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  productSubcategory_like?: InputMaybe<Scalars['String']['input']>;
-  productSubcategory_lt?: InputMaybe<Scalars['String']['input']>;
-  productSubcategory_lte?: InputMaybe<Scalars['String']['input']>;
-  productSubcategory_ne?: InputMaybe<Scalars['String']['input']>;
-  productSubcategory_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  productSubcategory_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  productSubcategory_null?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-export type MultipleOrganizationProductMaterialEmissionsOrderByInput = {
-  emissionsFactor?: InputMaybe<Sort>;
-  materialId?: InputMaybe<Sort>;
-  materialName?: InputMaybe<Sort>;
-  organizationId?: InputMaybe<Sort>;
-  productCategory?: InputMaybe<Sort>;
-  productId?: InputMaybe<Sort>;
-  productSubcategory?: InputMaybe<Sort>;
-};
-
-/** Pagination options for MultipleOrganizationProductMaterialEmissions. */
-export type MultipleOrganizationProductMaterialEmissionsPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MultipleOrganizationProductMaterialEmissionsOrderByInput>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   /** Create a single Action. */
@@ -4799,6 +5258,10 @@ export type Mutation = {
   createCoreClassifications?: Maybe<Array<Maybe<CoreClassification>>>;
   /** Create a single Emission. */
   createEmission?: Maybe<Emission>;
+  /** Create a single EmissionFactor. */
+  createEmissionFactor?: Maybe<EmissionFactor>;
+  /** Create many EmissionFactors. */
+  createEmissionFactors?: Maybe<Array<Maybe<EmissionFactor>>>;
   /** Create a single EmissionScope. */
   createEmissionScope?: Maybe<EmissionScope>;
   /** Create many EmissionScopes. */
@@ -4819,10 +5282,22 @@ export type Mutation = {
   createMaterialClassification?: Maybe<MaterialClassification>;
   /** Create many MaterialClassifications. */
   createMaterialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
+  /** Create a single MaterialEmissionFactor. */
+  createMaterialEmissionFactor?: Maybe<MaterialEmissionFactor>;
+  /** Create many MaterialEmissionFactors. */
+  createMaterialEmissionFactors?: Maybe<Array<Maybe<MaterialEmissionFactor>>>;
   /** Create a single MaterialSupplier. */
   createMaterialSupplier?: Maybe<MaterialSupplier>;
   /** Create many MaterialSuppliers. */
   createMaterialSuppliers?: Maybe<Array<Maybe<MaterialSupplier>>>;
+  /** Create a single MaterialTag. */
+  createMaterialTag?: Maybe<MaterialTag>;
+  /** Create a single MaterialTagAssignment. */
+  createMaterialTagAssignment?: Maybe<MaterialTagAssignment>;
+  /** Create many MaterialTagAssignments. */
+  createMaterialTagAssignments?: Maybe<Array<Maybe<MaterialTagAssignment>>>;
+  /** Create many MaterialTags. */
+  createMaterialTags?: Maybe<Array<Maybe<MaterialTag>>>;
   /** Create many Materials. */
   createMaterials?: Maybe<Array<Maybe<Material>>>;
   /** Create many MultipleNews. */
@@ -4857,6 +5332,8 @@ export type Mutation = {
   createOrUpdateComponentDefinitions?: Maybe<Array<Maybe<ComponentDefinition>>>;
   /** Create or update many CoreClassifications. */
   createOrUpdateCoreClassifications?: Maybe<Array<Maybe<CoreClassification>>>;
+  /** Create or update many EmissionFactors. */
+  createOrUpdateEmissionFactors?: Maybe<Array<Maybe<EmissionFactor>>>;
   /** Create or update many EmissionScopes. */
   createOrUpdateEmissionScopes?: Maybe<Array<Maybe<EmissionScope>>>;
   /** Create or update many Emissions. */
@@ -4867,8 +5344,14 @@ export type Mutation = {
   createOrUpdateIntegrations?: Maybe<Array<Maybe<Integration>>>;
   /** Create or update many MaterialClassifications. */
   createOrUpdateMaterialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
+  /** Create or update many MaterialEmissionFactors. */
+  createOrUpdateMaterialEmissionFactors?: Maybe<Array<Maybe<MaterialEmissionFactor>>>;
   /** Create or update many MaterialSuppliers. */
   createOrUpdateMaterialSuppliers?: Maybe<Array<Maybe<MaterialSupplier>>>;
+  /** Create or update many MaterialTagAssignments. */
+  createOrUpdateMaterialTagAssignments?: Maybe<Array<Maybe<MaterialTagAssignment>>>;
+  /** Create or update many MaterialTags. */
+  createOrUpdateMaterialTags?: Maybe<Array<Maybe<MaterialTag>>>;
   /** Create or update many Materials. */
   createOrUpdateMaterials?: Maybe<Array<Maybe<Material>>>;
   /** Create or update many MultipleNews. */
@@ -4907,8 +5390,12 @@ export type Mutation = {
   createOrUpdatePrismaMigrations?: Maybe<Array<Maybe<PrismaMigration>>>;
   /** Create or update many ProductMaterials. */
   createOrUpdateProductMaterials?: Maybe<Array<Maybe<ProductMaterial>>>;
+  /** Create or update many ProductTagAssignments. */
+  createOrUpdateProductTagAssignments?: Maybe<Array<Maybe<ProductTagAssignment>>>;
   /** Create or update many Products. */
   createOrUpdateProducts?: Maybe<Array<Maybe<Product>>>;
+  /** Create or update many ProductsTags. */
+  createOrUpdateProductsTags?: Maybe<Array<Maybe<ProductsTag>>>;
   /** Create or update many ServiceDefinitions. */
   createOrUpdateServiceDefinitions?: Maybe<Array<Maybe<ServiceDefinition>>>;
   /** Create or update many SupportedUtilities. */
@@ -4997,8 +5484,16 @@ export type Mutation = {
   createProductMaterial?: Maybe<ProductMaterial>;
   /** Create many ProductMaterials. */
   createProductMaterials?: Maybe<Array<Maybe<ProductMaterial>>>;
+  /** Create a single ProductTagAssignment. */
+  createProductTagAssignment?: Maybe<ProductTagAssignment>;
+  /** Create many ProductTagAssignments. */
+  createProductTagAssignments?: Maybe<Array<Maybe<ProductTagAssignment>>>;
   /** Create many Products. */
   createProducts?: Maybe<Array<Maybe<Product>>>;
+  /** Create a single ProductsTag. */
+  createProductsTag?: Maybe<ProductsTag>;
+  /** Create many ProductsTags. */
+  createProductsTags?: Maybe<Array<Maybe<ProductsTag>>>;
   /** Create a single ServiceDefinition. */
   createServiceDefinition?: Maybe<ServiceDefinition>;
   /** Create many ServiceDefinitions. */
@@ -5093,6 +5588,10 @@ export type Mutation = {
   deleteCoreClassifications?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single Emission. */
   deleteEmission?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single EmissionFactor. */
+  deleteEmissionFactor?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many EmissionFactors with a filter. */
+  deleteEmissionFactors?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single EmissionScope. */
   deleteEmissionScope?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many EmissionScopes with a filter. */
@@ -5113,10 +5612,22 @@ export type Mutation = {
   deleteMaterialClassification?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many MaterialClassifications with a filter. */
   deleteMaterialClassifications?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single MaterialEmissionFactor. */
+  deleteMaterialEmissionFactor?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many MaterialEmissionFactors with a filter. */
+  deleteMaterialEmissionFactors?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single MaterialSupplier. */
   deleteMaterialSupplier?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many MaterialSuppliers with a filter. */
   deleteMaterialSuppliers?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single MaterialTag. */
+  deleteMaterialTag?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single MaterialTagAssignment. */
+  deleteMaterialTagAssignment?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many MaterialTagAssignments with a filter. */
+  deleteMaterialTagAssignments?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many MaterialTags with a filter. */
+  deleteMaterialTags?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Materials with a filter. */
   deleteMaterials?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many MultipleNews with a filter. */
@@ -5193,8 +5704,16 @@ export type Mutation = {
   deleteProductMaterial?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many ProductMaterials with a filter. */
   deleteProductMaterials?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single ProductTagAssignment. */
+  deleteProductTagAssignment?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many ProductTagAssignments with a filter. */
+  deleteProductTagAssignments?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Products with a filter. */
   deleteProducts?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single ProductsTag. */
+  deleteProductsTag?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many ProductsTags with a filter. */
+  deleteProductsTags?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single ServiceDefinition. */
   deleteServiceDefinition?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many ServiceDefinitions with a filter. */
@@ -5289,6 +5808,10 @@ export type Mutation = {
   updateCoreClassifications?: Maybe<Array<Maybe<CoreClassification>>>;
   /** Update a single Emission. */
   updateEmission?: Maybe<Emission>;
+  /** Update a single EmissionFactor. */
+  updateEmissionFactor?: Maybe<EmissionFactor>;
+  /** Update many EmissionFactors. */
+  updateEmissionFactors?: Maybe<Array<Maybe<EmissionFactor>>>;
   /** Update a single EmissionScope. */
   updateEmissionScope?: Maybe<EmissionScope>;
   /** Update many EmissionScopes. */
@@ -5309,10 +5832,22 @@ export type Mutation = {
   updateMaterialClassification?: Maybe<MaterialClassification>;
   /** Update many MaterialClassifications. */
   updateMaterialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
+  /** Update a single MaterialEmissionFactor. */
+  updateMaterialEmissionFactor?: Maybe<MaterialEmissionFactor>;
+  /** Update many MaterialEmissionFactors. */
+  updateMaterialEmissionFactors?: Maybe<Array<Maybe<MaterialEmissionFactor>>>;
   /** Update a single MaterialSupplier. */
   updateMaterialSupplier?: Maybe<MaterialSupplier>;
   /** Update many MaterialSuppliers. */
   updateMaterialSuppliers?: Maybe<Array<Maybe<MaterialSupplier>>>;
+  /** Update a single MaterialTag. */
+  updateMaterialTag?: Maybe<MaterialTag>;
+  /** Update a single MaterialTagAssignment. */
+  updateMaterialTagAssignment?: Maybe<MaterialTagAssignment>;
+  /** Update many MaterialTagAssignments. */
+  updateMaterialTagAssignments?: Maybe<Array<Maybe<MaterialTagAssignment>>>;
+  /** Update many MaterialTags. */
+  updateMaterialTags?: Maybe<Array<Maybe<MaterialTag>>>;
   /** Update many Materials. */
   updateMaterials?: Maybe<Array<Maybe<Material>>>;
   /** Update many MultipleNews. */
@@ -5389,8 +5924,16 @@ export type Mutation = {
   updateProductMaterial?: Maybe<ProductMaterial>;
   /** Update many ProductMaterials. */
   updateProductMaterials?: Maybe<Array<Maybe<ProductMaterial>>>;
+  /** Update a single ProductTagAssignment. */
+  updateProductTagAssignment?: Maybe<ProductTagAssignment>;
+  /** Update many ProductTagAssignments. */
+  updateProductTagAssignments?: Maybe<Array<Maybe<ProductTagAssignment>>>;
   /** Update many Products. */
   updateProducts?: Maybe<Array<Maybe<Product>>>;
+  /** Update a single ProductsTag. */
+  updateProductsTag?: Maybe<ProductsTag>;
+  /** Update many ProductsTags. */
+  updateProductsTags?: Maybe<Array<Maybe<ProductsTag>>>;
   /** Update a single ServiceDefinition. */
   updateServiceDefinition?: Maybe<ServiceDefinition>;
   /** Update many ServiceDefinitions. */
@@ -5575,6 +6118,16 @@ export type MutationCreateEmissionArgs = {
 };
 
 
+export type MutationCreateEmissionFactorArgs = {
+  input: EmissionFactorInsertInput;
+};
+
+
+export type MutationCreateEmissionFactorsArgs = {
+  input: Array<EmissionFactorInsertInput>;
+};
+
+
 export type MutationCreateEmissionScopeArgs = {
   input: EmissionScopeInsertInput;
 };
@@ -5625,6 +6178,16 @@ export type MutationCreateMaterialClassificationsArgs = {
 };
 
 
+export type MutationCreateMaterialEmissionFactorArgs = {
+  input: MaterialEmissionFactorInsertInput;
+};
+
+
+export type MutationCreateMaterialEmissionFactorsArgs = {
+  input: Array<MaterialEmissionFactorInsertInput>;
+};
+
+
 export type MutationCreateMaterialSupplierArgs = {
   input: MaterialSupplierInsertInput;
 };
@@ -5632,6 +6195,26 @@ export type MutationCreateMaterialSupplierArgs = {
 
 export type MutationCreateMaterialSuppliersArgs = {
   input: Array<MaterialSupplierInsertInput>;
+};
+
+
+export type MutationCreateMaterialTagArgs = {
+  input: MaterialTagInsertInput;
+};
+
+
+export type MutationCreateMaterialTagAssignmentArgs = {
+  input: MaterialTagAssignmentInsertInput;
+};
+
+
+export type MutationCreateMaterialTagAssignmentsArgs = {
+  input: Array<MaterialTagAssignmentInsertInput>;
+};
+
+
+export type MutationCreateMaterialTagsArgs = {
+  input: Array<MaterialTagInsertInput>;
 };
 
 
@@ -5720,6 +6303,11 @@ export type MutationCreateOrUpdateCoreClassificationsArgs = {
 };
 
 
+export type MutationCreateOrUpdateEmissionFactorsArgs = {
+  input: Array<EmissionFactorCreateOrUpdateInput>;
+};
+
+
 export type MutationCreateOrUpdateEmissionScopesArgs = {
   input: Array<EmissionScopeCreateOrUpdateInput>;
 };
@@ -5745,8 +6333,23 @@ export type MutationCreateOrUpdateMaterialClassificationsArgs = {
 };
 
 
+export type MutationCreateOrUpdateMaterialEmissionFactorsArgs = {
+  input: Array<MaterialEmissionFactorCreateOrUpdateInput>;
+};
+
+
 export type MutationCreateOrUpdateMaterialSuppliersArgs = {
   input: Array<MaterialSupplierCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateMaterialTagAssignmentsArgs = {
+  input: Array<MaterialTagAssignmentCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateMaterialTagsArgs = {
+  input: Array<MaterialTagCreateOrUpdateInput>;
 };
 
 
@@ -5845,8 +6448,18 @@ export type MutationCreateOrUpdateProductMaterialsArgs = {
 };
 
 
+export type MutationCreateOrUpdateProductTagAssignmentsArgs = {
+  input: Array<ProductTagAssignmentCreateOrUpdateInput>;
+};
+
+
 export type MutationCreateOrUpdateProductsArgs = {
   input: Array<ProductCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateProductsTagsArgs = {
+  input: Array<ProductsTagCreateOrUpdateInput>;
 };
 
 
@@ -6070,8 +6683,28 @@ export type MutationCreateProductMaterialsArgs = {
 };
 
 
+export type MutationCreateProductTagAssignmentArgs = {
+  input: ProductTagAssignmentInsertInput;
+};
+
+
+export type MutationCreateProductTagAssignmentsArgs = {
+  input: Array<ProductTagAssignmentInsertInput>;
+};
+
+
 export type MutationCreateProductsArgs = {
   input: Array<ProductInsertInput>;
+};
+
+
+export type MutationCreateProductsTagArgs = {
+  input: ProductsTagInsertInput;
+};
+
+
+export type MutationCreateProductsTagsArgs = {
+  input: Array<ProductsTagInsertInput>;
 };
 
 
@@ -6310,6 +6943,16 @@ export type MutationDeleteEmissionArgs = {
 };
 
 
+export type MutationDeleteEmissionFactorArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteEmissionFactorsArgs = {
+  filter: EmissionFactorsListFilter;
+};
+
+
 export type MutationDeleteEmissionScopeArgs = {
   filter: DeleteOneFilterInput;
 };
@@ -6360,6 +7003,16 @@ export type MutationDeleteMaterialClassificationsArgs = {
 };
 
 
+export type MutationDeleteMaterialEmissionFactorArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteMaterialEmissionFactorsArgs = {
+  filter: MaterialEmissionFactorsListFilter;
+};
+
+
 export type MutationDeleteMaterialSupplierArgs = {
   filter: DeleteOneFilterInput;
 };
@@ -6367,6 +7020,26 @@ export type MutationDeleteMaterialSupplierArgs = {
 
 export type MutationDeleteMaterialSuppliersArgs = {
   filter: MaterialSuppliersListFilter;
+};
+
+
+export type MutationDeleteMaterialTagArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteMaterialTagAssignmentArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteMaterialTagAssignmentsArgs = {
+  filter: MaterialTagAssignmentsListFilter;
+};
+
+
+export type MutationDeleteMaterialTagsArgs = {
+  filter: MaterialTagsListFilter;
 };
 
 
@@ -6560,8 +7233,28 @@ export type MutationDeleteProductMaterialsArgs = {
 };
 
 
+export type MutationDeleteProductTagAssignmentArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteProductTagAssignmentsArgs = {
+  filter: ProductTagAssignmentsListFilter;
+};
+
+
 export type MutationDeleteProductsArgs = {
   filter: ProductsListFilter;
+};
+
+
+export type MutationDeleteProductsTagArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteProductsTagsArgs = {
+  filter: ProductsTagsListFilter;
 };
 
 
@@ -6800,6 +7493,16 @@ export type MutationUpdateEmissionArgs = {
 };
 
 
+export type MutationUpdateEmissionFactorArgs = {
+  input: EmissionFactorUpdateInput;
+};
+
+
+export type MutationUpdateEmissionFactorsArgs = {
+  input: Array<EmissionFactorUpdateInput>;
+};
+
+
 export type MutationUpdateEmissionScopeArgs = {
   input: EmissionScopeUpdateInput;
 };
@@ -6850,6 +7553,16 @@ export type MutationUpdateMaterialClassificationsArgs = {
 };
 
 
+export type MutationUpdateMaterialEmissionFactorArgs = {
+  input: MaterialEmissionFactorUpdateInput;
+};
+
+
+export type MutationUpdateMaterialEmissionFactorsArgs = {
+  input: Array<MaterialEmissionFactorUpdateInput>;
+};
+
+
 export type MutationUpdateMaterialSupplierArgs = {
   input: MaterialSupplierUpdateInput;
 };
@@ -6857,6 +7570,26 @@ export type MutationUpdateMaterialSupplierArgs = {
 
 export type MutationUpdateMaterialSuppliersArgs = {
   input: Array<MaterialSupplierUpdateInput>;
+};
+
+
+export type MutationUpdateMaterialTagArgs = {
+  input: MaterialTagUpdateInput;
+};
+
+
+export type MutationUpdateMaterialTagAssignmentArgs = {
+  input: MaterialTagAssignmentUpdateInput;
+};
+
+
+export type MutationUpdateMaterialTagAssignmentsArgs = {
+  input: Array<MaterialTagAssignmentUpdateInput>;
+};
+
+
+export type MutationUpdateMaterialTagsArgs = {
+  input: Array<MaterialTagUpdateInput>;
 };
 
 
@@ -7050,8 +7783,28 @@ export type MutationUpdateProductMaterialsArgs = {
 };
 
 
+export type MutationUpdateProductTagAssignmentArgs = {
+  input: ProductTagAssignmentUpdateInput;
+};
+
+
+export type MutationUpdateProductTagAssignmentsArgs = {
+  input: Array<ProductTagAssignmentUpdateInput>;
+};
+
+
 export type MutationUpdateProductsArgs = {
   input: Array<ProductUpdateInput>;
+};
+
+
+export type MutationUpdateProductsTagArgs = {
+  input: ProductsTagUpdateInput;
+};
+
+
+export type MutationUpdateProductsTagsArgs = {
+  input: Array<ProductsTagUpdateInput>;
 };
 
 
@@ -7215,8 +7968,14 @@ export type Organization = {
   integrations: Array<Integration>;
   integrations_aggregate?: Maybe<AggregationResult>;
   isTest: Scalars['Boolean']['output'];
+  linearSecret?: Maybe<Scalars['String']['output']>;
+  linearWebhookId?: Maybe<Scalars['String']['output']>;
   materialSuppliers: Array<MaterialSupplier>;
   materialSuppliers_aggregate?: Maybe<AggregationResult>;
+  materialTagAssignments: Array<MaterialTagAssignment>;
+  materialTagAssignments_aggregate?: Maybe<AggregationResult>;
+  materialTags: Array<MaterialTag>;
+  materialTags_aggregate?: Maybe<AggregationResult>;
   materials: Array<Material>;
   materials_aggregate?: Maybe<AggregationResult>;
   metadata?: Maybe<Scalars['JSON']['output']>;
@@ -7236,7 +7995,11 @@ export type Organization = {
   phone?: Maybe<Scalars['String']['output']>;
   productMaterials: Array<ProductMaterial>;
   productMaterials_aggregate?: Maybe<AggregationResult>;
+  productTagAssignments: Array<ProductTagAssignment>;
+  productTagAssignments_aggregate?: Maybe<AggregationResult>;
   products: Array<Product>;
+  productsTags: Array<ProductsTag>;
+  productsTags_aggregate?: Maybe<AggregationResult>;
   products_aggregate?: Maybe<AggregationResult>;
   surveyData: Array<SurveyDatum>;
   surveyData_aggregate?: Maybe<AggregationResult>;
@@ -7312,6 +8075,26 @@ export type OrganizationMaterialSuppliersArgs = {
 
 export type OrganizationMaterialSuppliers_AggregateArgs = {
   filter?: InputMaybe<MaterialSuppliersListFilter>;
+};
+
+
+export type OrganizationMaterialTagAssignmentsArgs = {
+  filter?: InputMaybe<MaterialTagAssignmentsListFilter>;
+};
+
+
+export type OrganizationMaterialTagAssignments_AggregateArgs = {
+  filter?: InputMaybe<MaterialTagAssignmentsListFilter>;
+};
+
+
+export type OrganizationMaterialTagsArgs = {
+  filter?: InputMaybe<MaterialTagsListFilter>;
+};
+
+
+export type OrganizationMaterialTags_AggregateArgs = {
+  filter?: InputMaybe<MaterialTagsListFilter>;
 };
 
 
@@ -7395,8 +8178,28 @@ export type OrganizationProductMaterials_AggregateArgs = {
 };
 
 
+export type OrganizationProductTagAssignmentsArgs = {
+  filter?: InputMaybe<ProductTagAssignmentsListFilter>;
+};
+
+
+export type OrganizationProductTagAssignments_AggregateArgs = {
+  filter?: InputMaybe<ProductTagAssignmentsListFilter>;
+};
+
+
 export type OrganizationProductsArgs = {
   filter?: InputMaybe<ProductsListFilter>;
+};
+
+
+export type OrganizationProductsTagsArgs = {
+  filter?: InputMaybe<ProductsTagsListFilter>;
+};
+
+
+export type OrganizationProductsTags_AggregateArgs = {
+  filter?: InputMaybe<ProductsTagsListFilter>;
 };
 
 
@@ -9045,7 +9848,11 @@ export type OrganizationCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
   isTest?: InputMaybe<Scalars['Boolean']['input']>;
+  linearSecret?: InputMaybe<Scalars['String']['input']>;
+  linearWebhookId?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  materialTagAssignments?: InputMaybe<Array<MaterialTagAssignmentCreateOrUpdateInput>>;
+  materialTags?: InputMaybe<Array<MaterialTagCreateOrUpdateInput>>;
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -9057,7 +9864,9 @@ export type OrganizationCreateOrUpdateInput = {
   organizationFiles?: InputMaybe<Array<OrganizationFileCreateOrUpdateInput>>;
   phone?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
+  productTagAssignments?: InputMaybe<Array<ProductTagAssignmentCreateOrUpdateInput>>;
   products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
+  productsTags?: InputMaybe<Array<ProductsTagCreateOrUpdateInput>>;
   surveyData?: InputMaybe<Array<SurveyDatumCreateOrUpdateInput>>;
   surveyStatuses?: InputMaybe<Array<SurveyStatusCreateOrUpdateInput>>;
   sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
@@ -9171,6 +9980,7 @@ export type OrganizationFacilitiesListFilter = {
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   integrations?: InputMaybe<IntegrationsListFilter>;
   materialSuppliers?: InputMaybe<MaterialSuppliersListFilter>;
+  materials?: InputMaybe<MaterialsListFilter>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   metadata_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   metadata_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -9298,6 +10108,8 @@ export type OrganizationFacility = {
   integrations_aggregate?: Maybe<AggregationResult>;
   materialSuppliers: Array<MaterialSupplier>;
   materialSuppliers_aggregate?: Maybe<AggregationResult>;
+  materials: Array<Material>;
+  materials_aggregate?: Maybe<AggregationResult>;
   metadata?: Maybe<Scalars['JSON']['output']>;
   name: Scalars['String']['output'];
   organization: Organization;
@@ -9355,6 +10167,16 @@ export type OrganizationFacilityMaterialSuppliers_AggregateArgs = {
 };
 
 
+export type OrganizationFacilityMaterialsArgs = {
+  filter?: InputMaybe<MaterialsListFilter>;
+};
+
+
+export type OrganizationFacilityMaterials_AggregateArgs = {
+  filter?: InputMaybe<MaterialsListFilter>;
+};
+
+
 export type OrganizationFacilityOrganizationArgs = {
   filter?: InputMaybe<OrganizationsListFilter>;
 };
@@ -9399,6 +10221,7 @@ export type OrganizationFacilityCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
@@ -9426,6 +10249,7 @@ export type OrganizationFacilityInsertInput = {
   emissions?: InputMaybe<Array<EmissionCreateOrUpdateInput>>;
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name: Scalars['String']['input'];
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
@@ -9454,6 +10278,7 @@ export type OrganizationFacilityUpdateInput = {
   id: Scalars['ID']['input'];
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
@@ -9500,6 +10325,7 @@ export type OrganizationFile = {
   organizationComplianceNoteFiles_aggregate?: Maybe<AggregationResult>;
   organization_aggregate?: Maybe<AggregationResult>;
   originalName: Scalars['String']['output'];
+  processingStatus?: Maybe<OrganizationFilesProcessingStatus>;
   size?: Maybe<Scalars['Float']['output']>;
   type: OrganizationFilesType;
   updatedAt: Scalars['ISOString']['output'];
@@ -9597,6 +10423,7 @@ export type OrganizationFileCreateOrUpdateInput = {
   organizationComplianceAiResponseFiles?: InputMaybe<Array<OrganizationComplianceAiResponseFileCreateOrUpdateInput>>;
   organizationComplianceNoteFiles?: InputMaybe<Array<OrganizationComplianceNoteFileCreateOrUpdateInput>>;
   originalName?: InputMaybe<Scalars['String']['input']>;
+  processingStatus?: InputMaybe<OrganizationFilesProcessingStatus>;
   size?: InputMaybe<Scalars['Float']['input']>;
   type?: InputMaybe<OrganizationFilesType>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -9632,6 +10459,7 @@ export type OrganizationFileInsertInput = {
   organizationComplianceAiResponseFiles?: InputMaybe<Array<OrganizationComplianceAiResponseFileCreateOrUpdateInput>>;
   organizationComplianceNoteFiles?: InputMaybe<Array<OrganizationComplianceNoteFileCreateOrUpdateInput>>;
   originalName: Scalars['String']['input'];
+  processingStatus?: InputMaybe<OrganizationFilesProcessingStatus>;
   size?: InputMaybe<Scalars['Float']['input']>;
   type: OrganizationFilesType;
   updatedAt: Scalars['ISOString']['input'];
@@ -9668,6 +10496,7 @@ export type OrganizationFileUpdateInput = {
   organizationComplianceAiResponseFiles?: InputMaybe<Array<OrganizationComplianceAiResponseFileCreateOrUpdateInput>>;
   organizationComplianceNoteFiles?: InputMaybe<Array<OrganizationComplianceNoteFileCreateOrUpdateInput>>;
   originalName?: InputMaybe<Scalars['String']['input']>;
+  processingStatus?: InputMaybe<OrganizationFilesProcessingStatus>;
   size?: InputMaybe<Scalars['Float']['input']>;
   type?: InputMaybe<OrganizationFilesType>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -9912,6 +10741,9 @@ export type OrganizationFilesListFilter = {
   originalName_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   originalName_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   originalName_null?: InputMaybe<Scalars['Boolean']['input']>;
+  processingStatus?: InputMaybe<OrganizationFilesProcessingStatus>;
+  processingStatus_in?: InputMaybe<Array<OrganizationFilesProcessingStatus>>;
+  processingStatus_nin?: InputMaybe<Array<OrganizationFilesProcessingStatus>>;
   size?: InputMaybe<Scalars['Float']['input']>;
   size_in?: InputMaybe<Array<Scalars['Float']['input']>>;
   size_ne?: InputMaybe<Scalars['Float']['input']>;
@@ -9974,6 +10806,7 @@ export type OrganizationFilesOrderByInput = {
   openaiVectorFileStatus?: InputMaybe<Sort>;
   openaiVectorStoreId?: InputMaybe<Sort>;
   originalName?: InputMaybe<Sort>;
+  processingStatus?: InputMaybe<Sort>;
   size?: InputMaybe<Sort>;
   type?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
@@ -9988,6 +10821,13 @@ export type OrganizationFilesPaginationInput = {
   orderBy?: InputMaybe<OrganizationFilesOrderByInput>;
 };
 
+export enum OrganizationFilesProcessingStatus {
+  AiProcessing = 'AI_PROCESSING',
+  ImportComplete = 'IMPORT_COMPLETE',
+  ManualReview = 'MANUAL_REVIEW',
+  ProcessingError = 'PROCESSING_ERROR'
+}
+
 export enum OrganizationFilesType {
   Assessment = 'ASSESSMENT',
   AuditReport = 'AUDIT_REPORT',
@@ -10000,6 +10840,7 @@ export enum OrganizationFilesType {
   Statement = 'STATEMENT',
   SupplierAgreement = 'SUPPLIER_AGREEMENT',
   SupplierStatement = 'SUPPLIER_STATEMENT',
+  SustainabilityData = 'SUSTAINABILITY_DATA',
   TestReport = 'TEST_REPORT',
   TransactionCertificate = 'TRANSACTION_CERTIFICATE'
 }
@@ -10018,7 +10859,11 @@ export type OrganizationInsertInput = {
   facilityFootprints?: InputMaybe<Array<FacilityFootprintCreateOrUpdateInput>>;
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
   isTest: Scalars['Boolean']['input'];
+  linearSecret?: InputMaybe<Scalars['String']['input']>;
+  linearWebhookId?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  materialTagAssignments?: InputMaybe<Array<MaterialTagAssignmentCreateOrUpdateInput>>;
+  materialTags?: InputMaybe<Array<MaterialTagCreateOrUpdateInput>>;
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name: Scalars['String']['input'];
@@ -10030,7 +10875,9 @@ export type OrganizationInsertInput = {
   organizationFiles?: InputMaybe<Array<OrganizationFileCreateOrUpdateInput>>;
   phone?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
+  productTagAssignments?: InputMaybe<Array<ProductTagAssignmentCreateOrUpdateInput>>;
   products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
+  productsTags?: InputMaybe<Array<ProductsTagCreateOrUpdateInput>>;
   surveyData?: InputMaybe<Array<SurveyDatumCreateOrUpdateInput>>;
   surveyStatuses?: InputMaybe<Array<SurveyStatusCreateOrUpdateInput>>;
   sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
@@ -10039,17 +10886,6 @@ export type OrganizationInsertInput = {
   utilityBills?: InputMaybe<Array<UtilityBillCreateOrUpdateInput>>;
   vectorRecords?: InputMaybe<Array<VectorRecordCreateOrUpdateInput>>;
   website?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type OrganizationProductMaterialEmissions = {
-  __typename?: 'OrganizationProductMaterialEmissions';
-  emissionsFactor?: Maybe<Scalars['Float']['output']>;
-  materialId?: Maybe<Scalars['String']['output']>;
-  materialName?: Maybe<Scalars['String']['output']>;
-  organizationId?: Maybe<Scalars['String']['output']>;
-  productCategory?: Maybe<Scalars['String']['output']>;
-  productId?: Maybe<Scalars['String']['output']>;
-  productSubcategory?: Maybe<Scalars['String']['output']>;
 };
 
 /** Data needed to update Organizations. An ID must be passed. */
@@ -10067,7 +10903,11 @@ export type OrganizationUpdateInput = {
   id: Scalars['ID']['input'];
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
   isTest?: InputMaybe<Scalars['Boolean']['input']>;
+  linearSecret?: InputMaybe<Scalars['String']['input']>;
+  linearWebhookId?: InputMaybe<Scalars['String']['input']>;
   materialSuppliers?: InputMaybe<Array<MaterialSupplierCreateOrUpdateInput>>;
+  materialTagAssignments?: InputMaybe<Array<MaterialTagAssignmentCreateOrUpdateInput>>;
+  materialTags?: InputMaybe<Array<MaterialTagCreateOrUpdateInput>>;
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -10079,7 +10919,9 @@ export type OrganizationUpdateInput = {
   organizationFiles?: InputMaybe<Array<OrganizationFileCreateOrUpdateInput>>;
   phone?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
+  productTagAssignments?: InputMaybe<Array<ProductTagAssignmentCreateOrUpdateInput>>;
   products?: InputMaybe<Array<ProductCreateOrUpdateInput>>;
+  productsTags?: InputMaybe<Array<ProductsTagCreateOrUpdateInput>>;
   surveyData?: InputMaybe<Array<SurveyDatumCreateOrUpdateInput>>;
   surveyStatuses?: InputMaybe<Array<SurveyStatusCreateOrUpdateInput>>;
   sustainabilityAttributeClassifcationAssignments?: InputMaybe<Array<SustainabilityAttributeClassifcationAssignmentCreateOrUpdateInput>>;
@@ -10164,7 +11006,33 @@ export type OrganizationsListFilter = {
   isTest_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
   isTest_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   isTest_null?: InputMaybe<Scalars['Boolean']['input']>;
+  linearSecret?: InputMaybe<Scalars['String']['input']>;
+  linearSecret_gt?: InputMaybe<Scalars['String']['input']>;
+  linearSecret_gte?: InputMaybe<Scalars['String']['input']>;
+  linearSecret_ilike?: InputMaybe<Scalars['String']['input']>;
+  linearSecret_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  linearSecret_like?: InputMaybe<Scalars['String']['input']>;
+  linearSecret_lt?: InputMaybe<Scalars['String']['input']>;
+  linearSecret_lte?: InputMaybe<Scalars['String']['input']>;
+  linearSecret_ne?: InputMaybe<Scalars['String']['input']>;
+  linearSecret_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  linearSecret_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  linearSecret_null?: InputMaybe<Scalars['Boolean']['input']>;
+  linearWebhookId?: InputMaybe<Scalars['String']['input']>;
+  linearWebhookId_gt?: InputMaybe<Scalars['String']['input']>;
+  linearWebhookId_gte?: InputMaybe<Scalars['String']['input']>;
+  linearWebhookId_ilike?: InputMaybe<Scalars['String']['input']>;
+  linearWebhookId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  linearWebhookId_like?: InputMaybe<Scalars['String']['input']>;
+  linearWebhookId_lt?: InputMaybe<Scalars['String']['input']>;
+  linearWebhookId_lte?: InputMaybe<Scalars['String']['input']>;
+  linearWebhookId_ne?: InputMaybe<Scalars['String']['input']>;
+  linearWebhookId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  linearWebhookId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  linearWebhookId_null?: InputMaybe<Scalars['Boolean']['input']>;
   materialSuppliers?: InputMaybe<MaterialSuppliersListFilter>;
+  materialTagAssignments?: InputMaybe<MaterialTagAssignmentsListFilter>;
+  materialTags?: InputMaybe<MaterialTagsListFilter>;
   materials?: InputMaybe<MaterialsListFilter>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   metadata_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
@@ -10203,7 +11071,9 @@ export type OrganizationsListFilter = {
   phone_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   phone_null?: InputMaybe<Scalars['Boolean']['input']>;
   productMaterials?: InputMaybe<ProductMaterialsListFilter>;
+  productTagAssignments?: InputMaybe<ProductTagAssignmentsListFilter>;
   products?: InputMaybe<ProductsListFilter>;
+  productsTags?: InputMaybe<ProductsTagsListFilter>;
   surveyData?: InputMaybe<SurveyDataListFilter>;
   surveyStatuses?: InputMaybe<SurveyStatusesListFilter>;
   sustainabilityAttributeClassifcationAssignments?: InputMaybe<SustainabilityAttributeClassifcationAssignmentsListFilter>;
@@ -10243,6 +11113,8 @@ export type OrganizationsOrderByInput = {
   enabledConnections?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   isTest?: InputMaybe<Sort>;
+  linearSecret?: InputMaybe<Sort>;
+  linearWebhookId?: InputMaybe<Sort>;
   metadata?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
   phone?: InputMaybe<Sort>;
@@ -10677,6 +11549,8 @@ export type Product = {
   productMaterials: Array<ProductMaterial>;
   productMaterials_aggregate?: Maybe<AggregationResult>;
   productSubcategory?: Maybe<Scalars['String']['output']>;
+  productTagAssignments: Array<ProductTagAssignment>;
+  productTagAssignments_aggregate?: Maybe<AggregationResult>;
   seasonCode?: Maybe<Scalars['String']['output']>;
   styleCode?: Maybe<Scalars['String']['output']>;
   supplierProductId?: Maybe<Scalars['String']['output']>;
@@ -10725,6 +11599,16 @@ export type ProductProductMaterials_AggregateArgs = {
   filter?: InputMaybe<ProductMaterialsListFilter>;
 };
 
+
+export type ProductProductTagAssignmentsArgs = {
+  filter?: InputMaybe<ProductTagAssignmentsListFilter>;
+};
+
+
+export type ProductProductTagAssignments_AggregateArgs = {
+  filter?: InputMaybe<ProductTagAssignmentsListFilter>;
+};
+
 /** Data needed to create or update Products. If an ID is passed, this is an update, otherwise it's an insert. */
 export type ProductCreateOrUpdateInput = {
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
@@ -10744,6 +11628,7 @@ export type ProductCreateOrUpdateInput = {
   productCategory?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   productSubcategory?: InputMaybe<Scalars['String']['input']>;
+  productTagAssignments?: InputMaybe<Array<ProductTagAssignmentCreateOrUpdateInput>>;
   seasonCode?: InputMaybe<Scalars['String']['input']>;
   styleCode?: InputMaybe<Scalars['String']['input']>;
   supplierProductId?: InputMaybe<Scalars['String']['input']>;
@@ -10770,6 +11655,7 @@ export type ProductInsertInput = {
   productCategory?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   productSubcategory?: InputMaybe<Scalars['String']['input']>;
+  productTagAssignments?: InputMaybe<Array<ProductTagAssignmentCreateOrUpdateInput>>;
   seasonCode?: InputMaybe<Scalars['String']['input']>;
   styleCode?: InputMaybe<Scalars['String']['input']>;
   supplierProductId?: InputMaybe<Scalars['String']['input']>;
@@ -11017,6 +11903,122 @@ export type ProductMaterialsPaginationInput = {
   orderBy?: InputMaybe<ProductMaterialsOrderByInput>;
 };
 
+export type ProductTagAssignment = {
+  __typename?: 'ProductTagAssignment';
+  createdAt: Scalars['ISOString']['output'];
+  id: Scalars['ID']['output'];
+  organization: Organization;
+  organization_aggregate?: Maybe<AggregationResult>;
+  product: Product;
+  product_aggregate?: Maybe<AggregationResult>;
+  tagId: Scalars['Float']['output'];
+  updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type ProductTagAssignmentOrganizationArgs = {
+  filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+
+export type ProductTagAssignmentOrganization_AggregateArgs = {
+  filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+
+export type ProductTagAssignmentProductArgs = {
+  filter?: InputMaybe<ProductsListFilter>;
+};
+
+
+export type ProductTagAssignmentProduct_AggregateArgs = {
+  filter?: InputMaybe<ProductsListFilter>;
+};
+
+/** Data needed to create or update ProductTagAssignments. If an ID is passed, this is an update, otherwise it's an insert. */
+export type ProductTagAssignmentCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  product?: InputMaybe<ProductCreateOrUpdateInput>;
+  tagId?: InputMaybe<Scalars['Float']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to create ProductTagAssignments. */
+export type ProductTagAssignmentInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  product?: InputMaybe<ProductCreateOrUpdateInput>;
+  tagId: Scalars['Float']['input'];
+  updatedAt: Scalars['ISOString']['input'];
+};
+
+/** Data needed to update ProductTagAssignments. An ID must be passed. */
+export type ProductTagAssignmentUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id: Scalars['ID']['input'];
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  product?: InputMaybe<ProductCreateOrUpdateInput>;
+  tagId?: InputMaybe<Scalars['Float']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type ProductTagAssignmentsListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  organization?: InputMaybe<OrganizationsListFilter>;
+  product?: InputMaybe<ProductsListFilter>;
+  tagId?: InputMaybe<Scalars['Float']['input']>;
+  tagId_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  tagId_ne?: InputMaybe<Scalars['Float']['input']>;
+  tagId_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  tagId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  tagId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type ProductTagAssignmentsOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  tagId?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for ProductTagAssignments. */
+export type ProductTagAssignmentsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProductTagAssignmentsOrderByInput>;
+};
+
 /** Data needed to update Products. An ID must be passed. */
 export type ProductUpdateInput = {
   attributeAssurances?: InputMaybe<Array<AttributeAssuranceCreateOrUpdateInput>>;
@@ -11036,6 +12038,7 @@ export type ProductUpdateInput = {
   productCategory?: InputMaybe<Scalars['String']['input']>;
   productMaterials?: InputMaybe<Array<ProductMaterialCreateOrUpdateInput>>;
   productSubcategory?: InputMaybe<Scalars['String']['input']>;
+  productTagAssignments?: InputMaybe<Array<ProductTagAssignmentCreateOrUpdateInput>>;
   seasonCode?: InputMaybe<Scalars['String']['input']>;
   styleCode?: InputMaybe<Scalars['String']['input']>;
   supplierProductId?: InputMaybe<Scalars['String']['input']>;
@@ -11183,6 +12186,7 @@ export type ProductsListFilter = {
   productSubcategory_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   productSubcategory_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   productSubcategory_null?: InputMaybe<Scalars['Boolean']['input']>;
+  productTagAssignments?: InputMaybe<ProductTagAssignmentsListFilter>;
   seasonCode?: InputMaybe<Scalars['String']['input']>;
   seasonCode_gt?: InputMaybe<Scalars['String']['input']>;
   seasonCode_gte?: InputMaybe<Scalars['String']['input']>;
@@ -11278,6 +12282,112 @@ export type ProductsPaginationInput = {
   orderBy?: InputMaybe<ProductsOrderByInput>;
 };
 
+export type ProductsTag = {
+  __typename?: 'ProductsTag';
+  createdAt: Scalars['ISOString']['output'];
+  id: Scalars['ID']['output'];
+  organization: Organization;
+  organization_aggregate?: Maybe<AggregationResult>;
+  tag: Scalars['String']['output'];
+  updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type ProductsTagOrganizationArgs = {
+  filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+
+export type ProductsTagOrganization_AggregateArgs = {
+  filter?: InputMaybe<OrganizationsListFilter>;
+};
+
+/** Data needed to create or update ProductsTags. If an ID is passed, this is an update, otherwise it's an insert. */
+export type ProductsTagCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  tag?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to create ProductsTags. */
+export type ProductsTagInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  tag: Scalars['String']['input'];
+  updatedAt: Scalars['ISOString']['input'];
+};
+
+/** Data needed to update ProductsTags. An ID must be passed. */
+export type ProductsTagUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  id: Scalars['ID']['input'];
+  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
+  tag?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type ProductsTagsListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  organization?: InputMaybe<OrganizationsListFilter>;
+  tag?: InputMaybe<Scalars['String']['input']>;
+  tag_gt?: InputMaybe<Scalars['String']['input']>;
+  tag_gte?: InputMaybe<Scalars['String']['input']>;
+  tag_ilike?: InputMaybe<Scalars['String']['input']>;
+  tag_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  tag_like?: InputMaybe<Scalars['String']['input']>;
+  tag_lt?: InputMaybe<Scalars['String']['input']>;
+  tag_lte?: InputMaybe<Scalars['String']['input']>;
+  tag_ne?: InputMaybe<Scalars['String']['input']>;
+  tag_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  tag_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  tag_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type ProductsTagsOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  tag?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for ProductsTags. */
+export type ProductsTagsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProductsTagsOrderByInput>;
+};
+
 export type Query = {
   __typename?: 'Query';
   /** Query used by the Admin UI to introspect the schema and metadata. */
@@ -11300,7 +12410,6 @@ export type Query = {
   attributeAssurances?: Maybe<Array<Maybe<AttributeAssurance>>>;
   /** Get aggregated data for AttributeAssurances. */
   attributeAssurances_aggregate?: Maybe<AggregationResult>;
-  cache_pcf_emissions?: Maybe<Scalars['JSONObject']['output']>;
   /** Get multiple CategoryData. */
   categoryData?: Maybe<Array<Maybe<CategoryDatum>>>;
   /** Get aggregated data for CategoryData. */
@@ -11369,6 +12478,12 @@ export type Query = {
   coreClassifications_aggregate?: Maybe<AggregationResult>;
   /** Get a single Emission. */
   emission?: Maybe<Emission>;
+  /** Get a single EmissionFactor. */
+  emissionFactor?: Maybe<EmissionFactor>;
+  /** Get multiple EmissionFactors. */
+  emissionFactors?: Maybe<Array<Maybe<EmissionFactor>>>;
+  /** Get aggregated data for EmissionFactors. */
+  emissionFactors_aggregate?: Maybe<AggregationResult>;
   /** Get a single EmissionScope. */
   emissionScope?: Maybe<EmissionScope>;
   /** Get multiple EmissionScopes. */
@@ -11399,12 +12514,30 @@ export type Query = {
   materialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
   /** Get aggregated data for MaterialClassifications. */
   materialClassifications_aggregate?: Maybe<AggregationResult>;
+  /** Get a single MaterialEmissionFactor. */
+  materialEmissionFactor?: Maybe<MaterialEmissionFactor>;
+  /** Get multiple MaterialEmissionFactors. */
+  materialEmissionFactors?: Maybe<Array<Maybe<MaterialEmissionFactor>>>;
+  /** Get aggregated data for MaterialEmissionFactors. */
+  materialEmissionFactors_aggregate?: Maybe<AggregationResult>;
   /** Get a single MaterialSupplier. */
   materialSupplier?: Maybe<MaterialSupplier>;
   /** Get multiple MaterialSuppliers. */
   materialSuppliers?: Maybe<Array<Maybe<MaterialSupplier>>>;
   /** Get aggregated data for MaterialSuppliers. */
   materialSuppliers_aggregate?: Maybe<AggregationResult>;
+  /** Get a single MaterialTag. */
+  materialTag?: Maybe<MaterialTag>;
+  /** Get a single MaterialTagAssignment. */
+  materialTagAssignment?: Maybe<MaterialTagAssignment>;
+  /** Get multiple MaterialTagAssignments. */
+  materialTagAssignments?: Maybe<Array<Maybe<MaterialTagAssignment>>>;
+  /** Get aggregated data for MaterialTagAssignments. */
+  materialTagAssignments_aggregate?: Maybe<AggregationResult>;
+  /** Get multiple MaterialTags. */
+  materialTags?: Maybe<Array<Maybe<MaterialTag>>>;
+  /** Get aggregated data for MaterialTags. */
+  materialTags_aggregate?: Maybe<AggregationResult>;
   /** Get multiple Materials. */
   materials?: Maybe<Array<Maybe<Material>>>;
   /** Get aggregated data for Materials. */
@@ -11413,10 +12546,6 @@ export type Query = {
   multipleNews?: Maybe<Array<Maybe<News>>>;
   /** Get aggregated data for MultipleNews. */
   multipleNews_aggregate?: Maybe<AggregationResult>;
-  /** Get multiple MultipleOrganizationProductMaterialEmissions. */
-  multipleOrganizationProductMaterialEmissions?: Maybe<Array<Maybe<OrganizationProductMaterialEmissions>>>;
-  /** Get aggregated data for MultipleOrganizationProductMaterialEmissions. */
-  multipleOrganizationProductMaterialEmissions_aggregate?: Maybe<AggregationResult>;
   /** Get a single News. */
   news?: Maybe<News>;
   /** Get a single Organization. */
@@ -11493,8 +12622,6 @@ export type Query = {
   organizationFiles?: Maybe<Array<Maybe<OrganizationFile>>>;
   /** Get aggregated data for OrganizationFiles. */
   organizationFiles_aggregate?: Maybe<AggregationResult>;
-  /** Get a single OrganizationProductMaterialEmissions. */
-  organizationProductMaterialEmissions?: Maybe<OrganizationProductMaterialEmissions>;
   /** Get multiple Organizations. */
   organizations?: Maybe<Array<Maybe<Organization>>>;
   /** Get aggregated data for Organizations. */
@@ -11525,8 +12652,20 @@ export type Query = {
   productMaterials?: Maybe<Array<Maybe<ProductMaterial>>>;
   /** Get aggregated data for ProductMaterials. */
   productMaterials_aggregate?: Maybe<AggregationResult>;
+  /** Get a single ProductTagAssignment. */
+  productTagAssignment?: Maybe<ProductTagAssignment>;
+  /** Get multiple ProductTagAssignments. */
+  productTagAssignments?: Maybe<Array<Maybe<ProductTagAssignment>>>;
+  /** Get aggregated data for ProductTagAssignments. */
+  productTagAssignments_aggregate?: Maybe<AggregationResult>;
   /** Get multiple Products. */
   products?: Maybe<Array<Maybe<Product>>>;
+  /** Get a single ProductsTag. */
+  productsTag?: Maybe<ProductsTag>;
+  /** Get multiple ProductsTags. */
+  productsTags?: Maybe<Array<Maybe<ProductsTag>>>;
+  /** Get aggregated data for ProductsTags. */
+  productsTags_aggregate?: Maybe<AggregationResult>;
   /** Get aggregated data for Products. */
   products_aggregate?: Maybe<AggregationResult>;
   /** Get a single ServiceDefinition. */
@@ -11631,11 +12770,6 @@ export type QueryAttributeAssurancesArgs = {
 
 export type QueryAttributeAssurances_AggregateArgs = {
   filter?: InputMaybe<AttributeAssurancesListFilter>;
-};
-
-
-export type QueryCache_Pcf_EmissionsArgs = {
-  organizationId: Scalars['String']['input'];
 };
 
 
@@ -11820,6 +12954,22 @@ export type QueryEmissionArgs = {
 };
 
 
+export type QueryEmissionFactorArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryEmissionFactorsArgs = {
+  filter?: InputMaybe<EmissionFactorsListFilter>;
+  pagination?: InputMaybe<EmissionFactorsPaginationInput>;
+};
+
+
+export type QueryEmissionFactors_AggregateArgs = {
+  filter?: InputMaybe<EmissionFactorsListFilter>;
+};
+
+
 export type QueryEmissionScopeArgs = {
   id: Scalars['ID']['input'];
 };
@@ -11900,6 +13050,22 @@ export type QueryMaterialClassifications_AggregateArgs = {
 };
 
 
+export type QueryMaterialEmissionFactorArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryMaterialEmissionFactorsArgs = {
+  filter?: InputMaybe<MaterialEmissionFactorsListFilter>;
+  pagination?: InputMaybe<MaterialEmissionFactorsPaginationInput>;
+};
+
+
+export type QueryMaterialEmissionFactors_AggregateArgs = {
+  filter?: InputMaybe<MaterialEmissionFactorsListFilter>;
+};
+
+
 export type QueryMaterialSupplierArgs = {
   id: Scalars['ID']['input'];
 };
@@ -11913,6 +13079,38 @@ export type QueryMaterialSuppliersArgs = {
 
 export type QueryMaterialSuppliers_AggregateArgs = {
   filter?: InputMaybe<MaterialSuppliersListFilter>;
+};
+
+
+export type QueryMaterialTagArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryMaterialTagAssignmentArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryMaterialTagAssignmentsArgs = {
+  filter?: InputMaybe<MaterialTagAssignmentsListFilter>;
+  pagination?: InputMaybe<MaterialTagAssignmentsPaginationInput>;
+};
+
+
+export type QueryMaterialTagAssignments_AggregateArgs = {
+  filter?: InputMaybe<MaterialTagAssignmentsListFilter>;
+};
+
+
+export type QueryMaterialTagsArgs = {
+  filter?: InputMaybe<MaterialTagsListFilter>;
+  pagination?: InputMaybe<MaterialTagsPaginationInput>;
+};
+
+
+export type QueryMaterialTags_AggregateArgs = {
+  filter?: InputMaybe<MaterialTagsListFilter>;
 };
 
 
@@ -11935,17 +13133,6 @@ export type QueryMultipleNewsArgs = {
 
 export type QueryMultipleNews_AggregateArgs = {
   filter?: InputMaybe<MultipleNewsListFilter>;
-};
-
-
-export type QueryMultipleOrganizationProductMaterialEmissionsArgs = {
-  filter?: InputMaybe<MultipleOrganizationProductMaterialEmissionsListFilter>;
-  pagination?: InputMaybe<MultipleOrganizationProductMaterialEmissionsPaginationInput>;
-};
-
-
-export type QueryMultipleOrganizationProductMaterialEmissions_AggregateArgs = {
-  filter?: InputMaybe<MultipleOrganizationProductMaterialEmissionsListFilter>;
 };
 
 
@@ -12151,11 +13338,6 @@ export type QueryOrganizationFiles_AggregateArgs = {
 };
 
 
-export type QueryOrganizationProductMaterialEmissionsArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
 export type QueryOrganizationsArgs = {
   filter?: InputMaybe<OrganizationsListFilter>;
   pagination?: InputMaybe<OrganizationsPaginationInput>;
@@ -12236,9 +13418,41 @@ export type QueryProductMaterials_AggregateArgs = {
 };
 
 
+export type QueryProductTagAssignmentArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryProductTagAssignmentsArgs = {
+  filter?: InputMaybe<ProductTagAssignmentsListFilter>;
+  pagination?: InputMaybe<ProductTagAssignmentsPaginationInput>;
+};
+
+
+export type QueryProductTagAssignments_AggregateArgs = {
+  filter?: InputMaybe<ProductTagAssignmentsListFilter>;
+};
+
+
 export type QueryProductsArgs = {
   filter?: InputMaybe<ProductsListFilter>;
   pagination?: InputMaybe<ProductsPaginationInput>;
+};
+
+
+export type QueryProductsTagArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryProductsTagsArgs = {
+  filter?: InputMaybe<ProductsTagsListFilter>;
+  pagination?: InputMaybe<ProductsTagsPaginationInput>;
+};
+
+
+export type QueryProductsTags_AggregateArgs = {
+  filter?: InputMaybe<ProductsTagsListFilter>;
 };
 
 
