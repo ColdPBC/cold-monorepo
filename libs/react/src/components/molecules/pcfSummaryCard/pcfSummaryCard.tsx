@@ -1,9 +1,8 @@
 import React from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { ProductsQuery } from '@coldpbc/interfaces';
-import { Card, DetailsItem, PcfGraphByClassificationCategory } from '@coldpbc/components';
-import { PcfGraphData } from '@coldpbc/enums';
+import { PcfGraphData } from '@coldpbc/interfaces';
+import { Card, PcfGraphByClassificationCategory } from '@coldpbc/components';
 
 interface PcfSummaryCardProps {
   data: PcfGraphData[];
