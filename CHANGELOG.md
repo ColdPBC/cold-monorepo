@@ -1,3 +1,11 @@
+# [1.571.0](https://github.com/coldPBC/cold-monorepo/compare/v1.570.0...v1.571.0) (2025-02-19)
+
+
+### Features
+
+* Fix conditional logic for product carbon footprint columns ([6d662a3](https://github.com/coldPBC/cold-monorepo/commit/6d662a3584c1adf377fb4c1b4585b71100ff5bd4))
+* Update feature flags for carbon footprint components ([42dbed5](https://github.com/coldPBC/cold-monorepo/commit/42dbed58137a8b62851a03205bd22cf45635b20a))
+
 # [1.570.0](https://github.com/coldPBC/cold-monorepo/compare/v1.569.0...v1.570.0) (2025-02-19)
 
 
