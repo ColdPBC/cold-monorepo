@@ -1,3 +1,11 @@
+## [1.568.1](https://github.com/coldPBC/cold-monorepo/compare/v1.568.0...v1.568.1) (2025-02-19)
+
+
+### Bug Fixes
+
+* add material emissions and tagging functionalities ([6dad4cd](https://github.com/coldPBC/cold-monorepo/commit/6dad4cd02d4b34467e46ba8fa9b2781aa4bf96c2))
+* fixed MQTT connection/publishing ([0da6e62](https://github.com/coldPBC/cold-monorepo/commit/0da6e62f829954b771430151aec741882bb27130))
+
 # [1.568.0](https://github.com/coldPBC/cold-monorepo/compare/v1.567.0...v1.568.0) (2025-02-19)
 
 
