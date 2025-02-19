@@ -26,7 +26,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 15',
 						materialCategory: null,
 						materialSubcategory: null,
-						emissionsFactor: 11.2,
+            emissionsFactor: 11.2,
+            materialEmissionFactors: [{
+              id: "mef_1",
+              emissionFactor: {
+                id: 'emfac_1',
+                name: 'Wool insulation',
+                value: 11.2,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              }
+            }],
 						organizationFacility: {
 							id: 'ofac_f20621xztckbtqirkjlc7qgy',
 							name: 'Global Apparel Ltd.',
@@ -54,7 +63,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 7',
 						materialCategory: null,
 						materialSubcategory: null,
-						emissionsFactor: 2,
+            emissionsFactor: 2,
+            materialEmissionFactors: [{
+              id: "mef_2",
+              emissionFactor: {
+                id: 'emfac_2',
+                name: 'Polyester',
+                value: 2,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              }
+            }],
 						organizationFacility: {
 							id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 							name: 'Kerluke - Armstrong',
@@ -116,8 +134,17 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 9',
 						materialCategory: null,
 						materialSubcategory: null,
-						emissionsFactor: 5,
-						organizationFacility: {
+            emissionsFactor: 5,
+            materialEmissionFactors: [{
+              id: "mef_3",
+              emissionFactor: {
+                id: 'emfac_3',
+                name: 'Cotton',
+                value: 5,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
+            organizationFacility: {
 							id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 							name: 'Kerluke - Armstrong',
 						},
@@ -180,7 +207,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Example Nylon 1234',
 						materialCategory: null,
 						materialSubcategory: null,
-						emissionsFactor: 4,
+            emissionsFactor: 4,
+            materialEmissionFactors: [{
+              id: "mef_3",
+              emissionFactor: {
+                id: 'emfac_4',
+                name: 'Polyester',
+                value: 4,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              }
+            }],
 						organizationFacility: {
 							id: 'ofac_vd809v326es9yz3rygkeb14f',
 							name: 'Supplier Delta',
@@ -320,6 +356,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						materialCategory: null,
 						materialSubcategory: null,
 						emissionsFactor: null,
+            materialEmissionFactors: [],
 						organizationFacility: {
 							id: 'ofac_f20621xztckbtqirkjlc7qgy',
 							name: 'Global Apparel Ltd.',
@@ -348,6 +385,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						materialCategory: null,
 						materialSubcategory: null,
 						emissionsFactor: null,
+            materialEmissionFactors: [],
 						organizationFacility: {
 							id: 'ofac_vd809v326es9yz3rygkeb14f',
 							name: 'Supplier Delta',
@@ -410,6 +448,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						materialCategory: null,
 						materialSubcategory: null,
 						emissionsFactor: null,
+            materialEmissionFactors: [],
 						organizationFacility: {
 							id: 'ofac_c833b42yr2kv52p73oy0nuve',
 							name: 'Supplier 15',
@@ -461,6 +500,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						materialCategory: null,
 						materialSubcategory: null,
 						emissionsFactor: null,
+            materialEmissionFactors: [],
 						organizationFacility: {
 							id: 'ofac_vd809v326es9yz3rygkeb14f',
 							name: 'Supplier Delta',
@@ -598,7 +638,34 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 1',
 						materialCategory: 'Material Category 1',
 						materialSubcategory: 'Material Subcategory 1',
-						emissionsFactor: 2.3,
+            emissionsFactor: 2.3,
+            materialEmissionFactors: [
+              {
+                id: "mef_1",
+                emissionFactor: {
+                  id: 'emfac_5',
+                  name: 'nylon 6 production',
+                  value: 0.3,
+                  description: '\'nylon 6\', is a plastic product of fossil origin, it is not biodegradable and it is a thermoplastic material. This product consists of 100% virgin material with no content of recycled material. The product is used in the following applications and sectors: extruded, granulated and moulded in a wide range of textile, packaging and engineering applications. The main uses include fibers, films and engineering plastics.',
+                },
+              }, {
+                id: "mef_2",
+                emissionFactor: {
+                  id: 'emfac_6',
+                  name: 'weaving of synthetic fibre, for industrial use',
+                  value: 1.0,
+                  description: 'Inventory refers to the service of weaving a synthetic fibre. The dataset can be used with nylon, polypropylene and other types of thermoplastic fibres. The service should be used along with the raw material. The material to be used with this service should be 101.5% of the final product; for instance, for 1 kg of weaved synthetic fibre, a user should use 1.015 kg of raw material, be it nylon, polypropylene or other thermoplastic. The dataset is an estimation of the respective process. Waste polypropylene is chosen here to be an approximation of the waste generated by this activity, which depends on the raw material the user will choose. If this waste fraction is deemed irrelevant by the user, a modification is recommended.  The inventories includes energy consumption and infrastructure requirements for the service of weaving a synthetic fibre.',
+                },
+              }, {
+                id: "mef_3",
+                emissionFactor: {
+                  id: 'emfac_6',
+                  name: 'market for weaving, synthetic fibre',
+                  value: 1.0,
+                  description: 'This is a market activity. In the case of services or immobile infrastructures, markets are connecting suppliers and consumers at a global level. For specific connections at regional level, direct links between the local producing activities and the local consumers are preferred. Transport or losses are logically not relevant for this type of products. This is a market dataset delivering the service of weaving, synthetic fibre. No transportation is included.',
+                },
+              },
+            ],
 						organizationFacility: {
 							id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
 							name: 'Supplier 12',
@@ -626,7 +693,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 7',
 						materialCategory: 'Material Category 1',
 						materialSubcategory: 'Material Subcategory 2',
-						emissionsFactor: 3.5,
+            emissionsFactor: 3.5,
+            materialEmissionFactors: [{
+              id: "mef_2",
+              emissionFactor: {
+                id: 'emfac_6',
+                name: 'Polyester',
+                value: 3.5,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
 						organizationFacility: {
 							id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 							name: 'Kerluke - Armstrong',
@@ -694,7 +770,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 8',
 						materialCategory: 'Material Category 2',
 						materialSubcategory: 'Material Subcategory 1',
-						emissionsFactor: 4.5,
+            emissionsFactor: 4.5,
+            materialEmissionFactors: [{
+              id: "mef_3",
+              emissionFactor: {
+                id: 'emfac_7',
+                name: 'Polyester',
+                value: 4.5,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
 						organizationFacility: {
 							id: 'ofac_vd809v326es9yz3rygkeb14f',
 							name: 'Supplier Delta',
@@ -756,7 +841,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 9',
 						materialCategory: 'Material Category 1',
 						materialSubcategory: 'Material Subcategory 2',
-						emissionsFactor: 20.1,
+            emissionsFactor: 20.1,
+            materialEmissionFactors: [{
+              id: "mef_4",
+              emissionFactor: {
+                id: 'emfac_8',
+                name: 'Polyester',
+                value: 20.1,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
 						organizationFacility: {
 							id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
 							name: 'Kerluke - Armstrong',
@@ -818,7 +912,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Material 11',
 						materialCategory: 'Material Category 2',
 						materialSubcategory: 'Material Subcategory 2',
-						emissionsFactor: 14.5,
+            emissionsFactor: 14.5,
+            materialEmissionFactors: [{
+              id: "mef_5",
+              emissionFactor: {
+                id: 'emfac_9',
+                name: 'Polyester',
+                value: 14.5,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
 						organizationFacility: {
 							id: 'ofac_c833b42yr2kv52p73oy0nuve',
 							name: 'Supplier 15',
@@ -869,7 +972,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 						name: 'Example Nylon 1234',
 						materialCategory: 'Material Category 3',
 						materialSubcategory: 'Material Subcategory 1',
-						emissionsFactor: 3.2,
+            emissionsFactor: 3.2,
+            materialEmissionFactors: [{
+              id: "mef_6",
+              emissionFactor: {
+                id: 'emfac_10',
+                name: 'Polyester',
+                value: 3.2,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
 						organizationFacility: {
 							id: 'ofac_vd809v326es9yz3rygkeb14f',
 							name: 'Supplier Delta',
@@ -1003,7 +1115,7 @@ export const getProductsMockById = (id: string): ProductsQuery | null => {
 export const getProductMockWithOutEmissionFactor = (id: string): ProductsQuery | null => {
   const productsWithOutEmissionFactors = getProductsMock().find(product => product.id === id) || null;
   if(productsWithOutEmissionFactors && productsWithOutEmissionFactors.productMaterials.length > 0) {
-    productsWithOutEmissionFactors.productMaterials[0].material.emissionsFactor = null;
+    productsWithOutEmissionFactors.productMaterials[0].material.materialEmissionFactors = [];
   }
   return productsWithOutEmissionFactors;
 }

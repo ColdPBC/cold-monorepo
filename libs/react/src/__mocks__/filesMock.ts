@@ -1,7 +1,6 @@
 import { Files, FilesWithAssurances, UploadsQuery } from '@coldpbc/interfaces';
 import { addDays, subDays } from 'date-fns';
 import { DocumentTypes, EntityLevel, ProcessingStatus } from '@coldpbc/enums';
-import { get } from 'lodash';
 
 export function getAllFilesMock() {
 	return [
@@ -765,8 +764,6 @@ export function getUploadsMock(): UploadsQuery[] {
   const additionalFiles: UploadsQuery[] = Array.from({ length: 6 - baseFiles.length }, (_, i) => {
     const newId = (baseFiles.length + i + 1).toString();
     const statusIndex = (baseFiles.length + i) % processingStatuses.length;
-
-    console.log(`File ${newId} assigned status:`, processingStatuses[statusIndex]); // Debugging
 
     return {
       id: newId,

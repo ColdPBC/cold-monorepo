@@ -94,6 +94,7 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
       sx={{
         '--DataGrid-overlayHeight': '300px',
         '--DataGrid-containerBackground': 'transparent',
+        '--DataGrid-pinnedBackground': 'transparent',
         '--DataGrid-rowBorderColor': HexColors.gray[30],
         '& .MuiTablePagination-root': {
           color: HexColors.tc.primary,
@@ -118,6 +119,9 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
         },
         '& .MuiDataGrid-row': {
           cursor: 'pointer',
+        },
+        '& .MuiDataGrid-cell--pinnedRight' : {
+          backgroundColor: HexColors.bgc.elevated,
         },
         ...props.sx,
       }}

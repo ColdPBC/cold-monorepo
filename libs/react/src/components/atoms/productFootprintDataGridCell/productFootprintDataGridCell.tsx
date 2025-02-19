@@ -4,10 +4,11 @@
 // import { HexColors } from '@coldpbc/themes';
 import React from 'react';
 import { PaginatedProductsQuery } from '@coldpbc/interfaces';
-import { getCalculatedWeight } from '@coldpbc/lib';
+import {getCalculatedWeight, getAggregateEmissionFactors} from '@coldpbc/lib';
 
 interface ProductFootprintDataGridCellProps {
   product: PaginatedProductsQuery;
+  useNewEmissionFactor: boolean;
   // cache: ProductFootprintCache;
   // id: string;
   // productCategory: string | null;
@@ -49,7 +50,7 @@ interface ProductFootprintDataGridCellProps {
 //   }
 // ];
 
-export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCellProps> = ({ product }) => {
+export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCellProps> = ({ product, useNewEmissionFactor }) => {
   // NOTE: This component used to leverage useProductCarbonFootprint data but that dependency has been temporarily removed due to performance considerations
 
   // const { totalFootprint, categoryAverage, percentageFromAverage } = getProductCarbonFootprint(cache, {
@@ -64,12 +65,25 @@ export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCell
   product.productMaterials.forEach(productMaterial => {
     const weightResult = getCalculatedWeight(productMaterial);
 
-    if (!('weightInKg' in weightResult) || !productMaterial.material.emissionsFactor) {
+    let materialFootprint = 0;
+
+    if (!('weightInKg' in weightResult)) {
       return;
     }
 
-    const materialFootprint = weightResult.weightInKg * productMaterial.material.emissionsFactor;
-    totalFootprint += materialFootprint;
+    if(useNewEmissionFactor) {
+      const emissionFactor = getAggregateEmissionFactors(productMaterial.material.materialEmissionFactors)
+      if (!emissionFactor) {
+        return;
+      }
+      materialFootprint = weightResult.weightInKg * emissionFactor.value;
+    } else {
+      if (!productMaterial.material.emissionsFactor) {
+        return;
+      }
+      materialFootprint = weightResult.weightInKg * productMaterial.material.emissionsFactor;
+    }
+    totalFootprint += materialFootprint
   });
 
   if (totalFootprint === 0) return 'No data available';

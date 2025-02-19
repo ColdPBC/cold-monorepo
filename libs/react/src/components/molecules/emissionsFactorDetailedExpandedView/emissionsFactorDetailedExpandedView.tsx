@@ -3,24 +3,22 @@ import {LightBulbIcon} from "@heroicons/react/20/solid";
 import {ColdIcon} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
 import {IconNames} from "@coldpbc/enums";
+import {EmissionFactor, AggregatedEmissionFactor} from "@coldpbc/interfaces";
+import { capitalize } from "lodash";
 
 
 export const EmissionsFactorDetailedExpandedView = (
   props : {
-    emissionsFactor: {
-      name: string;
-      description: string;
-      emissions_factor: number;
-    } | null
+    aggregateEmissionsFactors: AggregatedEmissionFactor | null
     weight: number | null
   }
 ) => {
-  const { emissionsFactor, weight } = props;
+  const { aggregateEmissionsFactors, weight } = props;
 
-  let element: ReactNode = null;
-  let className = ''
+  let element: ReactNode;
+  let className: string;
 
-  if(!emissionsFactor || !weight) {
+  if(!aggregateEmissionsFactors || !weight) {
     className = ' flex flex-col'
     element = (
       <>
@@ -35,20 +33,27 @@ export const EmissionsFactorDetailedExpandedView = (
     )
   } else {
     className = ' flex flex-row justify-between'
-    const totalEmissions = emissionsFactor.emissions_factor * weight;
+    const totalEmissions = aggregateEmissionsFactors.value * weight;
     element = (
       <>
         <div className={'flex flex-col gap-4 w-full'}>
           <div className={'text-h5'}>
-            {emissionsFactor.name} | {emissionsFactor.emissions_factor}
+            What Goes into the Emissions Factor Value
           </div>
-          <div className={'text-body text-wrap'}>
-            {emissionsFactor.description}
+          <div className={'max-h-[200px] overflow-y-auto scrollbar-hide'}>
+            <ul className="list-disc pl-5">
+              {aggregateEmissionsFactors.emissionFactors.map((ef, index) => (
+                <li key={index}>
+                  <span className="font-bold text-nowrap">{capitalize(ef.name)}:</span> {ef.description}
+                </li>
+              ))}
+            </ul>
+
           </div>
           <div className={'flex flex-row gap-[10px]'}>
             <LightBulbIcon className={'w-[15px] h-[15px] self-center'} color={'white'}/>
             <div className={'text-tc-secondary text-body'}>
-              Tip: Look wrong? To match to a different factor, select a new material classification and re-run the AI.
+              Tip: Look wrong? To match to a different factor, select a new material classification and refresh.
             </div>
           </div>
         </div>
@@ -74,7 +79,7 @@ export const EmissionsFactorDetailedExpandedView = (
               name={IconNames.CloseModalIcon}
             />
             <div>
-              {emissionsFactor.emissions_factor.toFixed(1)}
+              {aggregateEmissionsFactors.value.toFixed(1)}
             </div>
           </div>
           <div className={'h-[1px] w-full bg-gray-80'}></div>
@@ -83,7 +88,7 @@ export const EmissionsFactorDetailedExpandedView = (
               Emissions
             </div>
             <div className={'font-bold'}>
-              {parseFloat(totalEmissions.toFixed(1))} kg CO2e
+              {totalEmissions.toFixed(2)} kg CO2e
             </div>
           </div>
         </div>
@@ -93,8 +98,10 @@ export const EmissionsFactorDetailedExpandedView = (
 
 
   return (
-    <div className={('w-full h-auto p-4 gap-4 text-tc-primary bg-gray-30 rounded-lg' + className)}>
-      {element}
+    <div className={'w-full h-auto p-6'}>
+      <div className={('w-full h-full p-4 gap-4 text-tc-primary bg-gray-30 rounded-lg' + className)}>
+        {element}
+      </div>
     </div>
   )
 }

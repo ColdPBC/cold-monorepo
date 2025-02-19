@@ -1,16 +1,16 @@
 import { ColdIcon } from "@coldpbc/components"
 import {IconNames} from "@coldpbc/enums";
 import {HexColors} from "@coldpbc/themes";
-import {ProductsQuery} from "@coldpbc/interfaces";
+import {ProductMaterial} from "@coldpbc/interfaces";
 import {pluralize} from "@coldpbc/lib";
 
 
 export const MissingMaterialEmissionsCard = (props: {
-  productMaterials: ProductsQuery['productMaterials']
+  productMaterials: ProductMaterial[]
 }) => {
   const { productMaterials } = props;
 
-  const materialsMissingEmissions = productMaterials.filter(productMaterial => !productMaterial.material.emissionsFactor).length;
+  const materialsMissingEmissions = productMaterials.filter(productMaterial => productMaterial.material.materialEmissionFactors.length === 0).length;
 
   if(materialsMissingEmissions === 0) {
     return null;

@@ -1,35 +1,43 @@
 import {
   CalculatedWeight,
   Card,
-  DEFAULT_GRID_COL_DEF,
+  DEFAULT_GRID_COL_DEF, EmissionsFactorDetailedExpandedView,
   MaterialClassificationIcon,
   MissingMaterialEmissionsCard,
-  MuiDataGrid,
-} from '@coldpbc/components';
-import {ProductsQuery} from "@coldpbc/interfaces";
-import {GridColDef} from "@mui/x-data-grid-pro";
+  MuiDataGrid
+} from "@coldpbc/components"
+import {EmissionFactor, AggregatedEmissionFactor, ProductsQuery} from "@coldpbc/interfaces";
+import {
+  DataGridProProps,
+  GRID_DETAIL_PANEL_TOGGLE_COL_DEF,
+  GRID_DETAIL_PANEL_TOGGLE_FIELD,
+  GridColDef
+} from "@mui/x-data-grid-pro";
 import {get} from "lodash";
 import {MaterialClassificationCategory} from "@coldpbc/enums";
-import { getCalculatedWeight } from '@coldpbc/lib';
-import React from 'react';
+import {HexColors} from "@coldpbc/themes";
+import {useCallback, useMemo} from "react";
+import {getCalculatedWeight, getAggregateEmissionFactors} from "@coldpbc/lib";
+import {ChevronDownIcon} from "@heroicons/react/20/solid";
+import {twMerge} from "tailwind-merge";
 
 
 export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) => {
   const { product } = props;
 
   const renderTotalEmissions = (params: any) => {
-    const emissions: number = get(params, 'row.total_emissions', 0);
+    const emissions: number = get(params, 'row.totalEmissions', 0);
     if(emissions === 0) {
       return '';
     } else {
       return (
-        <div className={'text-body flex flex-row gap-1 justify-end'}>
-          <span className={'font-bold text-tc-primary'}>
+        <div className={'text-body flex flex-row gap-1 justify-end h-full'}>
+          <div className={'font-bold text-tc-primary self-center'}>
             {(emissions).toFixed(2)}
-          </span>
-          <span className={'text-tc-secondary'}>
+          </div>
+          <div className={'text-tc-secondary self-center'}>
             kg CO2e
-          </span>
+          </div>
         </div>
       )
     }
@@ -54,6 +62,33 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     );
   }
 
+  const renderEmissionsFactor = (params: any) => {
+    const emissionFactorValue: number | null = get(params, 'row.emissionFactorValue', 0);
+    return (
+      <div className={'h-full w-full flex items-center'}>
+        {emissionFactorValue ? emissionFactorValue : '--'}
+      </div>
+    )
+  }
+
+  const renderToggleDetailPanelContent = (params: any) => {
+    // render the toggle button with ChevronDownIcon
+    const isExpanded = params.value as boolean;
+    // rotate the icon if the detail panel is expanded
+    return (
+      <div className={'w-full h-full flex items-center justify-center'}
+           aria-label={'Expand'}
+      >
+        <ChevronDownIcon
+          className={twMerge(
+            'w-[20px] h-[20px] transition-transform duration-300',
+            isExpanded ? 'transform rotate-180' : ''
+          )}
+        />
+      </div>
+    )
+  }
+
   const columns: GridColDef[] = [
     {
       ...DEFAULT_GRID_COL_DEF,
@@ -70,7 +105,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     },
     {
       ...DEFAULT_GRID_COL_DEF,
-      field: 'yield_with_uom',
+      field: 'yieldWithUom',
       headerName: 'Yield',
       minWidth: 100,
     },
@@ -85,37 +120,63 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     },
     {
       ...DEFAULT_GRID_COL_DEF,
-      field: 'emissions_factor',
+      field: 'emissionsFactorValue',
       headerName: 'Emissions Factor',
       minWidth: 200,
+      renderCell: renderEmissionsFactor,
     },
     {
       ...DEFAULT_GRID_COL_DEF,
-      field: 'total_emissions',
+      field: 'totalEmissions',
       headerName: 'Total Emissions',
       minWidth: 130,
       type: 'number',
       renderCell: renderTotalEmissions,
     },
+    {
+      ...GRID_DETAIL_PANEL_TOGGLE_COL_DEF, // Already contains the right field
+      renderCell: renderToggleDetailPanelContent,
+    },
   ]
 
-  const rows = product.productMaterials.map((prodMaterial) => {
-    const weightResult = getCalculatedWeight(prodMaterial);
-    const calculatedWeight = get(weightResult, 'weightInKg');
+  const rows = useMemo(() => {
+    return product.productMaterials.map((prodMaterial) => {
+      const weightResult = getCalculatedWeight(prodMaterial);
+      const calculatedWeight = get(weightResult, 'weightInKg');
+      const emissionFactor = getAggregateEmissionFactors(prodMaterial.material.materialEmissionFactors);
+      const emissionsFactorValue = emissionFactor?.value || null;
+      const totalEmissions = (emissionFactor && calculatedWeight) ? emissionFactor.value * calculatedWeight : 0
 
-    return {
-      id: prodMaterial.id,
-      materialId: prodMaterial.material?.id,
-      material: prodMaterial.material?.name,
-      classification: prodMaterial.material.materialClassification,
-      yield_with_uom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
-      weight: calculatedWeight,
-      weightResult: weightResult,
-      emissions_factor: prodMaterial.material.emissionsFactor?.toFixed(1) || null,
-      total_emissions: (prodMaterial.material.emissionsFactor && calculatedWeight)
-        ? prodMaterial.material.emissionsFactor * calculatedWeight : 0,
-    }
-  })
+      return {
+        id: prodMaterial.id,
+        materialId: prodMaterial.material?.id,
+        material: prodMaterial.material?.name,
+        classification: prodMaterial.material.materialClassification,
+        yieldWithUom: [prodMaterial.yield !== null ? parseFloat(prodMaterial.yield.toFixed(2)) : null, prodMaterial.unitOfMeasure].join(' '),
+        weight: calculatedWeight,
+        weightResult: weightResult,
+        emissionFactorValue: emissionsFactorValue,
+        totalEmissions: totalEmissions,
+        aggregatedEmissionFactors: emissionFactor,
+      };
+    });
+  }, [product.productMaterials]);
+
+  const getDetailPanelContent = useCallback<NonNullable<DataGridProProps['getDetailPanelContent']>>(({row}) => {
+    const aggregatedEmissionFactor: AggregatedEmissionFactor | null = get(row, 'aggregatedEmissionFactors', null);
+    const weight = get(row, 'weight',null)
+
+    return (
+      <EmissionsFactorDetailedExpandedView
+        aggregateEmissionsFactors={aggregatedEmissionFactor}
+        weight={weight}
+        />
+    )
+  }, [])
+
+  const getDetailPanelHeight = useCallback<NonNullable<DataGridProProps['getDetailPanelHeight']>>(() => {
+    return 'auto';
+  }, [])
 
   return (
     <div className={'w-full flex flex-col gap-[40px]'}>
@@ -130,9 +191,22 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
           columns={columns}
           initialState={{
             sorting: {
-              sortModel: [{ field: 'total_emissions', sort: 'desc' }],
+              sortModel: [{ field: 'totalEmissions', sort: 'desc' }],
             },
+            pinnedColumns: {
+              right: [GRID_DETAIL_PANEL_TOGGLE_FIELD]
+            }
           }}
+          getDetailPanelContent={getDetailPanelContent}
+          getDetailPanelHeight={getDetailPanelHeight}
+          sx={{
+            '& .MuiDataGrid-columnHeader' : {
+              backgroundColor: HexColors.gray["30"]
+            }
+          }}
+          columnHeaderHeight={55}
+          rowHeight={72}
+          disableRowSelectionOnClick={true}
         />
       </Card>
     </div>

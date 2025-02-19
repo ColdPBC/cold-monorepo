@@ -13,7 +13,6 @@ import {get, uniq} from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import {useFlags} from "launchdarkly-react-client-sdk";
-import numeral from 'numeral';
 import { EntityLevel } from '@coldpbc/enums';
 
 export const DEFAULT_GRID_COL_DEF = {

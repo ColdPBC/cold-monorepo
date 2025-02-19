@@ -213,7 +213,10 @@ export const _ProductsDataGrid = () => {
 						flex: 1,
 						minWidth: 220,
 						renderCell: params => (
-             <ProductFootprintDataGridCell product={params.row.product as PaginatedProductsQuery} />
+             <ProductFootprintDataGridCell
+               product={params.row.product as PaginatedProductsQuery}
+               useNewEmissionFactor={ldFlags.showNewPcfUiCold1450}
+             />
             ),
 					},
 			  ]
