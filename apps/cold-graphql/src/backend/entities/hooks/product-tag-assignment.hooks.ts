@@ -4,25 +4,74 @@ import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exo
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
 import { ProductTagAssignment } from '../postgresql';
+import { Cuid2Generator, GuidPrefixes } from '@coldpbc/nest';
+import { set } from 'lodash';
 
 export class ProductTagAssignmentHooks extends BaseSidecar {
 	constructor() {
 		super(ProductTagAssignment, 'product_tag_assignments');
 	}
-	// Overrride BeforeReadHook here:
+	
+	async beforeReadHook(params: ReadHookParams<typeof ProductTagAssignment, OrgContext>) {
+		this.logger.log('before ProductTagAssignment read hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeReadHook(params);
+	}
 
-	// Overrride AfterReadHook here:
+	
+	async afterReadHook(params: ReadHookParams<typeof ProductTagAssignment, OrgContext>) {
+		this.logger.log('ProductTagAssignment read', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterReadHook(params);
+		
+	}
 
-	// Overrride BeforeCreateHook here:
+	
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof ProductTagAssignment, OrgContext>) {
+		this.logger.log(`before create ProductTagAssignment`, { user: params.context.user, arguments: params.args });
+		for (const item of params.args.items) {
+			if(GuidPrefixes["ProductTagAssignment"]) {
+				set(item, 'id', new Cuid2Generator(GuidPrefixes["ProductTagAssignment"]).generate().scopedId);
+			}
+			
+			set(item, 'organization.id', params.context.user.organization.id);
+			
+			set(item, 'updatedAt', new Date());
+			set(item, 'createdAt', new Date());
+		}
+	
+	  return super.beforeCreateHook(params);    
+	}
 
-	// Overrride AfterCreateHook here:
+	
+	async afterCreateHook(params: CreateOrUpdateHookParams<typeof ProductTagAssignment, OrgContext>) {
+		this.logger.log('ProductTagAssignment created', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterCreateHook(params);
+	}
 
-	// Overrride BeforeUpdateHook here:
+	
+	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof ProductTagAssignment, OrgContext>) {
+		this.logger.log('before ProductTagAssignment update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		for (const item of params.args.items) {
+			set(item, 'updatedAt', new Date());
+		}
+		return await super.beforeUpdateHook(params);
+	}
 
-	// Overrride AfterUpdateHook here:
+	
+	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof ProductTagAssignment, OrgContext>) {
+		this.logger.log('ProductTagAssignment updated', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterUpdateHook(params);
+	}
 
-	// Overrride BeforeDeleteHook here:
+	
+	async beforeDeleteHook(params: DeleteHookParams<typeof ProductTagAssignment, OrgContext>) {
+		this.logger.log('before ProductTagAssignment delete hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeDeleteHook(params);
+	}
 
-	// Overrride AfterDeleteHook here:
+	
+	async afterDeleteHook(params: DeleteHookParams<typeof ProductTagAssignment, OrgContext>) {
+		this.logger.log('ProductTagAssignment deleted', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterDeleteHook(params);
+	}
 
 }

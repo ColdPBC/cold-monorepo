@@ -1,3 +1,10 @@
+# [1.567.0](https://github.com/coldPBC/cold-monorepo/compare/v1.566.0...v1.567.0) (2025-02-18)
+
+
+### Features
+
+* update all hooks to mutate createdAt/updatedAt and call baseSidecar ([d375a60](https://github.com/coldPBC/cold-monorepo/commit/d375a6033aff276d0e56febaa882ab652fa7da1f))
+
 # [1.566.0](https://github.com/coldPBC/cold-monorepo/compare/v1.565.0...v1.566.0) (2025-02-18)
 
 

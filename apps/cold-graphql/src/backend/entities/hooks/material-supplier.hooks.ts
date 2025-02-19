@@ -4,25 +4,74 @@ import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exo
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
 import { MaterialSupplier } from '../postgresql';
+import { Cuid2Generator, GuidPrefixes } from '@coldpbc/nest';
+import { set } from 'lodash';
 
 export class MaterialSupplierHooks extends BaseSidecar {
 	constructor() {
 		super(MaterialSupplier, 'material_suppliers');
 	}
-	// Overrride BeforeReadHook here:
+	
+	async beforeReadHook(params: ReadHookParams<typeof MaterialSupplier, OrgContext>) {
+		this.logger.log('before MaterialSupplier read hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeReadHook(params);
+	}
 
-	// Overrride AfterReadHook here:
+	
+	async afterReadHook(params: ReadHookParams<typeof MaterialSupplier, OrgContext>) {
+		this.logger.log('MaterialSupplier read', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterReadHook(params);
+		
+	}
 
-	// Overrride BeforeCreateHook here:
+	
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof MaterialSupplier, OrgContext>) {
+		this.logger.log(`before create MaterialSupplier`, { user: params.context.user, arguments: params.args });
+		for (const item of params.args.items) {
+			if(GuidPrefixes["MaterialSupplier"]) {
+				set(item, 'id', new Cuid2Generator(GuidPrefixes["MaterialSupplier"]).generate().scopedId);
+			}
+			
+			set(item, 'organization.id', params.context.user.organization.id);
+			
+			set(item, 'updatedAt', new Date());
+			set(item, 'createdAt', new Date());
+		}
+	
+	  return super.beforeCreateHook(params);    
+	}
 
-	// Overrride AfterCreateHook here:
+	
+	async afterCreateHook(params: CreateOrUpdateHookParams<typeof MaterialSupplier, OrgContext>) {
+		this.logger.log('MaterialSupplier created', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterCreateHook(params);
+	}
 
-	// Overrride BeforeUpdateHook here:
+	
+	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof MaterialSupplier, OrgContext>) {
+		this.logger.log('before MaterialSupplier update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		for (const item of params.args.items) {
+			set(item, 'updatedAt', new Date());
+		}
+		return await super.beforeUpdateHook(params);
+	}
 
-	// Overrride AfterUpdateHook here:
+	
+	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof MaterialSupplier, OrgContext>) {
+		this.logger.log('MaterialSupplier updated', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterUpdateHook(params);
+	}
 
-	// Overrride BeforeDeleteHook here:
+	
+	async beforeDeleteHook(params: DeleteHookParams<typeof MaterialSupplier, OrgContext>) {
+		this.logger.log('before MaterialSupplier delete hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeDeleteHook(params);
+	}
 
-	// Overrride AfterDeleteHook here:
+	
+	async afterDeleteHook(params: DeleteHookParams<typeof MaterialSupplier, OrgContext>) {
+		this.logger.log('MaterialSupplier deleted', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterDeleteHook(params);
+	}
 
 }
