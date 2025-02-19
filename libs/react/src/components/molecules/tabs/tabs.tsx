@@ -1,6 +1,7 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useSearchParams } from 'react-router-dom';
+import { handleTabChange } from '@coldpbc/lib';
 
 export const Tabs = (props: {
 	tabs: {
@@ -22,17 +23,6 @@ export const Tabs = (props: {
 		return tabs.find(t => t.label === tab)?.content || null;
 	};
 
-	const handleTabChange = (tabLabel: string) => {
-		setSearchParams(
-			prev => {
-				const newParams = new URLSearchParams(prev);
-				newParams.set('tab', encodeURIComponent(tabLabel));
-				return newParams;
-			},
-			{ replace: true },
-		);
-	};
-
 	return (
 		<div className={twMerge('w-full flex flex-col items-center gap-6 text-tc-primary', className)}>
 			<div className={'flex flex-row w-full justify-start relative'} data-testid={props['data-testid'] || 'tabs'}>
@@ -40,7 +30,7 @@ export const Tabs = (props: {
 				{tabs.map(tab => (
 					<div
 						className={`px-[16px] py-[8px] text-h5 cursor-pointer relative ` + (activeTab === tab.label ? 'text-tc-primary' : 'text-tc-disabled')}
-						onClick={() => handleTabChange(tab.label)}
+						onClick={() => handleTabChange(tab.label, setSearchParams)}
 						key={tab.label}
 						data-testid={`tab-${tab.label}`}>
 						{tab.label}

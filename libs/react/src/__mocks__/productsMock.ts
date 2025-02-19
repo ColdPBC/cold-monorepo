@@ -632,7 +632,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 					id: 'opm_rrnqxqbnp2vlmb8278q0x29f',
 					yield: 2,
 					unitOfMeasure: 'pcs',
-					weight: 300,
+					weight: 3,
 					material: {
 						id: '5926bb4c-5cbc-4b14-970f-968249444415',
 						name: 'Material 1',
@@ -819,12 +819,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
-						materialClassification: {
-							id: 'matclass_7',
-							name: 'Polyethylene (PE) plastic',
-							category: MaterialClassificationCategory.PLASTICS,
-							weightFactor: 0.95,
-						},
+						materialClassification: null,
 						weightFactor: null,
 						weightFactorUnitOfMeasure: null,
 						width: null,
