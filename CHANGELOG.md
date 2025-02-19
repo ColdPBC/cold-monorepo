@@ -1,3 +1,10 @@
+## [1.571.1](https://github.com/coldPBC/cold-monorepo/compare/v1.571.0...v1.571.1) (2025-02-19)
+
+
+### Bug Fixes
+
+* correctly merge and update metadata in beforeUpdateHook ([6c959a1](https://github.com/coldPBC/cold-monorepo/commit/6c959a19e401da8440d9b9db848c6548b90d599b))
+
 # [1.571.0](https://github.com/coldPBC/cold-monorepo/compare/v1.570.0...v1.571.0) (2025-02-19)
 
 
