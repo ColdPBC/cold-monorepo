@@ -1,7 +1,7 @@
-import {EmissionFactorDisplay, MaterialEmissionFactor} from "@coldpbc/interfaces";
+import {AggregatedEmissionFactor, MaterialEmissionFactor} from "@coldpbc/interfaces";
 
 
-export const getAggregateEmissionFactors = (materialEmissionFactors: MaterialEmissionFactor[] | undefined): EmissionFactorDisplay | null => {
+export const getAggregateEmissionFactors = (materialEmissionFactors: MaterialEmissionFactor[] | undefined): AggregatedEmissionFactor | null => {
   if (materialEmissionFactors === undefined || materialEmissionFactors.length === 0) {
     return null;
   }

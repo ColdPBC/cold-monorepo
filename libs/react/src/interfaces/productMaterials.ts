@@ -48,7 +48,7 @@ export interface MaterialEmissionFactor {
 }
 
 
-export interface EmissionFactorDisplay {
+export interface AggregatedEmissionFactor {
   value: number;
   emissionFactors: EmissionFactor[];
 }

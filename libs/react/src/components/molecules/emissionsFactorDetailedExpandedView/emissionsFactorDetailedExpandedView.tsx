@@ -3,13 +3,13 @@ import {LightBulbIcon} from "@heroicons/react/20/solid";
 import {ColdIcon} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
 import {IconNames} from "@coldpbc/enums";
-import {EmissionFactor, EmissionFactorDisplay} from "@coldpbc/interfaces";
+import {EmissionFactor, AggregatedEmissionFactor} from "@coldpbc/interfaces";
 import { capitalize } from "lodash";
 
 
 export const EmissionsFactorDetailedExpandedView = (
   props : {
-    aggregateEmissionsFactors: EmissionFactorDisplay | null
+    aggregateEmissionsFactors: AggregatedEmissionFactor | null
     weight: number | null
   }
 ) => {
