@@ -30,19 +30,7 @@ export const SustainabiliBuddyButton = (props: {
       onClick={() => setShowPromptContainer(!showPromptContainer)}
     >
       <div className="rounded-full h-full w-full bg-bgc-accent flex flex-row items-center justify-center">
-        <Transition
-          show={showPromptContainer}
-          enter="transition-opacity duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="transition-opacity duration-300"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div>
-            {show}
-          </div>
-        </Transition>
+          {show}
       </div>
     </div>
   )
