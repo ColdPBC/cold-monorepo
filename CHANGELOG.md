@@ -1,3 +1,31 @@
+# [1.570.0](https://github.com/coldPBC/cold-monorepo/compare/v1.569.0...v1.570.0) (2025-02-19)
+
+
+### Features
+
+* Add EmissionFactor interface and refactor EmissionsFactorBubble ([9c3db50](https://github.com/coldPBC/cold-monorepo/commit/9c3db506977c3f523379a91593645502ab51c9cb))
+* Add support for toggling emission factor calculation logic ([89dc13b](https://github.com/coldPBC/cold-monorepo/commit/89dc13bc0775c30872588767275b87a50d8f224f))
+* Add toggle detail panel with ChevronDownIcon in data grid ([935cd40](https://github.com/coldPBC/cold-monorepo/commit/935cd40932cd68ac39ff0e6479b1d7eff94e8d84))
+* Enhance DataGrid styling for pinned columns ([2ef59a1](https://github.com/coldPBC/cold-monorepo/commit/2ef59a188cae4b88ee5932341ce5f0f5ebb7be32))
+* Fix emissions factor access in productBOMTab component ([f083282](https://github.com/coldPBC/cold-monorepo/commit/f0832821e5ef3a1f1676d792a4edd4c99b195301))
+* Fix typo in property name for emission factor filter ([296da1c](https://github.com/coldPBC/cold-monorepo/commit/296da1c5ba37cf3c9e5c23e17e679572b66c84c6))
+* Refactor emission factor handling to use updated interface ([e0a87e2](https://github.com/coldPBC/cold-monorepo/commit/e0a87e299d0c696953f3dd667448ed220eaf6eb6))
+* Refactor emission factor logic to use aggregated factors. ([afa5c37](https://github.com/coldPBC/cold-monorepo/commit/afa5c3780725dd760beed47c69aeaf1a1ea52bad))
+* Refactor emission factors display with improved formatting ([0af4a42](https://github.com/coldPBC/cold-monorepo/commit/0af4a42ebc21da617f2da697f55d87f44a394aca))
+* Refactor emissions calculation type for clarity. ([100788c](https://github.com/coldPBC/cold-monorepo/commit/100788c42411853913e7c2b0b913e8c2cd95f031))
+* Refactor emissions data structure and remove unused components ([96ac858](https://github.com/coldPBC/cold-monorepo/commit/96ac8584b2918509e4b87bf23447f269aa9e6d66))
+* Refactor emissions factor rendering and data updates. ([18ff41f](https://github.com/coldPBC/cold-monorepo/commit/18ff41f123566e3bb0606c4dabbb29b30b10a5da))
+* Refactor emissionsFactor handling across components. ([9fadcd5](https://github.com/coldPBC/cold-monorepo/commit/9fadcd5bf67edf8f4df8cb06092015311c59b4bc))
+* Refactor product materials rows generation with useMemo ([6d3f421](https://github.com/coldPBC/cold-monorepo/commit/6d3f421a296fa1e48954c17101883fcaee9c4224))
+* Refactor: Rename 'emissionsFactor' to 'emissionFactor' ([b57d396](https://github.com/coldPBC/cold-monorepo/commit/b57d3961f6d93d408e47d1a5faed626ca798b097))
+* Rename 'materialEmissionFactor' to 'materialEmissionFactors'. ([73eea7f](https://github.com/coldPBC/cold-monorepo/commit/73eea7fa1c4f8f9f71597db1a15288e734b91cc0))
+* Round weight values to 2 decimal places in components. ([aa5dbfa](https://github.com/coldPBC/cold-monorepo/commit/aa5dbfab35a37fe1c5dfdf6c26887f3461c8c3ab))
+* Simplify emissions factor assignment in product tab. ([7c844ac](https://github.com/coldPBC/cold-monorepo/commit/7c844acfca3acc24131f92470f0f6a17c040633a))
+* Simplify emissions factor usage in productBOMTab. ([c726206](https://github.com/coldPBC/cold-monorepo/commit/c7262068d854e1bb34ed2f198a3ed81ecf538810))
+* Simplify tip text for emissions factor correction. ([9fa8083](https://github.com/coldPBC/cold-monorepo/commit/9fa808390989d1441e8e94c5e0b659ca6ce9b839))
+* Simplify weight display logic in component ([cbeb6f7](https://github.com/coldPBC/cold-monorepo/commit/cbeb6f79d200b7fdbf042dfec8852ed756141394))
+* Update background color for pinned data grid cells ([5873973](https://github.com/coldPBC/cold-monorepo/commit/5873973030f3dd3706b19d584deb82d73eea1c68))
+
 # [1.569.0](https://github.com/coldPBC/cold-monorepo/compare/v1.568.3...v1.569.0) (2025-02-19)
 
 
