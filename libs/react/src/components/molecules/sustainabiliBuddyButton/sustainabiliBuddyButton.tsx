@@ -1,6 +1,5 @@
 import { ColdIcon } from "@coldpbc/components"
 import { IconNames } from "@coldpbc/enums"
-import { Transition } from "@headlessui/react";
 
 
 export const SustainabiliBuddyButton = (props: {
