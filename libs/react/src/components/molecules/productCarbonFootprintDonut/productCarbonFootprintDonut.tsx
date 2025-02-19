@@ -100,7 +100,7 @@ const _ProductCarbonFootprintDonut: React.FC<ProductDetailsCardProps> = ({ produ
 		chartHasSpacers: false,
 	});
 
-	if (!ldFlags.productCarbonFootprintMvp || totalEmissions === 0) {
+	if (!ldFlags.productCarbonFootprintMvp || ldFlags.showNewPcfUiCold1450 || totalEmissions === 0) {
 		return null;
 	}
 
