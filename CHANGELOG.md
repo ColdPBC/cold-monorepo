@@ -1,3 +1,13 @@
+# [1.572.0](https://github.com/coldPBC/cold-monorepo/compare/v1.571.1...v1.572.0) (2025-02-20)
+
+
+### Features
+
+* Add feature flag for SustainabiliBuddy component ([b01fce1](https://github.com/coldPBC/cold-monorepo/commit/b01fce1ca4c556b51fbc5b931d4962ec2e29b1cb))
+* Add SustainabiliBuddy component to DashboardLayout ([d776ffc](https://github.com/coldPBC/cold-monorepo/commit/d776ffc86fcc1773b360b2cd658525db480fcc98))
+* Fix JSX attribute casing and add Transition for animations ([703ccde](https://github.com/coldPBC/cold-monorepo/commit/703ccde12bd4a0cc0d028cbf06ed45c25e7d8120))
+* Refactor SustainabiliBuddyButton to remove Transition component ([babfc7a](https://github.com/coldPBC/cold-monorepo/commit/babfc7adb92d985bc05d83abcf4a77f98aa7c810))
+
 ## [1.571.1](https://github.com/coldPBC/cold-monorepo/compare/v1.571.0...v1.571.1) (2025-02-19)
 
 
