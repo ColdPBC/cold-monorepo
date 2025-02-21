@@ -1,3 +1,13 @@
+# [1.573.0](https://github.com/coldPBC/cold-monorepo/compare/v1.572.0...v1.573.0) (2025-02-21)
+
+
+### Features
+
+* Add document deletion functionality to UploadsPage ([3b6d28b](https://github.com/coldPBC/cold-monorepo/commit/3b6d28bd863d0ba5e049d089109914f068fbd439))
+* Add file download functionality to uploads page ([3f0ec6c](https://github.com/coldPBC/cold-monorepo/commit/3f0ec6c991ea3eef7083051d93a86d2f81422c89))
+* Fix delete action parameter in uploads page grid ([64916e3](https://github.com/coldPBC/cold-monorepo/commit/64916e3394f0ba03db2e9a2498dfdf9cd8b17ab2))
+* Refactor delete document modal into reusable component ([cb4d76a](https://github.com/coldPBC/cold-monorepo/commit/cb4d76aafa5b59b5649f10f2610199c327893ae4))
+
 # [1.572.0](https://github.com/coldPBC/cold-monorepo/compare/v1.571.1...v1.572.0) (2025-02-20)
 
 
