@@ -228,7 +228,7 @@ export const _UploadsPage = () => {
       field: 'actions',
       type: 'actions',
       getActions: (params: GridRowParams) => [
-        <GridActionsCellItem label={'Delete'} onClick={() => setDocumentToDelete(params.row.id)} showInMenu={true}/>,
+        <GridActionsCellItem label={'Delete'} onClick={() => setDocumentToDelete(params.row)} showInMenu={true}/>,
       ]
     }
   ]
