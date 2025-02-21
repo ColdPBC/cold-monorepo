@@ -46,6 +46,7 @@ export const SustainabiliBuddyInput = (props: {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
               onEnter(currentPrompt);
+              setCurrentPrompt('');
               setRows(1);
             } else if (e.key === 'Enter' && e.shiftKey) {
               setRows(rows + 1);
