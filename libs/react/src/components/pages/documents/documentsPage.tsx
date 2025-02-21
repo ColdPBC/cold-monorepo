@@ -6,18 +6,17 @@ import {
   DocumentUploadButton,
   ErrorFallback,
   MainContent,
-  Modal,
   Spinner,
   DocumentDetailsSidebarFileState,
   DocumentsEditMaterialsModal,
   UploadModal,
-  AiProcessingDocumentsBanner
+  AiProcessingDocumentsBanner, DeleteDocumentModal
 } from '@coldpbc/components';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { FilesWithAssurances, MaterialWithSupplier, ToastMessage } from '@coldpbc/interfaces';
-import { AssuranceDocumentTypes, ButtonTypes, IconNames, MainDocumentCategory, ProcessingStatus} from '@coldpbc/enums';
-import {AxiosError, isAxiosError} from 'axios';
+import { AssuranceDocumentTypes, IconNames, MainDocumentCategory, ProcessingStatus} from '@coldpbc/enums';
+import {isAxiosError} from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
 import {get} from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
@@ -39,7 +38,6 @@ const _DocumentsPage = () => {
 	const [documentToDelete, setDocumentToDelete] = React.useState<FilesWithAssurances | undefined>(undefined);
   const [ editDocumentFileState, setEditDocumentFileState ] = React.useState<DocumentDetailsSidebarFileState | undefined>(undefined);
 	const [ editMaterialsModalIsOpen, setEditMaterialsModalIsOpen ] = React.useState(false);
-	const [deleteButtonLoading, setDeleteButtonLoading] = React.useState(false);
 	const [files, setFiles] = React.useState<FilesWithAssurances[]>([]);
 	const [selectedDocumentURL, setSelectedDocumentURL] = React.useState<string | undefined>(undefined);
 	const { orgId } = useAuth0Wrapper();
@@ -162,36 +160,6 @@ const _DocumentsPage = () => {
     );
   };
 
-	const deleteDocument = async (documentToDelete: FilesWithAssurances) => {
-		setDeleteButtonLoading(true);
-		const response = await axiosFetcher([`/organizations/${orgId}/files/${documentToDelete.id}`, 'DELETE']);
-		await allFiles.mutate();
-		if (isAxiosError(response)) {
-      const axiosError: AxiosError = response;
-      if(axiosError.status === 401) {
-        logBrowser('Unauthorized to delete file', 'error', { axiosError }, axiosError);
-        addToastMessage({
-          message: 'Unauthorized to delete file',
-          type: ToastMessage.FAILURE,
-        });
-      } else {
-        logBrowser('Error deleting file', 'error', { axiosError }, axiosError);
-        addToastMessage({
-          message: 'Error deleting file',
-          type: ToastMessage.FAILURE,
-        });
-      }
-		} else {
-      logBrowser('File deleted', 'info', { response });
-			addToastMessage({
-				message: 'File deleted successfully',
-				type: ToastMessage.SUCCESS,
-			});
-		}
-		setDeleteButtonLoading(false);
-		setDocumentToDelete(undefined);
-	};
-
 	const onDeleteClick = (id: string) => {
 		setSelectedDocument(undefined);
 		const file = files.find(file => file.id === id);
@@ -224,46 +192,6 @@ const _DocumentsPage = () => {
     setEditDocumentFileState(undefined);
 	};
 
-	const getDeleteModal = () => {
-		return (
-			<Modal
-				show={documentToDelete !== undefined}
-				setShowModal={() => {
-					setDocumentToDelete(undefined);
-				}}
-				header={{
-					title: `Are you sure you want to delete ${documentToDelete?.originalName}?`,
-					cardProps: {
-						glow: false,
-					},
-				}}
-				body={
-					<div className={'text-body text-tc-primary'}>
-						Once you delete, this document will be removed from Cold and no longer used in any assessments or reporting. This cannot be undone.
-					</div>
-				}
-				footer={{
-					rejectButton: {
-						label: 'Cancel',
-						onClick: () => setDocumentToDelete(undefined),
-						variant: ButtonTypes.secondary,
-					},
-					resolveButton: {
-						label: 'Yes, Delete',
-						onClick: async () => {
-							if (documentToDelete) {
-								await deleteDocument(documentToDelete);
-							}
-						},
-						disabled: deleteButtonLoading,
-						loading: deleteButtonLoading,
-						variant: ButtonTypes.warning,
-					},
-				}}
-			/>
-		);
-	};
-
 	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, documentToDelete, editDocumentFileState, files, allSustainabilityAttributes });
 
 	return (
@@ -291,7 +219,21 @@ const _DocumentsPage = () => {
         }}
         allMaterials={allMaterials}
 			/>
-			{getDeleteModal()}
+      {
+        documentToDelete && (
+          <DeleteDocumentModal
+            show={!!documentToDelete}
+            setShowModal={(show: boolean) => {
+              if (!show) {
+                setDocumentToDelete(undefined);
+              }
+            }}
+            id={documentToDelete?.id || ''}
+            documentName={documentToDelete?.originalName || ''}
+            refresh={allFiles.mutate}
+          />
+        )
+      }
       {editDocumentFileState && (
         <DocumentsEditMaterialsModal
           allMaterials={allMaterials}
