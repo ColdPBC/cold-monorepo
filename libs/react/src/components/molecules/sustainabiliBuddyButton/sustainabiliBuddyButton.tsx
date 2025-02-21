@@ -25,7 +25,7 @@ export const SustainabiliBuddyButton = (props: {
   )
   return (
     <div
-      className="p-[2px] w-[69px] h-[69px] rounded-full bg-gradient-to-br from-[#F7FF58] via-[#32B5FF] to-[#485CEA] cursor-pointer"
+      className="p-[2px] w-[69px] h-[69px] rounded-full bg-gradient-to-br from-yellow-300 via-blue-400 to-blue-600 cursor-pointer"
       onClick={() => setShowPromptContainer(!showPromptContainer)}
     >
       <div className="rounded-full h-full w-full bg-bgc-accent flex flex-row items-center justify-center">

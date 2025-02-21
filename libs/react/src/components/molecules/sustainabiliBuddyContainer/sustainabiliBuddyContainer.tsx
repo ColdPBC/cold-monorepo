@@ -3,11 +3,22 @@ import {SustainabiliBuddyInput} from "@coldpbc/components";
 
 
 export const SustainabiliBuddyContainer = () => {
-  const [queue, setQueue] = useState<string[]>([]);
+  const [queue, setQueue] = useState<{
+    ai: string[];
+    user: string[];
+  }>({
+    ai: [],
+    user: [],
+  });
 
   const onEnter = (prompt: string) => {
     if (prompt) {
-      setQueue([...queue, prompt]);
+      setQueue(prev => {
+        return {
+          ai: [...prev.ai],
+          user: [...prev.user, prompt],
+        }
+      });
     }
   }
 
