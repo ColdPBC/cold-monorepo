@@ -1,7 +1,6 @@
 import {ColdIcon, Input} from "@coldpbc/components";
 import {IconNames, InputTypes} from "@coldpbc/enums";
-import {MutableRefObject, useEffect, useRef, useState} from "react";
-import TextareaAutosize from 'react-textarea-autosize';
+import {useEffect, useRef, useState} from "react";
 
 const useAutosizeTextArea = (
   textAreaRef: HTMLTextAreaElement | null,
