@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, Cuid2Generator, GuidPrefixes, IRequest, PrismaService, ImperialUnits } from '@coldpbc/nest';
+import { BaseWorker, Cuid2Generator, GuidPrefixes, IRequest, PrismaService, ImperialUnits, WeightFactorUnits } from '@coldpbc/nest';
 import { HttpService } from '@nestjs/axios';
 import { AxiosRequestConfig } from 'axios';
 import { capitalize, merge } from 'lodash';
@@ -22,32 +22,24 @@ export class BackboneService extends BaseWorker {
 	}
 
 	// custom fields
-
-	value_field_name = 'name';
-	year_field_id = '62fa7cfba63b100013a6e7d7';
-	season_field = '5e29ee82e38dd60034e3c369';
-	supplier_field_id = '5e2a079c9556da0033a23232';
-
-	material_supplier_field_id = '5e2a079c9556da0033a23232';
-	material_supplier_country_field_id = '5ea9d60434c24800327e4da9';
-	material_yield_field_id = '5e4ecd88a369020033942cbd';
-	material_description_field_id = '5e3c6cfd490c1100343dbcce';
-	material_notes_field_id = '5e4ecda1a369020033942cbf';
-
-	product_supplier_field_id = '5e31c0dd56f58f003e3cc4e8';
-	product_weight_field_id = '5e31c26f56f58f003e3cc501';
-	product_gender_field_id = '5e31bff356f58f003e3cc4e3';
-	product_landed_cost = '5e31cef056f58f003e3cc58b';
-	product_folded_dimensions_field_id = '6070a2bf2597fa00141fe8bd';
-	product_packaging_dimensions = '5e90a66e5b9d8b00327d59e7';
-	product_sustainability_notes_field_id = '5e31c25c56f58f003e3cc4ff';
-
 	customFields = {
+		value_field_name: 'name',
+		year_field_id: '62fa7cfba63b100013a6e7d7',
+		season_field: '5e29ee82e38dd60034e3c369',
 		material_supplier_field_id: '5e2a079c9556da0033a23232',
+		material_weight_field_id: '67acdb7031b9c1da6490ece5',
 		material_yield_field_id: '5e4ecd88a369020033942cbd',
+		material_description_field_id: '5e3c6cfd490c1100343dbcce',
+		material_notes_field_id: '5e4ecda1a369020033942cbf',
 		product_supplier_field_id: '5e31c0dd56f58f003e3cc4e8',
 		product_weight_field_id: '5e31c26f56f58f003e3cc501',
+		product_gender_field_id: '5e31bff356f58f003e3cc4e3',
+		product_landed_cost: '5e31cef056f58f003e3cc58b',
+		product_folded_dimensions_field_id: '6070a2bf2597fa00141fe8bd',
+		product_packaging_dimensions: '5e90a66e5b9d8b00327d59e7',
+		product_sustainability_notes_field_id: '5e31c25c56f58f003e3cc4ff',
 	};
+
 	async authenticate(req: IRequest) {
 		try {
 			if (!req.body || !req.body['api_key']) {
@@ -82,164 +74,140 @@ export class BackboneService extends BaseWorker {
 	 * @param total
 	 */
 	async syncProducts(req: IRequest, skip: number, limit: number, total: number) {
-		this.logger.info(`Syncing products from Backbone API: ${skip}/${total}`);
+		try {
+			this.logger.info(`Syncing products from Backbone API: ${skip}/${total}`);
 
-		if (!this.config.headers?.authentication) {
-			await this.authenticate(req);
-		}
-
-		this.config.params = {
-			skip,
-			limit,
-		};
-
-		const response = await this.axios.axiosRef.get('/products', this.config);
-
-		if (!response.data || !response.data.results) {
-			return;
-		}
-
-		for (const product of response.data.results) {
-			if (req.body.startYear) {
-				if (!product.year) {
-					this.logger.warn(`Skipping product ${product.name} as it does not have a year`);
-					continue;
-				}
-				if (+product.year.name < +req.body.startYear) {
-					this.logger.info(`Skipping product ${product.name} as it is older than ${req.body.startYear}`);
-					continue;
-				}
+			if (!this.config.headers?.authentication) {
+				await this.authenticate(req);
 			}
 
-			const supplierDetails = await this.getProductSupplier(product._id, req);
-			const categoryData = await this.resolveProductCategories(product._id, req);
-
-			let existingProduct: any = await this.prisma.products.findUnique({
-				where: {
-					orgIdName: {
-						name: product.name,
-						organization_id: req.organization.id,
-					},
-				},
-			});
-
-			const data = {
-				name: product.name,
-				description: existingProduct?.description ? existingProduct.description : product.description,
-				season_code: `${product.season.name} ${product.year.name}`,
-				plm_id: product._id,
-				brand_product_id: product.code,
-				style_code: product.code,
-				organization_id: req.organization.id,
-				...supplierDetails,
-				product_category: categoryData?.product_category || null,
-				product_subcategory: categoryData?.product_subcategory || null,
+			this.config.params = {
+				skip,
+				limit,
 			};
 
-			if (!existingProduct) {
-				try {
-					existingProduct = await this.prisma.products.create({
-						data: {
-							id: new Cuid2Generator(GuidPrefixes.OrganizationProduct).scopedId,
-							...data,
-							metadata: product,
-							weight: product.custom_fields.find(field => field.field_info === this.product_weight_field_id)?.value,
-						},
-					});
-				} catch (e) {
-					this.logger.error(e.message, e);
-				}
-			} else {
-				try {
-					existingProduct = await this.prisma.products.update({
-						where: {
-							orgIdName: {
-								name: product.name,
-								organization_id: req.organization.id,
-							},
-						},
-						data: {
-							weight: existingProduct.weight ? existingProduct.weight : product.custom_fields.find(field => field.field_info === this.product_weight_field_id)?.value || null,
-							metadata: merge(existingProduct.metadata, product),
-						},
-					});
-				} catch (e) {
-					this.logger.error(e.message, e);
-				}
+			const response = await this.axios.axiosRef.get('/products', this.config);
+
+			if (!response.data || !response.data.results) {
+				return;
 			}
 
-			const bomItems = await this.getBomItems(product, req);
+			for (const product of response.data.results) {
+				if (req.body.startYear) {
+					if (!product.year) {
+						this.logger.warn(`Skipping product ${product.name} as it does not have a year`);
+						continue;
+					}
+					if (+product.year.name < +req.body.startYear) {
+						this.logger.info(`Skipping product ${product.name} as it is older than ${req.body.startYear}`);
+						continue;
+					}
+				}
 
-			for (const item of bomItems) {
-				const existingMaterial = await this.prisma.materials.findUnique({
+				const supplierDetails = await this.getProductSupplier(product._id, req);
+				const categoryData = await this.resolveProductCategories(product._id, req);
+
+				let existingProduct: any = await this.prisma.products.findUnique({
 					where: {
 						orgIdName: {
-							name: item.component.name,
+							name: product.name,
 							organization_id: req.organization.id,
 						},
 					},
 				});
 
-				const categoryData = await this.resolveMaterialCategories(item, req);
-
-				const materialData = {
-					name: item.component.name,
-					description: existingMaterial?.description ? existingMaterial.description : item.description,
+				const data = {
+					name: product.name,
+					description: existingProduct?.description ? existingProduct.description : product.description,
+					season_code: `${product.season.name} ${product.year.name}`,
+					plm_id: product._id,
+					brand_product_id: product.code,
+					style_code: product.code,
 					organization_id: req.organization.id,
-					brand_material_id: item.component.code,
-					material_category: categoryData.material_category,
-					material_subcategory: categoryData.material_subcategory,
+
+					...supplierDetails,
+					product_category: categoryData?.product_category || null,
+					product_subcategory: categoryData?.product_subcategory || null,
 				};
 
-				let material: any;
-				try {
-					material = await this.prisma.materials.upsert({
+				if (!existingProduct) {
+					try {
+						existingProduct = await this.prisma.products.create({
+							data: {
+								id: new Cuid2Generator(GuidPrefixes.OrganizationProduct).scopedId,
+								...data,
+								metadata: product,
+								weight: product.custom_fields?.find(field => field.field_info === this.customFields.product_weight_field_id)?.value,
+							},
+						});
+					} catch (e) {
+						this.logger.error(e.message, e);
+					}
+				} else {
+					try {
+						existingProduct = await this.prisma.products.update({
+							where: {
+								orgIdName: {
+									name: product.name,
+									organization_id: req.organization.id,
+								},
+							},
+							data: {
+								weight: existingProduct.weight
+									? existingProduct.weight
+									: product.custom_fields?.find(field => field.field_info === this.customFields.product_weight_field_id)?.value || null,
+								metadata: merge(existingProduct.metadata, product),
+							},
+						});
+					} catch (e) {
+						this.logger.error(e.message, e);
+					}
+				}
+
+				const bomItems = await this.getBomItems(product, req);
+
+				for (const item of bomItems) {
+					const existingMaterial = await this.prisma.materials.findUnique({
 						where: {
 							orgIdName: {
 								name: item.component.name,
 								organization_id: req.organization.id,
 							},
 						},
-						update: materialData,
-						create: {
-							id: new Cuid2Generator(GuidPrefixes.Material).scopedId,
-							...materialData,
-						},
 					});
 
-					this.logger.info(`${item.component.name} synced for ${existingProduct?.name || product?.name}`, {
-						material,
-						organization: req.organization,
-						user: req.user,
-					});
-				} catch (e) {
-					this.logger.error(e.message, e);
-				}
+					const categoryData = await this.resolveMaterialCategories(item, req);
 
-				const materialSupplier = await this.getMaterialSupplier(item.component.custom_fields, req);
+					const weight = item.component.custom_fields?.find(field => field.field_info === this.customFields.material_weight_field_id)?.value;
+					const weight_factor = weight ? this.resolveWeightFactor(weight) : null;
+					const materialData = {
+						name: item.component.name,
+						description: existingMaterial?.description ? existingMaterial.description : item.description,
+						organization_id: req.organization.id,
+						brand_material_id: item.component.code,
+						material_category: categoryData.material_category,
+						material_subcategory: categoryData.material_subcategory,
+						weight_factor: weight_factor?.weight ? weight_factor.weight : existingMaterial?.weight_factor || null,
+						weight_factor_unit_of_measure: weight_factor?.unit ? weight_factor.unit : existingMaterial?.weight_factor_unit_of_measure || null,
+					};
 
-				if (materialSupplier.supplier_id) {
+					let material: any;
 					try {
-						await this.prisma.material_suppliers.upsert({
+						material = await this.prisma.materials.upsert({
 							where: {
-								materialSupplierKey: {
-									material_id: material.id,
-									supplier_id: materialSupplier.supplier_id,
+								orgIdName: {
+									name: item.component.name,
+									organization_id: req.organization.id,
 								},
 							},
+							update: materialData,
 							create: {
-								id: new Cuid2Generator(GuidPrefixes.MaterialSupplier).scopedId,
-								material_id: material.id,
-								supplier_id: materialSupplier.supplier_id,
-								organization_id: req.organization.id,
-							},
-							update: {
-								organization_id: req.organization.id,
+								id: new Cuid2Generator(GuidPrefixes.Material).scopedId,
+								...materialData,
 							},
 						});
 
-						this.logger.info(`Material Supplier synced for ${material.name}`, {
-							product: existingProduct,
+						this.logger.info(`${item.component.name} synced for ${existingProduct?.name || product?.name}`, {
 							material,
 							organization: req.organization,
 							user: req.user,
@@ -247,72 +215,112 @@ export class BackboneService extends BaseWorker {
 					} catch (e) {
 						this.logger.error(e.message, e);
 					}
-				} else {
-					this.logger.warn(`Material Supplier not found for ${item.component.name}`);
-				}
 
-				const existing = await this.prisma.product_materials.findUnique({
-					where: {
-						materialProductKey: {
-							material_id: material.id,
-							product_id: existingProduct.id,
-						},
-					},
-				});
+					const materialSupplier = await this.getMaterialSupplier(item.component.custom_fields, req);
 
-				try {
-					const { uofm, yieldNumber } = this.resolveUofM(item, existing);
+					if (materialSupplier.supplier_id) {
+						try {
+							await this.prisma.material_suppliers.upsert({
+								where: {
+									materialSupplierKey: {
+										material_id: material.id,
+										supplier_id: materialSupplier.supplier_id,
+									},
+								},
+								create: {
+									id: new Cuid2Generator(GuidPrefixes.MaterialSupplier).scopedId,
+									material_id: material.id,
+									supplier_id: materialSupplier.supplier_id,
+									organization_id: req.organization.id,
+								},
+								update: {
+									organization_id: req.organization.id,
+								},
+							});
 
-					const productMaterial = await this.prisma.product_materials.upsert({
+							this.logger.info(`Material Supplier synced for ${material.name}`, {
+								product: existingProduct,
+								material,
+								organization: req.organization,
+								user: req.user,
+							});
+						} catch (e) {
+							this.logger.error(e.message, e);
+						}
+					} else {
+						this.logger.warn(`Material Supplier not found for ${item.component.name}`);
+					}
+
+					if (!material.id || !existingProduct?.id) {
+						this.logger.warn(`Material or Product not found for ${item.component.name} or ${existingProduct?.name}`, { material, product: existingProduct });
+						continue;
+					}
+
+					const existing = await this.prisma.product_materials.findUnique({
 						where: {
 							materialProductKey: {
 								material_id: material.id,
 								product_id: existingProduct.id,
 							},
 						},
-						create: {
-							id: new Cuid2Generator(GuidPrefixes.OrganizationProductMaterial).scopedId,
-							product_id: existingProduct.id,
-							material_id: material.id,
-							material_supplier_id: materialSupplier.supplier_id,
-							organization_id: req.organization.id,
-							placement: item.placement,
-							plm_id: item._id,
-							metadata: item,
-							unit_of_measure: uofm,
-							yield: yieldNumber,
-						},
-						update: {
-							material_supplier_id: materialSupplier.supplier_id,
-							organization_id: req.organization.id,
-							placement: item.placement,
-							plm_id: item._id,
-							weight: existing?.weight,
-							yield: yieldNumber,
-							unit_of_measure: uofm,
-							metadata: item,
-						},
 					});
 
-					this.logger.info(`Product Material synced for ${existingProduct.name}`, {
-						product: existingProduct,
-						product_material: productMaterial,
-						organization: req.organization,
-						user: req.user,
-					});
-				} catch (e) {
-					this.logger.error(e.message, e);
+					try {
+						const { uofm, yieldNumber } = this.resolveUofM(item, existing);
+
+						const productMaterial = await this.prisma.product_materials.upsert({
+							where: {
+								materialProductKey: {
+									material_id: material.id,
+									product_id: existingProduct.id,
+								},
+							},
+							create: {
+								id: new Cuid2Generator(GuidPrefixes.OrganizationProductMaterial).scopedId,
+								product_id: existingProduct.id,
+								material_id: material.id,
+								material_supplier_id: materialSupplier.supplier_id,
+								organization_id: req.organization.id,
+								placement: item.placement,
+								plm_id: item._id,
+								metadata: item,
+								unit_of_measure: uofm,
+								yield: yieldNumber,
+							},
+							update: {
+								material_supplier_id: materialSupplier.supplier_id,
+								organization_id: req.organization.id,
+								placement: item.placement,
+								plm_id: item._id,
+								yield: yieldNumber,
+								unit_of_measure: uofm,
+								metadata: item,
+							},
+						});
+
+						this.logger.info(`Product Material synced for ${existingProduct.name}`, {
+							product: existingProduct,
+							product_material: productMaterial,
+							organization: req.organization,
+							user: req.user,
+						});
+					} catch (e) {
+						this.logger.error(e.message, e);
+					}
 				}
+
+				this.logger.info(`Product synced: ${product.name}`);
 			}
 
-			this.logger.info(`Product synced: ${product.name}`);
-		}
+			if (skip < total) {
+				await this.syncProducts(req, skip + limit, limit, total);
+			}
 
-		if (skip < total) {
-			await this.syncProducts(req, skip + limit, limit, total);
+			return;
+		} catch (e) {
+			this.logger.error(e.message, e);
+			throw e;
 		}
-
-		return;
 	}
 
 	async getProductSupplier(id: string, req: IRequest) {
@@ -332,7 +340,7 @@ export class BackboneService extends BaseWorker {
 		let tier1_supplier: any;
 
 		try {
-			const supplier_name = product.custom_fields.find(field => field.field_info === this.product_supplier_field_id)?.value;
+			const supplier_name = product.custom_fields?.find(field => field.field_info === this.customFields.product_supplier_field_id)?.value;
 			if (supplier_name) {
 				tier1_supplier = await this.resolveSupplierToFacility(supplier_name, req);
 			}
@@ -345,6 +353,29 @@ export class BackboneService extends BaseWorker {
 		};
 
 		return data;
+	}
+
+	resolveWeightFactor(weight: string) {
+		try {
+			const regex = /(\d+)\s*(\w+)/;
+			const match = weight.match(regex);
+
+			if (match) {
+				switch (match[2]) {
+					case 'gsm':
+						return { weight: +match[1] / 1000, unit: WeightFactorUnits.KG_PER_M2 };
+					case 'oz':
+						return { weight: +match[1] * 0.0283495, unit: WeightFactorUnits.KG_PER_PCS };
+					default:
+						throw new Error(`Unknown weight unit: ${weight}`);
+				}
+			}
+
+			return { weight: null, unit: null };
+		} catch (e) {
+			this.logger.error(e.message, { weight });
+			return { weight: null, unit: null };
+		}
 	}
 
 	/**
@@ -363,7 +394,7 @@ export class BackboneService extends BaseWorker {
 		let tier2_supplier: any;
 
 		try {
-			const supplier_name = custom_fields.find(field => field.field_info === this.material_supplier_field_id)?.value;
+			const supplier_name = custom_fields.find(field => field.field_info === this.customFields.material_supplier_field_id)?.value;
 			if (supplier_name) {
 				tier2_supplier = await this.resolveSupplierToFacility(supplier_name, req);
 			}
@@ -412,7 +443,7 @@ export class BackboneService extends BaseWorker {
 		const categories: string[] = [];
 
 		while (currentCategoryId) {
-			const category = this.productCategories.find(cat => cat._id === currentCategoryId);
+			const category = this.productCategories?.find(cat => cat._id === currentCategoryId);
 
 			if (!category) break;
 
@@ -529,7 +560,7 @@ export class BackboneService extends BaseWorker {
 	resolveUofM(item, existing: any): { uofm: string | null; yieldNumber: number | null } {
 		try {
 			let uofm: string | null;
-			const yieldString = item.component.custom_fields.find(field => field.field_info === this.material_yield_field_id)?.value;
+			const yieldString = item.component.custom_fields.find(field => field.field_info === this.customFields.material_yield_field_id)?.value;
 			const yieldParts = yieldString?.match(/(\d+)\s*(\w+)/);
 
 			const yieldNumber = existing?.yield ? existing.yield : yieldParts?.length > 1 ? +yieldParts[1] : null;
