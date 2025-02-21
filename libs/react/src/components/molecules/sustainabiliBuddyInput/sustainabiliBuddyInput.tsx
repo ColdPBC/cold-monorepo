@@ -20,12 +20,11 @@ const useAutosizeTextArea = (
 };
 
 export const SustainabiliBuddyInput = (props: {
-  currentPrompt: string,
-  setCurrentPrompt: (value: string) => void,
-  onEnter: () => void,
+  onEnter: (prompt: string) => void,
 }) => {
   const [rows, setRows] = useState(1);
-  const {currentPrompt, setCurrentPrompt, onEnter} = props;
+  const [currentPrompt, setCurrentPrompt] = useState<string>('');
+  const { onEnter} = props;
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useAutosizeTextArea(textAreaRef.current, currentPrompt);
@@ -46,7 +45,7 @@ export const SustainabiliBuddyInput = (props: {
             // when its shift + enter, we want to add a new line
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
-              onEnter();
+              onEnter(currentPrompt);
               setRows(1);
             } else if (e.key === 'Enter' && e.shiftKey) {
               setRows(rows + 1);
@@ -60,7 +59,10 @@ export const SustainabiliBuddyInput = (props: {
       />
       <div
         className={'flex flex-row justify-center items-center rounded-full relative cursor-pointer bg-primary w-[24px] h-[24px] shrink-0 self-center'}
-        onClick={onEnter}
+        onClick={() => {
+          onEnter(currentPrompt);
+          setRows(1);
+        }}
       >
         <ColdIcon
           name={IconNames.ColdRightArrowIcon}
