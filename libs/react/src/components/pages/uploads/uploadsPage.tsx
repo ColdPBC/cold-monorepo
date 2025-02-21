@@ -6,7 +6,7 @@ import {
   MuiDataGrid,
   UploadModal
 } from '@coldpbc/components';
-import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
+import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLSWR, useOrgSWR} from '@coldpbc/hooks';
 import {FilesWithAssurances, ToastMessage, UploadsQuery} from '@coldpbc/interfaces';
 import { get } from 'lodash';
 import {GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridActionsCellItem } from '@mui/x-data-grid-pro';
@@ -60,12 +60,59 @@ const ProcessingStatusConfig: Record<UIProcessingStatus, {
   },
 };
 
+const DownloadAction = ({ id, fileName, orgId, addToastMessage, log }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleDownload = async () => {
+    setLoading(true);
+    try {
+      // Replace with your API endpoint
+      const response = await axiosFetcher([`/organizations/${orgId}/files/${id}/url`, 'GET'])
+      if(isAxiosError(response)) {
+        const axiosError: AxiosError = response;
+        log(
+          'Error downloading the file',
+          'error',
+          {
+            error: axiosError
+          },
+          axiosError
+        );
+        return;
+      }
+      window.location.href = response;
+      addToastMessage({
+        message: 'Downloaded file',
+        type: ToastMessage.SUCCESS,
+      });
+      log(
+        'Downloaded the file',
+        'info',
+        {
+          response
+        },
+      );
+    } catch (error) {
+      console.error('Error downloading the file:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return <GridActionsCellItem
+            label="Download"
+            onClick={handleDownload}
+            showInMenu={true}
+          />
+};
+
 export const _UploadsPage = () => {
   const {logBrowser} = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const [documentToDelete, setDocumentToDelete] = useState<UploadsQuery | undefined>(undefined);
   const [deletingDocument, setDeletingDocument] = useState<boolean>(false);
   const {addToastMessage} = useAddToastMessage()
+  // const selectedFileURLSWR = useOrgSWR<string>(selectedDocument ? [`/files/${selectedDocument}/url`, 'GET'] : null, axiosFetcher);
 
   const uploadsQuery = useGraphQLSWR<{
       organizationFiles: UploadsQuery[];
@@ -120,6 +167,7 @@ export const _UploadsPage = () => {
   };
 
   const error = get(uploadsQuery, 'data.error', null);
+
   if(error){
     logBrowser(
       'Getting Uploads Error',
@@ -229,6 +277,35 @@ export const _UploadsPage = () => {
       type: 'actions',
       getActions: (params: GridRowParams) => [
         <GridActionsCellItem label={'Delete'} onClick={() => setDocumentToDelete(params.row)} showInMenu={true}/>,
+        <GridActionsCellItem
+          label="Download"
+          onClick={async () => {
+            try {
+              const response = await axiosFetcher([`/organizations/${orgId}/files/${params.row.id}/url`, 'GET']);
+              if (!isAxiosError(response)) {
+                window.location.href = response;
+                addToastMessage({
+                  message: 'File downloaded successfully',
+                  type: ToastMessage.SUCCESS,
+                });
+                logBrowser('File downloaded', 'info', { response });
+              } else {
+                logBrowser('Error downloading the file', 'error', { response }, response);
+                addToastMessage({
+                  message: 'Error downloading the file',
+                  type: ToastMessage.FAILURE,
+                });
+              }
+            } catch (error) {
+              logBrowser('Error downloading the file', 'error', { error }, error);
+              addToastMessage({
+                message: 'Error downloading the file',
+                type: ToastMessage.FAILURE,
+              });
+            }
+          }}
+          showInMenu
+        />
       ]
     }
   ]
