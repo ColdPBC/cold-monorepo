@@ -21,6 +21,7 @@ export interface NumericProps extends NumericInputProps {
 export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string;
   showError?: boolean;
+  ref?: MutableRefObject<HTMLTextAreaElement | null>;
 }
 
 export interface BaseInputProps extends InputHTMLAttributes<HTMLInputElement> {
