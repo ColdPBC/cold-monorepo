@@ -1,19 +1,18 @@
 import {
   ColdIcon,
-  DEFAULT_GRID_COL_DEF,
+  DEFAULT_GRID_COL_DEF, DeleteDocumentModal,
   ErrorFallback,
-  MainContent, Modal,
+  MainContent,
   MuiDataGrid,
   UploadModal
 } from '@coldpbc/components';
-import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLSWR, useOrgSWR} from '@coldpbc/hooks';
+import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
 import {ToastMessage, UploadsQuery} from '@coldpbc/interfaces';
 import { get } from 'lodash';
 import {GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridActionsCellItem } from '@mui/x-data-grid-pro';
 import { format } from 'date-fns';
 import React, {ReactNode, useState} from 'react';
 import {
-  ButtonTypes,
   DocumentTypes,
   IconNames, MainDocumentCategory,
   ProcessingStatus,
@@ -24,7 +23,7 @@ import { HexColors } from '@coldpbc/themes';
 import { formatScreamingSnakeCase } from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import {axiosFetcher} from "@coldpbc/fetchers";
-import {AxiosError, isAxiosError} from "axios";
+import { isAxiosError} from "axios";
 
 const ProcessingStatusConfig: Record<UIProcessingStatus, {
   icon: IconNames;
@@ -62,10 +61,9 @@ const ProcessingStatusConfig: Record<UIProcessingStatus, {
 
 export const _UploadsPage = () => {
   const {logBrowser} = useColdContext();
+  const {addToastMessage} = useAddToastMessage()
   const { orgId } = useAuth0Wrapper();
   const [documentToDelete, setDocumentToDelete] = useState<UploadsQuery | undefined>(undefined);
-  const [deletingDocument, setDeletingDocument] = useState<boolean>(false);
-  const {addToastMessage} = useAddToastMessage()
 
   const uploadsQuery = useGraphQLSWR<{
       organizationFiles: UploadsQuery[];
@@ -148,37 +146,6 @@ export const _UploadsPage = () => {
       uploadsQuery: uploadsQuery
     }
   )
-
-  const deleteDocument = async (documentToDelete: UploadsQuery | undefined) => {
-    if(!documentToDelete) return;
-    setDeletingDocument(true);
-    const response = await axiosFetcher([`/organizations/${orgId}/files/${documentToDelete.id}`, 'DELETE']);
-    if (isAxiosError(response)) {
-      const axiosError: AxiosError = response;
-      if(axiosError.status === 401) {
-        logBrowser('Unauthorized to delete file', 'error', { axiosError }, axiosError);
-        await addToastMessage({
-          message: 'Unauthorized to delete file',
-          type: ToastMessage.FAILURE,
-        });
-      } else {
-        logBrowser('Error deleting file', 'error', { axiosError }, axiosError);
-        await addToastMessage({
-          message: 'Error deleting file',
-          type: ToastMessage.FAILURE,
-        });
-      }
-    } else {
-      logBrowser('File deleted', 'info', { response });
-      await addToastMessage({
-        message: 'File deleted successfully',
-        type: ToastMessage.SUCCESS,
-      });
-    }
-    await uploadsQuery.mutate();
-    setDeletingDocument(false);
-    setDocumentToDelete(undefined);
-  };
 
   const columns: GridColDef[] = [
     {
@@ -293,41 +260,21 @@ export const _UploadsPage = () => {
           }
         }}
       />
-      <Modal
-        show={documentToDelete !== undefined}
-        setShowModal={() => {
-          setDocumentToDelete(undefined);
-        }}
-        header={{
-          title: `Are you sure you want to delete ${documentToDelete?.originalName}?`,
-          cardProps: {
-            glow: false,
-          },
-        }}
-        body={
-          <div className={'text-body text-tc-primary'}>
-            Once you delete, this document will be removed from Cold and no longer used in any assessments or reporting. This cannot be undone.
-          </div>
-        }
-        footer={{
-          rejectButton: {
-            label: 'Cancel',
-            onClick: () => setDocumentToDelete(undefined),
-            variant: ButtonTypes.secondary,
-          },
-          resolveButton: {
-            label: 'Yes, Delete',
-            onClick: async () => {
-              if (documentToDelete) {
-                await deleteDocument(documentToDelete);
+      {
+        documentToDelete && (
+          <DeleteDocumentModal
+            show={!!documentToDelete}
+            setShowModal={(show: boolean) => {
+              if (!show) {
+                setDocumentToDelete(undefined);
               }
-            },
-            disabled: deletingDocument,
-            loading: deletingDocument,
-            variant: ButtonTypes.warning,
-          },
-        }}
-      />
+            }}
+            id={documentToDelete?.id || ''}
+            documentName={documentToDelete?.originalName || ''}
+            refresh={uploadsQuery.mutate}
+          />
+        )
+      }
     </MainContent>
   )
 };
