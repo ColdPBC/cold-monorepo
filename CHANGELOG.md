@@ -1,3 +1,18 @@
+# [1.574.0](https://github.com/coldPBC/cold-monorepo/compare/v1.573.0...v1.574.0) (2025-02-22)
+
+
+### Features
+
+* Add SustainabiliBuddyContainer component and integrate it ([b0eada6](https://github.com/coldPBC/cold-monorepo/commit/b0eada65e0b9e6dad5215eb69f6c1852c0339ffd))
+* Add SustainabiliBuddyInput component and input enhancements ([83c6120](https://github.com/coldPBC/cold-monorepo/commit/83c61208860d6da549b61fc3f6fea642df10b1cb))
+* Adjust layout for responsive design in SustainabiliBuddyContainer ([d1c0005](https://github.com/coldPBC/cold-monorepo/commit/d1c00055e6cda096979d30a9f6b2f7d942d29620))
+* Refactor prompt handling in SustainabiliBuddy components ([ca934a4](https://github.com/coldPBC/cold-monorepo/commit/ca934a4ddb32d9726410df3498ed582bc7e7740b))
+* Refactor queue state structure and adjust button styling ([7d24c7b](https://github.com/coldPBC/cold-monorepo/commit/7d24c7bf842c6102a97266d45cffb72559c9d47f))
+* Reset input field after handling Enter key press ([6a4ec4d](https://github.com/coldPBC/cold-monorepo/commit/6a4ec4d2b9d36c29420a7226cfe6f8c378eb08eb))
+* Update gradient colors for SustainabiliBuddy components ([015f69b](https://github.com/coldPBC/cold-monorepo/commit/015f69b4151c033c4f00cb27821aae674bc88be6))
+* Update gradient colors in SustainabiliBuddy components ([4c5e19e](https://github.com/coldPBC/cold-monorepo/commit/4c5e19e3db2b1a66d171760a7578268b6e0e57bc)), closes [#F7FF58](https://github.com/coldPBC/cold-monorepo/issues/F7FF58)
+* Update gradient colors in SustainabiliBuddyContainer ([6693a42](https://github.com/coldPBC/cold-monorepo/commit/6693a42862a29a0a4e8e9502a86516104d1f8aec))
+
 # [1.573.0](https://github.com/coldPBC/cold-monorepo/compare/v1.572.0...v1.573.0) (2025-02-21)
 
 
