@@ -134,7 +134,7 @@ export class MqttService {
 
 			// Handle MQTT events
 			this.mqttClient.on('connect', () => {
-				this.logger.log(`Connected to AWS IoT Core`);
+				this.logger.log(`Connected to AWS IoT Core as ${this.clientId}`);
 			});
 
 			this.mqttClient.on('error', error => {
