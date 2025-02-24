@@ -1,3 +1,10 @@
+## [1.574.4](https://github.com/coldPBC/cold-monorepo/compare/v1.574.3...v1.574.4) (2025-02-24)
+
+
+### Bug Fixes
+
+* remove unnecessary condition in file processing status update ([39a41e8](https://github.com/coldPBC/cold-monorepo/commit/39a41e8e3f583b8daf26900de6401cd1a116bddb))
+
 ## [1.574.3](https://github.com/coldPBC/cold-monorepo/compare/v1.574.2...v1.574.3) (2025-02-24)
 
 
