@@ -55,11 +55,15 @@ module.exports = {
 							fontSize: fontSizes().body[0],
 							lineHeight: fontSizes().body[1].lineHeight,
 							fontWeight: fontSizes().body[1].fontWeight,
-						},
+              marginTop: '0',
+              marginBottom: '0',
+            },
             div: {
               fontSize: fontSizes().body[0],
               lineHeight: fontSizes().body[1].lineHeight,
               fontWeight: fontSizes().body[1].fontWeight,
+              marginTop: '0',
+              marginBottom: '0',
             },
             span: {
               fontSize: fontSizes().body[0],
@@ -79,8 +83,29 @@ module.exports = {
 							fontSize: fontSizes().body[0],
 							lineHeight: fontSizes().body[1].lineHeight,
 							fontWeight: fontSizes().body[1].fontWeight,
-						},
-						maxWidth: '100%',
+              marginTop: '0 !important',
+              marginBottom: '0 !important',
+            },
+            // Remove top margin from the first <p> in <li> elements
+            'ol > li > p:first-child': {
+              marginTop: '0',
+            },
+            // Optionally, adjust the bottom margin
+            'ol > li > p:last-child': {
+              marginBottom: '0',
+            },
+            // Repeat for unordered lists if needed
+            'ul > li > p:first-child': {
+              marginTop: '0',
+            },
+            'ul > li > p:last-child': {
+              marginBottom: '0',
+            },
+            'ol, ul': {
+              marginTop: '0 !important',
+              marginBottom: '0 !important',
+            },
+            maxWidth: '100%',
 						'--tw-prose-body': themeColors().tc.primary,
 						'--tw-prose-headings': themeColors().tc.primary,
 						'--tw-prose-lead': themeColors().tc.primary,
