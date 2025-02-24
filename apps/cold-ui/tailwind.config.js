@@ -56,6 +56,16 @@ module.exports = {
 							lineHeight: fontSizes().body[1].lineHeight,
 							fontWeight: fontSizes().body[1].fontWeight,
 						},
+            div: {
+              fontSize: fontSizes().body[0],
+              lineHeight: fontSizes().body[1].lineHeight,
+              fontWeight: fontSizes().body[1].fontWeight,
+            },
+            span: {
+              fontSize: fontSizes().body[0],
+              lineHeight: fontSizes().body[1].lineHeight,
+              fontWeight: fontSizes().body[1].fontWeight,
+            },
 						strong: {
 							fontSize: fontSizes().body[0],
 							lineHeight: fontSizes().body[1].lineHeight,
