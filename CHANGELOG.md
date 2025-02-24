@@ -1,3 +1,15 @@
+## [1.574.1](https://github.com/coldPBC/cold-monorepo/compare/v1.574.0...v1.574.1) (2025-02-24)
+
+
+### Bug Fixes
+
+* enhance mqtt client handling and logging defaults ([95aaab4](https://github.com/coldPBC/cold-monorepo/commit/95aaab4f1320cdd1b41f3cd62cf611e3fa992398))
+
+
+### Reverts
+
+* mistakenly added WeightUnit to product_materials ([d9d7bb9](https://github.com/coldPBC/cold-monorepo/commit/d9d7bb96a821fc794332e4460f78013eaaa309d7))
+
 # [1.574.0](https://github.com/coldPBC/cold-monorepo/compare/v1.573.0...v1.574.0) (2025-02-22)
 
 
