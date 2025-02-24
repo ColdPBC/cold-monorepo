@@ -62,17 +62,15 @@ export class ExtractionProcessorService extends BaseWorker {
 				}
 			}
 
-			if (filePayload.processing_status !== processing_status.AI_PROCESSING) {
-				await this.prisma.organization_files.update({
-					where: {
-						organization_id: organization.id,
-						id: filePayload.id,
-					},
-					data: {
-						processing_status: processing_status.IMPORT_COMPLETE,
-					},
-				});
-			}
+			await this.prisma.organization_files.update({
+				where: {
+					organization_id: organization.id,
+					id: filePayload.id,
+				},
+				data: {
+					processing_status: processing_status.IMPORT_COMPLETE,
+				},
+			});
 
 			this.mqtt.publishToUI({
 				action: 'update',
