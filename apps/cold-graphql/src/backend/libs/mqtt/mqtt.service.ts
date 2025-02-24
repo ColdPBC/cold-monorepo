@@ -221,7 +221,13 @@ export class MqttService {
 				while (!this.mqttClient.connected) {
 					await new Promise(resolve => setTimeout(resolve, 5000 + this.attempts * 1000));
 					this.attempts++;
+					if (this.attempts > 10) {
+						this.logger.error('Max failed attempts to connect to AWS IoT Core');
+						break;
+					}
 				}
+
+				this.attempts = 0;
 			}
 			const inputs = this.validate(payload);
 
