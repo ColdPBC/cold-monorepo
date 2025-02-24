@@ -115,7 +115,7 @@ export const UploadingScreen = (props: UploadModalUploadingScreenProps) => {
   return (
     <>
       <div className="flex flex-col gap-[24px] w-full">
-        <div className="flex flex-row text-h3">Uploading Documents?</div>
+        <div className="flex flex-row text-h3">Upload Progress</div>
       </div>
       <div className={'w-full h-auto flex flex-col self-stretch items-stretch gap-[8px]'}>
         <div className={'h-auto w-full flex flex-col gap-[8px]'}>

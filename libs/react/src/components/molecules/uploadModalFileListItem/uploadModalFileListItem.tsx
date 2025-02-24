@@ -36,7 +36,7 @@ const _UploadModalFileListItem = ({ file, apiResponse, uploading }: UploadModalF
       return {
         icon: {
           name: response.success ? IconNames.ColdSmallCheckBoxIcon : IconNames.ColdDangerIcon,
-          color: response.success ? HexColors.primary.DEFAULT : 'red',
+          color: response.success ? HexColors.primary.DEFAULT : HexColors.red["100"],
         },
         message: response.message
       }
