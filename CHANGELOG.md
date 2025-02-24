@@ -1,3 +1,10 @@
+## [1.574.3](https://github.com/coldPBC/cold-monorepo/compare/v1.574.2...v1.574.3) (2025-02-24)
+
+
+### Bug Fixes
+
+* improve MQTT connection log message to include client ID ([31deadc](https://github.com/coldPBC/cold-monorepo/commit/31deadc02c4992c4fe72f881ed36f34643b89eb1))
+
 ## [1.574.2](https://github.com/coldPBC/cold-monorepo/compare/v1.574.1...v1.574.2) (2025-02-24)
 
 
