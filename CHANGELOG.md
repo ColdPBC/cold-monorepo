@@ -1,3 +1,10 @@
+## [1.574.2](https://github.com/coldPBC/cold-monorepo/compare/v1.574.1...v1.574.2) (2025-02-24)
+
+
+### Bug Fixes
+
+* handle excessive MQTT connection attempts with error logging ([56af389](https://github.com/coldPBC/cold-monorepo/commit/56af3891063b9669f05a31c15e7ca7c2e9224410))
+
 ## [1.574.1](https://github.com/coldPBC/cold-monorepo/compare/v1.574.0...v1.574.1) (2025-02-24)
 
 
