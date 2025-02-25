@@ -1,3 +1,13 @@
+# [1.576.0](https://github.com/coldPBC/cold-monorepo/compare/v1.575.0...v1.576.0) (2025-02-25)
+
+
+### Features
+
+* Add upload modal with file selection and upload functionality ([038b99f](https://github.com/coldPBC/cold-monorepo/commit/038b99f40cf79508aad2ad5ad3a695f17de9795f))
+* Refactor uploadingScreen to simplify file handling logic. ([ac42b93](https://github.com/coldPBC/cold-monorepo/commit/ac42b935f766fb0a849bc088d521fdac0e118563))
+* Remove toast messages from document upload component ([60ad934](https://github.com/coldPBC/cold-monorepo/commit/60ad9346f6b5ea3a97f477ab249f2a8cce16c1c9))
+* Update text label and fix error color reference ([8df5dfb](https://github.com/coldPBC/cold-monorepo/commit/8df5dfbc871a12a2247e9c8bba052211bd327218))
+
 # [1.575.0](https://github.com/coldPBC/cold-monorepo/compare/v1.574.4...v1.575.0) (2025-02-25)
 
 
