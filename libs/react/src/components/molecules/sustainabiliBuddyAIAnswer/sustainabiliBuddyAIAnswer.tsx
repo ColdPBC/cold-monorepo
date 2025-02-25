@@ -1,4 +1,4 @@
-import {Spinner, SustainabiliBuddyAIAnswerContainer} from "@coldpbc/components";
+import {SustainabiliBuddyAIAnswerContainer} from "@coldpbc/components";
 import React, {useEffect} from "react";
 import {AIPromptResponse} from "@coldpbc/interfaces";
 import {LightBulbIcon} from "@heroicons/react/20/solid";
@@ -67,7 +67,14 @@ export const SustainabiliBuddyAIAnswer = (
     <SustainabiliBuddyAIAnswerContainer>
       {
         (!aiState.response) ? (
-          <Spinner />
+          <div className="flex space-x-2 p-4 bg-transparent">
+            <div
+              className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-300 via-blue-400 to-indigo-500 bg-[length:200%] animate-gradient-x"></div>
+            <div
+              className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-300 via-blue-400 to-indigo-500 bg-[length:200%] animate-gradient-x delay-1000"></div>
+            <div
+              className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-300 via-blue-400 to-indigo-500 bg-[length:200%] animate-gradient-x delay-1500"></div>
+          </div>
         ) : (
           <div className={'w-full flex flex-col gap-4'}>
             <div>
