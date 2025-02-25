@@ -1,3 +1,11 @@
+# [1.575.0](https://github.com/coldPBC/cold-monorepo/compare/v1.574.4...v1.575.0) (2025-02-25)
+
+
+### Features
+
+* Add SustainabiliBuddy conversational UI components ([d8960a7](https://github.com/coldPBC/cold-monorepo/commit/d8960a7bde553aeb1a4559c03a35a00f12898cfe))
+* Set default margins for text elements in Tailwind config ([b17e14b](https://github.com/coldPBC/cold-monorepo/commit/b17e14b678233a064090999f8611921e3df08748))
+
 ## [1.574.4](https://github.com/coldPBC/cold-monorepo/compare/v1.574.3...v1.574.4) (2025-02-24)
 
 
