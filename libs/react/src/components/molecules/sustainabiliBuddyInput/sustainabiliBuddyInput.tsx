@@ -1,6 +1,7 @@
 import {ColdIcon, Input} from "@coldpbc/components";
 import {IconNames, InputTypes} from "@coldpbc/enums";
 import {useEffect, useRef, useState} from "react";
+import {twMerge} from "tailwind-merge";
 
 const useAutosizeTextArea = (
   textAreaRef: HTMLTextAreaElement | null,
@@ -21,10 +22,11 @@ const useAutosizeTextArea = (
 
 export const SustainabiliBuddyInput = (props: {
   onEnter: (prompt: string) => void,
+  aiLoading: boolean,
 }) => {
   const [rows, setRows] = useState(1);
   const [currentPrompt, setCurrentPrompt] = useState<string>('');
-  const { onEnter} = props;
+  const { onEnter, aiLoading } = props;
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useAutosizeTextArea(textAreaRef.current, currentPrompt);
@@ -45,6 +47,7 @@ export const SustainabiliBuddyInput = (props: {
             // when its shift + enter, we want to add a new line
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
+              if(aiLoading) return;
               const formattedPrompt = currentPrompt.replace(/\n/g, '\n\n');
               onEnter(formattedPrompt);
               setCurrentPrompt('');
@@ -54,14 +57,15 @@ export const SustainabiliBuddyInput = (props: {
             }
           },
           ref: textAreaRef,
-          rows: 1
+          rows: 1,
         }}
         type={InputTypes.TextArea}
         container_classname={'w-full'}
       />
       <div
-        className={'flex flex-row justify-center items-center rounded-full relative cursor-pointer bg-primary w-[24px] h-[24px] shrink-0 self-center'}
+        className={twMerge('flex flex-row justify-center items-center rounded-full relative cursor-pointer w-[24px] h-[24px] shrink-0 self-center', aiLoading ? 'bg-tc-disabled' : 'bg-primary')}
         onClick={() => {
+          if(aiLoading) return;
           onEnter(currentPrompt);
           setRows(1);
         }}

@@ -1,24 +1,26 @@
 import { useState } from "react";
 import {SustainabiliBuddyInput, SustainabiliBuddyQueue} from "@coldpbc/components";
-import {AIPromptResponse} from "@coldpbc/interfaces";
+import {QueueItem} from "@coldpbc/interfaces";
 
 
 export const SustainabiliBuddyContainer = () => {
-  const [queue, setQueue] = useState<{
-    ai: AIPromptResponse[];
-    user: string[];
-  }>({
-    ai: [],
-    user: [],
-  });
+  const [queue, setQueue] = useState<QueueItem[]>([]);
+  const [aiLoading, setAILoading] = useState<boolean>(false);
 
   const onEnter = (prompt: string) => {
     if (prompt) {
       setQueue(prev => {
-        return {
-          ai: [...prev.ai],
-          user: [...prev.user, prompt],
-        }
+        return [
+          ...prev,
+          {
+            type: 'User',
+            content: prompt,
+          },
+          {
+            type: 'AI',
+            content: prompt,
+          }
+        ]
       });
     }
   }
@@ -28,9 +30,11 @@ export const SustainabiliBuddyContainer = () => {
       <div className={'p-6 h-full w-full flex flex-col rounded-[16px] bg-black justify-end'}>
         <SustainabiliBuddyQueue
           queue={queue}
+          setAILoading={setAILoading}
         />
         <SustainabiliBuddyInput
           onEnter={onEnter}
+          aiLoading={aiLoading}
         />
       </div>
     </div>

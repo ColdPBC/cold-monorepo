@@ -1,17 +1,16 @@
-import { Auth0ContextInterface, GetTokenSilentlyOptions, useAuth0, User } from '@auth0/auth0-react';
+import { Auth0ContextInterface, useAuth0, User } from '@auth0/auth0-react';
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import { resolveAPIUrl, resolveStripeIntegrationUrl } from '@coldpbc/fetchers';
+import {resolveAPIUrl, resolveOpenAIServiceURL, resolveStripeIntegrationUrl} from '@coldpbc/fetchers';
 import { ErrorType } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
 import { ColdContextType } from '@coldpbc/context';
-import { AuthError } from '@auth0/nextjs-auth0';
 import { forEach, get } from 'lodash';
 
 const setAxiosTokenInterceptor = async ( auth0Context: Auth0ContextInterface<User>, context: ColdContextType): Promise<void> => {
   const { logBrowser } = context;
   axios.interceptors.request.use(async config => {
-    if (config.baseURL === resolveAPIUrl() || config.baseURL === resolveStripeIntegrationUrl()) {
+    if (config.baseURL === resolveAPIUrl() || config.baseURL === resolveStripeIntegrationUrl() || config.baseURL === resolveOpenAIServiceURL()) {
       const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
       try {
         const accessToken = await auth0Context.getAccessTokenSilently({
