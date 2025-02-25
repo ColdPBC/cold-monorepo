@@ -45,7 +45,8 @@ export const SustainabiliBuddyInput = (props: {
             // when its shift + enter, we want to add a new line
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
-              onEnter(currentPrompt);
+              const formattedPrompt = currentPrompt.replace(/\n/g, '\n\n');
+              onEnter(formattedPrompt);
               setCurrentPrompt('');
               setRows(1);
             } else if (e.key === 'Enter' && e.shiftKey) {
