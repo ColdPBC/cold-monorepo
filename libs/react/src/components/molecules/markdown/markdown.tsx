@@ -8,5 +8,9 @@ export interface MarkdownProps {
 }
 
 export const Markdown = ({ markdown, className }: MarkdownProps) => {
-  return <MarkdownToJSX className={twMerge('prose', className)}>{markdown}</MarkdownToJSX>;
+  return (
+    <div className={twMerge('prose', className)}>
+      <MarkdownToJSX>{markdown}</MarkdownToJSX>
+    </div>
+  );
 };

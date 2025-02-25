@@ -1,3 +1,21 @@
+# [1.576.0](https://github.com/coldPBC/cold-monorepo/compare/v1.575.0...v1.576.0) (2025-02-25)
+
+
+### Features
+
+* Add upload modal with file selection and upload functionality ([038b99f](https://github.com/coldPBC/cold-monorepo/commit/038b99f40cf79508aad2ad5ad3a695f17de9795f))
+* Refactor uploadingScreen to simplify file handling logic. ([ac42b93](https://github.com/coldPBC/cold-monorepo/commit/ac42b935f766fb0a849bc088d521fdac0e118563))
+* Remove toast messages from document upload component ([60ad934](https://github.com/coldPBC/cold-monorepo/commit/60ad9346f6b5ea3a97f477ab249f2a8cce16c1c9))
+* Update text label and fix error color reference ([8df5dfb](https://github.com/coldPBC/cold-monorepo/commit/8df5dfbc871a12a2247e9c8bba052211bd327218))
+
+# [1.575.0](https://github.com/coldPBC/cold-monorepo/compare/v1.574.4...v1.575.0) (2025-02-25)
+
+
+### Features
+
+* Add SustainabiliBuddy conversational UI components ([d8960a7](https://github.com/coldPBC/cold-monorepo/commit/d8960a7bde553aeb1a4559c03a35a00f12898cfe))
+* Set default margins for text elements in Tailwind config ([b17e14b](https://github.com/coldPBC/cold-monorepo/commit/b17e14b678233a064090999f8611921e3df08748))
+
 ## [1.574.4](https://github.com/coldPBC/cold-monorepo/compare/v1.574.3...v1.574.4) (2025-02-24)
 
 
