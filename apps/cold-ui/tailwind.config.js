@@ -176,17 +176,22 @@ module.exports = {
 					'50%': { opacity: '0.5', filter: 'brightness(150%)' },
 					'100%': { opacity: '1', filter: 'brightness(100%)' },
 				},
-        'gradient-x': {
-          '0%, 100%': { 'background-position': '0% 50%' },
-          '50%': { 'background-position': '100% 50%' },
+        'bounce-gradient': {
+          '0%, 100%': {
+            transform: 'translateY(-50%)',
+            'background-position': '0% 50%',
+          },
+          '50%': {
+            transform: 'translateY(0)',
+            'background-position': '100% 50%',
+          },
         },
-			},
+      },
 			animation: {
 				progressBar: 'progressBar 2s linear infinite',
 				pulsate: 'pulsate 2s linear infinite',
-        'gradient-x': 'gradient-x 3s ease infinite',
-        bounce: "bounce 1.5s infinite ease-in-out",
-			},
+        'bounce-gradient': 'bounce-gradient 1.5s infinite',
+      },
       backgroundSize: {
         '200%': '200%',
       },
