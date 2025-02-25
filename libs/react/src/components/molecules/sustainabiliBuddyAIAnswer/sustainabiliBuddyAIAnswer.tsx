@@ -71,9 +71,9 @@ export const SustainabiliBuddyAIAnswer = (
             <div
               className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-300 via-blue-400 to-indigo-500 bg-[length:200%] animate-gradient-x"></div>
             <div
-              className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-300 via-blue-400 to-indigo-500 bg-[length:200%] animate-gradient-x delay-1000"></div>
+              className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-300 via-blue-400 to-indigo-500 bg-[length:200%] animate-gradient-x animation-delay-1000"></div>
             <div
-              className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-300 via-blue-400 to-indigo-500 bg-[length:200%] animate-gradient-x delay-1500"></div>
+              className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-300 via-blue-400 to-indigo-500 bg-[length:200%] animate-gradient-x animation-delay-1500"></div>
           </div>
         ) : (
           <div className={'w-full flex flex-col gap-4'}>
