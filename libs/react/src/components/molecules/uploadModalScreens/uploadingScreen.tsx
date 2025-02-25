@@ -1,14 +1,18 @@
 import {UPLOAD_MAP, UploadModalFileListItem} from "@coldpbc/components";
-import {forEach, get, map, orderBy} from "lodash";
+import {forEach, get, map} from "lodash";
 import React, {useEffect, useState} from "react";
 import {MainDocumentCategory} from "@coldpbc/enums";
 import {AxiosError, AxiosRequestConfig, isAxiosError} from "axios";
 import {axiosFetcher} from "@coldpbc/fetchers";
 import {useAuth0Wrapper, useColdContext} from "@coldpbc/hooks";
+import {FilesWithAssurances, UploadsQuery} from "@coldpbc/interfaces";
+import {ApolloQueryResult} from "@apollo/client";
+import {KeyedMutator} from "swr";
 
 interface UploadModalUploadingScreenProps {
   files: File[];
-  onFileUpload: () => void;
+  onFileUpload: KeyedMutator<ApolloQueryResult<{ organizationFiles: UploadsQuery[] }>> |
+    KeyedMutator<ApolloQueryResult<{ organizationFiles: FilesWithAssurances[] | null }>>;
   setButtonLoading: React.Dispatch<React.SetStateAction<boolean>>;
   selectedOption: MainDocumentCategory | null;
   setButtonDisabled: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,13 +28,13 @@ export const UploadingScreen = (props: UploadModalUploadingScreenProps) => {
     failed: any[];
   } | null>(null);
 
-  const getResponseForFile = (file: File): {
+  const getResponseForFile = (index: number): {
     message: string;
     success: boolean;
   } | null => {
     if(response === null) return null;
     const failed = get(response, 'failed', []);
-    const failedFile = failed.find((failed: any) => get(failed, 'file.originalname', '') === file.name);
+    const failedFile = get(failed, index, null);
     if(failedFile) {
       const failedMessage = get(failedFile, 'error.message', 'Failed to upload');
       return {
@@ -119,12 +123,12 @@ export const UploadingScreen = (props: UploadModalUploadingScreenProps) => {
       </div>
       <div className={'w-full h-auto flex flex-col self-stretch items-stretch gap-[8px]'}>
         <div className={'h-auto w-full flex flex-col gap-[8px]'}>
-          {map(orderBy(files, ['lastModified', 'name'], ['desc', 'asc']), (file, index) => {
+          {map(files, (file, index) => {
             return (
               <UploadModalFileListItem
                 key={index}
                 file={file}
-                apiResponse={getResponseForFile(file)}
+                apiResponse={getResponseForFile(index)}
                 uploading={uploading}
               />
             );
