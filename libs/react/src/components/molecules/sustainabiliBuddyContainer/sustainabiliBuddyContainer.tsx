@@ -30,6 +30,7 @@ export const SustainabiliBuddyContainer = () => {
       <div className={'p-6 h-full w-full flex flex-col rounded-[16px] bg-black justify-end'}>
         <SustainabiliBuddyQueue
           queue={queue}
+          aiLoading={aiLoading}
           setAILoading={setAILoading}
         />
         <SustainabiliBuddyInput

@@ -12,15 +12,16 @@ export const SustainabiliBuddyQueue = (
   props: {
     queue: QueueItem[];
     setAILoading: (loading: boolean) => void;
+    aiLoading: boolean;
   }) => {
-  const {queue, setAILoading} = props;
+  const {queue, setAILoading, aiLoading} = props;
   // Create a ref for the dummy div at the end of the messages
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if(messagesEndRef.current)
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [queue]);
+  }, [queue, aiLoading]);
 
   return (
     <div className={'h-full overflow-y-auto w-full flex flex-col gap-6'}>
