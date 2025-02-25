@@ -815,9 +815,9 @@ model material_emission_factors {
   material         materials        @relation(fields: [material_id], references: [id], onDelete: Cascade)
   emission_factors emission_factors @relation(fields: [emission_factor_id], references: [id], onDelete: Cascade)
 
-	@@unique([material_id, emission_factor_id], name: "materialEmissionFactorKey")
-	@@index([emission_factor_id], map: "material_emission_factors_emission_factor_id_idx1")
-	@@index([material_id], map: "material_emission_factors_material_id_idx1")
+  @@unique([material_id, emission_factor_id], name: "materialEmissionFactorKey")
+  @@index([emission_factor_id], map: "material_emission_factors_emission_factor_id_idx1")
+  @@index([material_id], map: "material_emission_factors_material_id_idx1")
 }
 
 model emission_factors {
@@ -829,7 +829,7 @@ model emission_factors {
   updated_at                DateTime                    @updatedAt
   material_emission_factors material_emission_factors[]
 
-	@@unique([name], name: "emissionFactorName")
+  @@unique([name], name: "emissionFactorName")
   @@index([name], map: "emission_factors_name_idx1")
 }
 
@@ -1304,6 +1304,39 @@ view compliance_responses {
   @@index([organization_id, compliance_question_id, compliance_section_id, compliance_section_group_id, compliance_definition_name, organization_compliance_ai_response_id, organization_compliance_response_id], name: "orgCompFullIDX")
 }
 
+model ecoinvent_imports {
+	id                String            @id @default(uuid())
+	bucket            String
+	key               String            @unique
+	activity_name     String
+	location          String
+	reference_product String
+	job_status				String?
+	processing_status processing_status @default(PENDING)
+	created_at        DateTime          @default(now())
+	update_at         DateTime          @updatedAt
+	ecoinvent_data    ecoinvent_data[]
+
+	@@index([processing_status], map: "ecoinvent_imports_processing_status_idx1")
+	@@index([key], map: "ecoinvent_imports_key_idx1")
+	@@index([job_status], map: "ecoinvent_imports_job_status_idx1")
+	@@index([activity_name], map: "ecoinvent_imports_activity_name_idx1")
+	@@index([location], map: "ecoinvent_imports_location_idx1")
+	@@index([reference_product], map: "ecoinvent_imports_reference_product_idx1")
+}
+
+model ecoinvent_data {
+	id                String            @id @default(uuid())
+	import_id         String
+	key               String            @unique
+	xml               String? // raw XML
+	parsed            Json? // full parsed data with all attributes
+	created_at        DateTime          @default(now())
+	import_file ecoinvent_imports @relation(fields: [import_id], references: [id])
+
+	@@index([key], map: "ecoinvent_data_key_idx1")
+}
+
 view organization_claims_view {
   facility_id            String        @id
   facility_name          String?
@@ -1409,10 +1442,12 @@ enum file_types {
 }
 
 enum processing_status {
+	PENDING
   IMPORT_COMPLETE
   PROCESSING_ERROR
   MANUAL_REVIEW
   AI_PROCESSING
+	JOB_PROCESSING
 }
 
 enum claim_types {
