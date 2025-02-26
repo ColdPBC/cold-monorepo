@@ -44,6 +44,11 @@ const _BulkEditEntityAttributesModal = (props: {
     filter: {
       level: entityLevel
     },
+    pagination: {
+      orderBy: {
+        name: 'ASC',
+      },
+    }
   });
 
   const { mutateGraphQL: createAttributeAssurances } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCES')

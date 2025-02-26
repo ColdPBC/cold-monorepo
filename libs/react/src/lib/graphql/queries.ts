@@ -713,8 +713,8 @@ export const GET_PRODUCT_CARBON_FOOTPRINT_DATA = gql`
 `;
 
 export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES = gql`
-  query SustainabilityAttributes($filter: SustainabilityAttributesListFilter) {
-    sustainabilityAttributes(filter: $filter) {
+  query SustainabilityAttributes($filter: SustainabilityAttributesListFilter, $pagination: SustainabilityAttributesPaginationInput) {
+    sustainabilityAttributes(filter: $filter, pagination: $pagination) {
       id
       level
       logoUrl
