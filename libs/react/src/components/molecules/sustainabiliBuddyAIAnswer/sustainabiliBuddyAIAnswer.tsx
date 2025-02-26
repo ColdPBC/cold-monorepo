@@ -81,30 +81,37 @@ const _SustainabiliBuddyAIAnswer = (
               {aiState.response.answer}
             </div>
             {
-              aiState.response.justification && (
-                <>
-                  <div className={'flex flex-row gap-1 items-center'}>
-                    <LightBulbIcon className={'w-[15px] h-[15px] self-center shrink-0'} color={'white'}/>
-                    <div className={'w-full text-eyebrow'}>
-                      About this response
-                    </div>
+              (aiState.response.justification || (aiState.response.references && aiState.response.references.length > 0)) && (
+                <div className={'flex flex-row gap-1 items-center'}>
+                  <LightBulbIcon className={'w-[15px] h-[15px] self-center shrink-0'} color={'white'}/>
+                  <div className={'w-full text-eyebrow'}>
+                    About this response
                   </div>
-                  <div>
-                    {aiState.response.justification}
-                  </div>
-                </>
+                </div>
               )
             }
-            <div className={'flex flex-col gap-2 w-full'}>
-              {
-                aiState.response.references.map(({text, file}, index) => (
-                  <div key={index}
-                       className={'p-2 bg-gray-30 border-[1px] border-gray-50 rounded-[8px] cursor-pointer hover:underline hover:bg-gray-40'}>
-                    {file}
-                  </div>
-                ))
-              }
-            </div>
+            {
+              aiState.response.justification && (
+                <div>
+                  {aiState.response.justification}
+                </div>
+              )
+            }
+            {
+              (
+                aiState.response.references && aiState.response.references.length > 0) && (
+                  <div className={'flex flex-col gap-2 w-full'}>
+                  {
+                    aiState.response.references.map(({text, file}, index) => (
+                      <div key={index}
+                           className={'p-2 bg-gray-30 border-[1px] border-gray-50 rounded-[8px] cursor-pointer hover:underline hover:bg-gray-40'}>
+                        {file}
+                      </div>
+                    ))
+                  }
+                </div>
+              )
+            }
           </div>
         )
       }
