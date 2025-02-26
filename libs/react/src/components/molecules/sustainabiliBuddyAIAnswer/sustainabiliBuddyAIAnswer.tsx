@@ -1,17 +1,17 @@
-import {SustainabiliBuddyAIAnswerContainer} from "@coldpbc/components";
+import {ErrorFallback, SustainabiliBuddyAIAnswerContainer} from "@coldpbc/components";
 import React, {useEffect} from "react";
 import {AIPromptResponse} from "@coldpbc/interfaces";
 import {LightBulbIcon} from "@heroicons/react/20/solid";
 import {openAiServiceFetcher} from "@coldpbc/fetchers";
 import {useAuth0Wrapper, useColdContext} from "@coldpbc/hooks";
 import {isAxiosError} from "axios";
+import {withErrorBoundary} from "react-error-boundary";
 
 interface AIState {
-  isLoading: boolean;
   response: AIPromptResponse | null;
 }
 
-export const SustainabiliBuddyAIAnswer = (
+const _SustainabiliBuddyAIAnswer = (
   props : {
     question: string;
     setAILoading: (loading: boolean) => void;
@@ -20,7 +20,6 @@ export const SustainabiliBuddyAIAnswer = (
   const {logBrowser} = useColdContext()
   const {question, setAILoading} = props;
   const [aiState, setAIState] = React.useState<AIState>({
-    isLoading: true,
     response: null,
   });
 
@@ -41,7 +40,6 @@ export const SustainabiliBuddyAIAnswer = (
             answer: DEFAULT_RESPONSE_ANSWER,
             references: [],
           },
-          isLoading: false,
         });
         logBrowser(
           `AI response failed for ${orgId}`,
@@ -54,7 +52,6 @@ export const SustainabiliBuddyAIAnswer = (
       } else {
         setAIState({
           response: response,
-          isLoading: false,
         });
       }
       setAILoading(false);
@@ -80,15 +77,21 @@ export const SustainabiliBuddyAIAnswer = (
             <div>
               {aiState.response.answer || DEFAULT_RESPONSE_ANSWER}
             </div>
-            <div className={'flex flex-row gap-1 items-center'}>
-              <LightBulbIcon className={'w-[15px] h-[15px] self-center shrink-0'} color={'white'}/>
-              <div className={'w-full text-eyebrow'}>
-                About this response
-              </div>
-            </div>
-            <div>
-              {aiState.response.justification}
-            </div>
+            {
+              aiState.response.justification && (
+                <>
+                  <div className={'flex flex-row gap-1 items-center'}>
+                    <LightBulbIcon className={'w-[15px] h-[15px] self-center shrink-0'} color={'white'}/>
+                    <div className={'w-full text-eyebrow'}>
+                      About this response
+                    </div>
+                  </div>
+                  <div>
+                    {aiState.response.justification}
+                  </div>
+                </>
+              )
+            }
             <div className={'flex flex-col gap-2 w-full'}>
               {
                 aiState.response.references.map(({text, file}, index) => (
@@ -104,5 +107,11 @@ export const SustainabiliBuddyAIAnswer = (
       }
     </SustainabiliBuddyAIAnswerContainer>
   )
-
 }
+
+export const SustainabiliBuddyAIAnswer = withErrorBoundary(_SustainabiliBuddyAIAnswer, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SustainabiliBuddyAIAnswer: ', error);
+  },
+});

@@ -1,9 +1,10 @@
-import { useState } from "react";
-import {SustainabiliBuddyInput, SustainabiliBuddyQueue} from "@coldpbc/components";
+import React, { useState } from "react";
+import {ErrorFallback, SustainabiliBuddyInput, SustainabiliBuddyQueue} from "@coldpbc/components";
 import {QueueItem} from "@coldpbc/interfaces";
+import {withErrorBoundary} from "react-error-boundary";
 
 
-export const SustainabiliBuddyContainer = () => {
+const _SustainabiliBuddyContainer = () => {
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [aiLoading, setAILoading] = useState<boolean>(false);
 
@@ -41,3 +42,10 @@ export const SustainabiliBuddyContainer = () => {
     </div>
   )
 }
+
+export const SustainabiliBuddyContainer = withErrorBoundary(_SustainabiliBuddyContainer, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SustainabiliBuddyContainer: ', error);
+  },
+});
