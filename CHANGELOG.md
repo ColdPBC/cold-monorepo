@@ -1,3 +1,17 @@
+# [1.578.0](https://github.com/coldPBC/cold-monorepo/compare/v1.577.0...v1.578.0) (2025-02-26)
+
+
+### Features
+
+* Add AI response handling with OpenAI integration ([f40fd9c](https://github.com/coldPBC/cold-monorepo/commit/f40fd9cf7ed611ba0e781ed61e6e629d8b96de1b))
+* Add aiLoading prop to SustainabiliBuddyQueue component ([8626454](https://github.com/coldPBC/cold-monorepo/commit/862645426b9029555801c0980e7b016818e0a31b))
+* Add error boundaries to SustainabiliBuddy components ([852306f](https://github.com/coldPBC/cold-monorepo/commit/852306f38103721b80e485c6a761807485d5f84a))
+* Add gradient animations and improve loading indicators ([16c04b1](https://github.com/coldPBC/cold-monorepo/commit/16c04b12870771c6978b320c17c47b42e97468b3))
+* Fix incorrect delay class names in gradient animation ([44351e7](https://github.com/coldPBC/cold-monorepo/commit/44351e7e1ec634c1f90f78b1f11bf671d311c0fa))
+* Refactor AI response handling to include default answer. ([06ccab3](https://github.com/coldPBC/cold-monorepo/commit/06ccab369a6d096b4b99cf67776c3905a08215ec))
+* Refactor justification and references rendering logic. ([d46ee96](https://github.com/coldPBC/cold-monorepo/commit/d46ee9683f188514447358417dd5af31971eedc3))
+* Update animations and add utility classes for delays ([e3085f0](https://github.com/coldPBC/cold-monorepo/commit/e3085f03b5aa8f756a8be51e06c46c90cdd0882a))
+
 # [1.577.0](https://github.com/coldPBC/cold-monorepo/compare/v1.576.0...v1.577.0) (2025-02-26)
 
 
