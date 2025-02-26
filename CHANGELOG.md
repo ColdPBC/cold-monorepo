@@ -1,3 +1,10 @@
+# [1.577.0](https://github.com/coldPBC/cold-monorepo/compare/v1.576.0...v1.577.0) (2025-02-26)
+
+
+### Features
+
+* add support for extracting and handling PDF text, update dependencies ([467ed80](https://github.com/coldPBC/cold-monorepo/commit/467ed80f80098e1ed2395e2afef101f002c68583))
+
 # [1.576.0](https://github.com/coldPBC/cold-monorepo/compare/v1.575.0...v1.576.0) (2025-02-25)
 
 
