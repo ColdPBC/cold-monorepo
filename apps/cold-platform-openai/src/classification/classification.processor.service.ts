@@ -25,7 +25,8 @@ export class ClassificationProcessorService extends BaseWorker {
 
 	@Process('classify')
 	async classifyDocumentJob(job: any) {
-		const { filePayload, user, organization } = job.data;
+		const { file, user, organization } = job.data;
+		const filePayload = file;
 		try {
 			this.logger.info(`Classifying content for ${filePayload.original_name}`, { filePayload, user, organization });
 

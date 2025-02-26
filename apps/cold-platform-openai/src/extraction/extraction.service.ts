@@ -725,6 +725,7 @@ export class ExtractionService extends BaseWorker {
 							});
 							break;
 						case 'WRAP':
+						case 'WRAP (Worldwide Responsible Accredited Production)':
 						case 'Worldwide Responsible Accredited Production':
 							classification.extraction_schema = certSchema.extend({
 								name: z.enum(['Worldwide Responsible Accredited Production (WRAP)']),

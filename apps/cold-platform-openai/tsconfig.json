@@ -27,7 +27,7 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "target": "es2022",
-
+		"module": "ES2020",
     "noImplicitReturns": true,
     "noImplicitAny": false
   }

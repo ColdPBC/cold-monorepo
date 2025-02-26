@@ -91,6 +91,7 @@ export class OrganizationFilesController implements OnModuleInit {
 
 	@Post('import')
 	@Roles(...allRoles)
+	@UseInterceptors(OrgUserInterceptor)
 	@UseInterceptors(AnyFilesInterceptor())
 	async import(
 		@Param('orgId') orgId: string,
