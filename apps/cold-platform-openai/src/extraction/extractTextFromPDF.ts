@@ -28,8 +28,7 @@ export type PageType = {
  */
 export async function pdfToPages(pdf: Buffer | Uint8Array, options?: { nodeSep?: string }): Promise<PageType[]> {
 	pdf = normalizeBuffer(pdf);
-	const { getDocument } = await import('pdfjs-dist');
-
+	const getDocument = await import('pdfjs-dist/build/pdf.mjs');
 	const document = await getDocument({
 		data: pdf,
 		useWorkerFetch: false,
@@ -82,4 +81,39 @@ function getStringOptionOrDefault(option: string | undefined, optionDefault: str
 
 function normalizeBuffer(buffer: Buffer | Uint8Array) {
 	return buffer instanceof Buffer ? new Uint8Array(buffer.buffer) : buffer;
+}
+
+import { promises as fs } from 'fs';
+import pdf from 'pdf-parse';
+
+export async function extractPdfText(filePath: string): Promise<string> {
+	// Read the file into a buffer
+	const dataBuffer = await fs.readFile(filePath);
+	try {
+		// Attempt to parse the PDF
+		const data = await pdf(dataBuffer);
+
+		// Option 1: Check if pdf.js reported that the document is encrypted
+		if (data.info && data.info.Encrypted) {
+			throw new Error('PDF is encrypted and cannot be read.');
+		}
+
+		// Option 2: If pdf-parse throws an error (caught below) or returns an empty text
+		if (!data.text || data.text.trim() === '') {
+			throw new Error('PDF text could not be extracted. It might be encrypted.');
+		}
+
+		return data.text;
+	} catch (error: any) {
+		// Check if the error message or error name indicates encryption
+		if (
+			error.name === 'PasswordException' ||
+			(error.message && error.message.toLowerCase().includes('password')) ||
+			(error.message && error.message.toLowerCase().includes('encrypted'))
+		) {
+			throw new Error('PDF is encrypted and cannot be read.');
+		}
+		// Rethrow other errors
+		throw error;
+	}
 }

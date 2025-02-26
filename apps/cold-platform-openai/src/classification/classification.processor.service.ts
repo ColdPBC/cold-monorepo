@@ -25,9 +25,20 @@ export class ClassificationProcessorService extends BaseWorker {
 
 	@Process('classify')
 	async classifyDocumentJob(job: any) {
-		const { filePayload, user, organization } = job.data;
+		const { file, user, organization } = job.data;
+		const filePayload = file;
 		try {
 			this.logger.info(`Classifying content for ${filePayload.original_name}`, { filePayload, user, organization });
+
+			const orgFile = await this.prisma.organization_files.findUnique({
+				where: {
+					id: filePayload.id,
+				},
+			});
+
+			if (!orgFile) {
+				throw new Error('File not found');
+			}
 
 			if (filePayload.processing_status !== processing_status.AI_PROCESSING) {
 				await this.prisma.organization_files.update({
@@ -50,8 +61,8 @@ export class ClassificationProcessorService extends BaseWorker {
 
 			const extension = filePayload.key.split('.').pop().toLowerCase();
 
-			const file = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
-			const fileBytes = await file.Body?.transformToByteArray();
+			const s3Reponse = await this.s3.getObject(user, filePayload.bucket, filePayload.key);
+			const fileBytes = await s3Reponse.Body?.transformToByteArray();
 
 			if (!fileBytes) {
 				throw new Error('Failed to read file from S3');
@@ -72,11 +83,11 @@ export class ClassificationProcessorService extends BaseWorker {
 
 			if (extension === 'pdf') {
 				// Extract raw content from the document for classification
-				content = await this.extraction.extractTextFromPDF(fileBytes, filePayload, user, organization);
+				content = await this.extraction.extractTextFromPDF(fileBytes, orgFile, user, organization);
 
 				if (!content || content.length < 256) {
 					// attempt to convert pdf pages to array of OpenAI content objects which contain base64 image urls
-					openAiImageUrlContent = await this.extraction.convertPDFPagesToImages(fileBytes, filePayload, user, organization);
+					openAiImageUrlContent = await this.extraction.convertPDFPagesToImages(fileBytes, orgFile, user, organization);
 				}
 			}
 
@@ -89,12 +100,12 @@ export class ClassificationProcessorService extends BaseWorker {
 
 			if (content && content.length > 256) {
 				// classify text content and add to extraction queue
-				classification = await this.classification.classifyContent(content, user, filePayload, organization);
-				extractionJobData = { content, extension, classification, filePayload, user, organization, attributes: this.classification.sus_attributes };
+				classification = await this.classification.classifyContent(content, user, orgFile, organization);
+				extractionJobData = { content, extension, classification, filePayload: orgFile, user, organization, attributes: this.classification.sus_attributes };
 			} else if (openAiImageUrlContent.length > 0) {
 				// classify image pages and add to extraction queue
-				classification = await this.classification.classifyImageUrls(openAiImageUrlContent, user, filePayload, organization);
-				extractionJobData = { extension, isImage: isImage(extension), classification, filePayload, user, organization, attributes: this.classification.sus_attributes };
+				classification = await this.classification.classifyImageUrls(openAiImageUrlContent, user, orgFile, organization);
+				extractionJobData = { extension, isImage: isImage(extension), classification, filePayload: orgFile, user, organization, attributes: this.classification.sus_attributes };
 			}
 
 			if (filePayload.processing_status !== processing_status.AI_PROCESSING) {
@@ -110,7 +121,7 @@ export class ClassificationProcessorService extends BaseWorker {
 			}
 
 			await this.extractionQueue.add('extract', extractionJobData, { removeOnComplete: true, removeOnFail: true });
-			this.logger.info(`Classification job for ${filePayload.original_name} completed`, { filePayload, user, organization });
+			this.logger.info(`Classification job for ${orgFile.original_name} completed`, { orgFile, user, organization });
 			// done
 			return {};
 		} catch (e) {

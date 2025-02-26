@@ -121,6 +121,7 @@ Steps for Classification:
 				•	Authored by ${organization.display_name} and explicitly declares that it is a bill of materials or BOM (BILL_OF_MATERIALS).
 				•	Authored by another entity and contains reports on inspections, or audits,(AUDIT_REPORT).
 				•	Authored by another entity and contains results from material or product testing (TEST_REPORT).
+				•	Certificate authored by another entity such as BlueSign or WRAP or OEKOTEX (SCOPE_CERTIFICATE).
 				•	Authored by another entity and explicitly declares that it is a scope certificate (SCOPE_CERTIFICATE).
 				•	Authored by another entity and explicitly declares that it is a transaction certificate (TRANSACTION_CERTIFICATE).
 	3.	Match Content to Categories:
@@ -130,6 +131,7 @@ Steps for Classification:
 	4.	Exclude Incorrect Categories:
 				•	Ensure the document does not fit restricted or invalid categories:
 				•	Example: Avoid using ‘CERTIFICATE’ as it is explicitly not allowed.
+				•	Example: Use 'SCOPE_CERTIFICATE' if the document is certified by OEKOTEX, WRAP, or Bluesign
 	5.	Apply the Fallback Rule:
 				•	Use ‘OTHER’ only as a last resort. If the document fits SUPPLIER_STATEMENT, do not classify it as ‘OTHER.’
 	`;

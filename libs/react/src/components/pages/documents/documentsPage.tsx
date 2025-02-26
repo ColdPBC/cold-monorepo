@@ -117,18 +117,6 @@ const _DocumentsPage = () => {
                 types={[
                   MainDocumentCategory.Assurance,
                 ]}
-                successfulToastMessage={{
-                  message: (
-                    <div className={'flex flex-col gap-[10px]'}>
-                      <div className={'font-bold'}>Upload Complete</div>
-                      <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
-                    </div>
-                  ),
-                  position: 'bottomRight',
-                }}
-                failureToastMessage={{
-                  position: 'bottomRight',
-                }}
                 buttonProps={{
                   label: 'Upload Assurance Doc',
                   iconLeft: IconNames.PlusIcon,
