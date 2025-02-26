@@ -1,3 +1,13 @@
+# [1.579.0](https://github.com/coldPBC/cold-monorepo/compare/v1.578.0...v1.579.0) (2025-02-26)
+
+
+### Features
+
+* Add bulk edit functionality for supplied products ([1b3e416](https://github.com/coldPBC/cold-monorepo/commit/1b3e41667f20668890a0527cde65f22e50d9aa79))
+* Refactor bulk edit modal to support multiple entity levels ([8471aac](https://github.com/coldPBC/cold-monorepo/commit/8471aac1b039859728fe9b323044ae71b04a4cc2))
+* Remove unused pagination input and standardize export syntax ([0291190](https://github.com/coldPBC/cold-monorepo/commit/02911901abf41c874e1cbb55365b01b963d819fa))
+* Simplify attribute selection logic in modal ([f08ee12](https://github.com/coldPBC/cold-monorepo/commit/f08ee12a263c7801daea224f09401fd285ac79c1))
+
 # [1.578.0](https://github.com/coldPBC/cold-monorepo/compare/v1.577.0...v1.578.0) (2025-02-26)
 
 
