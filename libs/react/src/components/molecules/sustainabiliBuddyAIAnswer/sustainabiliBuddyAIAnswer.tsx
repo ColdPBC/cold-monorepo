@@ -51,7 +51,10 @@ const _SustainabiliBuddyAIAnswer = (
         )
       } else {
         setAIState({
-          response: response,
+          response: {
+            answer: DEFAULT_RESPONSE_ANSWER,
+            ...response,
+          },
         });
       }
       setAILoading(false);
@@ -75,7 +78,7 @@ const _SustainabiliBuddyAIAnswer = (
         ) : (
           <div className={'w-full flex flex-col gap-4'}>
             <div>
-              {aiState.response.answer || DEFAULT_RESPONSE_ANSWER}
+              {aiState.response.answer}
             </div>
             {
               aiState.response.justification && (
