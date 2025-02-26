@@ -179,23 +179,11 @@ const _BulkEditEntityAttributesModal = (props: {
               const attributeSelected = find(prev, (attribute) => attribute.attributeId === params.row.id);
 
               if (attributeSelected) {
-                if (attributeSelected.indeterminate) {
-                  // Update row to be not indeterminate and keep the list sorted
-                  return sortBy(
-                    prev.map((attribute) =>
-                      attribute.attributeId === params.row.id
-                        ? { ...attribute, indeterminate: false }
-                        : attribute
-                    ),
-                    ['attributeId']
-                  );
-                } else {
-                  // Remove the attribute from the selected rows
-                  return sortBy(
-                    prev.filter((attribute) => attribute.attributeId !== params.row.id),
-                    ['attributeId']
-                  );
-                }
+                // Remove the attribute from the selected rows
+                return sortBy(
+                  prev.filter((attribute) => attribute.attributeId !== params.row.id),
+                  ['attributeId']
+                );
               } else {
                 // Add new attribute and ensure sorting
                 return sortBy([...prev, { attributeId: params.row.id, indeterminate: false }], ['attributeId']);
