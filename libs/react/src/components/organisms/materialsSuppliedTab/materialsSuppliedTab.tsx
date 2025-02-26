@@ -1,12 +1,12 @@
 import { SupplierGraphQL, SustainabilityAttribute } from '@coldpbc/interfaces';
 import {
-	BulkEditMaterialAttributesModal,
-	Card,
-	DEFAULT_GRID_COL_DEF,
-	EditEntityAssociationsModal,
-	ErrorFallback,
-	MuiDataGrid,
-	SustainabilityAttributeColumnList,
+  BulkEditAttributesForEntitiesSuppliedModal,
+  Card,
+  DEFAULT_GRID_COL_DEF,
+  EditEntityAssociationsModal, EntitiesSelected,
+  ErrorFallback,
+  MuiDataGrid,
+  SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
 import { GridCellParams, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid-pro';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
@@ -52,8 +52,15 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
 		};
 	});
 
-  const getMaterialsSelected = () => {
-    return rows.filter(row => rowsSelected.includes(row.id));
+  const getMaterialsSelected = (): EntitiesSelected[] => {
+    return rows
+      .map(row => ({
+        id: row.id,
+        sustainabilityAttributes: row.sustainabilityAttributes,
+      }))
+      .filter(row =>
+        rowsSelected.includes(row.id)
+      )
   }
 
   const columns: GridColDef[] = [
@@ -77,12 +84,12 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
           })}
         />
       ),
-      renderHeader: (params) => (
+      renderHeader: () => (
         <Checkbox
           data-testid={'select-all-checkbox-materials-supplied'}
           checked={rowsSelected.length === rows.length && rowsSelected.length > 0}
           indeterminate={rowsSelected.length > 0 && rowsSelected.length < rows.length}
-          onClick={(e) => {
+          onClick={() => {
             if(rowsSelected.length === rows.length) {
               setRowsSelected([]);
             } else if(rowsSelected.length > 0) {
@@ -180,14 +187,15 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
         disableRowSelectionOnClick={true}
         searchKey={`${supplier.id}materialsSuppliedSearchValue`}
       />
-			<BulkEditMaterialAttributesModal
+			<BulkEditAttributesForEntitiesSuppliedModal
 				show={showBulkEditAttributesModal}
 				onClose={() => {
 					setShowBulkEditAttributesModal(false);
           refreshData();
           setRowsSelected([]);
 				}}
-        materialsSelected={getMaterialsSelected()}
+        entitiesSelected={getMaterialsSelected()}
+        entityLevel={EntityLevel.MATERIAL}
 			/>
 		</Card>
 	);
