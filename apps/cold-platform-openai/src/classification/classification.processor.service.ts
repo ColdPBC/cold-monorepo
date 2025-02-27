@@ -205,7 +205,7 @@ export class ClassificationProcessorService extends BaseWorker {
 
 			if (extension === 'pdf') {
 				// Extract raw content from the document for classification
-				content = await this.extraction.extractTextFromPDF(fileBytes, orgFile, user, organization);
+				//content = await this.extraction.extractTextFromPDF(fileBytes, orgFile, user, organization);
 
 				if (!content || content.length < 256) {
 					// attempt to convert pdf pages to array of OpenAI content objects which contain base64 image urls
