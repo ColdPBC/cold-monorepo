@@ -98,7 +98,7 @@ export class ClassificationProcessorService extends BaseWorker {
 
 	@OnQueueFailed()
 	async onFailed(job: Job) {
-		this.logger.info(`${job.name} Job FAILED | id: ${job.id} failed_on: ${new Date().toUTCString()} | ${this.getTimerString(job)}`);
+		this.logger.info(`${job.name} Job FAILED | ${job.failedReason}| id: ${job.id} failed_on: ${new Date().toUTCString()} | ${this.getTimerString(job)}`);
 		const { organization, user, file } = job.data;
 		const metadata = file.metadata as any;
 
