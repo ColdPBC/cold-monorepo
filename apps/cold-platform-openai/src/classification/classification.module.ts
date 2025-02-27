@@ -6,9 +6,11 @@ import { ClassificationService } from './classification.service';
 import { EntitiesModule } from '../entities/entities.module';
 import { BullModule } from '@nestjs/bull';
 import { ClassificationProcessorService } from './classification.processor.service';
+import { PineconeModule } from '../pinecone/pinecone.module';
 
 @Module({
 	imports: [
+		PineconeModule,
 		BullModule.registerQueue({
 			name: 'openai:classification',
 		}),

@@ -1,26 +1,148 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { InjectQueue, Process, Processor } from '@nestjs/bull';
+import { InjectQueue, OnQueueCompleted, OnQueueFailed, OnQueueProgress, Process, Processor } from '@nestjs/bull';
 import { ClassificationService } from './classification.service';
-import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
-import { BaseWorker, ColdRabbitService, EventService, PrismaService, S3Service } from '@coldpbc/nest';
-import { Queue } from 'bull';
+import { BaseWorker, EventService, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
+import { Job, Queue } from 'bull';
+import { isImage } from '../utility';
+import { organization_files, processing_status } from '@prisma/client';
+import { omit } from 'lodash';
 import { ExtractionService } from '../extraction/extraction.service';
 import { ExtractionJobPayload } from '../extraction/extraction.processor.service';
-import { isImage } from '../utility';
-import { processing_status } from '@prisma/client';
+import { PineconeService } from '../pinecone/pinecone.service';
 
 @Injectable()
 @Processor({ name: 'openai:classification' })
 export class ClassificationProcessorService extends BaseWorker {
 	constructor(
-		@InjectQueue('openai:extraction') readonly extractionQueue: Queue,
+		readonly pinecone: PineconeService,
 		readonly classification: ClassificationService,
 		readonly extraction: ExtractionService,
 		readonly s3: S3Service,
 		readonly events: EventService,
 		readonly prisma: PrismaService,
+		readonly mqtt: MqttService,
 	) {
 		super(ClassificationProcessorService.name);
+	}
+
+	async onModuleInit(): Promise<void> {
+		super.onModuleInit();
+	}
+
+	@OnQueueProgress()
+	async onProgress(job: Job) {
+		const message = `${job.name} Job PROGRESS | id: ${job.id} progress: ${(await job.progress()) * 100}% | ${this.getTimerString(job)}`;
+		this.logger.info(message, { ...job.data });
+		await job.log(message);
+	}
+
+	@OnQueueCompleted()
+	async onCompleted(job: Job) {
+		this.logger.info(`${job.name} Job COMPLETED | id: ${job.id} completed_on: ${new Date(job.finishedOn || 0).toUTCString()} | ${this.getTimerString(job)}`);
+
+		const { file, user, organization } = job.data;
+
+		const orgFile = (await this.prisma.organization_files.findUnique({
+			where: {
+				id: file.id,
+			},
+		})) as organization_files;
+
+		if (!orgFile) {
+			throw new Error('File not found');
+		}
+		// update the file metadata with the classification
+		const updateData: any = {
+			processing_status: processing_status.AI_PROCESSING,
+			metadata: {
+				status: 'ai_classified',
+			},
+		};
+
+		await this.prisma.organization_files.update({
+			where: {
+				id: orgFile.id,
+			},
+			data: updateData,
+		});
+
+		// Trigger extraction job if classification is complete
+		if (job.name === 'classify') {
+			const response = await this.pinecone.ingestData(user, organization, file);
+			this.logger.info(`Ingested file ${file.original_name} for ${organization.name}`, omit(response, ['bytes']));
+
+			// update the file metadata with the classification
+			const updateData: any = {
+				processing_status: processing_status.IMPORT_COMPLETE,
+			};
+
+			await this.prisma.organization_files.update({
+				where: {
+					id: orgFile.id,
+				},
+				data: updateData,
+			});
+		}
+
+		const extension = orgFile?.original_name?.split('.').shift();
+
+		this.metrics.increment(`cold.platform.openai.${job.name}`, 1, {
+			status: 'complete',
+			file_type: orgFile.type,
+			extension: extension ? extension : 'unknown',
+			organization: organization.id,
+			organization_name: organization.name,
+			user: user.coldclimate_claims.email,
+		});
+	}
+
+	@OnQueueFailed()
+	async onFailed(job: Job) {
+		this.logger.info(`${job.name} Job FAILED | id: ${job.id} failed_on: ${new Date().toUTCString()} | ${this.getTimerString(job)}`);
+		const { organization, user, file } = job.data;
+		const metadata = file.metadata as any;
+
+		try {
+			const orgFile = await this.prisma.organization_files.update({
+				where: {
+					id: file.id,
+				},
+				data: {
+					processing_status: 'PROCESSING_ERROR',
+					metadata: {
+						status: 'failed',
+						error: job.failedReason,
+						...metadata,
+					},
+				},
+			});
+		} catch (e) {
+			this.logger.error(e.message, e);
+		}
+
+		/*this.mqtt.publishToUI({
+			action: 'update',
+			status: 'failed',
+			resource: 'organization_files',
+			event: 'classify-file',
+			data: orgFile,
+			user,
+			swr_key: `organization_files.PROCESSING_ERROR`,
+			org_id: organization.id,
+		});*/
+
+		await this.events.sendAsyncEvent('cold.core.linear.events', processing_status.PROCESSING_ERROR, { error: job.failedReason, orgFile: file, user, organization });
+
+		const extension = file?.original_name?.split('.').shift();
+
+		this.metrics.increment(`cold.platform.openai.${job.name}`, 1, {
+			status: 'complete',
+			file_type: file.type,
+			extension: extension ? extension : 'unknown',
+			organization: organization.id,
+			organization_name: organization.name,
+			user: user.coldclimate_claims.email,
+		});
 	}
 
 	@Process('classify')
@@ -52,7 +174,7 @@ export class ClassificationProcessorService extends BaseWorker {
 				});
 			}
 
-			let openAiImageUrlContent: OpenAiBase64ImageUrl[] = [
+			let openAiImageUrlContent: any[] = [
 				{
 					type: 'text',
 					text: await this.classification.getClassifyPrompt(organization),
@@ -108,39 +230,30 @@ export class ClassificationProcessorService extends BaseWorker {
 				extractionJobData = { extension, isImage: isImage(extension), classification, filePayload: orgFile, user, organization, attributes: this.classification.sus_attributes };
 			}
 
-			if (filePayload.processing_status !== processing_status.AI_PROCESSING) {
-				await this.prisma.organization_files.update({
-					where: {
-						organization_id: organization.id,
-						id: filePayload.id,
-					},
-					data: {
-						processing_status: processing_status.IMPORT_COMPLETE,
-					},
-				});
-			}
-
-			await this.extractionQueue.add('extract', extractionJobData, { removeOnComplete: true, removeOnFail: true });
-			this.logger.info(`Classification job for ${orgFile.original_name} completed`, { orgFile, user, organization });
-			// done
-			return {};
-		} catch (e) {
-			this.logger.info(e.message, e);
-
-			await this.events.sendAsyncEvent('cold.core.linear.events', processing_status.PROCESSING_ERROR, { error: JSON.stringify(e), orgFile: filePayload, user, organization });
-
 			await this.prisma.organization_files.update({
 				where: {
 					organization_id: organization.id,
 					id: filePayload.id,
 				},
 				data: {
-					processing_status: processing_status.PROCESSING_ERROR,
+					type: classification.type,
+					metadata: {
+						classification: omit(classification, ['extraction_name', 'extraction_schema']),
+						...(orgFile.metadata as object),
+					},
 				},
 			});
 
-			return e;
+			this.logger.info(`Classification job for ${orgFile.original_name} completed`, { orgFile, user, organization });
+			await this.onCompleted(job);
+			// classification done
+		} catch (e) {
+			await this.onFailed(job);
+			this.logger.info(e.message, e);
+			//await this.onFailed(job);
+			throw e;
 		}
+
 		/*
 
 		const extractionPrompt = `${classification?.prompt} Please use the response_format to properly extract the content ${Array.isArray(content) ? content.join(' ') : content}`;
@@ -163,5 +276,19 @@ export class ClassificationProcessorService extends BaseWorker {
 			const encoder = new TextEncoder();
 			encoder.encode(JSON.stringify(extracted));
 		}*/
+	}
+
+	getTimerString(job: Job) {
+		if (job.finishedOn) {
+			return `Duration: ${this.getDuration(job)} seconds`;
+		} else {
+			return `Elapsed: ${(new Date().getTime() - (job.processedOn || 0)) / 1000} seconds`;
+		}
+	}
+
+	getDuration(job: Job) {
+		const finishedOn = new Date(job.finishedOn || 0).getTime();
+		const processedOn = new Date(job.processedOn || 0).getTime();
+		return (finishedOn - processedOn) / 1000;
 	}
 }
