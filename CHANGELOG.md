@@ -1,3 +1,18 @@
+# [1.580.0](https://github.com/coldPBC/cold-monorepo/compare/v1.579.0...v1.580.0) (2025-02-27)
+
+
+### Bug Fixes
+
+* comment out PDF text extraction for debugging purposes ([afebb17](https://github.com/coldPBC/cold-monorepo/commit/afebb17d013646b509ce2f87a5c3de75a8900260))
+
+
+### Features
+
+* add 'vectorize-file' event to MqttEventSchema ([eb93627](https://github.com/coldPBC/cold-monorepo/commit/eb93627a90a9b385b4005392ed1801f1f85ea61d))
+* enhance classification processor with progress tracking and error handling ([aea9021](https://github.com/coldPBC/cold-monorepo/commit/aea9021aaa63d956bb30bd3d4b148e1fdbbb2abf))
+* implement NotImplementedException for syncOrgFiles method ([09fd470](https://github.com/coldPBC/cold-monorepo/commit/09fd4706d29237bc9b56b1014b338a001a6cbf36))
+* update PDF extraction service to log image conversion progress and change type definition ([42f0163](https://github.com/coldPBC/cold-monorepo/commit/42f0163dc26cad815ce9af8c2e4aa61ad76bb98b))
+
 # [1.579.0](https://github.com/coldPBC/cold-monorepo/compare/v1.578.0...v1.579.0) (2025-02-26)
 
 
