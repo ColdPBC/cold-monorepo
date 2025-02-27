@@ -1,6 +1,6 @@
 import {UPLOAD_MAP, UploadModalFileListItem} from "@coldpbc/components";
 import {forEach, get, map} from "lodash";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {MainDocumentCategory} from "@coldpbc/enums";
 import {AxiosError, AxiosRequestConfig, isAxiosError} from "axios";
 import {axiosFetcher} from "@coldpbc/fetchers";
@@ -18,63 +18,52 @@ interface UploadModalUploadingScreenProps {
   setButtonDisabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const UploadingScreen = (props: UploadModalUploadingScreenProps) => {
+interface UseFileUploadProps {
+  files: File[];
+  selectedOption: MainDocumentCategory | null;
+  onFileUpload: KeyedMutator<ApolloQueryResult<{ organizationFiles: UploadsQuery[] }>> |
+    KeyedMutator<ApolloQueryResult<{ organizationFiles: FilesWithAssurances[] | null }>>;
+  setButtonLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setButtonDisabled: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const useFileUpload = ({
+                                files,
+                                selectedOption,
+                                onFileUpload,
+                                setButtonLoading,
+                                setButtonDisabled,
+                              }: UseFileUploadProps) => {
   const { logBrowser } = useColdContext();
   const { orgId } = useAuth0Wrapper();
-  const {files, onFileUpload, setButtonLoading, selectedOption, setButtonDisabled} = props;
-  const [uploading, setUploading] = useState(false)
+  const [uploading, setUploading] = useState(false);
+  const [response, setResponse] = useState<{ failed: any[] } | null>(null);
 
-  const [response, setResponse] = useState<{
-    failed: any[];
-  } | null>(null);
+  const hasUploaded = useRef(false); // Prevent double execution
 
-  const getResponseForFile = (index: number): {
-    message: string;
-    success: boolean;
-  } | null => {
-    if(response === null) return null;
-    const failed = get(response, 'failed', []);
-    const failedFile = get(failed, index, null);
-    if(failedFile) {
-      const failedMessage = get(failedFile, 'error.message', 'Failed to upload');
-      return {
-        message: failedMessage,
-        success: false,
-      }
-    } else {
-      return {
-        message: 'Uploaded',
-        success: true,
-      }
-    }
-  }
+  const uploadDocuments = useCallback(async () => {
+    if (!selectedOption || uploading || hasUploaded.current) return;
+    hasUploaded.current = true; // Set flag to prevent re-execution
 
-  useEffect(() => {
-    const uploadDocuments = async () => {
-      if(selectedOption === null) return;
+    setButtonLoading(true);
+    setUploading(true);
+    setButtonDisabled(true);
 
-      setButtonLoading(true);
-      setUploading(true);
-      setButtonDisabled(true);
-      const formData = new FormData();
-      forEach(files, file => {
-        formData.append('file', file);
-      })
-      const config = JSON.stringify({
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        timeout: 60000,
-        params: {
-          ...UPLOAD_MAP[selectedOption].queryParams,
-        }
-      } as AxiosRequestConfig);
+    const formData = new FormData();
+    forEach(files, (file) => formData.append("file", file));
 
+    const config: AxiosRequestConfig = {
+      headers: { "Content-Type": "multipart/form-data" },
+      timeout: 60000,
+      params: { ...UPLOAD_MAP[selectedOption].queryParams },
+    };
+
+    try {
       const response = await axiosFetcher([
         `/organizations/${orgId}/files`,
-        'POST',
+        "POST",
         formData,
-        config
+        JSON.stringify(config),
       ]);
 
       if (!isAxiosError(response)) {
@@ -86,7 +75,6 @@ export const UploadingScreen = (props: UploadModalUploadingScreenProps) => {
           logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData }, response });
         }
         setResponse(response);
-        await onFileUpload()
       } else {
         // handle regular axios server response errors
         const error: AxiosError = response;
@@ -109,12 +97,54 @@ export const UploadingScreen = (props: UploadModalUploadingScreenProps) => {
           });
         }
       }
-      setUploading(false);
-      setButtonLoading(false);
-      setButtonDisabled(false);
+      await onFileUpload();
+    } catch (error) {
+      if (isAxiosError(error)) {
+        setResponse({
+          failed: files.map((file) => ({
+            file: { originalname: file.name },
+            error: { message: "Failed to upload" },
+          })),
+        });
+
+        if (error.response?.status === 409) {
+          logBrowser("Duplicate file uploaded", "error", { orgId, error });
+        } else {
+          logBrowser("Upload failed", "error", { orgId, error });
+        }
+      }
     }
+
+    setUploading(false);
+    setButtonLoading(false);
+    setButtonDisabled(false);
+  }, [files, selectedOption, uploading, orgId, onFileUpload, setButtonLoading, setButtonDisabled]);
+
+  return { uploadDocuments, uploading, response };
+};
+
+export const UploadingScreen = (props: UploadModalUploadingScreenProps) => {
+  const {files, onFileUpload, setButtonLoading, selectedOption, setButtonDisabled} = props;
+
+  const { uploadDocuments, uploading, response } = useFileUpload({
+    files,
+    selectedOption,
+    onFileUpload,
+    setButtonLoading,
+    setButtonDisabled,
+  });
+
+  useEffect(() => {
     uploadDocuments();
-  }, []);
+  }, []); // Empty dependency array ensures it only runs once on mount
+
+  const getResponseForFile = (index: number) => {
+    if (!response) return null;
+    const failedFile = get(response, `failed[${index}]`, null);
+    return failedFile
+      ? { message: get(failedFile, "error.message", "Failed to upload"), success: false }
+      : { message: "Uploaded", success: true };
+  };
 
   return (
     <>
