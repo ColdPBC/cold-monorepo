@@ -67,14 +67,6 @@ export class JobConsumer extends BaseWorker {
 	@Process('file.uploaded')
 	async processFileJob(job: Job) {
 		await this.classification.add('classify', { ...job.data }, { removeOnFail: true, removeOnComplete: true });
-
-		if (!isImage(job.data.file.key.split('.').pop().toLowerCase())) {
-			const processed = await this.loader.ingestData(job.data.user, job.data.organization, job.data.file);
-
-			if (!processed?.filePayload || !processed?.user || !processed?.organization) {
-				throw new Error('Failed to process file, missing required data');
-			}
-		}
 	}
 
 	@Process('file.deleted')
