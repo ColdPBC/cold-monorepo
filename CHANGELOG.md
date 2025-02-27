@@ -1,3 +1,10 @@
+## [1.580.1](https://github.com/coldPBC/cold-monorepo/compare/v1.580.0...v1.580.1) (2025-02-27)
+
+
+### Bug Fixes
+
+* enhance failure logging to include job failure reason ([fc92e48](https://github.com/coldPBC/cold-monorepo/commit/fc92e48b74c45c428bfcfbab350b34db5672bf6a))
+
 # [1.580.0](https://github.com/coldPBC/cold-monorepo/compare/v1.579.0...v1.580.0) (2025-02-27)
 
 
