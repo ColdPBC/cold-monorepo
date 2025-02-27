@@ -36,7 +36,7 @@ export const SustainabiliBuddyInput = (props: {
       className={'rounded-[30px] border-[1px] border-white py-[12px] pr-[12px] pl-[16px] flex flex-row justify-between gap-[6px] h-auto'}>
       <Input
         textarea_props={{
-          className: 'w-full p-0 border-0 focus:border-0 text-body text-tc-primary text-wrap h-fit',
+          className: 'w-full p-0 border-0 focus:border-0 text-body text-tc-primary text-wrap h-fit rounded-none',
           placeholder: 'Your question...',
           value: currentPrompt,
           onChange: (e) => {
