@@ -54,6 +54,16 @@ const _SustainabiliBuddyAIAnswer = (
           response: {
             answer: DEFAULT_RESPONSE_ANSWER,
             ...response,
+            // group the references by file name, concat text by new line
+            references: response.references ? response.references.reduce((acc: AIPromptResponse['references'], ref: AIPromptResponse['references'][0]) => {
+              const existingRef = acc.find(r => r.file === ref.file);
+              if (existingRef) {
+                existingRef.text += `\n${ref.text}`;
+              } else {
+                acc.push(ref);
+              }
+              return acc;
+            }) : [],
           },
         });
       }
