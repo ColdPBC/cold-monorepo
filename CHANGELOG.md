@@ -1,3 +1,14 @@
+# [1.581.0](https://github.com/coldPBC/cold-monorepo/compare/v1.580.1...v1.581.0) (2025-02-27)
+
+
+### Features
+
+* Add rounded-none style to input component ([8a8336a](https://github.com/coldPBC/cold-monorepo/commit/8a8336a8b870b7e20f64d81c61984e0797a1ff06))
+* Extract input handling logic into a separate function for clarity ([2a2b8ee](https://github.com/coldPBC/cold-monorepo/commit/2a2b8eea21991f7ed375b02e2296caab9d708df8))
+* Group references by file name and concatenate text in response ([340cfd8](https://github.com/coldPBC/cold-monorepo/commit/340cfd8e86ef0d59527a554fd58a501591648f8d))
+* Refactor file input handling to allow re-selection. ([4b30473](https://github.com/coldPBC/cold-monorepo/commit/4b30473890be23895c3dfdc2fcd8c85eefc841d0))
+* Refactor file upload logic into custom hook. ([65557c5](https://github.com/coldPBC/cold-monorepo/commit/65557c57aafd7a7bc9448bb5498b7f566fef8b2f))
+
 ## [1.580.1](https://github.com/coldPBC/cold-monorepo/compare/v1.580.0...v1.580.1) (2025-02-27)
 
 
