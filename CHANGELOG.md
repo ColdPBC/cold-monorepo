@@ -1,3 +1,10 @@
+## [1.582.1](https://github.com/coldPBC/cold-monorepo/compare/v1.582.0...v1.582.1) (2025-02-28)
+
+
+### Bug Fixes
+
+* comment out platform event for AI_PROCESSING status in file upload handling ([8548047](https://github.com/coldPBC/cold-monorepo/commit/8548047d22b22e156fb69f470c43ff73fa3d4031))
+
 # [1.582.0](https://github.com/coldPBC/cold-monorepo/compare/v1.581.0...v1.582.0) (2025-02-28)
 
 
