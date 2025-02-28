@@ -600,7 +600,7 @@ export class OrganizationFilesService extends BaseWorker {
 				// only send event to openAI if the file status is AI_PROCESSING otherwise create MANUAL_REVIEW issue in linear
 				if (existing.processing_status === processing_status.AI_PROCESSING) {
 					await this.events.sendIntegrationEvent(false, 'file.uploaded', { ...existing, organization }, user);
-					await this.events.sendPlatformEvent('cold.platform.openai', 'file.uploaded', { file: existing, organization }, user);
+					//await this.events.sendPlatformEvent('cold.platform.openai', 'file.uploaded', { file: existing, organization }, user);
 				} else {
 					if (existing.bucket && existing.key) {
 						const issue = await this.events.sendRPCEvent('cold.core.linear.events', processing_status.MANUAL_REVIEW, { orgFile: existing, organization, user });
