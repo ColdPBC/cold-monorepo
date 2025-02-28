@@ -1,3 +1,18 @@
+import { dynamicImport, MinimalNodeModule } from 'tsimportlib';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+async function loadPdfJs() {
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = dirname(__filename);
+
+	const module: MinimalNodeModule = {
+		filename: __filename,
+	};
+	const pdfjs = (await dynamicImport('pdfjs-dist/legacy/build/pdf.mjs', module)) as typeof import('pdfjs-dist');
+
+	return pdfjs;
+}
 /**
  * Given a PDF, extract and return its text content.
  *
@@ -28,7 +43,9 @@ export type PageType = {
  */
 export async function pdfToPages(pdf: Buffer | Uint8Array, options?: { nodeSep?: string }): Promise<PageType[]> {
 	pdf = normalizeBuffer(pdf);
-	const getDocument = await import('pdfjs-dist/build/pdf.mjs');
+	const pdfjs = await loadPdfJs();
+	const { getDocument } = pdfjs;
+	//const getDocument = await import('pdfjs-dist/build/pdf.mjs');
 	const document = await getDocument({
 		data: pdf,
 		useWorkerFetch: false,
