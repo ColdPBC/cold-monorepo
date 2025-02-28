@@ -98,6 +98,10 @@ export class ClassificationProcessorService extends BaseWorker {
 
 	@OnQueueFailed()
 	async onFailed(job: Job) {
+		if (!job?.name) {
+			this.logger.error(`Job name not found`, job);
+			return;
+		}
 		this.logger.info(`${job.name} Job FAILED | ${job.failedReason}| id: ${job.id} failed_on: ${new Date().toUTCString()} | ${this.getTimerString(job)}`);
 		const { organization, user, file } = job.data;
 		const metadata = file.metadata as any;
@@ -205,9 +209,10 @@ export class ClassificationProcessorService extends BaseWorker {
 
 			if (extension === 'pdf') {
 				// Extract raw content from the document for classification
-				//content = await this.extraction.extractTextFromPDF(fileBytes, orgFile, user, organization);
+				content = await this.extraction.extractTextFromPDF(fileBytes, orgFile, user, organization);
 
-				if (!content || content.length < 256) {
+				// no text content extracted from pdf, attempt to convert pdf pages to array of OpenAI content objects which contain base64 image urls
+				if (!content) {
 					// attempt to convert pdf pages to array of OpenAI content objects which contain base64 image urls
 					openAiImageUrlContent = await this.extraction.convertPDFPagesToImages(fileBytes, orgFile, user, organization);
 				}
@@ -219,15 +224,44 @@ export class ClassificationProcessorService extends BaseWorker {
 
 			let classification: any;
 			let extractionJobData = {} as ExtractionJobPayload;
+			let containsBinaryData = false;
 
-			if (content && content.length > 256) {
-				// classify text content and add to extraction queue
-				classification = await this.classification.classifyContent(content, user, orgFile, organization);
-				extractionJobData = { content, extension, classification, filePayload: orgFile, user, organization, attributes: this.classification.sus_attributes };
-			} else if (openAiImageUrlContent.length > 0) {
-				// classify image pages and add to extraction queue
-				classification = await this.classification.classifyImageUrls(openAiImageUrlContent, user, orgFile, organization);
-				extractionJobData = { extension, isImage: isImage(extension), classification, filePayload: orgFile, user, organization, attributes: this.classification.sus_attributes };
+			if (content) {
+				for (const item of content) {
+					if (this.likelyBinary(item)) {
+						containsBinaryData = true;
+
+						openAiImageUrlContent.push({
+							type: 'image_url',
+							image_url: { url: `data:image/${extension};base64,${btoa(item)}` },
+						});
+					}
+				}
+				if (!containsBinaryData) {
+					// classify text content and add to extraction queue
+					classification = await this.classification.classifyContent(content, user, orgFile, organization);
+					extractionJobData = {
+						content,
+						extension,
+						classification,
+						filePayload: orgFile,
+						user,
+						organization,
+						attributes: this.classification.sus_attributes,
+					};
+				} else if (openAiImageUrlContent.length > 0) {
+					// classify image pages and add to extraction queue
+					classification = await this.classification.classifyImageUrls(openAiImageUrlContent, user, orgFile, organization);
+					extractionJobData = {
+						extension,
+						isImage: isImage(extension),
+						classification,
+						filePayload: orgFile,
+						user,
+						organization,
+						attributes: this.classification.sus_attributes,
+					};
+				}
 			}
 
 			await this.prisma.organization_files.update({
@@ -248,8 +282,15 @@ export class ClassificationProcessorService extends BaseWorker {
 			await this.onCompleted(job);
 			// classification done
 		} catch (e) {
-			await this.onFailed(job);
 			this.logger.info(e.message, e);
+
+			if (e.message === 'File not found') {
+				job.discard({ message: e.message });
+			} else {
+				job.moveToFailed({ message: e.message }, true);
+			}
+
+			//await this.onFailed(job);
 			//await this.onFailed(job);
 			throw e;
 		}
@@ -276,6 +317,19 @@ export class ClassificationProcessorService extends BaseWorker {
 			const encoder = new TextEncoder();
 			encoder.encode(JSON.stringify(extracted));
 		}*/
+	}
+
+	likelyBinary(content: string) {
+		let nonPrintableCount = 0;
+
+		for (let i = 0; i < content.length; i++) {
+			const charCode = content.charCodeAt(i);
+			if (charCode < 32 && ![9, 10, 13].includes(charCode)) {
+				nonPrintableCount++;
+			}
+		}
+
+		return nonPrintableCount / content.length > 0.2;
 	}
 
 	getTimerString(job: Job) {
