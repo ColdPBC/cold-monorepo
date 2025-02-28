@@ -100,7 +100,13 @@ export class ExtractionService extends BaseWorker {
 			const base64String = Buffer.from(fileBuffer).toString('base64');
 
 			const pdfLoadDoc = await PDFDocument.load(base64String, { ignoreEncryption: true });
-
+			if (pdfLoadDoc.isEncrypted) {
+				this.logger.error(`FATAL: Unable to process encrypted PDF ${filePayload.original_name}.  Either upload decrypted PDF or create a new PDF with screenshots of the pages`, {
+					file: filePayload,
+					user,
+					organization,
+				});
+			}
 			const pageCount = pdfLoadDoc.getPageCount();
 
 			if (pdfLoadDoc.isEncrypted) {
@@ -112,11 +118,13 @@ export class ExtractionService extends BaseWorker {
 			for (let i = 0; i < pageCount; i++) {
 				const imageBase64 = await this.convertPdfPageToImage(i + 1, fileBuffer, filePayload, user, organization);
 
-				this.logger.info(`Converted page ${i + 1} to image`, { file: filePayload, user, organization });
-				pages.push({
-					type: 'image_url',
-					image_url: { url: `data:image/png;base64,${imageBase64}` },
-				});
+				if (imageBase64) {
+					this.logger.info(`Converted page ${i + 1} to image`, { file: filePayload, user, organization });
+					pages.push({
+						type: 'image_url',
+						image_url: { url: `data:image/png;base64,${imageBase64}` },
+					});
+				}
 			}
 
 			return pages;
