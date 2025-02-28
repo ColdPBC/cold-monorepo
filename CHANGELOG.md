@@ -1,3 +1,18 @@
+# [1.582.0](https://github.com/coldPBC/cold-monorepo/compare/v1.581.0...v1.582.0) (2025-02-28)
+
+
+### Bug Fixes
+
+* handle inconsistent payload key for file in async message processing ([5942fc3](https://github.com/coldPBC/cold-monorepo/commit/5942fc39e89c180efce2f7d74c617a692d9c7b28))
+* handle optional compliance ID in job cache retrieval ([9e8b6d0](https://github.com/coldPBC/cold-monorepo/commit/9e8b6d0f7a2874ac0178bef7642e8b5504d15215))
+* improve error handling for encrypted PDFs in extraction service ([a96424c](https://github.com/coldPBC/cold-monorepo/commit/a96424cc34da8e5ecbdb1cb7b243faaef23abfda))
+
+
+### Features
+
+* dynamically load pdfjs-dist for improved PDF text extraction ([44aa893](https://github.com/coldPBC/cold-monorepo/commit/44aa8934b623a6d93e8c8be143d7a97464b2e202))
+* enhance job failure handling and add binary content detection in classification process ([bd11c57](https://github.com/coldPBC/cold-monorepo/commit/bd11c5768064e61047535262a0f173b20770a5c3))
+
 # [1.581.0](https://github.com/coldPBC/cold-monorepo/compare/v1.580.1...v1.581.0) (2025-02-27)
 
 
