@@ -123,6 +123,12 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
         '& .MuiDataGrid-cell--pinnedRight' : {
           backgroundColor: HexColors.bgc.elevated,
         },
+        '& .MuiTablePagination-toolbar': {
+          justifyContent: 'flex-start', // Ensures pagination is aligned to the left
+        },
+        '& .MuiTablePagination-spacer': {
+          display: 'none', // Removes default right spacing
+        },
         ...props.sx,
       }}
       slots={{
