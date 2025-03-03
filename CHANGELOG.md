@@ -1,3 +1,12 @@
+# [1.584.0](https://github.com/coldPBC/cold-monorepo/compare/v1.583.1...v1.584.0) (2025-03-03)
+
+
+### Features
+
+* Add custom scrollbar styling for chatbot UI ([d327583](https://github.com/coldPBC/cold-monorepo/commit/d327583edb17cdd267ab45a739c273bc2150193f))
+* Adjust padding logic and refine scrolling behavior ([6ce4de0](https://github.com/coldPBC/cold-monorepo/commit/6ce4de0adadcb17578b1d0e8188459e0c654d491))
+* Align pagination toolbar to the left and remove default right spacing ([e94dd75](https://github.com/coldPBC/cold-monorepo/commit/e94dd75b5144cc22c67a77cf3b8b3512a5eb3d90))
+
 ## [1.583.1](https://github.com/coldPBC/cold-monorepo/compare/v1.583.0...v1.583.1) (2025-03-03)
 
 
