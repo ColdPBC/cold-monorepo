@@ -100,13 +100,7 @@ export class ExtractionService extends BaseWorker {
 			const base64String = Buffer.from(fileBuffer).toString('base64');
 
 			const pdfLoadDoc = await PDFDocument.load(base64String, { ignoreEncryption: true });
-			if (pdfLoadDoc.isEncrypted) {
-				this.logger.error(`FATAL: Unable to process encrypted PDF ${filePayload.original_name}.  Either upload decrypted PDF or create a new PDF with screenshots of the pages`, {
-					file: filePayload,
-					user,
-					organization,
-				});
-			}
+
 			const pageCount = pdfLoadDoc.getPageCount();
 
 			if (pdfLoadDoc.isEncrypted) {

@@ -225,6 +225,10 @@ Steps for Classification:
 				response_format: zodResponseFormat(this.classificationSchema, 'content_classification'),
 			});
 
+			if (!Array.isArray(classifyResponse.choices) || classifyResponse.choices.length === 0) {
+				throw new Error('No choices found in classify response');
+			}
+
 			set(classifyResponse.choices[0].message?.parsed, 'attributes', this.sus_attributes);
 
 			const suppliers = (await this.prisma.organization_facilities.findMany({
@@ -254,10 +258,6 @@ Steps for Classification:
 					file_id: orgFile.id,
 				},
 			});
-
-			if (!Array.isArray(classifyResponse.choices) || classifyResponse.choices.length === 0) {
-				throw new Error('No choices found in classify response');
-			}
 
 			return classifyResponse.choices[0].message.parsed;
 		} catch (e) {

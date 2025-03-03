@@ -270,7 +270,7 @@ export class ClassificationProcessorService extends BaseWorker {
 					id: filePayload.id,
 				},
 				data: {
-					type: classification.type,
+					type: classification?.type || orgFile.type,
 					metadata: {
 						classification: omit(classification, ['extraction_name', 'extraction_schema']),
 						...(orgFile.metadata as object),
