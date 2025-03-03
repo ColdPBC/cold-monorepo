@@ -1,6 +1,12 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { find, get } from 'lodash';
-import {ProcessingStatus} from "@coldpbc/enums";
+import {
+  AssuranceDocumentTypes,
+  BillOfMaterialDocumentTypes,
+  DocumentType, InternalSustainabilityPolicyDocumentTypes,
+  MainDocumentCategory,
+  ProcessingStatus, SustainabilityDataDocumentTypes
+} from "@coldpbc/enums";
 
 export const getEffectiveEndDate = (file: FilesWithAssurances): string | null => {
   if(file.effectiveEndDate) return file.effectiveEndDate;
@@ -57,4 +63,16 @@ export const getEffectiveStartDateFromAssurances = (file: FilesWithAssurances | 
 export const getFileProcessingStatus = (file: FilesWithAssurances | undefined): ProcessingStatus | null => {
   if (!file) return null;
   return file.processingStatus;
+};
+
+
+const DocumentCategoryMap = {
+  ...Object.fromEntries(Object.values(AssuranceDocumentTypes).map(type => [type, MainDocumentCategory.Assurance])),
+  ...Object.fromEntries(Object.values(BillOfMaterialDocumentTypes).map(type => [type, MainDocumentCategory.BillOfMaterial])),
+  ...Object.fromEntries(Object.values(InternalSustainabilityPolicyDocumentTypes).map(type => [type, MainDocumentCategory.InternalSustainabilityPolicy])),
+  ...Object.fromEntries(Object.values(SustainabilityDataDocumentTypes).map(type => [type, MainDocumentCategory.SustainabilityData])),
+};
+
+export const getDocumentCategory = (documentType: DocumentType): MainDocumentCategory => {
+  return DocumentCategoryMap[documentType] || MainDocumentCategory.Assurance; // Default fallback
 };
