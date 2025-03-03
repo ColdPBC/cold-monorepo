@@ -1,3 +1,10 @@
+## [1.583.1](https://github.com/coldPBC/cold-monorepo/compare/v1.583.0...v1.583.1) (2025-03-03)
+
+
+### Bug Fixes
+
+* handle optional classification type and improve error handling for classify response ([2616935](https://github.com/coldPBC/cold-monorepo/commit/26169359026d5b678d02b8de59d4abafff6c882e))
+
 # [1.583.0](https://github.com/coldPBC/cold-monorepo/compare/v1.582.1...v1.583.0) (2025-03-03)
 
 
