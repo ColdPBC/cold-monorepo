@@ -1,3 +1,10 @@
+# [1.583.0](https://github.com/coldPBC/cold-monorepo/compare/v1.582.1...v1.583.0) (2025-03-03)
+
+
+### Features
+
+* Map document types to main categories and update UI labels. ([88d48ba](https://github.com/coldPBC/cold-monorepo/commit/88d48ba0705517f63b78bf4b485127659395085b))
+
 ## [1.582.1](https://github.com/coldPBC/cold-monorepo/compare/v1.582.0...v1.582.1) (2025-02-28)
 
 
