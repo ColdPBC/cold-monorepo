@@ -42,6 +42,23 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
+  .scrollbar-chatbot::-webkit-scrollbar {
+    width: 8px; /* Scrollbar width */
+  }
+
+  /* Scrollbar track (the area behind the thumb) */
+  .scrollbar-chatbot::-webkit-scrollbar-track {
+    background: transparent;
+    margin-top: 20px;  /* Adds space above the scrollbar */
+    margin-bottom: 20px; /* Adds space below the scrollbar */
+  }
+
+  /* Scrollbar thumb (hidden by default) */
+  .scrollbar-chatbot::-webkit-scrollbar-thumb {
+    background: #A3A6C2; /* Visible scrollbar */
+    border-radius: 8px;
+  }
 }
 
 @media print {
