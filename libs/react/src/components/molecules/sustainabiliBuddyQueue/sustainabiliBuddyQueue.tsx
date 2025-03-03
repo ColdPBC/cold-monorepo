@@ -23,7 +23,7 @@ export const SustainabiliBuddyQueue = (
   }, [queue]);
 
   return (
-    <div className={'h-full overflow-y-auto w-full flex flex-col gap-6'}>
+    <div className={'h-full w-full flex flex-col gap-6 overflow-y-auto pr-2 scrollbar-chatbot'}>
       {/** Dummy div to show illusion of padding at the top for the beginning*/}
       <div className={'h-0'}/>
       <SustainabiliBuddyAIAnswerContainer>
