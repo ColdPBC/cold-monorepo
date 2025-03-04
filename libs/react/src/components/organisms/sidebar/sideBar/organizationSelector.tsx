@@ -1,12 +1,10 @@
 import { withErrorBoundary } from 'react-error-boundary';
 import { ColdIcon, ErrorFallback, Spinner } from '@coldpbc/components';
-import { useColdContext } from '@coldpbc/hooks';
+import {useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
 import type { Organization } from '@coldpbc/context';
-import { axiosFetcher } from '@coldpbc/fetchers';
 import { ErrorType, IconNames } from '@coldpbc/enums';
 import React, { useEffect, useState } from 'react';
-import useSWR from 'swr';
-import { find, parseInt } from 'lodash';
+import {find, get, parseInt} from 'lodash';
 import { ComboBox } from '@coldpbc/components';
 import { useNavigate } from 'react-router-dom';
 import { InputOption } from '@coldpbc/interfaces';
@@ -15,7 +13,7 @@ const orgToInputOption = (org: Organization | undefined) => {
   if (org) {
     return {
       id: parseInt(org.id),
-      name: org.display_name,
+      name: org.displayName,
       value: org.id
     };
   } else {
@@ -25,16 +23,18 @@ const orgToInputOption = (org: Organization | undefined) => {
 
 const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
   const navigate = useNavigate();
-  const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
+  const { data, error, isLoading } = useGraphQLSWR<{
+    organizations: Organization[];
+  }>('GET_ALL_ORGS');
   const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
 
   // Default to the impersonating org if already set
   const [selectedOption, setSelectedOption] = useState<InputOption | null>(orgToInputOption(impersonatingOrg));
 
   const onOrgSelect = (selectedOption: InputOption) => {
-    const org: Organization | undefined = find(data, org => org.id === selectedOption.value);
+    const org: Organization | undefined = find(get(data, 'data.organizations', []), org => org.id === selectedOption.value);
     if(org) {
-      logBrowser(`New impersonating organization selected: ${org.display_name}`, 'info', { org: org });
+      logBrowser(`New impersonating organization selected: ${org.displayName}`, 'info', { org: org });
       navigate('/');
       setSelectedOption(selectedOption);
       setImpersonatingOrg(org);
@@ -47,7 +47,7 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
   // Set the org to Cold Climate if there's no impersonating org
   useEffect(() => {
     if (data && !impersonatingOrg) {
-      const coldClimateOrg = find(data, org => org.display_name === 'Cold Climate')
+      const coldClimateOrg = find(get(data, 'data.organizations', []), org => org.displayName === 'Cold Climate')
       setSelectedOption(orgToInputOption(coldClimateOrg));
     }
   }, [data, impersonatingOrg]);
@@ -69,11 +69,11 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
   logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOption });
 
   if (sidebarExpanded) {
-    const organizationOptions: InputOption[] = data
-      .sort((a: Organization, b: Organization) => a.display_name.localeCompare(b.display_name))
+    const organizationOptions: InputOption[] = get(data, 'data.organizations', [])
+      .sort((a: Organization, b: Organization) => a.displayName.localeCompare(b.displayName))
       .map((org: Organization, index: number) => ({
         id: index,
-        name: org.display_name,
+        name: org.displayName,
         value: org.id,
       }));
 

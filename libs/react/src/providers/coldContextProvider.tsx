@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import ColdContext from '../context/coldContext';
+import ColdContext, {Organization} from '../context/coldContext';
 import { ColdAuthProvider } from './coldAuthProvider';
 import { BrowserRouter } from 'react-router-dom';
 import { ColdLDProvider } from './coldLDProvider';
@@ -28,7 +28,7 @@ export const ColdContextProvider = (props: PropsWithChildren<ColdContextProvider
     }
   };
 
-  const [impersonatingOrg, setImpersonatingOrg] = React.useState<any | undefined>(getImpersonatingOrg());
+  const [impersonatingOrg, setImpersonatingOrg] = React.useState<Organization | undefined>(getImpersonatingOrg());
 
   const logError = (error: any, type: ErrorType, context?: object) => {
     error.name = type;
@@ -39,7 +39,7 @@ export const ColdContextProvider = (props: PropsWithChildren<ColdContextProvider
     datadogLogs.logger.log(message, context, type, error);
   };
 
-  const setSelectedOrg = (org: any) => {
+  const setSelectedOrg = (org: Organization | undefined) => {
     logBrowser('Impersonating new organization', 'info', { org: org });
     setImpersonatingOrg(org);
     if (org) {

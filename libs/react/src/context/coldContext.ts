@@ -15,6 +15,13 @@ export type ColdContextType = {
 export type Organization = {
   id: string;
   name: string;
+  displayName: string;
+  branding?: any;
+}
+
+export type OrganizationGraphql = {
+  id: string;
+  name: string;
   display_name: string;
 }
 
