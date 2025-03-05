@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {clone, get, upperCase} from 'lodash';
+import {clone, forEach, get, upperCase} from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useLocation } from 'react-router-dom';
 import {NavbarItem, NavbarItemWithRoute, SidebarGraphQL} from '@coldpbc/interfaces';
@@ -65,21 +65,20 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 	};
 
 	useEffect(() => {
+    const matchPathWithSidebarItem = (items: NavbarItem[]) => {
+      forEach(items, (item: NavbarItem) => {
+        if(item.items) {
+          matchPathWithSidebarItem(item.items);
+        }
+        if(item.route) {
+          if (location.pathname.includes(item.route) && activeItem?.key !== item.key) {
+            setActiveItem(item);
+          }
+        }
+      });
+    }
     const items: NavbarItem[] = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []);
-		if (items && items.length > 0) {
-			items.forEach((item: NavbarItem) => {
-				if (location.pathname === item.route && activeItem?.key !== item.key) {
-					setActiveItem(item);
-				}
-				if (item.items) {
-					item.items.forEach((subItem: NavbarItemWithRoute) => {
-						if (location.pathname === subItem.route && activeItem?.key !== subItem.key) {
-							setActiveItem(subItem);
-						}
-					});
-				}
-			});
-		}
+    matchPathWithSidebarItem(items);
 	}, [location.pathname, sidebarQuery.data, activeItem?.key]);
 
 	if (sidebarQuery.isLoading || auth0.isLoading)
