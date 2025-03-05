@@ -639,11 +639,10 @@ export const defaultGraphqlMocks: {
   },
   {
     query: GET_COMPONENT_DEFINITIONS,
-    handler: (variables) => {
-      const {filter} = variables as {filter: {name: string}};
+    handler: (variables: {filter: {name: string}}) => {
       return Promise.resolve({
         data: {
-          componentDefinitions: getComponentMocksByFilter(filter),
+          componentDefinitions: getComponentMocksByFilter(variables.filter.name),
         }
       });
     }
