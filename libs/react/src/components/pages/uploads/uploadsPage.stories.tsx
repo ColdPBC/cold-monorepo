@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { UploadsPage } from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryMockProvider } from '@coldpbc/mocks';
-import {within} from "@storybook/testing-library";
+import {within} from "@storybook/test";
 
 const meta: Meta<typeof UploadsPage> = {
   title: 'Pages/UploadsPage',

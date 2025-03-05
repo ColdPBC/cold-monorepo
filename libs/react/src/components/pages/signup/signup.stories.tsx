@@ -2,8 +2,7 @@ import { auth0UserMock, getEmptyPoliciesSignedMock, getPoliciesSignedMock, getSi
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ApplicationToaster, SignupPage } from '@coldpbc/components';
-import { fireEvent, userEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { expect, fireEvent, userEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/test';
 
 const meta: Meta<typeof SignupPage> = {
   title: 'Pages/SignupPage',

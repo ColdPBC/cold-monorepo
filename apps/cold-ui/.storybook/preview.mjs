@@ -7,6 +7,7 @@ import {muiTheme} from "../../../libs/react/src/themes/muiTheme";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import { LicenseInfo } from '@mui/x-license';
+import {CustomDecorators} from "./customDecorators";
 
 // Storybook executes this module in both bootstap phase (Node)
 // and a story's runtime (browser). However, we cannot call `setupWorker`
@@ -24,7 +25,6 @@ if (typeof global.process === 'undefined' || global.process.title === 'browser')
 
 export default {
   parameters: {
-    actions: {argTypesRegex: '^on[A-Z].*'},
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -99,16 +99,10 @@ export default {
       },
     },
   },
+
   decorators: [
-    Story => {
-      LicenseInfo.setLicenseKey(import.meta.env.STORYBOOK_MUI_LICENSE_KEY);
-      return StyledEngineProvider({
-        injectFirst: true,
-        children: LocalizationProvider({
-          dateAdapter: AdapterDateFns,
-          children: ThemeProvider({theme: muiTheme, children: Story()})
-        })
-      })
-    },
+    (Story, context) => CustomDecorators(Story, context, import.meta.env.STORYBOOK_MUI_LICENSE_KEY),
   ],
+
+  tags: ['autodocs']
 };

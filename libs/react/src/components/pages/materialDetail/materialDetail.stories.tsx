@@ -3,8 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { MaterialDetail } from '@coldpbc/components';
 import { defaultGraphqlMocks, getMaterialGraphQLMock, StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
-import {fireEvent, waitFor, waitForElementToBeRemoved, within} from "@storybook/testing-library";
-import {expect} from "@storybook/jest";
+import { fireEvent, waitForElementToBeRemoved, within} from "@storybook/test";
 
 const meta: Meta<typeof MaterialDetail> = {
   title: 'Pages/MaterialDetail',

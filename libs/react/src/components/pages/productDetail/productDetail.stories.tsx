@@ -3,7 +3,7 @@ import {ProductDetail} from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import {fileWithProductMocks, productWithoutEmissionsFactor, StoryMockProvider} from '@coldpbc/mocks';
 import {Route, Routes} from "react-router-dom";
-import {fireEvent, waitForElementToBeRemoved, within} from "@storybook/testing-library";
+import {fireEvent, waitForElementToBeRemoved, within} from "@storybook/test";
 import {GET_ALL_FILES} from "@coldpbc/lib";
 
 const meta: Meta<typeof ProductDetail> = {

@@ -2,8 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import {CreateProductPage} from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryMockProvider } from '@coldpbc/mocks';
-import { userEvent, waitForElementToBeRemoved, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { expect, userEvent, waitForElementToBeRemoved, within } from '@storybook/test';
 
 const meta: Meta<typeof CreateProductPage> = {
   title: 'Pages/CreateProductPage',

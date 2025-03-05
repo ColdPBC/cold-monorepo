@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { MaterialDetail, SupplierDetail } from '@coldpbc/components';
 import { defaultGraphqlMocks, getMaterialGraphQLMock, getSupplierGraphQLMock, StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
-import {fireEvent, waitForElementToBeRemoved, within} from "@storybook/testing-library";
+import {fireEvent, waitForElementToBeRemoved, within} from "@storybook/test";
 
 const meta: Meta<typeof SupplierDetail> = {
   title: 'Pages/SupplierDetail',

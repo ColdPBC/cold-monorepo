@@ -1,8 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { MaterialsSuppliedTab, Tabs } from '@coldpbc/components';
 import { getMaterialsMocksWithAssurances, getSupplierMock, StoryMockProvider } from '@coldpbc/mocks';
-import { fireEvent, within } from "@storybook/testing-library";
-import { expect } from '@storybook/jest'
+import { expect, fireEvent, within } from "@storybook/test";
 
 const meta: Meta<typeof MaterialsSuppliedTab> = {
 	title: 'Organisms/MaterialsSuppliedTab',

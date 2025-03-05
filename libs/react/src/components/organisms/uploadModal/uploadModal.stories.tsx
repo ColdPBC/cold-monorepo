@@ -3,7 +3,7 @@ import {StoryMockProvider } from '@coldpbc/mocks';
 import {MainDocumentCategory} from '@coldpbc/enums';
 import {UploadModal} from "./uploadModal";
 import {NetworkStatus} from "@apollo/client";
-import {within} from "@storybook/testing-library";
+import {within} from "@storybook/test";
 
 const meta: Meta<typeof UploadModal> = {
   title: 'Organisms/UploadModal',

@@ -2,8 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { ProductBOMTabSidebar } from '@coldpbc/components';
 import { useState } from 'react';
 import { getProductsMock, getProductsMockById, StoryMockProvider } from '@coldpbc/mocks';
-import { userEvent, waitForElementToBeRemoved, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { expect, userEvent, within } from '@storybook/test';
 
 const meta: Meta<typeof ProductBOMTabSidebar> = {
   title: "Organisms/ProductBOMTabSidebar",

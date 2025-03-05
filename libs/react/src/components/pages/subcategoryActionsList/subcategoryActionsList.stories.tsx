@@ -3,8 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { SubcategoryActionsList } from './subcategoryActionsList';
 import { getActionHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
-import { fireEvent, waitFor, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { expect, fireEvent, waitFor, within } from '@storybook/test';
 
 const meta: Meta<typeof SubcategoryActionsList> = {
   title: 'Pages/SubcategoryActionsList',
