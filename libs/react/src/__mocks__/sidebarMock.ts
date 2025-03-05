@@ -1,3 +1,5 @@
+import {getDocumentsListTableMock} from "./componentMock";
+
 export function getSidebarMock() {
   return {
     id: 'cc0267d8-f49c-493e-8ea0-2aaa58bb61f3',
@@ -138,4 +140,13 @@ export function getSidebarMock() {
     created_at: '2023-09-11T17:17:02.295Z',
     updated_at: '2024-03-18T17:45:23.188Z',
   };
+}
+
+export function getComponentMocksByFilter(filter: Object) {
+  const componentDefinitions = [getDocumentsListTableMock(), getSidebarMock()]
+  return componentDefinitions.filter((component) => {
+    return Object.keys(filter).every((key) => {
+      return component[key] === filter
+    });
+  });
 }
