@@ -99,7 +99,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 			logBrowser('Error loading auth0 data', 'error', { ...auth0.error }, auth0.error);
 			logError(auth0.error, ErrorType.Auth0Error);
 		}
-		return <></>;
+		return <>Error</>;
 	}
 
 	// filter top-level nav items
