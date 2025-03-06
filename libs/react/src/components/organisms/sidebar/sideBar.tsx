@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import useSWR from 'swr';
-import { axiosFetcher } from '@coldpbc/fetchers';
-import { clone, get, upperCase } from 'lodash';
+import {clone, forEach, get, upperCase} from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useLocation } from 'react-router-dom';
-import { NavbarItem, NavbarItemWithRoute } from '@coldpbc/interfaces';
+import {NavbarItem, NavbarItemWithRoute, SidebarGraphQL} from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
-import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 import {
   ColdLogoAnimation,
@@ -15,19 +13,19 @@ import {
   ErrorFallback,
   Spinner,
 } from '@coldpbc/components';
+import {getGraphqlError, hasGraphqlError} from '@coldpbc/lib';
 
 const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Element => {
 	const ldFlags = useFlags();
 	const [activeItem, setActiveItem] = useState<NavbarItem | NavbarItemWithRoute | null>(null);
-	const {
-		data,
-		error,
-		isLoading,
-	}: {
-		data: any;
-		error: any;
-		isLoading: boolean;
-	} = useSWR(['/components/sidebar_navigation', 'GET'], axiosFetcher);
+	const sidebarQuery =  useGraphQLSWR<{
+    componentDefinitions: SidebarGraphQL[];
+  }>(
+    'GET_COMPONENT_DEFINITIONS', {
+      filter: {
+        name: 'sidebar_navigation',
+      }
+    });
 
 	const auth0 = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
@@ -67,34 +65,34 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 	};
 
 	useEffect(() => {
-    const items: NavbarItem[] = get(data, 'definition.items', []);
-		if (items && items.length > 0) {
-			items.forEach((item: NavbarItem) => {
-				if (location.pathname === item.route && activeItem?.key !== item.key) {
-					setActiveItem(item);
-				}
-				if (item.items) {
-					item.items.forEach((subItem: NavbarItemWithRoute) => {
-						if (location.pathname === subItem.route && activeItem?.key !== subItem.key) {
-							setActiveItem(subItem);
-						}
-					});
-				}
-			});
-		}
-	}, [location.pathname, data, activeItem?.key]);
+    const matchPathWithSidebarItem = (items: NavbarItem[]) => {
+      forEach(items, (item: NavbarItem) => {
+        if(item.items) {
+          matchPathWithSidebarItem(item.items);
+        }
+        if(item.route) {
+          if (location.pathname.includes(item.route) && activeItem?.key !== item.key) {
+            setActiveItem(item);
+          }
+        }
+      });
+    }
+    const items: NavbarItem[] = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []);
+    matchPathWithSidebarItem(items);
+	}, [location.pathname, sidebarQuery.data, activeItem?.key]);
 
-	if (isLoading || auth0.isLoading)
+	if (sidebarQuery.isLoading || auth0.isLoading)
 		return (
 			<div>
 				<Spinner />
 			</div>
 		);
 
-	if (error || auth0.error) {
+	if (hasGraphqlError(sidebarQuery) || auth0.error) {
+    const error = getGraphqlError(sidebarQuery);
 		if (error) {
-			logBrowser('Error loading sidebar data', 'error', { ...error }, error);
-			logError(error, ErrorType.SWRError);
+			logBrowser('Error loading sidebar data', 'error', { error: error });
+			logError(new Error('Error loading sidebar data'), ErrorType.SWRError, error);
 		}
 		if (auth0.error) {
 			logBrowser('Error loading auth0 data', 'error', { ...auth0.error }, auth0.error);
@@ -104,11 +102,11 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 	}
 
 	// filter top-level nav items
-	const filteredSidebarItems = get(data, 'definition.items', []).filter(filterSidebar) ?? [];
+	const filteredSidebarItems = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []).filter(filterSidebar) ?? [];
 
 	if (filteredSidebarItems) {
 		// Separate the items into top and bottom nav items
-		logBrowser('Sidebar data loaded', 'info', { data, filteredSidebarItems });
+		logBrowser('Sidebar data loaded', 'info', { data: sidebarQuery.data, filteredSidebarItems });
 		const topItems: NavbarItem[] = clone(filteredSidebarItems);
     const orgSelector = getOrgSelector();
 

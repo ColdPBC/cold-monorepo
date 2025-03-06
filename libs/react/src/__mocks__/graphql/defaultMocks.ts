@@ -28,7 +28,7 @@ import {
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
   GET_PRODUCT_CARBON_FOOTPRINT_DATA,
   GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-  GET_ALL_MATERIAL_CLASSIFICATIONS, GET_ALL_UPLOADS,
+  GET_ALL_MATERIAL_CLASSIFICATIONS, GET_ALL_UPLOADS, GET_COMPONENT_DEFINITIONS,
 } from '@coldpbc/lib';
 import {
   filesProcessedWithDatesMock,
@@ -48,6 +48,7 @@ import {getProductMockWithOutEmissionFactor, getProductsMock, getProductsMockByI
 import { getMaterialsMocksWithAssurances } from '../materialsMock';
 import { addDays } from 'date-fns';
 import { Length, UnitOfMeasurement } from '@coldpbc/enums';
+import {getComponentMocksByFilter} from "../sidebarMock";
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
@@ -633,6 +634,16 @@ export const defaultGraphqlMocks: {
         data: {
           organizationFiles: getUploadsMock(),
         },
+      });
+    }
+  },
+  {
+    query: GET_COMPONENT_DEFINITIONS,
+    handler: (variables: {filter: {name: string}}) => {
+      return Promise.resolve({
+        data: {
+          componentDefinitions: getComponentMocksByFilter(variables.filter.name),
+        }
       });
     }
   }
