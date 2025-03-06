@@ -18,8 +18,9 @@ const _SustainabilityPage = () => {
 
   const { myAttributes, otherAttributes } = React.useMemo(() => {
     const sustainabilityAttributesGraphQL: SustainabilityAttributeGraphQL[] = get(sustainabilityAttributesQuery.data, 'data.sustainabilityAttributes', [])
-    const sustainabilityAttributes: SustainabilityAttribute[] = processSustainabilityAttributeDataFromGraphQL(sustainabilityAttributesGraphQL)
-      .filter(attribute => attribute.level !== EntityLevel.ORGANIZATION)
+    const filteredAttributes = sustainabilityAttributesGraphQL
+      .filter(attribute => (!attribute.organization || attribute.organization.id === orgId) && attribute.level !== EntityLevel.ORGANIZATION)
+    const sustainabilityAttributes: SustainabilityAttribute[] = processSustainabilityAttributeDataFromGraphQL(filteredAttributes)
       .sort((a, b) => a.name.localeCompare(b.name));
     const myAttributes = sustainabilityAttributes.filter(attribute => (attribute.attributeAssurances?.length || 0) > 0);
     const otherAttributes = sustainabilityAttributes.filter(attribute => (attribute.attributeAssurances?.length || 0) === 0);
