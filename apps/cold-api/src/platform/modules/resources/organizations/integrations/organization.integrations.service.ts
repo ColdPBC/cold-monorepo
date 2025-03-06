@@ -252,6 +252,8 @@ export class OrganizationIntegrationsService extends BaseWorker {
 			api_key: string;
 			timeout?: number;
 		},
+		skip: number,
+		limit: number,
 	): Promise<any> {
 		const { user, url, organization } = req;
 		this.logger.info(`Backbone integration triggered for ${organization.name}`, {
@@ -259,7 +261,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
 			organization,
 		});
 
-		await this.backbone.syncProducts(req, 0, 100, 1000);
+		await this.backbone.syncProducts(req, skip, limit);
 	}
 
 	async createIntegration(
