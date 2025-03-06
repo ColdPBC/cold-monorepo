@@ -1,3 +1,10 @@
+## [1.586.2](https://github.com/coldPBC/cold-monorepo/compare/v1.586.1...v1.586.2) (2025-03-06)
+
+
+### Bug Fixes
+
+* ensure weight is stored as a number in BackboneService ([50cb9f4](https://github.com/coldPBC/cold-monorepo/commit/50cb9f453d706f499e18119a5cc69f09d40f0833))
+
 ## [1.586.1](https://github.com/coldPBC/cold-monorepo/compare/v1.586.0...v1.586.1) (2025-03-06)
 
 
