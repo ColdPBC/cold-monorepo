@@ -1,3 +1,10 @@
+## [1.586.1](https://github.com/coldPBC/cold-monorepo/compare/v1.586.0...v1.586.1) (2025-03-06)
+
+
+### Bug Fixes
+
+* improve error logging for product upsert failure in BackboneService ([82c5e87](https://github.com/coldPBC/cold-monorepo/commit/82c5e87d09d653d6a8f5c5b2356595df3da9c59a))
+
 # [1.586.0](https://github.com/coldPBC/cold-monorepo/compare/v1.585.0...v1.586.0) (2025-03-06)
 
 
