@@ -1,3 +1,12 @@
+# [1.585.0](https://github.com/coldPBC/cold-monorepo/compare/v1.584.0...v1.585.0) (2025-03-06)
+
+
+### Features
+
+* Add GraphQL query for component definitions and implement error handling in sidebar ([38c2466](https://github.com/coldPBC/cold-monorepo/commit/38c24662e4b7baf45ff258731ab2d2af78f13598))
+* Handle errors at all levels in getGraphqlError utility ([44ee017](https://github.com/coldPBC/cold-monorepo/commit/44ee0173f8df779ec0e37c90f783e426df287f7d))
+* Refactor sidebar item matching logic with recursion. ([c6dc2f8](https://github.com/coldPBC/cold-monorepo/commit/c6dc2f8e88ac0a94d03144db279357495026633d))
+
 # [1.584.0](https://github.com/coldPBC/cold-monorepo/compare/v1.583.1...v1.584.0) (2025-03-03)
 
 
