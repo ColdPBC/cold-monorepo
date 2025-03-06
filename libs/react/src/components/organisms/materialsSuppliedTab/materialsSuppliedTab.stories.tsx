@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { MaterialsSuppliedTab, Tabs } from '@coldpbc/components';
 import { getMaterialsMocksWithAssurances, getSupplierMock, StoryMockProvider } from '@coldpbc/mocks';
 import { expect, fireEvent, within } from "@storybook/test";
+import React from "react";
 
 const meta: Meta<typeof MaterialsSuppliedTab> = {
 	title: 'Organisms/MaterialsSuppliedTab',
@@ -19,22 +20,12 @@ export const Default: Story = {
 			...getSupplierMock(2),
 			materials: getMaterialsMocksWithAssurances(),
 		},
-	},
+    refreshData: () => {},
+  },
 	// Need to place the data grid in a parent component for correct rendering
-	render: args => {
-		return (
-			<StoryMockProvider>
-				<Tabs
-					tabs={[
-						{
-							label: 'Materials',
-							content: <MaterialsSuppliedTab {...args} />,
-						},
-					]}
-				/>
-			</StoryMockProvider>
-		);
-	},
+  render: args => {
+    return <RenderMaterialsSuppliedTabStory {...args} />;
+  },
 };
 
 export const SelectMaterialsOpenBulkEditModal: Story = {
@@ -43,21 +34,11 @@ export const SelectMaterialsOpenBulkEditModal: Story = {
       ...getSupplierMock(2),
       materials: getMaterialsMocksWithAssurances(),
     },
+    refreshData: () => {},
   },
   // Need to place the data grid in a parent component for correct rendering
   render: args => {
-    return (
-      <StoryMockProvider>
-        <Tabs
-          tabs={[
-            {
-              label: 'Materials',
-              content: <MaterialsSuppliedTab {...args} />,
-            },
-          ]}
-        />
-      </StoryMockProvider>
-    );
+    return <RenderMaterialsSuppliedTabStory {...args} />;
   },
   play: async ({ canvasElement, step}) => {
     const canvas = within(canvasElement);
@@ -81,29 +62,35 @@ export const SelectMaterialsOpenEditMaterialsModal: Story = {
       ...getSupplierMock(2),
       materials: getMaterialsMocksWithAssurances(),
     },
+    refreshData: () => {},
   },
   // Need to place the data grid in a parent component for correct rendering
   render: args => {
-    return (
-      <StoryMockProvider>
-        <Tabs
-          tabs={[
-            {
-              label: 'Materials',
-              content: <MaterialsSuppliedTab {...args} />,
-            },
-          ]}
-        />
-      </StoryMockProvider>
-    );
+    return <RenderMaterialsSuppliedTabStory {...args} />;
   },
   play: async ({ canvasElement, step}) => {
     const canvas = within(canvasElement);
     await step('Select all materials', async () => {
-      const editButton = canvas.getByTestId('Edit Materials-button');
+      const editButton = await canvas.findByTestId('Edit Materials-button');
       await expect(editButton).toBeEnabled();
       // click the button
       fireEvent.click(editButton);
     })
   }
 };
+
+
+const RenderMaterialsSuppliedTabStory = (args: any) => {
+  return (
+    <StoryMockProvider>
+      <Tabs
+        tabs={[
+          {
+            label: 'Materials',
+            content: <MaterialsSuppliedTab {...args} />,
+          },
+        ]}
+      />
+    </StoryMockProvider>
+  );
+}

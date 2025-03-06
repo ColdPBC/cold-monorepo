@@ -15,16 +15,22 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [value, setValue] = React.useState(args.value);
-
-    const onChange = (value: any) => {
-      setValue(value);
-    };
-
-    return <YesNo value={value} onChange={onChange} />;
+    return <RenderYesNoStory {...args} />;
   },
   args: {
     value: null,
   },
 };
+
+
+const RenderYesNoStory = (args: any) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [value, setValue] = React.useState(args.value);
+
+  const onChange = (value: any) => {
+    setValue(value);
+  };
+
+  return <YesNo value={value} onChange={onChange} />;
+
+}
