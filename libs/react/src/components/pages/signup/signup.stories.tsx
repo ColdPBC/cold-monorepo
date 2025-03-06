@@ -2,7 +2,7 @@ import { auth0UserMock, getEmptyPoliciesSignedMock, getSignUpHandler, StoryMockP
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ApplicationToaster, SignupPage } from '@coldpbc/components';
-import {expect, fireEvent, userEvent, waitFor, within} from '@storybook/test';
+import {expect, userEvent, waitFor, within} from '@storybook/test';
 import {waitForElementToBeRemoved} from "@testing-library/react";
 
 const meta: Meta<typeof SignupPage> = {
@@ -40,6 +40,7 @@ export const NewUserExistingCompany: Story = {
     </StoryMockProvider>
   ),
   play: async ({ canvasElement, step }) => {
+    const user = userEvent.setup({ delay: 100 })
     const canvas = within(canvasElement);
 
     let continueButton = await canvas.findByRole('button', { name: 'Continue' });
@@ -57,23 +58,19 @@ export const NewUserExistingCompany: Story = {
       name: 'isAgreedToPrivacyAndTOS',
     });
     await step('Validate the form', async () => {
-      await waitFor(async () => {
-        fireEvent.change(firstNameInput, { target: { value: 'John' } });
-        fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
-        await expect(companyNameInput).toBeDisabled();
-        fireEvent.click(isAgreedToPrivacyAndTOSInput);
-      });
+      await user.type(firstNameInput, 'John');
+      await user.type(lastNameInput, 'Doe');
+      await expect(companyNameInput).toBeDisabled();
+      await user.click(isAgreedToPrivacyAndTOSInput);
       await expect(continueButton).not.toBeDisabled();
     });
 
     await step('Invalidate the form', async () => {
-      await waitFor(async () => {
-        fireEvent.change(firstNameInput, { target: { value: '' } });
-        fireEvent.change(lastNameInput, { target: { value: '' } });
-        fireEvent.click(isAgreedToPrivacyAndTOSInput);
-        continueButton = await canvas.findByRole('button', { name: 'Continue' });
-        await expect(continueButton).toBeDisabled();
-      });
+      await user.type(firstNameInput, '');
+      await user.type(lastNameInput, '');
+      await user.click(isAgreedToPrivacyAndTOSInput);
+      continueButton = await canvas.findByRole('button', { name: 'Continue' });
+      await expect(continueButton).toBeDisabled();
     });
   },
 };
