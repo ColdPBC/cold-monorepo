@@ -3,42 +3,48 @@ import useSWR from 'swr';
 import { Toaster } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const _ApplicationToaster = () => {
   const { data, error, isLoading, mutate } = useSWR('messages', {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
-    dedupingInterval: process.env.STORYBOOK ? 0 : 2000,
-    keepPreviousData: true
   });
+  const { logError } = useColdContext();
 
-  // Debug logging for Chromatic environment
-  React.useEffect(() => {
-    if (process.env.STORYBOOK) {
-      console.log('Toast data updated:', data);
+  useEffect(() => {
+    if (data) {
+      // clear timeout if it exists
+      const timeout = setTimeout(
+        () => {
+          mutate(null);
+        },
+        data.timeout ? data.timeout : 3000,
+      );
+
+      return () => {
+        return clearTimeout(timeout);
+      };
+    } else {
+      return;
     }
   }, [data]);
 
-  // @ts-ignore
-  useEffect(() => {
-    if (data) {
-      // Use shorter timeout in Storybook environment
-      const timeoutDuration = process.env.STORYBOOK ? 1000 : (data.timeout || 3000);
-
-      const timeout = setTimeout(() => {
-        mutate(null);
-      }, timeoutDuration);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [data, mutate]);
-
-  // Show immediately when data is available
-  if (data) {
-    return <Toaster toastMessage={data} />;
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
   }
 
-  return null;
+  if (isLoading) {
+    return <></>;
+  }
+
+  if (data) {
+    return <Toaster toastMessage={data} />;
+  } else {
+    return <></>;
+  }
 };
 
 export const ApplicationToaster = withErrorBoundary(_ApplicationToaster, {

@@ -2,7 +2,8 @@ import { auth0UserMock, getEmptyPoliciesSignedMock, getSignUpHandler, StoryMockP
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ApplicationToaster, SignupPage } from '@coldpbc/components';
-import { expect, fireEvent, waitFor, within } from '@storybook/test';
+import {expect, fireEvent, userEvent, waitFor, within} from '@storybook/test';
+import {waitForElementToBeRemoved} from "@testing-library/react";
 
 const meta: Meta<typeof SignupPage> = {
   title: 'Pages/SignupPage',
@@ -92,36 +93,45 @@ export const OnSignupError: Story = {
     </StoryMockProvider>
   ),
   play: async ({ canvasElement, step }) => {
+    const user = userEvent.setup({ delay: 100 })
+    const canvas = within(canvasElement);
+
     // fill out form, when click continue, get error toast message 'Error creating account'
     await step('Fill out form', async () => {
-      const canvas = within(canvasElement);
-      // const spinner = canvas.queryByRole('status');
-      //
-      // await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
+
+      await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
 
       const firstNameInput = await canvas.findByRole('textbox', {
         name: 'firstName',
       });
-      await fireEvent.change(firstNameInput, { target: { value: 'John' } });
+      await user.type(firstNameInput, 'John');
 
       const lastNameInput = await canvas.findByRole('textbox', {
         name: 'lastName',
       });
-      await fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+      await user.type(lastNameInput, 'Doe');
 
       const companyNameInput = await canvas.findByRole('textbox', {
         name: 'companyName',
       });
+      await user.type(companyNameInput, 'Company');
+
       const isAgreedToPrivacyAndTOSInput = await canvas.findByRole('checkbox', {
         name: 'isAgreedToPrivacyAndTOS',
       });
+      await user.click(isAgreedToPrivacyAndTOSInput);
+
+      // Wait for button to be enabled
       const continueButton = await canvas.findByRole('button', { name: 'Continue' });
-      await fireEvent.change(companyNameInput, { target: { value: 'Company' } });
+      await waitFor(() => expect(continueButton).not.toBeDisabled());
 
-      await fireEvent.click(isAgreedToPrivacyAndTOSInput);
-      await fireEvent.click(continueButton);
+      // Click and wait for toast
+      await user.click(continueButton);
 
-      await canvas.findByTestId('toaster');
+      await waitFor(
+        () => expect(canvas.getByTestId('toaster')).toBeInTheDocument(),
+        { timeout: 5000 }
+      );
     });
   },
 };
