@@ -246,7 +246,7 @@ export class BackboneService extends BaseWorker {
 								id: new Cuid2Generator(GuidPrefixes.OrganizationProduct).scopedId,
 								...data,
 								metadata: { ...productMetadata, backbone_product: product },
-								weight: weight,
+								weight: +weight,
 							},
 						});
 					} catch (e) {
