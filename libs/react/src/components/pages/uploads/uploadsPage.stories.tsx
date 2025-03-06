@@ -36,7 +36,7 @@ export const OpenUploadModal: Story = {
     if (!canvasElement.parentElement) return;
 
     const canvas = within(canvasElement.parentElement);
-    const uploadButton = canvas.getByTestId('upload-button');
+    const uploadButton = await canvas.findByTestId('upload-button');
     uploadButton.click();
     await canvas.findByText('What are you uploading?');
   },

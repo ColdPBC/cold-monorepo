@@ -1,8 +1,8 @@
-import { auth0UserMock, getEmptyPoliciesSignedMock, getPoliciesSignedMock, getSignUpHandler, StoryMockProvider } from '@coldpbc/mocks';
+import { auth0UserMock, getEmptyPoliciesSignedMock, getSignUpHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ApplicationToaster, SignupPage } from '@coldpbc/components';
-import { expect, fireEvent, userEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/test';
+import { expect, fireEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/test';
 
 const meta: Meta<typeof SignupPage> = {
   title: 'Pages/SignupPage',
@@ -45,7 +45,7 @@ export const NewUserExistingCompany: Story = {
     const companyNameInput = canvas.getByRole('textbox', {
       name: 'companyName',
     });
-    const isAgreedToPrivacyAndTOSInput = canvas.getByRole('checkbox', {
+    const isAgreedToPrivacyAndTOSInput = await canvas.findByRole('checkbox', {
       name: 'isAgreedToPrivacyAndTOS',
     });
     await step('Validate the form', async () => {
@@ -88,20 +88,20 @@ export const OnSignupError: Story = {
     // fill out form, when click continue, get error toast message 'Error creating account'
     await step('Fill out form', async () => {
       const canvas = within(canvasElement);
-      const spinner = canvas.queryByRole('status');
+      // const spinner = canvas.queryByRole('status');
+      //
+      // await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
 
-      await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-
-      const firstNameInput = canvas.getByRole('textbox', {
+      const firstNameInput = await canvas.findByRole('textbox', {
         name: 'firstName',
       });
-      const lastNameInput = canvas.getByRole('textbox', {
+      const lastNameInput = await canvas.findByRole('textbox', {
         name: 'lastName',
       });
-      const companyNameInput = canvas.getByRole('textbox', {
+      const companyNameInput = await canvas.findByRole('textbox', {
         name: 'companyName',
       });
-      const isAgreedToPrivacyAndTOSInput = canvas.getByRole('checkbox', {
+      const isAgreedToPrivacyAndTOSInput = await canvas.findByRole('checkbox', {
         name: 'isAgreedToPrivacyAndTOS',
       });
       const continueButton = canvas.getByRole('button', { name: 'Continue' });

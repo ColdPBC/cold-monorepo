@@ -63,9 +63,9 @@ export const SelectMaterialsOpenBulkEditModal: Story = {
     const canvas = within(canvasElement);
     await step('Select all materials', async () => {
       // find 'Bulk Edit Attributes' button
-      const bulkEditButton = canvas.getByRole('button', { name: 'Bulk Edit Attributes' });
+      const bulkEditButton = await canvas.findByRole('button', { name: 'Bulk Edit Attributes' });
       await expect(bulkEditButton).toBeDisabled();
-      const selectAllCheckbox = canvas.getByTestId('select-all-checkbox-materials-supplied');
+      const selectAllCheckbox = await canvas.findByTestId('select-all-checkbox-materials-supplied');
       fireEvent.click(selectAllCheckbox);
       const buttonEnabled = await canvas.findByRole('button', { name: 'Bulk Edit Attributes' });
       await expect(buttonEnabled).toBeEnabled();

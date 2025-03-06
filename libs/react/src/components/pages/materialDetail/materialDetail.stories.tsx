@@ -1,9 +1,9 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { MaterialDetail } from '@coldpbc/components';
-import { defaultGraphqlMocks, getMaterialGraphQLMock, StoryMockProvider } from '@coldpbc/mocks';
+import { getMaterialGraphQLMock, StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
-import { fireEvent, waitForElementToBeRemoved, within} from "@storybook/test";
+import { fireEvent, within} from "@storybook/test";
 
 const meta: Meta<typeof MaterialDetail> = {
   title: 'Pages/MaterialDetail',
@@ -46,9 +46,7 @@ export const ShowDeleteModal: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-
-    const menu = canvas.getByTestId('material-details-menu');
+    const menu = await canvas.findByTestId('material-details-menu');
 
     const menuButton = within(menu).getByRole('button');
     fireEvent.click(menuButton);
@@ -75,9 +73,7 @@ export const ShowEdit: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-
-    const editButtom = canvas.getByText('Edit');
+    const editButtom = await canvas.findByText('Edit');
     fireEvent.click(editButtom);
   },
 };
