@@ -271,6 +271,10 @@ export class BackboneService extends BaseWorker {
 					}
 				}
 
+				if (!existingProduct.id) {
+					this.logger.error(`Error upserting product ${product?.name}`, { product: item, organization: req.organization, user: req.user });
+					return;
+				}
 				// process product tag assignments
 				for (const tag of categoryData.categories) {
 					const tagData = {
