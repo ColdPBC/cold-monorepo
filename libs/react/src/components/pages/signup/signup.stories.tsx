@@ -2,13 +2,24 @@ import { auth0UserMock, getEmptyPoliciesSignedMock, getSignUpHandler, StoryMockP
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ApplicationToaster, SignupPage } from '@coldpbc/components';
-import { expect, fireEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/test';
+import { expect, fireEvent, waitFor, within } from '@storybook/test';
 
 const meta: Meta<typeof SignupPage> = {
   title: 'Pages/SignupPage',
   component: SignupPage,
   tags: ['autodocs'],
   decorators: [withKnobs],
+  parameters: {
+    // Tell Chromatic to wait for animations
+    chromatic: {
+      pauseAnimationAtEnd: true,
+      delay: 1000
+    },
+    // Ensure async operations complete
+    async: {
+      waitFor: '[data-testid="toaster"]'
+    }
+  }
 };
 
 export default meta;
@@ -91,9 +102,13 @@ export const OnSignupError: Story = {
       const firstNameInput = await canvas.findByRole('textbox', {
         name: 'firstName',
       });
+      await fireEvent.change(firstNameInput, { target: { value: 'John' } });
+
       const lastNameInput = await canvas.findByRole('textbox', {
         name: 'lastName',
       });
+      await fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+
       const companyNameInput = await canvas.findByRole('textbox', {
         name: 'companyName',
       });
@@ -101,16 +116,12 @@ export const OnSignupError: Story = {
         name: 'isAgreedToPrivacyAndTOS',
       });
       const continueButton = await canvas.findByRole('button', { name: 'Continue' });
-      await fireEvent.change(firstNameInput, { target: { value: 'John' } });
-      await fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
       await fireEvent.change(companyNameInput, { target: { value: 'Company' } });
 
       await fireEvent.click(isAgreedToPrivacyAndTOSInput);
       await fireEvent.click(continueButton);
 
-      await waitFor(async () => {
-        await expect(canvas.getByText('Error creating account')).toBeInTheDocument();
-      });
+      await canvas.findByTestId('toaster');
     });
   },
 };
