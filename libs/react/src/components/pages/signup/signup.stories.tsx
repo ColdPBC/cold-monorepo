@@ -30,10 +30,6 @@ export const NewUserExistingCompany: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    const spinner = canvas.queryByRole('status');
-
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-
     let continueButton = await canvas.findByRole('button', { name: 'Continue' });
 
     const firstNameInput = canvas.getByRole('textbox', {
@@ -104,14 +100,14 @@ export const OnSignupError: Story = {
       const isAgreedToPrivacyAndTOSInput = await canvas.findByRole('checkbox', {
         name: 'isAgreedToPrivacyAndTOS',
       });
-      const continueButton = canvas.getByRole('button', { name: 'Continue' });
-      await waitFor(async () => {
-        fireEvent.change(firstNameInput, { target: { value: 'John' } });
-        fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
-        fireEvent.change(companyNameInput, { target: { value: 'Company' } });
-        fireEvent.click(isAgreedToPrivacyAndTOSInput);
-        fireEvent.click(continueButton);
-      });
+      const continueButton = await canvas.findByRole('button', { name: 'Continue' });
+      await fireEvent.change(firstNameInput, { target: { value: 'John' } });
+      await fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+      await fireEvent.change(companyNameInput, { target: { value: 'Company' } });
+
+      await fireEvent.click(isAgreedToPrivacyAndTOSInput);
+      await fireEvent.click(continueButton);
+
       await waitFor(async () => {
         await expect(canvas.getByText('Error creating account')).toBeInTheDocument();
       });
