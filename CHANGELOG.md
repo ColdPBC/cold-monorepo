@@ -1,3 +1,12 @@
+# [1.586.0](https://github.com/coldPBC/cold-monorepo/compare/v1.585.0...v1.586.0) (2025-03-06)
+
+
+### Features
+
+* add pagination support to triggerIntegration method in organization integrations ([35c873b](https://github.com/coldPBC/cold-monorepo/commit/35c873bac6c0eea1496d0a3f7e012621e9b21c19))
+* add unique constraints and new columns for materials and tag assignments ([d46ed35](https://github.com/coldPBC/cold-monorepo/commit/d46ed35fb321fc1753ca971ffd3244014812e01b))
+* enhance BackboneService sync logic, add conversion factor handling, and improve product/material syncing ([7469407](https://github.com/coldPBC/cold-monorepo/commit/746940742c187889e09596302cac5b477660cbdc))
+
 # [1.585.0](https://github.com/coldPBC/cold-monorepo/compare/v1.584.0...v1.585.0) (2025-03-06)
 
 
