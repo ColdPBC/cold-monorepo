@@ -354,6 +354,9 @@ export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG = gql`
       level
       logoUrl
       name
+      organization {
+        id
+      }
     }
   }
 `;
