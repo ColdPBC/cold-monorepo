@@ -1,3 +1,10 @@
+## [1.586.3](https://github.com/coldPBC/cold-monorepo/compare/v1.586.2...v1.586.3) (2025-03-06)
+
+
+### Bug Fixes
+
+* handle weight assignment to ensure it is a number or null in BackboneService ([90cab93](https://github.com/coldPBC/cold-monorepo/commit/90cab93cd40ab2c360122839707cdc0517615c4a))
+
 ## [1.586.2](https://github.com/coldPBC/cold-monorepo/compare/v1.586.1...v1.586.2) (2025-03-06)
 
 
