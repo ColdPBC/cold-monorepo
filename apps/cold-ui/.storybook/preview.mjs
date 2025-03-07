@@ -2,11 +2,6 @@ import documentationTemplate from './documentationTemplate.mdx';
 import '../src/styles.css';
 import 'flowbite';
 import {auth0UserMock, worker} from '../../../libs/react/src';
-import {StyledEngineProvider, ThemeProvider} from "@mui/material";
-import {muiTheme} from "../../../libs/react/src/themes/muiTheme";
-import {LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
-import { LicenseInfo } from '@mui/x-license';
 import {CustomDecorators} from "./customDecorators";
 
 // Storybook executes this module in both bootstap phase (Node)
@@ -30,6 +25,11 @@ export default {
         color: /(background|color)$/i,
         date: /Date$/,
       },
+    },
+    options: {
+      storySort: {
+        order: ['Introduction', '*']
+      }
     },
     previewTabs: {
       'storybook/docs/panel': {index: -1},

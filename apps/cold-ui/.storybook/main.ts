@@ -4,7 +4,10 @@ import turbosnap from 'vite-plugin-turbosnap';
 import { mergeConfig } from 'vite';
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.@(stories.@(js|jsx|tsx|ts))', '../../../libs/react/src/**/*.@(stories.@(js|jsx|ts|tsx))'],
+  stories: [
+    '../../../libs/react/src/components/Introduction.mdoc.mdx',
+    '../../../libs/react/src/**/*.@(stories.@(js|jsx|ts|tsx))'
+  ],
 
   addons: [
     getAbsolutePath("@storybook/addon-knobs"),
@@ -39,11 +42,14 @@ const config: StorybookConfig = {
     });
   },
 
-  docs: {},
-
   typescript: {
     reactDocgen: "react-docgen-typescript"
-  }
+  },
+
+  docs: {
+    defaultName: 'Introduction', // Add this
+    autodocs: true
+  },
 };
 
 export default config;
