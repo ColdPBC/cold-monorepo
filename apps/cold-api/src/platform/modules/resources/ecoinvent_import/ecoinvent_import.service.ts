@@ -169,24 +169,4 @@ export class EcoinventImportService extends BaseWorker {
 			return { error };
 		}
 	}
-
-	create(createEcoinventImportDto: CreateEcoinventImportDto) {
-		return 'This action adds a new ecoinventImport';
-	}
-
-	findAll() {
-		return `This action returns all ecoinventImport`;
-	}
-
-	findOne(id: number) {
-		return `This action returns a #${id} ecoinventImport`;
-	}
-
-	update(id: number, updateEcoinventImportDto: UpdateEcoinventImportDto) {
-		return `This action updates a #${id} ecoinventImport`;
-	}
-
-	remove(id: number) {
-		return `This action removes a #${id} ecoinventImport`;
-	}
 }
