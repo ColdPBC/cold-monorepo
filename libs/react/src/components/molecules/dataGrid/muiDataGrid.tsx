@@ -34,7 +34,7 @@ interface CustomDataGridToolbarProps extends GridToolbarProps {
 }
 
 const CustomDataGridToolbar = (props: CustomDataGridToolbarProps) => {
-  const { showSearch, showExport, showManageColumns, quickFilterProps } = props;
+  const { showSearch, showExport, showManageColumns, quickFilterProps, printOptions, csvOptions } = props;
   if(!showSearch && !showExport && !showManageColumns) {
     return null;
   }
@@ -50,7 +50,7 @@ const CustomDataGridToolbar = (props: CustomDataGridToolbarProps) => {
         </>
       )}
       {showManageColumns && <GridToolbarColumnsButton />}
-      {showExport && <GridToolbarExport />}
+      {showExport && <GridToolbarExport printOptions={printOptions} csvOptions={csvOptions} />}
     </GridToolbarContainer>
   );
 };
@@ -191,6 +191,10 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
           showSearch,
           showExport,
           showManageColumns,
+          printOptions: {
+            ...slotProps?.toolbar?.printOptions,
+            disableToolbarButton: true,
+          }
         } as CustomDataGridToolbarProps,
       }}
       className={twMerge('text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto', props.className)}

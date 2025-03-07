@@ -1,3 +1,50 @@
+# [1.587.0](https://github.com/coldPBC/cold-monorepo/compare/v1.586.3...v1.587.0) (2025-03-07)
+
+
+### Features
+
+* Add CSV export options and reusable checkbox column config ([047cab6](https://github.com/coldPBC/cold-monorepo/commit/047cab654a42fe6397907b3e6d6c64e10360e3b5))
+* Remove print options to GridToolbarExport in CustomDataGridToolbar by default ([cb79671](https://github.com/coldPBC/cold-monorepo/commit/cb7967153118291307cd7f04836792316a68b98d))
+
+## [1.586.3](https://github.com/coldPBC/cold-monorepo/compare/v1.586.2...v1.586.3) (2025-03-06)
+
+
+### Bug Fixes
+
+* handle weight assignment to ensure it is a number or null in BackboneService ([90cab93](https://github.com/coldPBC/cold-monorepo/commit/90cab93cd40ab2c360122839707cdc0517615c4a))
+
+## [1.586.2](https://github.com/coldPBC/cold-monorepo/compare/v1.586.1...v1.586.2) (2025-03-06)
+
+
+### Bug Fixes
+
+* ensure weight is stored as a number in BackboneService ([50cb9f4](https://github.com/coldPBC/cold-monorepo/commit/50cb9f453d706f499e18119a5cc69f09d40f0833))
+
+## [1.586.1](https://github.com/coldPBC/cold-monorepo/compare/v1.586.0...v1.586.1) (2025-03-06)
+
+
+### Bug Fixes
+
+* improve error logging for product upsert failure in BackboneService ([82c5e87](https://github.com/coldPBC/cold-monorepo/commit/82c5e87d09d653d6a8f5c5b2356595df3da9c59a))
+
+# [1.586.0](https://github.com/coldPBC/cold-monorepo/compare/v1.585.0...v1.586.0) (2025-03-06)
+
+
+### Features
+
+* add pagination support to triggerIntegration method in organization integrations ([35c873b](https://github.com/coldPBC/cold-monorepo/commit/35c873bac6c0eea1496d0a3f7e012621e9b21c19))
+* add unique constraints and new columns for materials and tag assignments ([d46ed35](https://github.com/coldPBC/cold-monorepo/commit/d46ed35fb321fc1753ca971ffd3244014812e01b))
+* enhance BackboneService sync logic, add conversion factor handling, and improve product/material syncing ([7469407](https://github.com/coldPBC/cold-monorepo/commit/746940742c187889e09596302cac5b477660cbdc))
+
+# [1.585.0](https://github.com/coldPBC/cold-monorepo/compare/v1.584.0...v1.585.0) (2025-03-06)
+
+
+### Features
+
+* Add GraphQL query for component definitions and implement error handling in sidebar ([38c2466](https://github.com/coldPBC/cold-monorepo/commit/38c24662e4b7baf45ff258731ab2d2af78f13598))
+* Handle errors at all levels in getGraphqlError utility ([44ee017](https://github.com/coldPBC/cold-monorepo/commit/44ee0173f8df779ec0e37c90f783e426df287f7d))
+* Refactor sidebar item matching logic with recursion. ([c6dc2f8](https://github.com/coldPBC/cold-monorepo/commit/c6dc2f8e88ac0a94d03144db279357495026633d))
+
 # [1.584.0](https://github.com/coldPBC/cold-monorepo/compare/v1.583.1...v1.584.0) (2025-03-03)
 
 
