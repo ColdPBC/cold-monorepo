@@ -6,8 +6,6 @@ import {
   GridColDef,
   GridFilterModel,
   GridRowSelectionModel,
-  GridToolbarContainer,
-  GridToolbarQuickFilter
 } from '@mui/x-data-grid-pro';
 import { ButtonTypes, EntityLevel, GlobalSizes } from '@coldpbc/enums';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -16,7 +14,10 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { type SustainabilityAttributeGraphQL, ToastMessage } from '@coldpbc/interfaces';
 import {get, toLower, uniq} from 'lodash';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
-import { DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE, processSustainabilityAttributeDataFromGraphQL } from '@coldpbc/lib';
+import {
+  GRID_CHECKBOX_COL_DEF,
+  processSustainabilityAttributeDataFromGraphQL
+} from '@coldpbc/lib';
 import { mutate } from 'swr';
 
 interface EditSustainabilityAttributesForProductProps {
@@ -208,12 +209,7 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 
   const columns: GridColDef[] = [
 		{
-			field: 'checkbox',
-			editable: false,
-			sortable: false,
-			hideSortIcons: true,
-			width: 100,
-			headerClassName: 'bg-gray-30',
+      ...GRID_CHECKBOX_COL_DEF,
 			cellClassName: 'bg-gray-10',
       renderCell: (params: GridCellParams) => (
         <Checkbox

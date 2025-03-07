@@ -13,6 +13,7 @@ import {Checkbox} from "@mui/material";
 import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR} from "@coldpbc/hooks";
 import {withErrorBoundary} from "react-error-boundary";
 import capitalize from "lodash/capitalize";
+import {GRID_CHECKBOX_COL_DEF} from "@coldpbc/lib";
 
 export interface EntitiesSelected {
   id: string;
@@ -159,12 +160,7 @@ const _BulkEditEntityAttributesModal = (props: {
 
   const columns: GridColDef[] = [
     {
-      field: 'checkbox',
-      editable: false,
-      sortable: false,
-      hideSortIcons: true,
-      width: 100,
-      headerClassName: 'bg-gray-30',
+      ...GRID_CHECKBOX_COL_DEF,
       renderCell: (params: GridCellParams) => (
         <Checkbox
           checked={some(rowsSelected, (attribute) => {
