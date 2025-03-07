@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const MqttTargetSchema = z.enum(['public', 'cold', 'ui', 'replyTo']);
 export const MqttActionSchema = z.enum(['get', 'create', 'update', 'delete']);
 export const MqttStatusSchema = z.enum(['complete', 'failed', 'active', 'queued', 'delayed', 'stalled']);
-export const MqttEventSchema = z.enum(['classify-file', 'extract-file-data']);
+export const MqttEventSchema = z.enum(['classify-file', 'extract-file-data', 'vectorize-file']);
 
 export const MqttResourceSchema = z.enum([
 	'actions',

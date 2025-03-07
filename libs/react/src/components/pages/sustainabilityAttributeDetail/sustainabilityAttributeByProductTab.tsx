@@ -190,6 +190,9 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 					);
 				}
 			},
+      valueFormatter: (value: number | null) => {
+        return value ? `${value.toFixed(0)}%` : 'Unknown';
+      }
 		},
 		{
 			field: 'materialList',
@@ -200,6 +203,9 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 			renderCell: params => {
 				return <BubbleList values={params.value} />;
 			},
+      valueFormatter: (value) => {
+        return (value as string[]).join(', ');
+      }
 		},
 		{
 			field: 'tier1SupplierName',
@@ -272,7 +278,15 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 						},
 					}}
           searchKey={`${sustainabilityAttribute.id}sustainabilityAttributeByProductsSearchValue`}
-				/>
+          slotProps={{
+            toolbar: {
+              csvOptions: {
+                fileName: `SustainabilityAttributeByProduct_${new Date().toISOString().split('T')[0]}`,
+                utf8WithBom: true
+              }
+            }
+          }}
+        />
 			</div>
 		</div>
 	);

@@ -37,11 +37,6 @@ export const SelectingFilesScreen = (props: SelectingFilesScreenProps) => {
     ], ['lastModified', 'name'], ['desc', 'asc']))
   }
 
-  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newFiles = Array.from(event.target.files || []);
-    addNewFiles(newFiles);
-  };
-
   const uploadButton = async () => {
     if (fileInputRef.current !== null) fileInputRef.current.click();
   };
@@ -79,9 +74,24 @@ export const SelectingFilesScreen = (props: SelectingFilesScreenProps) => {
     event.dataTransfer.dropEffect = 'copy';
   };
 
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newFiles = Array.from(event.target.files || []);
+    addNewFiles(newFiles);
+
+    // Reset input to allow re-uploading the same file
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const removeFile = (index: number) => {
     setFilesToUpload(prevFiles => prevFiles.filter((_, i) => i !== index));
-  }
+
+    // Reset input so the same file can be selected again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   return (
     <>

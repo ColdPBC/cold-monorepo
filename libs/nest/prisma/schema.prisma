@@ -783,6 +783,8 @@ model materials {
   emissions_factor              Float?
   weight_factor                 Float?
   weight_factor_unit_of_measure String?
+	length												Float?
+	length_unit_of_measure        String?
   width                         Float?
   width_unit_of_measure         String?
   activity_id                   String?
@@ -844,6 +846,7 @@ model material_tag_assignments {
   organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   material     materials     @relation(fields: [material_id], references: [id], onDelete: Cascade)
 
+	@@unique([material_id, tag_id, organization_id], name: "materialTagUniqueKey")
   @@index([organization_id], map: "material_tag_assignments_organization_id_idx1")
   @@index([material_id], map: "material_tag_assignments_material_id_idx1")
 }
@@ -890,6 +893,7 @@ model product_tag_assignments {
   organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   product      products      @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
+  @@unique([organization_id, product_id, tag_id], name: "organization_product_tag_unique")
   @@index([organization_id], map: "product_tag_assignments_organization_id_idx1")
   @@index([product_id], map: "product_tag_assignments_product_id_idx1")
 }

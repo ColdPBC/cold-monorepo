@@ -40,9 +40,6 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 		readonly lc: LangchainLoaderService,
 		readonly prisma: PrismaService,
 		readonly s3: S3Service,
-		readonly extraction: ExtractionService,
-		readonly xlsxService: ExtractionXlsxService,
-		@InjectQueue('pinecone') readonly queue: Queue,
 	) {
 		super(PineconeService.name);
 		this.openai = new OpenAI({
@@ -126,7 +123,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 		for (const file of files) {
 			this.logger.info(`adding job to sync ${file.original_name} for ${org.name} to queue`);
 
-			await this.queue.add(
+			/*await this.queue.add(
 				'sync_files',
 				{
 					user,
@@ -135,7 +132,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 					index_details: details,
 				},
 				{ removeOnComplete: true, delay, priority: 10 },
-			);
+			);*/
 
 			this.logger.info(`Syncing org file ${file.original_name}`, { org, file });
 		}
@@ -499,6 +496,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 			let bytes: Uint8Array = new Uint8Array();
 
 			if (extension === 'xlsx') {
+				/*
 				const pdfBytes = await this.convertXlsToPdf(user, filePayload, organization);
 
 				if (!pdfBytes) {
@@ -507,7 +505,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
 				bytes = pdfBytes;
 				// set extension to PDF since it's now been converted
-				extension = 'pdf';
+				extension = 'pdf';*/
 			} else {
 				// Process document
 				const bucket = `cold-api-uploaded-files`;
@@ -531,7 +529,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 			// Load the document content from the file and split it into chunks
 			const content = await this.lc.getDocContent(extension, bytes, user);
 
-			if (Array.isArray(content) && content.length > 256) {
+			if (Array.isArray(content) && content.length < 256) {
 				// Store the vector embeddings for the document
 				await this.persistEmbeddings(index, content, filePayload, organization);
 
@@ -543,9 +541,9 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 				extension = 'pdf';
 
 				// Create embedding for content
-				//const embedding = (await this.lc.getDocContent('txt', bytes, user)) as Document<Record<string, any>>[];
+				const embedding = (await this.lc.getDocContent(extension, bytes, user)) as Document<Record<string, any>>[];
 
-				//await this.persistEmbeddings(index, embedding, filePayload, organization);
+				await this.persistEmbeddings(index, embedding, filePayload, organization);
 			}
 
 			return { bytes, extension, organization, user, filePayload };
@@ -567,13 +565,14 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 				throw new BadRequestException('Failed to load file');
 			}
 
-			const fileData = await this.xlsxService.convertXLS(bytes, filePayload, user, organization);
+			/*const fileData = await this.xlsxService.convertXLS(bytes, filePayload, user, organization);
 
 			if (!fileData || !fileData.file || !fileData.bytes) {
 				throw new Error(`Failed to convert ${filePayload.original_name} to pdf`);
 			}
 
-			return fileData.bytes;
+			return fileData.bytes;*/
+			return;
 		} catch (e) {
 			this.logger.error('Error converting xlsx to image', { error: e, namespace: organization.name });
 			throw e;

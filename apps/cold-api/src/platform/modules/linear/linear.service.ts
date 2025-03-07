@@ -124,7 +124,7 @@ export class LinearService extends BaseWorker {
 	/** Creates an issue in Linear. @throws */
 	async createIssue(labels: string[], data: { organization: organizations; user: IAuthenticatedUser; orgFile: organization_files; error?: string }): Promise<Issue> {
 		try {
-			if (!data.organization.linear_webhook_id) {
+			if (!data?.organization?.linear_webhook_id) {
 				await this.createWebhook(data);
 			}
 
@@ -133,11 +133,11 @@ export class LinearService extends BaseWorker {
 
 			if (data.error) {
 				const error = JSON.parse(data.error);
-				title = `Review Failed Ingestion for ${data.organization.display_name} : ${data.orgFile.original_name} | ${data.orgFile.type}`;
+				title = `Review Failed Ingestion for ${data.organization.display_name} : ${data.orgFile.original_name} | ${data?.orgFile?.type}`;
 				description = `The file uploaded by ${data.user.coldclimate_claims.email} failed to process due to the following error: ${error.message}`;
 			} else {
-				title = `Manual Review Request from ${data.organization.display_name} : ${data.orgFile.original_name} | ${data.orgFile.type}`;
-				description = `User ${data.user.coldclimate_claims.email} from ${data.organization.display_name} uploaded a file with a ${data.orgFile.type} type for ingestion.`;
+				title = `Manual Review Request from ${data.organization.display_name} : ${data.orgFile.original_name} | ${data?.orgFile?.type}`;
+				description = `User ${data.user.coldclimate_claims.email} from ${data.organization.display_name} uploaded a file with a ${data?.orgFile?.type} type for ingestion.`;
 			}
 
 			const payload = {
@@ -210,6 +210,11 @@ export class LinearService extends BaseWorker {
 
 	private async createWebhook(data: { organization: organizations; user: IAuthenticatedUser; orgFile: organization_files }) {
 		try {
+			if (!data.organization) {
+				data.organization = (await this.prisma.organizations.findUnique({
+					where: { id: data.orgFile.organization_id },
+				})) as organizations;
+			}
 			// Add Secret for processing linear webhooks
 			if (!data.organization.linear_secret) {
 				data.organization.linear_secret = new Cuid2Generator(GuidPrefixes.WebhookSecret).scopedId;

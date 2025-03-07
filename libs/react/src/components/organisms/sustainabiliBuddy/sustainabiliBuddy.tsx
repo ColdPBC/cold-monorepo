@@ -1,9 +1,9 @@
-import {useState} from "react";
-import { SustainabiliBuddyButton } from "@coldpbc/components";
-import {SustainabiliBuddyContainer} from "../../molecules/sustainabiliBuddyContainer/sustainabiliBuddyContainer";
+import React, {useState} from "react";
+import {ErrorFallback, SustainabiliBuddyButton, SustainabiliBuddyContainer} from "@coldpbc/components";
+import {withErrorBoundary} from "react-error-boundary";
 
 
-export const SustainabiliBuddy = () => {
+const _SustainabiliBuddy = () => {
   const [showPromptContainer, setShowPromptContainer] = useState(false);
 
   return (
@@ -21,3 +21,10 @@ export const SustainabiliBuddy = () => {
   )
 
 }
+
+export const SustainabiliBuddy = withErrorBoundary(_SustainabiliBuddy, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SustainabiliBuddy: ', error);
+  },
+});

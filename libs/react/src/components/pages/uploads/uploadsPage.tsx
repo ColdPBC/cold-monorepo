@@ -13,14 +13,13 @@ import {GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender,
 import { format } from 'date-fns';
 import React, {ReactNode, useState} from 'react';
 import {
-  DocumentTypes,
   IconNames, MainDocumentCategory,
   ProcessingStatus,
   UIProcessingStatus,
   UIProcessingStatusMapping,
 } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
-import { formatScreamingSnakeCase } from '@coldpbc/lib';
+import {formatScreamingSnakeCase, getDocumentCategory} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import {axiosFetcher} from "@coldpbc/fetchers";
 import { isAxiosError} from "axios";
@@ -130,13 +129,20 @@ export const _UploadsPage = () => {
     );
   }
 
-  const fileTypes = Object.values(DocumentTypes).map((type) =>
+  const fileTypes = Object.values(MainDocumentCategory).map((type) =>
     formatScreamingSnakeCase(type)
   )
 
   const statuses = Object.values(UIProcessingStatusMapping)
 
-  const files = get(uploadsQuery, 'data.data.organizationFiles', []);
+  const files = get(uploadsQuery, 'data.data.organizationFiles', []).map((file: UploadsQuery) => {
+    return (
+      {
+        ...file,
+        type: getDocumentCategory(file.type),
+      }
+    )
+  })
 
   logBrowser(
     'Uploads Page',
@@ -157,7 +163,7 @@ export const _UploadsPage = () => {
     {
       ...DEFAULT_GRID_COL_DEF,
       field: 'type',
-      headerName: 'Import Type',
+      headerName: 'Upload Category',
       type: 'singleSelect',
       valueOptions: fileTypes,
       cellClassName: 'text-tc-secondary text-body',

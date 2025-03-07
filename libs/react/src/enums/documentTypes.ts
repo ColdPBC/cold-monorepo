@@ -41,7 +41,7 @@ export type DocumentType = typeof DocumentTypes[keyof typeof DocumentTypes];
 
 export enum MainDocumentCategory {
   Assurance = 'ASSURANCE_DOCUMENT',
-  BillOfMaterial = 'BILL_OF_MATERIAL_DOCUMENT',
-  InternalSustainabilityPolicy = 'INTERNAL_SUSTAINABILITY_POLICY_DOCUMENT',
-  SustainabilityData = 'SUSTAINABILITY_DATA_DOCUMENT'
+  BillOfMaterial = 'BILL_OF_MATERIAL',
+  InternalSustainabilityPolicy = 'INTERNAL_SUSTAINABILITY_POLICY',
+  SustainabilityData = 'SUSTAINABILITY_DATA'
 }
