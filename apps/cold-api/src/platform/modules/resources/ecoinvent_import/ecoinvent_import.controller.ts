@@ -15,24 +15,4 @@ export class EcoinventImportController {
 	create(@Req() req: any, @Body() createEcoinventImportDto?: CreateEcoinventImportDto) {
 		return this.ecoinventImportService.importCSVFromBucket(req);
 	}
-
-	@Get()
-	findAll() {
-		return this.ecoinventImportService.findAll();
-	}
-
-	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.ecoinventImportService.findOne(+id);
-	}
-
-	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateEcoinventImportDto: UpdateEcoinventImportDto) {
-		return this.ecoinventImportService.update(+id, updateEcoinventImportDto);
-	}
-
-	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.ecoinventImportService.remove(+id);
-	}
 }
