@@ -1,3 +1,11 @@
+# [1.587.0](https://github.com/coldPBC/cold-monorepo/compare/v1.586.3...v1.587.0) (2025-03-07)
+
+
+### Features
+
+* Add CSV export options and reusable checkbox column config ([047cab6](https://github.com/coldPBC/cold-monorepo/commit/047cab654a42fe6397907b3e6d6c64e10360e3b5))
+* Remove print options to GridToolbarExport in CustomDataGridToolbar by default ([cb79671](https://github.com/coldPBC/cold-monorepo/commit/cb7967153118291307cd7f04836792316a68b98d))
+
 ## [1.586.3](https://github.com/coldPBC/cold-monorepo/compare/v1.586.2...v1.586.3) (2025-03-06)
 
 
