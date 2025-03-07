@@ -43,35 +43,33 @@ export const NewUserExistingCompany: Story = {
     const user = userEvent.setup({ delay: 100 })
     const canvas = within(canvasElement);
 
-    let continueButton = await canvas.findByRole('button', { name: 'Continue' });
-
-    const firstNameInput = canvas.getByRole('textbox', {
+    const firstNameInput = await canvas.findByRole('textbox', {
       name: 'firstName',
     });
-    const lastNameInput = canvas.getByRole('textbox', {
+    await user.type(firstNameInput, 'John');
+
+    const lastNameInput = await canvas.findByRole('textbox', {
       name: 'lastName',
     });
-    const companyNameInput = canvas.getByRole('textbox', {
+    await user.type(lastNameInput, 'Doe');
+
+    const companyNameInput = await canvas.findByRole('textbox', {
       name: 'companyName',
     });
+    await expect(companyNameInput).toBeDisabled();
+
     const isAgreedToPrivacyAndTOSInput = await canvas.findByRole('checkbox', {
       name: 'isAgreedToPrivacyAndTOS',
     });
-    await step('Validate the form', async () => {
-      await user.type(firstNameInput, 'John');
-      await user.type(lastNameInput, 'Doe');
-      await expect(companyNameInput).toBeDisabled();
-      await user.click(isAgreedToPrivacyAndTOSInput);
-      await expect(continueButton).not.toBeDisabled();
-    });
+    await user.click(isAgreedToPrivacyAndTOSInput);
 
-    await step('Invalidate the form', async () => {
-      await user.type(firstNameInput, '');
-      await user.type(lastNameInput, '');
-      await user.click(isAgreedToPrivacyAndTOSInput);
-      continueButton = await canvas.findByRole('button', { name: 'Continue' });
-      await expect(continueButton).toBeDisabled();
-    });
+    let continueButton = await canvas.findByRole('button', { name: 'Continue' });
+    await expect(continueButton).not.toBeDisabled();
+
+    await user.clear(firstNameInput);
+    await user.clear(lastNameInput);
+    await user.click(isAgreedToPrivacyAndTOSInput);
+    await expect(continueButton).toBeDisabled();
   },
 };
 
