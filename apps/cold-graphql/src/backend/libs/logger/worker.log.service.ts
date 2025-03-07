@@ -34,7 +34,7 @@ export class WorkerLogger {
 			app: 'cold-graphql',
 			version: process.env.npm_package_version,
 			environment: process.env.NODE_ENV,
-			service: process.env.DD_SERVICE,
+			service: process.env.DD_SERVICE || meta?.service || 'cold-graphql',
 		};
 	}
 

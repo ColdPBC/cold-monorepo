@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { ConfigService } from '@nestjs/config';
 import { PineconeService } from './pinecone/pinecone.service';
 import { ChatService } from './chat/chat.service';
+import { set } from 'lodash';
 
 /**
  * RabbitService class.
@@ -77,7 +78,7 @@ export class RabbitService extends BaseWorker {
 			msg.data = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
 			this.logger.info(`received async ${msg.event} request from ${msg.from}`);
 
-			this.processAsyncMessage(msg.event, msg.from, msg.data);
+			await this.processAsyncMessage(msg.event, msg.from, msg.data);
 
 			return new Nack();
 		} catch (err) {
@@ -138,6 +139,13 @@ export class RabbitService extends BaseWorker {
 	// @ts-expect-error - Fix this later
 	async processAsyncMessage(event: string, from: string, parsed: any) {
 		const { user } = parsed;
+
+		// the API is inconsistent in the payload key and calling the service twice
+		if (parsed.payload) {
+			set(parsed, 'file', parsed.payload);
+		} else if (!parsed.file) {
+			throw new Error('No file provided');
+		}
 
 		this.logger.info(`Processing ${event} event triggered by ${user?.coldclimate_claims?.email} from ${from}`, {
 			...parsed,

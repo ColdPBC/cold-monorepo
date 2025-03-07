@@ -1,19 +1,21 @@
 import { SupplierGraphQL, SustainabilityAttribute } from '@coldpbc/interfaces';
 import {
+  BulkEditAttributesForEntitiesSuppliedModal,
   Card,
   DEFAULT_GRID_COL_DEF,
-  EditEntityAssociationsModal,
+  EditEntityAssociationsModal, EntitiesSelected,
   ErrorFallback,
   MuiDataGrid,
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
-import { GridColDef } from '@mui/x-data-grid-pro';
+import {GridCellParams, GridColDef, GridRowSelectionModel} from '@mui/x-data-grid-pro';
 import { processEntityLevelAssurances } from '@coldpbc/lib';
 import { uniq } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { EntityLevel } from '@coldpbc/enums';
+import {ButtonTypes, EntityLevel} from '@coldpbc/enums';
+import {Checkbox} from "@mui/material";
 
 interface ProductsSuppliedTabProps {
   supplier: SupplierGraphQL;
@@ -21,6 +23,8 @@ interface ProductsSuppliedTabProps {
 }
 
 const _ProductsSuppliedTab: React.FC<ProductsSuppliedTabProps> = ({ supplier, refreshData }) => {
+  const [showBulkEditAttributesModal, setShowBulkEditAttributesModal] = React.useState<boolean>(false);
+  const [rowsSelected, setRowsSelected] = useState<GridRowSelectionModel>([]);
   const navigate = useNavigate();
 
   const uniqCategories = uniq(supplier.products.map(product => product.productCategory || ''))
@@ -31,7 +35,55 @@ const _ProductsSuppliedTab: React.FC<ProductsSuppliedTabProps> = ({ supplier, re
     .filter(Boolean)
     .sort((a, b) => a.localeCompare(b));
 
+  const getProductsSelected = (): EntitiesSelected[] => {
+    return rows
+      .map(row => ({
+        id: row.id,
+        sustainabilityAttributes: row.sustainabilityAttributes,
+      }))
+      .filter(row =>
+        rowsSelected.includes(row.id)
+      )
+  }
+
   const columns: GridColDef[] = [
+    {
+      field: 'checkbox',
+      editable: false,
+      sortable: false,
+      hideSortIcons: true,
+      width: 100,
+      headerClassName: 'bg-gray-30',
+      renderCell: (params: GridCellParams) => (
+        <Checkbox
+          data-testid={`select-checkbox-products-supplied-${params.row.id}`}
+          checked={rowsSelected.includes(params.row.id) || false}
+          onClick={() => setRowsSelected((prev) => {
+            if (prev.includes(params.row.id)) {
+              return prev.filter((id) => id !== params.row.id);
+            } else {
+              return [...prev, params.row.id];
+            }
+          })}
+        />
+      ),
+      renderHeader: () => (
+        <Checkbox
+          data-testid={'select-all-checkbox-products-supplied'}
+          checked={rowsSelected.length === rows.length && rowsSelected.length > 0}
+          indeterminate={rowsSelected.length > 0 && rowsSelected.length < rows.length}
+          onClick={() => {
+            if(rowsSelected.length === rows.length) {
+              setRowsSelected([]);
+            } else if(rowsSelected.length > 0) {
+              setRowsSelected([]);
+            } else {
+              setRowsSelected(rows.map(r => r.id));
+            }
+          }}
+        />
+      ),
+    },
     {
       ...DEFAULT_GRID_COL_DEF,
       field: 'name',
@@ -118,23 +170,34 @@ const _ProductsSuppliedTab: React.FC<ProductsSuppliedTabProps> = ({ supplier, re
       className={'w-full'}
       data-testid={'products-supplied-tab-card'}
       ctas={[
-          {
-            child: <EditEntityAssociationsModal
-              buttonText={'Edit Products'}
-              refresh={refreshData}
-              title={'Edit Products'}
-              entityLevelToAdd={EntityLevel.PRODUCT}
-              entityLevelToBeAddedTo={EntityLevel.SUPPLIER}
-              entityToBeAddedId={supplier.id}
-              saveButtonText={'Save'}
-              idsSelected={rows.map(r => r.id)}
-            />
+        {
+          child: <EditEntityAssociationsModal
+            buttonText={'Edit Products'}
+            refresh={refreshData}
+            title={'Edit Products'}
+            entityLevelToAdd={EntityLevel.PRODUCT}
+            entityLevelToBeAddedTo={EntityLevel.SUPPLIER}
+            entityToBeAddedId={supplier.id}
+            saveButtonText={'Save'}
+            idsSelected={rows.map(r => r.id)}
+          />
+        },
+        {
+          text: 'Bulk Edit Attributes',
+          action: () => {
+            setShowBulkEditAttributesModal(true);
           },
-        ]}
+          variant: ButtonTypes.secondary,
+          disabled: rowsSelected.length === 0,
+        },
+      ]}
     >
       <MuiDataGrid
         rows={rows}
-        onRowClick={params => {
+        onCellClick={params => {
+          if (params.field === 'checkbox') {
+            return;
+          }
           navigate(`/products/${params.id}`);
         }}
         columns={columns}
@@ -148,6 +211,16 @@ const _ProductsSuppliedTab: React.FC<ProductsSuppliedTabProps> = ({ supplier, re
           },
         }}
         searchKey={`${supplier.id}productsSuppliedSearchValue`}
+      />
+      <BulkEditAttributesForEntitiesSuppliedModal
+        show={showBulkEditAttributesModal}
+        onClose={() => {
+          setShowBulkEditAttributesModal(false);
+          refreshData();
+          setRowsSelected([]);
+        }}
+        entitiesSelected={getProductsSelected()}
+        entityLevel={EntityLevel.PRODUCT}
       />
     </Card>
   );

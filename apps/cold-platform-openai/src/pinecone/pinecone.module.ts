@@ -9,15 +9,14 @@ import { ExtractionService } from '../extraction/extraction.service';
 import { ExtractionModule } from '../extraction/extraction.module';
 
 @Module({
-  imports: [
-    BullModule.registerQueue({
-      name: 'pinecone',
-    }),
-    LangchainModule,
-    PrismaModule,
-    ExtractionModule,
-  ],
-  providers: [PineconeService, LangchainLoaderService, PineconeConsumer, ExtractionService],
-  exports: [PineconeService],
+	imports: [
+		BullModule.registerQueue({
+			name: 'pinecone',
+		}),
+		LangchainModule,
+		PrismaModule,
+	],
+	providers: [PineconeService, LangchainLoaderService, PineconeConsumer],
+	exports: [PineconeService],
 })
 export class PineconeModule {}

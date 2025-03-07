@@ -172,7 +172,7 @@ export const Input = (props: IInputProps) => {
           {...textarea_props}
           key={`input_${key}`}
           className={twMerge('block text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 resize-none', textarea_props?.className)}
-          data-testid={`input_error_${textarea_props?.name}`}
+          data-testid={`input_${textarea_props?.name}`}
         />
         {
           textarea_props && textarea_props.showError && (textarea_props.error ? (

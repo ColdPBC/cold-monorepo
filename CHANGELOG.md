@@ -1,3 +1,227 @@
+## [1.586.3](https://github.com/coldPBC/cold-monorepo/compare/v1.586.2...v1.586.3) (2025-03-06)
+
+
+### Bug Fixes
+
+* handle weight assignment to ensure it is a number or null in BackboneService ([90cab93](https://github.com/coldPBC/cold-monorepo/commit/90cab93cd40ab2c360122839707cdc0517615c4a))
+
+## [1.586.2](https://github.com/coldPBC/cold-monorepo/compare/v1.586.1...v1.586.2) (2025-03-06)
+
+
+### Bug Fixes
+
+* ensure weight is stored as a number in BackboneService ([50cb9f4](https://github.com/coldPBC/cold-monorepo/commit/50cb9f453d706f499e18119a5cc69f09d40f0833))
+
+## [1.586.1](https://github.com/coldPBC/cold-monorepo/compare/v1.586.0...v1.586.1) (2025-03-06)
+
+
+### Bug Fixes
+
+* improve error logging for product upsert failure in BackboneService ([82c5e87](https://github.com/coldPBC/cold-monorepo/commit/82c5e87d09d653d6a8f5c5b2356595df3da9c59a))
+
+# [1.586.0](https://github.com/coldPBC/cold-monorepo/compare/v1.585.0...v1.586.0) (2025-03-06)
+
+
+### Features
+
+* add pagination support to triggerIntegration method in organization integrations ([35c873b](https://github.com/coldPBC/cold-monorepo/commit/35c873bac6c0eea1496d0a3f7e012621e9b21c19))
+* add unique constraints and new columns for materials and tag assignments ([d46ed35](https://github.com/coldPBC/cold-monorepo/commit/d46ed35fb321fc1753ca971ffd3244014812e01b))
+* enhance BackboneService sync logic, add conversion factor handling, and improve product/material syncing ([7469407](https://github.com/coldPBC/cold-monorepo/commit/746940742c187889e09596302cac5b477660cbdc))
+
+# [1.585.0](https://github.com/coldPBC/cold-monorepo/compare/v1.584.0...v1.585.0) (2025-03-06)
+
+
+### Features
+
+* Add GraphQL query for component definitions and implement error handling in sidebar ([38c2466](https://github.com/coldPBC/cold-monorepo/commit/38c24662e4b7baf45ff258731ab2d2af78f13598))
+* Handle errors at all levels in getGraphqlError utility ([44ee017](https://github.com/coldPBC/cold-monorepo/commit/44ee0173f8df779ec0e37c90f783e426df287f7d))
+* Refactor sidebar item matching logic with recursion. ([c6dc2f8](https://github.com/coldPBC/cold-monorepo/commit/c6dc2f8e88ac0a94d03144db279357495026633d))
+
+# [1.584.0](https://github.com/coldPBC/cold-monorepo/compare/v1.583.1...v1.584.0) (2025-03-03)
+
+
+### Features
+
+* Add custom scrollbar styling for chatbot UI ([d327583](https://github.com/coldPBC/cold-monorepo/commit/d327583edb17cdd267ab45a739c273bc2150193f))
+* Adjust padding logic and refine scrolling behavior ([6ce4de0](https://github.com/coldPBC/cold-monorepo/commit/6ce4de0adadcb17578b1d0e8188459e0c654d491))
+* Align pagination toolbar to the left and remove default right spacing ([e94dd75](https://github.com/coldPBC/cold-monorepo/commit/e94dd75b5144cc22c67a77cf3b8b3512a5eb3d90))
+
+## [1.583.1](https://github.com/coldPBC/cold-monorepo/compare/v1.583.0...v1.583.1) (2025-03-03)
+
+
+### Bug Fixes
+
+* handle optional classification type and improve error handling for classify response ([2616935](https://github.com/coldPBC/cold-monorepo/commit/26169359026d5b678d02b8de59d4abafff6c882e))
+
+# [1.583.0](https://github.com/coldPBC/cold-monorepo/compare/v1.582.1...v1.583.0) (2025-03-03)
+
+
+### Features
+
+* Map document types to main categories and update UI labels. ([88d48ba](https://github.com/coldPBC/cold-monorepo/commit/88d48ba0705517f63b78bf4b485127659395085b))
+
+## [1.582.1](https://github.com/coldPBC/cold-monorepo/compare/v1.582.0...v1.582.1) (2025-02-28)
+
+
+### Bug Fixes
+
+* comment out platform event for AI_PROCESSING status in file upload handling ([8548047](https://github.com/coldPBC/cold-monorepo/commit/8548047d22b22e156fb69f470c43ff73fa3d4031))
+
+# [1.582.0](https://github.com/coldPBC/cold-monorepo/compare/v1.581.0...v1.582.0) (2025-02-28)
+
+
+### Bug Fixes
+
+* handle inconsistent payload key for file in async message processing ([5942fc3](https://github.com/coldPBC/cold-monorepo/commit/5942fc39e89c180efce2f7d74c617a692d9c7b28))
+* handle optional compliance ID in job cache retrieval ([9e8b6d0](https://github.com/coldPBC/cold-monorepo/commit/9e8b6d0f7a2874ac0178bef7642e8b5504d15215))
+* improve error handling for encrypted PDFs in extraction service ([a96424c](https://github.com/coldPBC/cold-monorepo/commit/a96424cc34da8e5ecbdb1cb7b243faaef23abfda))
+
+
+### Features
+
+* dynamically load pdfjs-dist for improved PDF text extraction ([44aa893](https://github.com/coldPBC/cold-monorepo/commit/44aa8934b623a6d93e8c8be143d7a97464b2e202))
+* enhance job failure handling and add binary content detection in classification process ([bd11c57](https://github.com/coldPBC/cold-monorepo/commit/bd11c5768064e61047535262a0f173b20770a5c3))
+
+# [1.581.0](https://github.com/coldPBC/cold-monorepo/compare/v1.580.1...v1.581.0) (2025-02-27)
+
+
+### Features
+
+* Add rounded-none style to input component ([8a8336a](https://github.com/coldPBC/cold-monorepo/commit/8a8336a8b870b7e20f64d81c61984e0797a1ff06))
+* Extract input handling logic into a separate function for clarity ([2a2b8ee](https://github.com/coldPBC/cold-monorepo/commit/2a2b8eea21991f7ed375b02e2296caab9d708df8))
+* Group references by file name and concatenate text in response ([340cfd8](https://github.com/coldPBC/cold-monorepo/commit/340cfd8e86ef0d59527a554fd58a501591648f8d))
+* Refactor file input handling to allow re-selection. ([4b30473](https://github.com/coldPBC/cold-monorepo/commit/4b30473890be23895c3dfdc2fcd8c85eefc841d0))
+* Refactor file upload logic into custom hook. ([65557c5](https://github.com/coldPBC/cold-monorepo/commit/65557c57aafd7a7bc9448bb5498b7f566fef8b2f))
+
+## [1.580.1](https://github.com/coldPBC/cold-monorepo/compare/v1.580.0...v1.580.1) (2025-02-27)
+
+
+### Bug Fixes
+
+* enhance failure logging to include job failure reason ([fc92e48](https://github.com/coldPBC/cold-monorepo/commit/fc92e48b74c45c428bfcfbab350b34db5672bf6a))
+
+# [1.580.0](https://github.com/coldPBC/cold-monorepo/compare/v1.579.0...v1.580.0) (2025-02-27)
+
+
+### Bug Fixes
+
+* comment out PDF text extraction for debugging purposes ([afebb17](https://github.com/coldPBC/cold-monorepo/commit/afebb17d013646b509ce2f87a5c3de75a8900260))
+
+
+### Features
+
+* add 'vectorize-file' event to MqttEventSchema ([eb93627](https://github.com/coldPBC/cold-monorepo/commit/eb93627a90a9b385b4005392ed1801f1f85ea61d))
+* enhance classification processor with progress tracking and error handling ([aea9021](https://github.com/coldPBC/cold-monorepo/commit/aea9021aaa63d956bb30bd3d4b148e1fdbbb2abf))
+* implement NotImplementedException for syncOrgFiles method ([09fd470](https://github.com/coldPBC/cold-monorepo/commit/09fd4706d29237bc9b56b1014b338a001a6cbf36))
+* update PDF extraction service to log image conversion progress and change type definition ([42f0163](https://github.com/coldPBC/cold-monorepo/commit/42f0163dc26cad815ce9af8c2e4aa61ad76bb98b))
+
+# [1.579.0](https://github.com/coldPBC/cold-monorepo/compare/v1.578.0...v1.579.0) (2025-02-26)
+
+
+### Features
+
+* Add bulk edit functionality for supplied products ([1b3e416](https://github.com/coldPBC/cold-monorepo/commit/1b3e41667f20668890a0527cde65f22e50d9aa79))
+* Refactor bulk edit modal to support multiple entity levels ([8471aac](https://github.com/coldPBC/cold-monorepo/commit/8471aac1b039859728fe9b323044ae71b04a4cc2))
+* Remove unused pagination input and standardize export syntax ([0291190](https://github.com/coldPBC/cold-monorepo/commit/02911901abf41c874e1cbb55365b01b963d819fa))
+* Simplify attribute selection logic in modal ([f08ee12](https://github.com/coldPBC/cold-monorepo/commit/f08ee12a263c7801daea224f09401fd285ac79c1))
+
+# [1.578.0](https://github.com/coldPBC/cold-monorepo/compare/v1.577.0...v1.578.0) (2025-02-26)
+
+
+### Features
+
+* Add AI response handling with OpenAI integration ([f40fd9c](https://github.com/coldPBC/cold-monorepo/commit/f40fd9cf7ed611ba0e781ed61e6e629d8b96de1b))
+* Add aiLoading prop to SustainabiliBuddyQueue component ([8626454](https://github.com/coldPBC/cold-monorepo/commit/862645426b9029555801c0980e7b016818e0a31b))
+* Add error boundaries to SustainabiliBuddy components ([852306f](https://github.com/coldPBC/cold-monorepo/commit/852306f38103721b80e485c6a761807485d5f84a))
+* Add gradient animations and improve loading indicators ([16c04b1](https://github.com/coldPBC/cold-monorepo/commit/16c04b12870771c6978b320c17c47b42e97468b3))
+* Fix incorrect delay class names in gradient animation ([44351e7](https://github.com/coldPBC/cold-monorepo/commit/44351e7e1ec634c1f90f78b1f11bf671d311c0fa))
+* Refactor AI response handling to include default answer. ([06ccab3](https://github.com/coldPBC/cold-monorepo/commit/06ccab369a6d096b4b99cf67776c3905a08215ec))
+* Refactor justification and references rendering logic. ([d46ee96](https://github.com/coldPBC/cold-monorepo/commit/d46ee9683f188514447358417dd5af31971eedc3))
+* Update animations and add utility classes for delays ([e3085f0](https://github.com/coldPBC/cold-monorepo/commit/e3085f03b5aa8f756a8be51e06c46c90cdd0882a))
+
+# [1.577.0](https://github.com/coldPBC/cold-monorepo/compare/v1.576.0...v1.577.0) (2025-02-26)
+
+
+### Features
+
+* add support for extracting and handling PDF text, update dependencies ([467ed80](https://github.com/coldPBC/cold-monorepo/commit/467ed80f80098e1ed2395e2afef101f002c68583))
+
+# [1.576.0](https://github.com/coldPBC/cold-monorepo/compare/v1.575.0...v1.576.0) (2025-02-25)
+
+
+### Features
+
+* Add upload modal with file selection and upload functionality ([038b99f](https://github.com/coldPBC/cold-monorepo/commit/038b99f40cf79508aad2ad5ad3a695f17de9795f))
+* Refactor uploadingScreen to simplify file handling logic. ([ac42b93](https://github.com/coldPBC/cold-monorepo/commit/ac42b935f766fb0a849bc088d521fdac0e118563))
+* Remove toast messages from document upload component ([60ad934](https://github.com/coldPBC/cold-monorepo/commit/60ad9346f6b5ea3a97f477ab249f2a8cce16c1c9))
+* Update text label and fix error color reference ([8df5dfb](https://github.com/coldPBC/cold-monorepo/commit/8df5dfbc871a12a2247e9c8bba052211bd327218))
+
+# [1.575.0](https://github.com/coldPBC/cold-monorepo/compare/v1.574.4...v1.575.0) (2025-02-25)
+
+
+### Features
+
+* Add SustainabiliBuddy conversational UI components ([d8960a7](https://github.com/coldPBC/cold-monorepo/commit/d8960a7bde553aeb1a4559c03a35a00f12898cfe))
+* Set default margins for text elements in Tailwind config ([b17e14b](https://github.com/coldPBC/cold-monorepo/commit/b17e14b678233a064090999f8611921e3df08748))
+
+## [1.574.4](https://github.com/coldPBC/cold-monorepo/compare/v1.574.3...v1.574.4) (2025-02-24)
+
+
+### Bug Fixes
+
+* remove unnecessary condition in file processing status update ([39a41e8](https://github.com/coldPBC/cold-monorepo/commit/39a41e8e3f583b8daf26900de6401cd1a116bddb))
+
+## [1.574.3](https://github.com/coldPBC/cold-monorepo/compare/v1.574.2...v1.574.3) (2025-02-24)
+
+
+### Bug Fixes
+
+* improve MQTT connection log message to include client ID ([31deadc](https://github.com/coldPBC/cold-monorepo/commit/31deadc02c4992c4fe72f881ed36f34643b89eb1))
+
+## [1.574.2](https://github.com/coldPBC/cold-monorepo/compare/v1.574.1...v1.574.2) (2025-02-24)
+
+
+### Bug Fixes
+
+* handle excessive MQTT connection attempts with error logging ([56af389](https://github.com/coldPBC/cold-monorepo/commit/56af3891063b9669f05a31c15e7ca7c2e9224410))
+
+## [1.574.1](https://github.com/coldPBC/cold-monorepo/compare/v1.574.0...v1.574.1) (2025-02-24)
+
+
+### Bug Fixes
+
+* enhance mqtt client handling and logging defaults ([95aaab4](https://github.com/coldPBC/cold-monorepo/commit/95aaab4f1320cdd1b41f3cd62cf611e3fa992398))
+
+
+### Reverts
+
+* mistakenly added WeightUnit to product_materials ([d9d7bb9](https://github.com/coldPBC/cold-monorepo/commit/d9d7bb96a821fc794332e4460f78013eaaa309d7))
+
+# [1.574.0](https://github.com/coldPBC/cold-monorepo/compare/v1.573.0...v1.574.0) (2025-02-22)
+
+
+### Features
+
+* Add SustainabiliBuddyContainer component and integrate it ([b0eada6](https://github.com/coldPBC/cold-monorepo/commit/b0eada65e0b9e6dad5215eb69f6c1852c0339ffd))
+* Add SustainabiliBuddyInput component and input enhancements ([83c6120](https://github.com/coldPBC/cold-monorepo/commit/83c61208860d6da549b61fc3f6fea642df10b1cb))
+* Adjust layout for responsive design in SustainabiliBuddyContainer ([d1c0005](https://github.com/coldPBC/cold-monorepo/commit/d1c00055e6cda096979d30a9f6b2f7d942d29620))
+* Refactor prompt handling in SustainabiliBuddy components ([ca934a4](https://github.com/coldPBC/cold-monorepo/commit/ca934a4ddb32d9726410df3498ed582bc7e7740b))
+* Refactor queue state structure and adjust button styling ([7d24c7b](https://github.com/coldPBC/cold-monorepo/commit/7d24c7bf842c6102a97266d45cffb72559c9d47f))
+* Reset input field after handling Enter key press ([6a4ec4d](https://github.com/coldPBC/cold-monorepo/commit/6a4ec4d2b9d36c29420a7226cfe6f8c378eb08eb))
+* Update gradient colors for SustainabiliBuddy components ([015f69b](https://github.com/coldPBC/cold-monorepo/commit/015f69b4151c033c4f00cb27821aae674bc88be6))
+* Update gradient colors in SustainabiliBuddy components ([4c5e19e](https://github.com/coldPBC/cold-monorepo/commit/4c5e19e3db2b1a66d171760a7578268b6e0e57bc)), closes [#F7FF58](https://github.com/coldPBC/cold-monorepo/issues/F7FF58)
+* Update gradient colors in SustainabiliBuddyContainer ([6693a42](https://github.com/coldPBC/cold-monorepo/commit/6693a42862a29a0a4e8e9502a86516104d1f8aec))
+
+# [1.573.0](https://github.com/coldPBC/cold-monorepo/compare/v1.572.0...v1.573.0) (2025-02-21)
+
+
+### Features
+
+* Add document deletion functionality to UploadsPage ([3b6d28b](https://github.com/coldPBC/cold-monorepo/commit/3b6d28bd863d0ba5e049d089109914f068fbd439))
+* Add file download functionality to uploads page ([3f0ec6c](https://github.com/coldPBC/cold-monorepo/commit/3f0ec6c991ea3eef7083051d93a86d2f81422c89))
+* Fix delete action parameter in uploads page grid ([64916e3](https://github.com/coldPBC/cold-monorepo/commit/64916e3394f0ba03db2e9a2498dfdf9cd8b17ab2))
+* Refactor delete document modal into reusable component ([cb4d76a](https://github.com/coldPBC/cold-monorepo/commit/cb4d76aafa5b59b5649f10f2610199c327893ae4))
+
 # [1.572.0](https://github.com/coldPBC/cold-monorepo/compare/v1.571.1...v1.572.0) (2025-02-20)
 
 

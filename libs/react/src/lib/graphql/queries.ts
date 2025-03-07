@@ -354,6 +354,9 @@ export const GET_ALL_SUSTAINABILITY_ATTRIBUTES_FOR_ORG = gql`
       level
       logoUrl
       name
+      organization {
+        id
+      }
     }
   }
 `;
@@ -744,6 +747,16 @@ export const GET_ALL_UPLOADS = gql`
   }
 `;
 
+export const GET_COMPONENT_DEFINITIONS = gql`
+  query ComponentDefinitions($filter: ComponentDefinitionsListFilter) {
+    componentDefinitions(filter: $filter) {
+      id
+      name
+      definition
+    }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -791,4 +804,5 @@ export const queries: {
   DELETE_PRODUCT_MATERIALS: DELETE_PRODUCT_MATERIALS,
   UPDATE_PRODUCT_MATERIAL: UPDATE_PRODUCT_MATERIAL,
   GET_ALL_UPLOADS: GET_ALL_UPLOADS,
+  GET_COMPONENT_DEFINITIONS: GET_COMPONENT_DEFINITIONS,
 };

@@ -1,4 +1,4 @@
-import { IconNames } from '../enums/iconNames';
+import { IconNames } from '@coldpbc/enums';
 
 export interface NavbarItem {
   icon?: { name: IconNames };
@@ -12,4 +12,16 @@ export interface NavbarItem {
 
 export interface NavbarItemWithRoute extends NavbarItem {
   route: string;
+}
+
+export interface ComponentDefinitionGraphQL {
+  id: string;
+  name: string;
+  definition: any;
+}
+
+export interface SidebarGraphQL extends ComponentDefinitionGraphQL {
+  definition: {
+    items: NavbarItem[];
+  };
 }

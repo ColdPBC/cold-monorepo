@@ -1,8 +1,10 @@
-import { ColdIcon } from "@coldpbc/components"
+import {ColdIcon, ErrorFallback} from "@coldpbc/components"
 import { IconNames } from "@coldpbc/enums"
+import {withErrorBoundary} from "react-error-boundary";
+import React from "react";
 
 
-export const SustainabiliBuddyButton = (props: {
+const _SustainabiliBuddyButton = (props: {
   showPromptContainer: boolean,
   setShowPromptContainer: (value: boolean) => void,
 }) => {
@@ -25,7 +27,7 @@ export const SustainabiliBuddyButton = (props: {
   )
   return (
     <div
-      className="p-[2px] w-[69px] h-[69px] rounded-full bg-gradient-to-br from-[#F7FF58] via-[#32B5FF] to-[#485CEA] cursor-pointer"
+      className="p-[2px] w-[69px] h-[69px] rounded-full bg-gradient-to-br from-yellow-250 via-lightblue-400 to-primary-300 cursor-pointer"
       onClick={() => setShowPromptContainer(!showPromptContainer)}
     >
       <div className="rounded-full h-full w-full bg-bgc-accent flex flex-row items-center justify-center">
@@ -34,3 +36,10 @@ export const SustainabiliBuddyButton = (props: {
     </div>
   )
 }
+
+export const SustainabiliBuddyButton = withErrorBoundary(_SustainabiliBuddyButton, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SustainabiliBuddyButton: ', error);
+  },
+});

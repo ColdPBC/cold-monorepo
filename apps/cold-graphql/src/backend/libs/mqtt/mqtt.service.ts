@@ -7,6 +7,7 @@ import * as z from 'zod';
 export type MqttStatus = 'complete' | 'failed';
 export type MqttAction = 'create' | 'update' | 'delete';
 import { ss, secrets } from '../secrets/secrets.service';
+import { cpus, freemem, hostname, loadavg, NetworkInterfaceInfo, totalmem } from 'os';
 
 export enum MqttActionEnum {
 	GET = 'get',
@@ -42,11 +43,12 @@ export type MQTTPayloadType = z.infer<typeof payloadSchema>;
 
 export class MqttService {
 	private iotEndpoint = 'a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com';
-	private clientId: string;
+	private clientId: string = hostname();
 	mqttClient: mqtt.MqttClient | undefined;
 	logger: WorkerLogger;
 	entity: string;
 	secrets: any;
+	attempts: 0;
 	constructor(entity: string) {
 		this.entity = entity;
 		const cuid = init({
@@ -115,15 +117,14 @@ export class MqttService {
 					headers: {
 						'x-auth0-domain': this.secrets.AUTH0_DOMAIN || 'dev-6qt527e13qyo4ls6.us.auth0.com',
 						'x-amz-customauthorizer-name': 'mqtt_authorizer',
-						'x-cold-org': 'org_VWv3Al9pLEI4CaOH',
-						'x-cold-env': 'development',
-						token:
-							'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik5Ea1BmUDhuQVpHamhhZ1E1TjMyTCJ9.eyJjb2xkY2xpbWF0ZV9jbGFpbXMiOnsiZW1haWwiOiJ0cm95Lm1vcnZhbnRAY29sZGNsaW1hdGUuY29tIiwiaWQiOiJnb29nbGUtb2F1dGgyfDEwNzMwMjA2OTc4MjQ4NzAyNDkzNiIsInJvbGVzIjpbImNvbGQ6YWRtaW4iXX0sImlzcyI6Imh0dHBzOi8vZGV2LTZxdDUyN2UxM3F5bzRsczYudXMuYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTA3MzAyMDY5NzgyNDg3MDI0OTM2IiwiYXVkIjpbImh0dHBzOi8vYXBpLmNvbGRjbGltYXRlLnd0Zi8iLCJodHRwczovL2Rldi02cXQ1MjdlMTNxeW80bHM2LnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE3MTQ2Mjk5NDEsImV4cCI6MTcxNDcxNjM0MSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCBvZmZsaW5lX2FjY2VzcyIsImF6cCI6IkFvY3lORXFCb2NLZm1VOUFIVXMwa29HZVo3M2xicmtGIiwicGVybWlzc2lvbnMiOlsiaW1wZXJzb25hdGUiLCJyZWFkOmFsbCIsIndyaXRlOmFsbCJdfQ.QWIXLNGQZrxyV61dXrMfDcEvJqrQA2F7BRfPEkFrZdzHBU7-A9BtDW0RZa4Mtx7cs_vPE-N80XLaRw3CWQrvxX3kQttmlpq6xlmfUZ2Qzv6mZ-6XHOc5DL1B33ElRj01pBRkjQwHKH8xsAXoBH7zb_F7PbEsX1-bwN9PnoJk9hr6x4k_F3ABN2yBHf-QCYPnAVMgjWWLkCbO5tbxK7wuOHe9zpphcPa74rKzKtoPiaGXchZPUjdQSNy-khO4ggF7PYyL_No0zJO-NNsdKgT8PIcnsCqj-uxTRmRKXgJ80bZdeT4x8tHdwMjmUue1AQeziLS_67s0eFLMl72UIYTq0w',
+						'x-cold-org': `${context.context.user.organization.id}`,
+						'x-cold-env': `${process.env.NODE_ENV || 'development'}`,
+						token: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik5Ea1BmUDhuQVpHamhhZ1E1TjMyTCJ9.eyJjb2xkY2xpbWF0ZV9jbGFpbXMiOnsiZW1haWwiOiJ0cm95Lm1vcnZhbnRAY29sZGNsaW1hdGUuY29tIiwiaWQiOiJnb29nbGUtb2F1dGgyfDEwNzMwMjA2OTc4MjQ4NzAyNDkzNiIsInJvbGVzIjpbImNvbGQ6YWRtaW4iXX0sImlzcyI6Imh0dHBzOi8vZGV2LTZxdDUyN2UxM3F5bzRsczYudXMuYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTA3MzAyMDY5NzgyNDg3MDI0OTM2IiwiYXVkIjpbImh0dHBzOi8vYXBpLmNvbGRjbGltYXRlLnd0Zi8iLCJodHRwczovL2Rldi02cXQ1MjdlMTNxeW80bHM2LnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE3MTQ2Mjk5NDEsImV4cCI6MTcxNDcxNjM0MSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCBvZmZsaW5lX2FjY2VzcyIsImF6cCI6IkFvY3lORXFCb2NLZm1VOUFIVXMwa29HZVo3M2xicmtGIiwicGVybWlzc2lvbnMiOlsiaW1wZXJzb25hdGUiLCJyZWFkOmFsbCIsIndyaXRlOmFsbCJdfQ.QWIXLNGQZrxyV61dXrMfDcEvJqrQA2F7BRfPEkFrZdzHBU7-A9BtDW0RZa4Mtx7cs_vPE-N80XLaRw3CWQrvxX3kQttmlpq6xlmfUZ2Qzv6mZ-6XHOc5DL1B33ElRj01pBRkjQwHKH8xsAXoBH7zb_F7PbEsX1-bwN9PnoJk9hr6x4k_F3ABN2yBHf-QCYPnAVMgjWWLkCbO5tbxK7wuOHe9zpphcPa74rKzKtoPiaGXchZPUjdQSNy-khO4ggF7PYyL_No0zJO-NNsdKgT8PIcnsCqj-uxTRmRKXgJ80bZdeT4x8tHdwMjmUue1AQeziLS_67s0eFLMl72UIYTq0w`,
 					},
 				},
 				host: this.iotEndpoint,
 				port: 8883,
-				clientId: this.clientId || `${this.clientId}${new Date().getTime()}`,
+				clientId: `${this.clientId}${new Date().getTime()}`,
 				protocol: 'mqtts',
 				protocolVersion: 5,
 				key: key,
@@ -133,7 +134,7 @@ export class MqttService {
 
 			// Handle MQTT events
 			this.mqttClient.on('connect', () => {
-				this.logger.log(`Connected to AWS IoT Core`);
+				this.logger.log(`Connected to AWS IoT Core as ${this.clientId}`);
 			});
 
 			this.mqttClient.on('error', error => {
@@ -218,8 +219,15 @@ export class MqttService {
 			if (!this.mqttClient || !this.mqttClient.connected) {
 				this.mqttClient = await this.connect(context);
 				while (!this.mqttClient.connected) {
-					await new Promise(resolve => setTimeout(resolve, 3000));
+					await new Promise(resolve => setTimeout(resolve, 5000 + this.attempts * 1000));
+					this.attempts++;
+					if (this.attempts > 10) {
+						this.logger.error('Max failed attempts to connect to AWS IoT Core');
+						break;
+					}
 				}
+
+				this.attempts = 0;
 			}
 			const inputs = this.validate(payload);
 

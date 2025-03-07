@@ -1,27 +1,28 @@
 import {
   ColdIcon,
-  DEFAULT_GRID_COL_DEF,
+  DEFAULT_GRID_COL_DEF, DeleteDocumentModal,
   ErrorFallback,
   MainContent,
   MuiDataGrid,
   UploadModal
 } from '@coldpbc/components';
-import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
-import { UploadsQuery } from '@coldpbc/interfaces';
+import {useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
+import {ToastMessage, UploadsQuery} from '@coldpbc/interfaces';
 import { get } from 'lodash';
-import { GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid-pro';
+import {GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridActionsCellItem } from '@mui/x-data-grid-pro';
 import { format } from 'date-fns';
-import React, { ReactNode } from 'react';
+import React, {ReactNode, useState} from 'react';
 import {
-  DocumentTypes,
   IconNames, MainDocumentCategory,
   ProcessingStatus,
   UIProcessingStatus,
   UIProcessingStatusMapping,
 } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
-import { formatScreamingSnakeCase } from '@coldpbc/lib';
+import {formatScreamingSnakeCase, getDocumentCategory} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
+import {axiosFetcher} from "@coldpbc/fetchers";
+import { isAxiosError} from "axios";
 
 const ProcessingStatusConfig: Record<UIProcessingStatus, {
   icon: IconNames;
@@ -59,7 +60,9 @@ const ProcessingStatusConfig: Record<UIProcessingStatus, {
 
 export const _UploadsPage = () => {
   const {logBrowser} = useColdContext();
+  const {addToastMessage} = useAddToastMessage()
   const { orgId } = useAuth0Wrapper();
+  const [documentToDelete, setDocumentToDelete] = useState<UploadsQuery | undefined>(undefined);
 
   const uploadsQuery = useGraphQLSWR<{
       organizationFiles: UploadsQuery[];
@@ -114,6 +117,7 @@ export const _UploadsPage = () => {
   };
 
   const error = get(uploadsQuery, 'data.error', null);
+
   if(error){
     logBrowser(
       'Getting Uploads Error',
@@ -125,13 +129,20 @@ export const _UploadsPage = () => {
     );
   }
 
-  const fileTypes = Object.values(DocumentTypes).map((type) =>
+  const fileTypes = Object.values(MainDocumentCategory).map((type) =>
     formatScreamingSnakeCase(type)
   )
 
   const statuses = Object.values(UIProcessingStatusMapping)
 
-  const files = get(uploadsQuery, 'data.data.organizationFiles', []);
+  const files = get(uploadsQuery, 'data.data.organizationFiles', []).map((file: UploadsQuery) => {
+    return (
+      {
+        ...file,
+        type: getDocumentCategory(file.type),
+      }
+    )
+  })
 
   logBrowser(
     'Uploads Page',
@@ -152,7 +163,7 @@ export const _UploadsPage = () => {
     {
       ...DEFAULT_GRID_COL_DEF,
       field: 'type',
-      headerName: 'Import Type',
+      headerName: 'Upload Category',
       type: 'singleSelect',
       valueOptions: fileTypes,
       cellClassName: 'text-tc-secondary text-body',
@@ -186,6 +197,43 @@ export const _UploadsPage = () => {
         return UIProcessingStatusMapping[value as ProcessingStatus];
       },
     },
+    {
+      headerClassName: 'bg-gray-30',
+      field: 'actions',
+      type: 'actions',
+      getActions: (params: GridRowParams) => [
+        <GridActionsCellItem label={'Delete'} onClick={() => setDocumentToDelete(params.row)} showInMenu={true}/>,
+        <GridActionsCellItem
+          label="Download"
+          onClick={async () => {
+            try {
+              const response = await axiosFetcher([`/organizations/${orgId}/files/${params.row.id}/url`, 'GET']);
+              if (!isAxiosError(response)) {
+                window.location.href = response;
+                addToastMessage({
+                  message: 'File downloaded successfully',
+                  type: ToastMessage.SUCCESS,
+                });
+                logBrowser('File downloaded', 'info', { response });
+              } else {
+                logBrowser('Error downloading the file', 'error', { response }, response);
+                addToastMessage({
+                  message: 'Error downloading the file',
+                  type: ToastMessage.FAILURE,
+                });
+              }
+            } catch (error) {
+              logBrowser('Error downloading the file', 'error', { error }, error);
+              addToastMessage({
+                message: 'Error downloading the file',
+                type: ToastMessage.FAILURE,
+              });
+            }
+          }}
+          showInMenu
+        />
+      ]
+    }
   ]
 
   return (
@@ -218,6 +266,21 @@ export const _UploadsPage = () => {
           }
         }}
       />
+      {
+        documentToDelete && (
+          <DeleteDocumentModal
+            show={!!documentToDelete}
+            setShowModal={(show: boolean) => {
+              if (!show) {
+                setDocumentToDelete(undefined);
+              }
+            }}
+            id={documentToDelete?.id || ''}
+            documentName={documentToDelete?.originalName || ''}
+            refresh={uploadsQuery.mutate}
+          />
+        )
+      }
     </MainContent>
   )
 };

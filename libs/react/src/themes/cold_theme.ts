@@ -45,6 +45,7 @@ const FoundationalHexColors = {
     DEFAULT: '#FCE500',
     '100': '#FFF8B2',
     '200': '#FFF166',
+    '250': '#F7FF58',
     '300': '#FCE500',
     '400': '#E0CB00',
     '500': '#C7B400',
