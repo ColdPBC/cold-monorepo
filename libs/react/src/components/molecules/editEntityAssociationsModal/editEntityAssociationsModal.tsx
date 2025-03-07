@@ -13,6 +13,7 @@ import { Checkbox } from '@mui/material';
 import { isEqual, lowerCase, sortBy, uniq } from 'lodash';
 import { FetchResult } from '@apollo/client';
 import { ToastMessage } from '@coldpbc/interfaces';
+import {GRID_CHECKBOX_COL_DEF} from "@coldpbc/lib";
 
 interface EditEntityAssociationsModalProps {
 	buttonText: string;
@@ -77,12 +78,7 @@ export const EditEntityAssociationsModal = (
 
   const columns: GridColDef[] = [
     {
-      field: 'checkbox',
-      editable: false,
-      sortable: false,
-      hideSortIcons: true,
-      width: 100,
-      headerClassName: 'bg-gray-30',
+      ...GRID_CHECKBOX_COL_DEF,
       cellClassName: 'bg-gray-10',
       renderCell: (params: GridCellParams) => (
         <Checkbox

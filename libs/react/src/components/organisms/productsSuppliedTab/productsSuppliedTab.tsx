@@ -9,7 +9,7 @@ import {
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
 import {GridCellParams, GridColDef, GridRowSelectionModel} from '@mui/x-data-grid-pro';
-import { processEntityLevelAssurances } from '@coldpbc/lib';
+import {GRID_CHECKBOX_COL_DEF, processEntityLevelAssurances} from '@coldpbc/lib';
 import { uniq } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React, {useState} from 'react';
@@ -48,12 +48,7 @@ const _ProductsSuppliedTab: React.FC<ProductsSuppliedTabProps> = ({ supplier, re
 
   const columns: GridColDef[] = [
     {
-      field: 'checkbox',
-      editable: false,
-      sortable: false,
-      hideSortIcons: true,
-      width: 100,
-      headerClassName: 'bg-gray-30',
+      ...GRID_CHECKBOX_COL_DEF,
       renderCell: (params: GridCellParams) => (
         <Checkbox
           data-testid={`select-checkbox-products-supplied-${params.row.id}`}
