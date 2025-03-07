@@ -34,7 +34,7 @@ interface CustomDataGridToolbarProps extends GridToolbarProps {
 }
 
 const CustomDataGridToolbar = (props: CustomDataGridToolbarProps) => {
-  const { showSearch, showExport, showManageColumns, quickFilterProps, printOptions } = props;
+  const { showSearch, showExport, showManageColumns, quickFilterProps, printOptions, csvOptions } = props;
   if(!showSearch && !showExport && !showManageColumns) {
     return null;
   }
@@ -50,7 +50,7 @@ const CustomDataGridToolbar = (props: CustomDataGridToolbarProps) => {
         </>
       )}
       {showManageColumns && <GridToolbarColumnsButton />}
-      {showExport && <GridToolbarExport printOptions={printOptions} />}
+      {showExport && <GridToolbarExport printOptions={printOptions} csvOptions={csvOptions} />}
     </GridToolbarContainer>
   );
 };
