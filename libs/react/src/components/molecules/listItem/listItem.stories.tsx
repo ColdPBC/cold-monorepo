@@ -2,6 +2,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ListItem, ListItemProps } from '@coldpbc/components';
 import React, { useState } from 'react';
+import { userEvent, within, expect } from '@storybook/test';
 
 const meta: Meta<typeof ListItem> = {
   title: 'Molecules/ListItem',
@@ -22,30 +23,47 @@ export const Empty: Story = {
     const user = userEvent.setup();
 
     // Initial state check
-    let inputs = canvas.getAllByRole('textbox', { name: /listInput/i });
-    expect(inputs).toHaveLength(1);
-    expect(inputs[0]).toHaveValue('');
+    let listItems = await canvas.findAllByTestId('listItem');
+    await expect(listItems).toHaveLength(1);
+    let input = await within(listItems[0]).findByRole('textbox', { name: /listInput/i });
+    await expect(input).toHaveValue('');
 
     // Add new items and type values
-    const addButton = canvas.getByRole('button', { name: /plus/i });
-    await user.type(inputs[0], 'First item');
+    const addButton = await canvas.findByTestId('addListItemButton');
+    await user.type(input, 'First item');
     await user.click(addButton);
-    await user.type(canvas.getAllByRole('textbox')[1], 'Second item');
+
+    listItems = await canvas.findAllByTestId('listItem');
+    await expect(listItems).toHaveLength(2);
+    input = await within(listItems[1]).findByRole('textbox', { name: /listInput/i });
+    await user.type(input, 'Second item');
+
+
+    await user.click(addButton);
+    listItems = await canvas.findAllByTestId('listItem');
+    await expect(listItems).toHaveLength(3);
+    input = await within(listItems[2]).findByRole('textbox', { name: /listInput/i });
+    await user.type(input, 'Third item');
 
     // Verify added items
-    inputs = canvas.getAllByRole('textbox');
-    expect(inputs).toHaveLength(2);
-    expect(inputs[0]).toHaveValue('First item');
-    expect(inputs[1]).toHaveValue('Second item');
+    listItems = await canvas.findAllByTestId('listItem');
+    await expect(listItems).toHaveLength(3);
+    await expect(await within(listItems[0]).findByRole('textbox', { name: /listInput/i })).toHaveValue('First item');
+    await expect(await within(listItems[1]).findByRole('textbox', { name: /listInput/i })).toHaveValue('Second item');
+    await expect(await within(listItems[2]).findByRole('textbox', { name: /listInput/i })).toHaveValue('Third item');
 
     // Test remove functionality
-    const removeButtons = canvas.getAllByRole('button', { name: /close/i });
-    await user.click(removeButtons[0]);
+    const removeButtons = await canvas.findAllByTestId('removeListItem');
+    await user.click(removeButtons[1]);
+
+    // wait 2 seconds for transition to complete
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Verify item was removed
-    inputs = canvas.getAllByRole('textbox');
-    expect(inputs).toHaveLength(1);
-    expect(inputs[0]).toHaveValue('Second item');
+    listItems = await canvas.findAllByTestId('listItem');
+    await expect(listItems).toHaveLength(2);
+    await expect(await within(listItems[0]).findByRole('textbox', { name: /listInput/i })).toHaveValue('First item');
+    await expect(await within(listItems[1]).findByRole('textbox', { name: /listInput/i })).toHaveValue('Third item');
   }
 };
 
@@ -61,37 +79,39 @@ export const WithValues: Story = {
     const user = userEvent.setup();
 
     // Initial state check
-    let inputs = canvas.getAllByRole('textbox', { name: /listInput/i });
-    expect(inputs).toHaveLength(4);
-    expect(inputs[0]).toHaveValue('Oregon');
-    expect(inputs[1]).toHaveValue('Washington');
-    expect(inputs[2]).toHaveValue('11');
-    expect(inputs[3]).toHaveValue('DC');
+    let listItems = await canvas.findAllByTestId('listItem');
+    await expect(listItems).toHaveLength(4);
+    await expect(await within(listItems[0]).findByRole('textbox', { name: /listInput/i })).toHaveValue('Oregon');
+    await expect(await within(listItems[1]).findByRole('textbox', { name: /listInput/i })).toHaveValue('Washington');
+    await expect(await within(listItems[2]).findByRole('textbox', { name: /listInput/i })).toHaveValue('11');
+    await expect(await within(listItems[3]).findByRole('textbox', { name: /listInput/i })).toHaveValue('DC');
 
     // Test editing values
-    await user.clear(inputs[1]);
-    await user.type(inputs[1], 'California');
-    expect(inputs[1]).toHaveValue('California');
+    let input = await within(listItems[1]).findByRole('textbox', { name: /listInput/i });
+    await user.clear(input);
+    await user.type(input, 'California');
+    await expect(input).toHaveValue('California');
 
     // Test removing middle item
-    const removeButtons = canvas.getAllByRole('button', { name: /close/i });
+    const removeButtons = await canvas.findAllByTestId('removeListItem');
     await user.click(removeButtons[1]);
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Verify correct item was removed
-    inputs = canvas.getAllByRole('textbox');
-    expect(inputs).toHaveLength(3);
-    expect(inputs[0]).toHaveValue('Oregon');
-    expect(inputs[1]).toHaveValue('11');
-    expect(inputs[2]).toHaveValue('DC');
+    listItems = await canvas.findAllByTestId('listItem');
+    await expect(listItems).toHaveLength(3);
+    await expect(await within(listItems[0]).findByRole('textbox', { name: /listInput/i })).toHaveValue('Oregon');
+    await expect(await within(listItems[1]).findByRole('textbox', { name: /listInput/i })).toHaveValue('11');
+    await expect(await within(listItems[2]).findByRole('textbox', { name: /listInput/i })).toHaveValue('DC');
 
     // Test adding new item
-    const addButton = canvas.getByRole('button', { name: /plus/i });
+    const addButton = await canvas.findByTestId('addListItemButton');
     await user.click(addButton);
 
     // Verify new item added
-    inputs = canvas.getAllByRole('textbox');
-    expect(inputs).toHaveLength(4);
-    expect(inputs[3]).toHaveValue('');
+    listItems = await canvas.findAllByTestId('listItem');
+    await expect(listItems).toHaveLength(4);
+    await expect(await within(listItems[3]).findByRole('textbox', { name: /listInput/i })).toHaveValue('');
   }
 };
 
@@ -107,6 +127,7 @@ const ListItemStory = (props: ListItemProps) => {
       input_props={{
         placeholder: 'Enter a value',
       }}
+      data-testid={'listItem'}
     />
   );
 };

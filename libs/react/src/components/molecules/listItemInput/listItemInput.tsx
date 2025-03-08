@@ -42,6 +42,7 @@ export const ListItemInput = (props: ListItemInputProps) => {
         iconRight={IconNames.CloseModalIcon}
         className={'bg-transparent border border-bgc-accent hover:bg-transparent active:bg-transparent w-[72px]'}
         {...buttonProps}
+        data-testid={'removeListItem'}
       />
     </div>
   );

@@ -57,7 +57,7 @@ export const ListItem = (props: ListItemProps) => {
   const listWithTransition = () => {
     return (
       <TransitionGroup className={listClassName}>
-        {items.map((item) => (
+        {items.map((item, index) => (
           <CSSTransition
             key={item.id}
             nodeRef={item.nodeRef}
@@ -76,7 +76,7 @@ export const ListItem = (props: ListItemProps) => {
               onChange={onItemChange}
               input_props={input_props}
               buttonProps={deleteButtonProps}
-              data-testid={props['data-testid']}
+              data-testid={(props['data-testid'])}
               forwardRef={item.nodeRef}
             />
           </CSSTransition>
@@ -86,13 +86,14 @@ export const ListItem = (props: ListItemProps) => {
   };
 
   return (
-    <div className={twMerge('flex flex-col w-full', className)}>
+    <div className={twMerge('flex flex-col w-full', className)} data-testid={'wholeListItem'}>
       <div className={'flex flex-col w-full gap-[16px]'}>{listWithTransition()}</div>
       <BaseButton
         onClick={addToList}
         iconRight={IconNames.PlusIcon}
         className={'bg-transparent border border-bgc-accent hover:bg-transparent active:bg-transparent h-[72px] w-full'}
         disabled={items.length > 0 && items[items.length - 1].value === null}
+        data-testid={'addListItemButton'}
         {...buttonProps}
       />
     </div>
