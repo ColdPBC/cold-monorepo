@@ -26,7 +26,7 @@ import { set } from 'lodash';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
-import { FPSession, FreeplayService } from '../freeplay/freeplay.service';
+import { FPSession, FreeplayService, IFPChatSession } from '../freeplay/freeplay.service';
 import { FormattedPrompt } from 'freeplay/thin';
 import { compliance_sections, file_types, organization_files, organizations } from '@prisma/client';
 import { zodResponseFormat } from 'openai/helpers/zod';
@@ -196,15 +196,22 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 		});
 		this.prompts = await new PromptsService(this.darkly, 'chat', organization, this.prisma).initialize();
 
-		const session = (await this.fp.createComplianceSession({
-			organization: company_name,
-			user: user.coldclimate_claims.email,
-			compliance_set: 'chat',
-		})) as FPSession;
-
 		if (typeof question !== 'string') {
+			const session = (await this.fp.createComplianceSession({
+				organization: company_name,
+				user: user.coldclimate_claims.email,
+				compliance_set: 'chat',
+			})) as FPSession;
+
 			return await this.askSurveyQuestion(question, company_name, user, session);
 		}
+
+		const session = (await this.fp.createChatSession({
+			type: 'chatbot',
+			organization: company_name,
+			user: user.coldclimate_claims.email,
+			project: 'ChatBot',
+		})) as FPSession;
 
 		const start = new Date();
 
@@ -224,38 +231,38 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 			});
 		}
 
-		const context: any = [];
 		const openai = new OpenAI({
 			organization: this.config.getOrThrow('OPENAI_ORG_ID'),
 			apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
 		});
 
+		const context = [] as any[];
 		for (const message of messages) {
 			context.push(message);
 		}
 
-		const { rephrased_question, docs } = await this.getDocumentContent(messages, { prompt: question }, company_name, user, context);
+		const { rephrased_question, docs } = await this.getDocumentContent(messages, { prompt: question, context: context }, company_name, user, session);
 
 		const vars = {
-			component_prompt: '',
+			organization_name: organization?.display_name,
 			context: context[0] || '',
-			question: rephrased_question,
+			question: question,
 		};
 
-		const sanitized_base = (await this.fp.getPrompt('survey_question_prompt', vars, true)) as FormattedPrompt;
+		const prompt = (await this.fp.getPrompt('ChatBotTemplate', vars, true)) as FormattedPrompt;
 
 		let response: any;
 		try {
 			response = await openai.chat.completions.create({
-				response_format: sanitized_base.promptInfo.model === 'gpt-3.5-turbo-16k-0613' ? undefined : { type: 'json_object' },
-				model: sanitized_base.promptInfo.model,
-				max_tokens: sanitized_base.promptInfo.modelParameters.max_tokens,
-				temperature: sanitized_base.promptInfo.modelParameters.temperature,
-				frequency_penalty: sanitized_base.promptInfo.modelParameters.frequency_penalty,
-				presence_penalty: sanitized_base.promptInfo.modelParameters.presence_penalty,
-				logit_bias: sanitized_base.promptInfo.modelParameters.logit_bias,
-				stop: sanitized_base.promptInfo.modelParameters.stop,
-				messages: sanitized_base.messages as unknown as ChatCompletionMessageParam[],
+				response_format: prompt.promptInfo.model === 'gpt-3.5-turbo-16k-0613' ? undefined : { type: 'json_object' },
+				model: prompt.promptInfo.model,
+				max_tokens: prompt.promptInfo.modelParameters.max_tokens,
+				temperature: prompt.promptInfo.modelParameters.temperature,
+				frequency_penalty: prompt.promptInfo.modelParameters.frequency_penalty,
+				presence_penalty: prompt.promptInfo.modelParameters.presence_penalty,
+				logit_bias: prompt.promptInfo.modelParameters.logit_bias,
+				stop: prompt.promptInfo.modelParameters.stop,
+				messages: prompt.messages as unknown as ChatCompletionMessageParam[],
 				user: user.coldclimate_claims.id,
 			});
 			if (!response.choices[0].message.content) {
@@ -271,7 +278,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 			content: response.choices[0].message.content,
 		};
 
-		sanitized_base.allMessages(message);
+		prompt.allMessages(message);
 
 		let ai_response: any;
 		// eslint-disable-next-line prefer-const
@@ -312,15 +319,15 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 			pinecone_query: rephrased_question,
 			document_content: context,
 			prompt: question,
-			ai_prompt: sanitized_base,
+			ai_prompt: prompt,
 			ai_response,
 			session_id: session?.sessionId,
 			...session?.customMetadata,
 		});
 
 		const end = new Date();
-		this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`);
-		this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
+		this.logger.info(`Sending ${prompt.promptInfo.templateName} run stats to FreePlay`);
+		await this.fp.recordCompletion(session, vars, prompt, response, start, end);
 
 		return ai_response;
 	}
