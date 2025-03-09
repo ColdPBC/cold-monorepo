@@ -12,10 +12,11 @@ export interface ListItemInputProps {
   buttonProps?: IButtonProps;
   'data-testid'?: string;
   forwardRef: React.RefObject<HTMLDivElement>;
+  showRemove: boolean;
 }
 
 export const ListItemInput = (props: ListItemInputProps) => {
-  const { id, value, removeItem, onChange, input_props, buttonProps, forwardRef } = props;
+  const { id, value, removeItem, onChange, input_props, buttonProps, forwardRef, showRemove } = props;
 
   const updateValue = (newValue: string) => {
     const valueOrNull = newValue.length > 0 ? newValue : null;
@@ -37,13 +38,17 @@ export const ListItemInput = (props: ListItemInputProps) => {
         }}
         container_classname={'w-full'}
       />
-      <BaseButton
-        onClick={() => removeItem(id)}
-        iconRight={IconNames.CloseModalIcon}
-        className={'bg-transparent border border-bgc-accent hover:bg-transparent active:bg-transparent w-[72px]'}
-        {...buttonProps}
-        data-testid={'removeListItem'}
-      />
+      {
+        showRemove && (
+          <BaseButton
+            onClick={() => removeItem(id)}
+            iconRight={IconNames.CloseModalIcon}
+            className={'bg-transparent border border-bgc-accent hover:bg-transparent active:bg-transparent w-[72px]'}
+            {...buttonProps}
+            data-testid={'removeListItem'}
+          />
+        )
+      }
     </div>
   );
 };

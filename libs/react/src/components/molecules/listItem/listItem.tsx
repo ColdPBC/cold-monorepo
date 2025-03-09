@@ -2,7 +2,6 @@ import React, {createRef, useState} from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { IconNames } from '@coldpbc/enums';
 import { BaseButton, ListItemInput } from '@coldpbc/components';
-import { forEach } from 'lodash';
 import { IButtonProps } from '@coldpbc/interfaces';
 import { twMerge } from 'tailwind-merge';
 
@@ -57,7 +56,7 @@ export const ListItem = (props: ListItemProps) => {
   const listWithTransition = () => {
     return (
       <TransitionGroup className={listClassName}>
-        {items.map((item, index) => (
+        {items.map((item) => (
           <CSSTransition
             key={item.id}
             nodeRef={item.nodeRef}
@@ -78,6 +77,7 @@ export const ListItem = (props: ListItemProps) => {
               buttonProps={deleteButtonProps}
               data-testid={(props['data-testid'])}
               forwardRef={item.nodeRef}
+              showRemove={(items.length > 1 || (items.length === 1 && items[0].value !== null))}
             />
           </CSSTransition>
         ))}
