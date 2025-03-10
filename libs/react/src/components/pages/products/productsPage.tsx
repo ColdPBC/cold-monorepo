@@ -7,6 +7,7 @@ import {EntityLevel} from "@coldpbc/enums";
 
 const _ProductsPage = () => {
   const navigate = useNavigate();
+  const [isGridReady, setIsGridReady] = useState(false);
 
   const apiRef = useGridApiRef()
 
@@ -23,8 +24,6 @@ const _ProductsPage = () => {
       />
     </div>
   };
-
-  const [isGridReady, setIsGridReady] = useState(false);
 
   const handleGridStateChange = (state: GridState) => {
     // When grid state changes, ensure we mark it as ready

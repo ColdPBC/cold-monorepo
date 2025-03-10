@@ -336,32 +336,31 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
       <MuiDataGrid
         {...props}
         loading={productsQuery.isLoading} // || footprintLoading}
-        columns={columns}
         rows={rows}
+        columns={columns}
         columnHeaderHeight={55}
         rowHeight={72}
+        showManageColumns
+        showSearch
         onRowClick={(params) => {
           navigate(`/products/${params.id}`)
         }}
-        showManageColumns
-        showExport
-        showSearch
+        // Sorting props
+        sortingMode="server"
+        sortModel={sortModel}
+        onSortModelChange={setSortModel}
         // Pagination props
+        paginationMode="server"
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         pageSizeOptions={[25, 50, 100]}
-        paginationMode="server"
         rowCount={totalRows}
-        // Sorting props
-        sortModel={sortModel}
-        onSortModelChange={setSortModel}
-        sortingMode="server"
         // Search props
+        filterMode="server"
         filterModel={{
           items: [],
           quickFilterValues: [searchQuery],
         }}
-        filterMode="server"
         onFilterModelChange={handleFilterChange}
         filterDebounceMs={500}
         slotProps={{
