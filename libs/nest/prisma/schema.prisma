@@ -4,6 +4,24 @@ generator client {
   binaryTargets   = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x", "linux-arm64-openssl-1.1.x"]
 }
 
+generator zod {
+  provider                         = "zod-prisma-types"
+  output                           = "../src/validation/generated"
+  useDefaultValidators             = "false"
+  writeBarrelFiles                 = "false"
+  coerceDate                       = "false"
+  addIncludeType                   = "false"
+  addSelectType                    = "false"
+  validateWhereUniqueInput         = "false"
+  createRelationValuesTypes        = "false"
+  createOptionalDefaultValuesTypes = "false"
+  addInputTypeValidation           = "false"
+  createModelTypes                 = "true"
+  createPartialTypes               = "false"
+  createInputTypes                 = "false"
+  useMultipleFiles                 = "true"
+  writeNullishInModelTypes         = "false"
+}
 
 /// this is a test line this is
 
