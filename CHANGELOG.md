@@ -1,3 +1,10 @@
+## [1.589.1](https://github.com/coldPBC/cold-monorepo/compare/v1.589.0...v1.589.1) (2025-03-10)
+
+
+### Bug Fixes
+
+* re-add Zod generator configuration for Prisma schema validation ([3c2f4de](https://github.com/coldPBC/cold-monorepo/commit/3c2f4def8ce9336993e64e39c98f14d26478bc97))
+
 # [1.589.0](https://github.com/coldPBC/cold-monorepo/compare/v1.588.0...v1.589.0) (2025-03-10)
 
 
