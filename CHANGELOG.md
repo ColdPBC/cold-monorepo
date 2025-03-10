@@ -1,3 +1,12 @@
+# [1.588.0](https://github.com/coldPBC/cold-monorepo/compare/v1.587.0...v1.588.0) (2025-03-10)
+
+
+### Features
+
+* add ecoinvent import and data models with migrations ([a889a7e](https://github.com/coldPBC/cold-monorepo/commit/a889a7ef34e30868cb38169dbd5f9022aa64b38d))
+* add ecoinvent import module with CSV parsing and EcoSpold XML validation ([162f66c](https://github.com/coldPBC/cold-monorepo/commit/162f66ccf4ca28981353b5e48c8107df321f4964))
+* add ecoinvent-datum and ecoinvent-import to schema and entities ([e5d5f59](https://github.com/coldPBC/cold-monorepo/commit/e5d5f59c406c3239068f6ab70ccc24e6606b6ece))
+
 # [1.587.0](https://github.com/coldPBC/cold-monorepo/compare/v1.586.3...v1.587.0) (2025-03-07)
 
 
