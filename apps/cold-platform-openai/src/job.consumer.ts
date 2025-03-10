@@ -66,19 +66,7 @@ export class JobConsumer extends BaseWorker {
 
 	@Process('file.uploaded')
 	async processFileJob(job: Job) {
-		await this.classification.add(
-			'classify',
-			{ filePayload: job.data.payload, user: job.data.user, organization: job.data.organization },
-			{ removeOnFail: true, removeOnComplete: true },
-		);
-
-		if (!isImage(job.data.payload.key.split('.').pop().toLowerCase())) {
-			const processed = await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
-
-			if (!processed?.filePayload || !processed?.user || !processed?.organization) {
-				throw new Error('Failed to process file, missing required data');
-			}
-		}
+		await this.classification.add('classify', { ...job.data }, { removeOnFail: true, removeOnComplete: true });
 	}
 
 	@Process('file.deleted')
@@ -160,11 +148,11 @@ export class JobConsumer extends BaseWorker {
 
 	@OnQueueCompleted()
 	async onCompleted(job: Job) {
-		const jobs = (await this.cache.get(`organizations:${job.data.organization.id}:jobs:${job.name}:${job.data.payload.compliance?.compliance_id}`)) as number[];
+		const jobs = (await this.cache.get(`organizations:${job.data.organization.id}:jobs:${job.name}:${job.data.payload?.compliance?.compliance_id}`)) as number[];
 		if (jobs) {
 			jobs.splice(jobs.indexOf(typeof job.id === 'number' ? job.id : parseInt(job.id)), 1);
 
-			await this.cache.set(`organizations:${job.data.organization.id}:jobs:${job.name}::${job.data.payload.compliance?.compliance_id}`, jobs, { ttl: 60 * 60 * 24 * 7 });
+			await this.cache.set(`organizations:${job.data.organization.id}:jobs:${job.name}::${job.data.payload?.compliance?.compliance_id}`, jobs, { ttl: 60 * 60 * 24 * 7 });
 		}
 
 		this.logger.info(`${job.name} Job COMPLETED | id: ${job.id} completed_on: ${new Date(job.finishedOn || 0).toUTCString()} | ${this.getTimerString(job)}`);

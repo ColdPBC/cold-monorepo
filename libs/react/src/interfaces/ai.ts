@@ -9,3 +9,8 @@ export interface AIPromptResponse {
     file: string,
   }[];
 }
+
+export interface QueueItem {
+  type: 'AI' | 'User';
+  content: string
+}

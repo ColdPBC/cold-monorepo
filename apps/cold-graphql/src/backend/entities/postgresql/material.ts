@@ -93,6 +93,12 @@ export class Material {
 	@Property({ type: 'text', nullable: true })
 	widthUnitOfMeasure?: string;
 
+	@Property({ type: 'double', nullable: true })
+	length?: number;
+
+	@Property({ type: 'text', nullable: true })
+	lengthUnitOfMeasure?: string;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'material' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 

@@ -7,7 +7,6 @@ import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { summary } from '../schemas';
 import { omit, set } from 'lodash';
-import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
 
 @Injectable()
 export class ClassificationService extends BaseWorker {
@@ -121,6 +120,7 @@ Steps for Classification:
 				•	Authored by ${organization.display_name} and explicitly declares that it is a bill of materials or BOM (BILL_OF_MATERIALS).
 				•	Authored by another entity and contains reports on inspections, or audits,(AUDIT_REPORT).
 				•	Authored by another entity and contains results from material or product testing (TEST_REPORT).
+				•	Certificate authored by another entity such as BlueSign or WRAP or OEKOTEX (SCOPE_CERTIFICATE).
 				•	Authored by another entity and explicitly declares that it is a scope certificate (SCOPE_CERTIFICATE).
 				•	Authored by another entity and explicitly declares that it is a transaction certificate (TRANSACTION_CERTIFICATE).
 	3.	Match Content to Categories:
@@ -130,12 +130,13 @@ Steps for Classification:
 	4.	Exclude Incorrect Categories:
 				•	Ensure the document does not fit restricted or invalid categories:
 				•	Example: Avoid using ‘CERTIFICATE’ as it is explicitly not allowed.
+				•	Example: Use 'SCOPE_CERTIFICATE' if the document is certified by OEKOTEX, WRAP, or Bluesign
 	5.	Apply the Fallback Rule:
 				•	Use ‘OTHER’ only as a last resort. If the document fits SUPPLIER_STATEMENT, do not classify it as ‘OTHER.’
 	`;
 	}
 
-	async classifyImageUrls(images: OpenAiBase64ImageUrl[], user: IAuthenticatedUser, orgFile: organization_files, organization: organizations) {
+	async classifyImageUrls(images: any[], user: IAuthenticatedUser, orgFile: organization_files, organization: organizations) {
 		const classifyPrompt = `${await this.getClassifyPrompt(organization)} from the provided image urls.`;
 
 		// add the classification prompt to the beginning of the images array
@@ -166,7 +167,7 @@ Steps for Classification:
 			},
 		})) as organization_facilities[];
 
-		// remove the classification prompt from the beginning of the images array
+		// remove the classification prompt from the beginning of the images array so the image uRLs can be stored in the messages for further processing
 		images.shift();
 
 		await set(classifyResponse.choices[0].message?.parsed, 'suppliers', suppliers.map(k => k.name) as readonly string[]);
@@ -224,6 +225,10 @@ Steps for Classification:
 				response_format: zodResponseFormat(this.classificationSchema, 'content_classification'),
 			});
 
+			if (!Array.isArray(classifyResponse.choices) || classifyResponse.choices.length === 0) {
+				throw new Error('No choices found in classify response');
+			}
+
 			set(classifyResponse.choices[0].message?.parsed, 'attributes', this.sus_attributes);
 
 			const suppliers = (await this.prisma.organization_facilities.findMany({
@@ -254,80 +259,10 @@ Steps for Classification:
 				},
 			});
 
-			if (!Array.isArray(classifyResponse.choices) || classifyResponse.choices.length === 0) {
-				throw new Error('No choices found in classify response');
-			}
-
-			await this.updateOrgFile(orgFile, classifyResponse.choices[0].message.parsed, organization, user);
-
 			return classifyResponse.choices[0].message.parsed;
 		} catch (e) {
 			this.logger.error(e.message, { ...e, content, user, file: orgFile, organization });
-
-			const metadata = orgFile.metadata as any;
-
-			orgFile = await this.prisma.organization_files.update({
-				where: {
-					id: orgFile.id,
-				},
-				data: {
-					metadata: {
-						status: 'failed',
-						error: e,
-						...metadata,
-					},
-				},
-			});
-
-			this.mqtt.publishToUI({
-				action: 'update',
-				status: 'failed',
-				resource: 'organization_files',
-				event: 'classify-file',
-				data: orgFile,
-				user,
-				swr_key: `organization_files.${metadata.status}`,
-				org_id: organization.id,
-			});
-
 			throw e;
 		}
-	}
-
-	private async updateOrgFile(orgFile: any, parsed: any, organization, user) {
-		orgFile = (await this.prisma.organization_files.findUnique({
-			where: {
-				id: orgFile.id,
-			},
-		})) as organization_files;
-
-		// update the file metadata with the classification
-		const updateData: any = {
-			type: parsed.type,
-			metadata: {
-				status: 'ai_classified',
-				classification: omit(parsed, ['extraction_name', 'extraction_schema']),
-				...(orgFile.metadata as object),
-			},
-		};
-
-		await this.prisma.organization_files.update({
-			where: {
-				id: orgFile.id,
-			},
-			data: updateData,
-		});
-
-		// publish message to MQTT whenever a file is classified
-		this.mqtt.publishToUI({
-			action: 'update',
-			status: 'complete',
-			data: orgFile,
-			user,
-			swr_key: `organization_files.${updateData.metadata.status}`,
-			org_id: organization.id,
-		});
-
-		return updateData;
 	}
 }

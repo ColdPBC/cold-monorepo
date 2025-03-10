@@ -13,6 +13,8 @@ import './compliance-section-group';
 import './compliance-section';
 import './component-definition';
 import './core-classification';
+import './ecoinvent-datum';
+import './ecoinvent-import';
 import './emission-factor';
 import './emission-scope';
 import './emission';

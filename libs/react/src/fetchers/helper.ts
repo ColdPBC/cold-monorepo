@@ -22,3 +22,7 @@ export const resolveStripeIntegrationUrl = (): string => {
 export const resolveGraphQLUrl = (): string => {
   return `${import.meta.env.STORYBOOK_API_URL || get(import.meta.env, 'VITE_GRAPHQL_URL', 'http://localhost:9001')}/`;
 };
+
+export const resolveOpenAIServiceURL = (): string => {
+  return import.meta.env.STORYBOOK_API_URL || get(import.meta.env, 'VITE_OPENAI_SERVICE_URL', 'http://localhost:7002');
+}

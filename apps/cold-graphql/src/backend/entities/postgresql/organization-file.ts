@@ -34,6 +34,8 @@ export enum OrganizationFilesProcessingStatus {
 	PROCESSING_ERROR = 'PROCESSING_ERROR',
 	MANUAL_REVIEW = 'MANUAL_REVIEW',
 	AI_PROCESSING = 'AI_PROCESSING',
+	PENDING = 'PENDING',
+	JOB_PROCESSING = 'JOB_PROCESSING',
 }
 
 @ApplyAccessControlList(default_acl)

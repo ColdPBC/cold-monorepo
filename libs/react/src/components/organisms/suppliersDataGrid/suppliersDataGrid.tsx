@@ -13,7 +13,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import {
   EntityWithAttributeAssurances,
-  SuppliersDataGridGraphQL,
+  SuppliersDataGridGraphQL, SustainabilityAttribute,
 } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
@@ -96,6 +96,9 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       renderCell: (params) => {
         return <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />;
       },
+      valueFormatter: (value) => {
+        return (value as SustainabilityAttribute[]).map((attr) => attr.name).join(', ');
+      },
       type: 'singleSelect',
       sortComparator: listSortComparator,
       filterOperators: listFilterOperators,
@@ -126,6 +129,9 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       valueOptions: uniqProducts,
       minWidth: 350,
       flex: 1,
+      valueFormatter: (value) => {
+        return (value as string[]).join(', ');
+      },
     });
   } else {
     const uniqMaterials = uniqWith(
@@ -146,6 +152,9 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
       valueOptions: uniqMaterials,
       minWidth: 350,
       flex: 1,
+      valueFormatter: (value) => {
+        return (value as string[]).join(', ');
+      },
     });
   }
 
@@ -197,6 +206,14 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
           },
         }}
         searchKey={`${tier}TierSuppliersDataGridSearchValue`}
+        slotProps={{
+          toolbar: {
+            csvOptions: {
+              fileName: `${tier === 1 ? 'Tier1' : 'Tier2'}_Suppliers_${new Date().toISOString().split('T')[0]}`,
+              utf8WithBom: true
+            }
+          }
+        }}
       />
     </div>
   );

@@ -2,85 +2,106 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import Freeplay, { getCallInfo, getSessionInfo } from 'freeplay/thin';
 import { BaseWorker } from '@coldpbc/nest';
 import { ConfigService } from '@nestjs/config';
+import { set } from 'lodash';
 
 export interface FPSession {
-  sessionId: string;
-  customMetadata?: IFPSession;
+	sessionId: string;
+	customMetadata?: IFPSurveySession;
 }
 
-export interface ICFPSession {
-  compliance_set: string;
-  organization: string;
-  user: string;
+export interface IFPComplianceSession {
+	compliance_set: string;
+	organization: string;
+	user: string;
 
-  [key: string]: any;
+	[key: string]: any;
 }
 
-export interface IFPSession {
-  survey: string;
-  organization: string;
-  user: string;
+export interface IFPSurveySession {
+	survey: string;
+	organization: string;
+	user: string;
 
-  [key: string]: any;
+	[key: string]: any;
+}
+
+export interface IFPChatSession {
+	type: string;
+	organization: string;
+	user: string;
+
+	[key: string]: any;
 }
 
 @Injectable()
 export class FreeplayService extends BaseWorker implements OnModuleInit {
-  public client: Freeplay;
+	public client: Freeplay;
 
-  constructor(readonly config: ConfigService) {
-    super(FreeplayService.name);
+	constructor(readonly config: ConfigService) {
+		super(FreeplayService.name);
 
-    this.client = new Freeplay({
-      freeplayApiKey: this.config.getOrThrow('FREEPLAY_API_KEY'),
-      baseUrl: 'https://coldclimate.freeplay.ai/api',
-    });
-  }
+		this.client = new Freeplay({
+			freeplayApiKey: this.config.getOrThrow('FREEPLAY_API_KEY'),
+			baseUrl: 'https://coldclimate.freeplay.ai/api',
+		});
+	}
 
-  async onModuleInit() {}
+	async onModuleInit() {}
 
-  async createComplianceSession(metadata: ICFPSession) {
-    return this.client.sessions.create({ customMetadata: metadata });
-  }
+	async createComplianceSession(metadata: IFPComplianceSession) {
+		return this.client.sessions.create({ customMetadata: metadata });
+	}
 
-  async createSession(metadata: IFPSession) {
-    return this.client.sessions.create({ customMetadata: metadata });
-  }
+	async createSession(metadata: IFPSurveySession) {
+		return this.client.sessions.create({ customMetadata: metadata });
+	}
 
-  async getPrompt(template_name: string, variables: any, formatted = true) {
-    if (formatted)
-      return await this.client.prompts.getFormatted({
-        projectId: 'f98682e7-7dec-4d9c-a74b-28819dca3e3a',
-        templateName: template_name,
-        environment: process.env['NODE_ENV'] === 'development' ? 'latest' : process.env['NODE_ENV'] || 'unknown environment',
-        variables: variables,
-      });
+	async createChatSession(metadata: IFPChatSession) {
+		return this.client.sessions.create({ customMetadata: metadata });
+	}
 
-    return await this.client.prompts.get(variables);
-  }
+	async getPrompt(template_name: string, variables: any, formatted = true, project?: string) {
+		try {
+			if (formatted) {
+				const payload = {
+					projectId: project ? project : 'f98682e7-7dec-4d9c-a74b-28819dca3e3a',
+					templateName: template_name,
+					environment: process.env['NODE_ENV'] === 'development' ? 'latest' : process.env['NODE_ENV'] || 'unknown environment',
+					variables: variables,
+				};
 
-  // @ts-expect-error - TS6133: 'session' is declared but its value is never read.
-  async recordCompletion(session: any, promptVars: any, prompt: any, openAIResponse, start: Date, end: Date) {
-    const sessionId = session?.sessionId;
-    if (!sessionId) {
-      this.logger.error('Session ID not found', { session });
-      return;
-    }
-    try {
-      const recording = await this.client.recordings.create({
-        allMessages: prompt.allMessages(openAIResponse.choices[0].message),
-        inputs: promptVars,
-        sessionInfo: getSessionInfo(session),
-        promptInfo: prompt.promptInfo,
-        callInfo: getCallInfo(prompt?.promptInfo, start, end),
-        responseInfo: {
-          isComplete: 'stop_sequence' === openAIResponse?.choices[0]?.stop,
-        },
-      });
+				return await this.client.prompts.getFormatted(payload);
+			}
 
-      return recording;
-    } catch (error) {
-      this.logger.error('Failed to record completion', { session, promptVars, prompt, openAIResponse, start, end });
-    }
-  }
+			return await this.client.prompts.get(variables);
+		} catch (e) {
+			this.logger.error('Failed to get prompt', e);
+			throw e;
+		}
+	}
+
+	// @ts-expect-error - TS6133: 'session' is declared but its value is never read.
+	async recordCompletion(session: any, promptVars: any, prompt: any, openAIResponse, start: Date, end: Date) {
+		const sessionId = session?.sessionId;
+		if (!sessionId) {
+			this.logger.error('Session ID not found', { session });
+			return;
+		}
+		try {
+			const recording = await this.client.recordings.create({
+				allMessages: prompt.allMessages(openAIResponse.choices[0].message),
+				inputs: promptVars,
+				sessionInfo: getSessionInfo(session),
+				promptInfo: prompt.promptInfo,
+				callInfo: getCallInfo(prompt?.promptInfo, start, end),
+				responseInfo: {
+					isComplete: 'stop_sequence' === openAIResponse?.choices[0]?.stop,
+				},
+			});
+
+			return recording;
+		} catch (error) {
+			this.logger.error('Failed to record completion', { session, promptVars, prompt, openAIResponse, start, end });
+		}
+	}
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, ParseBoolPipe, Post, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, ParseBoolPipe, ParseIntPipe, Post, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { bpcDecoratorOptions, coldAndCompanyAdmins, orgIdDecoratorOptions } from '../../_global/global.params';
 import { BaseWorker, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
@@ -91,6 +91,8 @@ export class OrganizationIntegrationsController extends BaseWorker {
 	@HttpCode(201)
 	triggerIntegration(
 		@Param('orgId') orgId: string,
+		@Query('skip', new ParseIntPipe({ optional: true })) skip: number,
+		@Query('limit', new ParseIntPipe({ optional: true })) limit: number,
 		@Req()
 		req: IRequest,
 		@Body()
@@ -98,7 +100,7 @@ export class OrganizationIntegrationsController extends BaseWorker {
 			api_key: string;
 		},
 	) {
-		return this.orgIntegrationsService.triggerIntegration(req, orgId, body);
+		return this.orgIntegrationsService.triggerIntegration(req, orgId, body, skip, limit);
 	}
 
 	@ApiOperation({

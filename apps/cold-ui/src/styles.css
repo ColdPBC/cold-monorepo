@@ -5,6 +5,24 @@
 @tailwind components;
 /* You can add global styles to this file, and also import other style files */
 
+@layer utilities {
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+  .animation-delay-1500 {
+    animation-delay: 1.5s;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+}
+
 /* Accommodations to account for flowbite sidebar styling not overwriting appropriately */
 @layer components {
   .sidebar-item span {
@@ -23,6 +41,23 @@
   .scrollbar-hide {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-chatbot::-webkit-scrollbar {
+    width: 8px; /* Scrollbar width */
+  }
+
+  /* Scrollbar track (the area behind the thumb) */
+  .scrollbar-chatbot::-webkit-scrollbar-track {
+    background: transparent;
+    margin-top: 20px;  /* Adds space above the scrollbar */
+    margin-bottom: 20px; /* Adds space below the scrollbar */
+  }
+
+  /* Scrollbar thumb (hidden by default) */
+  .scrollbar-chatbot::-webkit-scrollbar-thumb {
+    background: #A3A6C2; /* Visible scrollbar */
+    border-radius: 8px;
   }
 }
 

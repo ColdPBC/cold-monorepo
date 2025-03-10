@@ -176,12 +176,26 @@ module.exports = {
 					'50%': { opacity: '0.5', filter: 'brightness(150%)' },
 					'100%': { opacity: '1', filter: 'brightness(100%)' },
 				},
-			},
+        'bounce-gradient': {
+          '0%, 100%': {
+            transform: 'translateY(-50%)',
+            'background-position': '0% 50%',
+          },
+          '50%': {
+            transform: 'translateY(0)',
+            'background-position': '100% 50%',
+          },
+        },
+      },
 			animation: {
 				progressBar: 'progressBar 2s linear infinite',
 				pulsate: 'pulsate 2s linear infinite',
-			},
-		},
+        'bounce-gradient': 'bounce-gradient 1.5s infinite',
+      },
+      backgroundSize: {
+        '200%': '200%',
+      },
+    },
 		minHeight: theme => ({
 			...theme('spacing'),
 		}),
