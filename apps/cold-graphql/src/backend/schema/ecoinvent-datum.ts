@@ -26,4 +26,16 @@ export class EcoinventDatum {
 
 	@Field(() => ISODateStringScalar)
 	createdAt!: Date;
+
+	@Field(() => String, { nullable: true })
+	activityName?: string;
+
+	@Field(() => String, { nullable: true })
+	description?: string;
+
+	@Field(() => String, { nullable: true })
+	location?: string;
+
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 }

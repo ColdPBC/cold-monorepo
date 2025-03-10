@@ -85,6 +85,12 @@ export class Material {
 	@Field(() => String, { nullable: true })
 	widthUnitOfMeasure?: string;
 
+	@Field(() => Number, { nullable: true })
+	length?: number;
+
+	@Field(() => String, { nullable: true })
+	lengthUnitOfMeasure?: string;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'material' })
 	attributeAssurances!: AttributeAssurance[];
 

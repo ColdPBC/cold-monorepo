@@ -1,5 +1,5 @@
 import { Entity, Field, ID, RelationshipField, graphweaverMetadata } from '@exogee/graphweaver';
-import { GraphQLBigInt, ISODateStringScalar } from '@exogee/graphweaver-scalars';
+import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { EcoinventDatum } from './ecoinvent-datum';
 import { EcoinventImportsProcessingStatus, EcoinventImport as OrmEcoinventImport } from '../entities';
@@ -29,9 +29,6 @@ export class EcoinventImport {
 	@Field(() => String)
 	referenceProduct!: string;
 
-	@Field(() => GraphQLBigInt, { nullable: true })
-	jobId?: bigint;
-
 	@Field(() => String, { nullable: true })
 	jobStatus?: string;
 
@@ -41,8 +38,8 @@ export class EcoinventImport {
 	@Field(() => ISODateStringScalar)
 	createdAt!: Date;
 
-	@Field(() => ISODateStringScalar)
-	updateAt!: Date;
+	@Field(() => ISODateStringScalar, { nullable: true })
+	updatedAt?: Date;
 
 	@RelationshipField<EcoinventDatum>(() => [EcoinventDatum], { relatedField: 'ecoinventImport' })
 	ecoinventData!: EcoinventDatum[];

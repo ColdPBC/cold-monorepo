@@ -36,6 +36,18 @@ export class EcoinventDatum {
 	@Property({ type: 'datetime', length: 3 })
 	createdAt!: Date;
 
+	@Property({ type: 'text', nullable: true })
+	activityName?: string;
+
+	@Property({ type: 'text', nullable: true })
+	description?: string;
+
+	@Property({ type: 'text', nullable: true })
+	location?: string;
+
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof EcoinventDatum, OrgContext>) {
 		if(!this.sidecar) {

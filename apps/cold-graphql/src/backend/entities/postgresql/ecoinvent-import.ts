@@ -48,10 +48,6 @@ export class EcoinventImport {
 	@Property({ type: 'text' })
 	referenceProduct!: string;
 
-	@Index({ name: 'ecoinvent_imports_job_id_idx1' })
-	@Property({ type: 'bigint', nullable: true })
-	jobId?: bigint;
-
 	@Index({ name: 'ecoinvent_imports_job_status_idx1' })
 	@Property({ type: 'text', nullable: true })
 	jobStatus?: string;
@@ -63,8 +59,8 @@ export class EcoinventImport {
 	@Property({ type: 'datetime', length: 3 })
 	createdAt!: Date;
 
-	@Property({ type: 'datetime', length: 3 })
-	updateAt!: Date;
+	@Property({ type: 'datetime', length: 3, nullable: true })
+	updatedAt?: Date;
 
 	@OneToMany({ entity: () => EcoinventDatum, mappedBy: 'ecoinventImport' })
 	ecoinventData = new Collection<EcoinventDatum>(this);

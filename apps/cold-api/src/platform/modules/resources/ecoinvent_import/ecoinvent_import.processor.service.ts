@@ -41,18 +41,39 @@ export class EcoinventImportProcessorService extends BaseWorker {
 			// Validate and convert the parsed XML using the Zod schema
 			const validatedData = EcoSpold2Schema.safeParse(parsedXML);
 
+			const name = parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.activityName._;
+			const location = parsedXML.ecoSpold.childActivityDataset.activityDescription.geography.shortname._;
+			let description = `${parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.includedActivitiesStart._ || ''} \n ${
+				parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.includedActivitiesEnd._ || ''
+			}`;
+
+			const genComment = parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.generalComment.text;
+			if (genComment && Array.isArray(genComment)) {
+				for (const comment of genComment) {
+					description = `${description} ${comment._}`;
+				}
+			}
+
 			// Persist the raw XML and validated JSON data.
 			await this.prisma.ecoinvent_data.upsert({
 				where: { key: key },
 				update: {
 					import_id: jobId,
 					xml: xmlContent,
+					description: description,
+					location: location,
+					activity_name: name,
+					updated_at: new Date(),
 					parsed: parsedXML,
 				},
 				create: {
 					import_id: jobId,
 					key: key,
 					xml: xmlContent,
+					description: description,
+					location: location,
+					activity_name: name,
+					updated_at: new Date(),
 					parsed: parsedXML,
 				},
 			});

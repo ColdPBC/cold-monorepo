@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEcoinventImportDto } from './dto/create-ecoinvent_import.dto';
-import { UpdateEcoinventImportDto } from './dto/update-ecoinvent_import.dto';
 import { BaseWorker, PrismaService, S3Service } from '@coldpbc/nest';
 import { EcoSpold2Schema } from './validation/ecoSpold2.schema';
 import csvParser from 'csv-parser';
 import { Readable } from 'stream';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
-
+import { ecoinvent_imports } from '@prisma/client';
+import { v4 } from 'uuid';
 @Injectable()
 export class EcoinventImportService extends BaseWorker {
 	ecoSpoldSchema = EcoSpold2Schema;
+	batchSize = 25;
 
 	constructor(private readonly s3: S3Service, private readonly prisma: PrismaService, @InjectQueue('ecoinvent:import') readonly queue: Queue) {
 		super(EcoinventImportService.name);
@@ -74,99 +74,147 @@ export class EcoinventImportService extends BaseWorker {
 	 * @param bucketName Name of the S3 bucket.
 	 * @param csvFileKey Key (filename) of the CSV file.
 	 */
-	async importCSVFromBucket(req: any, bucketName = 'cold-ecoinvent-data', csvFileKey = 'ecoinvent_ecospold2_3_11_cutoff/FilenameToActivityLookup.csv'): Promise<any> {
-		try {
-			const csvObject = await this.s3.getObject(req.user, bucketName, csvFileKey);
+	async importCsv(req: any, bucketName = 'cold-ecoinvent-data', csvFileKey = 'ecoinvent_ecospold2_3_11_cutoff/FilenameToActivityLookup.csv'): Promise<void> {
+		// Retrieve CSV file from S3.
+		const s3Object = await this.s3.getObject(req.user, bucketName, csvFileKey);
+		const folder = `${csvFileKey.split('/')[0]}/datasets`;
 
-			const csvData = await csvObject?.Body?.transformToString('utf-8');
+		if (!s3Object) {
+			this.logger.error(`File not found in S3: ${csvFileKey}`);
+			return;
+		}
 
-			if (!csvData) {
-				this.logger.error(`Error reading CSV file from S3: ${csvFileKey}`);
-				return;
-			}
+		this.logger.info(`Importing ECOInvent CSV file from S3: ${csvFileKey}`, { bucket: bucketName, key: csvFileKey, user: req.user });
 
-			const folder = `${csvFileKey.split('/')[0]}/datasets`;
-			const rows = await this.parseCSV(csvData);
-			this.logger.log(`Found ${rows.length} rows in CSV.`);
+		// Ensure we can create a stream from the S3 object Body.
+		const csvContent = await s3Object.Body?.transformToString('utf-8');
+		if (!csvContent) {
+			this.logger.error(`Error reading CSV file content from S3: ${csvFileKey}`, { bucket: bucketName, key: csvFileKey, user: req.user });
+			return;
+		}
 
-			for (const row of rows) {
-				try {
-					// Check if the file exists in S3
-					await this.s3.getObject(req.user, bucketName, `${folder}/${row.Filename}`);
-				} catch (e) {
-					this.logger.error(`Error reading file from S3: ${folder}/${row.Filename}`);
-					continue;
-				}
-				// Insert new record if it does not exist already.
-				// (Assumes fileKey is unique.)
-				try {
-					let importRow = await this.prisma.ecoinvent_imports.upsert({
-						where: { key: `${folder}/${row.Filename}` },
-						update: {
-							processing_status: 'PENDING',
-						},
-						create: {
-							bucket: bucketName,
-							key: `${folder}/${row.Filename}`,
-							activity_name: row.ActivityName,
-							location: row.Location,
-							reference_product: row.ReferenceProduct,
-							processing_status: 'PENDING',
-						},
+		// Create a readable stream from the file content.
+		const stream = Readable.from(csvContent);
+		const parser = csvParser({ separator: ';' });
+		const batchRows: Array<ecoinvent_imports> = [];
+		const jobs: any[] = [];
+
+		this.logger.info('Pausing job queue to process CSV file.', { bucket: bucketName, key: csvFileKey, user: req.user });
+
+		stream
+			.pipe(parser)
+			.on('data', async row => {
+				parser.pause();
+				this.logger.info(`Processing row: ${row.Filename}`, { bucket: bucketName, key: csvFileKey, user: req.user, csv_row: row });
+				const existingRow = await this.prisma.ecoinvent_imports.findUnique({
+					where: { key: `${folder}/${row.Filename}` },
+				});
+
+				if (existingRow) {
+					this.logger.warn(`Existing job found for file ${row.Filename} will be replaced with new job`, {
+						existing_row: existingRow,
+						bucket: bucketName,
+						key: `${folder}/${row.Filename}`,
+						user: req.user,
+						csv_row: row,
 					});
-
 					// Cancel job if one already exists
-					const existingJob = await this.queue.getJob(importRow.id);
+					const existingJob = await this.queue.getJob(existingRow?.id);
 					if (existingJob) {
 						await existingJob.discard();
-					}
-
-					// Queue a job to process the record.
-					const job = await this.queue.add({
-						jobId: importRow.id,
-						bucket: bucketName,
-						user: req.user,
-						organization: req.organization,
-						key: `${folder}/${row.Filename}`,
-						activity_name: row.ActivityName,
-						location: row.Location,
-						reference_product: row.ReferenceProduct,
-					});
-
-					// Update the record with the job ID and status.
-					importRow = await this.prisma.ecoinvent_imports.update({
-						where: { id: importRow.id },
-						data: {
-							job_status: await job.getState(),
-							processing_status: 'JOB_PROCESSING',
-						},
-					});
-
-					this.logger.log(`Upserted and queued record for file ${row.Filename}`, importRow);
-				} catch (insertError) {
-					this.logger.error(`Error upserting record for file ${row.Filename}`, insertError);
-					// Update the record with the job ID and status.
-					const failed = await this.prisma.ecoinvent_imports.upsert({
-						where: { key: `${folder}/${row.Filename}` },
-						update: {
-							processing_status: 'PROCESSING_ERROR',
-						},
-						create: {
+						this.logger.warn(`Existing job for file ${folder}/${row.Filename} canceled`, {
+							existing_row: existingRow,
 							bucket: bucketName,
-							key: `${folder}/${row.Filename}`,
-							activity_name: row.ActivityName,
-							location: row.Location,
-							reference_product: row.ReferenceProduct,
-							processing_status: 'PROCESSING_ERROR',
-						},
-					});
-
-					this.logger.error(`Upserted record with error status for file ${row.Filename}`, { failed_row: failed, error: insertError });
+							key: csvFileKey,
+							user: req.user,
+							csv_row: row,
+						});
+					}
 				}
-			}
-		} catch (error) {
-			this.logger.error('Error importing CSV file from S3', error);
-			return { error };
+
+				const rowData = {
+					id: v4().toString(),
+					job_status: 'PENDING',
+					created_at: new Date(),
+					updated_at: new Date(),
+					bucket: bucketName,
+					key: `${folder}/${row.Filename}`,
+					activity_name: row.ActivityName,
+					location: row.Location,
+					reference_product: row.ReferenceProduct,
+					processing_status: 'PENDING',
+				} as ecoinvent_imports;
+
+				// Map CSV columns to corresponding DB fields.
+				batchRows.push(rowData);
+
+				// When batch size is reached, insert rows in bulk.
+				if (batchRows.length >= this.batchSize) {
+					try {
+						await this.prisma.ecoinvent_imports.createMany({
+							data: batchRows,
+							// Skip duplicates if key is unique.
+							skipDuplicates: true,
+						});
+						batchRows.length = 0;
+						this.logger.info('Batch inserted successfully.', {
+							bucket: bucketName,
+							key: csvFileKey,
+							user: req.user,
+						});
+					} catch (error) {
+						this.logger.error(`Bulk insert error: ${error}`);
+						parser.destroy(error);
+					}
+				}
+				parser?.resume();
+			})
+			.on('end', async () => {
+				// Insert any remaining rows.
+				if (batchRows.length > 0) {
+					try {
+						await this.prisma.ecoinvent_imports.createMany({
+							data: batchRows,
+							skipDuplicates: true,
+						});
+						this.logger.info('Batch inserted successfully.', {
+							bucket: bucketName,
+							key: csvFileKey,
+							user: req.user,
+						});
+					} catch (error) {
+						this.logger.error(`Bulk insert error on final batch: ${error}`);
+					}
+				}
+
+				this.logger.log('CSV import completed successfully.');
+				this.logger.info('Resuming job queue to process EcoInvent imports.', { bucket: bucketName, key: csvFileKey, user: req.user });
+			})
+			.on('error', error => {
+				this.logger.error(`Error reading CSV: ${error}`);
+				this.logger.info('Resuming job queue to process EcoInvent imports.', { bucket: bucketName, key: csvFileKey, user: req.user });
+			});
+	}
+
+	async queueImportJobs(req: any, location?: string): Promise<any> {
+		const imports = await this.prisma.ecoinvent_imports.findMany({
+			where: {
+				AND: [{ job_status: 'PENDING' }, { location: location }],
+			},
+		});
+		for (const row of imports) {
+			const job = await this.queue.add({
+				jobId: row.id,
+				bucket: row.bucket,
+				user: req.user,
+				organization: req.organization,
+				key: row.key,
+				activity_name: row.activity_name,
+				location: row.location,
+				reference_product: row.reference_product,
+			});
+
+			this.logger.info(`Queuing import job for file ${row.key}.`, { bucket: row.bucket, key: row.key, user: req.user, job: job.data });
 		}
 	}
 }

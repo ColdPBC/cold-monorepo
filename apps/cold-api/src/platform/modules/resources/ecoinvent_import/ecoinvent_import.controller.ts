@@ -1,6 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, UseFilters } from '@nestjs/common';
+import { Controller, Post, Body, Req, UseGuards, UseFilters, Param, Put } from '@nestjs/common';
 import { EcoinventImportService } from './ecoinvent_import.service';
-import { UpdateEcoinventImportDto } from './dto/update-ecoinvent_import.dto';
 import { CreateEcoinventImportDto } from './dto/create-ecoinvent_import.dto';
 import { HttpExceptionFilter, JwtAuthGuard, Role, Roles, RolesGuard } from '@coldpbc/nest';
 
@@ -13,6 +12,12 @@ export class EcoinventImportController {
 	@Post('import')
 	@Roles(Role.ColdAdmin)
 	create(@Req() req: any, @Body() createEcoinventImportDto?: CreateEcoinventImportDto) {
-		return this.ecoinventImportService.importCSVFromBucket(req);
+		return this.ecoinventImportService.importCsv(req);
+	}
+
+	@Put('import/:location')
+	@Roles(Role.ColdAdmin)
+	update(@Req() req: any, @Param('location') location: string) {
+		return this.ecoinventImportService.queueImportJobs(req, location);
 	}
 }
