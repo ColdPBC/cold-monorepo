@@ -1,3 +1,10 @@
+# [1.589.0](https://github.com/coldPBC/cold-monorepo/compare/v1.588.0...v1.589.0) (2025-03-10)
+
+
+### Features
+
+* enhance ecoinvent import functionality with update endpoint and additional data fields ([2ea2e59](https://github.com/coldPBC/cold-monorepo/commit/2ea2e594f98515c9aac3e0fad6feda7525036cea))
+
 # [1.588.0](https://github.com/coldPBC/cold-monorepo/compare/v1.587.0...v1.588.0) (2025-03-10)
 
 
