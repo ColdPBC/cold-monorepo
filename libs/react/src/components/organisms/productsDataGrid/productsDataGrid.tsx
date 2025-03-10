@@ -1,7 +1,7 @@
 import {
   BubbleList,
   ErrorFallback,
-  MuiDataGrid,
+  MuiDataGrid, MUIDataGridProps,
   ProductFootprintDataGridCell,
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
@@ -11,15 +11,20 @@ import {
   PaginatedProductsQuery,
   SustainabilityAttribute,
 } from '@coldpbc/interfaces';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { get, has } from 'lodash';
 import { withErrorBoundary } from "react-error-boundary";
 import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
-import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid-pro';
+import {
+  GridColumnVisibilityModel,
+  GridFilterModel,
+  GridPaginationModel,
+  GridSortModel
+} from '@mui/x-data-grid-pro';
 
-const getColumnRows = (
+export const getColumnRows = (
   products: PaginatedProductsQuery[]
 ) => {
   return products.map(product => {
@@ -65,21 +70,27 @@ const getColumnRows = (
   })
 }
 
-export const _ProductsDataGrid = () => {
+export const _ProductsDataGrid = (props: MUIDataGridProps) => {
   const ldFlags = useFlags();
   const navigate = useNavigate();
   const {orgId} = useAuth0Wrapper()
-
-  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-    page: 0,
-    pageSize: 25,
-  });
 
   const [sortModel, setSortModel] = useState<GridSortModel>([
     { field: 'name', sort: 'asc' }
   ]);
 
   const [searchQuery, setSearchQuery] = useState<string>(getFromOrgStorage(orgId, 'productsDataGridSearchValue') || '');
+
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: 25,
+  });
+
+  const [columnVisibility, setColumnVisibility] = useState<GridColumnVisibilityModel | undefined>(undefined);
+
+  const handleColumnsChange = (model: GridColumnVisibilityModel) => {
+    setColumnVisibility(model);
+  };
 
   // Handle search input changes
   const handleFilterChange = (filterModel: GridFilterModel) => {
@@ -265,6 +276,9 @@ export const _ProductsDataGrid = () => {
 				return <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />;
 			},
 			sortable: false,
+      valueFormatter: (params: SustainabilityAttribute[]) => {
+        return params.map((value) => value.name).join(', ');
+      }
 		},
 		{
 			...defaultColumnProperties,
@@ -297,7 +311,10 @@ export const _ProductsDataGrid = () => {
 				return <BubbleList values={params.value} />;
 			},
 			sortable: false,
-		},
+      valueFormatter: (params: string[]) => {
+        return params.join(', ');
+      }
+    },
 		{
 			...defaultColumnProperties,
 			field: 'productCategory',
@@ -317,6 +334,7 @@ export const _ProductsDataGrid = () => {
   return (
     <div className={'w-full'}>
       <MuiDataGrid
+        {...props}
         loading={productsQuery.isLoading} // || footprintLoading}
         columns={columns}
         rows={rows}
@@ -353,6 +371,8 @@ export const _ProductsDataGrid = () => {
             }
           }
         }}
+        columnVisibilityModel={columnVisibility}
+        onColumnVisibilityModelChange={handleColumnsChange}
       />
     </div>
   )

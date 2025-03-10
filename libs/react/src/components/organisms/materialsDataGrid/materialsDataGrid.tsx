@@ -18,6 +18,21 @@ import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '
 import { withErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
 
+export const getMaterialRows = (materials: MaterialsWithRelations[]) => {
+  return materials.map((material) => ({
+    id: material.id,
+    name: material.name,
+    materialCategory: material.materialCategory || '',
+    materialSubcategory: material.materialSubcategory || '',
+    sustainabilityAttributes: processEntityLevelAssurances([material]),
+    tier2Supplier: material.organizationFacility?.name || '',
+    usedBy: uniq(material.productMaterials
+      .map(pm => pm.product.organizationFacility?.name)
+      .filter(name => name !== undefined)
+      .sort((a,b) => a.localeCompare(b)))
+  }))
+}
+
 const _MaterialsDataGrid = () => {
   const navigate = useNavigate();
   const { orgId } = useAuth0Wrapper();
@@ -234,18 +249,7 @@ const _MaterialsDataGrid = () => {
     },
   ];
 
-  const rows: GridValidRowModel[] = materials.map(material => ({
-    id: material.id,
-    name: material.name,
-    materialCategory: material.materialCategory || '',
-    materialSubcategory: material.materialSubcategory || '',
-    sustainabilityAttributes: processEntityLevelAssurances([material]),
-    tier2Supplier: material.organizationFacility?.name || '',
-    usedBy: uniq(material.productMaterials
-      .map(pm => pm.product.organizationFacility?.name)
-      .filter(name => name !== undefined)
-      .sort((a,b) => a.localeCompare(b)))
-  }));
+  const rows: GridValidRowModel[] = getMaterialRows(materials)
 
   return (
     <div className={'w-full'}>
