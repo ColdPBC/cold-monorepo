@@ -111,7 +111,7 @@
 		"@paralleldrive/cuid2": "^2.2.2",
 		"@pinecone-database/doc-splitter": "^0.0.1",
 		"@pinecone-database/pinecone": "^2.1.0",
-		"@prisma/client": "^5.6.0",
+		"@prisma/client": "6.4.1",
 		"@semantic-release/exec": "^6.0.3",
 		"@sendgrid/mail": "^7.7.0",
 		"@storybook/testing-react": "^2.0.1",
