@@ -18,6 +18,9 @@ export class EcoinventImportController {
 	@Put('import/:location')
 	@Roles(Role.ColdAdmin)
 	update(@Req() req: any, @Param('location') location: string) {
+		if (location === 'all') {
+			return this.ecoinventImportService.queueImportJobs(req);
+		}
 		return this.ecoinventImportService.queueImportJobs(req, location);
 	}
 }
