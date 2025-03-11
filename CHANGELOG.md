@@ -1,3 +1,10 @@
+# [1.593.0](https://github.com/coldPBC/cold-monorepo/compare/v1.592.0...v1.593.0) (2025-03-11)
+
+
+### Features
+
+* Enhance export functionality with batching and progress tracking ([bb5919a](https://github.com/coldPBC/cold-monorepo/commit/bb5919a7d41f7166bd375c34c098d66eb329acb7))
+
 # [1.592.0](https://github.com/coldPBC/cold-monorepo/compare/v1.591.0...v1.592.0) (2025-03-11)
 
 
