@@ -4,8 +4,10 @@ import {withErrorBoundary} from "react-error-boundary";
 import {useNavigate} from 'react-router-dom';
 import {GridState, useGridApiRef} from "@mui/x-data-grid-pro";
 import {EntityLevel} from "@coldpbc/enums";
+import {useFlags} from "launchdarkly-react-client-sdk";
 
 const _ProductsPage = () => {
+  const ldFlags = useFlags()
   const navigate = useNavigate();
   const [isGridReady, setIsGridReady] = useState(false);
 
@@ -13,10 +15,13 @@ const _ProductsPage = () => {
 
   const getPageButtons = () => {
     return <div className={'flex flex-row gap-5'}>
-      <EntityExport
-        entityLevel={EntityLevel.PRODUCT}
-        gridAPI={isGridReady ? apiRef.current : null}
+      {
+        ldFlags.showSspDatagridExportButton &&
+        <EntityExport
+          entityLevel={EntityLevel.PRODUCT}
+          gridAPI={isGridReady ? apiRef.current : null}
         />
+      }
       <BaseButton
         onClick={() => navigate('/products/new')}
         label={'Add New'}

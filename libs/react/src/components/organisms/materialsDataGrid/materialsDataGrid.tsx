@@ -17,6 +17,7 @@ import { get, has, uniq } from 'lodash';
 import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
+import {useFlags} from "launchdarkly-react-client-sdk";
 
 export const getMaterialRows = (materials: MaterialsWithRelations[]) => {
   return materials.map((material) => ({
@@ -34,6 +35,7 @@ export const getMaterialRows = (materials: MaterialsWithRelations[]) => {
 }
 
 const _MaterialsDataGrid = (props: MUIDataGridProps) => {
+  const ldFlags = useFlags();
   const navigate = useNavigate();
   const { orgId } = useAuth0Wrapper();
 
@@ -280,6 +282,7 @@ const _MaterialsDataGrid = (props: MUIDataGridProps) => {
         rowHeight={72}
         showManageColumns
         showSearch
+        showExport={!ldFlags.showSspDatagridExportButton}
         onRowClick={(params) => {
           navigate(`/materials/${params.id}`)
         }}

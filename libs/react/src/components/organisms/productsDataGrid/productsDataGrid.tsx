@@ -346,6 +346,7 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
         rowHeight={72}
         showManageColumns
         showSearch
+        showExport={!ldFlags.showSspDatagridExportButton}
         onRowClick={(params) => {
           navigate(`/products/${params.id}`)
         }}
