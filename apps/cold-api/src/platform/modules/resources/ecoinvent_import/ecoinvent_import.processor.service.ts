@@ -20,7 +20,7 @@ export class EcoinventImportProcessorService extends BaseWorker {
 
 	@Process('*')
 	async importEcoSpoldFile(job: any): Promise<any> {
-		const { jobId, bucket, organization, key, activity_name, location, reference_product, user } = job.data;
+		const { jobId, bucket, organization, key, activity_name, location, user } = job.data;
 		try {
 			const fileObject = await this.s3.getObject(user, bucket, key);
 			if (!fileObject) {
@@ -79,6 +79,8 @@ export class EcoinventImportProcessorService extends BaseWorker {
 			});
 
 			this.logger.log(`Successfully imported EcoSpold file: ${key}`);
+
+			job = null;
 
 			return {};
 		} catch (error) {

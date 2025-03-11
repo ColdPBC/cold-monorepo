@@ -48,26 +48,6 @@ export class EcoinventImportService extends BaseWorker {
 	}
 
 	/**
-	 * Parses CSV data into an array of objects.
-	 * @param data CSV file content as string.
-	 */
-	private parseCSV(data: string): Promise<any[]> {
-		return new Promise((resolve, reject) => {
-			const results: any[] = [];
-			const stream = Readable.from(data);
-			stream
-				.pipe(
-					csvParser({
-						separator: ';',
-					}),
-				)
-				.on('data', row => results.push(row))
-				.on('end', () => resolve(results))
-				.on('error', err => reject(err));
-		});
-	}
-
-	/**
 	 * Imports CSV data from an S3 bucket.
 	 * This function inserts each row into the EcoinventImport model.
 	 * (This part remains largely unchanged.)
@@ -197,9 +177,14 @@ export class EcoinventImportService extends BaseWorker {
 	}
 
 	async queueImportJobs(req: any, location?: string): Promise<any> {
+		const filter: any[] = [{ job_status: 'PENDING' }];
+		if (location) {
+			filter.push({ location: location });
+		}
+
 		const imports = await this.prisma.ecoinvent_imports.findMany({
 			where: {
-				AND: [{ job_status: 'PENDING' }, { location: location }],
+				AND: filter,
 			},
 		});
 		for (const row of imports) {
@@ -214,6 +199,14 @@ export class EcoinventImportService extends BaseWorker {
 				reference_product: row.reference_product,
 			});
 
+			await this.prisma.ecoinvent_imports.update({
+				where: {
+					id: row.id,
+				},
+				data: {
+					job_status: 'QUEUED',
+				},
+			});
 			this.logger.info(`Queuing import job for file ${row.key}.`, { bucket: row.bucket, key: row.key, user: req.user, job: job.data });
 		}
 	}
