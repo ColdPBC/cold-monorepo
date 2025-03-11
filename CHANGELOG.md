@@ -1,3 +1,10 @@
+## [1.589.2](https://github.com/coldPBC/cold-monorepo/compare/v1.589.1...v1.589.2) (2025-03-11)
+
+
+### Bug Fixes
+
+* update @prisma/client version from 5.6.0 to 6.4.1 in package.json and yarn.lock ([244a367](https://github.com/coldPBC/cold-monorepo/commit/244a3674ea96c7098c349712bda602356463d7c3))
+
 ## [1.589.1](https://github.com/coldPBC/cold-monorepo/compare/v1.589.0...v1.589.1) (2025-03-10)
 
 
