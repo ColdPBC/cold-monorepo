@@ -96,6 +96,7 @@ export default {
         showNewDocumentUploadUxCold1410: true,
         showNewPcfUiCold1450: true,
         showAiSustainabilibuddyCold1464: true,
+        showSspDatagridExportButton: true,
       },
     },
   },
