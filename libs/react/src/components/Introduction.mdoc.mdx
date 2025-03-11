@@ -1,4 +1,4 @@
-import {Meta} from '@storybook/blocks';
+import { Meta, Title, Subtitle } from '@storybook/blocks';
 import Code from '../assets/code-brackets.svg';
 import Colors from '../assets/colors.svg';
 import Comments from '../assets/comments.svg';
@@ -10,11 +10,18 @@ import StackAlt from '../assets/stackalt.svg';
 import {ColdClimateWordmark} from "./atoms";
 
 <Meta title="Introduction"/>
-<ColdClimateWordmark color="primary"/>
-<p/>
-<p/>
+
+<Title>Welcome to the Component Library Storybook</Title>
+
+{/* Import component with modern syntax */}
+<div style={{ marginBottom: '2rem' }}>
+  <ColdClimateWordmark color="primary"/>
+</div>
+
+
 <hr/>
-## Welcome to the Component Library Storybook
+
+<Subtitle>Overview</Subtitle>
 
 Storybook helps you build UI components in isolation from your app's business logic, data, and context.
 That makes it easy to develop hard-to-reach states. Save these UI states as **stories** to revisit during development, testing, or QA.

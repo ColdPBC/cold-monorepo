@@ -6,6 +6,7 @@ import { IconNames } from '@coldpbc/enums';
 import { GlobalSizes } from '@coldpbc/enums';
 import React from 'react';
 import { Spinner } from '@coldpbc/components';
+import {toArray} from "lodash";
 
 const meta: Meta<typeof BaseButton> = {
   title: 'Atoms/Button',
@@ -15,7 +16,7 @@ const meta: Meta<typeof BaseButton> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ButtonTypes,
+      options: toArray(ButtonTypes),
     },
   },
 };

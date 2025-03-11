@@ -3,16 +3,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import { BaseButton } from '../../atoms/button/button';
 import { GlobalSizes } from '../../../enums/sizes';
 import { InvitationModal, InvitationModalProps } from './invitationModal';
-import { auth0UserMock } from '../../../__mocks__/userMock';
-import { StoryMockProvider } from '@coldpbc/mocks';
-import { TeamMemberSettings } from '@coldpbc/components';
-import {
-  userEvent,
-  waitFor,
-  waitForElementToBeRemoved,
-  within,
-} from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
 
 const meta: Meta<typeof InvitationModal> = {
   /* 👇 The title prop is optional.

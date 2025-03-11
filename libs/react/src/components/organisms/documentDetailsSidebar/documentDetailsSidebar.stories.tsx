@@ -37,6 +37,14 @@ export const NoAssurances: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
+    fileState: undefined,
+    refreshFiles: async () => ({ data: { organizationFiles: null }, loading: false, networkStatus: NetworkStatus.ready }),
+    closeSidebar: () => {},
+    setFileState: () => {},
+    deleteFile: () => {},
+    downloadFile: () => {},
+    openEditMaterials: () => {},
+    allMaterials: [],
 	},
 };
 
@@ -50,6 +58,14 @@ export const WithAssurancesSupplierClaim: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
+    fileState: undefined,
+    refreshFiles: async () => ({ data: { organizationFiles: null }, loading: false, networkStatus: NetworkStatus.ready }),
+    closeSidebar: () => {},
+    setFileState: () => {},
+    deleteFile: () => {},
+    downloadFile: () => {},
+    openEditMaterials: () => {},
+    allMaterials: [],
 	},
 };
 
@@ -63,11 +79,19 @@ export const WithAssurancesMaterialClaim: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
+    fileState: undefined,
+    refreshFiles: async () => ({ data: { organizationFiles: null }, loading: false, networkStatus: NetworkStatus.ready }),
+    closeSidebar: () => {},
+    setFileState: () => {},
+    deleteFile: () => {},
+    downloadFile: () => {},
+    openEditMaterials: () => {},
+    allMaterials: [],
 	},
 };
 
 export const NonCertificateDocument: Story = {
-  render: args => {
+  render: (args: DocumentDetailsSidebarStoryProps) => {
     return <SidebarStory {...args} />;
   },
   args: {
@@ -76,8 +100,28 @@ export const NonCertificateDocument: Story = {
     isLoading: false,
     signedUrl: '',
     sustainabilityAttributes: getClaimsMock(),
+    fileState: undefined,
+    refreshFiles: async () => ({ data: { organizationFiles: null }, loading: false, networkStatus: NetworkStatus.ready }),
+    closeSidebar: () => {},
+    setFileState: () => {},
+    deleteFile: () => {},
+    downloadFile: () => {},
+    openEditMaterials: () => {},
+    allMaterials: [],
   },
 };
+
+interface DocumentDetailsSidebarStoryProps {
+  file: FilesWithAssurances | undefined;
+  sustainabilityAttributes: Claims[];
+  refreshFiles: () => void;
+  closeSidebar: () => void;
+  innerRef: React.RefObject<HTMLDivElement>;
+  deleteFile: (id: string) => void;
+  isLoading: boolean;
+  downloadFile: (url: string | undefined) => void;
+  signedUrl: string | undefined;
+}
 
 const SidebarStory = (props: {
 	file: FilesWithAssurances | undefined;

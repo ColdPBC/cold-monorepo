@@ -1,9 +1,9 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { MaterialDetail, SupplierDetail } from '@coldpbc/components';
-import { defaultGraphqlMocks, getMaterialGraphQLMock, getSupplierGraphQLMock, StoryMockProvider } from '@coldpbc/mocks';
+import { SupplierDetail } from '@coldpbc/components';
+import { getSupplierGraphQLMock, StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
-import {fireEvent, waitForElementToBeRemoved, within} from "@storybook/testing-library";
+import { fireEvent, within } from "@storybook/test";
 
 const meta: Meta<typeof SupplierDetail> = {
   title: 'Pages/SupplierDetail',
@@ -61,9 +61,7 @@ export const ShowDeleteModal: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-
-    const menu = canvas.getByTestId('supplier-details-menu');
+    const menu = await canvas.findByTestId('supplier-details-menu');
 
     const menuButton = within(menu).getByRole('button');
     fireEvent.click(menuButton);
@@ -90,9 +88,7 @@ export const ShowEdit: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-
-    const editButton = canvas.getByText('Edit');
+    const editButton = await canvas.findByText('Edit');
     fireEvent.click(editButton);
   },
 };

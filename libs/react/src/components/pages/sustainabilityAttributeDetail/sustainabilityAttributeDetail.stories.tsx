@@ -6,7 +6,7 @@ import {
   StoryMockProvider, supplierLevelSustainabilityAttributeMocks,
   sustainabilityAttributesMocks,
 } from '@coldpbc/mocks';
-import { fireEvent, within } from '@storybook/testing-library';
+import { fireEvent, within } from '@storybook/test';
 
 const meta: Meta<typeof SustainabilityAttributeDetail> = {
   title: 'Pages/SustainabilityAttributeDetail',

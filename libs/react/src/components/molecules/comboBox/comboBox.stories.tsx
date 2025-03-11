@@ -3,7 +3,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import {ComboBox, ComboBoxProps} from "./comboBox";
 import {InputOption} from "@coldpbc/interfaces";
-import { userEvent, within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/test';
 
 const meta: Meta<typeof ComboBox> = {
   title: 'Molecules/ComboBox',

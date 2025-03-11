@@ -16,18 +16,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args: any) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [values, setValues] = useState([0] as number[]);
-
-    const onChange = (values: number[]) => {
-      setValues(values);
-    };
-
-    return (
-      <div className={'w-96'}>
-        <RangeSlider {...args} defaultValue={values[0]} onChange={onChange} />
-      </div>
-    );
+    return <RenderSliderStory {...args} />;
   },
   args: {
     min: 0,
@@ -37,3 +26,19 @@ export const Default: Story = {
     title: 'Select estimated value',
   },
 };
+
+
+const RenderSliderStory = (args: any) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [values, setValues] = useState([0] as number[]);
+
+  const onChange = (values: number[]) => {
+    setValues(values);
+  };
+
+  return (
+    <div className={'w-96'}>
+      <RangeSlider {...args} defaultValue={values[0]} onChange={onChange} />
+    </div>
+  );
+}
