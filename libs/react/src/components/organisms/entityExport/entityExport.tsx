@@ -1,4 +1,4 @@
-import {BaseButton, getColumnRows, getMaterialRows} from '@coldpbc/components'
+import {BaseButton, getProductRows, getMaterialRows} from '@coldpbc/components'
 import { EntityLevel } from '@coldpbc/enums';
 import { ColdApolloContext } from '@coldpbc/providers';
 import {useContext, useState} from "react";
@@ -9,11 +9,13 @@ import {
   GridApiPro,
   GridValueFormatter,
 } from "@mui/x-data-grid-pro";
+import {useFlags} from "launchdarkly-react-client-sdk";
 
 export const EntityExport = (props: {
   entityLevel: EntityLevel;
   gridAPI: GridApiPro | null;
 }) => {
+  const ldFlags = useFlags()
   const {entityLevel, gridAPI } = props;
   const {orgId} = useAuth0Wrapper()
   const [exporting, setExporting] = useState<boolean>(false);
@@ -72,7 +74,7 @@ export const EntityExport = (props: {
 
       let data: any[] = [];
       if ('products' in response.data) {
-        data = getColumnRows(response.data.products)
+        data = getProductRows(response.data.products, ldFlags)
       } else if ('materials' in response.data) {
         data = getMaterialRows(response.data.materials)
       }

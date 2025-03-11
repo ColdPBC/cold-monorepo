@@ -1,6 +1,6 @@
 import {
   BubbleList,
-  ErrorFallback,
+  ErrorFallback, getTotalFootprint,
   MuiDataGrid, MUIDataGridProps,
   ProductFootprintDataGridCell,
   SustainabilityAttributeColumnList,
@@ -23,9 +23,11 @@ import {
   GridPaginationModel,
   GridSortModel
 } from '@mui/x-data-grid-pro';
+import {LDFlagSet} from "@launchdarkly/node-server-sdk";
 
-export const getColumnRows = (
-  products: PaginatedProductsQuery[]
+export const getProductRows = (
+  products: PaginatedProductsQuery[],
+  ldFlags: LDFlagSet,
 ) => {
   return products.map(product => {
     const tier1Supplier = product.organizationFacility
@@ -65,7 +67,8 @@ export const getColumnRows = (
       materials: product.productMaterials.map(material => material.material?.name).filter((material): material is string => material !== null),
       productCategory: product.productCategory ?? '',
       productSubcategory: product.productSubcategory ?? '',
-      product
+      carbonFootprint: (ldFlags.productCarbonFootprintMvp || ldFlags.showNewPcfUiCold1450) ? getTotalFootprint(product, ldFlags.showNewPcfUiCold1450) : '',
+      product,
     }
   })
 }
@@ -158,6 +161,7 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
     materials: string[];
     productCategory: string;
     productSubcategory: string;
+    carbonFootprint: string | number;
   }[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0);
 
@@ -168,7 +172,7 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
         setTotalRows(0);
       } else {
         const products = get(productsQuery.data, 'data.products', []);
-        const rows = getColumnRows(products)
+        const rows = getProductRows(products, ldFlags);
         const total = get(productsQuery.data, 'data.products_aggregate.count', 0);
         setRows(rows);
         setTotalRows(total);
