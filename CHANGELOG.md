@@ -1,3 +1,16 @@
+# [1.592.0](https://github.com/coldPBC/cold-monorepo/compare/v1.591.0...v1.592.0) (2025-03-11)
+
+
+### Features
+
+* Enable conditional rendering of the remove button in list items ([1c5c529](https://github.com/coldPBC/cold-monorepo/commit/1c5c52932be6611246b802c7833bcac7518329bf))
+* Enhance ListItem component with unique item management and improved input handling ([adba01c](https://github.com/coldPBC/cold-monorepo/commit/adba01c1daec920b0d4379604b497720a630ccea))
+* Refactor signup form story for clarity and efficiency ([d3ee9bb](https://github.com/coldPBC/cold-monorepo/commit/d3ee9bbce31d45b98583bef755fbdbd3c7fa9d82))
+* Refactor story components to use dedicated render functions ([f28895d](https://github.com/coldPBC/cold-monorepo/commit/f28895d66986f5224fadc76ce728a3866747d81c))
+* Update listitem story tests ([149f5d3](https://github.com/coldPBC/cold-monorepo/commit/149f5d34b402ef1c3a1a7652dcc2df4027617d75))
+* Update Storybook docs configuration and story sorting ([fdf7150](https://github.com/coldPBC/cold-monorepo/commit/fdf715045b46b9b1da77c357eb1ee024adc7cb96))
+* Update Storybook from v7 to v8 ([c8df453](https://github.com/coldPBC/cold-monorepo/commit/c8df453f1e48a42f76f7fc9c9d7a258885fcfc5b))
+
 # [1.591.0](https://github.com/coldPBC/cold-monorepo/compare/v1.590.0...v1.591.0) (2025-03-11)
 
 
