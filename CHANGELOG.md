@@ -1,3 +1,14 @@
+# [1.591.0](https://github.com/coldPBC/cold-monorepo/compare/v1.590.0...v1.591.0) (2025-03-11)
+
+
+### Features
+
+* Add error handling and logging to EntityExport component ([cdbd0c5](https://github.com/coldPBC/cold-monorepo/commit/cdbd0c5fa3545ac34bca5487e22b1134a216a7ec))
+* Add export functionality for products and materials grids ([64b3599](https://github.com/coldPBC/cold-monorepo/commit/64b359905480fe27b480859d5cd4db7cb9074ab8))
+* Enable feature flag for DataGrid export button ([05f4664](https://github.com/coldPBC/cold-monorepo/commit/05f4664d9dde3318b9b3c5d238528bbd34104500))
+* Refactor data grids for enhanced server-side functionalities ([401ddfe](https://github.com/coldPBC/cold-monorepo/commit/401ddfe54788c55509c43f643ea5f5edb9e354e4))
+* Refactor product data grid to include carbon footprint logic ([4f2af91](https://github.com/coldPBC/cold-monorepo/commit/4f2af9126347dc4c57cb0343adf77a06812232be))
+
 # [1.590.0](https://github.com/coldPBC/cold-monorepo/compare/v1.589.2...v1.590.0) (2025-03-11)
 
 
