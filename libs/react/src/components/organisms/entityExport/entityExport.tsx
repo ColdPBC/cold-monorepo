@@ -1,25 +1,40 @@
-import {BaseButton, getProductRows, getMaterialRows} from '@coldpbc/components'
-import { EntityLevel } from '@coldpbc/enums';
-import { ColdApolloContext } from '@coldpbc/providers';
-import {useContext, useState} from "react";
-import {useAuth0Wrapper} from "@coldpbc/hooks";
+import {BaseButton, ErrorFallback, getMaterialRows, getProductRows} from '@coldpbc/components'
+import {EntityLevel} from '@coldpbc/enums';
+import {ColdApolloContext} from '@coldpbc/providers';
+import React, {useContext, useState} from "react";
+import {useAddToastMessage, useAuth0Wrapper, useColdContext} from "@coldpbc/hooks";
 import {queries} from "@coldpbc/lib";
-import {ConfigOptions, generateCsv, download } from 'export-to-csv';
-import {
-  GridApiPro,
-  GridValueFormatter,
-} from "@mui/x-data-grid-pro";
+import {ConfigOptions, download, generateCsv} from 'export-to-csv';
+import {GridApiPro, GridValueFormatter,} from "@mui/x-data-grid-pro";
 import {useFlags} from "launchdarkly-react-client-sdk";
+import {withErrorBoundary} from "react-error-boundary";
+import {ToastMessage} from "@coldpbc/interfaces";
 
-export const EntityExport = (props: {
+export const _EntityExport = (props: {
   entityLevel: EntityLevel;
   gridAPI: GridApiPro | null;
 }) => {
   const ldFlags = useFlags()
+  const {logBrowser} = useColdContext()
+  const {addToastMessage} = useAddToastMessage();
   const {entityLevel, gridAPI } = props;
   const {orgId} = useAuth0Wrapper()
   const [exporting, setExporting] = useState<boolean>(false);
   const { client } = useContext(ColdApolloContext);
+
+  const checkResponse = (response: any) => {
+    if (response.error || response.errors) {
+      logBrowser(
+        'Error fetching graphql data for export',
+        'error', {
+          error: response.error,
+          errors: response.errors,
+          orgId,
+          entityLevel: entityLevel,
+        });
+      throw new Error('Error fetching graphql data for export');
+    }
+  }
 
   const exportEntities = async () => {
     if (!gridAPI || !client) return;
@@ -72,6 +87,8 @@ export const EntityExport = (props: {
         }
       });
 
+      checkResponse(response);
+
       let data: any[] = [];
       if ('products' in response.data) {
         data = getProductRows(response.data.products, ldFlags)
@@ -114,8 +131,31 @@ export const EntityExport = (props: {
 
       const csv = generateCsv(options)(formattedData);
       download(options)(csv);
+      logBrowser(
+        'CSV exported successfully',
+        'info',
+        {
+          count: formattedData.length,
+          entityLevel,
+          orgId,
+        }
+      )
+      await addToastMessage({
+        type: ToastMessage.SUCCESS,
+        message: 'CSV exported successfully',
+      })
     } catch (error) {
-      console.error('Export failed:', error);
+      logBrowser(
+        'Error getting data ready for export',
+        'error', {
+          error: error,
+          entityLevel,
+          orgId,
+        }, error);
+      await addToastMessage({
+        type: ToastMessage.FAILURE,
+        message: 'Error exporting data',
+      })
     } finally {
       setExporting(false);
     }
@@ -131,3 +171,10 @@ export const EntityExport = (props: {
     />
   );
 };
+
+export const EntityExport = withErrorBoundary(_EntityExport, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in EntityExport: ', error);
+  },
+});
