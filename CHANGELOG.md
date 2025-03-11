@@ -1,3 +1,10 @@
+# [1.590.0](https://github.com/coldPBC/cold-monorepo/compare/v1.589.2...v1.590.0) (2025-03-11)
+
+
+### Features
+
+* add support for importing all locations in ecoinvent update endpoint ([3c8b0ed](https://github.com/coldPBC/cold-monorepo/commit/3c8b0ede75e28b0f31542d87b33af1578e7a83ce))
+
 ## [1.589.2](https://github.com/coldPBC/cold-monorepo/compare/v1.589.1...v1.589.2) (2025-03-11)
 
 
