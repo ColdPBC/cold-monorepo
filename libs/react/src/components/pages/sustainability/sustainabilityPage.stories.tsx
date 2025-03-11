@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { SustainabilityPage } from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryMockProvider, sustainabilityAttributesMocks } from '@coldpbc/mocks';
-import { fireEvent, within } from '@storybook/testing-library';
+import { fireEvent, within } from '@storybook/test';
 
 const meta: Meta<typeof SustainabilityPage> = {
   title: 'Pages/SustainabilityPage',

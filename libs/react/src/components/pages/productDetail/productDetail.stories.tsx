@@ -3,7 +3,7 @@ import {ProductDetail} from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import {fileWithProductMocks, productWithoutEmissionsFactor, StoryMockProvider} from '@coldpbc/mocks';
 import {Route, Routes} from "react-router-dom";
-import {fireEvent, waitForElementToBeRemoved, within} from "@storybook/testing-library";
+import {fireEvent, within} from "@storybook/test";
 import {GET_ALL_FILES} from "@coldpbc/lib";
 
 const meta: Meta<typeof ProductDetail> = {
@@ -44,7 +44,6 @@ export const BOMTab: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
     const bomTab = await canvas.findByTestId('tab-BOM');
     bomTab.click();
     await canvas.findByTestId('product-bom-tab-card');
@@ -77,7 +76,6 @@ export const DocumentsTab: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
     const documentsTab = await canvas.findByTestId('tab-Documents');
     documentsTab.click();
     await canvas.findByTestId('product-documents-tab-card');
@@ -111,9 +109,7 @@ export const ShowDeleteModal: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-
-    const menu = canvas.getByTestId('product-details-menu');
+    const menu = await canvas.findByTestId('product-details-menu');
 
     const menuButton = within(menu).getByRole('button');
     fireEvent.click(menuButton);
@@ -139,9 +135,7 @@ export const ShowEdit: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-
-    const editButton = canvas.getByText('Edit');
+    const editButton = await canvas.findByText('Edit');
     fireEvent.click(editButton);
   },
 };
@@ -160,7 +154,6 @@ export const CarbonAccountingTab: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
     const carbonAccountingTab = await canvas.findByTestId('tab-Carbon Accounting');
     carbonAccountingTab.click();
   }
@@ -183,7 +176,6 @@ export const CarbonAccountingTabWithoutEmissionsFactor: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
     const carbonAccountingTab = await canvas.findByTestId('tab-Carbon Accounting');
     carbonAccountingTab.click();
   }
@@ -205,7 +197,6 @@ export const CarbonAccountingTabOpenDetailExpandedView: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
     const carbonAccountingTab = await canvas.findByTestId('tab-Carbon Accounting');
     carbonAccountingTab.click();
 
@@ -233,7 +224,6 @@ export const CarbonAccountingTabOpenDetailExpandedViewUnknownFactor: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
     const carbonAccountingTab = await canvas.findByTestId('tab-Carbon Accounting');
     carbonAccountingTab.click();
 

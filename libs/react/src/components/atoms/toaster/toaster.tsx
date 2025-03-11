@@ -40,5 +40,12 @@ export const Toaster = (props: ToasterProps) => {
     return className;
   };
 
-  return <div className={'w-auto rounded-[16px] p-[24px] z-30 bg-bgc-accent text-tc-primary ' + getHighlightClassName() + getToastPositionClassName()}>{message}</div>;
+  return (
+    <div
+      className={'w-auto rounded-[16px] p-[24px] z-30 bg-bgc-accent text-tc-primary ' + getHighlightClassName() + getToastPositionClassName()}
+      data-testid={'toaster'}
+    >
+      {message}
+    </div>
+  );
 };

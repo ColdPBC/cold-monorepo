@@ -3,8 +3,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { getSurveyHandler, StoryMockProvider } from "@coldpbc/mocks";
 import { NextSteps } from "./nextSteps";
-import { within } from "@storybook/testing-library";
-import { expect } from "@storybook/jest"
+import { expect, within } from "@storybook/test";
 import { forEach } from "lodash";
 
 const meta = {

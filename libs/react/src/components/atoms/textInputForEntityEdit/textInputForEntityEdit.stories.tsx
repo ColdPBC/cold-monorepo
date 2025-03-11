@@ -3,7 +3,7 @@ import { TextInputForEntityEdit } from '@coldpbc/components';
 import { getMaterialMock } from '@coldpbc/mocks';
 import React from 'react';
 import { MaterialGraphQL } from '@coldpbc/interfaces';
-import { userEvent, within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/test';
 
 const meta: Meta<typeof TextInputForEntityEdit> = {
   title: 'Atoms/TextInputForEntityEdit',

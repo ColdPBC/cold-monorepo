@@ -4,7 +4,8 @@ import { Meta, StoryObj } from '@storybook/react';
 import { StoryMockProvider } from '@coldpbc/mocks';
 import { EntityLevel } from '@coldpbc/enums';
 import { BulkEditSustainabilityAttributeModal, BulkEditSustainabilityAttributeModalProps } from '@coldpbc/components';
-import {fireEvent, within} from "@storybook/testing-library";
+import { fireEvent, within } from '@storybook/test';
+
 
 const meta: Meta<typeof BulkEditSustainabilityAttributeModal> = {
 	title: 'Organisms/BulkEditSustainabilityAttributeModal',

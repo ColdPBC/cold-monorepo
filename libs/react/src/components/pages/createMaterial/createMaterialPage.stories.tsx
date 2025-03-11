@@ -2,8 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { CreateMaterialPage } from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryMockProvider } from '@coldpbc/mocks';
-import { userEvent, waitForElementToBeRemoved, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { expect, userEvent, within } from '@storybook/test';
 
 const meta: Meta<typeof CreateMaterialPage> = {
   title: 'Pages/CreateMaterialPage',
@@ -35,13 +34,12 @@ export const ShowInputErrorValidation: Story = {
   },
   play: async ({canvasElement, step}) => {
     const canvas = within(canvasElement);
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
     await step('Show name input error', async () => {
-      const input = canvas.getByTestId('input_name');
+      const input = await canvas.findByTestId('input_name');
       await userEvent.type(input, 'Material 6');
-      const saveButton = canvas.getByTestId('save_button');
+      const saveButton = await canvas.findByTestId('save_button');
       await expect(saveButton).toBeDisabled();
-      const error = canvas.getByTestId('input_error_name');
+      const error = await canvas.findByTestId('input_error_name');
       await expect(error).toHaveTextContent('Material name already exists');
     });
 

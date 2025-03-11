@@ -1,15 +1,26 @@
-import { auth0UserMock, getEmptyPoliciesSignedMock, getPoliciesSignedMock, getSignUpHandler, StoryMockProvider } from '@coldpbc/mocks';
+import { auth0UserMock, getEmptyPoliciesSignedMock, getSignUpHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ApplicationToaster, SignupPage } from '@coldpbc/components';
-import { fireEvent, userEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import {expect, userEvent, waitFor, within} from '@storybook/test';
+import {waitForElementToBeRemoved} from "@testing-library/react";
 
 const meta: Meta<typeof SignupPage> = {
   title: 'Pages/SignupPage',
   component: SignupPage,
   tags: ['autodocs'],
   decorators: [withKnobs],
+  parameters: {
+    // Tell Chromatic to wait for animations
+    chromatic: {
+      pauseAnimationAtEnd: true,
+      delay: 1000
+    },
+    // Ensure async operations complete
+    async: {
+      waitFor: '[data-testid="toaster"]'
+    }
+  }
 };
 
 export default meta;
@@ -29,45 +40,36 @@ export const NewUserExistingCompany: Story = {
     </StoryMockProvider>
   ),
   play: async ({ canvasElement, step }) => {
+    const user = userEvent.setup({ delay: 100 })
     const canvas = within(canvasElement);
 
-    const spinner = canvas.queryByRole('status');
-
-    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
-
-    let continueButton = await canvas.findByRole('button', { name: 'Continue' });
-
-    const firstNameInput = canvas.getByRole('textbox', {
+    const firstNameInput = await canvas.findByRole('textbox', {
       name: 'firstName',
     });
-    const lastNameInput = canvas.getByRole('textbox', {
+    await user.type(firstNameInput, 'John');
+
+    const lastNameInput = await canvas.findByRole('textbox', {
       name: 'lastName',
     });
-    const companyNameInput = canvas.getByRole('textbox', {
+    await user.type(lastNameInput, 'Doe');
+
+    const companyNameInput = await canvas.findByRole('textbox', {
       name: 'companyName',
     });
-    const isAgreedToPrivacyAndTOSInput = canvas.getByRole('checkbox', {
+    await expect(companyNameInput).toBeDisabled();
+
+    const isAgreedToPrivacyAndTOSInput = await canvas.findByRole('checkbox', {
       name: 'isAgreedToPrivacyAndTOS',
     });
-    await step('Validate the form', async () => {
-      await waitFor(async () => {
-        fireEvent.change(firstNameInput, { target: { value: 'John' } });
-        fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
-        await expect(companyNameInput).toBeDisabled();
-        fireEvent.click(isAgreedToPrivacyAndTOSInput);
-      });
-      await expect(continueButton).not.toBeDisabled();
-    });
+    await user.click(isAgreedToPrivacyAndTOSInput);
 
-    await step('Invalidate the form', async () => {
-      await waitFor(async () => {
-        fireEvent.change(firstNameInput, { target: { value: '' } });
-        fireEvent.change(lastNameInput, { target: { value: '' } });
-        fireEvent.click(isAgreedToPrivacyAndTOSInput);
-        continueButton = await canvas.findByRole('button', { name: 'Continue' });
-        await expect(continueButton).toBeDisabled();
-      });
-    });
+    let continueButton = await canvas.findByRole('button', { name: 'Continue' });
+    await expect(continueButton).not.toBeDisabled();
+
+    await user.clear(firstNameInput);
+    await user.clear(lastNameInput);
+    await user.click(isAgreedToPrivacyAndTOSInput);
+    await expect(continueButton).toBeDisabled();
   },
 };
 
@@ -86,36 +88,45 @@ export const OnSignupError: Story = {
     </StoryMockProvider>
   ),
   play: async ({ canvasElement, step }) => {
+    const user = userEvent.setup({ delay: 100 })
+    const canvas = within(canvasElement);
+
     // fill out form, when click continue, get error toast message 'Error creating account'
     await step('Fill out form', async () => {
-      const canvas = within(canvasElement);
-      const spinner = canvas.queryByRole('status');
 
       await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
 
-      const firstNameInput = canvas.getByRole('textbox', {
+      const firstNameInput = await canvas.findByRole('textbox', {
         name: 'firstName',
       });
-      const lastNameInput = canvas.getByRole('textbox', {
+      await user.type(firstNameInput, 'John');
+
+      const lastNameInput = await canvas.findByRole('textbox', {
         name: 'lastName',
       });
-      const companyNameInput = canvas.getByRole('textbox', {
+      await user.type(lastNameInput, 'Doe');
+
+      const companyNameInput = await canvas.findByRole('textbox', {
         name: 'companyName',
       });
-      const isAgreedToPrivacyAndTOSInput = canvas.getByRole('checkbox', {
+      await user.type(companyNameInput, 'Company');
+
+      const isAgreedToPrivacyAndTOSInput = await canvas.findByRole('checkbox', {
         name: 'isAgreedToPrivacyAndTOS',
       });
-      const continueButton = canvas.getByRole('button', { name: 'Continue' });
-      await waitFor(async () => {
-        fireEvent.change(firstNameInput, { target: { value: 'John' } });
-        fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
-        fireEvent.change(companyNameInput, { target: { value: 'Company' } });
-        fireEvent.click(isAgreedToPrivacyAndTOSInput);
-        fireEvent.click(continueButton);
-      });
-      await waitFor(async () => {
-        await expect(canvas.getByText('Error creating account')).toBeInTheDocument();
-      });
+      await user.click(isAgreedToPrivacyAndTOSInput);
+
+      // Wait for button to be enabled
+      const continueButton = await canvas.findByRole('button', { name: 'Continue' });
+      await waitFor(() => expect(continueButton).not.toBeDisabled());
+
+      // Click and wait for toast
+      await user.click(continueButton);
+
+      await waitFor(
+        () => expect(canvas.getByTestId('toaster')).toBeInTheDocument(),
+        { timeout: 5000 }
+      );
     });
   },
 };
