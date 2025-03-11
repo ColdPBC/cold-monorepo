@@ -14404,15 +14404,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:^5.6.0":
-  version: 5.21.1
-  resolution: "@prisma/client@npm:5.21.1"
+"@prisma/client@npm:6.4.1":
+  version: 6.4.1
+  resolution: "@prisma/client@npm:6.4.1"
   peerDependencies:
     prisma: "*"
+    typescript: ">=5.1.0"
   peerDependenciesMeta:
     prisma:
       optional: true
-  checksum: 10/f4cf3e77682eabf8d67d9d82980ba1bfa37cdfbce03159a14fa530b3fe5241cd4a2808d8cd1bdff1ba29522b8cc3e4c53332ed8d0b54ba00483057a3d1d2d473
+    typescript:
+      optional: true
+  checksum: 10/aefa2b819bdeeec98384f0bdd3caad5c30fd68ef014f190659322fc59a0d00be026a3bb6b050d742e1b23580c70ab1dc1a895d38ae72a193ad403f887db33c70
   languageName: node
   linkType: hard
 
@@ -22746,6 +22749,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/xml2js@npm:^0.4.14":
+  version: 0.4.14
+  resolution: "@types/xml2js@npm:0.4.14"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/d76338b8d6ce8540c7af6a32aacf96c38f6de48254568f58f6e5ac2af3f88e6bd1490e5346d3bb336990f91267d23c5cc09e8bf7e80840a63c7855dbf174ecbb
+  languageName: node
+  linkType: hard
+
 "@types/yargs-parser@npm:*":
   version: 21.0.3
   resolution: "@types/yargs-parser@npm:21.0.3"
@@ -28162,7 +28174,7 @@ __metadata:
     "@paralleldrive/cuid2": "npm:^2.2.2"
     "@pinecone-database/doc-splitter": "npm:^0.0.1"
     "@pinecone-database/pinecone": "npm:^2.1.0"
-    "@prisma/client": "npm:^5.6.0"
+    "@prisma/client": "npm:6.4.1"
     "@react-buddy/ide-toolbox": "npm:^2.3.1"
     "@rollup/plugin-alias": "npm:^5.0.0"
     "@rollup/plugin-babel": "npm:^6.0.3"
@@ -28250,6 +28262,7 @@ __metadata:
     "@types/swagger-ui-express": "npm:^4.1.6"
     "@types/swagger2openapi": "npm:^7.0.4"
     "@types/uuid": "npm:^9.0.1"
+    "@types/xml2js": "npm:^0.4.14"
     "@typescript-eslint/eslint-plugin": "npm:6.11.0"
     "@typescript-eslint/parser": "npm:6.14.0"
     "@typescript-eslint/typescript-estree": "npm:^6.13.2"
@@ -28284,7 +28297,7 @@ __metadata:
     class-validator: "npm:^0.14.0"
     clsx: "npm:^2.0.0"
     concurrently: "npm:^8.2.2"
-    csv-parser: "npm:^3.0.0"
+    csv-parser: "npm:^3.2.0"
     csvtojson: "npm:^2.0.10"
     cz-conventional-changelog: "npm:^3.3.0"
     d3-dsv: "npm:2"
@@ -28437,6 +28450,7 @@ __metadata:
     webpack-cli: "npm:^5.1.4"
     winston: "npm:^3.14.2"
     xlsx: "npm:^0.18.5"
+    xml2js: "npm:^0.6.2"
     yargs: "npm:^17.7.2"
     yarn: "npm:^1.22.22"
     zod: "npm:^3.23.8"
@@ -30050,14 +30064,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csv-parser@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "csv-parser@npm:3.0.0"
-  dependencies:
-    minimist: "npm:^1.2.0"
+"csv-parser@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "csv-parser@npm:3.2.0"
   bin:
     csv-parser: bin/csv-parser
-  checksum: 10/2f003d15d8361a94359d6715a8f05feac1252ab4d1d4e2908ea1baa0454c7e00fb99c53cdc86336635c5fd04f17b510291338df93da1e54944695f0c3b4a6bc1
+  checksum: 10/09a63fa8b6e9c0b75cf5a12cc53abecbe696b8b6ebfdf7ddb0a1e3a97e8f3f19a77d2ffa434810958fd4841682ea8d1a9c08f6fb84f1c0ec393cecdb72131735
   languageName: node
   linkType: hard
 
@@ -59394,6 +59406,16 @@ __metadata:
     sax: "npm:>=0.6.0"
     xmlbuilder: "npm:~11.0.0"
   checksum: 10/27c4d759214e99be5ec87ee5cb1290add427fa43df509d3b92d10152b3806fd2f7c9609697a18b158ccf2caa01e96af067cdba93196f69ca10c90e4f79a08896
+  languageName: node
+  linkType: hard
+
+"xml2js@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "xml2js@npm:0.6.2"
+  dependencies:
+    sax: "npm:>=0.6.0"
+    xmlbuilder: "npm:~11.0.0"
+  checksum: 10/df29de8eeedb762c367d87945c39bcf54db19a2c522607491c266ed6184b5a749e37ff29cfaed0ac149da9ba332ac3dcf8e5ff2bd0a206be3343eca95faa941d
   languageName: node
   linkType: hard
 

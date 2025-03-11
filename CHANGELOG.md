@@ -1,3 +1,33 @@
+## [1.589.2](https://github.com/coldPBC/cold-monorepo/compare/v1.589.1...v1.589.2) (2025-03-11)
+
+
+### Bug Fixes
+
+* update @prisma/client version from 5.6.0 to 6.4.1 in package.json and yarn.lock ([244a367](https://github.com/coldPBC/cold-monorepo/commit/244a3674ea96c7098c349712bda602356463d7c3))
+
+## [1.589.1](https://github.com/coldPBC/cold-monorepo/compare/v1.589.0...v1.589.1) (2025-03-10)
+
+
+### Bug Fixes
+
+* re-add Zod generator configuration for Prisma schema validation ([3c2f4de](https://github.com/coldPBC/cold-monorepo/commit/3c2f4def8ce9336993e64e39c98f14d26478bc97))
+
+# [1.589.0](https://github.com/coldPBC/cold-monorepo/compare/v1.588.0...v1.589.0) (2025-03-10)
+
+
+### Features
+
+* enhance ecoinvent import functionality with update endpoint and additional data fields ([2ea2e59](https://github.com/coldPBC/cold-monorepo/commit/2ea2e594f98515c9aac3e0fad6feda7525036cea))
+
+# [1.588.0](https://github.com/coldPBC/cold-monorepo/compare/v1.587.0...v1.588.0) (2025-03-10)
+
+
+### Features
+
+* add ecoinvent import and data models with migrations ([a889a7e](https://github.com/coldPBC/cold-monorepo/commit/a889a7ef34e30868cb38169dbd5f9022aa64b38d))
+* add ecoinvent import module with CSV parsing and EcoSpold XML validation ([162f66c](https://github.com/coldPBC/cold-monorepo/commit/162f66ccf4ca28981353b5e48c8107df321f4964))
+* add ecoinvent-datum and ecoinvent-import to schema and entities ([e5d5f59](https://github.com/coldPBC/cold-monorepo/commit/e5d5f59c406c3239068f6ab70ccc24e6606b6ece))
+
 # [1.587.0](https://github.com/coldPBC/cold-monorepo/compare/v1.586.3...v1.587.0) (2025-03-07)
 
 
