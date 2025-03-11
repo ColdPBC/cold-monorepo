@@ -20,6 +20,7 @@ export const _EntityExport = (props: {
   const {entityLevel, gridAPI } = props;
   const {orgId} = useAuth0Wrapper()
   const [exporting, setExporting] = useState<boolean>(false);
+  const [exportProgress, setExportProgress] = useState<number>(0);
   const { client } = useContext(ColdApolloContext);
 
   const checkResponse = (response: any) => {
@@ -41,6 +42,7 @@ export const _EntityExport = (props: {
 
     try {
       setExporting(true);
+      setExportProgress(0);
 
       // Get current grid state
       const filterModel = gridAPI.state.filter.filterModel
@@ -77,26 +79,53 @@ export const _EntityExport = (props: {
         [sortModel[0].field]: sortModel[0].sort === 'asc' ? 'ASC' : 'DESC'
       } : undefined;
 
-      const response = await client.query({
-        query: queries[entityLevel === EntityLevel.PRODUCT ? 'GET_PAGINATED_PRODUCTS_FOR_ORG' : 'GET_PAGINATED_MATERIALS_FOR_ORG'],
-        variables: {
-          filter,
-          pagination: {
-            orderBy,
-          }
-        }
+      // Get total count first to determine batch processing
+      const countResponse = await client.query({
+        query: queries[entityLevel === EntityLevel.PRODUCT ? 'GET_PRODUCTS_COUNT' : 'GET_MATERIALS_COUNT'],
+        variables: { filter }
       });
+      checkResponse(countResponse);
 
-      checkResponse(response);
+      const totalCount = entityLevel === EntityLevel.PRODUCT
+        ? countResponse.data.products_aggregate.count
+        : countResponse.data.materials_aggregate.count;
 
-      let data: any[] = [];
-      if ('products' in response.data) {
-        data = getProductRows(response.data.products, ldFlags)
-      } else if ('materials' in response.data) {
-        data = getMaterialRows(response.data.materials)
+      const batchSize = 25; // Adjust based on your API limits
+      const batches = Math.ceil(totalCount / batchSize);
+
+      let allData: any[] = [];
+
+      // Process in batches
+      for (let i = 0; i < batches; i++) {
+        const response = await client.query({
+          query: queries[entityLevel === EntityLevel.PRODUCT ? 'GET_PAGINATED_PRODUCTS_FOR_ORG' : 'GET_PAGINATED_MATERIALS_FOR_ORG'],
+          variables: {
+            filter,
+            pagination: {
+              orderBy,
+              offset: i * batchSize,
+              limit: batchSize
+            }
+          }
+        });
+
+        checkResponse(response);
+
+        let batchData: any[] = [];
+        if ('products' in response.data) {
+          batchData = getProductRows(response.data.products, ldFlags)
+        } else if ('materials' in response.data) {
+          batchData = getMaterialRows(response.data.materials)
+        }
+
+        allData = [...allData, ...batchData];
+        setExportProgress(Math.round(((i + 1) / batches) * 100));
+
+        // Give the UI a chance to update
+        await new Promise(resolve => setTimeout(resolve, 0));
       }
 
-      const formattedData = data.map(row => {
+      const formattedData = allData.map(row => {
         // Create an array of values in the correct order
         return columnFields.reduce((acc, field, index) => {
           const column = gridAPI.getColumn(field);
@@ -158,12 +187,14 @@ export const _EntityExport = (props: {
       })
     } finally {
       setExporting(false);
+      setExportProgress(0);
     }
   };
 
+
   return (
     <BaseButton
-      label={'Export'}
+      label={exporting ? `Exporting (${exportProgress}%)` : 'Export'}
       loading={exporting}
       onClick={exportEntities}
       disabled={exporting || !gridAPI?.state}

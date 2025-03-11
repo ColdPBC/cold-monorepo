@@ -757,6 +757,22 @@ export const GET_COMPONENT_DEFINITIONS = gql`
   }
 `;
 
+export const GET_PRODUCTS_COUNT = gql`
+  query GET_PRODUCTS_COUNT($filter: ProductsListFilter!) {
+    products_aggregate(filter: $filter) {
+      count
+    }
+  }
+`;
+
+export const GET_MATERIALS_COUNT = gql`
+  query GET_MATERIALS_COUNT($filter: MaterialsListFilter!) {
+    materials_aggregate(filter: $filter) {
+      count
+    }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -805,4 +821,6 @@ export const queries: {
   UPDATE_PRODUCT_MATERIAL: UPDATE_PRODUCT_MATERIAL,
   GET_ALL_UPLOADS: GET_ALL_UPLOADS,
   GET_COMPONENT_DEFINITIONS: GET_COMPONENT_DEFINITIONS,
+  GET_PRODUCTS_COUNT: GET_PRODUCTS_COUNT,
+  GET_MATERIALS_COUNT: GET_MATERIALS_COUNT,
 };
