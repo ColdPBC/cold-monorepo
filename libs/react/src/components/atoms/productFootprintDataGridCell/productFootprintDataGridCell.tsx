@@ -50,15 +50,7 @@ interface ProductFootprintDataGridCellProps {
 //   }
 // ];
 
-export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCellProps> = ({ product, useNewEmissionFactor }) => {
-  // NOTE: This component used to leverage useProductCarbonFootprint data but that dependency has been temporarily removed due to performance considerations
-
-  // const { totalFootprint, categoryAverage, percentageFromAverage } = getProductCarbonFootprint(cache, {
-  //   id,
-  //   productCategory,
-  // });
-  // const showComparison = productCategory && categoryAverage > 0;
-
+export const getTotalFootprint = (product: PaginatedProductsQuery, useNewEmissionFactor: boolean) => {
   // the following section was copied over from useProductCarbonFootprint
   let totalFootprint = 0;
 
@@ -85,8 +77,18 @@ export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCell
     }
     totalFootprint += materialFootprint
   });
+  return totalFootprint === 0 ? 'No data available' : totalFootprint.toFixed(1);
+}
 
-  if (totalFootprint === 0) return 'No data available';
+export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCellProps> = ({ product, useNewEmissionFactor }) => {
+  // NOTE: This component used to leverage useProductCarbonFootprint data but that dependency has been temporarily removed due to performance considerations
+
+  // const { totalFootprint, categoryAverage, percentageFromAverage } = getProductCarbonFootprint(cache, {
+  //   id,
+  //   productCategory,
+  // });
+  // const showComparison = productCategory && categoryAverage > 0;
+  const totalFootprint = getTotalFootprint(product, useNewEmissionFactor);
 
   // const range = PERCENTAGE_RANGES.find(range =>
   //   range.condition(percentageFromAverage)
@@ -94,7 +96,7 @@ export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCell
 
   return (
     <div className="flex w-full items-center justify-start gap-[10px]">
-      <span className="text-tc-primary">{totalFootprint.toFixed(1)}</span>
+      <span className="text-tc-primary">{totalFootprint}</span>
       {/*{showComparison && (*/}
       {/*  <Popover*/}
       {/*    contentClassName="max-w-[260px]"*/}

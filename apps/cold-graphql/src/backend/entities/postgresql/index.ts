@@ -13,6 +13,8 @@ import { ComplianceSectionGroup } from './compliance-section-group';
 import { ComplianceSection } from './compliance-section';
 import { ComponentDefinition } from './component-definition';
 import { CoreClassification } from './core-classification';
+import { EcoinventDatum } from './ecoinvent-datum';
+import { EcoinventImport } from './ecoinvent-import';
 import { EmissionFactor } from './emission-factor';
 import { EmissionScope } from './emission-scope';
 import { Emission } from './emission';
@@ -69,6 +71,8 @@ export * from './compliance-section-group';
 export * from './compliance-section';
 export * from './component-definition';
 export * from './core-classification';
+export * from './ecoinvent-datum';
+export * from './ecoinvent-import';
 export * from './emission-factor';
 export * from './emission-scope';
 export * from './emission';
@@ -126,6 +130,8 @@ export const entities = [
 	ComplianceSection,
 	ComponentDefinition,
 	CoreClassification,
+	EcoinventDatum,
+	EcoinventImport,
 	EmissionFactor,
 	EmissionScope,
 	Emission,
