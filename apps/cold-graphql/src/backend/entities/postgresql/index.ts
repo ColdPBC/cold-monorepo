@@ -13,7 +13,12 @@ import { ComplianceSectionGroup } from './compliance-section-group';
 import { ComplianceSection } from './compliance-section';
 import { ComponentDefinition } from './component-definition';
 import { CoreClassification } from './core-classification';
+import { EcoinventActivity } from './ecoinvent-activity';
+import { EcoinventActivityClassification } from './ecoinvent-activity-classification';
+import { EcoinventActivityImpact } from './ecoinvent-activity-impact';
+import { EcoinventClassification } from './ecoinvent-classification';
 import { EcoinventDatum } from './ecoinvent-datum';
+import { EcoinventImpactCategory } from './ecoinvent-impact-category';
 import { EcoinventImport } from './ecoinvent-import';
 import { EmissionFactor } from './emission-factor';
 import { EmissionScope } from './emission-scope';
@@ -71,7 +76,12 @@ export * from './compliance-section-group';
 export * from './compliance-section';
 export * from './component-definition';
 export * from './core-classification';
+export * from './ecoinvent-activity';
+export * from './ecoinvent-activity-classification';
+export * from './ecoinvent-activity-impact';
+export * from './ecoinvent-classification';
 export * from './ecoinvent-datum';
+export * from './ecoinvent-impact-category';
 export * from './ecoinvent-import';
 export * from './emission-factor';
 export * from './emission-scope';
@@ -130,7 +140,12 @@ export const entities = [
 	ComplianceSection,
 	ComponentDefinition,
 	CoreClassification,
+	EcoinventActivity,
+	EcoinventActivityClassification,
+	EcoinventActivityImpact,
+	EcoinventClassification,
 	EcoinventDatum,
+	EcoinventImpactCategory,
 	EcoinventImport,
 	EmissionFactor,
 	EmissionScope,

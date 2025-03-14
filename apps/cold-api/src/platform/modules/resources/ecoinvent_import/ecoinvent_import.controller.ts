@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UseGuards, UseFilters, Param, Put } from '@nestjs/common';
+import { Controller, Post, Body, Req, UseGuards, UseFilters, Param, Put, Query, ParseBoolPipe } from '@nestjs/common';
 import { EcoinventImportService } from './ecoinvent_import.service';
 import { CreateEcoinventImportDto } from './dto/create-ecoinvent_import.dto';
 import { HttpExceptionFilter, JwtAuthGuard, Role, Roles, RolesGuard } from '@coldpbc/nest';
@@ -17,10 +17,10 @@ export class EcoinventImportController {
 
 	@Put('import/:location')
 	@Roles(Role.ColdAdmin)
-	update(@Req() req: any, @Param('location') location: string) {
+	update(@Req() req: any, @Param('location') location: string, @Query('reprocess', ParseBoolPipe) reprocess: boolean) {
 		if (location === 'all') {
-			return this.ecoinventImportService.queueImportJobs(req);
+			return this.ecoinventImportService.queueImportJobs(req, undefined, reprocess);
 		}
-		return this.ecoinventImportService.queueImportJobs(req, location);
+		return this.ecoinventImportService.queueImportJobs(req, location, reprocess);
 	}
 }

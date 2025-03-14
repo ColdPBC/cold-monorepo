@@ -77,7 +77,6 @@ export class EcoinventImportService extends BaseWorker {
 		const stream = Readable.from(csvContent);
 		const parser = csvParser({ separator: ';' });
 		const batchRows: Array<ecoinvent_imports> = [];
-		const jobs: any[] = [];
 
 		this.logger.info('Pausing job queue to process CSV file.', { bucket: bucketName, key: csvFileKey, user: req.user });
 
@@ -176,8 +175,13 @@ export class EcoinventImportService extends BaseWorker {
 			});
 	}
 
-	async queueImportJobs(req: any, location?: string): Promise<any> {
-		const filter: any[] = [{ job_status: 'PENDING' }];
+	async queueImportJobs(req: any, location?: string, reprocess?: boolean): Promise<any> {
+		const filter: any[] = [];
+
+		if (!reprocess) {
+			filter.push({ job_status: 'PENDING' });
+		}
+
 		if (location) {
 			filter.push({ location: location });
 		}
@@ -187,13 +191,17 @@ export class EcoinventImportService extends BaseWorker {
 				AND: filter,
 			},
 		});
+
 		for (const row of imports) {
+			const keyParts = row.key.split('.');
+
 			const job = await this.queue.add({
 				jobId: row.id,
 				bucket: row.bucket,
 				user: req.user,
 				organization: req.organization,
 				key: row.key,
+				lcia_key: `${keyParts[0]}.${keyParts[1]}.lcia_data.${keyParts[2]}`,
 				activity_name: row.activity_name,
 				location: row.location,
 				reference_product: row.reference_product,
@@ -207,6 +215,7 @@ export class EcoinventImportService extends BaseWorker {
 					job_status: 'QUEUED',
 				},
 			});
+
 			this.logger.info(`Queuing import job for file ${row.key}.`, { bucket: row.bucket, key: row.key, user: req.user, job: job.data });
 		}
 	}
