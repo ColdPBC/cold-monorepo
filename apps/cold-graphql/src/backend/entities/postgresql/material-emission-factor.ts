@@ -2,6 +2,7 @@ import { MaterialEmissionFactorHooks } from '../hooks/material-emission-factor.h
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import { EcoinventActivity } from './ecoinvent-activity';
 import { EmissionFactor } from './emission-factor';
 import { Material } from './material';
 
@@ -23,7 +24,7 @@ export class MaterialEmissionFactor {
 	@ManyToOne({ entity: () => Material, ref: true, index: 'material_emission_factors_material_id_idx1' })
 	material!: Ref<Material>;
 
-	@ManyToOne({ entity: () => EmissionFactor, ref: true, index: 'material_emission_factors_emission_factor_id_idx1' })
+	@ManyToOne({ entity: () => EmissionFactor, ref: true })
 	emissionFactor!: Ref<EmissionFactor>;
 
 	@Property({ type: 'datetime', length: 3 })
@@ -31,6 +32,9 @@ export class MaterialEmissionFactor {
 
 	@Property({ type: 'datetime', length: 3 })
 	updatedAt!: Date;
+
+	@ManyToOne({ entity: () => EcoinventActivity, ref: true, fieldName: 'eco_invent_activity_id', nullable: true, index: 'material_emission_factors_activity_id_idx1' })
+	ecoinventActivity?: Ref<EcoinventActivity>;
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof MaterialEmissionFactor, OrgContext>) {
