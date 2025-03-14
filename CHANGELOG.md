@@ -1,3 +1,11 @@
+# [1.594.0](https://github.com/coldPBC/cold-monorepo/compare/v1.593.0...v1.594.0) (2025-03-14)
+
+
+### Features
+
+* enhance ecoinvent import process with classification and impact handling ([4dfbc92](https://github.com/coldPBC/cold-monorepo/commit/4dfbc92cfc2b76f73a6daef8f97102bd68187734))
+* update database schema for ecoinvent activities and impacts, adding new classifications and constraints ([a637db2](https://github.com/coldPBC/cold-monorepo/commit/a637db2b2aaa496bbf0f9b83be3289dabec86304))
+
 # [1.593.0](https://github.com/coldPBC/cold-monorepo/compare/v1.592.0...v1.593.0) (2025-03-11)
 
 
