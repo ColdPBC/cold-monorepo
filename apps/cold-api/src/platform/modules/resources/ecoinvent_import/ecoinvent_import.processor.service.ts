@@ -183,7 +183,10 @@ export class EcoinventImportProcessorService extends BaseWorker {
 
 				await this.prisma.ecoinvent_impact_categories.upsert({
 					where: {
-						id: categoryId,
+						ecoinventImpactCategoryNameMethod: {
+							impact_method: impact.impactMethodName,
+							name: impactName,
+						},
 					},
 					create: {
 						id: categoryId,
@@ -223,7 +226,7 @@ export class EcoinventImportProcessorService extends BaseWorker {
 			return {};
 		} catch (error) {
 			this.logger.error(`Error importing EcoSpold file: ${key}`, { job, error });
-			return error;
+			throw error;
 		}
 	}
 }
