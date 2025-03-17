@@ -31,6 +31,8 @@ export class EcoinventImportService extends BaseWorker {
 					},
 				});
 			}
+
+			await job.discard();
 		});
 
 		this.queue.on('failed', async (job, error) => {
@@ -195,17 +197,20 @@ export class EcoinventImportService extends BaseWorker {
 		for (const row of imports) {
 			const keyParts = row.key.split('.');
 
-			const job = await this.queue.add({
-				jobId: row.id,
-				bucket: row.bucket,
-				user: req.user,
-				organization: req.organization,
-				key: row.key,
-				lcia_key: `${keyParts[0]}.${keyParts[1]}.lcia_data.${keyParts[2]}`,
-				activity_name: row.activity_name,
-				location: row.location,
-				reference_product: row.reference_product,
-			});
+			const job = await this.queue.add(
+				{
+					jobId: row.id,
+					bucket: row.bucket,
+					user: req.user,
+					organization: req.organization,
+					key: row.key,
+					lcia_key: `${keyParts[0]}.${keyParts[1]}.lcia_data.${keyParts[2]}`,
+					activity_name: row.activity_name,
+					location: row.location,
+					reference_product: row.reference_product,
+				},
+				{ removeOnComplete: true },
+			);
 
 			await this.prisma.ecoinvent_imports.update({
 				where: {

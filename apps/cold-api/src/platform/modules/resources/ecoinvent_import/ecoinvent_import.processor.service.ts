@@ -58,9 +58,9 @@ export class EcoinventImportProcessorService extends BaseWorker {
 			// Validate and convert the parsed XML using the Zod schema
 			const validatedData = EcoSpold2Schema.safeParse(parsedXML);
 
-			const fileActivity = parsedXML.ecoSpold?.childActivityDataset?.activityDescription?.activity;
+			const fileActivity = parsedXML.ecoSpold?.childActivityDataset?.activityDescription?.activity || parsedXML.ecoSpold?.activityDataset?.activityDescription?.activity;
 
-			if (!fileActivity && !fileActivity.activityName) {
+			if (!fileActivity || !fileActivity?.activityName) {
 				this.logger.error('No activity found in EcoSpold file', { file_activity: fileActivity });
 				throw new Error('No activity found in EcoSpold file');
 			}
