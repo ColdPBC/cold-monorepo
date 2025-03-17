@@ -1,3 +1,11 @@
+# [1.595.0](https://github.com/coldPBC/cold-monorepo/compare/v1.594.0...v1.595.0) (2025-03-17)
+
+
+### Features
+
+* add unique constraints and indexes for ecoinvent activities and impact categories ([515eb6f](https://github.com/coldPBC/cold-monorepo/commit/515eb6fa99148eee5595589f9a53cb789aaff4eb))
+* update ecoinvent impact category upsert logic and improve error handling ([047799e](https://github.com/coldPBC/cold-monorepo/commit/047799e89b441af8a3e37fafa9e801f12a9418ca))
+
 # [1.594.0](https://github.com/coldPBC/cold-monorepo/compare/v1.593.0...v1.594.0) (2025-03-14)
 
 
