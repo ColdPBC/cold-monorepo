@@ -860,7 +860,7 @@ model ecoinvent_impact_categories {
   updated_at                 DateTime                     @updatedAt
   ecoinvent_activity_impacts ecoinvent_activity_impacts[]
 
-  @@unique([name], name: "ecoinventImpactCategoryName")
+  @@unique([name, impact_method], name: "ecoinventImpactCategoryNameMethod")
   @@index([impact_method], map: "ecoinvent_impact_categories_impact_method_idx1")
 }
 
@@ -908,7 +908,8 @@ model ecoinvent_activities {
   ecoinvent_activity_impacts         ecoinvent_activity_impacts[]
   material_emission_factors          material_emission_factors[]
 
-  @@unique([name], name: "ecoinventActivityName")
+  @@unique([name, location], name: "ecoinventActivityName")
+	@@index([location], map: "ecoinvent_activities_location_idx1")
   @@index([name], map: "ecoinvent_activities_name_idx1")
   @@index([parent_activity_id], map: "ecoinvent_activities_parent_activity_id_idx1")
 }
