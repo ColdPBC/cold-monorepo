@@ -1,3 +1,10 @@
+# [1.598.0](https://github.com/coldPBC/cold-monorepo/compare/v1.597.0...v1.598.0) (2025-03-17)
+
+
+### Features
+
+* improve error handling and logging for EcoSpold file processing ([0635f01](https://github.com/coldPBC/cold-monorepo/commit/0635f01c3459deece73aa3a763b6958507e3dd8b))
+
 # [1.597.0](https://github.com/coldPBC/cold-monorepo/compare/v1.596.0...v1.597.0) (2025-03-17)
 
 
