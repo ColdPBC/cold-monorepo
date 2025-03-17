@@ -60,7 +60,8 @@ export class EcoinventImportProcessorService extends BaseWorker {
 
 			const fileActivity = parsedXML.ecoSpold?.childActivityDataset?.activityDescription?.activity;
 
-			if (!fileActivity) {
+			if (!fileActivity && !fileActivity.activityName) {
+				this.logger.error('No activity found in EcoSpold file', { file_activity: fileActivity });
 				throw new Error('No activity found in EcoSpold file');
 			}
 
@@ -75,6 +76,10 @@ export class EcoinventImportProcessorService extends BaseWorker {
 				}
 			} else {
 				description = `${description} ${genComment._ || ''}`;
+			}
+
+			if (!name || !location || !description) {
+				throw new Error('Missing name, location, or description in EcoSpold file');
 			}
 
 			// Persist the raw XML and validated JSON data.
@@ -101,7 +106,7 @@ export class EcoinventImportProcessorService extends BaseWorker {
 				},
 			});
 
-			this.logger.log(`Successfully imported EcoSpold file: ${key}`);
+			this.logger.log(`Successfully parsed EcoSpold file: ${key}`);
 
 			// Persist ecoinvent activity.
 			const activity = await this.prisma.ecoinvent_activities.upsert({
@@ -241,7 +246,7 @@ export class EcoinventImportProcessorService extends BaseWorker {
 
 			return {};
 		} catch (error) {
-			this.logger.error(`Error importing EcoSpold file: ${key}`, { job, error });
+			this.logger.error(`Error importing EcoSpold file: ${error.message}`, { job, ...error });
 			throw error;
 		}
 	}
