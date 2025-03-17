@@ -58,13 +58,17 @@ export class EcoinventImportProcessorService extends BaseWorker {
 			// Validate and convert the parsed XML using the Zod schema
 			const validatedData = EcoSpold2Schema.safeParse(parsedXML);
 
-			const name = parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.activityName._;
-			const location = parsedXML.ecoSpold.childActivityDataset.activityDescription.geography.shortname._;
-			let description = `${parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.includedActivitiesStart._ || ''} \n ${
-				parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.includedActivitiesEnd._ || ''
-			}`;
+			const fileActivity = parsedXML.ecoSpold?.childActivityDataset?.activityDescription?.activity;
 
-			const genComment = parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.generalComment.text;
+			if (!fileActivity) {
+				throw new Error('No activity found in EcoSpold file');
+			}
+
+			const name = fileActivity.activityName?._;
+			const location = parsedXML.ecoSpold?.childActivityDataset?.activityDescription?.geography?.shortname?._;
+			let description = `${fileActivity.includedActivitiesStart?._ || ''} \n ${fileActivity.includedActivitiesEnd?._ || ''}`;
+
+			const genComment = fileActivity.generalComment?.text;
 			if (genComment && Array.isArray(genComment)) {
 				for (const comment of genComment) {
 					description = `${description} ${comment._}`;
@@ -101,25 +105,27 @@ export class EcoinventImportProcessorService extends BaseWorker {
 
 			// Persist ecoinvent activity.
 			const activity = await this.prisma.ecoinvent_activities.upsert({
-				where: { id: parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.id },
+				where: { id: fileActivity.id },
 				update: {
-					name: parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.activityName._,
-					parent_activity_id: parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.parentActivityId,
+					name: fileActivity.activityName._,
+					parent_activity_id: fileActivity.parentActivityId,
 					description: description,
 					location: location,
 					raw_data: parsedLCIA,
 					updated_at: new Date(),
 				},
 				create: {
-					id: parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.id,
-					name: parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.activityName._,
-					parent_activity_id: parsedXML.ecoSpold.childActivityDataset.activityDescription.activity.parentActivityId,
+					id: fileActivity.id,
+					name: fileActivity.activityName._,
+					parent_activity_id: fileActivity.parentActivityId,
 					description: description,
 					raw_data: parsedLCIA,
 					location: location,
 					updated_at: new Date(),
 				},
 			});
+
+			this.logger.log(`Successfully upserted EcoSpold activity: ${key}`, { activity });
 
 			// process activity classifications
 			const classifications = Array.isArray(parsedLCIA.ecoSpold.childActivityDataset.activityDescription.classification)
@@ -147,6 +153,8 @@ export class EcoinventImportProcessorService extends BaseWorker {
 					},
 				});
 
+				this.logger.log(`Successfully imported EcoSpold classification: ${classificationName}`, classification);
+
 				// Persist classification.
 				let existing_activity_classification = await this.prisma.ecoinvent_activity_classifications.findUnique({
 					where: {
@@ -173,6 +181,8 @@ export class EcoinventImportProcessorService extends BaseWorker {
 						throw e;
 					}
 				}
+
+				this.logger.log(`Activity classification already linked: ${classificationName}`, existing_activity_classification);
 			}
 
 			// process activity impacts
@@ -199,8 +209,10 @@ export class EcoinventImportProcessorService extends BaseWorker {
 						updated_at: new Date(),
 					},
 				});
+
+				this.logger.log(`Upserted impact category ${impactName} using impact method: ${impact.impactMethodName}`, impactCategory);
 				// Persist impact.
-				await this.prisma.ecoinvent_activity_impacts.upsert({
+				const activityImpact = await this.prisma.ecoinvent_activity_impacts.upsert({
 					where: {
 						ecoinventActivityImpactKey: {
 							ecoinvent_activity_id: activity.id,
@@ -218,6 +230,10 @@ export class EcoinventImportProcessorService extends BaseWorker {
 					update: {
 						impact_value: +impact.amount,
 					},
+				});
+
+				this.logger.log(`Upserted activity impact ${activity.name} in category ${impactCategory.name} using impact method: ${impact.impactMethodName}`, {
+					activity_impact: activityImpact,
 				});
 			}
 
