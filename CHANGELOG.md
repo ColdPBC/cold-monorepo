@@ -1,3 +1,15 @@
+# [1.596.0](https://github.com/coldPBC/cold-monorepo/compare/v1.595.0...v1.596.0) (2025-03-17)
+
+
+### Bug Fixes
+
+* add S3 upload python scripts for ecoinvent datasets and LCIA data ([90daa3e](https://github.com/coldPBC/cold-monorepo/commit/90daa3ee7c7b680f7856cd4ef7344ff5b090c830))
+
+
+### Features
+
+* refactor impact category handling in ecoinvent upsert logic ([3a0335e](https://github.com/coldPBC/cold-monorepo/commit/3a0335e94af2f3dc2f11b5b7346a79fd90543e90))
+
 # [1.595.0](https://github.com/coldPBC/cold-monorepo/compare/v1.594.0...v1.595.0) (2025-03-17)
 
 
