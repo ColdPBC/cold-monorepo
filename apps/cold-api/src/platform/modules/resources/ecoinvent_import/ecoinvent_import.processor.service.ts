@@ -181,7 +181,7 @@ export class EcoinventImportProcessorService extends BaseWorker {
 				const categoryId = impact.impactCategoryId;
 				const impactName = impact.name;
 
-				await this.prisma.ecoinvent_impact_categories.upsert({
+				const impactCategory = await this.prisma.ecoinvent_impact_categories.upsert({
 					where: {
 						ecoinventImpactCategoryNameMethod: {
 							impact_method: impact.impactMethodName,
@@ -204,13 +204,13 @@ export class EcoinventImportProcessorService extends BaseWorker {
 					where: {
 						ecoinventActivityImpactKey: {
 							ecoinvent_activity_id: activity.id,
-							impact_category_id: categoryId,
+							impact_category_id: impactCategory.id,
 							impact_method_name: impact.impactMethodName,
 						},
 					},
 					create: {
 						ecoinvent_activity_id: activity.id,
-						impact_category_id: categoryId,
+						impact_category_id: impactCategory.id,
 						impact_method_name: impact.impactMethodName,
 						impact_value: +impact.amount,
 						impact_unit_name: impact.unitName,
