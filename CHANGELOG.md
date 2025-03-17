@@ -1,3 +1,10 @@
+# [1.599.0](https://github.com/coldPBC/cold-monorepo/compare/v1.598.0...v1.599.0) (2025-03-17)
+
+
+### Features
+
+* enhance EcoSpold file validation and improve job handling in ecoinvent import ([9d8fcb4](https://github.com/coldPBC/cold-monorepo/commit/9d8fcb49f3cca31ad8c5120668cef6059553113f))
+
 # [1.598.0](https://github.com/coldPBC/cold-monorepo/compare/v1.597.0...v1.598.0) (2025-03-17)
 
 
