@@ -1,3 +1,10 @@
+# [1.600.0](https://github.com/coldPBC/cold-monorepo/compare/v1.599.0...v1.600.0) (2025-03-18)
+
+
+### Features
+
+* add database indices for improved query performance in ecoinvent schema ([1fc3b65](https://github.com/coldPBC/cold-monorepo/commit/1fc3b6537dc2a9819f8b562026ad9a1cc585884c))
+
 # [1.599.0](https://github.com/coldPBC/cold-monorepo/compare/v1.598.0...v1.599.0) (2025-03-17)
 
 
