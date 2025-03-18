@@ -861,6 +861,7 @@ model ecoinvent_impact_categories {
   ecoinvent_activity_impacts ecoinvent_activity_impacts[]
 
   @@unique([name, impact_method], name: "ecoinventImpactCategoryNameMethod")
+	@@index([name], map: "ecoinvent_impact_categories_name_idx1")
   @@index([impact_method], map: "ecoinvent_impact_categories_impact_method_idx1")
 }
 
@@ -875,6 +876,8 @@ model ecoinvent_activity_impacts {
   ecoinvent_activity    ecoinvent_activities        @relation(fields: [ecoinvent_activity_id], references: [id], onDelete: Cascade)
 
   @@unique([ecoinvent_activity_id, impact_category_id, impact_method_name], name: "ecoinventActivityImpactKey")
+	@@index([ecoinvent_activity_id, impact_method_name], map: "ecoinvent_activity_impact_method_name_idx1")
+	@@index([impact_method_name], map: "ecoinvent_activity_impacts_impact_method_name_idx1")
   @@index([impact_category_id], map: "ecoinvent_activity_impacts_impact_category_id_idx1")
   @@index([ecoinvent_activity_id], map: "ecoinvent_activity_impacts_ecoinvent_activity_id_idx1")
   @@index([impact_value], map: "ecoinvent_activity_impacts_impact_value_idx1")

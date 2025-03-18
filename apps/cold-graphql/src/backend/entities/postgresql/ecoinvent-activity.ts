@@ -1,7 +1,7 @@
 import { EcoinventActivityHooks } from '../hooks/ecoinvent-activity.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Collection, Entity, Index, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Collection, Entity, Index, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 import { EcoinventActivityClassification } from './ecoinvent-activity-classification';
 import { EcoinventActivityImpact } from './ecoinvent-activity-impact';
 import { MaterialEmissionFactor } from './material-emission-factor';
@@ -22,7 +22,6 @@ export class EcoinventActivity {
 	id!: string;
 
 	@Index({ name: 'ecoinvent_activities_name_idx1' })
-	@Unique({ name: 'ecoinvent_activities_name_key' })
 	@Property({ type: 'text' })
 	name!: string;
 
@@ -39,6 +38,7 @@ export class EcoinventActivity {
 	@Property({ type: 'datetime', length: 3 })
 	updatedAt!: Date;
 
+	@Index({ name: 'ecoinvent_activities_location_idx1' })
 	@Property({ type: 'text', nullable: true })
 	location?: string;
 

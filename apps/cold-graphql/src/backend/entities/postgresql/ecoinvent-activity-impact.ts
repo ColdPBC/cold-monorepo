@@ -33,6 +33,7 @@ export class EcoinventActivityImpact {
 	@Property({ type: 'text' })
 	impactUnitName!: string;
 
+	@Index({ name: 'ecoinvent_activity_impacts_impact_method_name_idx1' })
 	@Property({ type: 'text' })
 	impactMethodName!: string;
 

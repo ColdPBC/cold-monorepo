@@ -1,7 +1,7 @@
 import { EcoinventImpactCategoryHooks } from '../hooks/ecoinvent-impact-category.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Collection, Entity, Index, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Collection, Entity, Index, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 import { EcoinventActivityImpact } from './ecoinvent-activity-impact';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -23,7 +23,7 @@ export class EcoinventImpactCategory {
 	@Property({ type: 'text' })
 	impactMethod!: string;
 
-	@Unique({ name: 'ecoinvent_impact_categories_name_key' })
+	@Index({ name: 'ecoinvent_impact_categories_name_idx1' })
 	@Property({ type: 'text' })
 	name!: string;
 
