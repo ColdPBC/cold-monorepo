@@ -6,8 +6,7 @@ import { OrgContext } from '../libs/acls/acl_policies';
 import { merge, set } from 'lodash';
 import { v4 } from 'uuid';
 import { GuidPrefixes } from '../libs/cuid/compliance.enums';
-import { Organization } from './postgresql';
-import { EntityManager } from '@mikro-orm/core';
+import {EntityManager, EntityName} from '@mikro-orm/core';
 
 export class BaseSidecar {
 	logger;
@@ -112,14 +111,21 @@ export class BaseSidecar {
 			em.clear(); //clear EM cache
 			for (const item of params.args.items as (typeof this.entity)[]) {
 				if (item.metadata) {
-					const response = await em.findOneOrFail(Organization, { id: item.id });
-					// parse the metadata only if it's type is a string which must be in order to send from postman
-					const source = typeof response?.metadata === 'string' ? JSON.parse(response?.metadata) : response.metadata;
-					const update = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata;
-					item.metadata = merge({}, source, update);
+          const response = await em.findOneOrFail(this.entity.name as EntityName<{
+            id: string;
+            metadata?: object | string | null;
+          }>, { id: item.id })
 
-					this.logger.log(`Updated metadata for ${this.entityName}`, { metadata: item.metadata });
-				}
+          // Check if metadata exists on the response
+          const source = response.metadata ?
+            (typeof response.metadata === 'string' ? JSON.parse(response.metadata) : response.metadata) :
+            {};
+
+          const update = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata;
+          item.metadata = merge({}, source, update);
+
+          this.logger.log(`Updated metadata for ${this.entityName}`, { metadata: item.metadata });
+        }
 
 				set(item, 'updatedAt', new Date());
 			}
