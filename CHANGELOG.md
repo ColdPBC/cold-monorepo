@@ -1,3 +1,17 @@
+# [1.601.0](https://github.com/coldPBC/cold-monorepo/compare/v1.600.1...v1.601.0) (2025-03-19)
+
+
+### Features
+
+* improve OpenAI response handling with conditional schema processing and enhanced logging ([5038c0e](https://github.com/coldPBC/cold-monorepo/commit/5038c0ea19e06a404f440ec51e1148b1550ead77))
+
+## [1.600.1](https://github.com/coldPBC/cold-monorepo/compare/v1.600.0...v1.600.1) (2025-03-19)
+
+
+### Bug Fixes
+
+* Fix metadata handling in BaseSidecar entity updates ([4dd3df6](https://github.com/coldPBC/cold-monorepo/commit/4dd3df62faafd159744492ab639393afb6b193ee))
+
 # [1.600.0](https://github.com/coldPBC/cold-monorepo/compare/v1.599.0...v1.600.0) (2025-03-18)
 
 
