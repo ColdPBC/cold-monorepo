@@ -12,7 +12,6 @@ import React, { useContext } from 'react';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { isAxiosError } from 'axios';
 import { useColdContext } from '@coldpbc/hooks';
-import { isArray } from 'lodash';
 
 export const EmissionsCarbonFootprintBase = () => {
   const { logBrowser } = useColdContext();
@@ -20,7 +19,6 @@ export const EmissionsCarbonFootprintBase = () => {
   const { facilityOptions, yearOptions, emissions } = data;
 
   if ((isAxiosError(emissions) && emissions?.response?.status === 404) || (isArray(emissions) && emissions.length === 0)) {
-    logBrowser('No emissions data found', 'error', { data }, data);
     return (
       <MainContent title="Carbon Footprint">
         <div className={'w-full flex flex-col space-y-[35px]'}>

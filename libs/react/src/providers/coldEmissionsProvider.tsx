@@ -6,7 +6,7 @@ import { Spinner } from '@coldpbc/components';
 import { ErrorType } from '@coldpbc/enums';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { isAxiosError } from 'axios';
-import { find, forEach, map, sortBy, uniq } from 'lodash';
+import {find, forEach, isArray, map, sortBy, uniq} from 'lodash';
 
 export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
   const { logError, logBrowser } = useColdContext();
@@ -90,8 +90,13 @@ export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
 
   let uniqueScopes = Array<number>();
 
-  if (isAxiosError(data) && data?.response?.status === 404) {
-    logBrowser('No emissions data found', 'error', { data }, data);
+  if ((isAxiosError(data) && data?.response?.status === 404) || (isArray(data) && data.length === 0)) {
+    // log as error if there is a 404 error
+    if(isAxiosError(data)) {
+      logBrowser('No emissions data found. 404 Error', 'error', { data }, data);
+    } else {
+      logBrowser('No emissions data found', 'info', { data });
+    }
   } else {
     const yearSet = new Set<number>();
 
