@@ -1,7 +1,5 @@
 import {
-  AppContent,
   Card,
-  CenterColumnContent,
   DismissableInfoCard,
   EmissionsCarbonFootprintCharts,
   EmissionsDonutChart,
@@ -71,7 +69,7 @@ export const EmissionsCarbonFootprintBase = () => {
   };
 
   return (
-    <MainContent className={'relative gap-0 py-0'}>
+    <MainContent className={'relative gap-0 py-0 mb-10'}>
       <div className={'flex flex-row justify-between py-[36px] sticky top-0 shadow-2xl bg-bgc-main z-10 w-full'}>
         <div className={'text-h1 text-tc-primary'}>Carbon Footprint</div>
         <div className={'flex flex-row gap-[5px]'}>

@@ -175,37 +175,39 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
 
   const getTableActivityItem = (row: { activity: string; percentage: string; tCO2e: number; color: string }) => {
     return (
-      <Table.Cell className={`flex items-center font-bold w-[371px] ${getTableActivityClassName(row.activity)}`} theme={darkTableTheme.table?.body?.cell}>
-        {isRowSelected(row.activity) && (
+      <Table.Cell className={`w-6/12 ${getTableActivityClassName(row.activity)}`} theme={darkTableTheme.table?.body?.cell}>
+        <div className={'flex items-center w-full font-bold'}>
+          {isRowSelected(row.activity) && (
+            <div
+              className="h-[51px] w-[4px]"
+              style={{
+                backgroundColor: row.color,
+              }}></div>
+          )}
           <div
-            className="h-[51px] w-[4px]"
             style={{
-              backgroundColor: row.color,
-            }}></div>
-        )}
-        <div
-          style={{
-            background: row.color,
-            border: '2px solid rgba(0, 0, 0, 0.2)',
-          }}
-          className={`mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl ${isRowSelected(row.activity) ? 'ml-3' : ''}`}
-        />
-        {getCategoryChip(row.activity)}
-        <div className={`${getTableActivityWidth(row.activity)} truncate`}>{capitalize(row.activity)}</div>
-        {
-          // show 'Other Activities' row only for scope 3 and by activity
-          scope_category === 3 && byActivity && row.activity === 'Other Activities' && (
-            <div className={'w-[8px] h-[8px]'}>
-              <ColdIcon name={showOtherActivities ? IconNames.ColdChevronUpIcon : IconNames.ColdChevronDownIcon} />
-            </div>
-          )
-        }
+              background: row.color,
+              border: '2px solid rgba(0, 0, 0, 0.2)',
+            }}
+            className={`mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl ${isRowSelected(row.activity) ? 'ml-3' : ''}`}
+          />
+          {getCategoryChip(row.activity)}
+          <div className={`${getTableActivityWidth(row.activity)} truncate`}>{capitalize(row.activity)}</div>
+          {
+            // show 'Other Activities' row only for scope 3 and by activity
+            scope_category === 3 && byActivity && row.activity === 'Other Activities' && (
+              <div className={'w-[8px] h-[8px]'}>
+                <ColdIcon name={showOtherActivities ? IconNames.ColdChevronUpIcon : IconNames.ColdChevronDownIcon} />
+              </div>
+            )
+          }
+        </div>
       </Table.Cell>
     );
   };
 
   return (
-    <div className={'w-[663px]'}>
+    <div className={'w-full'}>
       <Table className="text-white" theme={darkTableTheme.table} data-testid={'footprint-detail-chart-table'}>
         <Table.Head className="text-white normal-case">
           {map(tableData.definition, (def, i) => (
@@ -219,7 +221,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
             <Table.Row
               key={`${row.activity}-${i}`}
               theme={darkTableTheme.table?.row}
-              className={'w-[742px]'}
+              className={'w-full'}
               onMouseEnter={() => {
                 setSelectedActivity({ scope: scope_category, activity: row.activity });
               }}

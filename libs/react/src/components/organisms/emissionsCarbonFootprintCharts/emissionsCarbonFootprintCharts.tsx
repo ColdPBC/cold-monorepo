@@ -291,14 +291,14 @@ const _EmissionsCarbonFootprintCharts = () => {
               </div>
             </div>
           </div>
-          <div className={'flex flex-row gap-[32px]'}>
-            <div className={'flex flex-col justify-start w-[347px] gap-[32px]'}>
-              <div className={'w-[347px] h-[347px] relative'}>
+          <div className={'flex flex-row gap-[32px] w-full'}>
+            <div className={'flex flex-col justify-start w-2/5 gap-[32px]'}>
+              <div className={'w-full h-[347px] relative'}>
                 <CarbonFootprintDetailChip emissions={totalEmissions} center />
                 <Chart options={chartOptions} type="doughnut" data={emissionsDataSet} plugins={chartPlugins} data-chromatic="ignore" />
               </div>
             </div>
-            <div className={'flex flex-col gap-[16px] w-full'}>
+            <div className={'flex flex-col gap-[16px] w-3/5'}>
               {uniqueScopes.map(scope => {
                 return (
                   <ScopeDataGrid

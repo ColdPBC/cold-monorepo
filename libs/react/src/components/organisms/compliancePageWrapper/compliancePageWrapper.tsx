@@ -5,7 +5,7 @@ import { InputOption } from '@coldpbc/interfaces';
 import { ColdCompliancePageContext } from '@coldpbc/context';
 
 export const CompliancePageWrapper = () => {
-  const { data, filter, setFilter } = useContext(ColdCompliancePageContext);
+  const { data, filter, setFilter, isLoading } = useContext(ColdCompliancePageContext);
   const { allComplianceSets } = data;
   const getFilter = () => {
     const filterOptions: InputOption[] = [
@@ -30,7 +30,11 @@ export const CompliancePageWrapper = () => {
   };
 
   return (
-    <MainContent title={'Assessments'} headerElement={getFilter()}>
+    <MainContent
+      title={'Assessments'}
+      headerElement={getFilter()}
+      isLoading={isLoading}
+    >
       <div className={'w-full space-y-[24px]'}>
         {allComplianceSets
           ?.sort((a, b) => {

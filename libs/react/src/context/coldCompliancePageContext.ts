@@ -10,6 +10,7 @@ export interface CompliancePageContextType {
   data: CompliancePageData;
   filter: CompliancePageFilter;
   setFilter: (filter: CompliancePageFilter) => void;
+  isLoading: boolean;
 }
 
 export const ColdCompliancePageContext = createContext<CompliancePageContextType>({
@@ -18,4 +19,5 @@ export const ColdCompliancePageContext = createContext<CompliancePageContextType
   },
   filter: CompliancePageFilter.all,
   setFilter: () => {},
+  isLoading: true,
 });
