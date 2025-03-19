@@ -32,21 +32,18 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
   const tableData = {
     definition: [
       {
-        size: 'w-[379px]',
         field: 'activity',
         cellStyle: '',
         headerStyle: '',
         headerTitle: `Scope ${scope_category}`,
       },
       {
-        size: 'w-[272px]',
         field: 'percentage',
         cellStyle: '',
         headerStyle: '',
         headerTitle: '%',
       },
       {
-        size: 'w-[81px]',
         field: 'tCO2e',
         cellStyle: '',
         headerStyle: '',
@@ -74,7 +71,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
   });
 
   if (byActivity) {
-    forEach(sortedActivities, (activity, index) => {
+    forEach(sortedActivities, (activity) => {
       const percentage = ((activity.emissions / totalEmissions) * 100).toFixed(1) + '%';
       tableData.data.push({
         activity: activity.activity,
@@ -131,19 +128,11 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
     return null;
   }
 
-  const getTableRowClassName = (activity: string, color: string) => {
+  const getTableRowClassName = (activity: string) => {
     if (isRowSelected(activity)) {
       return `px-4 py-4 bg-gray-70`;
     } else {
       return 'px-4 py-4';
-    }
-  };
-
-  const getTableActivityWidth = (activity: string) => {
-    if (scope_category === 3 && !byActivity) {
-      return 'w-full';
-    } else {
-      return 'w-full';
     }
   };
 
@@ -175,8 +164,8 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
 
   const getTableActivityItem = (row: { activity: string; percentage: string; tCO2e: number; color: string }) => {
     return (
-      <Table.Cell className={`w-6/12 ${getTableActivityClassName(row.activity)}`} theme={darkTableTheme.table?.body?.cell}>
-        <div className={'flex items-center w-full font-bold'}>
+      <Table.Cell className={`${getTableActivityClassName(row.activity)}`} theme={darkTableTheme.table?.body?.cell}>
+        <div className={'flex flex-row items-center w-full font-bold whitespace-nowrap'}>
           {isRowSelected(row.activity) && (
             <div
               className="h-[51px] w-[4px]"
@@ -192,7 +181,9 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
             className={`mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl ${isRowSelected(row.activity) ? 'ml-3' : ''}`}
           />
           {getCategoryChip(row.activity)}
-          <div className={`${getTableActivityWidth(row.activity)} truncate`}>{capitalize(row.activity)}</div>
+          <div className={'w-full truncate'}>
+            <span>{capitalize(row.activity)}</span>
+          </div>
           {
             // show 'Other Activities' row only for scope 3 and by activity
             scope_category === 3 && byActivity && row.activity === 'Other Activities' && (
@@ -208,7 +199,12 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
 
   return (
     <div className={'w-full'}>
-      <Table className="text-white" theme={darkTableTheme.table} data-testid={'footprint-detail-chart-table'}>
+      <Table className="text-white table-fixed" theme={darkTableTheme.table} data-testid={'footprint-detail-chart-table'}>
+        <colgroup>
+          <col className="w-1/2" />
+          <col className="w-4/12" />
+          <col className="w-2/12" />
+        </colgroup>
         <Table.Head className="text-white normal-case">
           {map(tableData.definition, (def, i) => (
             <Table.HeadCell key={`${def.field}-${i}`} theme={darkTableTheme.table?.head?.cell}>
@@ -234,7 +230,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
                 }
               }}>
               {getTableActivityItem(row)}
-              <Table.Cell theme={darkTableTheme.table?.body?.cell} className={`w-4/12 ${getTableRowClassName(row.activity, row.color)}`}>
+              <Table.Cell theme={darkTableTheme.table?.body?.cell} className={`${getTableRowClassName(row.activity)}`}>
                 <div className={'flex flex-row items-center h-full'}>
                   <div className={'min-w-[65px] h-full'}>{row.percentage}</div>
                   <div className={'w-full flex flex-row items-center h-full'}>
@@ -248,7 +244,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
                   </div>
                 </div>
               </Table.Cell>
-              <Table.Cell theme={darkTableTheme.table?.body?.cell} className={`w-2/12 ${getTableRowClassName(row.activity, row.color)}`}>
+              <Table.Cell theme={darkTableTheme.table?.body?.cell} className={`${getTableRowClassName(row.activity)}`}>
                 {numeral(row.tCO2e).format('0,0,0')}
               </Table.Cell>
             </Table.Row>
