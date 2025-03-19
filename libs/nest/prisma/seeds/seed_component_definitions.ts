@@ -65,41 +65,33 @@ const seeds: Array<{
     type: 'DATAGRID',
     description: 'Provides a table for managing team members',
     definition: {
-      items: [
+      "items": [
         {
-          field: 'image',
-          hideTitle: 'true',
-          headerTitle: 'Profile Image',
-          size: 'w-8',
-          headerStyle: 'py-4',
-          cellStyle: 'py-2 px-4 h-16',
+          "field": "name",
+          "cellStyle": "h-16",
+          "headerStyle": "py-4",
+          "headerTitle": "NAME"
         },
         {
-          field: 'name',
-          headerTitle: 'NAME',
-          headerStyle: 'py-4',
-          cellStyle: 'h-16',
+          "field": "email",
+          "cellStyle": "h-16",
+          "headerStyle": "py-4",
+          "headerTitle": "EMAIL"
         },
         {
-          field: 'role',
-          headerTitle: 'ROLE',
-          headerStyle: 'py-4',
-          cellStyle: 'h-16',
+          "field": "role",
+          "cellStyle": "h-16",
+          "headerStyle": "py-4",
+          "headerTitle": "ROLE"
         },
         {
-          field: 'status',
-          headerTitle: 'STATUS',
-          headerStyle: 'py-4',
-          cellStyle: 'h-16',
-        },
-        {
-          field: 'actions',
-          hideTitle: 'true',
-          headerTitle: 'Table Actions',
-          size: 'w-8',
-          headerStyle: 'py-4',
-          cellStyle: 'justify-end grid content-center h-16',
-        },
+          "size": "w-[60px]",
+          "field": "actions",
+          "cellStyle": "",
+          "hideTitle": "true",
+          "headerStyle": "py-4",
+          "headerTitle": "Table Actions"
+        }
       ],
     },
   },
