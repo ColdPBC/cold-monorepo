@@ -30,7 +30,7 @@ const _SustainabilityPage = () => {
 
   if (sustainabilityAttributesQuery.isLoading) {
     return (
-      <MainContent title={'Sustainability Claims'} className={'w-[calc(100%-100px)]'}>
+      <MainContent title={'Sustainability Claims'} className={'w-[calc(100%-100px)] min-w-0'}>
         <Spinner />
       </MainContent>
     );
@@ -48,7 +48,7 @@ const _SustainabilityPage = () => {
   }
 
   return (
-		<MainContent title={'Sustainability Claims'} className={'w-[calc(100%-100px)]'}>
+		<MainContent title={'Sustainability Claims'} className={'w-[calc(100%-100px)] min-w-0'}>
       <Tabs
         tabs={[
           {

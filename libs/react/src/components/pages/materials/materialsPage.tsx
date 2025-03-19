@@ -38,7 +38,7 @@ const _MaterialsPage = () => {
   };
 
   return (
-    <MainContent title="Materials" headerElement={getPageButtons()} className={'w-[calc(100%-100px)]'}>
+    <MainContent title="Materials" headerElement={getPageButtons()}>
       <MaterialsDataGrid
         onStateChange={handleGridStateChange}
         // @ts-ignore

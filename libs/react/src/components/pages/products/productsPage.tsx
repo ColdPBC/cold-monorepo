@@ -38,7 +38,7 @@ const _ProductsPage = () => {
   };
 
   return (
-    <MainContent title="Products" headerElement={getPageButtons()} className={'w-[calc(100%-100px)]'}>
+    <MainContent title="Products" headerElement={getPageButtons()}>
       <ProductsDataGrid
         onStateChange={handleGridStateChange}
         // @ts-ignore

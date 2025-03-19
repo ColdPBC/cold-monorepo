@@ -22,7 +22,7 @@ export const EmissionsCarbonFootprintBase = () => {
   if ((isAxiosError(emissions) && emissions?.response?.status === 404) || (isArray(emissions) && emissions.length === 0)) {
     logBrowser('No emissions data found', 'error', { data }, data);
     return (
-      <MainContent title="Carbon Footprint" className={'w-[calc(100%-100px)] min-w-[1129px]'}>
+      <MainContent title="Carbon Footprint">
         <div className={'w-full flex flex-col space-y-[35px]'}>
           <DismissableInfoCard
             text="Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e."

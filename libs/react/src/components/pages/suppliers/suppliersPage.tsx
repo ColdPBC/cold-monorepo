@@ -17,7 +17,7 @@ const _SuppliersPage = () => {
   };
 
   return (
-    <MainContent title="Suppliers" className={'w-[calc(100%-100px)]'} headerElement={getPageButtons()}>
+    <MainContent title="Suppliers" headerElement={getPageButtons()}>
       <Tabs
         tabs={[
           {

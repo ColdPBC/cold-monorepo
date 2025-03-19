@@ -43,7 +43,7 @@ export function MainContent(props: PropsWithChildren<MainContentProps>) {
 		return (
 			<div className={twMerge('w-full flex flex-col items-center gap-6 text-tc-primary', props.className)}>
 				<Breadcrumbs items={props.breadcrumbs} />
-				<div className={twMerge('w-full flex flex-col px-[50px] gap-[40px]', props.contentClassName)}>
+				<div className={twMerge('w-[calc(100%-100px)] min-w-[1129px] flex flex-col px-[50px] gap-[40px]', props.contentClassName)}>
           {
             props.title && (
               <div className={'w-full flex flex-row justify-between items-center'}>

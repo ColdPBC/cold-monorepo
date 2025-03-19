@@ -148,7 +148,7 @@ const _UserSettings = () => {
           },
         }}
       />
-      <div className="flex w-full">
+      <div className="flex w-full flow-row justify-between">
         <div className="flex justify-center items-center w-[400px] mr-10">
           {picture ? (
             <img className="w-[120px] h-auto rounded-2xl" src={picture} alt="profile" />
@@ -160,9 +160,9 @@ const _UserSettings = () => {
             </svg>
           )}
         </div>
-        <div className="flex-1">
+        <div className="flex-1 max-w-[800px]">
           <div className="flex flex-1 flex-col mb-11">
-            <label htmlFor="first-name" className="text-bgc-accent mb-1 text-sm text-gray-110">
+            <label htmlFor="first-name" className="mb-1 text-sm text-gray-110">
               First Name
             </label>
             <div className="flex">
@@ -179,7 +179,7 @@ const _UserSettings = () => {
             </div>
           </div>
           <div className="flex flex-col mb-5">
-            <label htmlFor="last-name" className="text-bgc-accent mb-1 text-sm text-gray-110">
+            <label htmlFor="last-name" className="mb-1 text-sm text-gray-110">
               Last Name
             </label>
             <div className="flex">

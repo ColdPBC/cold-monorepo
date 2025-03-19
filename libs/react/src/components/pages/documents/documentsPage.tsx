@@ -184,7 +184,7 @@ const _DocumentsPage = () => {
 
 	return (
 		<div className="relative overflow-y-auto h-full w-full">
-			<MainContent title={ldFlags.showNewDocumentUploadUxCold1410 ? "Assurance Documents" : "Documents"} className={'gap-[40px] w-[calc(100%-100px)] min-w-[1129px]'} headerElement={getPageButtons()}>
+			<MainContent title={ldFlags.showNewDocumentUploadUxCold1410 ? "Assurance Documents" : "Documents"} className={'gap-[40px]'} headerElement={getPageButtons()}>
 				<DocumentsHeaderTypes files={files} />
         <AiProcessingDocumentsBanner count={files.filter(file => file.processingStatus === ProcessingStatus.AI_PROCESSING).length} />
 				<DocumentsTable files={files} selectDocument={selectDocument} />

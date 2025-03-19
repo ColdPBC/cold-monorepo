@@ -240,7 +240,6 @@ export const _UploadsPage = () => {
     <MainContent
       title = { 'Uploads' }
       isLoading={uploadsQuery.isLoading}
-      className={'w-[calc(100%-100px)]'}
       headerElement={
       <UploadModal
         refreshData={uploadsQuery.mutate}
