@@ -3,7 +3,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { QuestionnaireQuestionItem } from '@coldpbc/components';
 import { QuestionnaireQuestion } from '@coldpbc/interfaces';
-import { getComplianceMock, StoryMockProvider } from '@coldpbc/mocks';
+import {getComplianceMock, QuestionnaireContextMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof QuestionnaireQuestionItem> = {
   title: 'Molecules/QuestionnaireQuestionItem',
@@ -550,20 +550,20 @@ export const MultiSelectWithScoring: Story = {
 
 const QuestionnaireStory = (args: { question: QuestionnaireQuestion; number: number }) => {
   return (
-    <StoryMockProvider>
+    <QuestionnaireContextMockProvider>
       <QuestionnaireQuestionItem {...args} questionnaireMutate={() => {}} sectionId={'1'} sectionGroupId={'1'} />
-    </StoryMockProvider>
+    </QuestionnaireContextMockProvider>
   );
 };
 
 const BCorpQuestionnaire = (args: { question: QuestionnaireQuestion; number: number }) => {
   return (
-    <StoryMockProvider
+    <QuestionnaireContextMockProvider
       complianceQuestionnaireContext={{
         name: 'b_corp_2024',
         complianceDefinition: getComplianceMock().find(compliance => compliance.name === 'b_corp_2024'),
       }}>
       <QuestionnaireQuestionItem {...args} questionnaireMutate={() => {}} sectionId={'1'} sectionGroupId={'1'} />
-    </StoryMockProvider>
+    </QuestionnaireContextMockProvider>
   );
 };

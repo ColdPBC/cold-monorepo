@@ -2,20 +2,14 @@ import React, { PropsWithChildren, useEffect } from 'react';
 import ColdContext, {ColdContextType, Organization} from '../../context/coldContext';
 import { worker } from '../browser';
 import { HttpHandler } from 'msw';
-import { SWRConfig, SWRResponse } from 'swr';
+import { SWRConfig } from 'swr';
 import { MemoryRouter, MemoryRouterProps } from 'react-router-dom';
 import { Auth0ProviderOptions } from '@auth0/auth0-react';
 import { ErrorType } from '@coldpbc/enums';
 import { WizardContext, WizardContextType } from '@coldpbc/components';
 import ColdMQTTContext from '../../context/coldMQTTContext';
-import { mockMQTTContext } from '../mqtt/mockMQTTContext';
+import { mockMQTTContext } from '../mqtt';
 import { defaultMqttDataHandler, defaultMqttTopics } from '../mqtt';
-import {
-	ColdComplianceQuestionnaireContext,
-	ComplianceQuestionnaireContextType,
-} from '@coldpbc/context';
-import { getComplianceMock, getQuestionnaireSidebarComplianceMock } from '../complianceMock';
-import { AIDetails } from '@coldpbc/interfaces';
 import { defaultGraphqlMocks } from '../graphql';
 import { ColdApolloContext } from '@coldpbc/providers';
 import { createMockClient, RequestHandler } from 'mock-apollo-client';
@@ -28,7 +22,6 @@ export interface StoryMockProviderProps {
 	coldContext?: ColdContextType;
 	wizardContext?: WizardContextType;
 	mqttTopics?: { [key: string]: (args: any) => any };
-	complianceQuestionnaireContext?: Partial<ComplianceQuestionnaireContextType>;
 	graphqlMocks?: {
 		query: DocumentNode;
 		handler: RequestHandler;
@@ -64,33 +57,6 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
 
 	const mqttTopics = props.mqttTopics ? props.mqttTopics : defaultMqttTopics;
 	const mqttContextValue = mockMQTTContext(defaultMqttDataHandler, mqttTopics);
-
-	const [complianceQuestionnaireFocusQuestion, setComplianceQuestionnaireFocusQuestion] = React.useState<{
-		key: string;
-		aiDetails: AIDetails;
-	} | null>(props.complianceQuestionnaireContext?.focusQuestion ?? null);
-
-	const [complianceQuestionnaireScrollToQuestion, setComplianceQuestionnaireScrollToQuestion] = React.useState<string | null>(
-		props.complianceQuestionnaireContext?.scrollToQuestion ?? null,
-	);
-
-	const complianceQuestionnaireContextValue: ComplianceQuestionnaireContextType = {
-		name: 'rei_pia_2024',
-		sectionGroups: {
-			data: getQuestionnaireSidebarComplianceMock(),
-			error: undefined,
-			revalidate: () => {},
-			isValidating: false,
-			isLoading: false,
-			mutate: () => Promise.resolve(),
-		} as SWRResponse<any, any, any>,
-		complianceDefinition: getComplianceMock().find(c => c.name === 'rei_pia_2024'),
-		...props.complianceQuestionnaireContext,
-		scrollToQuestion: complianceQuestionnaireScrollToQuestion,
-		setScrollToQuestion: props.complianceQuestionnaireContext?.setScrollToQuestion ?? setComplianceQuestionnaireScrollToQuestion,
-		focusQuestion: complianceQuestionnaireFocusQuestion,
-		setFocusQuestion: props.complianceQuestionnaireContext?.setFocusQuestion ?? setComplianceQuestionnaireFocusQuestion,
-	};
 
 	const client = createMockClient({
 		cache: new InMemoryCache(),
@@ -148,16 +114,14 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
 						publishMessage: mqttContextValue.publishMessage,
 						subscribeSWR: mqttContextValue.subscribeSWR,
 					}}>
-						<ColdComplianceQuestionnaireContext.Provider value={complianceQuestionnaireContextValue}>
-							<ColdApolloContext.Provider
-								value={{
-									client: client,
-								}}>
-								<SWRConfig value={{ provider: () => new Map() }}>
-									<MemoryRouter {...props.memoryRouterProps}>{props.children}</MemoryRouter>
-								</SWRConfig>
-							</ColdApolloContext.Provider>
-						</ColdComplianceQuestionnaireContext.Provider>
+            <ColdApolloContext.Provider
+              value={{
+                client: client,
+              }}>
+              <SWRConfig value={{ provider: () => new Map() }}>
+                <MemoryRouter {...props.memoryRouterProps}>{props.children}</MemoryRouter>
+              </SWRConfig>
+            </ColdApolloContext.Provider>
 				</ColdMQTTContext.Provider>
 			</WizardContext.Provider>
 		</ColdContext.Provider>

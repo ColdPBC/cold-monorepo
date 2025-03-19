@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { QuestionnaireDetailSidebar } from '@coldpbc/components';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { QuestionnaireContextMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof QuestionnaireDetailSidebar> = {
   title: 'Organisms/QuestionnaireDetailSidebar',
@@ -21,7 +21,7 @@ export const Default: Story = {
 
 const SidebarStory = () => {
   return (
-    <StoryMockProvider
+    <QuestionnaireContextMockProvider
       complianceQuestionnaireContext={{
         focusQuestion: {
           key: 'key',
@@ -77,6 +77,6 @@ const SidebarStory = () => {
       <div className={'w-[407px] h-screen'}>
         <QuestionnaireDetailSidebar />
       </div>
-    </StoryMockProvider>
+    </QuestionnaireContextMockProvider>
   );
 };

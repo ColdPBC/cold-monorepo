@@ -1,8 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { QuestionnaireContainer } from '@coldpbc/components';
-import { StoryMockProvider } from '@coldpbc/mocks';
-import { useState } from 'react';
+import { QuestionnaireContextMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof QuestionnaireContainer> = {
   title: 'Organisms/QuestionnaireContainer',
@@ -22,10 +21,10 @@ export const Default: Story = {
 
 const QuestionnaireContainerStory = (args: any) => {
   return (
-    <StoryMockProvider>
+    <QuestionnaireContextMockProvider>
       <div className={'w-[982px] h-screen'}>
         <QuestionnaireContainer />
       </div>
-    </StoryMockProvider>
+    </QuestionnaireContextMockProvider>
   );
 };

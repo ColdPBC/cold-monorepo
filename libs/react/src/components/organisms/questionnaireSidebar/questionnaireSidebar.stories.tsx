@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { QuestionnaireSidebar } from '@coldpbc/components';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { QuestionnaireContextMockProvider } from '@coldpbc/mocks';
 import { useState } from 'react';
 
 const meta: Meta<typeof QuestionnaireSidebar> = {
@@ -27,7 +27,7 @@ export const Default: Story = {
 const SidebarStory = (args: any) => {
   const [open, setOpen] = useState(true);
   return (
-    <StoryMockProvider>
+    <QuestionnaireContextMockProvider>
       <div className={'w-[407px] h-screen'}>
         <QuestionnaireSidebar
           sidebarOpen={open}
@@ -36,6 +36,6 @@ const SidebarStory = (args: any) => {
           }}
         />
       </div>
-    </StoryMockProvider>
+    </QuestionnaireContextMockProvider>
   );
 };

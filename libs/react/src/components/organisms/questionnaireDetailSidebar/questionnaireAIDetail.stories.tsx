@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { QuestionnaireAIDetail, QuestionnaireAIDetailProps } from '@coldpbc/components';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { QuestionnaireContextMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof QuestionnaireAIDetail> = {
   title: 'Organisms/QuestionnaireAIDetail',
@@ -475,9 +475,9 @@ const AIDetailStory = (args: QuestionnaireAIDetailProps) => {
   const { aiDetails } = args;
   return (
     <div className={'w-[407px] h-screen'}>
-      <StoryMockProvider>
+      <QuestionnaireContextMockProvider>
         <QuestionnaireAIDetail aiDetails={aiDetails} />
-      </StoryMockProvider>
+      </QuestionnaireContextMockProvider>
     </div>
   );
 };
