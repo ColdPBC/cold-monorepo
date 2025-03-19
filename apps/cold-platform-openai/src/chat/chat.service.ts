@@ -76,7 +76,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
 			if (!schema) {
 				classifyResponse = await openai.beta.chat.completions.parse({
-					model: 'gpt-4o-2024-08-06',
+					model: 'o3-mini',
 					messages: [
 						{
 							role: 'system',
@@ -88,10 +88,20 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 						},
 					],
 				});
+
+				this.logger.info('Received response from OpenAI', {
+					user,
+					organization,
+					question,
+					system_prompt,
+					parsed: classifyResponse?.choices['0']?.message?.content,
+				});
+
+				return classifyResponse?.choices['0']?.message?.content;
 			} else {
 				const responseSchema = eval(jsonSchemaToZod(schema, { module: 'cjs' }));
 				classifyResponse = await openai.beta.chat.completions.parse({
-					model: 'gpt-4o-2024-08-06',
+					model: 'o3-mini',
 					messages: [
 						{
 							role: 'system',
@@ -104,9 +114,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 					],
 					response_format: zodResponseFormat(responseSchema, 'microservice_chat'),
 				});
-			}
 
-			if (classifyResponse) {
 				this.logger.info('Received response from OpenAI', {
 					user,
 					organization,
@@ -116,18 +124,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 				});
 
 				return classifyResponse?.choices['0']?.message?.parsed;
-			} else {
-				this.logger.error('No response from OpenAI', {
-					user,
-					organization,
-					question,
-					system_prompt,
-					classifyResponse,
-				});
 			}
 		} catch (e) {
 			this.logger.error(`Error asking raw question`, e);
-			return;
+			return e;
 		}
 	}
 
