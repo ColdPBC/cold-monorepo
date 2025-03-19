@@ -1,7 +1,6 @@
 import {
   AppContent,
   Card,
-  CenterColumnContent,
   DismissableInfoCard,
   EmissionsCarbonFootprintCharts,
   EmissionsDonutChart,
@@ -22,7 +21,6 @@ export const EmissionsCarbonFootprintBase = () => {
   const { facilityOptions, yearOptions, emissions } = data;
 
   if ((isAxiosError(emissions) && emissions?.response?.status === 404) || (isArray(emissions) && emissions.length === 0)) {
-    logBrowser('No emissions data found', 'error', { data }, data);
     return (
       <AppContent title="Carbon Footprint">
         <div className={'flex flex-col space-y-[35px]'}>

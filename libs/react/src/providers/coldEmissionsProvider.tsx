@@ -91,7 +91,12 @@ export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
   let uniqueScopes = Array<number>();
 
   if ((isAxiosError(data) && data?.response?.status === 404) || (isArray(data) && data.length === 0)) {
-    logBrowser('No emissions data found', 'error', { data }, data);
+    // log as error if there is a 404 error
+    if(isAxiosError(data)) {
+      logBrowser('No emissions data found. 404 Error', 'error', { data }, data);
+    } else {
+      logBrowser('No emissions data found', 'info', { data });
+    }
   } else {
     const yearSet = new Set<number>();
 
