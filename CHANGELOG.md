@@ -1,3 +1,12 @@
+# [1.602.0](https://github.com/coldPBC/cold-monorepo/compare/v1.601.0...v1.602.0) (2025-03-19)
+
+
+### Features
+
+* Handle empty emissions data arrays in error checks ([f051acb](https://github.com/coldPBC/cold-monorepo/commit/f051acb692d86ba737049d6fb2f29b5425072215))
+* Refactor layout structure in emissions footprint component. ([4d2d295](https://github.com/coldPBC/cold-monorepo/commit/4d2d29538c793102176e4a0b5607b6606ba175d5))
+* Refine logging for missing emissions data ([4c9328d](https://github.com/coldPBC/cold-monorepo/commit/4c9328d50b6aad152c8d521ac956f7e325b92d7d))
+
 # [1.601.0](https://github.com/coldPBC/cold-monorepo/compare/v1.600.1...v1.601.0) (2025-03-19)
 
 
