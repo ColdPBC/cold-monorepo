@@ -72,25 +72,59 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 				apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
 			});
 
-			const responseSchema = eval(jsonSchemaToZod(schema, { module: 'cjs' }));
-			const classifyResponse = await openai.beta.chat.completions.parse({
-				model: 'gpt-4o-2024-08-06',
-				messages: [
-					{
-						role: 'system',
-						content: system_prompt,
-					},
-					{
-						role: 'user',
-						content: question,
-					},
-				],
-				response_format: zodResponseFormat(responseSchema, 'microservice_chat'),
-			});
+			let classifyResponse: any;
 
-			this.logger.info('Received response from OpenAI', { user, organization, question, system_prompt, parsed: classifyResponse?.choices['0']?.message?.parsed });
+			if (!schema) {
+				classifyResponse = await openai.beta.chat.completions.parse({
+					model: 'gpt-4o-2024-08-06',
+					messages: [
+						{
+							role: 'system',
+							content: system_prompt,
+						},
+						{
+							role: 'user',
+							content: question,
+						},
+					],
+				});
+			} else {
+				const responseSchema = eval(jsonSchemaToZod(schema, { module: 'cjs' }));
+				classifyResponse = await openai.beta.chat.completions.parse({
+					model: 'gpt-4o-2024-08-06',
+					messages: [
+						{
+							role: 'system',
+							content: system_prompt,
+						},
+						{
+							role: 'user',
+							content: question,
+						},
+					],
+					response_format: zodResponseFormat(responseSchema, 'microservice_chat'),
+				});
+			}
 
-			return classifyResponse?.choices['0']?.message?.parsed;
+			if (classifyResponse) {
+				this.logger.info('Received response from OpenAI', {
+					user,
+					organization,
+					question,
+					system_prompt,
+					parsed: classifyResponse?.choices['0']?.message?.parsed,
+				});
+
+				return classifyResponse?.choices['0']?.message?.parsed;
+			} else {
+				this.logger.error('No response from OpenAI', {
+					user,
+					organization,
+					question,
+					system_prompt,
+					classifyResponse,
+				});
+			}
 		} catch (e) {
 			this.logger.error(`Error asking raw question`, e);
 			return;
