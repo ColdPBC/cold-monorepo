@@ -25,30 +25,28 @@ export const EmissionsCarbonFootprintBase = () => {
     logBrowser('No emissions data found', 'error', { data }, data);
     return (
       <AppContent title="Carbon Footprint">
-        <CenterColumnContent>
-          <div className={'flex flex-col space-y-[35px]'}>
-            <DismissableInfoCard
-              text="Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e."
-              onDismiss={() => {}}
-              dismissKey="footprint-page"
+        <div className={'flex flex-col space-y-[35px]'}>
+          <DismissableInfoCard
+            text="Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e."
+            onDismiss={() => {}}
+            dismissKey="footprint-page"
+          />
+          <Card>
+            <EmissionsDonutChart
+              isEmptyData={true}
+              subcategoryTotals={[]}
+              variant={EmissionsDonutChartVariants.horizontal}
+              chartData={{
+                labels: [],
+                datasets: [],
+              }}
             />
-            <Card>
-              <EmissionsDonutChart
-                isEmptyData={true}
-                subcategoryTotals={[]}
-                variant={EmissionsDonutChartVariants.horizontal}
-                chartData={{
-                  labels: [],
-                  datasets: [],
-                }}
-              />
-              <div className="m-auto table w-1">
-                <h4 className="text-h4 text-center whitespace-nowrap m-4">{'We need more data to show your footprint'}</h4>
-                <p className="text-center text-sm leading-normal">We'll be in touch soon to collect info needed for your latest footprint</p>
-              </div>
-            </Card>
-          </div>
-        </CenterColumnContent>
+            <div className="m-auto table w-1">
+              <h4 className="text-h4 text-center whitespace-nowrap m-4">{'We need more data to show your footprint'}</h4>
+              <p className="text-center text-sm leading-normal">We'll be in touch soon to collect info needed for your latest footprint</p>
+            </div>
+          </Card>
+        </div>
       </AppContent>
     );
   }
