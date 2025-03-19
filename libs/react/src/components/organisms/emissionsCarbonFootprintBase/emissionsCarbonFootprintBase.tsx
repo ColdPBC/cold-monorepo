@@ -11,10 +11,9 @@ import {
 import React, { useContext } from 'react';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { isAxiosError } from 'axios';
-import { useColdContext } from '@coldpbc/hooks';
+import {isArray} from "lodash";
 
 export const EmissionsCarbonFootprintBase = () => {
-  const { logBrowser } = useColdContext();
   const { data, setSelectedFacility, selectedFacility, isSingleYear, selectedYear, setSelectedYear } = useContext(ColdEmissionsContext);
   const { facilityOptions, yearOptions, emissions } = data;
 
