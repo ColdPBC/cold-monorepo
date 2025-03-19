@@ -1,3 +1,10 @@
+# [1.603.0](https://github.com/coldPBC/cold-monorepo/compare/v1.602.0...v1.603.0) (2025-03-19)
+
+
+### Features
+
+* update OpenAI model to o3-mini and enhance logging for response handling ([2a690a1](https://github.com/coldPBC/cold-monorepo/commit/2a690a1279c6359fee1514f92a46188ffbb6033a))
+
 # [1.602.0](https://github.com/coldPBC/cold-monorepo/compare/v1.601.0...v1.602.0) (2025-03-19)
 
 
