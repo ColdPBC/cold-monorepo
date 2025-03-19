@@ -1,7 +1,10 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManagerFlowGuide, ComplianceManagerFlowGuideProps } from '@coldpbc/components';
-import { StoryMockProvider, StoryMockProviderProps } from '@coldpbc/mocks';
+import {
+  ComplianceManagerContextMockProvider,
+  ComplianceManagerContextMockProviderProps,
+} from '@coldpbc/mocks';
 import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus } from '@coldpbc/enums';
 import { useState } from 'react';
 
@@ -115,12 +118,12 @@ export const Submitted: Story = {
   },
 };
 
-const ComplianceFlowGuideStory = ({ args, storyMockProps }: { args: ComplianceManagerFlowGuideProps; storyMockProps: StoryMockProviderProps }) => {
+const ComplianceFlowGuideStory = ({ args, storyMockProps }: { args: ComplianceManagerFlowGuideProps; storyMockProps: ComplianceManagerContextMockProviderProps }) => {
   const [flowGuideStatus, setFlowGuideStatus] = useState(args.flowGuideStatus);
 
   return (
-    <StoryMockProvider {...storyMockProps}>
+    <ComplianceManagerContextMockProvider {...storyMockProps}>
       <ComplianceManagerFlowGuide {...args} setFlowGuideStatus={setFlowGuideStatus} flowGuideStatus={flowGuideStatus} />
-    </StoryMockProvider>
+    </ComplianceManagerContextMockProvider>
   );
 };

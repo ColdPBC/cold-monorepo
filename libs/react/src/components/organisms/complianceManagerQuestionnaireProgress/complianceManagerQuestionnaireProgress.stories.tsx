@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManagerQuestionnaireProgress } from '@coldpbc/components';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import {ComplianceManagerContextMockProvider} from '@coldpbc/mocks';
 
 const meta: Meta<typeof ComplianceManagerQuestionnaireProgress> = {
   title: 'Organisms/ComplianceManagerQuestionnaireProgress',
@@ -15,8 +15,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: args => (
-    <StoryMockProvider>
+    <ComplianceManagerContextMockProvider>
       <ComplianceManagerQuestionnaireProgress />
-    </StoryMockProvider>
+    </ComplianceManagerContextMockProvider>
   ),
 };
