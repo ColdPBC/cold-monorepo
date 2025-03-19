@@ -45,13 +45,6 @@ export const NoActionButton: Story = {
       </BrowserRouter>
     );
   },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showActions261: false,
-      },
-    },
-  },
   args: {
     colors: getSchemeForColor(HexColors.lightblue),
     period: 2022,

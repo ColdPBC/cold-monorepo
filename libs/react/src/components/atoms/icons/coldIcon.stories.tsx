@@ -3,6 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { DefaultHexColors } from '../../../enums/colors';
 import { ColdIcon } from './coldIcon';
 import { IconNames } from '../../../enums/iconNames';
+import {toArray} from "lodash";
 
 const meta: Meta<typeof ColdIcon> = {
   title: 'Atoms/Icons/ColdIcon',
@@ -12,11 +13,11 @@ const meta: Meta<typeof ColdIcon> = {
   argTypes: {
     name: {
       control: 'select',
-      options: IconNames,
+      options: toArray(Object.values(IconNames)),
     },
     color: {
       control: 'select',
-      options: DefaultHexColors,
+      options: toArray(Object.values(DefaultHexColors)),
     },
     inverted: {
       control: 'boolean',

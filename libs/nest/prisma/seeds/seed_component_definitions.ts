@@ -121,6 +121,14 @@ const seeds: Array<{
               },
               label: 'Sustainability Claims',
               route: '/sustainability_claims',
+            },
+            {
+              key: 'assurance_documents_key',
+              icon: {
+                name: 'ColdDocumentUploadIcon',
+              },
+              label: 'Assurance Documents',
+              route: '/documents',
             }
           ]
         },
@@ -187,6 +195,14 @@ const seeds: Array<{
               },
               label: 'Documents',
               route: '/documents',
+            },
+            {
+              key: 'uploads_key',
+              icon: {
+                name: 'ColdDocumentsIcon',
+              },
+              label: 'Uploads',
+              route: '/uploads',
             },
           ]
         },

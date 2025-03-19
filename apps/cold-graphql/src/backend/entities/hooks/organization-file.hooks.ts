@@ -4,25 +4,62 @@ import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exo
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
 import { OrganizationFile } from '../postgresql';
+import { GuidPrefixes } from '../../libs/cuid/compliance.enums';
+import { Cuid2Generator } from '../../libs/cuid/cuid2-generator.service';
+import { set } from 'lodash';
 
 export class OrganizationFileHooks extends BaseSidecar {
 	constructor() {
 		super(OrganizationFile, 'organization_files');
 	}
-	// Overrride BeforeReadHook here:
+	
+	async beforeReadHook(params: ReadHookParams<typeof OrganizationFile, OrgContext>) {
+		this.logger.log('before OrganizationFile read hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeReadHook(params);
+	}
 
-	// Overrride AfterReadHook here:
+	
+	async afterReadHook(params: ReadHookParams<typeof OrganizationFile, OrgContext>) {
+		this.logger.log('OrganizationFile read', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterReadHook(params);
+		
+	}
 
-	// Overrride BeforeCreateHook here:
+	
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof OrganizationFile, OrgContext>) {
+		this.logger.log(`before create OrganizationFile`, { user: params.context.user, arguments: params.args });
+	
+	  return super.beforeCreateHook(params);    
+	}
 
-	// Overrride AfterCreateHook here:
+	
+	async afterCreateHook(params: CreateOrUpdateHookParams<typeof OrganizationFile, OrgContext>) {
+		this.logger.log('OrganizationFile created', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterCreateHook(params);
+	}
 
-	// Overrride BeforeUpdateHook here:
+	
+	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof OrganizationFile, OrgContext>) {
+		this.logger.log('before OrganizationFile update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.beforeUpdateHook(params);
+	}
 
-	// Overrride AfterUpdateHook here:
+	
+	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof OrganizationFile, OrgContext>) {
+		this.logger.log('OrganizationFile updated', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterUpdateHook(params);
+	}
 
-	// Overrride BeforeDeleteHook here:
+	
+	async beforeDeleteHook(params: DeleteHookParams<typeof OrganizationFile, OrgContext>) {
+		this.logger.log('before OrganizationFile delete hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeDeleteHook(params);
+	}
 
-	// Overrride AfterDeleteHook here:
+	
+	async afterDeleteHook(params: DeleteHookParams<typeof OrganizationFile, OrgContext>) {
+		this.logger.log('OrganizationFile deleted', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterDeleteHook(params);
+	}
 
 }

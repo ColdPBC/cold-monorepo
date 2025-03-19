@@ -1,7 +1,6 @@
-import { Files, FilesWithAssurances } from '@coldpbc/interfaces';
-import {addDays, subDays} from 'date-fns';
-import {filesProcessedWithDatesMocks} from "./graphql";
-import {EntityLevel} from "@coldpbc/enums";
+import { Files, FilesWithAssurances, UploadsQuery } from '@coldpbc/interfaces';
+import { addDays, subDays } from 'date-fns';
+import { DocumentTypes, EntityLevel, ProcessingStatus } from '@coldpbc/enums';
 
 export function getAllFilesMock() {
 	return [
@@ -116,6 +115,9 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 		{
 			id: '2',
@@ -124,6 +126,9 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 		{
 			id: '3',
@@ -132,6 +137,9 @@ export function getFilesWithoutAssurances(): FilesWithAssurances[] {
 			type: "OTHER",
 			attributeAssurances: [],
 			metadata: null,
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 	];
 }
@@ -158,13 +166,11 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 						name: 'Supplier',
 						country: 'US',
 						supplierTier: 2,
-						materialSuppliers: [
-							{
-								material: {
-									id: '1',
-									name: 'Material',
-								},
-							},
+						materials: [
+              {
+                id: '1',
+                name: 'Material',
+              },
 						],
 					},
 					material: null,
@@ -179,6 +185,9 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 				status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 		{
 			id: '2',
@@ -198,15 +207,11 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 					material: {
 						id: '1',
 						name: 'Material 1',
-						materialSuppliers: [
-							{
-								organizationFacility: {
-									id: '1',
-									name: 'Supplier',
-									supplierTier: 2,
-								},
-							},
-						],
+						organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 2,
+            },
 					},
           organization: null,
           organizationFacility: null,
@@ -224,15 +229,11 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 					material: {
 						id: '2',
 						name: 'Material 2',
-						materialSuppliers: [
-							{
-								organizationFacility: {
-									id: '1',
-									name: 'Supplier',
-									supplierTier: 1,
-								},
-							},
-						],
+						organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 1,
+            },
 					},
           organization: null,
 					organizationFacility: null,
@@ -246,6 +247,9 @@ export function getFilesWithAssurances(): FilesWithAssurances[] {
 				status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 	];
 }
@@ -291,13 +295,11 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 						name: 'Supplier',
 						country: 'US',
 						supplierTier: 2,
-						materialSuppliers: [
+						materials: [
 							{
-								material: {
-									id: '1',
-									name: 'Material',
-								},
-							},
+                id: '1',
+                name: 'Material',
+              },
 						],
 					},
 					material: null,
@@ -311,6 +313,9 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 				status: 'uploaded',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      processingStatus: ProcessingStatus.AI_PROCESSING,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 		{
 			id: '2',
@@ -330,15 +335,11 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 					material: {
 						id: '1',
 						name: 'Material 1',
-						materialSuppliers: [
-							{
-								organizationFacility: {
-									id: '1',
-									name: 'Supplier',
-									supplierTier: 2,
-								},
-							},
-						],
+						organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 2,
+            },
 					},
           organization: null,
 					organizationFacility: null,
@@ -356,15 +357,11 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 					material: {
 						id: '2',
 						name: 'Material 2',
-						materialSuppliers: [
-							{
-								organizationFacility: {
-									id: '1',
-									name: 'Supplier',
-									supplierTier: 1,
-								},
-							},
-						],
+						organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 1,
+            },
 					},
           organization: null,
 					organizationFacility: null,
@@ -378,6 +375,9 @@ export function getFilesProcessingMock(): FilesWithAssurances[] {
 				status: 'uploaded',
         certificate_number: 'CU1077874GRS-2023-00051776',
 			},
+      processingStatus: ProcessingStatus.AI_PROCESSING,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
 		},
 	];
 }
@@ -397,6 +397,9 @@ export function filesProcessedWithDatesMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: '2024-05-01',
+      effectiveStartDate: '2024-05-01',
     },
     {
       id: '2',
@@ -411,6 +414,9 @@ export function filesProcessedWithDatesMock(): FilesWithAssurances[] {
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: '2024-04-20',
+      effectiveStartDate: '2024-04-20',
     },
   ];
 }
@@ -425,11 +431,14 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
       attributeAssurances: [],
       metadata: {
         summary: 'This is a summary',
-        effective_end_date: '2024-05-01',
-        effective_start_date: '2024-05-01',
+        effective_end_date: subDays(new Date(), 20).toISOString(),
+        effective_start_date: subDays(new Date(), 20).toISOString(),
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: subDays(new Date(), 20).toISOString(),
+      effectiveStartDate: subDays(new Date(), 20).toISOString(),
     },
     {
       id: '2',
@@ -449,15 +458,11 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           material: {
             id: '1',
             name: 'Material 1',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 2,
-                },
-              },
-            ],
+            organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 2,
+            },
           },
           organization: null,
           organizationFacility: null,
@@ -475,15 +480,11 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           material: {
             id: '2',
             name: 'Material 2',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 1,
-                },
-              },
-            ],
+            organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 1,
+            },
           },
           organization: null,
           organizationFacility: null,
@@ -501,15 +502,11 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           material: {
             id: '2',
             name: 'Material 3',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 1,
-                },
-              },
-            ],
+            organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 1,
+            },
           },
           organization: null,
           organizationFacility: null,
@@ -527,15 +524,11 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
           material: {
             id: '2',
             name: 'Material 4',
-            materialSuppliers: [
-              {
-                organizationFacility: {
-                  id: '1',
-                  name: 'Supplier',
-                  supplierTier: 1,
-                },
-              },
-            ],
+            organizationFacility: {
+              id: '1',
+              name: 'Supplier',
+              supplierTier: 1,
+            },
           },
           organization: null,
           organizationFacility: null,
@@ -544,11 +537,14 @@ export function filesWithTooManyRecordsMock(): FilesWithAssurances[] {
       ],
       metadata: {
         summary: 'This is a summary',
-        effective_end_date: '2024-04-20',
-        effective_start_date: '2024-04-20',
+        effective_end_date: addDays(new Date(), 70).toISOString(),
+        effective_start_date: addDays(new Date(), 70).toISOString(),
         status: 'ai_extracted',
         certificate_number: 'CU1077874GRS-2023-00051776',
       },
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: addDays(new Date(), 70).toISOString(),
+      effectiveStartDate: addDays(new Date(), 70).toISOString(),
     },
   ];
 }
@@ -605,7 +601,7 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           material: {
             id: '0e9135c9-c91d-45fd-8256-89e1c3fba854',
             name: 'Material 4',
-            materialSuppliers: [],
+            organizationFacility: null,
           },
           product: null,
         },
@@ -627,6 +623,9 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           },
         },
       ],
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
     },
     {
       id: 'ofile_xtu8n9rqlgko4v1nu8v8v5cg',
@@ -664,6 +663,9 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
           product: null,
         },
       ],
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: '2024-04-20',
+      effectiveStartDate: '2024-04-20',
     },
     {
       id: 'ofile_jqohnz87bn2fi2es7suhqb48',
@@ -701,24 +703,18 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
             name: 'Supplier 12',
             country: '',
             supplierTier: 2,
-            materialSuppliers: [
+            materials: [
               {
-                material: {
-                  id: '5926bb4c-5cbc-4b14-970f-968249444415',
-                  name: 'Material 1',
-                },
+                id: '5926bb4c-5cbc-4b14-970f-968249444415',
+                name: 'Material 1',
               },
               {
-                material: {
-                  id: 'mat_bj8zsf2imw9uvjjvk09h7ci0',
-                  name: 'Material 10',
-                },
+                id: 'mat_bj8zsf2imw9uvjjvk09h7ci0',
+                name: 'Material 10',
               },
               {
-                material: {
-                  id: 'mat_vctuajyeyeuwow0djuxwzb9g',
-                  name: 'Material 11',
-                },
+                id: 'mat_vctuajyeyeuwow0djuxwzb9g',
+                name: 'Material 11',
               },
             ],
           },
@@ -740,12 +736,43 @@ export function fileWithProductMocks(): FilesWithAssurances[] {
             name: 'Supplier 10',
             country: '',
             supplierTier: 1,
-            materialSuppliers: [],
+            materials: [],
           },
           material: null,
           product: null,
         },
       ],
+      processingStatus: ProcessingStatus.IMPORT_COMPLETE,
+      effectiveEndDate: null,
+      effectiveStartDate: null,
     },
   ];
+}
+
+export function getUploadsMock(): UploadsQuery[] {
+  const baseFiles: UploadsQuery[] = getFilesWithAssurances().map((file) => ({
+    id: file.id,
+    originalName: file.originalName,
+    createdAt: file.createdAt,
+    type: file.type as typeof DocumentTypes[keyof typeof DocumentTypes],
+    processingStatus: null,
+  }))
+  const processingStatuses = Object.values(ProcessingStatus);
+  const fileTypes = Object.values(DocumentTypes)
+
+  // Ensure exactly 6 files by generating additional ones if needed
+  const additionalFiles: UploadsQuery[] = Array.from({ length: 6 - baseFiles.length }, (_, i) => {
+    const newId = (baseFiles.length + i + 1).toString();
+    const statusIndex = (baseFiles.length + i) % processingStatuses.length;
+
+    return {
+      id: newId,
+      originalName: `Generated-File-${newId}.pdf`,
+      createdAt: new Date('01/25/2024').toISOString(),
+      type: fileTypes[i % fileTypes.length], // Cycle through enum values
+      processingStatus: processingStatuses[statusIndex], // Cycle through enum values
+    };
+  });
+
+  return [...baseFiles, ...additionalFiles];
 }

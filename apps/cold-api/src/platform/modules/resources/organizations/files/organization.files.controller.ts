@@ -1,10 +1,11 @@
 import { Body, Controller, Delete, Get, OnModuleInit, Param, Patch, Post, Query, Req, UploadedFiles, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import multerS3 from 'multer-s3';
-import { allRoles, coldAndCompanyAdmins, HttpExceptionFilter, IAuthenticatedUser, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
+import { allRoles, HttpExceptionFilter, IAuthenticatedUser, IRequest, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { OrganizationFilesService } from './organization.files.service';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { file_types } from '@prisma/client';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -59,7 +60,7 @@ export class OrganizationFilesController implements OnModuleInit {
 	}
 
 	@Delete(':id')
-	@Roles(...coldAndCompanyAdmins)
+	@Roles(...allRoles)
 	async deleteFile(
 		@Param('orgId') orgId: string,
 		@Param('id') fileId: string,
@@ -74,14 +75,14 @@ export class OrganizationFilesController implements OnModuleInit {
 	@UseInterceptors(AnyFilesInterceptor())
 	async uploadFile(
 		@Param('orgId') orgId: string,
-		@Query('bpc') bpc: boolean,
+		@Query('type') type: file_types,
 		@UploadedFiles()
 		file: Array<Express.Multer.File>,
 		@Req()
 		req: IRequest,
 	) {
 		try {
-			return this.orgFiles.uploadFile(req, orgId, file, bpc);
+			return this.orgFiles.uploadFile(req, orgId, file, type);
 		} catch (error) {
 			console.error('Error uploading file:', error.message);
 			throw new Error('Failed to process the uploaded file.');
@@ -90,10 +91,10 @@ export class OrganizationFilesController implements OnModuleInit {
 
 	@Post('import')
 	@Roles(...allRoles)
+	@UseInterceptors(OrgUserInterceptor)
 	@UseInterceptors(AnyFilesInterceptor())
 	async import(
 		@Param('orgId') orgId: string,
-		@Query('bpc') bpc: boolean,
 		@UploadedFiles()
 		file: Array<Express.Multer.File>,
 		@Req()

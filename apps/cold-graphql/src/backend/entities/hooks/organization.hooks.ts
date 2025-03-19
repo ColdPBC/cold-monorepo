@@ -2,71 +2,75 @@
 import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
-import { Organization } from '../postgresql';
-import { kebabCase, startCase } from 'lodash';
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { Organization, OrganizationFile } from '../postgresql';
+import { GuidPrefixes } from '../../libs/cuid/compliance.enums';
+import { Cuid2Generator } from '../../libs/cuid/cuid2-generator.service';
+import { kebabCase, merge, set, startCase } from 'lodash';
+import { EntityManager } from '@mikro-orm/core';
 
 export class OrganizationHooks extends BaseSidecar {
 	constructor() {
 		super(Organization, 'organizations');
 	}
 
-	async init() {
-		/*	try {
-			if (this.cache) {
-				let token: any = await this.cache.get(`auth0-management-token-${process.env['NODE_ENV']}`);
-
-				if (!token || token['data']['expiresAt'] < new Date().getMilliseconds() / 1000) {
-					this.logger.error('Token Expired', { token, compared_to: new Date().getMilliseconds() / 1000 });
-					token = await this.getManagementToken();
-				}
-
-				await this.setOptions(token as AxiosResponse);
-			}
-
-			if (!this.options.headers.Authorization || this.expiresAt < new Date().getSeconds()) {
-				//this.logger = new WorkerLogger(Auth0UtilityService.name);
-				await this.getManagementToken();
-				return this.options;
-			}
-
-			return this.options;
-		} catch (e: any) {
-			if (e.response) {
-				this.logger.error(e.response?.data?.message, { error: e.response?.data });
-			}
-			this.logger.error(e, { error: e.response });
-
-			throw e;
-		}*/
+	async beforeReadHook(params: ReadHookParams<typeof Organization, OrgContext>) {
+		this.logger.log('before Organization read hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeReadHook(params);
 	}
 
-	override async beforeCreateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
-		params.args.items.forEach(item => {
-			if (item.display_name) {
-				item.display_name = startCase(item.display_name);
+	async afterReadHook(params: ReadHookParams<typeof Organization, OrgContext>) {
+		this.logger.log('Organization read', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterReadHook(params);
+	}
+
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
+		this.logger.log(`before create Organization`, { user: params.context.user, arguments: params.args });
+		for (const item of params.args.items as Organization[]) {
+			if (GuidPrefixes['Organization']) {
+				set(item, 'id', new Cuid2Generator(GuidPrefixes['Organization']).generate().scopedId);
+			}
+
+			if (item.displayName) {
+				item.displayName = startCase(item.displayName);
 			}
 
 			if (item.name) {
 				item.name = kebabCase(item.name).toLowerCase();
 			}
-		});
+		}
 
 		return super.beforeCreateHook(params);
 	}
-	// Overrride BeforeReadHook here:
 
-	// Overrride AfterReadHook here:
+	async afterCreateHook(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
+		this.logger.log('Organization created', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterCreateHook(params);
+	}
 
-	// Overrride BeforeCreateHook here:
+	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
+		this.logger.log('before Organization update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.beforeUpdateHook(params);
+	}
 
-	// Overrride AfterCreateHook here:
+	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof Organization, OrgContext>) {
+		this.logger.log('Organization updated', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterUpdateHook(params);
+	}
 
-	// Overrride BeforeUpdateHook here:
+	async beforeDeleteHook(params: DeleteHookParams<typeof Organization, OrgContext>) {
+		this.logger.log('before Organization delete hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		const em = this.entity.prototype.__factory.em as EntityManager;
+		const response = await em.findOneOrFail(Organization, { id: params.args.filter['id'] });
 
-	// Overrride AfterUpdateHook here:
+		const protectedOrgs = ['cold-climate-development', 'cold-climate-staging', 'cold-climate-production'];
+		if (protectedOrgs.includes(response.name)) {
+			throw new Error(`Cannot delete protected organization: ${response.name}`);
+		}
+		return super.beforeDeleteHook(params);
+	}
 
-	// Overrride BeforeDeleteHook here:
-
-	// Overrride AfterDeleteHook here:
+	async afterDeleteHook(params: DeleteHookParams<typeof Organization, OrgContext>) {
+		this.logger.log('Organization deleted', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterDeleteHook(params);
+	}
 }

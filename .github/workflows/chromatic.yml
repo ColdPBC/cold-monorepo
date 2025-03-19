@@ -77,6 +77,7 @@ jobs:
           externals: /(public|.storybook|tailwind.config.js)/**
         env:
           STORYBOOK_API_URL: ${{ secrets.STORYBOOK_API_URL }}
+          STORYBOOK_MUI_LICENSE_KEY: ${{ secrets.STORYBOOK_MUI_LICENSE_KEY }}
           NODE_OPTIONS: "--max_old_space_size=4096"
       - name: 🏁 Done!
         run: echo "🎑 Published Build To Chromatic"

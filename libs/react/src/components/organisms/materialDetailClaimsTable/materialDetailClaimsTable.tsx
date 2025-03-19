@@ -3,7 +3,7 @@ import { ColdIcon, ErrorFallback, MuiDataGrid } from '@coldpbc/components';
 import React, { ReactNode } from 'react';
 import { forEach, get, isEqual, orderBy, toArray, uniq, uniqWith } from 'lodash';
 import { ClaimStatus, IconNames } from '@coldpbc/enums';
-import { GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
+import { GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid-pro';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays } from 'date-fns';
 import { getDateActiveStatus } from '@coldpbc/lib';

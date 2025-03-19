@@ -10,8 +10,6 @@ import {
 import { getOrganizationMock } from '../../../__mocks__/organizationMock';
 import { getPrivacyMock, getTosMock } from '../../../__mocks__/policyMock';
 import { getSignUpHandler } from '../../../__mocks__/signupHandlers';
-import { userEvent, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
 
 const meta: Meta<typeof SignupForm> = {
   title: 'Organisms/SignupForm',

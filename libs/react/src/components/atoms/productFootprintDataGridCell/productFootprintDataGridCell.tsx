@@ -4,9 +4,11 @@
 // import { HexColors } from '@coldpbc/themes';
 import React from 'react';
 import { PaginatedProductsQuery } from '@coldpbc/interfaces';
+import {getCalculatedWeight, getAggregateEmissionFactors} from '@coldpbc/lib';
 
 interface ProductFootprintDataGridCellProps {
   product: PaginatedProductsQuery;
+  useNewEmissionFactor: boolean;
   // cache: ProductFootprintCache;
   // id: string;
   // productCategory: string | null;
@@ -48,7 +50,37 @@ interface ProductFootprintDataGridCellProps {
 //   }
 // ];
 
-export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCellProps> = ({ product }) => {
+export const getTotalFootprint = (product: PaginatedProductsQuery, useNewEmissionFactor: boolean) => {
+  // the following section was copied over from useProductCarbonFootprint
+  let totalFootprint = 0;
+
+  product.productMaterials.forEach(productMaterial => {
+    const weightResult = getCalculatedWeight(productMaterial);
+
+    let materialFootprint = 0;
+
+    if (!('weightInKg' in weightResult)) {
+      return;
+    }
+
+    if(useNewEmissionFactor) {
+      const emissionFactor = getAggregateEmissionFactors(productMaterial.material.materialEmissionFactors)
+      if (!emissionFactor) {
+        return;
+      }
+      materialFootprint = weightResult.weightInKg * emissionFactor.value;
+    } else {
+      if (!productMaterial.material.emissionsFactor) {
+        return;
+      }
+      materialFootprint = weightResult.weightInKg * productMaterial.material.emissionsFactor;
+    }
+    totalFootprint += materialFootprint
+  });
+  return totalFootprint === 0 ? 'No data available' : totalFootprint.toFixed(1);
+}
+
+export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCellProps> = ({ product, useNewEmissionFactor }) => {
   // NOTE: This component used to leverage useProductCarbonFootprint data but that dependency has been temporarily removed due to performance considerations
 
   // const { totalFootprint, categoryAverage, percentageFromAverage } = getProductCarbonFootprint(cache, {
@@ -56,20 +88,7 @@ export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCell
   //   productCategory,
   // });
   // const showComparison = productCategory && categoryAverage > 0;
-
-  // the following section was copied over from useProductCarbonFootprint
-  let totalFootprint = 0;
-
-  product.productMaterials.forEach(materialItem => {
-    if (!materialItem.weight || !materialItem.material.emissionsFactor) {
-      return;
-    }
-
-    const materialFootprint = materialItem.weight * materialItem.material.emissionsFactor;
-    totalFootprint += materialFootprint;
-  });
-
-  if (totalFootprint === 0) return 'No data available';
+  const totalFootprint = getTotalFootprint(product, useNewEmissionFactor);
 
   // const range = PERCENTAGE_RANGES.find(range =>
   //   range.condition(percentageFromAverage)
@@ -77,7 +96,7 @@ export const ProductFootprintDataGridCell: React.FC<ProductFootprintDataGridCell
 
   return (
     <div className="flex w-full items-center justify-start gap-[10px]">
-      <span className="text-tc-primary">{totalFootprint.toFixed(1)}</span>
+      <span className="text-tc-primary">{totalFootprint}</span>
       {/*{showComparison && (*/}
       {/*  <Popover*/}
       {/*    contentClassName="max-w-[260px]"*/}

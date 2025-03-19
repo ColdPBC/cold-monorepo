@@ -1,9 +1,10 @@
+import {getDocumentsListTableMock} from "./componentMock";
+import {ComponentDefinitionGraphQL} from "@coldpbc/interfaces";
+
 export function getSidebarMock() {
   return {
     id: 'cc0267d8-f49c-493e-8ea0-2aaa58bb61f3',
     name: 'sidebar_navigation',
-    type: 'NAVIGATION_SIDE',
-    description: 'Provides links in the application sidebar',
     definition: {
       items: [
         {
@@ -17,6 +18,14 @@ export function getSidebarMock() {
               },
               label: 'Sustainability Claims',
               route: '/sustainability_claims',
+            },
+            {
+              key: 'assurance_documents_key',
+              icon: {
+                name: 'ColdDocumentUploadIcon',
+              },
+              label: 'Assurance Documents',
+              route: '/documents',
             }
           ]
         },
@@ -84,6 +93,14 @@ export function getSidebarMock() {
               label: 'Documents',
               route: '/documents',
             },
+            {
+              key: 'uploads_key',
+              icon: {
+                name: 'ColdDocumentsIcon',
+              },
+              label: 'Uploads',
+              route: '/uploads',
+            },
           ]
         },
         {
@@ -119,7 +136,12 @@ export function getSidebarMock() {
         },
       ],
     },
-    created_at: '2023-09-11T17:17:02.295Z',
-    updated_at: '2024-03-18T17:45:23.188Z',
   };
+}
+
+export function getComponentMocksByFilter(name: string): ComponentDefinitionGraphQL[] {
+  const componentDefinitions: ComponentDefinitionGraphQL[] = [getDocumentsListTableMock(), getSidebarMock()]
+  return componentDefinitions.filter((component) => {
+    return component.name === name;
+  });
 }

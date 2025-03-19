@@ -6,10 +6,8 @@ import React from 'react';
 import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { get } from 'lodash';
 import { EntityLevel } from '@coldpbc/enums';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 const _SustainabilityPage = () => {
-  const ldFlags = useFlags();
   const { logBrowser } = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const sustainabilityAttributesQuery = useGraphQLSWR<{
@@ -20,8 +18,9 @@ const _SustainabilityPage = () => {
 
   const { myAttributes, otherAttributes } = React.useMemo(() => {
     const sustainabilityAttributesGraphQL: SustainabilityAttributeGraphQL[] = get(sustainabilityAttributesQuery.data, 'data.sustainabilityAttributes', [])
-    const sustainabilityAttributes: SustainabilityAttribute[] = processSustainabilityAttributeDataFromGraphQL(sustainabilityAttributesGraphQL)
-      .filter(attribute => attribute.level !== EntityLevel.ORGANIZATION)
+    const filteredAttributes = sustainabilityAttributesGraphQL
+      .filter(attribute => (!attribute.organization || attribute.organization.id === orgId) && attribute.level !== EntityLevel.ORGANIZATION)
+    const sustainabilityAttributes: SustainabilityAttribute[] = processSustainabilityAttributeDataFromGraphQL(filteredAttributes)
       .sort((a, b) => a.name.localeCompare(b.name));
     const myAttributes = sustainabilityAttributes.filter(attribute => (attribute.attributeAssurances?.length || 0) > 0);
     const otherAttributes = sustainabilityAttributes.filter(attribute => (attribute.attributeAssurances?.length || 0) === 0);
@@ -31,7 +30,7 @@ const _SustainabilityPage = () => {
 
   if (sustainabilityAttributesQuery.isLoading) {
     return (
-      <MainContent title={ldFlags.showNewSidebarCold1354 ? 'Sustainability Claims' : 'Sustainability Attributes'} className={'w-[calc(100%-100px)]'}>
+      <MainContent title={'Sustainability Claims'} className={'w-[calc(100%-100px)]'}>
         <Spinner />
       </MainContent>
     );
@@ -49,7 +48,7 @@ const _SustainabilityPage = () => {
   }
 
   return (
-		<MainContent title="Sustainability Attributes" className={'w-[calc(100%-100px)]'}>
+		<MainContent title={'Sustainability Claims'} className={'w-[calc(100%-100px)]'}>
       <Tabs
         tabs={[
           {

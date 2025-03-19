@@ -9,6 +9,7 @@ import { seedComplianceModels } from './seed_compliance_models';
 import { buildQuestionDependencyChains } from './seed_compliance_question_dependencies';
 import { buildSectionDependencyChains } from './seed_compliance_section_dependencies';
 import { seedSustainabilityAttributes } from './seed_sustainability_attributes';
+import { seedClassifications } from './seed_ecoinvent_activity_classifications';
 
 export const seedDB = async () => {
 	/**
@@ -22,6 +23,7 @@ export const seedDB = async () => {
 	await seedScopes();
 	await seedComplianceDefinitions();
 	await seedSustainabilityAttributes();
+	await seedClassifications();
 	if (process.env['LOCAL_SERVICE'] === 'seed') {
 		await seedComplianceModels();
 		await buildQuestionDependencyChains();

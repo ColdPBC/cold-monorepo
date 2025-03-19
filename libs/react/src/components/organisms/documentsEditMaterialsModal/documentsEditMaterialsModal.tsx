@@ -4,17 +4,15 @@ import {
   DocumentDetailsSidebarFileState,
   ErrorFallback, MaterialWithTier2Supplier,
   MuiDataGrid,
-  Spinner,
 } from '@coldpbc/components';
 import { ButtonTypes, EntityLevel, GlobalSizes } from '@coldpbc/enums';
 import React, { useEffect } from 'react';
-import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
-import { get } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
-import { GridCellParams, GridColDef, GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid';
+import { GridCellParams, GridColDef, GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid-pro';
 import { Checkbox } from '@mui/material';
 import { Modal as FBModal } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
+import {GRID_CHECKBOX_COL_DEF} from "@coldpbc/lib";
 
 
 
@@ -63,12 +61,7 @@ export const _DocumentsEditMaterialsModal: React.FC<DocumentsEditMaterialsModalP
 
   const columns: GridColDef[] = [
     {
-      field: 'checkbox',
-      editable: false,
-      sortable: false,
-      hideSortIcons: true,
-      width: 100,
-      headerClassName: 'bg-gray-30',
+      ...GRID_CHECKBOX_COL_DEF,
       cellClassName: 'bg-gray-10',
       renderCell: (params: GridCellParams) => (
         <Checkbox
@@ -144,6 +137,11 @@ export const _DocumentsEditMaterialsModal: React.FC<DocumentsEditMaterialsModalP
               }}
               disableColumnMenu={true}
               rowSelection={false}
+              initialState={{
+                sorting: {
+                  sortModel: [{ field: 'name', sort: 'asc' }],
+                },
+              }}
             />
           </div>
         </div>

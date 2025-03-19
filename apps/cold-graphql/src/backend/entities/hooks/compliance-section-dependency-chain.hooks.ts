@@ -4,25 +4,62 @@ import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exo
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
 import { ComplianceSectionDependencyChain } from '../postgresql';
+import { GuidPrefixes } from '../../libs/cuid/compliance.enums';
+import { Cuid2Generator } from '../../libs/cuid/cuid2-generator.service';
+import { set } from 'lodash';
 
 export class ComplianceSectionDependencyChainHooks extends BaseSidecar {
 	constructor() {
 		super(ComplianceSectionDependencyChain, 'compliance_section_dependency_chains');
 	}
-	// Overrride BeforeReadHook here:
+	
+	async beforeReadHook(params: ReadHookParams<typeof ComplianceSectionDependencyChain, OrgContext>) {
+		this.logger.log('before ComplianceSectionDependencyChain read hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeReadHook(params);
+	}
 
-	// Overrride AfterReadHook here:
+	
+	async afterReadHook(params: ReadHookParams<typeof ComplianceSectionDependencyChain, OrgContext>) {
+		this.logger.log('ComplianceSectionDependencyChain read', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterReadHook(params);
+		
+	}
 
-	// Overrride BeforeCreateHook here:
+	
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof ComplianceSectionDependencyChain, OrgContext>) {
+		this.logger.log(`before create ComplianceSectionDependencyChain`, { user: params.context.user, arguments: params.args });
+	
+	  return super.beforeCreateHook(params);    
+	}
 
-	// Overrride AfterCreateHook here:
+	
+	async afterCreateHook(params: CreateOrUpdateHookParams<typeof ComplianceSectionDependencyChain, OrgContext>) {
+		this.logger.log('ComplianceSectionDependencyChain created', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterCreateHook(params);
+	}
 
-	// Overrride BeforeUpdateHook here:
+	
+	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof ComplianceSectionDependencyChain, OrgContext>) {
+		this.logger.log('before ComplianceSectionDependencyChain update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.beforeUpdateHook(params);
+	}
 
-	// Overrride AfterUpdateHook here:
+	
+	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof ComplianceSectionDependencyChain, OrgContext>) {
+		this.logger.log('ComplianceSectionDependencyChain updated', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterUpdateHook(params);
+	}
 
-	// Overrride BeforeDeleteHook here:
+	
+	async beforeDeleteHook(params: DeleteHookParams<typeof ComplianceSectionDependencyChain, OrgContext>) {
+		this.logger.log('before ComplianceSectionDependencyChain delete hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeDeleteHook(params);
+	}
 
-	// Overrride AfterDeleteHook here:
+	
+	async afterDeleteHook(params: DeleteHookParams<typeof ComplianceSectionDependencyChain, OrgContext>) {
+		this.logger.log('ComplianceSectionDependencyChain deleted', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterDeleteHook(params);
+	}
 
 }

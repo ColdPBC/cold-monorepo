@@ -1,17 +1,42 @@
 import {useGraphQLMutation} from "./useGraphqlMutation";
 import {EntityLevel} from "@coldpbc/enums";
 import {FetchResult} from "@apollo/client";
+import { axiosFetcher } from '@coldpbc/fetchers';
 
 
 
 export const useUpdateEntityAssociations = () => {
   // get the right graphQL mutation function i.e. delete/add entity associations
 
-  const { mutateGraphQL: deleteAndCreateMaterialSupplier } = useGraphQLMutation('DELETE_AND_CREATE_MATERIAL_SUPPLIER')
   const { mutateGraphQL: updateProduct } = useGraphQLMutation('UPDATE_PRODUCT');
-  const { mutateGraphQL: deleteMaterialSuppliers } = useGraphQLMutation('DELETE_MATERIAL_SUPPLIERS')
+  const { mutateGraphQL: updateMaterial } = useGraphQLMutation('UPDATE_MATERIAL');
   const { mutateGraphQL: createProductMaterial } = useGraphQLMutation('CREATE_PRODUCT_MATERIAL')
   const { mutateGraphQL: deleteProductMaterials } = useGraphQLMutation('DELETE_PRODUCT_MATERIALS')
+
+  // use axios for removing/updating associations to suppliers
+  const removeSupplierFromProduct = (variables: {
+    productId: string,
+    orgId: string | undefined
+  }) => {
+    const {productId, orgId} = variables;
+
+    return axiosFetcher([`/organizations/${orgId}/products/${productId}`, 'PATCH', {
+      id: productId,
+      supplier_id: null,
+    }])
+  };
+
+  const removeSupplierFromMaterial = (variables: {
+    materialId: string,
+    orgId: string | undefined
+  }) => {
+    const {materialId, orgId} = variables;
+
+    return axiosFetcher([`/organizations/${orgId}/materials/${materialId}`, 'PATCH', {
+      id: materialId,
+      organization_facility_id: null,
+    }])
+  };
 
   const mutationMap = {
     [EntityLevel.MATERIAL]: {
@@ -39,31 +64,44 @@ export const useUpdateEntityAssociations = () => {
       },
       [EntityLevel.SUPPLIER]: {
         add: {
-          mutation: deleteAndCreateMaterialSupplier,
+          mutation: updateMaterial,
           variables: (entityToAddId: string, entityBeingAddedToId: string, orgId: string | undefined) => ({
-            deleteFilter: {
-              material: { id: entityToAddId },
-              organization: { id: orgId }
-            },
-            createInput: {
-              material: { id: entityToAddId },
+            input: {
+              id: entityToAddId,
               organizationFacility: { id: entityBeingAddedToId },
               organization: { id: orgId }
             }
           })
         },
         delete: {
-          mutation: deleteMaterialSuppliers,
+          mutation: removeSupplierFromMaterial,
           variables: (entityToAddId: string, entityBeingAddedToId: string, orgId: string | undefined) => ({
-            filter: {
-              material: { id: entityToAddId },
-              organizationFacility: { id: entityBeingAddedToId },
-              organization: { id: orgId }
-            }
+            materialId: entityToAddId,
+            orgId,
           })
         }
       }
     },
+    [EntityLevel.PRODUCT]: {
+      [EntityLevel.SUPPLIER]: {
+        add: {
+          mutation: updateProduct,
+          variables: (entityToAddId: string, entityBeingAddedToId: string, orgId: string | undefined) => ({
+            input: {
+              id: entityToAddId,
+              organizationFacility: { id: entityBeingAddedToId }
+            }
+          })
+        },
+        delete: {
+          mutation: removeSupplierFromProduct,
+          variables: (entityToAddId: string, entityBeingAddedToId: string, orgId: string | undefined) => ({
+            productId: entityToAddId,
+            orgId
+          })
+        }
+      }
+    }
   };
 
 

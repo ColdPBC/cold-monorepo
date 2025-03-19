@@ -1,6 +1,6 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { ErrorFallback, MuiDataGrid } from '@coldpbc/components';
-import { GridActionsCellItem, GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
+import { GridActionsCellItem, GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid-pro';
 import capitalize from 'lodash/capitalize';
 import React, { ReactNode } from 'react';
 import { HexColors } from '@coldpbc/themes';
@@ -90,7 +90,7 @@ const _DocumentSuppliersTable = (props: { assurances: FilesWithAssurances['attri
 			const supplierName = supplier?.name || '';
 			const supplierCountry = supplier?.country || '';
 			const supplierTier = supplier?.supplierTier || 0;
-			const associatedMaterials = supplier?.materialSuppliers.map(materialSupplier => materialSupplier.material.name) || [];
+			const associatedMaterials = supplier?.materials.map(material => material.name) || [];
 			return {
 				id: assurance.id,
 				name: supplierName,
@@ -132,7 +132,12 @@ const _DocumentSuppliersTable = (props: { assurances: FilesWithAssurances['attri
 			}}
 			className={'text-tc-primary border-[2px] rounded-[2px] border-gray-50 bg-transparent w-full h-auto'}
 			disableRowSelectionOnClick={true}
-		/>
+      initialState={{
+        sorting: {
+          sortModel: [{ field: 'name', sort: 'asc' }],
+        },
+      }}
+    />
 	);
 };
 

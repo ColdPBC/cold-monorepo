@@ -39,16 +39,6 @@ export const Loading: Story = {
 	},
 };
 
-export const EmptyFootprintData: Story = {
-	render: () => {
-		return (
-			<StoryMockProvider handlers={[getFootprintHandler.empty, getCategoriesHandler.empty]}>
-				<Application />
-			</StoryMockProvider>
-		);
-	},
-};
-
 export const NeedsSignup: Story = {
 	render: () => {
 		return (
@@ -69,14 +59,6 @@ export const NeedsSignup: Story = {
 	},
 };
 
-export const Handle404 = () => {
-	return (
-		<StoryMockProvider handlers={[getFootprintHandler.handle404, getCategoriesHandler.handle404]}>
-			<Application />
-		</StoryMockProvider>
-	);
-};
-
 export const ColdAdmin: Story = {
 	render: () => {
 		return (
@@ -94,21 +76,4 @@ export const ColdAdmin: Story = {
 			},
 		},
 	},
-};
-
-export const NewSidebar: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider>
-        <Application />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showNewSidebarCold1354: true,
-      },
-    },
-  },
 };

@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { ProductSustainabilityAttributesCard } from '@coldpbc/components';
-import { getProductsMockById } from '@coldpbc/mocks';
+import { getProductsMockById, StoryMockProvider } from '@coldpbc/mocks';
 import { EntityLevel } from '@coldpbc/enums';
 
 const meta: Meta<typeof ProductSustainabilityAttributesCard> = {
@@ -43,15 +43,11 @@ export const Default: Story = {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: null,
-            materialSuppliers: [
-              {
-                id: 'ms_123',
-                organizationFacility: {
-                  id: 'ofac_123',
-                  name: 'Tier 2 Supplier',
-                }
-              }
-            ],
+            materialEmissionFactors: [],
+            organizationFacility: {
+              id: 'ofac_123',
+              name: 'Tier 2 Supplier',
+            },
             attributeAssurances: [
               {
                 id: 'aa_123',
@@ -65,6 +61,11 @@ export const Default: Story = {
                 }
               },
             ],
+            materialClassification: null,
+            weightFactor: null,
+            weightFactorUnitOfMeasure: null,
+            width: null,
+            widthUnitOfMeasure: null,
           }
         }
       ],
@@ -85,7 +86,12 @@ export const Default: Story = {
         ]
       },
     }
-  }
+  },
+  render: (args) => (
+    <StoryMockProvider>
+      <ProductSustainabilityAttributesCard {...args} />
+    </StoryMockProvider>
+  )
 };
 
 export const NoAssurances: Story = {
@@ -105,17 +111,18 @@ export const NoAssurances: Story = {
             materialCategory: null,
             materialSubcategory: null,
             emissionsFactor: null,
-            materialSuppliers: [
-              {
-                id: 'ms_123',
-                organizationFacility: {
-                  id: 'ofac_123',
-                  name: 'Tier 2 Supplier',
-                }
-              }
-            ],
+            materialEmissionFactors: [],
+            organizationFacility: {
+              id: 'ofac_123',
+              name: 'Tier 2 Supplier',
+            },
             attributeAssurances: [],
-          }
+            materialClassification: null,
+            weightFactor: null,
+            weightFactorUnitOfMeasure: null,
+            width: null,
+            widthUnitOfMeasure: null,
+          },
         }
       ],
       organizationFacility: {
@@ -124,5 +131,10 @@ export const NoAssurances: Story = {
         attributeAssurances: [],
       },
     }
-  }
+  },
+  render: (args) => (
+    <StoryMockProvider>
+      <ProductSustainabilityAttributesCard {...args} />
+    </StoryMockProvider>
+  )
 };

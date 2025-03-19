@@ -19,11 +19,4 @@ export const Default: Story = {
       <CompliancePage />
     </StoryMockProvider>
   ),
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showNewCompliancePageHomeCold671: true,
-      },
-    },
-  },
 };

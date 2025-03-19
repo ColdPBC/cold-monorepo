@@ -5,15 +5,17 @@ import {
   getClaimsMock,
   getFilesWithAssurances,
   getFilesWithoutAssurances,
-  getFileTypesMock, getMaterialsMock, getMaterialsMocksWithAssurances,
+  getMaterialsMocksWithAssurances,
   StoryMockProvider,
 } from '@coldpbc/mocks';
 import {
   DocumentDetailsSidebar,
   DocumentDetailsSidebarFileState,
-  DocumentsEditMaterialsModal,
+  DocumentsEditMaterialsModal, MaterialWithTier2Supplier,
 } from '@coldpbc/components';
 import { Claims, FilesWithAssurances } from '@coldpbc/interfaces';
+import { KeyedMutator } from 'swr';
+import { ApolloQueryResult, NetworkStatus } from '@apollo/client';
 
 const meta = {
 	title: 'Organisms/DocumentDetailsSidebar',
@@ -35,7 +37,14 @@ export const NoAssurances: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
+    fileState: undefined,
+    refreshFiles: async () => ({ data: { organizationFiles: null }, loading: false, networkStatus: NetworkStatus.ready }),
+    closeSidebar: () => {},
+    setFileState: () => {},
+    deleteFile: () => {},
+    downloadFile: () => {},
+    openEditMaterials: () => {},
+    allMaterials: [],
 	},
 };
 
@@ -49,7 +58,14 @@ export const WithAssurancesSupplierClaim: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
+    fileState: undefined,
+    refreshFiles: async () => ({ data: { organizationFiles: null }, loading: false, networkStatus: NetworkStatus.ready }),
+    closeSidebar: () => {},
+    setFileState: () => {},
+    deleteFile: () => {},
+    downloadFile: () => {},
+    openEditMaterials: () => {},
+    allMaterials: [],
 	},
 };
 
@@ -63,12 +79,19 @@ export const WithAssurancesMaterialClaim: Story = {
 		isLoading: false,
 		signedUrl: '',
 		sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
+    fileState: undefined,
+    refreshFiles: async () => ({ data: { organizationFiles: null }, loading: false, networkStatus: NetworkStatus.ready }),
+    closeSidebar: () => {},
+    setFileState: () => {},
+    deleteFile: () => {},
+    downloadFile: () => {},
+    openEditMaterials: () => {},
+    allMaterials: [],
 	},
 };
 
 export const NonCertificateDocument: Story = {
-  render: args => {
+  render: (args: DocumentDetailsSidebarStoryProps) => {
     return <SidebarStory {...args} />;
   },
   args: {
@@ -77,14 +100,32 @@ export const NonCertificateDocument: Story = {
     isLoading: false,
     signedUrl: '',
     sustainabilityAttributes: getClaimsMock(),
-    fileTypes: getFileTypesMock(),
+    fileState: undefined,
+    refreshFiles: async () => ({ data: { organizationFiles: null }, loading: false, networkStatus: NetworkStatus.ready }),
+    closeSidebar: () => {},
+    setFileState: () => {},
+    deleteFile: () => {},
+    downloadFile: () => {},
+    openEditMaterials: () => {},
+    allMaterials: [],
   },
 };
+
+interface DocumentDetailsSidebarStoryProps {
+  file: FilesWithAssurances | undefined;
+  sustainabilityAttributes: Claims[];
+  refreshFiles: () => void;
+  closeSidebar: () => void;
+  innerRef: React.RefObject<HTMLDivElement>;
+  deleteFile: (id: string) => void;
+  isLoading: boolean;
+  downloadFile: (url: string | undefined) => void;
+  signedUrl: string | undefined;
+}
 
 const SidebarStory = (props: {
 	file: FilesWithAssurances | undefined;
 	sustainabilityAttributes: Claims[];
-  fileTypes: string[];
 	refreshFiles: () => void;
 	closeSidebar: () => void;
 	innerRef: React.RefObject<HTMLDivElement>;
@@ -93,14 +134,18 @@ const SidebarStory = (props: {
 	downloadFile: (url: string | undefined) => void;
 	signedUrl: string | undefined;
 }) => {
-	const { file, fileTypes, innerRef, sustainabilityAttributes } = props;
+	const { file, innerRef, sustainabilityAttributes } = props;
 	const [selectedFile, setSelectedFile] = React.useState<FilesWithAssurances | undefined>(file);
   const [ editDocumentFileState, setEditDocumentFileState ] = React.useState<DocumentDetailsSidebarFileState | undefined>(undefined);
   const [ editMaterialsModalIsOpen, setEditMaterialsModalIsOpen ] = React.useState(false);
-  const allMaterials = getMaterialsMocksWithAssurances().map(material => {
-    const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
-    return { id: material.id, name: material.name, tier2SupplierName: tier2Supplier?.name, tier2SupplierId: tier2Supplier?.id };
-  })
+  const allMaterials: MaterialWithTier2Supplier[] = getMaterialsMocksWithAssurances().map(material => ({
+    id: material.id,
+    name: material.name,
+    tier2SupplierName: material.organizationFacility?.name || '',
+    tier2SupplierId: material.organizationFacility?.id || '',
+  }));
+  const mockMutator: KeyedMutator<ApolloQueryResult<{ organizationFiles: FilesWithAssurances[] | null }>> =
+    async () => ({ data: { organizationFiles: null }, loading: false, networkStatus: NetworkStatus.ready });
 
 	return (
 		<StoryMockProvider>
@@ -110,8 +155,7 @@ const SidebarStory = (props: {
         fileState={editDocumentFileState}
         setFileState={setEditDocumentFileState}
 				sustainabilityAttributes={sustainabilityAttributes}
-        fileTypes={fileTypes}
-				refreshFiles={() => {}}
+				refreshFiles={mockMutator}
 				closeSidebar={() => setSelectedFile(undefined)}
 				innerRef={innerRef}
 				deleteFile={() => {

@@ -123,7 +123,7 @@ model component_definitions {
   /// @zod.custom.use(z.date().optional())
   updated_at  DateTime                   @updatedAt
 
-	@@index([name], map: "component_definitions_name_idx1")
+  @@index([name], map: "component_definitions_name_idx1")
 }
 
 /// @namespace Policies
@@ -191,7 +191,7 @@ model survey_definitions {
   survey_data   survey_data[]
   survey_status survey_status[]
 
-	@@index([name], map: "survey_definitions_name_idx1")
+  @@index([name], map: "survey_definitions_name_idx1")
 }
 
 /// @namespace Surveys
@@ -221,7 +221,7 @@ model survey_data {
   @@unique([organization_id, survey_definition_id], name: "orgSurveyKey")
   @@index([survey_definition_id])
   @@index([survey_definition_id], map: "survey_data_survey_definition_id_idx1")
-	@@index([organization_id], map: "survey_data_organization_id_idx1")
+  @@index([organization_id], map: "survey_data_organization_id_idx1")
 }
 
 /// @namespace Survey Status
@@ -243,9 +243,9 @@ model survey_status {
 
   @@index([organization_id])
   @@index([organization_id], map: "survey_status_organization_id_idx1")
-	@@index([survey_id], map: "survey_status_survey_id_idx1")
-	@@index([survey_data_id], map: "survey_status_survey_data_id_idx1")
-	@@index([survey_name], map: "survey_status_survey_name_idx1")
+  @@index([survey_id], map: "survey_status_survey_id_idx1")
+  @@index([survey_data_id], map: "survey_status_survey_data_id_idx1")
+  @@index([survey_name], map: "survey_status_survey_name_idx1")
 }
 
 /// @namespace Categories
@@ -293,8 +293,8 @@ model category_data {
   category_definition    category_definitions @relation(fields: [category_definition_id], references: [id], onDelete: Cascade)
   organizations          organizations        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
-	@@index([organization_id], map: "category_data_organization_id_idx1")
-	@@index([category_definition_id], map: "category_data_category_definition_id_idx1")
+  @@index([organization_id], map: "category_data_organization_id_idx1")
+  @@index([category_definition_id], map: "category_data_category_definition_id_idx1")
 }
 
 /// @namespace Organizations
@@ -323,6 +323,8 @@ model organizations {
   isTest                                            Boolean                                             @default(false)
   website                                           String?
   deleted                                           Boolean                                             @default(false)
+  linear_secret                                     String?
+  linear_webhook_id                                 String?
   actions                                           actions[]
   category_data                                     category_data[]
   integrations                                      integrations[]
@@ -346,8 +348,12 @@ model organizations {
   material_suppliers                                material_suppliers[]
   product_materials                                 product_materials[]
   sustainability_attribute_classifcation_assignment sustainability_attribute_classifcation_assignment[]
+  material_tags                                     material_tags[]
+  material_tag_assignments                          material_tag_assignments[]
+  product_tag_assignments                           product_tag_assignments[]
+  products_tags                                     products_tags[]
 
-	@@index([name], map: "organizations_name_idx1")
+  @@index([name], map: "organizations_name_idx1")
 }
 
 /// @namespace Organization_Facilities
@@ -384,6 +390,7 @@ model organization_facilities {
   attribute_assurances attribute_assurances[]
   material_suppliers   material_suppliers[]
   products             products[]
+  materials            materials[]
 
   @@unique([organization_id, name], name: "orgFacilityName")
   @@index([organization_id], map: "organization_facilities_organization_id_idx1")
@@ -523,6 +530,7 @@ model organization_files {
   id                                        String                                      @id @default(cuid())
   integration_id                            String?
   mimetype                                  String?
+  processing_status                         processing_status?
   size                                      Int?
   acl                                       String?
   contentType                               String?
@@ -551,6 +559,7 @@ model organization_files {
   @@unique([organization_id, openai_file_id], name: "openaiFileId")
   @@unique([organization_id, bucket, key], name: "s3Key")
   @@index([integration_id], map: "organization_files_integration_id_idx1")
+  @@index([organization_id, type, processing_status], map: "organization_files_organization_id_type_idx1")
 }
 
 model organization_compliances_old {
@@ -616,7 +625,7 @@ model facility_footprints {
   organization organizations @relation(fields: [organization_id], references: [id])
 
   @@unique([facility_id, type, value], name: "facilityFootprintKey")
-	@@unique([facility_id, type, value], map: "facility_footprints_facility_id_type_value_idx1")
+  @@unique([facility_id, type, value], map: "facility_footprints_facility_id_type_value_idx1")
 }
 
 model sustainability_attributes {
@@ -640,7 +649,7 @@ model sustainability_attributes {
   @@index([organization_id], map: "sustainability_attributes_organization_id_idx1")
   @@index([level], map: "sustainability_attributes_level_idx1")
   @@index([type], map: "sustainability_attributes_type_idx1")
-	@@index([material_classification_id], map: "sustainability_attributes_material_classification_id_idx1")
+  @@index([material_classification_id], map: "sustainability_attributes_material_classification_id_idx1")
 }
 
 model attribute_assurances {
@@ -671,31 +680,32 @@ model attribute_assurances {
 }
 
 model products {
-  id                   String                   @id @default(cuid())
-  name                 String
-  created_at           DateTime?                @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime?                @updatedAt @db.Timestamptz(6)
-  deleted              Boolean?                 @default(false)
-  organization_id      String
-	plm_id							 String?
-  description          String?
-  product_category     String?
-  product_subcategory  String?
-  metadata             Json?
-  gender               String?
-  season_code          String?
-  upc_code             String?
-  brand_product_sku    String?
-  brand_product_id     String?
-  supplier_product_id  String?
-  supplier_id          String?
-  style_code           String?
-  emission_stats       Json?
-	weight							 Float?
-  materials            product_materials[]
-  organization         organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  supplier             organization_facilities? @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
-  attribute_assurances attribute_assurances[]
+  id                      String                    @id @default(cuid())
+  name                    String
+  created_at              DateTime?                 @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime?                 @updatedAt @db.Timestamptz(6)
+  deleted                 Boolean?                  @default(false)
+  organization_id         String
+  plm_id                  String?
+  description             String?
+  product_category        String?
+  product_subcategory     String?
+  metadata                Json?
+  gender                  String?
+  season_code             String?
+  upc_code                String?
+  brand_product_sku       String?
+  brand_product_id        String?
+  supplier_product_id     String?
+  supplier_id             String?
+  style_code              String?
+  emission_stats          Json?
+  weight                  Float?
+  materials               product_materials[]
+  organization            organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  supplier                organization_facilities?  @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+  attribute_assurances    attribute_assurances[]
+  product_tag_assignments product_tag_assignments[]
 
   @@unique([organization_id, upc_code, name], name: "orgIdNameUpc")
   @@unique([organization_id, name], name: "orgIdName")
@@ -705,9 +715,9 @@ model products {
   @@index([brand_product_sku], map: "brand_product_sku_idx1")
   @@index([supplier_product_id], map: "supplier_product_id_idx1")
   @@index([organization_id], map: "products_organization_id_idx1")
-	@@index([supplier_id], map: "products_supplier_id_idx1")
-	@@index([name], map: "products_name_idx1")
-	@@index([plm_id], map: "products_plm_id_idx1")
+  @@index([supplier_id], map: "products_supplier_id_idx1")
+  @@index([name], map: "products_name_idx1")
+  @@index([plm_id], map: "products_plm_id_idx1")
 }
 
 model core_classifications {
@@ -726,8 +736,9 @@ model material_classification {
   created_at                                        DateTime                                            @default(now())
   updated_at                                        DateTime                                            @updatedAt
   materials                                         materials[]
+  weight_factor                                     Float?
   core_classification_id                            Int?
-  core_classification                               core_classifications?                                @relation(fields: [core_classification_id], references: [id], onDelete: Cascade)
+  core_classification                               core_classifications?                               @relation(fields: [core_classification_id], references: [id], onDelete: Cascade)
   sustainability_attributes                         sustainability_attributes[]
   sustainability_attribute_classifcation_assignment sustainability_attribute_classifcation_assignment[]
 
@@ -749,41 +760,190 @@ model sustainability_attribute_classifcation_assignment {
   material_classification  material_classification   @relation(fields: [material_classification_id], references: [id], onDelete: Cascade)
   organization             organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
-	@@index([organization_id], map: "classification_organization_id_idx1")
-	@@index([sustainability_attribute_id], map: "classification_assignment_sustainability_attribute_id_idx1")
-	@@index([material_classification_id], map: "classification_assignment_material_classification_id_idx1")
+  @@index([organization_id], map: "classification_organization_id_idx1")
+  @@index([sustainability_attribute_id], map: "classification_assignment_sustainability_attribute_id_idx1")
+  @@index([material_classification_id], map: "classification_assignment_material_classification_id_idx1")
 }
 
 model materials {
-  id                         String                   @id @default(cuid())
-  name                       String
-  created_at                 DateTime?                @default(now()) @db.Timestamptz(6)
-  updated_at                 DateTime?                @updatedAt @db.Timestamptz(6)
-  deleted                    Boolean?                 @default(false)
-  organization_id            String
-  brand_material_id          String?
-  supplier_material_id       String?
-  description                String?
-  ai_description             String?
-  material_suppliers         material_suppliers[]
-  material_category          String?
-  material_subcategory       String?
-  organization_facility_id   String?
-  emissions_factor           Float?
-  activity_id                String?
-  metadata                   Json?
-  organization               organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  attribute_assurances       attribute_assurances[]
-  product_materials          product_materials[]
-  data_source                String?
-  material_classification    material_classification? @relation(fields: [material_classification_id], references: [id])
-  material_classification_id Int?
-  emission_stats             Json?
+  id                            String                      @id @default(cuid())
+  name                          String
+  created_at                    DateTime?                   @default(now()) @db.Timestamptz(6)
+  updated_at                    DateTime?                   @updatedAt @db.Timestamptz(6)
+  deleted                       Boolean?                    @default(false)
+  organization_id               String
+  brand_material_id             String?
+  supplier_material_id          String?
+  description                   String?
+  ai_description                String?
+  material_suppliers            material_suppliers[]
+  material_category             String?
+  material_subcategory          String?
+  organization_facility_id      String?
+  emissions_factor              Float?
+  weight_factor                 Float?
+  weight_factor_unit_of_measure String?
+  length                        Float?
+  length_unit_of_measure        String?
+  width                         Float?
+  width_unit_of_measure         String?
+  activity_id                   String?
+  metadata                      Json?
+  organization                  organizations               @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  attribute_assurances          attribute_assurances[]
+  product_materials             product_materials[]
+  data_source                   String?
+  organization_facility         organization_facilities?    @relation(fields: [organization_facility_id], references: [id], onDelete: Cascade)
+  material_classification       material_classification?    @relation(fields: [material_classification_id], references: [id])
+  material_classification_id    Int?
+  emission_stats                Json?
+  material_tag_assignments      material_tag_assignments[]
+  material_emission_factors     material_emission_factors[]
 
   @@unique([organization_id, name], name: "orgIdName")
   @@index([organization_id], map: "materials_organization_id_idx1")
-	@@index([material_classification_id], map: "materials_material_classification_id_idx1")
-	@@index([name], map: "materials_name_idx1")
+  @@index([organization_facility_id], map: "materials_organization_facility_id_idx1")
+  @@index([material_classification_id], map: "materials_material_classification_id_idx1")
+  @@index([name], map: "materials_name_idx1")
+}
+
+model material_emission_factors {
+  id                     String   @id @default(cuid())
+  material_id            String
+  eco_invent_activity_id String?
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
+  emission_factor_id     String
+
+  material             materials            @relation(fields: [material_id], references: [id], onDelete: Cascade)
+  ecoinvent_activities ecoinvent_activities? @relation(fields: [eco_invent_activity_id], references: [id], onDelete: Cascade)
+  emission_factors     emission_factors     @relation(fields: [emission_factor_id], references: [id], onDelete: Cascade)
+
+  @@index([eco_invent_activity_id], map: "material_emission_factors_activity_id_idx1")
+  @@index([material_id], map: "material_emission_factors_material_id_idx1")
+}
+
+model ecoinvent_classifications {
+  id          String  @id @default(cuid())
+  name        String
+  system      String
+  description String?
+
+  created_at                         DateTime                             @default(now())
+  updated_at                         DateTime                             @updatedAt
+  ecoinvent_activity_classifications ecoinvent_activity_classifications[]
+
+  @@unique([name, system], name: "ecoinventClassificationNameSystem")
+  @@index([name], map: "ecoinvent_classifications_name_idx1")
+  @@index([system], map: "ecoinvent_classifications_system_idx1")
+}
+
+model ecoinvent_activity_classifications {
+  id                          String @id @default(cuid())
+  ecoinvent_activity_id       String
+  ecoinvent_classification_id String
+
+  ecoinvent_activity       ecoinvent_activities      @relation(fields: [ecoinvent_activity_id], references: [id], onDelete: Cascade)
+  ecoinvent_classification ecoinvent_classifications @relation(fields: [ecoinvent_classification_id], references: [id], onDelete: Cascade)
+
+  @@unique([ecoinvent_activity_id, ecoinvent_classification_id], name: "ecoinventActivityClassificationKey")
+  @@index([ecoinvent_activity_id], map: "ecoinvent_activity_classifications_ecoinvent_activity_id_idx1")
+  @@index([ecoinvent_classification_id], map: "ecoinvent_activity_classification_id_idx1")
+}
+
+model ecoinvent_impact_categories {
+  id            String @id @default(cuid())
+  impact_method String
+  name          String
+
+  created_at                 DateTime                     @default(now())
+  updated_at                 DateTime                     @updatedAt
+  ecoinvent_activity_impacts ecoinvent_activity_impacts[]
+
+  @@unique([name, impact_method], name: "ecoinventImpactCategoryNameMethod")
+	@@index([name], map: "ecoinvent_impact_categories_name_idx1")
+  @@index([impact_method], map: "ecoinvent_impact_categories_impact_method_idx1")
+}
+
+model ecoinvent_activity_impacts {
+  id                    String                      @id @default(cuid())
+  ecoinvent_activity_id String
+  impact_category_id    String
+  impact_value          Float
+  impact_unit_name      String
+	impact_method_name		String
+  impact_category       ecoinvent_impact_categories @relation(fields: [impact_category_id], references: [id], onDelete: Cascade)
+  ecoinvent_activity    ecoinvent_activities        @relation(fields: [ecoinvent_activity_id], references: [id], onDelete: Cascade)
+
+  @@unique([ecoinvent_activity_id, impact_category_id, impact_method_name], name: "ecoinventActivityImpactKey")
+	@@index([ecoinvent_activity_id, impact_method_name], map: "ecoinvent_activity_impact_method_name_idx1")
+	@@index([impact_method_name], map: "ecoinvent_activity_impacts_impact_method_name_idx1")
+  @@index([impact_category_id], map: "ecoinvent_activity_impacts_impact_category_id_idx1")
+  @@index([ecoinvent_activity_id], map: "ecoinvent_activity_impacts_ecoinvent_activity_id_idx1")
+  @@index([impact_value], map: "ecoinvent_activity_impacts_impact_value_idx1")
+}
+
+model emission_factors {
+  id                        String                      @id @default(cuid())
+  name                      String
+  value                     Float
+  description               String?
+  created_at                DateTime                    @default(now())
+  updated_at                DateTime                    @updatedAt
+  material_emission_factors material_emission_factors[]
+
+  @@index([value], map: "emission_factors_value_idx1")
+}
+
+model ecoinvent_activities {
+  id                 String   @id @default(cuid())
+  name               String
+  description        String?
+  parent_activity_id String?
+  raw_data           Json?
+  location           String?
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+
+  //parent_activity                    ecoinvent_activities?                @relation("ActivityToParent", fields: [parent_activity_id], references: [id])
+  //children                           ecoinvent_activities[]               @relation("ActivityToParent")
+  ecoinvent_activity_classifications ecoinvent_activity_classifications[]
+  ecoinvent_activity_impacts         ecoinvent_activity_impacts[]
+  material_emission_factors          material_emission_factors[]
+
+  @@unique([name, location], name: "ecoinventActivityName")
+	@@index([location], map: "ecoinvent_activities_location_idx1")
+  @@index([name], map: "ecoinvent_activities_name_idx1")
+  @@index([parent_activity_id], map: "ecoinvent_activities_parent_activity_id_idx1")
+}
+
+model material_tag_assignments {
+  id              Int      @id @default(autoincrement())
+  material_id     String
+  tag_id          Int
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  organization_id String
+
+  organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  material     materials     @relation(fields: [material_id], references: [id], onDelete: Cascade)
+
+  @@unique([material_id, tag_id, organization_id], name: "materialTagUniqueKey")
+  @@index([organization_id], map: "material_tag_assignments_organization_id_idx1")
+  @@index([material_id], map: "material_tag_assignments_material_id_idx1")
+}
+
+model material_tags {
+  id              Int      @id @default(autoincrement())
+  organization_id String
+  tag             String
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  @@unique([organization_id, tag], name: "organization_material_tag_unique")
+  @@index([organization_id], map: "material_tags_organization_id_idx1")
 }
 
 model material_suppliers {
@@ -804,13 +964,42 @@ model material_suppliers {
   @@index([material_id], map: "material_suppliers_material_id_idx1")
 }
 
+model product_tag_assignments {
+  id              Int      @id @default(autoincrement())
+  product_id      String
+  tag_id          Int
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  organization_id String
+
+  organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  product      products      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@unique([organization_id, product_id, tag_id], name: "organization_product_tag_unique")
+  @@index([organization_id], map: "product_tag_assignments_organization_id_idx1")
+  @@index([product_id], map: "product_tag_assignments_product_id_idx1")
+}
+
+model products_tags {
+  id              Int      @id @default(autoincrement())
+  organization_id String
+  tag             String
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  @@unique([organization_id, tag], name: "organization_product_tag_unique")
+  @@index([organization_id], map: "product_tags_organization_id_idx1")
+}
+
 model product_materials {
   id                   String        @id @default(cuid())
   product_id           String
   material_id          String?
   material_supplier_id String?
   organization_id      String
-	plm_id							 String?
+  plm_id               String?
   yield                Float?
   weight               Float?
   unit_of_measure      String?
@@ -824,7 +1013,7 @@ model product_materials {
   product              products      @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
   @@unique([material_id, product_id], name: "materialProductKey")
-	@@index([plm_id, organization_id], map: "product_materials_plm_id_organization_id_idx1")
+  @@index([plm_id, organization_id], map: "product_materials_plm_id_organization_id_idx1")
   @@index([material_id], map: "product_materials_material_id_idx1")
   @@index([organization_id], map: "product_materials_organization_id_idx1")
   @@index([product_id], map: "product_materials_product_id_idx1")
@@ -853,7 +1042,7 @@ model organization_compliance {
 
   @@unique([organization_id, compliance_definition_name], name: "orgIdCompNameKey")
   @@index([compliance_definition_id], map: "organization_compliance_compliance_definition_id_idx1")
-	@@index([organization_id], map: "organization_compliance_organization_id_idx1")
+  @@index([organization_id], map: "organization_compliance_organization_id_idx1")
 }
 
 model compliance_definitions {
@@ -920,7 +1109,7 @@ model compliance_sections {
   @@unique([compliance_definition_name, key], name: "compDefNameSectionKey")
   @@index([compliance_definition_id], map: "compliance_sections_compliance_definition_id_idx1")
   @@index([compliance_section_dependency_chain_id], map: "compliance_sections_compliance_section_dependency_chain_id_idx1")
-	@@index([compliance_section_group_id], map: "compliance_sections_compliance_section_group_id_idx1")
+  @@index([compliance_section_group_id], map: "compliance_sections_compliance_section_group_id_idx1")
 }
 
 model compliance_questions {
@@ -958,7 +1147,7 @@ model compliance_questions {
   @@unique([compliance_section_id, key], name: "compSecKey")
   @@index([compliance_definition_id], map: "compliance_questions_compliance_definition_id_idx1")
   @@index([compliance_question_dependency_chain_id], map: "compliance_questions_compliance_question_dependency_chain__idx1")
-	@@index([compliance_section_id], map: "compliance_questions_compliance_section_id_idx1")
+  @@index([compliance_section_id], map: "compliance_questions_compliance_section_id_idx1")
 }
 
 model compliance_section_dependency_chains {
@@ -1093,7 +1282,7 @@ model organization_compliance_responses {
 
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
   @@index([compliance_question_id], map: "organization_compliance_responses_compliance_question_id_idx1")
-	@@index([organization_compliance_id], map: "compliance_responses_organization_compliance_id_idx1")
+  @@index([organization_compliance_id], map: "compliance_responses_organization_compliance_id_idx1")
 }
 
 model organization_compliance_ai_responses {
@@ -1118,7 +1307,7 @@ model organization_compliance_ai_responses {
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
   @@index([compliance_question_id], map: "organization_compliance_ai_response_compliance_question_id_idx1")
   @@index([organization_id], map: "organization_compliance_ai_responses_organization_id_idx1")
-	@@index([organization_compliance_id], map: "organization_ai_responses_organization_compliance_id_idx1")
+  @@index([organization_compliance_id], map: "organization_ai_responses_organization_compliance_id_idx1")
 }
 
 model organization_compliance_ai_response_files {
@@ -1139,7 +1328,7 @@ model organization_compliance_ai_response_files {
   @@index([organization_compliance_ai_response_id], map: "organization_compliance_ai_re_organization_compliance_ai_r_idx1")
   @@index([organization_files_id], map: "organization_compliance_ai_response__organization_files_id_idx1")
   @@index([organization_id], map: "organization_compliance_ai_response_files_organization_id_idx1")
-	@@index([organization_compliance_id], map: "organization_compliance_id_idx1")
+  @@index([organization_compliance_id], map: "organization_compliance_id_idx1")
 }
 
 model climatiq_actvities {
@@ -1199,6 +1388,44 @@ view compliance_responses {
   @@index([organization_compliance_ai_response_id])
   @@index([organization_compliance_response_id])
   @@index([organization_id, compliance_question_id, compliance_section_id, compliance_section_group_id, compliance_definition_name, organization_compliance_ai_response_id, organization_compliance_response_id], name: "orgCompFullIDX")
+}
+
+model ecoinvent_imports {
+  id                String            @id @default(uuid())
+  bucket            String
+  key               String            @unique
+  activity_name     String
+  location          String
+  reference_product String
+  job_status        String?
+  processing_status processing_status @default(PENDING)
+  created_at        DateTime          @default(now())
+  updated_at        DateTime?         @updatedAt
+  ecoinvent_data    ecoinvent_data[]
+
+  @@index([processing_status], map: "ecoinvent_imports_processing_status_idx1")
+  @@index([key], map: "ecoinvent_imports_key_idx1")
+  @@index([job_status], map: "ecoinvent_imports_job_status_idx1")
+  @@index([activity_name], map: "ecoinvent_imports_activity_name_idx1")
+  @@index([location], map: "ecoinvent_imports_location_idx1")
+  @@index([reference_product], map: "ecoinvent_imports_reference_product_idx1")
+}
+
+model ecoinvent_data {
+  id            String  @id @default(uuid())
+  import_id     String
+  key           String  @unique
+  xml           String? // raw XML
+  parsed        Json? // full parsed data with all attributes
+  location      String?
+  activity_name String?
+  description   String?
+
+  created_at  DateTime          @default(now())
+  updated_at  DateTime?         @updatedAt
+  import_file ecoinvent_imports @relation(fields: [import_id], references: [id])
+
+  @@index([key], map: "ecoinvent_data_key_idx1")
 }
 
 view organization_claims_view {
@@ -1301,7 +1528,17 @@ enum file_types {
   POLICY
   SCOPE_CERTIFICATE
   TRANSACTION_CERTIFICATE
+  SUSTAINABILITY_DATA
   OTHER
+}
+
+enum processing_status {
+  PENDING
+  IMPORT_COMPLETE
+  PROCESSING_ERROR
+  MANUAL_REVIEW
+  AI_PROCESSING
+  JOB_PROCESSING
 }
 
 enum claim_types {

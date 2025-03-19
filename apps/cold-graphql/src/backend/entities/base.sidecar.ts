@@ -3,8 +3,11 @@ import { MqttActionEnum, MqttService, mqttService, MqttStatusEnum } from '../lib
 import { Cuid2Generator } from '../libs/cuid/cuid2-generator.service';
 import { CreateOrUpdateHookParams, DeleteHookParams, ReadHookParams } from '@exogee/graphweaver';
 import { OrgContext } from '../libs/acls/acl_policies';
-import { set } from 'lodash';
+import { merge, set } from 'lodash';
+import { v4 } from 'uuid';
 import { GuidPrefixes } from '../libs/cuid/compliance.enums';
+import { Organization } from './postgresql';
+import { EntityManager } from '@mikro-orm/core';
 
 export class BaseSidecar {
 	logger;
@@ -51,25 +54,30 @@ export class BaseSidecar {
 	}
 
 	async afterReadHook(params: ReadHookParams<typeof this.entity, OrgContext>) {
-		if (this.secrets) {
-			await this.mqtt.connect();
-		}
-
 		this.logger.log(`after read ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 		return params;
 	}
 
 	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
-		this.logger.log(`before create ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
+		if (params.args.items.length > 0) {
+			this.logger.log(`before create ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 
-		for (const item of params.args.items) {
-			set(item, 'id', new Cuid2Generator(GuidPrefixes[`${this.entity.name}` as keyof typeof GuidPrefixes]).scopedId);
-			set(item, 'updatedAt', new Date());
-			set(item, 'createdAt', new Date());
+			for (const item of params.args.items) {
+				let id: string;
+				if (GuidPrefixes[`${this.entity.name}` as keyof typeof GuidPrefixes]) {
+					id = new Cuid2Generator(GuidPrefixes[`${this.entity.name}` as keyof typeof GuidPrefixes]).scopedId;
+				} else {
+					id = v4();
+				}
 
-			if (this.isOrgScoped) {
-				if (!params.context.user.isColdAdmin && item.organization?.id !== params.context.user.organization?.id) {
-					set(item, 'organization.id', params.context.user.organization?.id);
+				set(item, 'id', id);
+				set(item, 'updatedAt', new Date());
+				set(item, 'createdAt', new Date());
+
+				if (this.isOrgScoped) {
+					if (!params.context.user.isColdAdmin && item.organization?.id !== params.context.user.organization?.id) {
+						set(item, 'organization.id', params.context.user.organization?.id);
+					}
 				}
 			}
 		}
@@ -78,59 +86,65 @@ export class BaseSidecar {
 	}
 
 	async afterCreateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
-		if (this.secrets) {
-			await this.mqtt.connect();
+		if (params.args.items.length > 0) {
+			const payload = {
+				action: MqttActionEnum.CREATE,
+				status: MqttStatusEnum.COMPLETE,
+				data: params as any,
+				swr_key: this.entity.name,
+				org_id: params.context.user.organization.id,
+				user: params.context.user.email,
+			};
+
+			await this.mqtt.publishMQTT(payload, params);
+
+			this.logger.info(`Created ${this.entityName}`, { params, payload });
+			return params;
 		}
 
-		const payload = {
-			action: MqttActionEnum.DELETE,
-			status: MqttStatusEnum.COMPLETE,
-			data: params as any,
-			swr_key: this.entity.name,
-			org_id: params.context.user.organization.id,
-			user: params.context.user.email,
-		};
-
-		await this.mqtt.publishMQTT(payload, params);
-
-		this.logger.info(`Created ${this.entityName}`, { params, payload });
 		return params;
 	}
 
 	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
-		this.logger.log(`before update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
+		if (params.args.items.length > 0) {
+			this.logger.log(`before update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
+			const em = this.entity.prototype.__factory.em as EntityManager;
+			em.clear(); //clear EM cache
+			for (const item of params.args.items as (typeof this.entity)[]) {
+				if (item.metadata) {
+					const response = await em.findOneOrFail(Organization, { id: item.id });
+					// parse the metadata only if it's type is a string which must be in order to send from postman
+					const source = typeof response?.metadata === 'string' ? JSON.parse(response?.metadata) : response.metadata;
+					const update = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata;
+					item.metadata = merge({}, source, update);
 
-		if (this.secrets) {
-			await this.mqtt.connect();
-		}
+					this.logger.log(`Updated metadata for ${this.entityName}`, { metadata: item.metadata });
+				}
 
-		for (const item of params.args.items) {
-			set(item, 'updatedAt', new Date());
+				set(item, 'updatedAt', new Date());
+			}
 		}
 
 		return params;
 	}
 
 	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
-		this.logger.log(`after update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
+		if (params.args.items.length > 0) {
+			this.logger.log(`after update ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 
-		if (this.secrets) {
-			await this.mqtt.connect();
+			const payload = {
+				action: MqttActionEnum.UPDATE,
+				status: MqttStatusEnum.COMPLETE,
+				data: params as any,
+				swr_key: this.entity.name,
+				org_id: params.context.user.organization.id,
+				user: params.context.user.email,
+			};
+
+			await this.mqtt.publishMQTT(payload, params);
+
+			this.logger.info(`Sent MQTT Message: Updated ${params.args.items.length} ${this.entityName}`);
 		}
-
-		const payload = {
-			action: MqttActionEnum.DELETE,
-			status: MqttStatusEnum.COMPLETE,
-			data: params as any,
-			swr_key: this.entity.name,
-			org_id: params.context.user.organization.id,
-			user: params.context.user.email,
-		};
-
-		await this.mqtt.publishMQTT(payload, params);
-
-		this.logger.info(`Sent MQTT Message: Updated ${params.args.items.length} ${this.entityName}`);
-
 		return params;
 	}
 
@@ -142,10 +156,6 @@ export class BaseSidecar {
 
 	async afterDeleteHook(params: DeleteHookParams<typeof this.entity, OrgContext>) {
 		this.logger.log(`after delete ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
-
-		if (this.secrets) {
-			await this.mqtt.connect();
-		}
 
 		const payload = {
 			action: MqttActionEnum.DELETE,

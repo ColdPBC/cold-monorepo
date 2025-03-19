@@ -55,7 +55,21 @@ module.exports = {
 							fontSize: fontSizes().body[0],
 							lineHeight: fontSizes().body[1].lineHeight,
 							fontWeight: fontSizes().body[1].fontWeight,
-						},
+              marginTop: '0',
+              marginBottom: '0',
+            },
+            div: {
+              fontSize: fontSizes().body[0],
+              lineHeight: fontSizes().body[1].lineHeight,
+              fontWeight: fontSizes().body[1].fontWeight,
+              marginTop: '0',
+              marginBottom: '0',
+            },
+            span: {
+              fontSize: fontSizes().body[0],
+              lineHeight: fontSizes().body[1].lineHeight,
+              fontWeight: fontSizes().body[1].fontWeight,
+            },
 						strong: {
 							fontSize: fontSizes().body[0],
 							lineHeight: fontSizes().body[1].lineHeight,
@@ -69,8 +83,29 @@ module.exports = {
 							fontSize: fontSizes().body[0],
 							lineHeight: fontSizes().body[1].lineHeight,
 							fontWeight: fontSizes().body[1].fontWeight,
-						},
-						maxWidth: '100%',
+              marginTop: '0 !important',
+              marginBottom: '0 !important',
+            },
+            // Remove top margin from the first <p> in <li> elements
+            'ol > li > p:first-child': {
+              marginTop: '0',
+            },
+            // Optionally, adjust the bottom margin
+            'ol > li > p:last-child': {
+              marginBottom: '0',
+            },
+            // Repeat for unordered lists if needed
+            'ul > li > p:first-child': {
+              marginTop: '0',
+            },
+            'ul > li > p:last-child': {
+              marginBottom: '0',
+            },
+            'ol, ul': {
+              marginTop: '0 !important',
+              marginBottom: '0 !important',
+            },
+            maxWidth: '100%',
 						'--tw-prose-body': themeColors().tc.primary,
 						'--tw-prose-headings': themeColors().tc.primary,
 						'--tw-prose-lead': themeColors().tc.primary,
@@ -141,12 +176,26 @@ module.exports = {
 					'50%': { opacity: '0.5', filter: 'brightness(150%)' },
 					'100%': { opacity: '1', filter: 'brightness(100%)' },
 				},
-			},
+        'bounce-gradient': {
+          '0%, 100%': {
+            transform: 'translateY(-50%)',
+            'background-position': '0% 50%',
+          },
+          '50%': {
+            transform: 'translateY(0)',
+            'background-position': '100% 50%',
+          },
+        },
+      },
 			animation: {
 				progressBar: 'progressBar 2s linear infinite',
 				pulsate: 'pulsate 2s linear infinite',
-			},
-		},
+        'bounce-gradient': 'bounce-gradient 1.5s infinite',
+      },
+      backgroundSize: {
+        '200%': '200%',
+      },
+    },
 		minHeight: theme => ({
 			...theme('spacing'),
 		}),

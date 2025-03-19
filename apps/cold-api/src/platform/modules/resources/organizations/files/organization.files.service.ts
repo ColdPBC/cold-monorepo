@@ -21,7 +21,7 @@ import { EventService } from '../../../utilities/events/event.service';
 import { omit, pick } from 'lodash';
 import { OrganizationHelper } from '../helpers/organization.helper';
 import helper from 'csvtojson';
-import { material_suppliers, materials, products } from '@prisma/client';
+import { file_types, material_suppliers, materials, processing_status, products } from '@prisma/client';
 
 @Span()
 @Injectable()
@@ -484,9 +484,19 @@ export class OrganizationFilesService extends BaseWorker {
 		});
 	}
 
-	async uploadFile(req: IRequest, orgId: string, files: Array<Express.Multer.File>, bpc?: boolean) {
+	async uploadFile(req: IRequest, orgId: string, files: Array<Express.Multer.File>, type?: file_types) {
 		const { user, url, organization } = req;
-		const org = await this.helper.getOrganizationById(orgId, req.user, bpc);
+		const org = await this.helper.getOrganizationById(orgId, req.user, true);
+
+		// Add Secret for processing linear webhooks
+		if (!org.linear_secret) {
+			org.linear_secret = new Cuid2Generator(GuidPrefixes.WebhookSecret).scopedId;
+			this.prisma.organizations.update({
+				where: { id: org.id },
+				data: { linear_secret: org.linear_secret },
+			});
+		}
+
 		const failed: any = [];
 		const uploaded: any = [];
 
@@ -514,6 +524,19 @@ export class OrganizationFilesService extends BaseWorker {
 					},
 				});
 
+				let status: processing_status;
+
+				// set processing status to MANUAL_REVIEW for OTHER, SD, and BOM files
+				switch (type) {
+					case file_types.PURCHASE_ORDER:
+					case file_types.SUSTAINABILITY_DATA:
+					case file_types.BILL_OF_MATERIALS:
+						status = processing_status.MANUAL_REVIEW;
+						break;
+					default:
+						status = processing_status.AI_PROCESSING;
+				}
+
 				if (existing) {
 					if (existing?.checksum === hash) {
 						this.logger.warn(`file ${file.originalname} already exists in db`, pick(file, ['id', 'originalname', 'mimetype', 'size']));
@@ -540,8 +563,9 @@ export class OrganizationFilesService extends BaseWorker {
 							encoding: file.encoding,
 							contentType: file.mimetype,
 							location: file.destination,
+							processing_status: status,
 							checksum: hash,
-							type: 'OTHER',
+							type: type || 'OTHER',
 							metadata: { ...(existing.metadata as any) },
 						},
 					});
@@ -562,19 +586,27 @@ export class OrganizationFilesService extends BaseWorker {
 							contentType: file.mimetype,
 							location: file.destination,
 							checksum: hash,
-							type: 'OTHER',
+							processing_status: status,
+							type: type || 'OTHER',
 							metadata: { status: 'uploaded' },
 						},
 					});
 				}
 
-				//const routingKey = get(this.openAI.definition, 'rabbitMQ.publishOptions.routing_key', 'dead_letter');
-				//await this.events.sendPlatformEvent(routingKey, 'file.uploaded', { existing, user, organization: org }, req);
-
-				await this.events.sendIntegrationEvent(false, 'file.uploaded', { ...existing, organization }, user);
-
 				if (!failed.find(f => f.file.originalname === existing.original_name)) {
 					uploaded.push(existing);
+				}
+
+				// only send event to openAI if the file status is AI_PROCESSING otherwise create MANUAL_REVIEW issue in linear
+				if (existing.processing_status === processing_status.AI_PROCESSING) {
+					await this.events.sendIntegrationEvent(false, 'file.uploaded', { ...existing, organization }, user);
+					//await this.events.sendPlatformEvent('cold.platform.openai', 'file.uploaded', { file: existing, organization }, user);
+				} else {
+					if (existing.bucket && existing.key) {
+						const issue = await this.events.sendRPCEvent('cold.core.linear.events', processing_status.MANUAL_REVIEW, { orgFile: existing, organization, user });
+
+						this.logger.info(`Issue created for file ${existing.original_name}`, { issue });
+					}
 				}
 
 				this.metrics.increment('cold.file.uploaded', 1, {
@@ -584,6 +616,7 @@ export class OrganizationFilesService extends BaseWorker {
 					user_email: user.coldclimate_claims.email,
 					isTestOrg: organization.isTest.toString(),
 				});
+
 				this.metrics.event(
 					'File Uploaded',
 					`A file was uploaded by ${user.coldclimate_claims.email} for ${organization.name}`,

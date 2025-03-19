@@ -2,8 +2,6 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { DocumentUpload } from '@coldpbc/components';
 import { getDocumentListHandler, StoryMockProvider } from '@coldpbc/mocks';
-import { userEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
 
 const meta: Meta<typeof DocumentUpload> = {
   title: 'Pages/DocumentUpload',

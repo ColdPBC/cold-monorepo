@@ -1,6 +1,6 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { ErrorFallback, MaterialWithTier2Supplier, MuiDataGrid } from '@coldpbc/components';
-import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
+import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid-pro';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
@@ -57,6 +57,11 @@ const _DocumentMaterialsTable = (props: { materials: MaterialWithTier2Supplier[]
 			}}
 			className={'text-tc-primary border-[2px] rounded-[2px] border-gray-50 bg-transparent w-full h-auto'}
 			disableRowSelectionOnClick={true}
+      initialState={{
+        sorting: {
+          sortModel: [{ field: 'name', sort: 'asc' }],
+        },
+      }}
 		/>
 	);
 };

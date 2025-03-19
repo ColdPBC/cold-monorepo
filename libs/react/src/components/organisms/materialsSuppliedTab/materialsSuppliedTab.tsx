@@ -1,19 +1,18 @@
 import { SupplierGraphQL, SustainabilityAttribute } from '@coldpbc/interfaces';
 import {
-	BulkEditMaterialAttributesModal,
-	Card,
-	DEFAULT_GRID_COL_DEF,
-	EditEntityAssociationsModal,
-	ErrorFallback,
-	MuiDataGrid,
-	SustainabilityAttributeColumnList,
+  BulkEditAttributesForEntitiesSuppliedModal,
+  Card,
+  DEFAULT_GRID_COL_DEF,
+  EditEntityAssociationsModal, EntitiesSelected,
+  ErrorFallback,
+  MuiDataGrid,
+  SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
-import { GridCellParams, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import { processEntityLevelAssurances } from '@coldpbc/lib';
+import { GridCellParams, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid-pro';
+import {GRID_CHECKBOX_COL_DEF, processEntityLevelAssurances} from '@coldpbc/lib';
 import { uniq } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React, { useState } from 'react';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useNavigate } from 'react-router-dom';
 import { ButtonTypes, EntityLevel } from '@coldpbc/enums';
 import { Checkbox } from '@mui/material';
@@ -26,14 +25,13 @@ interface MaterialsSuppliedTabProps {
 const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, refreshData }) => {
   const [showBulkEditAttributesModal, setShowBulkEditAttributesModal] = React.useState<boolean>(false);
   const [rowsSelected, setRowsSelected] = useState<GridRowSelectionModel>([]);
-	const ldFlags = useFlags();
 	const navigate = useNavigate();
 
-	const uniqCategories = uniq(supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.materialCategory || ''))
+	const uniqCategories = uniq(supplier.materials.map(material => material.materialCategory || ''))
 		.filter(Boolean)
 		.sort((a, b) => a.localeCompare(b));
 
-	const uniqSubCategories = uniq(supplier.materialSuppliers.map(materialSupplier => materialSupplier.material.materialSubcategory || ''))
+	const uniqSubCategories = uniq(supplier.materials.map(material => material.materialSubcategory || ''))
 		.filter(Boolean)
 		.sort((a, b) => a.localeCompare(b));
 
@@ -43,9 +41,7 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
 		materialCategory: string;
 		materialSubcategory: string;
 		sustainabilityAttributes: SustainabilityAttribute[];
-	}[] = supplier.materialSuppliers.map(materialSupplier => {
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		const material = materialSupplier.material!;
+	}[] = supplier.materials.map(material => {
 		const susAttributes = processEntityLevelAssurances([material]);
 		return {
 			id: material.id,
@@ -56,18 +52,20 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
 		};
 	});
 
-  const getMaterialsSelected = () => {
-    return rows.filter(row => rowsSelected.includes(row.id));
+  const getMaterialsSelected = (): EntitiesSelected[] => {
+    return rows
+      .map(row => ({
+        id: row.id,
+        sustainabilityAttributes: row.sustainabilityAttributes,
+      }))
+      .filter(row =>
+        rowsSelected.includes(row.id)
+      )
   }
 
   const columns: GridColDef[] = [
     {
-      field: 'checkbox',
-      editable: false,
-      sortable: false,
-      hideSortIcons: true,
-      width: 100,
-      headerClassName: 'bg-gray-30',
+      ...GRID_CHECKBOX_COL_DEF,
       renderCell: (params: GridCellParams) => (
         <Checkbox
           data-testid={`select-checkbox-materials-supplied-${params.row.id}`}
@@ -81,12 +79,12 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
           })}
         />
       ),
-      renderHeader: (params) => (
+      renderHeader: () => (
         <Checkbox
           data-testid={'select-all-checkbox-materials-supplied'}
           checked={rowsSelected.length === rows.length && rowsSelected.length > 0}
           indeterminate={rowsSelected.length > 0 && rowsSelected.length < rows.length}
-          onClick={(e) => {
+          onClick={() => {
             if(rowsSelected.length === rows.length) {
               setRowsSelected([]);
             } else if(rowsSelected.length > 0) {
@@ -169,9 +167,7 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
           if (params.field === 'checkbox') {
             return;
           }
-          if (ldFlags.materialDetailPageCold997) {
-            navigate(`/materials/${params.id}`);
-          }
+          navigate(`/materials/${params.id}`);
         }}
 				columns={columns}
 				showSearch
@@ -186,14 +182,15 @@ const _MaterialsSuppliedTab: React.FC<MaterialsSuppliedTabProps> = ({ supplier, 
         disableRowSelectionOnClick={true}
         searchKey={`${supplier.id}materialsSuppliedSearchValue`}
       />
-			<BulkEditMaterialAttributesModal
+			<BulkEditAttributesForEntitiesSuppliedModal
 				show={showBulkEditAttributesModal}
 				onClose={() => {
 					setShowBulkEditAttributesModal(false);
           refreshData();
           setRowsSelected([]);
 				}}
-        materialsSelected={getMaterialsSelected()}
+        entitiesSelected={getMaterialsSelected()}
+        entityLevel={EntityLevel.MATERIAL}
 			/>
 		</Card>
 	);

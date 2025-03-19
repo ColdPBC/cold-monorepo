@@ -1,6 +1,7 @@
 import { Claims } from './claims';
 import { MaterialsWithCertifications } from './materials';
 import {SustainabilityAttributeWithoutAssurances} from "./sustainabilityAttribute";
+import { DocumentTypes, ProcessingStatus } from '@coldpbc/enums';
 
 export interface Files {
 	id: string;
@@ -23,8 +24,11 @@ export interface FilesWithAssurances {
 	id: string;
 	originalName: string;
 	createdAt: string;
+  effectiveStartDate: string | null;
+  effectiveEndDate: string | null;
 	type: string;
 	attributeAssurances: AttributeAssurance[];
+  processingStatus: ProcessingStatus | null;
   metadata: {
     effective_start_date: string | null;
     effective_end_date: string | null;
@@ -47,27 +51,32 @@ export interface AttributeAssurance {
     name: string;
     country: string | null;
     supplierTier: number | null;
-    materialSuppliers: {
-      material: {
-        id: string;
-        name: string;
-      };
+    materials: {
+      id: string;
+      name: string;
     }[];
   };
   material: null | {
     id: string;
     name: string;
-    materialSuppliers: {
-      organizationFacility: {
-        id: string;
-        name: string;
-        supplierTier: number | null;
-      };
-    }[];
+    organizationFacility: {
+      id: string;
+      name: string;
+      supplierTier: number | null;
+    } | null;
   };
   sustainabilityAttribute: SustainabilityAttributeWithoutAssurances;
   product: {
     id: string;
     name: string;
   } | null;
+}
+
+
+export interface UploadsQuery {
+  id: string;
+  originalName: string;
+  createdAt: string;
+  type: typeof DocumentTypes[keyof typeof DocumentTypes];
+  processingStatus: ProcessingStatus | null;
 }

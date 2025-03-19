@@ -1,32 +1,65 @@
+
 // Product Hooks
 import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
 import { Product } from '../postgresql';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { OrganizationProductMaterialEmissions } from '../postgresql/organization-product-material-emissions';
-import { getConnection } from '../../database.config';
+import { GuidPrefixes } from '../../libs/cuid/compliance.enums';
+import { Cuid2Generator } from '../../libs/cuid/cuid2-generator.service';
 import { set } from 'lodash';
 
 export class ProductHooks extends BaseSidecar {
 	constructor() {
 		super(Product, 'products');
 	}
-	// Overrride BeforeReadHook here:
-	override async afterReadHook(params: any): Promise<ReadHookParams<typeof Product, OrgContext>> {
-		return params;
+	
+	async beforeReadHook(params: ReadHookParams<typeof Product, OrgContext>) {
+		this.logger.log('before Product read hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeReadHook(params);
 	}
-	// Overrride AfterReadHook here:
 
-	// Overrride BeforeCreateHook here:
+	
+	async afterReadHook(params: ReadHookParams<typeof Product, OrgContext>) {
+		this.logger.log('Product read', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterReadHook(params);
+		
+	}
 
-	// Overrride AfterCreateHook here:
+	
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
+		this.logger.log(`before create Product`, { user: params.context.user, arguments: params.args });
+	
+	  return super.beforeCreateHook(params);    
+	}
 
-	// Overrride BeforeUpdateHook here:
+	
+	async afterCreateHook(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
+		this.logger.log('Product created', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterCreateHook(params);
+	}
 
-	// Overrride AfterUpdateHook here:
+	
+	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
+		this.logger.log('before Product update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.beforeUpdateHook(params);
+	}
 
-	// Overrride BeforeDeleteHook here:
+	
+	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof Product, OrgContext>) {
+		this.logger.log('Product updated', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterUpdateHook(params);
+	}
 
-	// Overrride AfterDeleteHook here:
+	
+	async beforeDeleteHook(params: DeleteHookParams<typeof Product, OrgContext>) {
+		this.logger.log('before Product delete hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeDeleteHook(params);
+	}
+
+	
+	async afterDeleteHook(params: DeleteHookParams<typeof Product, OrgContext>) {
+		this.logger.log('Product deleted', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterDeleteHook(params);
+	}
+
 }

@@ -4,25 +4,62 @@ import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exo
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
 import { OrganizationComplianceResponse } from '../postgresql';
+import { GuidPrefixes } from '../../libs/cuid/compliance.enums';
+import { Cuid2Generator } from '../../libs/cuid/cuid2-generator.service';
+import { set } from 'lodash';
 
 export class OrganizationComplianceResponseHooks extends BaseSidecar {
 	constructor() {
 		super(OrganizationComplianceResponse, 'organization_compliance_responses');
 	}
-	// Overrride BeforeReadHook here:
+	
+	async beforeReadHook(params: ReadHookParams<typeof OrganizationComplianceResponse, OrgContext>) {
+		this.logger.log('before OrganizationComplianceResponse read hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeReadHook(params);
+	}
 
-	// Overrride AfterReadHook here:
+	
+	async afterReadHook(params: ReadHookParams<typeof OrganizationComplianceResponse, OrgContext>) {
+		this.logger.log('OrganizationComplianceResponse read', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterReadHook(params);
+		
+	}
 
-	// Overrride BeforeCreateHook here:
+	
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof OrganizationComplianceResponse, OrgContext>) {
+		this.logger.log(`before create OrganizationComplianceResponse`, { user: params.context.user, arguments: params.args });
+	
+	  return super.beforeCreateHook(params);    
+	}
 
-	// Overrride AfterCreateHook here:
+	
+	async afterCreateHook(params: CreateOrUpdateHookParams<typeof OrganizationComplianceResponse, OrgContext>) {
+		this.logger.log('OrganizationComplianceResponse created', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterCreateHook(params);
+	}
 
-	// Overrride BeforeUpdateHook here:
+	
+	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof OrganizationComplianceResponse, OrgContext>) {
+		this.logger.log('before OrganizationComplianceResponse update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.beforeUpdateHook(params);
+	}
 
-	// Overrride AfterUpdateHook here:
+	
+	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof OrganizationComplianceResponse, OrgContext>) {
+		this.logger.log('OrganizationComplianceResponse updated', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterUpdateHook(params);
+	}
 
-	// Overrride BeforeDeleteHook here:
+	
+	async beforeDeleteHook(params: DeleteHookParams<typeof OrganizationComplianceResponse, OrgContext>) {
+		this.logger.log('before OrganizationComplianceResponse delete hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeDeleteHook(params);
+	}
 
-	// Overrride AfterDeleteHook here:
+	
+	async afterDeleteHook(params: DeleteHookParams<typeof OrganizationComplianceResponse, OrgContext>) {
+		this.logger.log('OrganizationComplianceResponse deleted', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterDeleteHook(params);
+	}
 
 }

@@ -1,7 +1,6 @@
-import {GridActionsCellItem, GridColDef} from "@mui/x-data-grid";
+import {GridActionsCellItem, GridColDef} from "@mui/x-data-grid-pro";
 import React from "react";
 import {ErrorFallback, MuiDataGrid} from "@coldpbc/components";
-import {lowerCase, startCase} from "lodash";
 import {withErrorBoundary} from "react-error-boundary";
 
 const _CreateMaterialTable = (props: {

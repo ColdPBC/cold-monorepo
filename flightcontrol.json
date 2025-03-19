@@ -62,7 +62,8 @@
             "NIXPACKS_VERSION": "1.26.1",
             "VITE_STRIPE_INTEGRATION_URL": "https://stripe.coldclimate.com",
             "VITE_STRIPE_BILLING_URL": "https://billing.stripe.com/p/login/7sI16O8EQfZpby8288",
-            "VITE_GRAPHQL_URL": "https://graphql.coldclimate.com"
+            "VITE_GRAPHQL_URL": "https://graphql.coldclimate.com",
+            "VITE_OPENAI_SERVICE_URL": "https://openai.coldclimate.com"
           }
         },
         {
@@ -88,8 +89,6 @@
           "dockerContext": ".",
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
-          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-api:build:production",
-          "startCommand": "nx run cold-api:serve:production",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
             "repository": "api-docker-images",
@@ -219,9 +218,6 @@
           "dockerfilePath": "_graphql.dockerfile",
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
-          "installCommand": "corepack enable pnpm && pnpm install",
-          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
-          "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
           "watchPaths": [
             "apps/cold-graphql/src/backend/**",
@@ -423,7 +419,8 @@
             "VITE_STRIPE_INTEGRATION_URL": "https://stripe.coldclimate.online",
             "VITE_STRIPE_BILLING_URL": "https://billing.stripe.com/p/login/test_5kA7uv53VcIa3kY144",
             "VITE_GRAPHQL_URL": "https://graphql.coldclimate.online",
-            "VITE_DD_VERSION": "1.456.1"
+            "VITE_DD_VERSION": "1.456.1",
+            "VITE_OPENAI_SERVICE_URL": "https://openai.coldclimate.online"
           }
         },
         {
@@ -448,8 +445,6 @@
           "dockerContext": ".",
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
-          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) nx run cold-api:build:staging",
-          "startCommand": "nx run cold-api:serve:staging",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
             "repository": "api-docker-images",
@@ -579,8 +574,6 @@
           "includeEnvVariablesInBuild": true,
           "injectEnvVariablesInDockerfile": true,
           "installCommand": "corepack enable pnpm && pnpm install",
-          "buildCommand": "DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo DD_GIT_COMMIT_SHA=$(git rev-parse HEAD) pnpm run build",
-          "startCommand": "pnpm run start",
           "basePath": "./apps/cold-graphql",
 	        "watchPaths": [
 		        "apps/cold-graphql/src/backend/**",

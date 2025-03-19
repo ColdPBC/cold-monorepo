@@ -5,6 +5,7 @@ import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } f
 import { AttributeAssurance } from './attribute-assurance';
 import { Emission } from './emission';
 import { Integration } from './integration';
+import { Material } from './material';
 import { MaterialSupplier } from './material-supplier';
 import { Organization } from './organization';
 import { Product } from './product';
@@ -87,6 +88,9 @@ export class OrganizationFacility {
 
 	@OneToMany({ entity: () => MaterialSupplier, mappedBy: 'organizationFacility' })
 	materialSuppliers = new Collection<MaterialSupplier>(this);
+
+	@OneToMany({ entity: () => Material, mappedBy: 'organizationFacility' })
+	materials = new Collection<Material>(this);
 
 	@OneToMany({ entity: () => Product, mappedBy: 'organizationFacility' })
 	products = new Collection<Product>(this);

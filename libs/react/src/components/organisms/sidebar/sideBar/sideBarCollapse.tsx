@@ -3,9 +3,6 @@ import { ColdIcon, SideBarItem } from '@coldpbc/components';
 import { NavbarItem, NavbarItemWithRoute } from '@coldpbc/interfaces';
 import { IconNames } from '@coldpbc/enums';
 import { twMerge } from 'tailwind-merge';
-import { Sidebar } from 'flowbite-react';
-import { flowbiteThemeOverride } from '@coldpbc/themes';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Link } from 'react-router-dom';
 import { forEach } from 'lodash';
 

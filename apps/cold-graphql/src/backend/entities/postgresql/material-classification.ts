@@ -8,9 +8,9 @@ import { SustainabilityAttribute } from './sustainability-attribute';
 import { SustainabilityAttributeClassifcationAssignment } from './sustainability-attribute-classifcation-assignment';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { default_acl, OrgContext } from '../../libs/acls/acl_policies';
+import { read_only_acl, OrgContext } from '../../libs/acls/acl_policies';
 
-@ApplyAccessControlList(default_acl)
+@ApplyAccessControlList(read_only_acl)
 @Entity({ tableName: 'material_classification' })
 export class MaterialClassification {
 	sidecar: MaterialClassificationHooks;
@@ -38,6 +38,9 @@ export class MaterialClassification {
 
 	@ManyToOne({ entity: () => CoreClassification, ref: true, nullable: true })
 	coreClassification?: Ref<CoreClassification>;
+
+	@Property({ type: 'double', nullable: true })
+	weightFactor?: number;
 
 	@OneToMany({ entity: () => Material, mappedBy: 'materialClassification' })
 	materials = new Collection<Material>(this);

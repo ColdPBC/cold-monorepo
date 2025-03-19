@@ -11,7 +11,7 @@ const meta: Meta<typeof Spinner> = {
   argTypes: {
     size: {
       control: 'radio',
-      options: GlobalSizes,
+      options: Object.values(GlobalSizes),
     },
   },
 };

@@ -18,24 +18,25 @@ import {
   Spinner,
   SustainabilityAttributeSelect,
 } from '@coldpbc/components';
-import { ButtonTypes, EntityLevel, IconNames } from '@coldpbc/enums';
-import { forEach, get, has, lowerCase, startCase } from 'lodash';
+import { AssuranceDocumentTypes, ButtonTypes, DocumentTypes, EntityLevel, IconNames } from '@coldpbc/enums';
+import { forEach, get, has } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
-import { useSWRConfig } from 'swr';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation } from '@coldpbc/hooks';
+import { KeyedMutator } from 'swr';
 import { format, isSameDay, parseISO } from 'date-fns';
-import { isApolloError } from '@apollo/client';
+import { ApolloQueryResult, isApolloError } from '@apollo/client';
 import {
   addTZOffset,
-  areArraysEqual,
+  areArraysEqual, formatScreamingSnakeCase,
   getEffectiveEndDate,
   getEffectiveStartDate,
   getEntity,
   removeTZOffset,
   toSentenceCase,
 } from '@coldpbc/lib';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export interface DocumentDetailsSidebarFileState {
 	id: string;
@@ -83,8 +84,7 @@ const _DocumentDetailsSidebar = (props: {
   fileState: DocumentDetailsSidebarFileState | undefined;
   setFileState: (fileState: DocumentDetailsSidebarFileState | undefined) => void;
 	sustainabilityAttributes: Claims[];
-	fileTypes: string[];
-	refreshFiles: () => void;
+	refreshFiles: KeyedMutator<ApolloQueryResult<{ organizationFiles: FilesWithAssurances[] | null }>>;
 	closeSidebar: () => void;
 	innerRef: React.RefObject<HTMLDivElement>;
 	deleteFile: (id: string) => void;
@@ -94,13 +94,12 @@ const _DocumentDetailsSidebar = (props: {
   openEditMaterials: (fileState: DocumentDetailsSidebarFileState) => void;
   allMaterials: MaterialWithTier2Supplier[];
 }) => {
-  const { mutate } = useSWRConfig();
   const { logBrowser } = useColdContext();
   const {
     file,
     fileState,
     setFileState,
-    fileTypes,
+    refreshFiles,
     sustainabilityAttributes,
     closeSidebar,
     innerRef,
@@ -119,6 +118,7 @@ const _DocumentDetailsSidebar = (props: {
   const { mutateGraphQL: deleteAssurance } = useGraphQLMutation('DELETE_ATTRIBUTE_ASSURANCE');
   const { mutateGraphQL: createAttributeAssurance } = useGraphQLMutation('CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE');
   const { addToastMessage } = useAddToastMessage();
+  const ldFlags = useFlags();
 
   const updateAssuranceHelper = (assuranceId: string, fileState: DocumentDetailsSidebarFileState) => (
     updateAssurance({
@@ -175,12 +175,7 @@ const _DocumentDetailsSidebar = (props: {
 		} else {
 			logBrowser('Assurance deleted successfully', 'info', { response });
 		}
-    await mutate(['GET_ALL_FILES', JSON.stringify({
-      filter: {
-        organization: { id: orgId },
-        visible: true
-      }
-    })]);
+    await refreshFiles();
 	};
 
 	const getInitialFileState = (file: FilesWithAssurances | undefined): DocumentDetailsSidebarFileState | undefined => {
@@ -222,9 +217,11 @@ const _DocumentDetailsSidebar = (props: {
 		setFileState(getInitialFileState(file));
 	}, [setFileState, file]);
 
+  // In the new document upload UX, this sidebar is for Assurance Documents only
+  const fileTypes = ldFlags.showNewDocumentUploadUxCold1410 ? Object.values(AssuranceDocumentTypes) : Object.values(DocumentTypes);
 	const documentTypeOptions: InputOption[] = fileTypes
 		.map((type, index) => {
-			const name = startCase(lowerCase(type.replace(/_/g, ' ')));
+			const name = formatScreamingSnakeCase(type);
 			return {
 				id: index,
 				name: name,
@@ -453,8 +450,8 @@ const _DocumentDetailsSidebar = (props: {
 			<div className={'w-auto flex justify-end'}>
 				<BaseButton
 					label={'Save'}
-					onClick={() => {
-						updateFileAndAssurances(fileState);
+					onClick={async () => {
+						await updateFileAndAssurances(fileState);
 					}}
 					variant={ButtonTypes.primary}
 					disabled={disabled}
@@ -477,29 +474,35 @@ const _DocumentDetailsSidebar = (props: {
 					input: {
 						id: fileState.id,
 						type: fileState.type,
-					},
+            effectiveStartDate: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+            effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+          },
 				};
-				// update the file metadata
-				variables.input.metadata = {
-					...(file.metadata || {}),
-					effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
-					effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
-				};
-				if (fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
-					variables.input.metadata.certificate_number = fileState.certificate_number;
-				}
+        // only send metadata if needed
+        if(
+          !isSameDay(fileState.startDate || 0, compareFileState.startDate || 0) ||
+          !isSameDay(fileState.endDate || 0, compareFileState.endDate || 0) ||
+          fileState.certificate_number !== compareFileState.certificate_number
+        ) {
+          // update the file metadata
+          variables.input.metadata = {
+            effective_end_date: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
+            effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
+          };
+
+          if(fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
+            // if the file type is certificate or scope certificate, then send the certificate number
+            variables.input.metadata.certificate_number = fileState.certificate_number
+          }
+        }
+
 				promises.push(updateDocument(variables));
 			}
 
 			if (ifOnlyTypeOrCertIdChanged(fileState, compareFileState)) {
 				await Promise.all(promises)
 					.then(responses => {
-            mutate(['GET_ALL_FILES', JSON.stringify({
-              filter: {
-                organization: { id: orgId },
-                visible: true
-              }
-            })]);
+            refreshFiles();
 						logBrowser('File updated successfully', 'info', {
 							responses,
 						});
@@ -516,6 +519,7 @@ const _DocumentDetailsSidebar = (props: {
 						});
 					});
 				setSaveButtonLoading(false);
+        closeSidebar();
 				return;
 			}
 
@@ -551,12 +555,7 @@ const _DocumentDetailsSidebar = (props: {
 
 			await Promise.all(promises)
 				.then(responses => {
-          mutate(['GET_ALL_FILES', JSON.stringify({
-            filter: {
-              organization: { id: orgId },
-              visible: true
-            }
-          })]);
+          refreshFiles();
 					logBrowser('File and assurances updated successfully', 'info', {
 						responses,
 					});
@@ -675,7 +674,7 @@ const _DocumentDetailsSidebar = (props: {
 									<Select
 										options={documentTypeOptions}
 										name={'type'}
-										value={startCase(lowerCase(fileState.type.replace(/_/g, ' ')))}
+										value={formatScreamingSnakeCase(fileState.type)}
 										onChange={(e: InputOption) => {
 											setFileState({ ...fileState, type: e.value });
 										}}

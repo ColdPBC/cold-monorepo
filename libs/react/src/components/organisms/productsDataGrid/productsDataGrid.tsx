@@ -1,7 +1,7 @@
 import {
   BubbleList,
-  ErrorFallback,
-  MuiDataGrid,
+  ErrorFallback, getTotalFootprint,
+  MuiDataGrid, MUIDataGridProps,
   ProductFootprintDataGridCell,
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
@@ -11,19 +11,24 @@ import {
   PaginatedProductsQuery,
   SustainabilityAttribute,
 } from '@coldpbc/interfaces';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { get, has } from 'lodash';
 import { withErrorBoundary } from "react-error-boundary";
 import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
-import { GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
+import {
+  GridColumnVisibilityModel,
+  GridFilterModel,
+  GridPaginationModel,
+  GridSortModel
+} from '@mui/x-data-grid-pro';
+import {LDFlagSet} from "@launchdarkly/node-server-sdk";
 
-const getColumnRows = (
+export const getProductRows = (
   products: PaginatedProductsQuery[],
-  flags: {
-    [key: string]: boolean
-  }) => {
+  ldFlags: LDFlagSet,
+) => {
   return products.map(product => {
     const tier1Supplier = product.organizationFacility
 
@@ -62,26 +67,33 @@ const getColumnRows = (
       materials: product.productMaterials.map(material => material.material?.name).filter((material): material is string => material !== null),
       productCategory: product.productCategory ?? '',
       productSubcategory: product.productSubcategory ?? '',
-      product
+      carbonFootprint: (ldFlags.productCarbonFootprintMvp || ldFlags.showNewPcfUiCold1450) ? getTotalFootprint(product, ldFlags.showNewPcfUiCold1450) : '',
+      product,
     }
   })
 }
 
-export const _ProductsDataGrid = () => {
+export const _ProductsDataGrid = (props: MUIDataGridProps) => {
   const ldFlags = useFlags();
   const navigate = useNavigate();
   const {orgId} = useAuth0Wrapper()
-
-  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-    page: 0,
-    pageSize: 25,
-  });
 
   const [sortModel, setSortModel] = useState<GridSortModel>([
     { field: 'name', sort: 'asc' }
   ]);
 
   const [searchQuery, setSearchQuery] = useState<string>(getFromOrgStorage(orgId, 'productsDataGridSearchValue') || '');
+
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: 25,
+  });
+
+  const [columnVisibility, setColumnVisibility] = useState<GridColumnVisibilityModel | undefined>(undefined);
+
+  const handleColumnsChange = (model: GridColumnVisibilityModel) => {
+    setColumnVisibility(model);
+  };
 
   // Handle search input changes
   const handleFilterChange = (filterModel: GridFilterModel) => {
@@ -149,6 +161,7 @@ export const _ProductsDataGrid = () => {
     materials: string[];
     productCategory: string;
     productSubcategory: string;
+    carbonFootprint: string | number;
   }[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0);
 
@@ -159,7 +172,7 @@ export const _ProductsDataGrid = () => {
         setTotalRows(0);
       } else {
         const products = get(productsQuery.data, 'data.products', []);
-        const rows = getColumnRows(products, ldFlags)
+        const rows = getProductRows(products, ldFlags);
         const total = get(productsQuery.data, 'data.products_aggregate.count', 0);
         setRows(rows);
         setTotalRows(total);
@@ -206,7 +219,7 @@ export const _ProductsDataGrid = () => {
   }
 
   const productFootprintColumn =
-		ldFlags.productCarbonFootprintMvp
+    (ldFlags.productCarbonFootprintMvp || ldFlags.showNewPcfUiCold1450)
 			? [
 					{
 						...defaultColumnProperties,
@@ -215,7 +228,10 @@ export const _ProductsDataGrid = () => {
 						flex: 1,
 						minWidth: 220,
 						renderCell: params => (
-             <ProductFootprintDataGridCell product={params.row.product as PaginatedProductsQuery} />
+             <ProductFootprintDataGridCell
+               product={params.row.product as PaginatedProductsQuery}
+               useNewEmissionFactor={ldFlags.showNewPcfUiCold1450}
+             />
             ),
 					},
 			  ]
@@ -264,6 +280,9 @@ export const _ProductsDataGrid = () => {
 				return <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />;
 			},
 			sortable: false,
+      valueFormatter: (params: SustainabilityAttribute[]) => {
+        return params.map((value) => value.name).join(', ');
+      }
 		},
 		{
 			...defaultColumnProperties,
@@ -296,7 +315,10 @@ export const _ProductsDataGrid = () => {
 				return <BubbleList values={params.value} />;
 			},
 			sortable: false,
-		},
+      valueFormatter: (params: string[]) => {
+        return params.join(', ');
+      }
+    },
 		{
 			...defaultColumnProperties,
 			field: 'productCategory',
@@ -316,44 +338,45 @@ export const _ProductsDataGrid = () => {
   return (
     <div className={'w-full'}>
       <MuiDataGrid
+        {...props}
         loading={productsQuery.isLoading} // || footprintLoading}
-        columns={columns}
         rows={rows}
+        columns={columns}
+        columnHeaderHeight={55}
         rowHeight={72}
-        onRowClick={(params) => {
-          if(ldFlags.showProductDetailPageCold1140){
-            navigate(`/products/${params.id}`)
-          }
-        }}
         showManageColumns
-        showExport
         showSearch
+        showExport={!ldFlags.showSspDatagridExportButton}
+        onRowClick={(params) => {
+          navigate(`/products/${params.id}`)
+        }}
+        // Sorting props
+        sortingMode="server"
+        sortModel={sortModel}
+        onSortModelChange={setSortModel}
         // Pagination props
+        paginationMode="server"
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         pageSizeOptions={[25, 50, 100]}
-        paginationMode="server"
         rowCount={totalRows}
-        // Sorting props
-        sortModel={sortModel}
-        onSortModelChange={setSortModel}
-        sortingMode="server"
         // Search props
+        filterMode="server"
         filterModel={{
           items: [],
           quickFilterValues: [searchQuery],
         }}
-        filterMode="server"
         onFilterModelChange={handleFilterChange}
         filterDebounceMs={500}
         slotProps={{
           toolbar: {
             quickFilterProps: {
               placeholder: 'Search by name...',
-              value: searchQuery,
             }
           }
         }}
+        columnVisibilityModel={columnVisibility}
+        onColumnVisibilityModelChange={handleColumnsChange}
       />
     </div>
   )

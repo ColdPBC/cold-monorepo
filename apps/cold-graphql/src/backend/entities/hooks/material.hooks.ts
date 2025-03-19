@@ -1,60 +1,65 @@
+
 // Material Hooks
 import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
-import { Material, Product } from '../postgresql';
-import { cache_product_emission_stats, get_product_args_from_material } from '../services/product_emission_stats';
+import { Material } from '../postgresql';
+import { GuidPrefixes } from '../../libs/cuid/compliance.enums';
+import { Cuid2Generator } from '../../libs/cuid/cuid2-generator.service';
+import { set } from 'lodash';
 
 export class MaterialHooks extends BaseSidecar {
 	constructor() {
 		super(Material, 'materials');
 	}
-
-	// Overrride BeforeReadHook here:
-
-	// Overrride AfterReadHook here:
-
-	// Overrride BeforeCreateHook here:
-
-	// Overrride AfterCreateHook here:
-	override async afterCreateHook(params: CreateOrUpdateHookParams<Material, OrgContext>) {
-		//await this.cache_emissions(params);
-		/*
-		const materials = params?.entities as Material[];
-		if (!materials || materials.length < 1) {
-			return params;
-		}
-
-		const products = await get_product_args_from_material(materials[0]);
-		const prodParams: CreateOrUpdateHookParams<any, OrgContext> = {
-			context: params.context as OrgContext,
-			args: params.args,
-			entities: products,
-			fields: params.fields,
-			transactional: false,
-		};
-		await cache_product_emission_stats(prodParams);
-		await super.afterCreateHook(params);
-		*/
-		return params;
+	
+	async beforeReadHook(params: ReadHookParams<typeof Material, OrgContext>) {
+		this.logger.log('before Material read hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeReadHook(params);
 	}
 
-	// Overrride BeforeUpdateHook here:
-
-	// Overrride AfterUpdateHook here:
-	override async afterUpdateHook(params: CreateOrUpdateHookParams<Material, OrgContext>) {
-		// await cache_product_emission_stats(params);
-		// await super.afterUpdateHook(params);
-
-		return params;
+	
+	async afterReadHook(params: ReadHookParams<typeof Material, OrgContext>) {
+		this.logger.log('Material read', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterReadHook(params);
+		
 	}
-	// Overrride BeforeDeleteHook here:
 
-	// Overrride AfterDeleteHook here:
-	override async afterDeleteHook(params: DeleteHookParams<Material, OrgContext>) {
-		// await cache_product_emission_stats(params);
-		// await super.afterDeleteHook(params);
-
-		return params;
+	
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof Material, OrgContext>) {
+		this.logger.log(`before create Material`, { user: params.context.user, arguments: params.args });
+	
+	  return super.beforeCreateHook(params);    
 	}
+
+	
+	async afterCreateHook(params: CreateOrUpdateHookParams<typeof Material, OrgContext>) {
+		this.logger.log('Material created', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterCreateHook(params);
+	}
+
+	
+	async beforeUpdateHook(params: CreateOrUpdateHookParams<typeof Material, OrgContext>) {
+		this.logger.log('before Material update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.beforeUpdateHook(params);
+	}
+
+	
+	async afterUpdateHook(params: CreateOrUpdateHookParams<typeof Material, OrgContext>) {
+		this.logger.log('Material updated', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return await super.afterUpdateHook(params);
+	}
+
+	
+	async beforeDeleteHook(params: DeleteHookParams<typeof Material, OrgContext>) {
+		this.logger.log('before Material delete hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.beforeDeleteHook(params);
+	}
+
+	
+	async afterDeleteHook(params: DeleteHookParams<typeof Material, OrgContext>) {
+		this.logger.log('Material deleted', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+		return super.afterDeleteHook(params);
+	}
+
 }

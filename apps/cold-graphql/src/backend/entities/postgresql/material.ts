@@ -4,8 +4,11 @@ import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHoo
 import { Collection, Entity, Index, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { AttributeAssurance } from './attribute-assurance';
 import { MaterialClassification } from './material-classification';
+import { MaterialEmissionFactor } from './material-emission-factor';
 import { MaterialSupplier } from './material-supplier';
+import { MaterialTagAssignment } from './material-tag-assignment';
 import { Organization } from './organization';
+import { OrganizationFacility } from './organization-facility';
 import { ProductMaterial } from './product-material';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -51,8 +54,8 @@ export class Material {
 	@Property({ type: 'text', nullable: true })
 	supplierMaterialId?: string;
 
-	@Property({ type: 'text', nullable: true })
-	organizationFacilityId?: string;
+	@ManyToOne({ entity: () => OrganizationFacility, ref: true, nullable: true, index: 'materials_organization_facility_id_idx1' })
+	organizationFacility?: Ref<OrganizationFacility>;
 
 	@Property({ type: 'double', nullable: true })
 	emissionsFactor?: number;
@@ -78,11 +81,35 @@ export class Material {
 	@Property({ type: 'json', nullable: true })
 	emissionStats?: Record<string, unknown>;
 
+	@Property({ type: 'double', nullable: true })
+	weightFactor?: number;
+
+	@Property({ type: 'text', nullable: true })
+	weightFactorUnitOfMeasure?: string;
+
+	@Property({ type: 'double', nullable: true })
+	width?: number;
+
+	@Property({ type: 'text', nullable: true })
+	widthUnitOfMeasure?: string;
+
+	@Property({ type: 'double', nullable: true })
+	length?: number;
+
+	@Property({ type: 'text', nullable: true })
+	lengthUnitOfMeasure?: string;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'material' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 
+	@OneToMany({ entity: () => MaterialEmissionFactor, mappedBy: 'material' })
+	materialEmissionFactors = new Collection<MaterialEmissionFactor>(this);
+
 	@OneToMany({ entity: () => MaterialSupplier, mappedBy: 'material' })
 	materialSuppliers = new Collection<MaterialSupplier>(this);
+
+	@OneToMany({ entity: () => MaterialTagAssignment, mappedBy: 'material' })
+	materialTagAssignments = new Collection<MaterialTagAssignment>(this);
 
 	@OneToMany({ entity: () => ProductMaterial, mappedBy: 'material' })
 	productMaterials = new Collection<ProductMaterial>(this);

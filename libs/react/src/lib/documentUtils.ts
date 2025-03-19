@@ -1,7 +1,15 @@
 import { FilesWithAssurances } from '@coldpbc/interfaces';
 import { find, get } from 'lodash';
+import {
+  AssuranceDocumentTypes,
+  BillOfMaterialDocumentTypes,
+  DocumentType, InternalSustainabilityPolicyDocumentTypes,
+  MainDocumentCategory,
+  ProcessingStatus, SustainabilityDataDocumentTypes
+} from "@coldpbc/enums";
 
 export const getEffectiveEndDate = (file: FilesWithAssurances): string | null => {
+  if(file.effectiveEndDate) return file.effectiveEndDate;
   // find the first assurance with an effective end date
   const assurance = find(file.attributeAssurances, assurance => assurance.effectiveEndDate !== null);
   if (assurance && assurance.effectiveEndDate) {
@@ -16,6 +24,7 @@ export const getEffectiveEndDate = (file: FilesWithAssurances): string | null =>
 };
 
 export const getEffectiveStartDate = (file: FilesWithAssurances): string | null => {
+  if(file.effectiveStartDate) return file.effectiveStartDate;
   // find the first assurance with an effective start date
   const assurance = file.attributeAssurances.find(assurance => assurance.effectiveStartDate !== null);
   if (assurance && assurance.effectiveStartDate) {
@@ -51,7 +60,19 @@ export const getEffectiveStartDateFromAssurances = (file: FilesWithAssurances | 
   }
 };
 
-export const getFileProcessingStatus = (file: FilesWithAssurances | undefined): string | null => {
+export const getFileProcessingStatus = (file: FilesWithAssurances | undefined): ProcessingStatus | null => {
   if (!file) return null;
-  return get(file, 'metadata.status', null);
+  return file.processingStatus;
+};
+
+
+const DocumentCategoryMap = {
+  ...Object.fromEntries(Object.values(AssuranceDocumentTypes).map(type => [type, MainDocumentCategory.Assurance])),
+  ...Object.fromEntries(Object.values(BillOfMaterialDocumentTypes).map(type => [type, MainDocumentCategory.BillOfMaterial])),
+  ...Object.fromEntries(Object.values(InternalSustainabilityPolicyDocumentTypes).map(type => [type, MainDocumentCategory.InternalSustainabilityPolicy])),
+  ...Object.fromEntries(Object.values(SustainabilityDataDocumentTypes).map(type => [type, MainDocumentCategory.SustainabilityData])),
+};
+
+export const getDocumentCategory = (documentType: DocumentType): MainDocumentCategory => {
+  return DocumentCategoryMap[documentType] || MainDocumentCategory.Assurance; // Default fallback
 };

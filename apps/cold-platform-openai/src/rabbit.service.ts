@@ -4,10 +4,10 @@ import { Nack, RabbitRPC, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { AppService } from './app.service';
-import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
 import { PineconeService } from './pinecone/pinecone.service';
 import { ChatService } from './chat/chat.service';
+import { set } from 'lodash';
 
 /**
  * RabbitService class.
@@ -21,7 +21,6 @@ export class RabbitService extends BaseWorker {
 		readonly appService: AppService,
 		readonly prisma: PrismaService,
 		readonly s3: S3Service,
-		readonly files: FileService,
 		readonly cache: CacheService,
 		readonly pc: PineconeService,
 		readonly chatService: ChatService,
@@ -79,7 +78,7 @@ export class RabbitService extends BaseWorker {
 			msg.data = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
 			this.logger.info(`received async ${msg.event} request from ${msg.from}`);
 
-			this.processAsyncMessage(msg.event, msg.from, msg.data);
+			await this.processAsyncMessage(msg.event, msg.from, msg.data);
 
 			return new Nack();
 		} catch (err) {
@@ -98,7 +97,6 @@ export class RabbitService extends BaseWorker {
 					break;
 				}
 				case 'organization.created': {
-					const response = await this.appService.createAssistant(parsed);
 					if (parsed.organization.website) {
 						await this.crawlerQueue.add(
 							event,
@@ -110,7 +108,7 @@ export class RabbitService extends BaseWorker {
 							},
 						);
 					}
-					return response;
+					return {};
 				}
 				case 'organization.deleted': {
 					let assistant, pinecone;
@@ -127,12 +125,9 @@ export class RabbitService extends BaseWorker {
 					return { assistant, pinecone };
 				}
 				case 'file.uploaded': {
-					const uploader = new FileService(this.config, this.appService, this.prisma, this.s3);
-					await this.pc.ingestData(parsed.user, parsed.organization, parsed.payload);
-					return await uploader.uploadOrgFilesToOpenAI(parsed);
-				}
-				case 'organization_files.get': {
-					return await this.files.listAssistantFiles(parsed.user, parsed.organization.id);
+					//await this.pc.ingestData(parsed.user, parsed.organization, parsed.payload);
+					//return await this.files.uploadOrgFilesToOpenAI(parsed);
+					return;
 				}
 			}
 		} catch (e) {
@@ -144,6 +139,13 @@ export class RabbitService extends BaseWorker {
 	// @ts-expect-error - Fix this later
 	async processAsyncMessage(event: string, from: string, parsed: any) {
 		const { user } = parsed;
+
+		// the API is inconsistent in the payload key and calling the service twice
+		if (parsed.payload) {
+			set(parsed, 'file', parsed.payload);
+		} else if (!parsed.file) {
+			throw new Error('No file provided');
+		}
 
 		this.logger.info(`Processing ${event} event triggered by ${user?.coldclimate_claims?.email} from ${from}`, {
 			...parsed,
@@ -173,7 +175,7 @@ export class RabbitService extends BaseWorker {
 			case 'organization.created': {
 				try {
 					const pcResponse = await this.pc.getIndexDetails();
-					const response = await this.appService.createAssistant(parsed);
+					//const response = await this.appService.createAssistant(parsed);
 					if (parsed.organization.website) {
 						let url = parsed.organization.website;
 						if (url.indexOf('/') === url.length - 1) {
@@ -190,7 +192,7 @@ export class RabbitService extends BaseWorker {
 							{ removeOnFail: true, removeOnComplete: true },
 						);
 					}
-					return { pinecone: pcResponse, assistant: response };
+					return { pinecone: pcResponse, assistant: {} };
 				} catch (e) {
 					this.logger.error('Failed to create Pinecone index', e);
 					throw e;

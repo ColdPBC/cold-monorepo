@@ -4,11 +4,16 @@ import React, { useEffect, useState } from 'react';
 import { Modal as FBModal } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import {useAddToastMessage, useAuth0Wrapper, useColdContext, useEntityData, useUpdateEntityAssociations} from '@coldpbc/hooks';
-import {GridCellParams, GridColDef, GridToolbarContainer, GridToolbarQuickFilter} from '@mui/x-data-grid';
+import {
+  GridCellParams,
+  GridColDef,
+  GridFilterModel,
+} from '@mui/x-data-grid-pro';
 import { Checkbox } from '@mui/material';
-import {isEqual, sortBy} from 'lodash';
+import { isEqual, lowerCase, sortBy, uniq } from 'lodash';
 import { FetchResult } from '@apollo/client';
 import { ToastMessage } from '@coldpbc/interfaces';
+import {GRID_CHECKBOX_COL_DEF} from "@coldpbc/lib";
 
 interface EditEntityAssociationsModalProps {
 	buttonText: string;
@@ -28,16 +33,27 @@ export const EditEntityAssociationsModal = (
   const {orgId} = useAuth0Wrapper();
   const [showEntityAssociationModal, setShowEntityAssociationModal] = useState<boolean>(false);
   const [rowsSelected, setRowsSelected] = useState<string[]>([]);
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({items: [], quickFilterValues: []});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const entities = useEntityData(entityLevelToAdd === EntityLevel.ORGANIZATION ? undefined : entityLevelToAdd, orgId);
   const {addToastMessage} = useAddToastMessage();
   const {logBrowser} = useColdContext();
   const {callMutateFunction} = useUpdateEntityAssociations();
-  // need to use materialSupplierId for materials
   const rows = entities.map(entity => ({
     id: entity.id,
-    name: entity.name
-  }))
+    name: entity.name,
+  }));
+
+  const filteredRows = React.useMemo(() => {
+    if (filterModel.quickFilterValues?.length) {
+      return rows.filter(row =>
+        row.name.toLowerCase().includes(
+          filterModel.quickFilterValues?.join(' ').toLowerCase() || ''
+        )
+      );
+    }
+    return rows;
+  }, [rows, filterModel.quickFilterValues]);
 
   useEffect(() => {
     if (showEntityAssociationModal) {
@@ -45,14 +61,24 @@ export const EditEntityAssociationsModal = (
     }
   }, [showEntityAssociationModal, idsSelected]);
 
+  const clickSelectAll = () => {
+    // if all the rows are selected or some of the rows are selected, then unselect all the rows
+    const filteredIds = filteredRows.map(row => row.id);
+    const selectedIds = rowsSelected.filter(id => filteredIds.includes(id));
+    if(selectedIds.length === filteredRows.length || selectedIds.length > 0) {
+      setRowsSelected(prev => prev.filter(id => !filteredIds.includes(id)));
+    } else {
+      setRowsSelected(prev => {
+        return uniq([...prev, ...filteredIds]);
+      })
+    }
+  }
+
+  const filteredSelectedIds = rowsSelected.filter(id => filteredRows.map(row => row.id).includes(id));
+
   const columns: GridColDef[] = [
     {
-      field: 'checkbox',
-      editable: false,
-      sortable: false,
-      hideSortIcons: true,
-      width: 100,
-      headerClassName: 'bg-gray-30',
+      ...GRID_CHECKBOX_COL_DEF,
       cellClassName: 'bg-gray-10',
       renderCell: (params: GridCellParams) => (
         <Checkbox
@@ -70,15 +96,9 @@ export const EditEntityAssociationsModal = (
       ),
       renderHeader: params => (
         <Checkbox
-          checked={rowsSelected.length === rows.length && rowsSelected.length > 0}
-          indeterminate={rowsSelected.length > 0 && rowsSelected.length < rows.length}
-          onClick={() => {
-            if (rowsSelected.length === rows.length || rowsSelected.length > 0) {
-              setRowsSelected([]);
-            } else {
-              setRowsSelected(rows.map(r => r.id));
-            }
-          }}
+          checked={filteredSelectedIds.length === filteredRows.length && filteredRows.length > 0}
+          indeterminate={filteredSelectedIds.length < filteredRows.length && filteredSelectedIds.length > 0 && filteredRows.length > 0}
+          onClick={clickSelectAll}
         />
       ),
     },
@@ -92,10 +112,11 @@ export const EditEntityAssociationsModal = (
     },
   ];
 
-  const onEntitiesUpdate = () => {
+  const onEntitiesUpdate = async () => {
     setIsLoading(true);
     const removedRows = idsSelected.filter(id => !rowsSelected.includes(id));
     const addedRows = rowsSelected.filter(id => !idsSelected.includes(id));
+
     try {
       const promises: (Promise<void> | Promise<FetchResult<any>>)[] = []
       addedRows.forEach(row => {
@@ -105,49 +126,39 @@ export const EditEntityAssociationsModal = (
         promises.push(callMutateFunction(entityLevelToAdd, entityLevelToBeAddedTo, row, entityToBeAddedId, orgId, 'delete'))
       });
 
-      Promise.all(promises).then((responses) => {
-        logBrowser(`Updated entity associations successfully`, 'info', {
-          orgId,
-          entityLevelToAdd,
-          entityLevelToBeAddedTo,
-          entityToBeAddedId,
-          idsSelected,
-          rowsSelected,
-          responses
-        });
-        addToastMessage({
-          message: 'Associations updated successfully',
-          type: ToastMessage.SUCCESS
-        })
-        refresh();
-        setShowEntityAssociationModal(false);
-      }).catch((error) => {
-        logBrowser(`Error updating entity associations`, 'error', {
-          orgId,
-          entityLevelToAdd,
-          entityLevelToBeAddedTo,
-          entityToBeAddedId,
-          idsSelected,
-          rowsSelected,
-          error
-        }, error)
-        addToastMessage({
-          message: 'Error updating associations',
-          type: ToastMessage.FAILURE
-        })
-      })
-    } catch (error) {
-      logBrowser(`Error updating entity associations`, 'error', {
+      const responses = await Promise.all(promises)
+      logBrowser(`Updated ${lowerCase(entityLevelToAdd)}s successfully`, 'info', {
         orgId,
         entityLevelToAdd,
         entityLevelToBeAddedTo,
         entityToBeAddedId,
         idsSelected,
         rowsSelected,
-        error
+        responses,
+        addedRows,
+        filteredSelectedIds,
+        filteredRows
+      });
+      addToastMessage({
+        message: `Updated ${lowerCase(entityLevelToBeAddedTo)} successfully`,
+        type: ToastMessage.SUCCESS
+      })
+      refresh();
+      setShowEntityAssociationModal(false);
+    } catch (error) {
+      logBrowser(`Error updating ${lowerCase(entityLevelToBeAddedTo)}`, 'error', {
+        orgId,
+        entityLevelToAdd,
+        entityLevelToBeAddedTo,
+        entityToBeAddedId,
+        idsSelected,
+        rowsSelected,
+        error,
+        filteredSelectedIds,
+        filteredRows
       }, error)
       addToastMessage({
-        message: 'Error updating associations',
+        message: `Error updating ${lowerCase(entityLevelToBeAddedTo)}`,
         type: ToastMessage.FAILURE
       })
     } finally {
@@ -175,7 +186,7 @@ export const EditEntityAssociationsModal = (
 						<div className="flex flex-row text-h3">{title}</div>
 						<div className="w-full h-[400px]">
 							<MuiDataGrid
-								rows={rows}
+								rows={filteredRows}
 								columns={columns}
 								sx={{
 									'--DataGrid-overlayHeight': '300px',
@@ -184,12 +195,26 @@ export const EditEntityAssociationsModal = (
 								autoHeight={false}
 								disableColumnMenu={true}
 								rowSelection={false}
-								showSearch={true}
-							/>
+                showSearch
+                filterDebounceMs={500}
+                filterModel={filterModel}
+                onFilterModelChange={(model) => {
+                  setFilterModel(model);
+                }}
+                initialState={{
+                  sorting: {
+                    sortModel: [{ field: 'name', sort: 'asc' }],
+                  }
+                }}
+              />
 						</div>
 					</div>
 					<div className="w-full flex flex-row justify-between">
-						<BaseButton label="Cancel" onClick={() => setShowEntityAssociationModal(false)} variant={ButtonTypes.secondary} disabled={isLoading} />
+						<BaseButton
+              label="Cancel"
+              onClick={() => setShowEntityAssociationModal(false)}
+              variant={ButtonTypes.secondary}
+            />
 						<div className="flex flex-row gap-[16px] items-center">
 							<div className="text-body font-bold text-tc-secondary">
 								{rowsSelected.length}/{rows.length} Selected

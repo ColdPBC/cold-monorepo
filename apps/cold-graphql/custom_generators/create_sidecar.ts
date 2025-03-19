@@ -44,7 +44,7 @@ fs.readdir(entityPath, (err, files) => {
 					}
 
 					const sidecarFilePath = path.join(hookPath, `${entityFileName}.hooks.ts`);
-					const sidecarContent = GenerateSideCarClass(entityClassName, entityFileName, tableNameMatch[1].toLowerCase(), true);
+					const sidecarContent = GenerateSideCarClass(entityClassName, entityFileName, tableNameMatch[1].toLowerCase(), false);
 
 					fs.access(sidecarFilePath, fs.constants.F_OK, err => {
 						if (err || overwriteSidecars) {

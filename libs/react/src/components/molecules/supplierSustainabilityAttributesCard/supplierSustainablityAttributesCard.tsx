@@ -12,12 +12,9 @@ interface SupplierSustainabilityAttributesCardProps {
 }
 
 const _SupplierSustainabilityAttributesCard: React.FC<SupplierSustainabilityAttributesCardProps> = ({ supplier, showUpdateAttributesModal }) => {
-	const materials = supplier.materialSuppliers.map(materialSupplier => materialSupplier.material);
-
 	// These filters reflect the current state of our data, but be unnecessary if we had better data validations
 	const supplierSustainabilityAttributes = filterAttributes(processEntityLevelAssurances([supplier]), EntityLevel.SUPPLIER);
-
-	const materialSustainabilityAttributes = filterAttributes(processEntityLevelAssurances(materials), EntityLevel.MATERIAL);
+	const materialSustainabilityAttributes = filterAttributes(processEntityLevelAssurances(supplier.materials), EntityLevel.MATERIAL);
 
   const ctas = [
     {

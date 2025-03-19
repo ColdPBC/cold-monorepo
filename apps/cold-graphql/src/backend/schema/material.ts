@@ -3,8 +3,11 @@ import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AttributeAssurance } from './attribute-assurance';
 import { MaterialClassification } from './material-classification';
+import { MaterialEmissionFactor } from './material-emission-factor';
 import { MaterialSupplier } from './material-supplier';
+import { MaterialTagAssignment } from './material-tag-assignment';
 import { Organization } from './organization';
+import { OrganizationFacility } from './organization-facility';
 import { ProductMaterial } from './product-material';
 import { Material as OrmMaterial } from '../entities';
 import { connection } from '../database';
@@ -43,8 +46,8 @@ export class Material {
 	@Field(() => String, { nullable: true })
 	supplierMaterialId?: string;
 
-	@Field(() => String, { nullable: true })
-	organizationFacilityId?: string;
+	@RelationshipField<Material>(() => OrganizationFacility, { id: (entity) => entity.organizationFacility?.id, nullable: true })
+	organizationFacility?: OrganizationFacility;
 
 	@Field(() => Number, { nullable: true })
 	emissionsFactor?: number;
@@ -70,11 +73,35 @@ export class Material {
 	@Field(() => GraphQLJSON, { nullable: true })
 	emissionStats?: Record<string, unknown>;
 
+	@Field(() => Number, { nullable: true })
+	weightFactor?: number;
+
+	@Field(() => String, { nullable: true })
+	weightFactorUnitOfMeasure?: string;
+
+	@Field(() => Number, { nullable: true })
+	width?: number;
+
+	@Field(() => String, { nullable: true })
+	widthUnitOfMeasure?: string;
+
+	@Field(() => Number, { nullable: true })
+	length?: number;
+
+	@Field(() => String, { nullable: true })
+	lengthUnitOfMeasure?: string;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'material' })
 	attributeAssurances!: AttributeAssurance[];
 
+	@RelationshipField<MaterialEmissionFactor>(() => [MaterialEmissionFactor], { relatedField: 'material' })
+	materialEmissionFactors!: MaterialEmissionFactor[];
+
 	@RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'material' })
 	materialSuppliers!: MaterialSupplier[];
+
+	@RelationshipField<MaterialTagAssignment>(() => [MaterialTagAssignment], { relatedField: 'material' })
+	materialTagAssignments!: MaterialTagAssignment[];
 
 	@RelationshipField<ProductMaterial>(() => [ProductMaterial], { relatedField: 'material' })
 	productMaterials!: ProductMaterial[];

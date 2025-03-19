@@ -5,8 +5,7 @@ import { getActionMock, getOrganizationMembersMock, StoryMockProvider } from '@c
 import { Action, ActionPayload, Assignee, Step } from '@coldpbc/interfaces';
 import { StepDetailsVariants } from '@coldpbc/enums';
 import { ActionDetailProgress, ActionDetailProgressProps, SurveySectionsProgress } from '@coldpbc/components';
-import { userEvent, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { userEvent, within, expect } from '@storybook/test';
 
 const meta: Meta<typeof ActionDetailProgress> = {
   title: 'Organisms/ActionDetailProgress',

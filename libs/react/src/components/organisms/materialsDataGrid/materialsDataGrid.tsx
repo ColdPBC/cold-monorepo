@@ -1,25 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { MaterialsWithRelations } from '@coldpbc/interfaces';
+import {MaterialsWithRelations, SustainabilityAttribute} from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useGraphQLSWR } from '@coldpbc/hooks';
 import {
   BubbleList,
   ErrorFallback,
-  MuiDataGrid,
+  MuiDataGrid, MUIDataGridProps,
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
 import {
-  GridColDef, GridFilterModel,
+  GridColDef, GridColumnVisibilityModel, GridFilterModel,
   GridPaginationModel,
   GridSortModel,
   GridValidRowModel,
-} from '@mui/x-data-grid';
+} from '@mui/x-data-grid-pro';
 import { get, has, uniq } from 'lodash';
 import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
 import { withErrorBoundary } from 'react-error-boundary';
-import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from 'react-router-dom';
+import {useFlags} from "launchdarkly-react-client-sdk";
 
-const _MaterialsDataGrid = () => {
+export const getMaterialRows = (materials: MaterialsWithRelations[]) => {
+  return materials.map((material) => ({
+    id: material.id,
+    name: material.name,
+    materialCategory: material.materialCategory || '',
+    materialSubcategory: material.materialSubcategory || '',
+    sustainabilityAttributes: processEntityLevelAssurances([material]),
+    tier2Supplier: material.organizationFacility?.name || '',
+    usedBy: uniq(material.productMaterials
+      .map(pm => pm.product.organizationFacility?.name)
+      .filter(name => name !== undefined)
+      .sort((a,b) => a.localeCompare(b)))
+  }))
+}
+
+const _MaterialsDataGrid = (props: MUIDataGridProps) => {
   const ldFlags = useFlags();
   const navigate = useNavigate();
   const { orgId } = useAuth0Wrapper();
@@ -35,6 +50,11 @@ const _MaterialsDataGrid = () => {
     { field: 'name', sort: 'asc' }
   ]);
 
+  const [columnVisibility, setColumnVisibility] = useState<GridColumnVisibilityModel | undefined>(undefined);
+
+  const handleColumnsChange = (model: GridColumnVisibilityModel) => {
+    setColumnVisibility(model);
+  };
 
   const [searchQuery, setSearchQuery] = useState<string>(getFromOrgStorage(orgId, 'materialsDataGridSearchValue') || '');
 
@@ -151,8 +171,8 @@ const _MaterialsDataGrid = () => {
 
   const uniqTier2Suppliers = uniq(
     materials
-      .map(material => material.materialSuppliers.filter(supplier => supplier.organizationFacility.supplierTier === 2).map(supplier => supplier.organizationFacility.name))
-      .flat(),
+      .filter(material => material.organizationFacility)
+      .map(material => material.organizationFacility!.name),
   );
 
   const uniqCategories = uniq(
@@ -180,6 +200,9 @@ const _MaterialsDataGrid = () => {
       flex: 1,
       minWidth: 230,
       type: 'singleSelect',
+      valueFormatter: (params: string) => {
+        return params;
+      },
       valueOptions: uniqTier2Suppliers,
       filterable: false,
       sortable: false,
@@ -190,7 +213,9 @@ const _MaterialsDataGrid = () => {
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       type: 'singleSelect',
       valueOptions: uniqTier1Suppliers,
-      valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
+      valueFormatter: (params: string[]) => {
+        return params.join(', ');
+      },
       renderCell: (params) => {
         return <BubbleList values={params.value as string[]} />;
       },
@@ -205,7 +230,6 @@ const _MaterialsDataGrid = () => {
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       type: 'singleSelect',
       valueOptions: uniqSusAttributes,
-      valueFormatter: value => `[${(value as Array<string>).join(', ')}]`,
       renderCell: (params) => {
         return <SustainabilityAttributeColumnList sustainabilityAttributes={params.value} />;
       },
@@ -213,6 +237,9 @@ const _MaterialsDataGrid = () => {
       flex: 1,
       filterable: false,
       sortable: false,
+      valueFormatter: (params: SustainabilityAttribute[]) => {
+        return params.map((value) => value.name).join(', ');
+      }
     },
     {
       field: 'materialCategory',
@@ -223,6 +250,9 @@ const _MaterialsDataGrid = () => {
       type: 'singleSelect',
       valueOptions: uniqCategories,
       filterable: false,
+      valueFormatter: (params: string) => {
+        return params;
+      },
     },
     {
       field: 'materialSubcategory',
@@ -233,62 +263,56 @@ const _MaterialsDataGrid = () => {
       type: 'singleSelect',
       valueOptions: uniqSubCategories,
       filterable: false,
+      valueFormatter: (params: string) => {
+        return params;
+      },
     },
   ];
 
-  const rows: GridValidRowModel[] = materials.map(material => ({
-    id: material.id,
-    name: material.name,
-    materialCategory: material.materialCategory || '',
-    materialSubcategory: material.materialSubcategory || '',
-    sustainabilityAttributes: processEntityLevelAssurances([material]),
-    tier2Supplier: material.materialSuppliers[0]?.organizationFacility?.name || '',
-    usedBy: uniq(material.productMaterials
-      .map(pm => pm.product.organizationFacility?.name)
-      .filter(name => name !== undefined)
-      .sort((a,b) => a.localeCompare(b)))
-  }));
+  const rows: GridValidRowModel[] = getMaterialRows(materials)
 
   return (
     <div className={'w-full'}>
       <MuiDataGrid
+        {...props}
         loading={materialsQuery.isLoading}
         rows={rows}
         columns={columns}
         columnHeaderHeight={55}
         rowHeight={72}
         showManageColumns
-        showExport
         showSearch
+        showExport={!ldFlags.showSspDatagridExportButton}
+        onRowClick={(params) => {
+          navigate(`/materials/${params.id}`)
+        }}
+        // sorting
+        sortingMode="server"
+        sortModel={sortModel}
+        onSortModelChange={setSortModel}
+        // pagination
+        paginationMode="server"
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         pageSizeOptions={[25, 50, 100]}
-        sortModel={sortModel}
-        onSortModelChange={setSortModel}
-        paginationMode="server"
-        sortingMode="server"
         rowCount={totalRows}
-        onRowClick={(params) => {
-          if(ldFlags.materialDetailPageCold997){
-            navigate(`/materials/${params.id}`)
-          }
-        }}
         // Search props
         filterMode="server"
-        onFilterModelChange={handleFilterChange}
         filterModel={{
           items: [],
           quickFilterValues: [searchQuery],
         }}
+        onFilterModelChange={handleFilterChange}
         filterDebounceMs={500}
         slotProps={{
           toolbar: {
             quickFilterProps: {
               placeholder: 'Search by name...',
-              value: searchQuery,
             }
           }
         }}
+        columnVisibilityModel={columnVisibility}
+        onColumnVisibilityModelChange={handleColumnsChange}
       />
     </div>
   );

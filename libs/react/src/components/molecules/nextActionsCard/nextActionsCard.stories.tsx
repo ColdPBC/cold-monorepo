@@ -1,10 +1,9 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { NextActionsCard } from './nextActionsCard';
-import {
-  StoryMockProvider,
-  RightColumnContent,
-} from '../../../';
+import {StoryMockProvider} from "@coldpbc/mocks";
+import {RightColumnContent} from "@coldpbc/components";
+
 
 const meta: Meta<typeof NextActionsCard> = {
   title: 'Molecules/NextActionsCard',

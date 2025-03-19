@@ -22,7 +22,7 @@ const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCar
         {
           text: 'Learn More',
           action: () => {
-            navigate('/reports/carbon_footprint');
+            navigate('/carbon_footprint');
           },
           variant: ButtonTypes.secondary,
         },

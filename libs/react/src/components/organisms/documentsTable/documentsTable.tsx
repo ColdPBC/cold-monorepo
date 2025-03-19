@@ -1,34 +1,31 @@
-import { DataGrid, GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, GridValidRowModel, MuiEvent } from '@mui/x-data-grid';
-import { ClaimStatus, IconNames } from '@coldpbc/enums';
 import {
-  ColdIcon,
-  BubbleList,
-  ErrorFallback, MuiDataGrid,
-  MUIDataGridNoRowsOverlay,
-  SustainabilityAttributeColumn
-} from '@coldpbc/components';
-import { HexColors } from '@coldpbc/themes';
-import { differenceInDays, format } from 'date-fns';
-import {capitalize, uniq} from 'lodash';
-import React, {ReactNode} from 'react';
-import {get, lowerCase, startCase, toArray, uniqWith} from 'lodash';
-import {
-  Claims,
-  FilesWithAssurances,
-  SustainabilityAttribute,
-  SustainabilityAttributeWithoutAssurances
-} from '@coldpbc/interfaces';
+  GridCallbackDetails,
+  GridColDef,
+  GridRenderCellParams,
+  GridRowParams,
+  GridTreeNodeWithRender,
+  GridValidRowModel,
+  MuiEvent
+} from '@mui/x-data-grid-pro';
+import {ClaimStatus, IconNames, ProcessingStatus} from '@coldpbc/enums';
+import {BubbleList, ColdIcon, ErrorFallback, MuiDataGrid, SustainabilityAttributeColumn} from '@coldpbc/components';
+import {HexColors} from '@coldpbc/themes';
+import {differenceInDays, format} from 'date-fns';
+import {get, toArray, uniq, uniqWith} from 'lodash';
+import React from 'react';
+import {FilesWithAssurances, SustainabilityAttributeWithoutAssurances} from '@coldpbc/interfaces';
 import {
   addTZOffset,
+  formatScreamingSnakeCase,
   getDateActiveStatus,
   getEffectiveEndDate,
   getFileProcessingStatus,
   listFilterOperators,
-  listSortComparator
+  listSortComparator,
 } from '@coldpbc/lib';
-import { withErrorBoundary } from 'react-error-boundary';
-import { useColdContext } from '@coldpbc/hooks';
-import { twMerge } from 'tailwind-merge';
+import {withErrorBoundary} from 'react-error-boundary';
+import {useColdContext} from '@coldpbc/hooks';
+import {twMerge} from 'tailwind-merge';
 
 const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: (id: string) => void }) => {
 	const { files, selectDocument } = props;
@@ -37,121 +34,86 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
   const renderName = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
     const file = files.find(file => file.id === params.row.id);
     const fileStatus = getFileProcessingStatus(file);
-    let className = 'text-tc-primary font-bold';
-    if (fileStatus === 'uploaded') {
-      className = 'text-tc-disabled font-bold';
-    }
-    return <div className={twMerge('overflow-hidden text-ellipsis ', className)}>{params.value}</div>;
+    return <div className={'flex items-center justify-start gap-1'}>
+      {fileStatus === ProcessingStatus.AI_PROCESSING ? <span role={'img'} aria-label={'Sparkles emoji'}>✨</span> : null}
+      <span className={'overflow-hidden text-ellipsis whitespace-nowrap text-tc-primary font-bold'}>{params.value}</span>
+    </div>;
   };
 
   const renderUploadDate = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    const file = files.find(file => file.id === params.row.id);
-    const fileStatus = getFileProcessingStatus(file);
-    let className = 'text-tc-secondary';
-    if (fileStatus === 'uploaded') {
-      className = 'text-tc-disabled';
-    }
     let dateString = '--';
     if (params.value.getTime() !== new Date(0).getTime()) {
       dateString = format(new Date(params.value), 'M/d/yy h:mm a');
     }
     return (
-      <div data-chromatic="ignore" className={twMerge('w-full h-full flex flex-row justify-start items-center', className)}>
+      <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
         {dateString}
       </div>
     );
   };
 
-  const fileProcessingStatusElement = (fileId: string, component: () => JSX.Element) => {
-    const file = files.find(file => file.id === fileId);
-    const fileStatus = getFileProcessingStatus(file);
-    if (fileStatus === 'uploaded') {
-      return (
-      <div className={'w-full h-full py-[16px] px-[0px]'}>
-        <div
-          className={'w-full h-full flex flex-row rounded-lg animate-pulsate'}
-          style={{
-            background: 'linear-gradient(90deg, rgba(255, 241, 102, 0.20) 0%, rgba(255, 241, 102, 0.40) 100%)',
-          }}></div>
-      </div>
-      )
-    } else {
-      return component();
-    }
-  }
-
   const renderStatus = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    return fileProcessingStatusElement(params.row.id, () => {
-      const expirationDate: string | null = params.row.expiration_date;
-      let diff = 0;
-      switch (params.value) {
-        case ClaimStatus.Expired:
-          return (
-            <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px] text-tc-secondary'}>
-              <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.tc.disabled} />
-              <span className={'text-tc-disabled'}>Expired</span>
+    const expirationDate: string | null = params.row.expiration_date;
+    let diff = 0;
+    switch (params.value) {
+      case ClaimStatus.Expired:
+        return (
+          <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px] text-tc-secondary'}>
+            <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.tc.disabled} />
+            <span className={'text-tc-disabled'}>Expired</span>
+          </div>
+        );
+      case ClaimStatus.ExpiringSoon:
+        if (expirationDate) {
+          diff = differenceInDays(addTZOffset(expirationDate), new Date());
+        }
+        return (
+          <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[4px] pl-[4px] text-tc-secondary'}>
+            <ColdIcon name={IconNames.ColdExpiringIcon} color={HexColors.yellow['200']} />
+            <span className={'text-yellow-200'}>{diff + 1} days</span>
+          </div>
+        );
+      case ClaimStatus.Active:
+        return (
+          <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px] text-tc-secondary'}>
+            <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} />
+            <span className={'text-green-200'}>Active</span>
+          </div>
+        );
+      default:
+      case ClaimStatus.Inactive:
+        return (
+          <div className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
+            <div className={'w-[24px] h-[24px] flex flex-row justify-center items-center'}>
+              <div className={'w-[13px] h-[13px] bg-gray-70 rounded-full'}></div>
             </div>
-          );
-        case ClaimStatus.ExpiringSoon:
-          if (expirationDate) {
-            diff = differenceInDays(addTZOffset(expirationDate), new Date());
-          }
-          return (
-            <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[4px] pl-[4px] text-tc-secondary'}>
-              <ColdIcon name={IconNames.ColdExpiringIcon} color={HexColors.yellow['200']} />
-              <span className={'text-yellow-200'}>{diff + 1} days</span>
-            </div>
-          );
-        case ClaimStatus.Active:
-          return (
-            <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px] text-tc-secondary'}>
-              <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} />
-              <span className={'text-green-200'}>Active</span>
-            </div>
-          );
-        default:
-        case ClaimStatus.Inactive:
-          return (
-            <div className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
-              <div className={'w-[24px] h-[24px] flex flex-row justify-center items-center'}>
-                <div className={'w-[13px] h-[13px] bg-gray-70 rounded-full'}></div>
-              </div>
-            </div>
-          );
-      }
-    });
+          </div>
+        );
+    }
   };
 
   const renderDate = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    return fileProcessingStatusElement(params.row.id, () => {
-      let dateString = '--';
-      if (params.value.getTime() !== new Date(0).getTime()) {
-        dateString = format(new Date(params.value), 'M/d/yy');
-      }
-      return (
-        <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
-          {dateString}
-        </div>
-      );
-    })
+    let dateString = '--';
+    if (params.value.getTime() !== new Date(0).getTime()) {
+      dateString = format(new Date(params.value), 'M/d/yy');
+    }
+    return (
+      <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
+        {dateString}
+      </div>
+    );
   };
 
   const renderType = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    return fileProcessingStatusElement(params.row.id, () => {
-      return <div className={'text-tc-secondary overflow-hidden text-ellipsis'}>{params.value}</div>;
-    });
+    return <div className={'text-tc-secondary overflow-hidden text-ellipsis'}>{params.value}</div>;
   };
 
   const renderSustainabilityAttribute = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    return fileProcessingStatusElement(params.row.id, () => {
-      return <SustainabilityAttributeColumn sustainabilityAttribute={params.value as SustainabilityAttributeWithoutAssurances | null} />;
-    });
+    return <SustainabilityAttributeColumn sustainabilityAttribute={params.value as SustainabilityAttributeWithoutAssurances | null} />;
   };
 
   const renderAssociatedRecords = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    return fileProcessingStatusElement(params.row.id, () => {
-      return <BubbleList values={params.value as string[]} color={HexColors.purple["200"]} />
-    });
+    return <BubbleList values={params.value as string[]} color={HexColors.purple["200"]} />
   };
 
   const onRowClick = (params: GridRowParams, event: MuiEvent<React.MouseEvent>, details: GridCallbackDetails) => {
@@ -200,7 +162,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
 
 	const allAssociatedRecords = uniqWith(files.map(file => getAssociatedRecords(file)).flat(), (a, b) => a === b);
 
-  const uniqFileTypes = uniqWith(files.map(file => startCase(lowerCase(file.type.replace(/_/g, ' ')))), (a, b) => a === b);
+  const uniqFileTypes = uniqWith(files.map(file => formatScreamingSnakeCase(file.type), (a, b) => a === b));
 
   const uniqSustainabilityAttributes = uniqWith(files.map(file => file.attributeAssurances.map(assurance => get(assurance, 'sustainabilityAttribute.name', ''))).flat()).filter(
     value => value !== '',
@@ -249,10 +211,10 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
 			width: 100,
 			type: 'singleSelect',
       valueGetter: (value: string) => {
-        return startCase(lowerCase(value.replace(/_/g, ' ')));
+        return formatScreamingSnakeCase(value);
       },
       valueFormatter: (value: string) => {
-        return startCase(lowerCase(value.replace(/_/g, ' ')));
+        return formatScreamingSnakeCase(value);
       },
       valueOptions: uniqFileTypes,
       renderCell: renderType,

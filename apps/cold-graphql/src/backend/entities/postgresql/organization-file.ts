@@ -26,6 +26,16 @@ export enum OrganizationFilesType {
 	TRANSACTION_CERTIFICATE = 'TRANSACTION_CERTIFICATE',
 	SUPPLIER_STATEMENT = 'SUPPLIER_STATEMENT',
 	SUPPLIER_AGREEMENT = 'SUPPLIER_AGREEMENT',
+	SUSTAINABILITY_DATA = 'SUSTAINABILITY_DATA',
+}
+
+export enum OrganizationFilesProcessingStatus {
+	IMPORT_COMPLETE = 'IMPORT_COMPLETE',
+	PROCESSING_ERROR = 'PROCESSING_ERROR',
+	MANUAL_REVIEW = 'MANUAL_REVIEW',
+	AI_PROCESSING = 'AI_PROCESSING',
+	PENDING = 'PENDING',
+	JOB_PROCESSING = 'JOB_PROCESSING',
 }
 
 @ApplyAccessControlList(default_acl)
@@ -121,6 +131,9 @@ export class OrganizationFile {
 
 	@Property({ type: 'boolean', default: true })
 	visible = true;
+
+	@Enum({ type: 'string', items: () => OrganizationFilesProcessingStatus, nullable: true })
+	processingStatus?: OrganizationFilesProcessingStatus;
 
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'organizationFile' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);

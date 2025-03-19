@@ -43,13 +43,14 @@ RUN ls -la ./apps/cold-graphql
 RUN ls -la ./apps/cold-graphql/src
 
 WORKDIR /home/node/repo/apps/cold-graphql
+RUN npm install -g corepack@latest
 RUN corepack enable
-RUN corepack use pnpm@9.12.2
+RUN corepack prepare pnpm@9.15.2 --activate
 
 # Build the app
 #RUN yarn build
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # Expose the port your app will run on (e.g., 9001)
 EXPOSE 9001

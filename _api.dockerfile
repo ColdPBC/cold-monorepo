@@ -14,9 +14,13 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
+RUN npm install -g corepack@latest
+RUN corepack enable
+RUN yarn set version latest
+
 #RUN npm uninstall -g yarn pnpm
 RUN apt-get update
-RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake zlib1g-dev libicu-dev libpng-dev libjpeg-dev libtiff-dev libgif-dev python3 python3-pip python3-setuptools python3-wheel
+RUN apt-get install -y build-essential libcairo2-dev libpango1.0-dev libgif7 libjpeg-dev libgif-dev librsvg2-dev libtool autoconf automake zlib1g-dev libicu-dev libpng-dev libjpeg-dev libtiff-dev libgif-dev python3 python3-pip python3-setuptools python3-wheel
 RUN rm -rf /var/lib/apt/lists/*
 
 
@@ -35,14 +39,13 @@ USER root
 # Leverage a cache mount to /root/.yarn to speed up subsequent builds.
 # Leverage a bind mounts to package.json and yarn.lock to avoid having to copy them into
 # into this layer.
-#RUN #--mount=type=bind,source=package.json,target=package.json \
-    #--mount=type=bind,source=yarn.lock,target=yarn.lock,readwrite \
-RUN  --mount=type=cache,target=/root/.yarn
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=yarn.lock,target=yarn.lock,readwrite \
+    --mount=type=cache,target=/root/.yarn
 
 COPY package.json package.json ./
 
-RUN yarn
-
+RUN yarn install
 #RUN yarn dedupe --strategy highest
 
 FROM dependencies AS build
@@ -61,9 +64,6 @@ ENV DD_API_KEY=${DD_API_KEY}
 ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
-
-RUN corepack enable
-RUN yarn set version latest
 
 RUN yarn dlx nx@latest run cold-nest-library:prisma-generate
 RUN yarn prebuild
@@ -88,8 +88,8 @@ FROM node:${NODE_VERSION} AS final
 USER root
 WORKDIR /home/node
 
+RUN npm install -g corepack@latest
 RUN npm uninstall -g yarn pnpm
-
 RUN corepack enable
 RUN yarn set version latest
 
@@ -138,5 +138,5 @@ RUN ls -la ./apps/${DD_SERVICE}
 RUN ls -la ./apps/${DD_SERVICE}/src
 
 # Run the application.
-CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./apps/${DD_SERVICE}/src/main.js"]
+CMD ["sh", "-c", "export DD_GIT_REPOSITORY_URL=github.com/coldPBC/cold-monorepo && export DD_GIT_COMMIT_SHA=$FC_GIT_COMMIT_SHA && node ./apps/${DD_SERVICE}/src/main.js"]
 

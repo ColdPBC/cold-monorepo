@@ -30,6 +30,9 @@ export class MaterialClassification {
 	@RelationshipField<MaterialClassification>(() => CoreClassification, { id: (entity) => entity.coreClassification?.id, nullable: true })
 	coreClassification?: CoreClassification;
 
+	@Field(() => Number, { nullable: true })
+	weightFactor?: number;
+
 	@RelationshipField<Material>(() => [Material], { relatedField: 'materialClassification' })
 	materials!: Material[];
 

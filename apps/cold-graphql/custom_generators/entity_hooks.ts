@@ -1,3 +1,6 @@
+import { DescriptionWriter } from 'prisma-markdown';
+import table = DescriptionWriter.table;
+
 export const importGraphWeaverHookClasses = `import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';\n`;
 
 export const GenerateSideCarClass = (entityClassName: string, entityFileName: string, tableName: string, useBaseCarHooks: boolean) => `
@@ -6,6 +9,9 @@ import { CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exo
 import { BaseSidecar } from '../base.sidecar';
 import { OrgContext } from '../../libs/acls/acl_policies';
 import { ${entityClassName} } from '../postgresql';
+import { GuidPrefixes } from '../../libs/cuid/compliance.enums';
+import { Cuid2Generator } from '../../libs/cuid/cuid2-generator.service';
+import { set } from 'lodash';
 
 export class ${entityClassName}Hooks extends BaseSidecar {
 \tconstructor() {
@@ -24,64 +30,59 @@ export class ${entityClassName}Hooks extends BaseSidecar {
 
 // ENTITY HOOK FUNCTIONS
 export const BEFORE_CREATE_HOOK_FUNCTION = (entityClassName: string) => `
-async beforeCreateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
-	this.logger.log(\`before create ${entityClassName}\`, { user: params.context.user, arguments: params.args });
-	for (const item of params.args.items) {
-		set(item, 'id', new Cuid2Generator(GuidPrefixes["${entityClassName}").generate().scopedId);
-		set(item, 'organization.id', params.context.user.organization.id);
-		set(item, 'updatedAt', new Date());
-		set(item, 'createdAt', new Date());
-	}
-
-  return params;    
-}
+\tasync beforeCreateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
+\t	this.logger.log(\`before create ${entityClassName}\`, { user: params.context.user, arguments: params.args });
+\t
+\t  return super.beforeCreateHook(params);    
+\t}
 `;
 
 export const AFTER_CREATE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync afterCreateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('${entityClassName} created', { user: params.context.user, organization: params.context.organization, arguments: params.args });
-	\treturn params;
+	\tthis.logger.log('${entityClassName} created', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+	\treturn super.afterCreateHook(params);
 \t}
 `;
 
 export const BEFORE_READ_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync beforeReadHook(params: ReadHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('before ${entityClassName} read hook', { user: params.context.user, organization: params.context.organization, arguments: params.args });
-	\treturn params;
+	\tthis.logger.log('before ${entityClassName} read hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+	\treturn super.beforeReadHook(params);
 \t}
 `;
 
 export const AFTER_READ_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync afterReadHook(params: ReadHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('${entityClassName} read', { user: params.context.user, organization: params.context.organization, arguments: params.args });
-	\treturn params;
+	\tthis.logger.log('${entityClassName} read', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+	\treturn await super.afterReadHook(params);
+	\t
 \t}
 `;
 
 export const BEFORE_UPDATE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync beforeUpdateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('before ${entityClassName} update hook', { user: params.context.user, organization: params.context.organization, arguments: params.args });
-	\treturn params;
+	\tthis.logger.log('before ${entityClassName} update hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+	\treturn await super.beforeUpdateHook(params);
 \t}
 `;
 
 export const AFTER_UPDATE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync afterUpdateHook(params: CreateOrUpdateHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('${entityClassName} updated', { user: params.context.user, organization: params.context.organization, arguments: params.args });
-	\treturn params;
+	\tthis.logger.log('${entityClassName} updated', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+	\treturn await super.afterUpdateHook(params);
 \t}
 `;
 
 export const BEFORE_DELETE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync beforeDeleteHook(params: DeleteHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('before ${entityClassName} delete hook', { user: params.context.user, organization: params.context.organization, arguments: params.args });
-	\treturn params;
+	\tthis.logger.log('before ${entityClassName} delete hook', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+	\treturn super.beforeDeleteHook(params);
 \t}
 `;
 
 export const AFTER_DELETE_HOOK_FUNCTION = (entityClassName: string) => `
 \tasync afterDeleteHook(params: DeleteHookParams<typeof ${entityClassName}, OrgContext>) {
-	\tthis.logger.log('${entityClassName} deleted', { user: params.context.user, organization: params.context.organization, arguments: params.args });
-	\treturn params;
+	\tthis.logger.log('${entityClassName} deleted', { user: params.context.user, organization: params.context.user.organization, arguments: params.args });
+	\treturn super.afterDeleteHook(params);
 \t}
 `;

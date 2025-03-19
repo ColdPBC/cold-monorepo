@@ -2,8 +2,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { UserSettingsPage } from './userSettings';
 import { StoryMockProvider } from '@coldpbc/mocks';
-import { fireEvent, userEvent, waitFor, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { expect, fireEvent, userEvent, waitFor, within } from '@storybook/test';
 
 const meta: Meta<typeof UserSettingsPage> = {
   title: 'Pages/UserSettingsPage',

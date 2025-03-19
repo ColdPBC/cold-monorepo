@@ -1,7 +1,6 @@
 import { Claims } from './claims';
 import { EntityLevel } from '@coldpbc/enums';
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
-import { PaginatedProductsQuery } from './products';
 
 export interface Suppliers {
   id: string;
@@ -49,25 +48,22 @@ export interface SuppliersWithAssurances {
       logoUrl?: string;
     };
   }[];
-  materialSuppliers: {
+  materials: {
     id: string;
-    material: {
+    name: string;
+    attributeAssurances: {
       id: string;
-      name: string;
-      attributeAssurances: {
+      effectiveEndDate: string | null;
+      organizationFile: {
         id: string;
-        effectiveEndDate: string | null;
-        organizationFile: {
-          id: string;
-        } | null;
-        sustainabilityAttribute: {
-          id: string;
-          name: string;
-          level: EntityLevel;
-          logoUrl?: string;
-        };
-      }[];
-    };
+      } | null;
+      sustainabilityAttribute: {
+        id: string;
+        name: string;
+        level: EntityLevel;
+        logoUrl?: string;
+      };
+    }[];
   }[];
   products: {
     id: string;
@@ -103,13 +99,10 @@ export interface SuppliersDataGridGraphQL {
   category: string | null;
   subcategory: string | null;
   attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
-  materialSuppliers: {
+  materials: {
     id: string;
-    material: {
-      id: string;
-      name: string;
-      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
-    }
+    name: string;
+    attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
   }[];
   products: {
     id: string;
@@ -119,12 +112,9 @@ export interface SuppliersDataGridGraphQL {
 
 // Additional attribute assurance information pulled for SuppliersDetail page
 export interface SupplierGraphQL extends SuppliersDataGridGraphQL {
-  materialSuppliers: Array<SuppliersDataGridGraphQL['materialSuppliers'][0] & {
-    material: SuppliersDataGridGraphQL['materialSuppliers'][0]['material'] & {
-      materialCategory: string | null;
-      materialSubcategory: string | null;
-      attributeAssurances: EntityLevelAttributeAssuranceGraphQL[];
-    }
+  materials: Array<SuppliersDataGridGraphQL['materials'][0] & {
+    materialCategory: string | null;
+    materialSubcategory: string | null;
   }>;
   products: Array<SuppliersDataGridGraphQL['products'][0] & {
     productCategory: string | null;

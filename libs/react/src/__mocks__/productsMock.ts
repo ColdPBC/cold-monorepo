@@ -1,5 +1,5 @@
 import { ProductsQuery } from '@coldpbc/interfaces';
-import { EntityLevel } from '@coldpbc/enums';
+import { EntityLevel, MaterialClassificationCategory, UnitOfMeasurement, WeightFactorUnits } from '@coldpbc/enums';
 import { addDays } from 'date-fns';
 
 export const getProductsMock = (): ProductsQuery[] => {
@@ -18,49 +18,65 @@ export const getProductsMock = (): ProductsQuery[] => {
 			productMaterials: [
 				{
 					id: 'opm_qf5x197buxezns68tbgbs37h',
-          yield: null,
-          unitOfMeasure: null,
-          weight: 5,
+					yield: null,
+					unitOfMeasure: null,
+					weight: 5,
 					material: {
 						id: 'mat_xyqmz0hdf1p8p26wg3d5ju97',
 						name: 'Material 15',
-            materialCategory: null,
-            materialSubcategory: null,
+						materialCategory: null,
+						materialSubcategory: null,
             emissionsFactor: 11.2,
-						materialSuppliers: [
-							{
-								id: 'matsup_ty7un10erbcr9ruvuwye02e6',
-								organizationFacility: {
-									id: 'ofac_f20621xztckbtqirkjlc7qgy',
-									name: 'Global Apparel Ltd.',
-                  attributeAssurances: [],
-								},
-							},
-						],
+            materialEmissionFactors: [{
+              id: "mef_1",
+              emissionFactor: {
+                id: 'emfac_1',
+                name: 'Wool insulation',
+                value: 11.2,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              }
+            }],
+						organizationFacility: {
+							id: 'ofac_f20621xztckbtqirkjlc7qgy',
+							name: 'Global Apparel Ltd.',
+						},
 						attributeAssurances: [],
+						materialClassification: {
+							id: 'matclass_1',
+							name: 'Sheep Wool insulation',
+							category: MaterialClassificationCategory.INSULATION_MATERIAL,
+							weightFactor: 0.1,
+						},
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: 58,
+						widthUnitOfMeasure: UnitOfMeasurement.in,
 					},
 				},
 				{
 					id: 'opm_zt3p4bfsa3ub3rxfe8witshb',
-          yield: null,
-          unitOfMeasure: null,
-          weight: 5,
+					yield: null,
+					unitOfMeasure: null,
+					weight: 5,
 					material: {
 						id: 'mat_beq7hd4e7efg5vzrzpp1xcb9',
 						name: 'Material 7',
-            materialCategory: null,
-            materialSubcategory: null,
+						materialCategory: null,
+						materialSubcategory: null,
             emissionsFactor: 2,
-						materialSuppliers: [
-							{
-								id: 'msup_mvldtl3a1y1y27i6dpuz7qs2',
-								organizationFacility: {
-									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
-									name: 'Kerluke - Armstrong',
-                  attributeAssurances: [],
-								},
-							},
-						],
+            materialEmissionFactors: [{
+              id: "mef_2",
+              emissionFactor: {
+                id: 'emfac_2',
+                name: 'Polyester',
+                value: 2,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              }
+            }],
+						organizationFacility: {
+							id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
+							name: 'Kerluke - Armstrong',
+						},
 						attributeAssurances: [
 							{
 								id: '381c0b18-d9df-4734-84b8-d30e95ef454c',
@@ -96,29 +112,42 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+						materialClassification: {
+							id: 'matclass_2',
+							name: 'Kangaroo leather',
+							category: MaterialClassificationCategory.LEATHER,
+							weightFactor: 0.75,
+						},
+						weightFactor: 0.73,
+						weightFactorUnitOfMeasure: WeightFactorUnits.KG_PER_M2,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 				{
 					id: 'opm_pwrhpxj9xkrxprxol7k54gr4',
-          yield: null,
-          unitOfMeasure: null,
-          weight: 2,
+					yield: null,
+					unitOfMeasure: null,
+					weight: 2,
 					material: {
 						id: 'mat_x0x7th2m41zdgahmrbt9t58c',
 						name: 'Material 9',
-            materialCategory: null,
-            materialSubcategory: null,
+						materialCategory: null,
+						materialSubcategory: null,
             emissionsFactor: 5,
-						materialSuppliers: [
-							{
-								id: 'msup_v1092i9nodjiixmgf1ze4zfm',
-								organizationFacility: {
-									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
-									name: 'Kerluke - Armstrong',
-                  attributeAssurances: [],
-								},
-							},
-						],
+            materialEmissionFactors: [{
+              id: "mef_3",
+              emissionFactor: {
+                id: 'emfac_3',
+                name: 'Cotton',
+                value: 5,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
+            organizationFacility: {
+							id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
+							name: 'Kerluke - Armstrong',
+						},
 						attributeAssurances: [
 							{
 								id: '7610a434-cb02-4206-83ca-75632fa1dc6e',
@@ -156,29 +185,42 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+						materialClassification: {
+							id: 'matclass_3',
+							name: 'Monolithic Laminate',
+							category: MaterialClassificationCategory.COATINGS_AND_LAMINATIONS,
+							weightFactor: 0.1,
+						},
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 				{
 					id: 'opm_lg4rlg979blgkw6k5pezltj3',
-          yield: null,
-          unitOfMeasure: null,
-          weight: 1,
+					yield: null,
+					unitOfMeasure: null,
+					weight: 1,
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
-            materialCategory: null,
-            materialSubcategory: null,
+						materialCategory: null,
+						materialSubcategory: null,
             emissionsFactor: 4,
-						materialSuppliers: [
-							{
-								id: 'msup_i3819gq1c53fygmlcn4qyz8w',
-								organizationFacility: {
-									id: 'ofac_vd809v326es9yz3rygkeb14f',
-									name: 'Supplier Delta',
-                  attributeAssurances: [],
-								},
-							},
-						],
+            materialEmissionFactors: [{
+              id: "mef_3",
+              emissionFactor: {
+                id: 'emfac_4',
+                name: 'Polyester',
+                value: 4,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              }
+            }],
+						organizationFacility: {
+							id: 'ofac_vd809v326es9yz3rygkeb14f',
+							name: 'Supplier Delta',
+						},
 						attributeAssurances: [
 							{
 								id: '0a16a219-8d92-43fe-9bde-1e2d1fae78bd',
@@ -225,6 +267,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+						materialClassification: {
+							id: 'matclass_4',
+							name: 'Aluminum',
+							category: MaterialClassificationCategory.METALS,
+							weightFactor: 2.7,
+						},
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 			],
@@ -295,57 +347,49 @@ export const getProductsMock = (): ProductsQuery[] => {
 			productMaterials: [
 				{
 					id: 'opm_kk834waglx0r6cxrb6kjd1lh',
-          yield: null,
-          unitOfMeasure: null,
-          weight: null,
+					yield: null,
+					unitOfMeasure: null,
+					weight: null,
 					material: {
 						id: 'mat_xyqmz0hdf1p8p26wg3d5ju97',
 						name: 'Material 15',
-            materialCategory: null,
-            materialSubcategory: null,
-            emissionsFactor: null,
-						materialSuppliers: [
-							{
-								id: 'matsup_ty7un10erbcr9ruvuwye02e6',
-								organizationFacility: {
-									id: 'ofac_f20621xztckbtqirkjlc7qgy',
-									name: 'Global Apparel Ltd.',
-                  attributeAssurances: [],
-								},
-							},
-						],
+						materialCategory: null,
+						materialSubcategory: null,
+						emissionsFactor: null,
+            materialEmissionFactors: [],
+						organizationFacility: {
+							id: 'ofac_f20621xztckbtqirkjlc7qgy',
+							name: 'Global Apparel Ltd.',
+						},
 						attributeAssurances: [],
+						materialClassification: {
+							id: 'matclass_1',
+							name: 'Goose Down Insulation',
+							category: MaterialClassificationCategory.INSULATION_MATERIAL,
+							weightFactor: 0.9,
+						},
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 				{
 					id: 'opm_kmubboc9e9q5v003p7xyu9k9',
-          yield: null,
-          unitOfMeasure: null,
-          weight: null,
+					yield: null,
+					unitOfMeasure: null,
+					weight: null,
 					material: {
 						id: 'mat_u9lckkyqyii41q3by2wdt86i',
 						name: 'Material 8',
-            materialCategory: null,
-            materialSubcategory: null,
-            emissionsFactor: null,
-						materialSuppliers: [
-							{
-								id: 'msup_sn673pues18vmk8l1d9jrehp',
-								organizationFacility: {
-									id: 'ofac_vd809v326es9yz3rygkeb14f',
-									name: 'Supplier Delta',
-                  attributeAssurances: [],
-								},
-							},
-							{
-								id: 'msup_qb1t60n4bce506eouvjkri8d',
-								organizationFacility: {
-									id: 'ofac_ziiewcq7wmehkgcnt6jhb6re',
-									name: 'Supplier 6',
-                  attributeAssurances: [],
-								},
-							},
-						],
+						materialCategory: null,
+						materialSubcategory: null,
+						emissionsFactor: null,
+            materialEmissionFactors: [],
+						organizationFacility: {
+							id: 'ofac_vd809v326es9yz3rygkeb14f',
+							name: 'Supplier Delta',
+						},
 						attributeAssurances: [
 							{
 								id: '96ae4fab-9641-4488-b50e-da998dd786d6',
@@ -381,45 +425,34 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+						materialClassification: {
+							id: 'matclass_2',
+							name: 'Poly(methyl methacrylate) (PMMA) (Acrylic) plastic',
+							category: MaterialClassificationCategory.PLASTICS,
+							weightFactor: 1.2,
+						},
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 				{
 					id: 'opm_w02oqu9ex65qodbglczh0c2e',
-          yield: null,
-          unitOfMeasure: null,
-          weight: null,
+					yield: null,
+					unitOfMeasure: null,
+					weight: null,
 					material: {
 						id: 'mat_vctuajyeyeuwow0djuxwzb9g',
 						name: 'Material 11',
-            materialCategory: null,
-            materialSubcategory: null,
-            emissionsFactor: null,
-						materialSuppliers: [
-							{
-								id: 'matsup_v2uj0x6hlvhqvmv2wqyszpd2',
-								organizationFacility: {
-									id: 'ofac_c833b42yr2kv52p73oy0nuve',
-									name: 'Supplier 15',
-                  attributeAssurances: [],
-								},
-							},
-							{
-								id: 'msup_cs23eebzc4l1zkp1ipkaryup',
-								organizationFacility: {
-									id: 'ofac_djkh7ccfbm738mkijm69gks8',
-									name: 'Supplier 3',
-                  attributeAssurances: [],
-								},
-							},
-							{
-								id: 'matsup_kj0rpuh0v5qap4l32r6f52pa',
-								organizationFacility: {
-									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
-									name: 'Supplier 12',
-                  attributeAssurances: [],
-								},
-							},
-						],
+						materialCategory: null,
+						materialSubcategory: null,
+						emissionsFactor: null,
+            materialEmissionFactors: [],
+						organizationFacility: {
+							id: 'ofac_c833b42yr2kv52p73oy0nuve',
+							name: 'Supplier 15',
+						},
 						attributeAssurances: [
 							{
 								id: '40bf1d37-dba2-45a3-a646-71f94ce6040b',
@@ -444,29 +477,34 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+						materialClassification: {
+							id: 'matclass_2',
+							name: 'Polyurethane (PU) synthetic leather',
+							category: MaterialClassificationCategory.SYNTHETIC_LEATHER,
+							weightFactor: 0.4,
+						},
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 				{
 					id: 'opm_j39ropi5u7x0y1qzbme0tygf',
-          yield: null,
-          unitOfMeasure: null,
-          weight: null,
+					yield: null,
+					unitOfMeasure: null,
+					weight: null,
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
-            materialCategory: null,
-            materialSubcategory: null,
-            emissionsFactor: null,
-						materialSuppliers: [
-							{
-								id: 'msup_i3819gq1c53fygmlcn4qyz8w',
-								organizationFacility: {
-									id: 'ofac_vd809v326es9yz3rygkeb14f',
-									name: 'Supplier Delta',
-                  attributeAssurances: [],
-								},
-							},
-						],
+						materialCategory: null,
+						materialSubcategory: null,
+						emissionsFactor: null,
+            materialEmissionFactors: [],
+						organizationFacility: {
+							id: 'ofac_vd809v326es9yz3rygkeb14f',
+							name: 'Supplier Delta',
+						},
 						attributeAssurances: [
 							{
 								id: '0a16a219-8d92-43fe-9bde-1e2d1fae78bd',
@@ -513,6 +551,16 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+						materialClassification: {
+							id: 'matclass_2',
+							name: 'Cardboard',
+							category: MaterialClassificationCategory.WOOD_BASED_MATERIALS,
+							weightFactor: 0.6,
+						},
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 			],
@@ -582,49 +630,83 @@ export const getProductsMock = (): ProductsQuery[] => {
 			productMaterials: [
 				{
 					id: 'opm_rrnqxqbnp2vlmb8278q0x29f',
-          yield: null,
-          unitOfMeasure: null,
-          weight: 52,
+					yield: 2,
+					unitOfMeasure: 'pcs',
+					weight: 3,
 					material: {
 						id: '5926bb4c-5cbc-4b14-970f-968249444415',
 						name: 'Material 1',
-            materialCategory: 'Material Category 1',
-            materialSubcategory: 'Material Subcategory 1',
+						materialCategory: 'Material Category 1',
+						materialSubcategory: 'Material Subcategory 1',
             emissionsFactor: 2.3,
-						materialSuppliers: [
-							{
-								id: 'matsup_ccwa08m14j91q4tjuzgz4zsv',
-								organizationFacility: {
-									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
-									name: 'Supplier 12',
-                  attributeAssurances: [],
-								},
-							},
-						],
+            materialEmissionFactors: [
+              {
+                id: "mef_1",
+                emissionFactor: {
+                  id: 'emfac_5',
+                  name: 'nylon 6 production',
+                  value: 0.3,
+                  description: '\'nylon 6\', is a plastic product of fossil origin, it is not biodegradable and it is a thermoplastic material. This product consists of 100% virgin material with no content of recycled material. The product is used in the following applications and sectors: extruded, granulated and moulded in a wide range of textile, packaging and engineering applications. The main uses include fibers, films and engineering plastics.',
+                },
+              }, {
+                id: "mef_2",
+                emissionFactor: {
+                  id: 'emfac_6',
+                  name: 'weaving of synthetic fibre, for industrial use',
+                  value: 1.0,
+                  description: 'Inventory refers to the service of weaving a synthetic fibre. The dataset can be used with nylon, polypropylene and other types of thermoplastic fibres. The service should be used along with the raw material. The material to be used with this service should be 101.5% of the final product; for instance, for 1 kg of weaved synthetic fibre, a user should use 1.015 kg of raw material, be it nylon, polypropylene or other thermoplastic. The dataset is an estimation of the respective process. Waste polypropylene is chosen here to be an approximation of the waste generated by this activity, which depends on the raw material the user will choose. If this waste fraction is deemed irrelevant by the user, a modification is recommended.  The inventories includes energy consumption and infrastructure requirements for the service of weaving a synthetic fibre.',
+                },
+              }, {
+                id: "mef_3",
+                emissionFactor: {
+                  id: 'emfac_6',
+                  name: 'market for weaving, synthetic fibre',
+                  value: 1.0,
+                  description: 'This is a market activity. In the case of services or immobile infrastructures, markets are connecting suppliers and consumers at a global level. For specific connections at regional level, direct links between the local producing activities and the local consumers are preferred. Transport or losses are logically not relevant for this type of products. This is a market dataset delivering the service of weaving, synthetic fibre. No transportation is included.',
+                },
+              },
+            ],
+						organizationFacility: {
+							id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
+							name: 'Supplier 12',
+						},
 						attributeAssurances: [],
+						materialClassification: {
+							id: 'matclass_5',
+							name: 'Polyvinyl chloride (PVC) foam',
+							category: MaterialClassificationCategory.FOAM,
+							weightFactor: 0.05,
+						},
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 				{
 					id: 'opm_ynpia336jl34ar26ikpje5sj',
-          yield: null,
-          unitOfMeasure: null,
-          weight: 2,
+					yield: 3.3,
+					unitOfMeasure: 'm',
+					weight: null,
 					material: {
 						id: 'mat_beq7hd4e7efg5vzrzpp1xcb9',
 						name: 'Material 7',
-            materialCategory: 'Material Category 1',
-            materialSubcategory: 'Material Subcategory 2',
+						materialCategory: 'Material Category 1',
+						materialSubcategory: 'Material Subcategory 2',
             emissionsFactor: 3.5,
-						materialSuppliers: [
-							{
-								id: 'msup_mvldtl3a1y1y27i6dpuz7qs2',
-								organizationFacility: {
-									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
-									name: 'Kerluke - Armstrong',
-                  attributeAssurances: [],
-								},
-							},
-						],
+            materialEmissionFactors: [{
+              id: "mef_2",
+              emissionFactor: {
+                id: 'emfac_6',
+                name: 'Polyester',
+                value: 3.5,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
+						organizationFacility: {
+							id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
+							name: 'Kerluke - Armstrong',
+						},
 						attributeAssurances: [
 							{
 								id: '381c0b18-d9df-4734-84b8-d30e95ef454c',
@@ -666,37 +748,42 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+						materialClassification: {
+							id: 'matclass_6',
+							name: 'Natural Rubber (NR)',
+							category: MaterialClassificationCategory.RUBBERS_ELASTOMERS,
+							weightFactor: 1.1,
+						},
+						weightFactor: 1.3,
+						weightFactorUnitOfMeasure: WeightFactorUnits.KG_PER_M2,
+						width: 2,
+						widthUnitOfMeasure: UnitOfMeasurement.in,
 					},
 				},
 				{
 					id: 'opm_an0ygchf305yo1b2faro7au6',
-          yield: null,
-          unitOfMeasure: null,
-          weight: 5.2,
+					yield: 4.6,
+					unitOfMeasure: 'm',
+					weight: 5.2,
 					material: {
 						id: 'mat_u9lckkyqyii41q3by2wdt86i',
 						name: 'Material 8',
-            materialCategory: 'Material Category 2',
-            materialSubcategory: 'Material Subcategory 1',
+						materialCategory: 'Material Category 2',
+						materialSubcategory: 'Material Subcategory 1',
             emissionsFactor: 4.5,
-						materialSuppliers: [
-							{
-								id: 'msup_sn673pues18vmk8l1d9jrehp',
-								organizationFacility: {
-									id: 'ofac_vd809v326es9yz3rygkeb14f',
-									name: 'Supplier Delta',
-                  attributeAssurances: [],
-								},
-							},
-							{
-								id: 'msup_qb1t60n4bce506eouvjkri8d',
-								organizationFacility: {
-									id: 'ofac_ziiewcq7wmehkgcnt6jhb6re',
-									name: 'Supplier 6',
-                  attributeAssurances: [],
-								},
-							},
-						],
+            materialEmissionFactors: [{
+              id: "mef_3",
+              emissionFactor: {
+                id: 'emfac_7',
+                name: 'Polyester',
+                value: 4.5,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
+						organizationFacility: {
+							id: 'ofac_vd809v326es9yz3rygkeb14f',
+							name: 'Supplier Delta',
+						},
 						attributeAssurances: [
 							{
 								id: '96ae4fab-9641-4488-b50e-da998dd786d6',
@@ -732,29 +819,37 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+						materialClassification: null,
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 				{
 					id: 'opm_btmrnz0tujog6nq1lf86voyj',
-          yield: null,
-          unitOfMeasure: null,
-          weight: 1.1,
+					yield: 3.75,
+					unitOfMeasure: 'm',
+					weight: 1.1,
 					material: {
 						id: 'mat_x0x7th2m41zdgahmrbt9t58c',
 						name: 'Material 9',
-            materialCategory: 'Material Category 1',
-            materialSubcategory: 'Material Subcategory 2',
+						materialCategory: 'Material Category 1',
+						materialSubcategory: 'Material Subcategory 2',
             emissionsFactor: 20.1,
-						materialSuppliers: [
-							{
-								id: 'msup_v1092i9nodjiixmgf1ze4zfm',
-								organizationFacility: {
-									id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
-									name: 'Kerluke - Armstrong',
-                  attributeAssurances: [],
-								},
-							},
-						],
+            materialEmissionFactors: [{
+              id: "mef_4",
+              emissionFactor: {
+                id: 'emfac_8',
+                name: 'Polyester',
+                value: 20.1,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
+						organizationFacility: {
+							id: 'ofac_zhgx5abrfsxx39nb5cc18nr9',
+							name: 'Kerluke - Armstrong',
+						},
 						attributeAssurances: [
 							{
 								id: '7610a434-cb02-4206-83ca-75632fa1dc6e',
@@ -790,45 +885,42 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+						materialClassification: {
+							id: 'matclass_8',
+							name: 'Wool fabric',
+							category: MaterialClassificationCategory.TEXTILES,
+							weightFactor: 0.3,
+						},
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 				{
 					id: 'opm_eppxah0jo1qm1pcl1ipctlty',
-          yield: null,
-          unitOfMeasure: null,
-          weight: 3.4,
+					yield: 2,
+					unitOfMeasure: 'pcs',
+					weight: 3.4,
 					material: {
 						id: 'mat_vctuajyeyeuwow0djuxwzb9g',
 						name: 'Material 11',
-            materialCategory: 'Material Category 2',
-            materialSubcategory: 'Material Subcategory 2',
+						materialCategory: 'Material Category 2',
+						materialSubcategory: 'Material Subcategory 2',
             emissionsFactor: 14.5,
-						materialSuppliers: [
-							{
-								id: 'matsup_v2uj0x6hlvhqvmv2wqyszpd2',
-								organizationFacility: {
-									id: 'ofac_c833b42yr2kv52p73oy0nuve',
-									name: 'Supplier 15',
-                  attributeAssurances: [],
-								},
-							},
-							{
-								id: 'msup_cs23eebzc4l1zkp1ipkaryup',
-								organizationFacility: {
-									id: 'ofac_djkh7ccfbm738mkijm69gks8',
-									name: 'Supplier 3',
-                  attributeAssurances: [],
-								},
-							},
-							{
-								id: 'matsup_kj0rpuh0v5qap4l32r6f52pa',
-								organizationFacility: {
-									id: 'ofac_kdy8y6rhyhz3aj6vlxe72798',
-									name: 'Supplier 12',
-                  attributeAssurances: [],
-								},
-							},
-						],
+            materialEmissionFactors: [{
+              id: "mef_5",
+              emissionFactor: {
+                id: 'emfac_9',
+                name: 'Polyester',
+                value: 14.5,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
+						organizationFacility: {
+							id: 'ofac_c833b42yr2kv52p73oy0nuve',
+							name: 'Supplier 15',
+						},
 						attributeAssurances: [
 							{
 								id: '40bf1d37-dba2-45a3-a646-71f94ce6040b',
@@ -853,29 +945,42 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+						materialClassification: {
+							id: 'matclass_8',
+							name: 'Animal-based Leather Alternatives',
+							category: MaterialClassificationCategory.LEATHER_ALTERNATIVES,
+							weightFactor: 0.5,
+						},
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 				{
 					id: 'opm_l30omtgvn91n7bt8jm2aiu57',
-          yield: null,
-          unitOfMeasure: null,
-          weight: null,
+					yield: null,
+					unitOfMeasure: null,
+					weight: null,
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
-            materialCategory: 'Material Category 3',
-            materialSubcategory: 'Material Subcategory 1',
-            emissionsFactor: null,
-						materialSuppliers: [
-							{
-								id: 'msup_i3819gq1c53fygmlcn4qyz8w',
-								organizationFacility: {
-									id: 'ofac_vd809v326es9yz3rygkeb14f',
-									name: 'Supplier Delta',
-                  attributeAssurances: [],
-								},
-							},
-						],
+						materialCategory: 'Material Category 3',
+						materialSubcategory: 'Material Subcategory 1',
+            emissionsFactor: 3.2,
+            materialEmissionFactors: [{
+              id: "mef_6",
+              emissionFactor: {
+                id: 'emfac_10',
+                name: 'Polyester',
+                value: 3.2,
+                description: 'The emissions factor for ethical wool insulation measures the greenhouse gas emissions produced throughout its lifecycle, including sheep farming, shearing, processing, and transportation. Ethical wool typically emphasizes sustainable grazing practices, animal welfare, and eco-friendly processing, which can help reduce its carbon footprint compared to conventional wool. The emissions factor serves as a critical metric for assessing the environmental impact of the fabric and guiding sustainable  choices.',
+              },
+            }],
+						organizationFacility: {
+							id: 'ofac_vd809v326es9yz3rygkeb14f',
+							name: 'Supplier Delta',
+						},
 						attributeAssurances: [
 							{
 								id: '0a16a219-8d92-43fe-9bde-1e2d1fae78bd',
@@ -922,6 +1027,11 @@ export const getProductsMock = (): ProductsQuery[] => {
 								},
 							},
 						],
+						materialClassification: null,
+						weightFactor: null,
+						weightFactorUnitOfMeasure: null,
+						width: null,
+						widthUnitOfMeasure: null,
 					},
 				},
 			],
@@ -996,3 +1106,11 @@ export const getProductsMock = (): ProductsQuery[] => {
 export const getProductsMockById = (id: string): ProductsQuery | null => {
 	return getProductsMock().find(product => product.id === id) || null;
 };
+
+export const getProductMockWithOutEmissionFactor = (id: string): ProductsQuery | null => {
+  const productsWithOutEmissionFactors = getProductsMock().find(product => product.id === id) || null;
+  if(productsWithOutEmissionFactors && productsWithOutEmissionFactors.productMaterials.length > 0) {
+    productsWithOutEmissionFactors.productMaterials[0].material.materialEmissionFactors = [];
+  }
+  return productsWithOutEmissionFactors;
+}

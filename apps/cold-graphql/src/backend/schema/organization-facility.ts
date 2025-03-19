@@ -4,6 +4,7 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AttributeAssurance } from './attribute-assurance';
 import { Emission } from './emission';
 import { Integration } from './integration';
+import { Material } from './material';
 import { MaterialSupplier } from './material-supplier';
 import { Organization } from './organization';
 import { Product } from './product';
@@ -80,6 +81,9 @@ export class OrganizationFacility {
 
 	@RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'organizationFacility' })
 	materialSuppliers!: MaterialSupplier[];
+
+	@RelationshipField<Material>(() => [Material], { relatedField: 'organizationFacility' })
+	materials!: Material[];
 
 	@RelationshipField<Product>(() => [Product], { relatedField: 'organizationFacility' })
 	products!: Product[];

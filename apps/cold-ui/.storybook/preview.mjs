@@ -2,10 +2,7 @@ import documentationTemplate from './documentationTemplate.mdx';
 import '../src/styles.css';
 import 'flowbite';
 import {auth0UserMock, worker} from '../../../libs/react/src';
-import {StyledEngineProvider, ThemeProvider} from "@mui/material";
-import {muiTheme} from "../../../libs/react/src/themes/muiTheme";
-import {LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
+import {CustomDecorators} from "./customDecorators";
 
 // Storybook executes this module in both bootstap phase (Node)
 // and a story's runtime (browser). However, we cannot call `setupWorker`
@@ -23,12 +20,16 @@ if (typeof global.process === 'undefined' || global.process.title === 'browser')
 
 export default {
   parameters: {
-    actions: {argTypesRegex: '^on[A-Z].*'},
     controls: {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/,
       },
+    },
+    options: {
+      storySort: {
+        order: ['Introduction', '*']
+      }
     },
     previewTabs: {
       'storybook/docs/panel': {index: -1},
@@ -89,39 +90,20 @@ export default {
     },
     launchdarkly: {
       flags: {
-        showTeamMemberTable: true,
-        showNewsModuleCold310: true,
-        showNextStepsCard: true,
-        showComplianceModule: true,
-        showDocumentsUploadModuleCold492: true,
-        showREIComplianceMVPSidebarCold506: true,
-        showNewHomePageComplianceReiMvp: true,
-        complianceSetFlowMarkdown:
-          "#Automate your REI Consolidated Form \n Upload company policies, documents, or other resources and Cold Climate will autofill the form. Cold Climate uses AI to pre-fill each question based on your information. \n\nYou'll always be able to review and edit yourself before submitting anything. \n\nYou can upload as many or as few documents as you want. We recommend uploading any of the following for REI. \n1. Your previous year REI PIA Compliance completed answers and impact assessment documents \n2. Other retailer sustainability compliance forms \n3. Supplier code of conduct \n4. Climate or environmental impact statements or documents \n5. Sustainability Certifications \n6. Diversity and Inclusion policies",
-        showNewCarbonFootprintModuleCold634: true,
-        showNewCompliancePageHomeCold671: true,
         swrKeepPreviousData: true,
-        showNewNavigationCold698: true,
-        showNewComplianceManagerCold711: true,
-        showNewComplianceManagerPreviewCold713: true,
-        showNewDocumentsPage: true,
-        showProductDetailPageCold1140: true,
-        materialDetailsPageCold997: true,
-        supplierDetailPageCold1195: true,
-        cold1220SustainabilityAttributePage: true,
         productCarbonFootprintMvp: true,
+        showBillingPageCold957: true,
+        showNewDocumentUploadUxCold1410: true,
+        showNewPcfUiCold1450: true,
+        showAiSustainabilibuddyCold1464: true,
+        showSspDatagridExportButton: true,
       },
     },
   },
+
   decorators: [
-    Story => {
-      return StyledEngineProvider({
-        injectFirst: true,
-        children: LocalizationProvider({
-          dateAdapter: AdapterDateFns,
-          children: ThemeProvider({theme: muiTheme, children: Story()})
-        })
-      })
-    },
+    (Story, context) => CustomDecorators(Story, context, import.meta.env.STORYBOOK_MUI_LICENSE_KEY),
   ],
+
+  tags: ['autodocs']
 };

@@ -2,8 +2,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { AccountSettingsPage } from './accountSettings';
 import { getMembersHandler, StoryMockProvider } from '@coldpbc/mocks';
-import { fireEvent, userEvent, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { fireEvent, userEvent, within, expect } from '@storybook/test';
 
 const meta: Meta<typeof AccountSettingsPage> = {
   title: 'Pages/AccountSettingsPage',
@@ -22,13 +21,6 @@ export const Default: Story = {
         <AccountSettingsPage {...args} />
       </StoryMockProvider>
     );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showTeamMemberTable: true,
-      },
-    },
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement.parentElement === null ? canvasElement : canvasElement.parentElement);
@@ -66,12 +58,5 @@ export const NoInvitations: Story = {
         <AccountSettingsPage {...args} />
       </StoryMockProvider>
     );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showTeamMemberTable: true,
-      },
-    },
   },
 };

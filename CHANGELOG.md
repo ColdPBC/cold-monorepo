@@ -1,3 +1,893 @@
+# [1.600.0](https://github.com/coldPBC/cold-monorepo/compare/v1.599.0...v1.600.0) (2025-03-18)
+
+
+### Features
+
+* add database indices for improved query performance in ecoinvent schema ([1fc3b65](https://github.com/coldPBC/cold-monorepo/commit/1fc3b6537dc2a9819f8b562026ad9a1cc585884c))
+
+# [1.599.0](https://github.com/coldPBC/cold-monorepo/compare/v1.598.0...v1.599.0) (2025-03-17)
+
+
+### Features
+
+* enhance EcoSpold file validation and improve job handling in ecoinvent import ([9d8fcb4](https://github.com/coldPBC/cold-monorepo/commit/9d8fcb49f3cca31ad8c5120668cef6059553113f))
+
+# [1.598.0](https://github.com/coldPBC/cold-monorepo/compare/v1.597.0...v1.598.0) (2025-03-17)
+
+
+### Features
+
+* improve error handling and logging for EcoSpold file processing ([0635f01](https://github.com/coldPBC/cold-monorepo/commit/0635f01c3459deece73aa3a763b6958507e3dd8b))
+
+# [1.597.0](https://github.com/coldPBC/cold-monorepo/compare/v1.596.0...v1.597.0) (2025-03-17)
+
+
+### Features
+
+* enhance EcoSpold file processing with improved error handling and logging ([f7a9a0f](https://github.com/coldPBC/cold-monorepo/commit/f7a9a0f6a8eb45e4698206383fc877506d8b9579))
+
+# [1.596.0](https://github.com/coldPBC/cold-monorepo/compare/v1.595.0...v1.596.0) (2025-03-17)
+
+
+### Bug Fixes
+
+* add S3 upload python scripts for ecoinvent datasets and LCIA data ([90daa3e](https://github.com/coldPBC/cold-monorepo/commit/90daa3ee7c7b680f7856cd4ef7344ff5b090c830))
+
+
+### Features
+
+* refactor impact category handling in ecoinvent upsert logic ([3a0335e](https://github.com/coldPBC/cold-monorepo/commit/3a0335e94af2f3dc2f11b5b7346a79fd90543e90))
+
+# [1.595.0](https://github.com/coldPBC/cold-monorepo/compare/v1.594.0...v1.595.0) (2025-03-17)
+
+
+### Features
+
+* add unique constraints and indexes for ecoinvent activities and impact categories ([515eb6f](https://github.com/coldPBC/cold-monorepo/commit/515eb6fa99148eee5595589f9a53cb789aaff4eb))
+* update ecoinvent impact category upsert logic and improve error handling ([047799e](https://github.com/coldPBC/cold-monorepo/commit/047799e89b441af8a3e37fafa9e801f12a9418ca))
+
+# [1.594.0](https://github.com/coldPBC/cold-monorepo/compare/v1.593.0...v1.594.0) (2025-03-14)
+
+
+### Features
+
+* enhance ecoinvent import process with classification and impact handling ([4dfbc92](https://github.com/coldPBC/cold-monorepo/commit/4dfbc92cfc2b76f73a6daef8f97102bd68187734))
+* update database schema for ecoinvent activities and impacts, adding new classifications and constraints ([a637db2](https://github.com/coldPBC/cold-monorepo/commit/a637db2b2aaa496bbf0f9b83be3289dabec86304))
+
+# [1.593.0](https://github.com/coldPBC/cold-monorepo/compare/v1.592.0...v1.593.0) (2025-03-11)
+
+
+### Features
+
+* Enhance export functionality with batching and progress tracking ([bb5919a](https://github.com/coldPBC/cold-monorepo/commit/bb5919a7d41f7166bd375c34c098d66eb329acb7))
+
+# [1.592.0](https://github.com/coldPBC/cold-monorepo/compare/v1.591.0...v1.592.0) (2025-03-11)
+
+
+### Features
+
+* Enable conditional rendering of the remove button in list items ([1c5c529](https://github.com/coldPBC/cold-monorepo/commit/1c5c52932be6611246b802c7833bcac7518329bf))
+* Enhance ListItem component with unique item management and improved input handling ([adba01c](https://github.com/coldPBC/cold-monorepo/commit/adba01c1daec920b0d4379604b497720a630ccea))
+* Refactor signup form story for clarity and efficiency ([d3ee9bb](https://github.com/coldPBC/cold-monorepo/commit/d3ee9bbce31d45b98583bef755fbdbd3c7fa9d82))
+* Refactor story components to use dedicated render functions ([f28895d](https://github.com/coldPBC/cold-monorepo/commit/f28895d66986f5224fadc76ce728a3866747d81c))
+* Update listitem story tests ([149f5d3](https://github.com/coldPBC/cold-monorepo/commit/149f5d34b402ef1c3a1a7652dcc2df4027617d75))
+* Update Storybook docs configuration and story sorting ([fdf7150](https://github.com/coldPBC/cold-monorepo/commit/fdf715045b46b9b1da77c357eb1ee024adc7cb96))
+* Update Storybook from v7 to v8 ([c8df453](https://github.com/coldPBC/cold-monorepo/commit/c8df453f1e48a42f76f7fc9c9d7a258885fcfc5b))
+
+# [1.591.0](https://github.com/coldPBC/cold-monorepo/compare/v1.590.0...v1.591.0) (2025-03-11)
+
+
+### Features
+
+* Add error handling and logging to EntityExport component ([cdbd0c5](https://github.com/coldPBC/cold-monorepo/commit/cdbd0c5fa3545ac34bca5487e22b1134a216a7ec))
+* Add export functionality for products and materials grids ([64b3599](https://github.com/coldPBC/cold-monorepo/commit/64b359905480fe27b480859d5cd4db7cb9074ab8))
+* Enable feature flag for DataGrid export button ([05f4664](https://github.com/coldPBC/cold-monorepo/commit/05f4664d9dde3318b9b3c5d238528bbd34104500))
+* Refactor data grids for enhanced server-side functionalities ([401ddfe](https://github.com/coldPBC/cold-monorepo/commit/401ddfe54788c55509c43f643ea5f5edb9e354e4))
+* Refactor product data grid to include carbon footprint logic ([4f2af91](https://github.com/coldPBC/cold-monorepo/commit/4f2af9126347dc4c57cb0343adf77a06812232be))
+
+# [1.590.0](https://github.com/coldPBC/cold-monorepo/compare/v1.589.2...v1.590.0) (2025-03-11)
+
+
+### Features
+
+* add support for importing all locations in ecoinvent update endpoint ([3c8b0ed](https://github.com/coldPBC/cold-monorepo/commit/3c8b0ede75e28b0f31542d87b33af1578e7a83ce))
+
+## [1.589.2](https://github.com/coldPBC/cold-monorepo/compare/v1.589.1...v1.589.2) (2025-03-11)
+
+
+### Bug Fixes
+
+* update @prisma/client version from 5.6.0 to 6.4.1 in package.json and yarn.lock ([244a367](https://github.com/coldPBC/cold-monorepo/commit/244a3674ea96c7098c349712bda602356463d7c3))
+
+## [1.589.1](https://github.com/coldPBC/cold-monorepo/compare/v1.589.0...v1.589.1) (2025-03-10)
+
+
+### Bug Fixes
+
+* re-add Zod generator configuration for Prisma schema validation ([3c2f4de](https://github.com/coldPBC/cold-monorepo/commit/3c2f4def8ce9336993e64e39c98f14d26478bc97))
+
+# [1.589.0](https://github.com/coldPBC/cold-monorepo/compare/v1.588.0...v1.589.0) (2025-03-10)
+
+
+### Features
+
+* enhance ecoinvent import functionality with update endpoint and additional data fields ([2ea2e59](https://github.com/coldPBC/cold-monorepo/commit/2ea2e594f98515c9aac3e0fad6feda7525036cea))
+
+# [1.588.0](https://github.com/coldPBC/cold-monorepo/compare/v1.587.0...v1.588.0) (2025-03-10)
+
+
+### Features
+
+* add ecoinvent import and data models with migrations ([a889a7e](https://github.com/coldPBC/cold-monorepo/commit/a889a7ef34e30868cb38169dbd5f9022aa64b38d))
+* add ecoinvent import module with CSV parsing and EcoSpold XML validation ([162f66c](https://github.com/coldPBC/cold-monorepo/commit/162f66ccf4ca28981353b5e48c8107df321f4964))
+* add ecoinvent-datum and ecoinvent-import to schema and entities ([e5d5f59](https://github.com/coldPBC/cold-monorepo/commit/e5d5f59c406c3239068f6ab70ccc24e6606b6ece))
+
+# [1.587.0](https://github.com/coldPBC/cold-monorepo/compare/v1.586.3...v1.587.0) (2025-03-07)
+
+
+### Features
+
+* Add CSV export options and reusable checkbox column config ([047cab6](https://github.com/coldPBC/cold-monorepo/commit/047cab654a42fe6397907b3e6d6c64e10360e3b5))
+* Remove print options to GridToolbarExport in CustomDataGridToolbar by default ([cb79671](https://github.com/coldPBC/cold-monorepo/commit/cb7967153118291307cd7f04836792316a68b98d))
+
+## [1.586.3](https://github.com/coldPBC/cold-monorepo/compare/v1.586.2...v1.586.3) (2025-03-06)
+
+
+### Bug Fixes
+
+* handle weight assignment to ensure it is a number or null in BackboneService ([90cab93](https://github.com/coldPBC/cold-monorepo/commit/90cab93cd40ab2c360122839707cdc0517615c4a))
+
+## [1.586.2](https://github.com/coldPBC/cold-monorepo/compare/v1.586.1...v1.586.2) (2025-03-06)
+
+
+### Bug Fixes
+
+* ensure weight is stored as a number in BackboneService ([50cb9f4](https://github.com/coldPBC/cold-monorepo/commit/50cb9f453d706f499e18119a5cc69f09d40f0833))
+
+## [1.586.1](https://github.com/coldPBC/cold-monorepo/compare/v1.586.0...v1.586.1) (2025-03-06)
+
+
+### Bug Fixes
+
+* improve error logging for product upsert failure in BackboneService ([82c5e87](https://github.com/coldPBC/cold-monorepo/commit/82c5e87d09d653d6a8f5c5b2356595df3da9c59a))
+
+# [1.586.0](https://github.com/coldPBC/cold-monorepo/compare/v1.585.0...v1.586.0) (2025-03-06)
+
+
+### Features
+
+* add pagination support to triggerIntegration method in organization integrations ([35c873b](https://github.com/coldPBC/cold-monorepo/commit/35c873bac6c0eea1496d0a3f7e012621e9b21c19))
+* add unique constraints and new columns for materials and tag assignments ([d46ed35](https://github.com/coldPBC/cold-monorepo/commit/d46ed35fb321fc1753ca971ffd3244014812e01b))
+* enhance BackboneService sync logic, add conversion factor handling, and improve product/material syncing ([7469407](https://github.com/coldPBC/cold-monorepo/commit/746940742c187889e09596302cac5b477660cbdc))
+
+# [1.585.0](https://github.com/coldPBC/cold-monorepo/compare/v1.584.0...v1.585.0) (2025-03-06)
+
+
+### Features
+
+* Add GraphQL query for component definitions and implement error handling in sidebar ([38c2466](https://github.com/coldPBC/cold-monorepo/commit/38c24662e4b7baf45ff258731ab2d2af78f13598))
+* Handle errors at all levels in getGraphqlError utility ([44ee017](https://github.com/coldPBC/cold-monorepo/commit/44ee0173f8df779ec0e37c90f783e426df287f7d))
+* Refactor sidebar item matching logic with recursion. ([c6dc2f8](https://github.com/coldPBC/cold-monorepo/commit/c6dc2f8e88ac0a94d03144db279357495026633d))
+
+# [1.584.0](https://github.com/coldPBC/cold-monorepo/compare/v1.583.1...v1.584.0) (2025-03-03)
+
+
+### Features
+
+* Add custom scrollbar styling for chatbot UI ([d327583](https://github.com/coldPBC/cold-monorepo/commit/d327583edb17cdd267ab45a739c273bc2150193f))
+* Adjust padding logic and refine scrolling behavior ([6ce4de0](https://github.com/coldPBC/cold-monorepo/commit/6ce4de0adadcb17578b1d0e8188459e0c654d491))
+* Align pagination toolbar to the left and remove default right spacing ([e94dd75](https://github.com/coldPBC/cold-monorepo/commit/e94dd75b5144cc22c67a77cf3b8b3512a5eb3d90))
+
+## [1.583.1](https://github.com/coldPBC/cold-monorepo/compare/v1.583.0...v1.583.1) (2025-03-03)
+
+
+### Bug Fixes
+
+* handle optional classification type and improve error handling for classify response ([2616935](https://github.com/coldPBC/cold-monorepo/commit/26169359026d5b678d02b8de59d4abafff6c882e))
+
+# [1.583.0](https://github.com/coldPBC/cold-monorepo/compare/v1.582.1...v1.583.0) (2025-03-03)
+
+
+### Features
+
+* Map document types to main categories and update UI labels. ([88d48ba](https://github.com/coldPBC/cold-monorepo/commit/88d48ba0705517f63b78bf4b485127659395085b))
+
+## [1.582.1](https://github.com/coldPBC/cold-monorepo/compare/v1.582.0...v1.582.1) (2025-02-28)
+
+
+### Bug Fixes
+
+* comment out platform event for AI_PROCESSING status in file upload handling ([8548047](https://github.com/coldPBC/cold-monorepo/commit/8548047d22b22e156fb69f470c43ff73fa3d4031))
+
+# [1.582.0](https://github.com/coldPBC/cold-monorepo/compare/v1.581.0...v1.582.0) (2025-02-28)
+
+
+### Bug Fixes
+
+* handle inconsistent payload key for file in async message processing ([5942fc3](https://github.com/coldPBC/cold-monorepo/commit/5942fc39e89c180efce2f7d74c617a692d9c7b28))
+* handle optional compliance ID in job cache retrieval ([9e8b6d0](https://github.com/coldPBC/cold-monorepo/commit/9e8b6d0f7a2874ac0178bef7642e8b5504d15215))
+* improve error handling for encrypted PDFs in extraction service ([a96424c](https://github.com/coldPBC/cold-monorepo/commit/a96424cc34da8e5ecbdb1cb7b243faaef23abfda))
+
+
+### Features
+
+* dynamically load pdfjs-dist for improved PDF text extraction ([44aa893](https://github.com/coldPBC/cold-monorepo/commit/44aa8934b623a6d93e8c8be143d7a97464b2e202))
+* enhance job failure handling and add binary content detection in classification process ([bd11c57](https://github.com/coldPBC/cold-monorepo/commit/bd11c5768064e61047535262a0f173b20770a5c3))
+
+# [1.581.0](https://github.com/coldPBC/cold-monorepo/compare/v1.580.1...v1.581.0) (2025-02-27)
+
+
+### Features
+
+* Add rounded-none style to input component ([8a8336a](https://github.com/coldPBC/cold-monorepo/commit/8a8336a8b870b7e20f64d81c61984e0797a1ff06))
+* Extract input handling logic into a separate function for clarity ([2a2b8ee](https://github.com/coldPBC/cold-monorepo/commit/2a2b8eea21991f7ed375b02e2296caab9d708df8))
+* Group references by file name and concatenate text in response ([340cfd8](https://github.com/coldPBC/cold-monorepo/commit/340cfd8e86ef0d59527a554fd58a501591648f8d))
+* Refactor file input handling to allow re-selection. ([4b30473](https://github.com/coldPBC/cold-monorepo/commit/4b30473890be23895c3dfdc2fcd8c85eefc841d0))
+* Refactor file upload logic into custom hook. ([65557c5](https://github.com/coldPBC/cold-monorepo/commit/65557c57aafd7a7bc9448bb5498b7f566fef8b2f))
+
+## [1.580.1](https://github.com/coldPBC/cold-monorepo/compare/v1.580.0...v1.580.1) (2025-02-27)
+
+
+### Bug Fixes
+
+* enhance failure logging to include job failure reason ([fc92e48](https://github.com/coldPBC/cold-monorepo/commit/fc92e48b74c45c428bfcfbab350b34db5672bf6a))
+
+# [1.580.0](https://github.com/coldPBC/cold-monorepo/compare/v1.579.0...v1.580.0) (2025-02-27)
+
+
+### Bug Fixes
+
+* comment out PDF text extraction for debugging purposes ([afebb17](https://github.com/coldPBC/cold-monorepo/commit/afebb17d013646b509ce2f87a5c3de75a8900260))
+
+
+### Features
+
+* add 'vectorize-file' event to MqttEventSchema ([eb93627](https://github.com/coldPBC/cold-monorepo/commit/eb93627a90a9b385b4005392ed1801f1f85ea61d))
+* enhance classification processor with progress tracking and error handling ([aea9021](https://github.com/coldPBC/cold-monorepo/commit/aea9021aaa63d956bb30bd3d4b148e1fdbbb2abf))
+* implement NotImplementedException for syncOrgFiles method ([09fd470](https://github.com/coldPBC/cold-monorepo/commit/09fd4706d29237bc9b56b1014b338a001a6cbf36))
+* update PDF extraction service to log image conversion progress and change type definition ([42f0163](https://github.com/coldPBC/cold-monorepo/commit/42f0163dc26cad815ce9af8c2e4aa61ad76bb98b))
+
+# [1.579.0](https://github.com/coldPBC/cold-monorepo/compare/v1.578.0...v1.579.0) (2025-02-26)
+
+
+### Features
+
+* Add bulk edit functionality for supplied products ([1b3e416](https://github.com/coldPBC/cold-monorepo/commit/1b3e41667f20668890a0527cde65f22e50d9aa79))
+* Refactor bulk edit modal to support multiple entity levels ([8471aac](https://github.com/coldPBC/cold-monorepo/commit/8471aac1b039859728fe9b323044ae71b04a4cc2))
+* Remove unused pagination input and standardize export syntax ([0291190](https://github.com/coldPBC/cold-monorepo/commit/02911901abf41c874e1cbb55365b01b963d819fa))
+* Simplify attribute selection logic in modal ([f08ee12](https://github.com/coldPBC/cold-monorepo/commit/f08ee12a263c7801daea224f09401fd285ac79c1))
+
+# [1.578.0](https://github.com/coldPBC/cold-monorepo/compare/v1.577.0...v1.578.0) (2025-02-26)
+
+
+### Features
+
+* Add AI response handling with OpenAI integration ([f40fd9c](https://github.com/coldPBC/cold-monorepo/commit/f40fd9cf7ed611ba0e781ed61e6e629d8b96de1b))
+* Add aiLoading prop to SustainabiliBuddyQueue component ([8626454](https://github.com/coldPBC/cold-monorepo/commit/862645426b9029555801c0980e7b016818e0a31b))
+* Add error boundaries to SustainabiliBuddy components ([852306f](https://github.com/coldPBC/cold-monorepo/commit/852306f38103721b80e485c6a761807485d5f84a))
+* Add gradient animations and improve loading indicators ([16c04b1](https://github.com/coldPBC/cold-monorepo/commit/16c04b12870771c6978b320c17c47b42e97468b3))
+* Fix incorrect delay class names in gradient animation ([44351e7](https://github.com/coldPBC/cold-monorepo/commit/44351e7e1ec634c1f90f78b1f11bf671d311c0fa))
+* Refactor AI response handling to include default answer. ([06ccab3](https://github.com/coldPBC/cold-monorepo/commit/06ccab369a6d096b4b99cf67776c3905a08215ec))
+* Refactor justification and references rendering logic. ([d46ee96](https://github.com/coldPBC/cold-monorepo/commit/d46ee9683f188514447358417dd5af31971eedc3))
+* Update animations and add utility classes for delays ([e3085f0](https://github.com/coldPBC/cold-monorepo/commit/e3085f03b5aa8f756a8be51e06c46c90cdd0882a))
+
+# [1.577.0](https://github.com/coldPBC/cold-monorepo/compare/v1.576.0...v1.577.0) (2025-02-26)
+
+
+### Features
+
+* add support for extracting and handling PDF text, update dependencies ([467ed80](https://github.com/coldPBC/cold-monorepo/commit/467ed80f80098e1ed2395e2afef101f002c68583))
+
+# [1.576.0](https://github.com/coldPBC/cold-monorepo/compare/v1.575.0...v1.576.0) (2025-02-25)
+
+
+### Features
+
+* Add upload modal with file selection and upload functionality ([038b99f](https://github.com/coldPBC/cold-monorepo/commit/038b99f40cf79508aad2ad5ad3a695f17de9795f))
+* Refactor uploadingScreen to simplify file handling logic. ([ac42b93](https://github.com/coldPBC/cold-monorepo/commit/ac42b935f766fb0a849bc088d521fdac0e118563))
+* Remove toast messages from document upload component ([60ad934](https://github.com/coldPBC/cold-monorepo/commit/60ad9346f6b5ea3a97f477ab249f2a8cce16c1c9))
+* Update text label and fix error color reference ([8df5dfb](https://github.com/coldPBC/cold-monorepo/commit/8df5dfbc871a12a2247e9c8bba052211bd327218))
+
+# [1.575.0](https://github.com/coldPBC/cold-monorepo/compare/v1.574.4...v1.575.0) (2025-02-25)
+
+
+### Features
+
+* Add SustainabiliBuddy conversational UI components ([d8960a7](https://github.com/coldPBC/cold-monorepo/commit/d8960a7bde553aeb1a4559c03a35a00f12898cfe))
+* Set default margins for text elements in Tailwind config ([b17e14b](https://github.com/coldPBC/cold-monorepo/commit/b17e14b678233a064090999f8611921e3df08748))
+
+## [1.574.4](https://github.com/coldPBC/cold-monorepo/compare/v1.574.3...v1.574.4) (2025-02-24)
+
+
+### Bug Fixes
+
+* remove unnecessary condition in file processing status update ([39a41e8](https://github.com/coldPBC/cold-monorepo/commit/39a41e8e3f583b8daf26900de6401cd1a116bddb))
+
+## [1.574.3](https://github.com/coldPBC/cold-monorepo/compare/v1.574.2...v1.574.3) (2025-02-24)
+
+
+### Bug Fixes
+
+* improve MQTT connection log message to include client ID ([31deadc](https://github.com/coldPBC/cold-monorepo/commit/31deadc02c4992c4fe72f881ed36f34643b89eb1))
+
+## [1.574.2](https://github.com/coldPBC/cold-monorepo/compare/v1.574.1...v1.574.2) (2025-02-24)
+
+
+### Bug Fixes
+
+* handle excessive MQTT connection attempts with error logging ([56af389](https://github.com/coldPBC/cold-monorepo/commit/56af3891063b9669f05a31c15e7ca7c2e9224410))
+
+## [1.574.1](https://github.com/coldPBC/cold-monorepo/compare/v1.574.0...v1.574.1) (2025-02-24)
+
+
+### Bug Fixes
+
+* enhance mqtt client handling and logging defaults ([95aaab4](https://github.com/coldPBC/cold-monorepo/commit/95aaab4f1320cdd1b41f3cd62cf611e3fa992398))
+
+
+### Reverts
+
+* mistakenly added WeightUnit to product_materials ([d9d7bb9](https://github.com/coldPBC/cold-monorepo/commit/d9d7bb96a821fc794332e4460f78013eaaa309d7))
+
+# [1.574.0](https://github.com/coldPBC/cold-monorepo/compare/v1.573.0...v1.574.0) (2025-02-22)
+
+
+### Features
+
+* Add SustainabiliBuddyContainer component and integrate it ([b0eada6](https://github.com/coldPBC/cold-monorepo/commit/b0eada65e0b9e6dad5215eb69f6c1852c0339ffd))
+* Add SustainabiliBuddyInput component and input enhancements ([83c6120](https://github.com/coldPBC/cold-monorepo/commit/83c61208860d6da549b61fc3f6fea642df10b1cb))
+* Adjust layout for responsive design in SustainabiliBuddyContainer ([d1c0005](https://github.com/coldPBC/cold-monorepo/commit/d1c00055e6cda096979d30a9f6b2f7d942d29620))
+* Refactor prompt handling in SustainabiliBuddy components ([ca934a4](https://github.com/coldPBC/cold-monorepo/commit/ca934a4ddb32d9726410df3498ed582bc7e7740b))
+* Refactor queue state structure and adjust button styling ([7d24c7b](https://github.com/coldPBC/cold-monorepo/commit/7d24c7bf842c6102a97266d45cffb72559c9d47f))
+* Reset input field after handling Enter key press ([6a4ec4d](https://github.com/coldPBC/cold-monorepo/commit/6a4ec4d2b9d36c29420a7226cfe6f8c378eb08eb))
+* Update gradient colors for SustainabiliBuddy components ([015f69b](https://github.com/coldPBC/cold-monorepo/commit/015f69b4151c033c4f00cb27821aae674bc88be6))
+* Update gradient colors in SustainabiliBuddy components ([4c5e19e](https://github.com/coldPBC/cold-monorepo/commit/4c5e19e3db2b1a66d171760a7578268b6e0e57bc)), closes [#F7FF58](https://github.com/coldPBC/cold-monorepo/issues/F7FF58)
+* Update gradient colors in SustainabiliBuddyContainer ([6693a42](https://github.com/coldPBC/cold-monorepo/commit/6693a42862a29a0a4e8e9502a86516104d1f8aec))
+
+# [1.573.0](https://github.com/coldPBC/cold-monorepo/compare/v1.572.0...v1.573.0) (2025-02-21)
+
+
+### Features
+
+* Add document deletion functionality to UploadsPage ([3b6d28b](https://github.com/coldPBC/cold-monorepo/commit/3b6d28bd863d0ba5e049d089109914f068fbd439))
+* Add file download functionality to uploads page ([3f0ec6c](https://github.com/coldPBC/cold-monorepo/commit/3f0ec6c991ea3eef7083051d93a86d2f81422c89))
+* Fix delete action parameter in uploads page grid ([64916e3](https://github.com/coldPBC/cold-monorepo/commit/64916e3394f0ba03db2e9a2498dfdf9cd8b17ab2))
+* Refactor delete document modal into reusable component ([cb4d76a](https://github.com/coldPBC/cold-monorepo/commit/cb4d76aafa5b59b5649f10f2610199c327893ae4))
+
+# [1.572.0](https://github.com/coldPBC/cold-monorepo/compare/v1.571.1...v1.572.0) (2025-02-20)
+
+
+### Features
+
+* Add feature flag for SustainabiliBuddy component ([b01fce1](https://github.com/coldPBC/cold-monorepo/commit/b01fce1ca4c556b51fbc5b931d4962ec2e29b1cb))
+* Add SustainabiliBuddy component to DashboardLayout ([d776ffc](https://github.com/coldPBC/cold-monorepo/commit/d776ffc86fcc1773b360b2cd658525db480fcc98))
+* Fix JSX attribute casing and add Transition for animations ([703ccde](https://github.com/coldPBC/cold-monorepo/commit/703ccde12bd4a0cc0d028cbf06ed45c25e7d8120))
+* Refactor SustainabiliBuddyButton to remove Transition component ([babfc7a](https://github.com/coldPBC/cold-monorepo/commit/babfc7adb92d985bc05d83abcf4a77f98aa7c810))
+
+## [1.571.1](https://github.com/coldPBC/cold-monorepo/compare/v1.571.0...v1.571.1) (2025-02-19)
+
+
+### Bug Fixes
+
+* correctly merge and update metadata in beforeUpdateHook ([6c959a1](https://github.com/coldPBC/cold-monorepo/commit/6c959a19e401da8440d9b9db848c6548b90d599b))
+
+# [1.571.0](https://github.com/coldPBC/cold-monorepo/compare/v1.570.0...v1.571.0) (2025-02-19)
+
+
+### Features
+
+* Fix conditional logic for product carbon footprint columns ([6d662a3](https://github.com/coldPBC/cold-monorepo/commit/6d662a3584c1adf377fb4c1b4585b71100ff5bd4))
+* Update feature flags for carbon footprint components ([42dbed5](https://github.com/coldPBC/cold-monorepo/commit/42dbed58137a8b62851a03205bd22cf45635b20a))
+
+# [1.570.0](https://github.com/coldPBC/cold-monorepo/compare/v1.569.0...v1.570.0) (2025-02-19)
+
+
+### Features
+
+* Add EmissionFactor interface and refactor EmissionsFactorBubble ([9c3db50](https://github.com/coldPBC/cold-monorepo/commit/9c3db506977c3f523379a91593645502ab51c9cb))
+* Add support for toggling emission factor calculation logic ([89dc13b](https://github.com/coldPBC/cold-monorepo/commit/89dc13bc0775c30872588767275b87a50d8f224f))
+* Add toggle detail panel with ChevronDownIcon in data grid ([935cd40](https://github.com/coldPBC/cold-monorepo/commit/935cd40932cd68ac39ff0e6479b1d7eff94e8d84))
+* Enhance DataGrid styling for pinned columns ([2ef59a1](https://github.com/coldPBC/cold-monorepo/commit/2ef59a188cae4b88ee5932341ce5f0f5ebb7be32))
+* Fix emissions factor access in productBOMTab component ([f083282](https://github.com/coldPBC/cold-monorepo/commit/f0832821e5ef3a1f1676d792a4edd4c99b195301))
+* Fix typo in property name for emission factor filter ([296da1c](https://github.com/coldPBC/cold-monorepo/commit/296da1c5ba37cf3c9e5c23e17e679572b66c84c6))
+* Refactor emission factor handling to use updated interface ([e0a87e2](https://github.com/coldPBC/cold-monorepo/commit/e0a87e299d0c696953f3dd667448ed220eaf6eb6))
+* Refactor emission factor logic to use aggregated factors. ([afa5c37](https://github.com/coldPBC/cold-monorepo/commit/afa5c3780725dd760beed47c69aeaf1a1ea52bad))
+* Refactor emission factors display with improved formatting ([0af4a42](https://github.com/coldPBC/cold-monorepo/commit/0af4a42ebc21da617f2da697f55d87f44a394aca))
+* Refactor emissions calculation type for clarity. ([100788c](https://github.com/coldPBC/cold-monorepo/commit/100788c42411853913e7c2b0b913e8c2cd95f031))
+* Refactor emissions data structure and remove unused components ([96ac858](https://github.com/coldPBC/cold-monorepo/commit/96ac8584b2918509e4b87bf23447f269aa9e6d66))
+* Refactor emissions factor rendering and data updates. ([18ff41f](https://github.com/coldPBC/cold-monorepo/commit/18ff41f123566e3bb0606c4dabbb29b30b10a5da))
+* Refactor emissionsFactor handling across components. ([9fadcd5](https://github.com/coldPBC/cold-monorepo/commit/9fadcd5bf67edf8f4df8cb06092015311c59b4bc))
+* Refactor product materials rows generation with useMemo ([6d3f421](https://github.com/coldPBC/cold-monorepo/commit/6d3f421a296fa1e48954c17101883fcaee9c4224))
+* Refactor: Rename 'emissionsFactor' to 'emissionFactor' ([b57d396](https://github.com/coldPBC/cold-monorepo/commit/b57d3961f6d93d408e47d1a5faed626ca798b097))
+* Rename 'materialEmissionFactor' to 'materialEmissionFactors'. ([73eea7f](https://github.com/coldPBC/cold-monorepo/commit/73eea7fa1c4f8f9f71597db1a15288e734b91cc0))
+* Round weight values to 2 decimal places in components. ([aa5dbfa](https://github.com/coldPBC/cold-monorepo/commit/aa5dbfab35a37fe1c5dfdf6c26887f3461c8c3ab))
+* Simplify emissions factor assignment in product tab. ([7c844ac](https://github.com/coldPBC/cold-monorepo/commit/7c844acfca3acc24131f92470f0f6a17c040633a))
+* Simplify emissions factor usage in productBOMTab. ([c726206](https://github.com/coldPBC/cold-monorepo/commit/c7262068d854e1bb34ed2f198a3ed81ecf538810))
+* Simplify tip text for emissions factor correction. ([9fa8083](https://github.com/coldPBC/cold-monorepo/commit/9fa808390989d1441e8e94c5e0b659ca6ce9b839))
+* Simplify weight display logic in component ([cbeb6f7](https://github.com/coldPBC/cold-monorepo/commit/cbeb6f79d200b7fdbf042dfec8852ed756141394))
+* Update background color for pinned data grid cells ([5873973](https://github.com/coldPBC/cold-monorepo/commit/5873973030f3dd3706b19d584deb82d73eea1c68))
+
+# [1.569.0](https://github.com/coldPBC/cold-monorepo/compare/v1.568.3...v1.569.0) (2025-02-19)
+
+
+### Features
+
+* add uuid dependency to cold-graphql package ([33f8b52](https://github.com/coldPBC/cold-monorepo/commit/33f8b52ad6df8491042ae3c7a0e62cd5cd122e18))
+
+## [1.568.3](https://github.com/coldPBC/cold-monorepo/compare/v1.568.2...v1.568.3) (2025-02-19)
+
+
+### Bug Fixes
+
+* made metadata merge logic generic and moved it to base.sidecar so that all updates to metadata will behave the same ([6a02d25](https://github.com/coldPBC/cold-monorepo/commit/6a02d2551f9a4e8dd2541fb734684cbec4d178d2))
+
+## [1.568.2](https://github.com/coldPBC/cold-monorepo/compare/v1.568.1...v1.568.2) (2025-02-19)
+
+
+### Bug Fixes
+
+* clean up redundant logic across entity hooks ([f28866f](https://github.com/coldPBC/cold-monorepo/commit/f28866fee432205272350b978b3e985360ee2758))
+
+## [1.568.1](https://github.com/coldPBC/cold-monorepo/compare/v1.568.0...v1.568.1) (2025-02-19)
+
+
+### Bug Fixes
+
+* add material emissions and tagging functionalities ([6dad4cd](https://github.com/coldPBC/cold-monorepo/commit/6dad4cd02d4b34467e46ba8fa9b2781aa4bf96c2))
+* fixed MQTT connection/publishing ([0da6e62](https://github.com/coldPBC/cold-monorepo/commit/0da6e62f829954b771430151aec741882bb27130))
+
+# [1.568.0](https://github.com/coldPBC/cold-monorepo/compare/v1.567.0...v1.568.0) (2025-02-19)
+
+
+### Features
+
+* Add `self-start` class to upload modal button ([419a24e](https://github.com/coldPBC/cold-monorepo/commit/419a24e761725cb58e711aaa5fe8c6a45cda22b3))
+* Add drag-and-drop functionality with visual feedback ([d4501d6](https://github.com/coldPBC/cold-monorepo/commit/d4501d61bd3c67f0133b6a473a622eda83763451))
+* Remove unnecessary timeout property from toast message ([84a6ce4](https://github.com/coldPBC/cold-monorepo/commit/84a6ce43d9ff9e39673fd32df78a3ee6de6bb34f))
+* Update drag-and-drop styling in UploadModal ([36baeee](https://github.com/coldPBC/cold-monorepo/commit/36baeeea68344239a2fb2e0b076ea6e22701562e))
+
+# [1.567.0](https://github.com/coldPBC/cold-monorepo/compare/v1.566.0...v1.567.0) (2025-02-18)
+
+
+### Features
+
+* update all hooks to mutate createdAt/updatedAt and call baseSidecar ([d375a60](https://github.com/coldPBC/cold-monorepo/commit/d375a6033aff276d0e56febaa882ab652fa7da1f))
+
+# [1.566.0](https://github.com/coldPBC/cold-monorepo/compare/v1.565.0...v1.566.0) (2025-02-18)
+
+
+### Bug Fixes
+
+* add `value` field to `emission_factors` model and schema ([79faa1c](https://github.com/coldPBC/cold-monorepo/commit/79faa1c374eb8b0a376986c70df9c79a2dc555ee))
+
+
+### Features
+
+* add emission factor model and relationships ([e40b7ad](https://github.com/coldPBC/cold-monorepo/commit/e40b7ada4e28f5abc7c6d4185586400ef84bcfe6))
+* add material emission factors and tag assignments ([0dc0c72](https://github.com/coldPBC/cold-monorepo/commit/0dc0c72c3741b3e1a78d023146566f5a9b8a069d))
+* add MaterialEmissionFactor entity to schema and PostgreSQL index ([7d83048](https://github.com/coldPBC/cold-monorepo/commit/7d83048ea5611f91cea6c2faa4def5dbefde40c4))
+* add support for EmissionFactor entity ([89a7a4b](https://github.com/coldPBC/cold-monorepo/commit/89a7a4b61bd594de29afe0dfc4e240ab1b38c87b))
+
+# [1.565.0](https://github.com/coldPBC/cold-monorepo/compare/v1.564.0...v1.565.0) (2025-02-18)
+
+
+### Features
+
+* Add support for effective start and end dates in files ([3d334b2](https://github.com/coldPBC/cold-monorepo/commit/3d334b288cb70be88152b8685bcd313b37a16738))
+* Fix date comparison logic in document details sidebar. ([4ce99e7](https://github.com/coldPBC/cold-monorepo/commit/4ce99e701503fe20e451baa1da3880b043f4c885))
+* Fix metadata condition logic in document sidebar ([7cf3b60](https://github.com/coldPBC/cold-monorepo/commit/7cf3b60dd60f441a6f867ea57c19f25bb83ebd62))
+* Only send metadata when dates or certificate number is changed to reduce payload size. ([e732b3c](https://github.com/coldPBC/cold-monorepo/commit/e732b3c9e8e167f2fcdd61cf38fd7bfcb299bdc6))
+* Optimize metadata sending in document details sidebar. ([a3bc170](https://github.com/coldPBC/cold-monorepo/commit/a3bc1707e9065d7361b4ff62ff8d67f562df4dfa))
+* Refactor metadata update logic in document sidebar. ([d2e639e](https://github.com/coldPBC/cold-monorepo/commit/d2e639e1e71834ee1d33fdd1cd43c9f9b3e6b961))
+* Refine metadata update logic in document sidebar. ([c5a4763](https://github.com/coldPBC/cold-monorepo/commit/c5a47637489cff9920aad6d9348add8af4505f77))
+* Remove unnecessary spread operator from metadata update. ([ef29b89](https://github.com/coldPBC/cold-monorepo/commit/ef29b8914f70cee2226080d00c6185c9e6c7f7fa))
+* Update handling of effective dates in document sidebar ([74aa507](https://github.com/coldPBC/cold-monorepo/commit/74aa507a978055f1affe8dffe5dad7d26271f15f))
+
+# [1.564.0](https://github.com/coldPBC/cold-monorepo/compare/v1.563.0...v1.564.0) (2025-02-18)
+
+
+### Bug Fixes
+
+* relocate MQTT publishToUI to end of function ([1c4de05](https://github.com/coldPBC/cold-monorepo/commit/1c4de05b66334679bf4ac40b2570ab6cbc0116c8))
+
+
+### Features
+
+* add MQTT UI update on file extraction completion ([ff9350f](https://github.com/coldPBC/cold-monorepo/commit/ff9350f7429ac3e75f3824e6663022b7af9f89ae))
+
+# [1.563.0](https://github.com/coldPBC/cold-monorepo/compare/v1.562.2...v1.563.0) (2025-02-18)
+
+
+### Features
+
+* Add spinner to AIProcessingDocumentsBanner ([e5be6a7](https://github.com/coldPBC/cold-monorepo/commit/e5be6a7b4604ae567cf9108100d6da018f2efe4d))
+
+## [1.562.2](https://github.com/coldPBC/cold-monorepo/compare/v1.562.1...v1.562.2) (2025-02-18)
+
+
+### Bug Fixes
+
+* handle metadata parsing properly in organization-file hook ([26969dc](https://github.com/coldPBC/cold-monorepo/commit/26969dcc4c1f84b3d8730b6cebc0fced6df19d90))
+
+## [1.562.1](https://github.com/coldPBC/cold-monorepo/compare/v1.562.0...v1.562.1) (2025-02-18)
+
+
+### Bug Fixes
+
+* add metadata merge in beforeUpdateHook ([a6986a8](https://github.com/coldPBC/cold-monorepo/commit/a6986a852c776a5eb4953c9cf1e38a5e5ca54099))
+
+# [1.562.0](https://github.com/coldPBC/cold-monorepo/compare/v1.561.0...v1.562.0) (2025-02-14)
+
+
+### Features
+
+* Improve UploadModal customization and replace DocumentUploadButton ([ddb6cb9](https://github.com/coldPBC/cold-monorepo/commit/ddb6cb9ec44523e977fc21fc824c94c485f5d4e4))
+
+# [1.561.0](https://github.com/coldPBC/cold-monorepo/compare/v1.560.0...v1.561.0) (2025-02-14)
+
+
+### Features
+
+* Add processingStatus field and integrate with file handling ([ecf8353](https://github.com/coldPBC/cold-monorepo/commit/ecf83537f2a5103a1aa50fb9906f48d37b7842a0))
+* Refactor `mqttMappings` and add URL mapping support ([d57d0cc](https://github.com/coldPBC/cold-monorepo/commit/d57d0cc390d23a7db96601732bbd0fce551ca0b6))
+
+# [1.560.0](https://github.com/coldPBC/cold-monorepo/compare/v1.559.0...v1.560.0) (2025-02-14)
+
+
+### Bug Fixes
+
+* support for test team in linear to stop spamming slack ([ddd765c](https://github.com/coldPBC/cold-monorepo/commit/ddd765c6c6b3bcbdb48b84334636c64aaca7f1e0))
+
+
+### Features
+
+* archive completed issues if in staging or development ([2b01a53](https://github.com/coldPBC/cold-monorepo/commit/2b01a5389beb4315ee8b56fe2fe0cbe5c1ff9993))
+
+# [1.559.0](https://github.com/coldPBC/cold-monorepo/compare/v1.558.0...v1.559.0) (2025-02-14)
+
+
+### Bug Fixes
+
+* set organization type to any as workaround for type issue ([e641215](https://github.com/coldPBC/cold-monorepo/commit/e6412154a1d300a22c23c0d16cbaa8b33d4644de))
+
+
+### Features
+
+* add 'WebhookSecret' to compliance.enums ([da0ea4d](https://github.com/coldPBC/cold-monorepo/commit/da0ea4d3bceaac75747bdd958631bf55a462451c))
+* add @linear/sdk dependency to project ([1ca5d4a](https://github.com/coldPBC/cold-monorepo/commit/1ca5d4a14f270aafaee8044c2a12d8e82030ed9e))
+* add custom rawBody handling for Linear webhook requests ([2ec6be9](https://github.com/coldPBC/cold-monorepo/commit/2ec6be931b771b08d584a9442adb3d32a815a44e))
+* add LinearController with incoming webhook support for file status updates ([5daf7b5](https://github.com/coldPBC/cold-monorepo/commit/5daf7b5ad00608094847bbf755eaf5b44253a87a))
+* add LinearModule to app module for modular functionality ([0555d66](https://github.com/coldPBC/cold-monorepo/commit/0555d66e9e5f6e07ac0545490b528ed725992b60))
+* add linearSecret and linearWebhookId to organization model ([30becca](https://github.com/coldPBC/cold-monorepo/commit/30becca1cc4a54bf0385117213aa33969944a60d))
+* add LinearService for managing Linear API integrations ([c71aa14](https://github.com/coldPBC/cold-monorepo/commit/c71aa143ea7ceee1c5a1343c44219a480c2f4883))
+* add RabbitMQ message subscription for linear events in LinearRabbitService ([615ca56](https://github.com/coldPBC/cold-monorepo/commit/615ca56c4d320d27e7e432dea40158f955ef26f6))
+* enhance classification processor with status updates and error handling ([28ae591](https://github.com/coldPBC/cold-monorepo/commit/28ae5914eed0b2bad22416eae2a338fb8eb75a5b))
+* enhance file upload handling with Linear webhook support and utility methods ([2bc575d](https://github.com/coldPBC/cold-monorepo/commit/2bc575d805b8e41de4c5765a1db46a762dcd2462))
+* enhance Linear service and controller for webhook handling and error reporting ([673ea74](https://github.com/coldPBC/cold-monorepo/commit/673ea74766b894a607fd8ed5537a7a497d03d82a))
+
+# [1.558.0](https://github.com/coldPBC/cold-monorepo/compare/v1.557.0...v1.558.0) (2025-02-13)
+
+
+### Features
+
+* Add filtered select-all functionality to data grid ([99d45b2](https://github.com/coldPBC/cold-monorepo/commit/99d45b24d7729e87602ea3c944ceaffe3ab0b221))
+* Fix syntax errors in clickSelectAll function logic ([c1d921f](https://github.com/coldPBC/cold-monorepo/commit/c1d921fbf6b552d0819c38724ec89389b399c1fa))
+* Optimize attribute sorting by wrapping it in useMemo ([6e4e56b](https://github.com/coldPBC/cold-monorepo/commit/6e4e56b1a83ea2841b48c5af92a59ef9e741b8b2))
+
+# [1.557.0](https://github.com/coldPBC/cold-monorepo/compare/v1.556.0...v1.557.0) (2025-02-13)
+
+
+### Features
+
+* Improve error handling and feedback for file deletion ([8713388](https://github.com/coldPBC/cold-monorepo/commit/8713388c6ce40900183b3f5af71761d1bae0baf7))
+
+# [1.556.0](https://github.com/coldPBC/cold-monorepo/compare/v1.555.0...v1.556.0) (2025-02-13)
+
+
+### Features
+
+* use calculated weights on product-level sustainability attribute report ([3786eea](https://github.com/coldPBC/cold-monorepo/commit/3786eea4fff63c1fee27d69d1cf7119384ea7d16))
+
+# [1.555.0](https://github.com/coldPBC/cold-monorepo/compare/v1.554.0...v1.555.0) (2025-02-12)
+
+
+### Features
+
+* show/use calculated weight on PCF tab ([8d3f785](https://github.com/coldPBC/cold-monorepo/commit/8d3f785c25e4457f8514a571f4f8a30a9e4ce7cc))
+
+# [1.554.0](https://github.com/coldPBC/cold-monorepo/compare/v1.553.0...v1.554.0) (2025-02-12)
+
+
+### Features
+
+* Enable new PCF UI feature flag in productsDataGrid ([7f6a11e](https://github.com/coldPBC/cold-monorepo/commit/7f6a11e10c60cd5518c0414e0940ad16c76dbd4d))
+
+# [1.553.0](https://github.com/coldPBC/cold-monorepo/compare/v1.552.0...v1.553.0) (2025-02-11)
+
+
+### Features
+
+* add weightFactor to material classifications ([d55cef3](https://github.com/coldPBC/cold-monorepo/commit/d55cef3154e28276434d6db70aa5215dd2d631f6))
+
+# [1.552.0](https://github.com/coldPBC/cold-monorepo/compare/v1.551.0...v1.552.0) (2025-02-11)
+
+
+### Features
+
+* Add support for missing material emissions handling ([9b67c13](https://github.com/coldPBC/cold-monorepo/commit/9b67c13262e529dbba0f565465811aa935e62b63))
+* Use pluralize for materials count in MissingMaterialEmissionsCard. ([40d5b80](https://github.com/coldPBC/cold-monorepo/commit/40d5b808dedb0369ab4c8cd7f4f7af0f341f337b))
+
+# [1.551.0](https://github.com/coldPBC/cold-monorepo/compare/v1.550.0...v1.551.0) (2025-02-11)
+
+
+### Features
+
+* add weight_factor, weight_factor_unit_of_measure, and width fields to materials model ([0a639b1](https://github.com/coldPBC/cold-monorepo/commit/0a639b193165a0c19b95fbb7800f58fcf1b5ce98))
+* add widthUnitOfMeasure field to materials schema and related entities ([f0e110c](https://github.com/coldPBC/cold-monorepo/commit/f0e110c2a613ddd5b35b09da0f45514461853cfd))
+
+# [1.550.0](https://github.com/coldPBC/cold-monorepo/compare/v1.549.0...v1.550.0) (2025-02-11)
+
+
+### Features
+
+* Add EmissionsFactorBubble component with Storybook examples ([d6a01e6](https://github.com/coldPBC/cold-monorepo/commit/d6a01e68f2f21283b88c7b6d87151e8d9bed91b3))
+* Add EmissionsFactorDetailedExpandedView component and stories ([b9fe6dc](https://github.com/coldPBC/cold-monorepo/commit/b9fe6dc015950e9168493de27c805ea1692f2974))
+* Add link color tokens to cold_theme ([da39f90](https://github.com/coldPBC/cold-monorepo/commit/da39f90fbc97a3ba64585c055df5d78e5c2e619c))
+* Remove redundant text-body class from emission factor bubble ([5968bf9](https://github.com/coldPBC/cold-monorepo/commit/5968bf9f7a231d1ea3c94125fc8a6ebfedca886e))
+
+# [1.549.0](https://github.com/coldPBC/cold-monorepo/compare/v1.548.1...v1.549.0) (2025-02-11)
+
+
+### Features
+
+* Add queryParams to document upload axios request ([f291015](https://github.com/coldPBC/cold-monorepo/commit/f291015b25b17839dd0e730a04cc65eaf8b60e32))
+* Handle partial upload failures in upload modal. ([4edd280](https://github.com/coldPBC/cold-monorepo/commit/4edd28020fa5f0d922c128a2920f8d4f36032da1))
+* Improve upload failure messaging with specific file names ([13c7d6f](https://github.com/coldPBC/cold-monorepo/commit/13c7d6f7ffd48dd3af9ce96d6b35701eb61646ca))
+* Refactor queryParams and restore Confirm button functionality ([cb8559c](https://github.com/coldPBC/cold-monorepo/commit/cb8559c64b1a2b0de1c1ce2708d48d5b248f34c7))
+
+## [1.548.1](https://github.com/coldPBC/cold-monorepo/compare/v1.548.0...v1.548.1) (2025-02-10)
+
+
+### Bug Fixes
+
+* **organization.files.service:** correct file type for manual review status ([e6e8a2a](https://github.com/coldPBC/cold-monorepo/commit/e6e8a2aeb5aa54a30632a71b8474cc7e59086c98))
+
+# [1.548.0](https://github.com/coldPBC/cold-monorepo/compare/v1.547.0...v1.548.0) (2025-02-10)
+
+
+### Features
+
+* update file upload handling to support processing status and file types ([ad2e53d](https://github.com/coldPBC/cold-monorepo/commit/ad2e53dead1c43b0e92c3708a7c54fab8afd0ead))
+
+# [1.547.0](https://github.com/coldPBC/cold-monorepo/compare/v1.546.0...v1.547.0) (2025-02-10)
+
+
+### Features
+
+* Add material classification category to products data ([b08c47e](https://github.com/coldPBC/cold-monorepo/commit/b08c47e1297082cd15788f3b885c2e4ed7523e42))
+* Refactor emission display to improve UI styling. ([4f45600](https://github.com/coldPBC/cold-monorepo/commit/4f456005b0a92fe143c5a04aa4161218f3bc0064))
+* Simplify null/undefined check for classification. ([73f3302](https://github.com/coldPBC/cold-monorepo/commit/73f33028cdfa8e9aa13f821c0cdd1696105d1396))
+
+# [1.546.0](https://github.com/coldPBC/cold-monorepo/compare/v1.545.0...v1.546.0) (2025-02-10)
+
+
+### Bug Fixes
+
+* update access control list to use read-only permissions so that it doesn't require org scoped query. ([d887bd7](https://github.com/coldPBC/cold-monorepo/commit/d887bd7322f8bb2391e218d47308625c1de6c26c))
+
+
+### Features
+
+* add materials relationship to organization-facility entity and schema ([fe1905d](https://github.com/coldPBC/cold-monorepo/commit/fe1905d15e9f0b383978d3f14e04a50544b8237b))
+* update Material entity to reference OrganizationFacility relationship ([ae24870](https://github.com/coldPBC/cold-monorepo/commit/ae24870fa8c3b9e2c91be70ccc33476b455e4967))
+
+# [1.545.0](https://github.com/coldPBC/cold-monorepo/compare/v1.544.0...v1.545.0) (2025-02-07)
+
+
+### Features
+
+* Add carbon accounting tab to product details ([a9bfa37](https://github.com/coldPBC/cold-monorepo/commit/a9bfa37b52f515b507096e52f610b3f987065f64))
+* Adjust emissions_factor precision to one decimal place. ([6cd69a0](https://github.com/coldPBC/cold-monorepo/commit/6cd69a0c1251f0c57041420992ea4ec0e274a432))
+* Fix carbon accounting unit conversion and weight calculation. ([e120f07](https://github.com/coldPBC/cold-monorepo/commit/e120f07db3c63a23d12e67e3a18557fe2d6d8fd4))
+* Format yield values to two decimal places if not null ([dd8b56f](https://github.com/coldPBC/cold-monorepo/commit/dd8b56fda22fd04d200c027254df7547058b5f0d))
+* Refactor tabs configuration in ProductDetail component. ([b6bfe9d](https://github.com/coldPBC/cold-monorepo/commit/b6bfe9d3b322bbf145599caf6584b632bcc9974b))
+* Remove unnecessary 'type' property from weight field definition ([660b940](https://github.com/coldPBC/cold-monorepo/commit/660b940017b6f5f48bba6629688ba9a8c482f77b))
+
+# [1.544.0](https://github.com/coldPBC/cold-monorepo/compare/v1.543.2...v1.544.0) (2025-02-07)
+
+
+### Features
+
+* "Remove unnecessary width class from modal inner element ([8abf835](https://github.com/coldPBC/cold-monorepo/commit/8abf8351154330dad9e3460f7fa28837ce3f7c74))
+* `Adjust modal content styles to improve layout consistency` ([36a5439](https://github.com/coldPBC/cold-monorepo/commit/36a54393890a8d9bafbc505595d9c196a384e96c))
+* Add query parameters to upload request configuration ([aa5ed7c](https://github.com/coldPBC/cold-monorepo/commit/aa5ed7cb48e4b01044de9121e966b1ace0967937))
+* Add UploadModal component and integrate it into UploadsPage ([da5ca08](https://github.com/coldPBC/cold-monorepo/commit/da5ca08aa18bd9216d379164b1cc2e1a909cc217))
+* Add UploadModal component and MainDocumentCategory enum ([10948a9](https://github.com/coldPBC/cold-monorepo/commit/10948a92d4b789d2f57a395510ea9b64478a3752))
+* Adjust upload modal layout styles for better responsiveness ([d0dd02a](https://github.com/coldPBC/cold-monorepo/commit/d0dd02ad167d583ef7768b575dba946cf486bcd8))
+* Fix indentation issues in UploadModal component ([094f1ac](https://github.com/coldPBC/cold-monorepo/commit/094f1acbf6944d24f49cdc81268e304e5d6b1fda))
+* Reset state on modal open and comment out confirm button. ([16a6496](https://github.com/coldPBC/cold-monorepo/commit/16a64966df717dca1403ca19c042eba72631b3fe))
+* Set default sorting by creation date in uploads table ([abaf9c4](https://github.com/coldPBC/cold-monorepo/commit/abaf9c42567557948fe3e92b72707dc0d855cbbc))
+* Update icon for Assurance Documents in upload modal ([9afbd98](https://github.com/coldPBC/cold-monorepo/commit/9afbd983340720c1d69519a4f24fae0e12ba65bc))
+
+## [1.543.2](https://github.com/coldPBC/cold-monorepo/compare/v1.543.1...v1.543.2) (2025-02-07)
+
+
+### Bug Fixes
+
+* update yarn install command and remove unnecessary npm uninstall steps ([eade4f9](https://github.com/coldPBC/cold-monorepo/commit/eade4f9e3395617731cc03cc4225e4b48e4427bd))
+
+## [1.543.1](https://github.com/coldPBC/cold-monorepo/compare/v1.543.0...v1.543.1) (2025-02-07)
+
+
+### Bug Fixes
+
+* update start commands and watch paths for platform services ([b492832](https://github.com/coldPBC/cold-monorepo/commit/b492832d5b3b0d56b1a304c0a27594eb39ae3c7d))
+
+# [1.543.0](https://github.com/coldPBC/cold-monorepo/compare/v1.542.0...v1.543.0) (2025-02-06)
+
+
+### Features
+
+* Enable pagination in DataGrids and downgrade [@mui](https://github.com/mui) packages. ([1a37320](https://github.com/coldPBC/cold-monorepo/commit/1a37320ed3f103f2a601a3b17ceb31c116103cf0))
+* Remove pagination from individual DataGrids and centralize it. ([75e00bd](https://github.com/coldPBC/cold-monorepo/commit/75e00bd79cbd461ecc0d9d180d65b5395b36df75))
+* Replace DataGridPro with MuiDataGrid for consistency ([fa771ad](https://github.com/coldPBC/cold-monorepo/commit/fa771adfdc3804604e9b1e3ecba1a4f1e94e6285))
+* Set custom column header height in ProductsDataGrid ([db521a4](https://github.com/coldPBC/cold-monorepo/commit/db521a433dad9f5abf26f490216eb58bcb3600e6))
+* Upgrade to `@mui/x-data-grid-pro` and add required license key. ([9f06b7d](https://github.com/coldPBC/cold-monorepo/commit/9f06b7d303b3b3a79d7dc4f90c44172e3dbbafea))
+
+# [1.542.0](https://github.com/coldPBC/cold-monorepo/compare/v1.541.0...v1.542.0) (2025-02-06)
+
+
+### Features
+
+* extend ACL entity maps with material_classification ([868af28](https://github.com/coldPBC/cold-monorepo/commit/868af28468b402d1d251419dd18bea4d4e379af0))
+
+# [1.541.0](https://github.com/coldPBC/cold-monorepo/compare/v1.540.0...v1.541.0) (2025-02-06)
+
+
+### Features
+
+* add foreign key and index for materials linking to organization facilities ([0484803](https://github.com/coldPBC/cold-monorepo/commit/04848037cf1f86e245d05108c2cdb870ca4a0d0c))
+
+# [1.540.0](https://github.com/coldPBC/cold-monorepo/compare/v1.539.0...v1.540.0) (2025-02-05)
+
+
+### Features
+
+* Add error boundary to UploadsPage for improved error handling ([942505e](https://github.com/coldPBC/cold-monorepo/commit/942505eaf41c08ceca5af441403bd96ee414584d))
+* Add support for fetching and displaying uploaded files ([e8e7daa](https://github.com/coldPBC/cold-monorepo/commit/e8e7daac5794f122fc5c657dcd1caf0bf1cf030d))
+* Refactor status rendering logic and improve type handling ([46dc573](https://github.com/coldPBC/cold-monorepo/commit/46dc5730627e2d8d08ed1fcd46610fd27399c29e))
+* Refactor type formatting using `formatScreamingSnakeCase` ([da96658](https://github.com/coldPBC/cold-monorepo/commit/da96658c074d4500796861c070d7bf7f9033120c))
+* Refactor uploads page file handling and status rendering. ([414b942](https://github.com/coldPBC/cold-monorepo/commit/414b942dad6d6850332a5d663b251ce1781dd1e8))
+* Refactor uploadsPage renderDate and update cell styling ([d586723](https://github.com/coldPBC/cold-monorepo/commit/d5867232d654bd9a92b304749bbe0e60a9d75983))
+* Simplify file type handling in uploadsPage. ([8d1a760](https://github.com/coldPBC/cold-monorepo/commit/8d1a760a741ab88017b0d01c9d6a6b94e2aafab7))
+* Simplify value handling in uploadsPage column config ([af51433](https://github.com/coldPBC/cold-monorepo/commit/af514336d2f4838682ff77164508d4aa5239f745))
+
+# [1.539.0](https://github.com/coldPBC/cold-monorepo/compare/v1.538.0...v1.539.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* Fix selection count to show total rows instead of filtered rows ([95d8a26](https://github.com/coldPBC/cold-monorepo/commit/95d8a26af40f930270cfb6e726afe9a986b1ee55))
+
+
+### Features
+
+* Add filtering to editEntityAssociationsModal grid ([2136935](https://github.com/coldPBC/cold-monorepo/commit/21369354b8140ce8876950ba5f373bcedb414a35))
+* Fix checkbox behavior and remove redundant filter reset logic ([de4068c](https://github.com/coldPBC/cold-monorepo/commit/de4068c0bb553bc07f47780dd370b6ed066813e7))
+* Fix indeterminate checkbox logic in editEntityAssociationsModal ([7cf6b28](https://github.com/coldPBC/cold-monorepo/commit/7cf6b28f7c0f2c36d98817d4dcc26234207a6fef))
+* Improve handling of selected rows in entity associations modal ([f96daa5](https://github.com/coldPBC/cold-monorepo/commit/f96daa51c32e04b0e7f30916d5434e4ef552e858))
+* Refactor row selection logic in EditEntityAssociationsModal ([0819e75](https://github.com/coldPBC/cold-monorepo/commit/0819e757ca3b02b6f6e18c4beaf936412941b69b))
+* Refactor selection logic in editEntityAssociationsModal. ([b55b48a](https://github.com/coldPBC/cold-monorepo/commit/b55b48af2a7cc02fb6ef498a76f8b53f1d9f18cb))
+* Remove custom toolbar from EditEntityAssociationsModal. ([b2a8ed9](https://github.com/coldPBC/cold-monorepo/commit/b2a8ed9d98e57bb307125d5c2a8565ec859d67c7))
+* Set consistent initial sorting for tables. ([ae4a29b](https://github.com/coldPBC/cold-monorepo/commit/ae4a29b2efbad105b37e68023cdd3f6cce012808))
+* Set initial sorting state in EditEntityAssociationsModal ([b6d8eb3](https://github.com/coldPBC/cold-monorepo/commit/b6d8eb3aeed24be66536ad6dc4879319bf604b68))
+* Simplify header checkbox selection logic. ([9e0a0fc](https://github.com/coldPBC/cold-monorepo/commit/9e0a0fc9651494975b80a2443f30b0f3cd1e9db9))
+
+# [1.538.0](https://github.com/coldPBC/cold-monorepo/compare/v1.537.0...v1.538.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* Refactor DataGrid toolbar for improved customization. ([43d72ee](https://github.com/coldPBC/cold-monorepo/commit/43d72eeef586f913f8a24cb7b25cb949f916cb14))
+
+
+### Features
+
+* Add support for custom quick filter props in DataGrid ([adb2766](https://github.com/coldPBC/cold-monorepo/commit/adb27663cb524f64adc809a3d26feb8a96aab978))
+* Prevent rendering toolbar when all options are disabled. ([a23b5ce](https://github.com/coldPBC/cold-monorepo/commit/a23b5ce1e5a8e635a6c6510194be950117b1c47c))
+* Refactor DataGrid toolbar props handling. ([16f94bc](https://github.com/coldPBC/cold-monorepo/commit/16f94bc9a3c229848f0a7d130a80b711ff6c1ff5))
+
+# [1.537.0](https://github.com/coldPBC/cold-monorepo/compare/v1.536.0...v1.537.0) (2025-02-04)
+
+
+### Features
+
+* **prisma:** add processing_status enum to organization_files and update pre-commit script ([a7ee098](https://github.com/coldPBC/cold-monorepo/commit/a7ee098e08e21675143a28ea7673de3e083ea1f0))
+* **prisma:** add processing_status field and index to organization_files model ([294d498](https://github.com/coldPBC/cold-monorepo/commit/294d4989fdb5b72e71be6bc29919dc8c387a3741))
+
+# [1.536.0](https://github.com/coldPBC/cold-monorepo/compare/v1.535.0...v1.536.0) (2025-02-04)
+
+
+### Bug Fixes
+
+* revert commit ([3a353b2](https://github.com/coldPBC/cold-monorepo/commit/3a353b21741b09195171bdc9233e1bc1d8e9ac80))
+
+
+### Features
+
+* add material and product tag relationships to Organization entity ([4df22ab](https://github.com/coldPBC/cold-monorepo/commit/4df22ab353a338da116e36fc52690e439342dfaf))
+* add material and product tagging models to extend tagging capabilities ([b0f34f3](https://github.com/coldPBC/cold-monorepo/commit/b0f34f3793db59747be8ebc3d85ee459bf86aa9e))
+* add MaterialTag entity and schema with hooks in backend ([b26bb6d](https://github.com/coldPBC/cold-monorepo/commit/b26bb6d37666f38bb6173a7a03a26d3f27ccae99))
+* add MaterialTagAssignment entity with hooks and schema definition ([ca698f3](https://github.com/coldPBC/cold-monorepo/commit/ca698f3f5518bc1ca673c08f2187a7b164593de7))
+* add MaterialTagAssignment relationship to Material entity and schema ([3d7698b](https://github.com/coldPBC/cold-monorepo/commit/3d7698b70949a435285a027b190ddbc482da7cac))
+* add ProductsTag entity with schema, hooks, and ACL integration ([5a1bea2](https://github.com/coldPBC/cold-monorepo/commit/5a1bea2bc0060020681dd3ca230a65b25fa9dca2))
+* add ProductTagAssignment entity with hooks and schema integration ([7b53f79](https://github.com/coldPBC/cold-monorepo/commit/7b53f797f9abc384035e3b6866b8c209a8cd8132))
+* add ProductTagAssignment relationship to Product entity and schema ([ddd9431](https://github.com/coldPBC/cold-monorepo/commit/ddd9431edb9aa53e94fc7664bfd14461a37f2f12))
+* add support for material and product tags ([036826d](https://github.com/coldPBC/cold-monorepo/commit/036826d3f7f89686e2a061eae3d266f2f843c7cb))
+* add unique constraints to tag models ([4e513b3](https://github.com/coldPBC/cold-monorepo/commit/4e513b3768f44af34c12f6e50a404707188737c1))
+* create tagging models for materials and products ([22defb7](https://github.com/coldPBC/cold-monorepo/commit/22defb77cbea5ea226212a4c49a8c996cc26159e))
+* migrate material categories and subcategories to tags ([e580360](https://github.com/coldPBC/cold-monorepo/commit/e580360bd39722b8e43001670f5e046fcb6fe803))
+* migrate product categories and subcategories to tags ([8b625d9](https://github.com/coldPBC/cold-monorepo/commit/8b625d955f9e964dba7a1eb15c7fec0b82964f30))
+
+# [1.535.0](https://github.com/coldPBC/cold-monorepo/compare/v1.534.0...v1.535.0) (2025-01-31)
+
+
+### Features
+
+* Update carbon footprint route in components ([b1ea976](https://github.com/coldPBC/cold-monorepo/commit/b1ea9769758f8e68556f552731595fbec67423ef))
+
+# [1.534.0](https://github.com/coldPBC/cold-monorepo/compare/v1.533.0...v1.534.0) (2025-01-31)
+
+
+### Features
+
+* Add useEffect to handle product updates in BOM tab ([baade4f](https://github.com/coldPBC/cold-monorepo/commit/baade4ff98f59bb74cc3ac2bb748cc2ed84f0276))
+* Ensure selected material validity on product update ([531a3c1](https://github.com/coldPBC/cold-monorepo/commit/531a3c104ab404f3aca64b63889013336970c662))
+* Make addToastMessage calls awaitable ([fa8f8f1](https://github.com/coldPBC/cold-monorepo/commit/fa8f8f10276f67bf6d160e4f3d49723c95a2c61a))
+* Refactor product BOM tab to streamline state handling. ([68e408f](https://github.com/coldPBC/cold-monorepo/commit/68e408f97abb20e38380750162e88960aac87cf0))
+* Remove unnecessary refresh logic from BOM components ([d0d3e02](https://github.com/coldPBC/cold-monorepo/commit/d0d3e028497f849e33038af52c8660537329c0d3))
+* Set selectedMaterial to undefined when material is removed ([99f4b7b](https://github.com/coldPBC/cold-monorepo/commit/99f4b7ba435361bd91634b268134136e6df0c3a2))
+
+# [1.533.0](https://github.com/coldPBC/cold-monorepo/compare/v1.532.0...v1.533.0) (2025-01-30)
+
+
+### Features
+
+* create new uploads page ([3e193ed](https://github.com/coldPBC/cold-monorepo/commit/3e193ed0c5efd2319a9d8b77559518bda2d5f028))
+* update sidebar with new items when FF is on ([9291535](https://github.com/coldPBC/cold-monorepo/commit/929153519bfcf6d2cad79e7923c3d6a718dd6170))
+
+# [1.532.0](https://github.com/coldPBC/cold-monorepo/compare/v1.531.0...v1.532.0) (2025-01-29)
+
+
+### Features
+
+* Refactor sidebar filtering logic for better flag handling ([7409605](https://github.com/coldPBC/cold-monorepo/commit/74096057aa8e1e16cb42bdd8d0c7603c16d8ca92))
+
+# [1.531.0](https://github.com/coldPBC/cold-monorepo/compare/v1.530.1...v1.531.0) (2025-01-29)
+
+
+### Features
+
+* Update page title dynamically based on feature flag ([49984c9](https://github.com/coldPBC/cold-monorepo/commit/49984c903fe90dfd4ae3b786a348b54ce9bb2f54))
+
+## [1.530.1](https://github.com/coldPBC/cold-monorepo/compare/v1.530.0...v1.530.1) (2025-01-29)
+
+
+### Bug Fixes
+
+* handle new case of divide by zero ([52a5e19](https://github.com/coldPBC/cold-monorepo/commit/52a5e19667f0da8bd4b832360a363b7bccd2c5a3))
+* handle new case of divide by zero ([#763](https://github.com/coldPBC/cold-monorepo/issues/763)) ([af4ec69](https://github.com/coldPBC/cold-monorepo/commit/af4ec6923eac45b7a0747ca5364f978c546750df))
+
+# [1.530.0](https://github.com/coldPBC/cold-monorepo/compare/v1.529.0...v1.530.0) (2025-01-28)
+
+
+### Features
+
+* Add dynamic product-supplier association editing ([85bd65b](https://github.com/coldPBC/cold-monorepo/commit/85bd65bc134f99f04fce31885b7ee6ca6960c411))
+* Log updates and add success toast in entity associations modal ([f1c9fff](https://github.com/coldPBC/cold-monorepo/commit/f1c9fff00dfd428eafb9ccb1b2741a40f89ee250))
+* Refactor error handling and remove redundant button props. ([5820058](https://github.com/coldPBC/cold-monorepo/commit/5820058b979b35664e7b1e26e0e8dd3e267f9e3b))
+* Rename and update supplier removal logic ([6f12836](https://github.com/coldPBC/cold-monorepo/commit/6f12836b528bea70488e152288eefb28765defd8))
+
 # [1.529.0](https://github.com/coldPBC/cold-monorepo/compare/v1.528.1...v1.529.0) (2025-01-28)
 
 

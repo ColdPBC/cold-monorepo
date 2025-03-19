@@ -1,4 +1,4 @@
-import {BaseButton, Card, ErrorFallback, Modal, MuiDataGrid} from '@coldpbc/components';
+import {BaseButton, Card, ErrorFallback, MuiDataGrid} from '@coldpbc/components';
 import { Modal as FBModal } from 'flowbite-react';
 import {flowbiteThemeOverride} from "@coldpbc/themes";
 import {
@@ -6,11 +6,12 @@ import {
   GridColDef,
   GridRowSelectionModel,
   GridToolbarContainer, GridToolbarQuickFilter
-} from "@mui/x-data-grid";
+} from "@mui/x-data-grid-pro";
 import {ButtonTypes} from "@coldpbc/enums";
 import React, {useEffect, useState} from "react";
 import {Checkbox} from "@mui/material";
 import {withErrorBoundary} from "react-error-boundary";
+import {GRID_CHECKBOX_COL_DEF} from "@coldpbc/lib";
 
 const _AddToCreateMaterialModal = (props: {
   show: boolean;
@@ -31,12 +32,7 @@ const _AddToCreateMaterialModal = (props: {
 
   const columns: GridColDef[] = [
     {
-      field: 'checkbox',
-      editable: false,
-      sortable: false,
-      hideSortIcons: true,
-      width: 100,
-      headerClassName: 'bg-gray-30',
+      ...GRID_CHECKBOX_COL_DEF,
       cellClassName: 'bg-gray-10',
       renderCell: (params: GridCellParams) => (
         <Checkbox

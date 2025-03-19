@@ -6,7 +6,6 @@ import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { get, omit, snakeCase } from 'lodash';
-import { OpenAiBase64ImageUrl } from '../pinecone/pinecone.service';
 import { PDFDocument } from 'pdf-lib';
 import { fromBuffer } from 'pdf2pic';
 import { pdfToText } from './extractTextFromPDF';
@@ -108,15 +107,18 @@ export class ExtractionService extends BaseWorker {
 				throw new Error(`FATAL: Unable to process encrypted PDF ${filePayload.original_name}.  Either upload decrypted PDF or create a new PDF with screenshots of the pages`);
 			}
 
-			const pages: OpenAiBase64ImageUrl[] = [];
+			const pages: any[] = [];
 
 			for (let i = 0; i < pageCount; i++) {
 				const imageBase64 = await this.convertPdfPageToImage(i + 1, fileBuffer, filePayload, user, organization);
 
-				pages.push({
-					type: 'image_url',
-					image_url: { url: `data:image/png;base64,${imageBase64}` },
-				});
+				if (imageBase64) {
+					this.logger.info(`Converted page ${i + 1} to image`, { file: filePayload, user, organization });
+					pages.push({
+						type: 'image_url',
+						image_url: { url: `data:image/png;base64,${imageBase64}` },
+					});
+				}
 			}
 
 			return pages;
@@ -465,17 +467,6 @@ export class ExtractionService extends BaseWorker {
 
 			this.logger.info('file metadata updated', { file: orgFile, organization, user });
 
-			this.mqtt.publishToUI({
-				action: 'update',
-				status: 'complete',
-				event: 'extract-file-data',
-				resource: 'organization_files',
-				data: orgFile,
-				user,
-				swr_key: `organization_files.${(orgFile?.metadata as any).status}`,
-				org_id: organization.id,
-			});
-
 			// if the classification does not contain a sustainability attribute, return the parsed response
 			if (!attributes?.find(item => item.name === classification.sustainability_attribute)) {
 				this.sendMetrics('organization.files', 'cold-openai', 'no-sustainability-attribute', 'completed', {
@@ -527,6 +518,17 @@ export class ExtractionService extends BaseWorker {
 					file_type: orgFile.type,
 					file_id: orgFile.id,
 				},
+			});
+
+			this.mqtt.publishToUI({
+				action: 'update',
+				status: 'complete',
+				event: 'extract-file-data',
+				resource: 'organization_files',
+				data: orgFile,
+				user,
+				swr_key: `organization_files.${(orgFile?.metadata as any).status}`,
+				org_id: organization.id,
 			});
 
 			return parsedResponse;
@@ -725,6 +727,7 @@ export class ExtractionService extends BaseWorker {
 							});
 							break;
 						case 'WRAP':
+						case 'WRAP (Worldwide Responsible Accredited Production)':
 						case 'Worldwide Responsible Accredited Production':
 							classification.extraction_schema = certSchema.extend({
 								name: z.enum(['Worldwide Responsible Accredited Production (WRAP)']),

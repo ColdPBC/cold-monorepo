@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 import { AppModule } from './platform/modules/app.module';
 // eslint-disable-next-line @nx/enforce-module-boundaries
+import * as express from 'express';
 import { patchNestjsSwagger } from '@anatine/zod-nestjs';
 import { json, urlencoded } from 'express';
 import { OpenapiModule } from './platform/modules/swagger/openapi.module';
@@ -20,11 +21,19 @@ async function bootstrap() {
 
   server.keepAliveTimeout = 61000;
   server.headersTimeout = 65000;
-
+	app.use(
+		express.json({
+			verify: (req: any, res, buf, encoding) => {
+				if (req.originalUrl.startsWith('/linear/webhook/organizations')) {
+					req.rawBody = buf;
+				}
+			},
+		}),
+	);
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
 
-  //app.useGlobalPipes(new ResourceValidationPipe());
+	//app.useGlobalPipes(new ResourceValidationPipe());
   const getOrigin = () => {
     switch (process.env['DD_ENV']) {
       case 'production':

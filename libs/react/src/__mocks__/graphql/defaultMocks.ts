@@ -1,7 +1,6 @@
 import {
   CREATE_ATTRIBUTE_ASSURANCE_FOR_FILE,
   CREATE_MATERIAL,
-  CREATE_MATERIAL_SUPPLIER,
   CREATE_PRODUCT_MATERIAL,
   GET_ALL_FILES,
   GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT,
@@ -29,15 +28,15 @@ import {
   GET_ALL_SUSTAINABILITY_ATTRIBUTES_WITHOUT_ASSURANCES,
   GET_PRODUCT_CARBON_FOOTPRINT_DATA,
   GET_ALL_PRODUCTS_TO_ADD_ASSURANCE_TO_DOCUMENT,
-  GET_ALL_MATERIAL_CLASSIFICATIONS,
+  GET_ALL_MATERIAL_CLASSIFICATIONS, GET_ALL_UPLOADS, GET_COMPONENT_DEFINITIONS,
 } from '@coldpbc/lib';
 import {
-	filesProcessedWithDatesMock,
-	filesWithTooManyRecordsMock,
-	getFilesProcessingMock,
-	getFilesWithAssurances,
-	getFilesWithoutAssurances,
-	suppliersForAssurancesMock,
+  filesProcessedWithDatesMock,
+  filesWithTooManyRecordsMock,
+  getFilesProcessingMock,
+  getFilesWithAssurances,
+  getFilesWithoutAssurances, getUploadsMock,
+  suppliersForAssurancesMock,
 } from '../filesMock';
 import { getClaimsMock } from '../claimsMock';
 import { DocumentNode } from '@apollo/client';
@@ -45,9 +44,11 @@ import { RequestHandler } from 'mock-apollo-client';
 import { get } from 'lodash';
 import { getSchemaMocks } from '../schemaMocks';
 import { getSupplierMock, getSupplierMocks } from '../suppliersMock';
-import {getProductsMock, getProductsMockById} from '../productsMock';
+import {getProductMockWithOutEmissionFactor, getProductsMock, getProductsMockById} from '../productsMock';
 import { getMaterialsMocksWithAssurances } from '../materialsMock';
 import { addDays } from 'date-fns';
+import { Length, UnitOfMeasurement } from '@coldpbc/enums';
+import {getComponentMocksByFilter} from "../sidebarMock";
 
 export const defaultGraphqlMocks: {
 	query: DocumentNode;
@@ -428,17 +429,6 @@ export const defaultGraphqlMocks: {
 				},
 			}),
 	},
-	{
-		query: CREATE_MATERIAL_SUPPLIER,
-		handler: () =>
-			Promise.resolve({
-				data: {
-					createMaterialSupplier: {
-						id: 'material_supplier_1',
-					},
-				},
-			}),
-	},
   {
     query: GET_PAGINATED_PRODUCTS_FOR_ORG,
     handler: () =>
@@ -637,6 +627,26 @@ export const defaultGraphqlMocks: {
       });
     }
   },
+  {
+    query: GET_ALL_UPLOADS,
+    handler: () => {
+      return Promise.resolve({
+        data: {
+          organizationFiles: getUploadsMock(),
+        },
+      });
+    }
+  },
+  {
+    query: GET_COMPONENT_DEFINITIONS,
+    handler: (variables: {filter: {name: string}}) => {
+      return Promise.resolve({
+        data: {
+          componentDefinitions: getComponentMocksByFilter(variables.filter.name),
+        }
+      });
+    }
+  }
 ];
 
 export const getSupplierGraphQLMock = (tier: number) => (
@@ -881,8 +891,20 @@ export const sustainabilityAttributesMocks = ({
               name: 'Example Product',
               productMaterials: getMaterialsMocksWithAssurances().map((material, index) => ({
                 id: `pm_${material.id}`,
-                weight: includeWeights ? index / 100 : null,
-                material,
+                yield: includeWeights ? (index + 1) / 100 : null,
+                unitOfMeasure: UnitOfMeasurement.yd,
+                weight: null,
+                material: {
+                  ...material,
+                  materialClassification: {
+                    id: 'matclass_1',
+                    weightFactor: 1,
+                  },
+                  weightFactor: null,
+                  weightFactorUnitOfMeasure: null,
+                  width: 58,
+                  widthUnitOfMeasure: Length.in,
+                },
               }))
             }
           ] : [],
@@ -984,5 +1006,23 @@ export const filesWithTooManyRecordsMocks: {
           organizationFiles: filesWithTooManyRecordsMock(),
         },
       }),
+  },
+];
+
+
+export const productWithoutEmissionsFactor: {
+  query: DocumentNode;
+  handler: RequestHandler;
+}[] = [
+  {
+    query: GET_PRODUCT,
+    handler: (variables) => {
+      const id = variables.id as string;
+      return Promise.resolve({
+        data: {
+          product: getProductMockWithOutEmissionFactor(id),
+        },
+      });
+    }
   },
 ];

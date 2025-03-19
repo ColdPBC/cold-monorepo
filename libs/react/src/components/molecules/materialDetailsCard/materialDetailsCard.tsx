@@ -3,7 +3,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { MaterialGraphQL } from '@coldpbc/interfaces';
 import { Card, ColdIcon, DetailsItem, Popover } from '@coldpbc/components';
-import { IconNames } from '@coldpbc/enums';
+import { IconNames, WeightFactorUnits } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
 
 interface MaterialDetailsCardProps {
@@ -11,10 +11,31 @@ interface MaterialDetailsCardProps {
   editMaterial: () => void;
 }
 
-const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material, editMaterial }) => {
-  const tier2Supplier = material.materialSuppliers[0]?.organizationFacility;
+const getWeightFactorValue = material => {
+	if (material.weightFactor && material.weightFactorUnitOfMeasure) {
+		return `${material.weightFactor.toFixed(2)} ${material.weightFactorUnitOfMeasure}`;
+	} else if (material.materialClassification?.weightFactor) {
+		return (
+			<div className={'flex items-center justify-start gap-1'}>
+				<Popover content={`Based on a material classification of ${material.materialClassification.name}`} contentClassName="w-[275px]">
+					<span role="img" aria-label={'Sparkles emoji'}>
+						✨
+					</span>
+				</Popover>
+				<span>
+					{material.materialClassification.weightFactor.toFixed(2)} {WeightFactorUnits.KG_PER_M2}
+				</span>
+			</div>
+		);
+	} else {
+		return undefined;
+	}
+};
 
-  const classificationCategory = (
+const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material, editMaterial }) => {
+	const tier2Supplier = material.organizationFacility;
+
+	const classificationCategory = (
 		<div className={'flex items-center justify-start gap-1'}>
 			<span>Classification</span>
 			<Popover content={'This classification is used for carbon accounting and sustainability attribute reporting.'} contentClassName="w-[275px]">
@@ -24,7 +45,7 @@ const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material, ed
 	);
 
 	return (
-		<Card title={'Details'} ctas={[{text: 'Edit', action: editMaterial}]} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'material-details-card'}>
+		<Card title={'Details'} ctas={[{ text: 'Edit', action: editMaterial }]} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'material-details-card'}>
 			<DetailsItem category={'Name'} value={material.name} />
 			<DetailsItem category={'Description'} value={material.description} />
 			<DetailsItem category={'Tier 2 Supplier'} value={tier2Supplier?.name} href={tier2Supplier ? `/suppliers/${tier2Supplier.id}` : undefined} />
@@ -34,6 +55,8 @@ const _MaterialDetailsCard: React.FC<MaterialDetailsCardProps> = ({ material, ed
 			<DetailsItem category={'Sub-Category'} value={material.materialSubcategory} />
 			<DetailsItem category={'Brand Material ID'} value={material.brandMaterialId} />
 			<DetailsItem category={'Supplier Material ID'} value={material.supplierMaterialId} />
+			<DetailsItem category={'Weight Factor'} value={getWeightFactorValue(material)} />
+			<DetailsItem category={'Width'} value={material.width && material.widthUnitOfMeasure ? `${material.width.toFixed(2)} ${material.widthUnitOfMeasure}` : undefined} />
 		</Card>
 	);
 };

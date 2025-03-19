@@ -1,6 +1,5 @@
 import { SurveySectionFollowUpType, SurveySectionType } from '@coldpbc/interfaces';
-import { fireEvent, waitFor, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { fireEvent, waitFor, within, expect } from '@storybook/test';
 
 export const enterInputValue = async (
   followUp: SurveySectionFollowUpType,

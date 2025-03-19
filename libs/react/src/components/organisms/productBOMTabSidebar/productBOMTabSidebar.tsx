@@ -55,7 +55,7 @@ const _ProductBOMTabSidebar = (
     value: '',
   };
 
-  const uomOptions: InputOption[] = toArray(UnitOfMeasurement).map((uom, index) => ({
+  const uomOptions: InputOption[] = Object.values(UnitOfMeasurement).sort((a, b) => a.localeCompare(b)).map((uom, index) => ({
     id: index,
     name: uom,
     value: uom,
@@ -128,7 +128,7 @@ const _ProductBOMTabSidebar = (
           weight: productMaterialState.weight ? productMaterialState.weight / 1000 : null,
         },
       })
-      addToastMessage({
+      await addToastMessage({
         message: 'Material updated successfully',
         type: ToastMessage.SUCCESS
       });
@@ -139,8 +139,9 @@ const _ProductBOMTabSidebar = (
         uomOptions,
       });
       refresh()
+      closeSidebar()
     } catch (error) {
-      addToastMessage({
+      await addToastMessage({
         message: 'Error updating product material',
         type: ToastMessage.FAILURE
       })

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, {createRef, useState} from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { IconNames } from '@coldpbc/enums';
 import { BaseButton, ListItemInput } from '@coldpbc/components';
-import { forEach } from 'lodash';
 import { IButtonProps } from '@coldpbc/interfaces';
 import { twMerge } from 'tailwind-merge';
 
@@ -17,56 +16,84 @@ export interface ListItemProps {
   'data-testid'?: string;
 }
 
+export interface ListItemType {
+  id: string;
+  value: string | null;
+  nodeRef: React.RefObject<HTMLDivElement>;
+}
+
 // todo: fix delete item that is not the last bug
 export const ListItem = (props: ListItemProps) => {
   const { value, onChange, input_props, buttonProps, className, listClassName, deleteButtonProps } = props;
-  const [list, setList] = useState<Array<string | null>>(value || [null]);
+  const [items, setItems] = useState<Array<ListItemType>>(() => {
+    if (value) {
+      return value.map(v => ({ id: crypto.randomUUID(), value: v, nodeRef: createRef<HTMLDivElement>() }));
+    }
+    return [{ id: crypto.randomUUID(), value: null, nodeRef: createRef<HTMLDivElement>() }];
+  });
 
   const addToList = () => {
-    const newList = [...list, null];
-    setList(newList);
+    const newItems = [...items, { id: crypto.randomUUID(), value: null, nodeRef: createRef<HTMLDivElement>() }];
+    setItems(newItems);
   };
 
-  const onListInputChange = (value: Array<string | null>) => {
-    setList(value);
-    // strip the nulls
-    const newList = Array<string | null>();
-    forEach(value, (item, idx) => {
-      newList.push(item);
-    });
-    onChange(newList.length > 0 ? newList : null);
+  const removeItem = (id: string) => {
+    const newItems = items.filter(item => item.id !== id);
+    setItems(newItems);
+    const newValues = newItems.map(item => item.value);
+    onChange(newValues.length > 0 ? newValues : null);
+  };
+
+  const onItemChange = (id: string, value: string | null) => {
+    const newItems = items.map(item =>
+      item.id === id ? { ...item, value } : item
+    );
+    setItems(newItems);
+    const newValues = newItems.map(item => item.value);
+    onChange(newValues.length > 0 ? newValues : null);
   };
 
   const listWithTransition = () => {
     return (
       <TransitionGroup className={listClassName}>
-        {list.map((item, idx, list) => {
-          return (
-            <CSSTransition
-              key={idx}
-              timeout={200}
-              classNames={{
-                enter: 'opacity-0',
-                enterDone: 'transition-opacity opacity-1 ease-in duration-200',
-                exit: 'opacity-1',
-                exitActive: 'transition-opacity opacity-0 ease-in duration-200',
-              }}>
-              <ListItemInput key={idx} index={idx} list={list} onChange={onListInputChange} input_props={input_props} buttonProps={deleteButtonProps} />
-            </CSSTransition>
-          );
-        })}
+        {items.map((item) => (
+          <CSSTransition
+            key={item.id}
+            nodeRef={item.nodeRef}
+            timeout={200}
+            classNames={{
+              enter: 'opacity-0',
+              enterActive: 'transition-opacity duration-200 ease-in opacity-100',
+              exit: 'opacity-100',
+              exitActive: 'transition-opacity duration-200 ease-in opacity-0'
+            }}
+          >
+            <ListItemInput
+              id={item.id}
+              value={item.value}
+              removeItem={removeItem}
+              onChange={onItemChange}
+              input_props={input_props}
+              buttonProps={deleteButtonProps}
+              data-testid={(props['data-testid'])}
+              forwardRef={item.nodeRef}
+              showRemove={(items.length > 1 || (items.length === 1 && items[0].value !== null))}
+            />
+          </CSSTransition>
+        ))}
       </TransitionGroup>
     );
   };
 
   return (
-    <div className={twMerge('flex flex-col w-full', className)}>
+    <div className={twMerge('flex flex-col w-full', className)} data-testid={'wholeListItem'}>
       <div className={'flex flex-col w-full gap-[16px]'}>{listWithTransition()}</div>
       <BaseButton
-        onClick={() => addToList()}
+        onClick={addToList}
         iconRight={IconNames.PlusIcon}
         className={'bg-transparent border border-bgc-accent hover:bg-transparent active:bg-transparent h-[72px] w-full'}
-        disabled={list.length > 0 && list[list.length - 1] === null}
+        disabled={items.length > 0 && items[items.length - 1].value === null}
+        data-testid={'addListItemButton'}
         {...buttonProps}
       />
     </div>

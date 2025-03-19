@@ -13,12 +13,23 @@ import { ComplianceSectionGroup } from './compliance-section-group';
 import { ComplianceSection } from './compliance-section';
 import { ComponentDefinition } from './component-definition';
 import { CoreClassification } from './core-classification';
+import { EcoinventActivity } from './ecoinvent-activity';
+import { EcoinventActivityClassification } from './ecoinvent-activity-classification';
+import { EcoinventActivityImpact } from './ecoinvent-activity-impact';
+import { EcoinventClassification } from './ecoinvent-classification';
+import { EcoinventDatum } from './ecoinvent-datum';
+import { EcoinventImpactCategory } from './ecoinvent-impact-category';
+import { EcoinventImport } from './ecoinvent-import';
+import { EmissionFactor } from './emission-factor';
 import { EmissionScope } from './emission-scope';
 import { Emission } from './emission';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { MaterialClassification } from './material-classification';
+import { MaterialEmissionFactor } from './material-emission-factor';
 import { MaterialSupplier } from './material-supplier';
+import { MaterialTagAssignment } from './material-tag-assignment';
+import { MaterialTag } from './material-tag';
 import { Material } from './material';
 import { News } from './news';
 import { OrganizationCompliance } from './organization-compliance';
@@ -37,7 +48,9 @@ import { Organization } from './organization';
 import { PolicyDatum } from './policy-datum';
 import { PolicyDefinition } from './policy-definition';
 import { ProductMaterial } from './product-material';
+import { ProductTagAssignment } from './product-tag-assignment';
 import { Product } from './product';
+import { ProductsTag } from './products-tag';
 import { ServiceDefinition } from './service-definition';
 import { SupportedUtility } from './supported-utility';
 import { SurveyDatum } from './survey-datum';
@@ -47,7 +60,6 @@ import { SustainabilityAttributeClassifcationAssignment } from './sustainability
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { UtilityBill } from './utility-bill';
 import { VectorRecord } from './vector-record';
-import { OrganizationProductMaterialEmissions } from './organization-product-material-emissions';
 
 export * from './prisma-migration';
 export * from './action-template';
@@ -64,12 +76,23 @@ export * from './compliance-section-group';
 export * from './compliance-section';
 export * from './component-definition';
 export * from './core-classification';
+export * from './ecoinvent-activity';
+export * from './ecoinvent-activity-classification';
+export * from './ecoinvent-activity-impact';
+export * from './ecoinvent-classification';
+export * from './ecoinvent-datum';
+export * from './ecoinvent-impact-category';
+export * from './ecoinvent-import';
+export * from './emission-factor';
 export * from './emission-scope';
 export * from './emission';
 export * from './facility-footprint';
 export * from './integration';
 export * from './material-classification';
+export * from './material-emission-factor';
 export * from './material-supplier';
+export * from './material-tag-assignment';
+export * from './material-tag';
 export * from './material';
 export * from './news';
 export * from './organization-compliance';
@@ -88,7 +111,9 @@ export * from './organization';
 export * from './policy-datum';
 export * from './policy-definition';
 export * from './product-material';
+export * from './product-tag-assignment';
 export * from './product';
+export * from './products-tag';
 export * from './service-definition';
 export * from './supported-utility';
 export * from './survey-datum';
@@ -98,7 +123,6 @@ export * from './sustainability-attribute-classifcation-assignment';
 export * from './sustainability-attribute';
 export * from './utility-bill';
 export * from './vector-record';
-export * from './organization-product-material-emissions';
 
 export const entities = [
 	PrismaMigration,
@@ -116,12 +140,23 @@ export const entities = [
 	ComplianceSection,
 	ComponentDefinition,
 	CoreClassification,
+	EcoinventActivity,
+	EcoinventActivityClassification,
+	EcoinventActivityImpact,
+	EcoinventClassification,
+	EcoinventDatum,
+	EcoinventImpactCategory,
+	EcoinventImport,
+	EmissionFactor,
 	EmissionScope,
 	Emission,
 	FacilityFootprint,
 	Integration,
 	MaterialClassification,
+	MaterialEmissionFactor,
 	MaterialSupplier,
+	MaterialTagAssignment,
+	MaterialTag,
 	Material,
 	News,
 	OrganizationCompliance,
@@ -140,7 +175,9 @@ export const entities = [
 	PolicyDatum,
 	PolicyDefinition,
 	ProductMaterial,
+	ProductTagAssignment,
 	Product,
+	ProductsTag,
 	ServiceDefinition,
 	SupportedUtility,
 	SurveyDatum,
@@ -150,5 +187,4 @@ export const entities = [
 	SustainabilityAttribute,
 	UtilityBill,
 	VectorRecord,
-	OrganizationProductMaterialEmissions,
 ];

@@ -1,5 +1,4 @@
-import { userEvent, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { userEvent, within, expect } from '@storybook/test';
 import { Action, ActionPayload } from '@coldpbc/interfaces';
 export const verifyActionsPage = async (subCategoryName: string, subCategoryTitle: string, canvasElement: HTMLElement) => {
   // click all the footprint detail cards Learn more buttons and verify that we are on the actions page

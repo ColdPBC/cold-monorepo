@@ -20,8 +20,8 @@ import { useAuth0Wrapper, useColdContext, useEntityData, useGraphQLSWR } from '@
 import { useNavigate, useParams } from 'react-router-dom';
 import { BaseEntity, SustainabilityAttributeGraphQL } from '@coldpbc/interfaces';
 import { get, groupBy, isError, toLower, uniq } from 'lodash';
-import { processSustainabilityAttributeDataFromGraphQL, toSentenceCase } from '@coldpbc/lib';
-import { GridCellParams, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import {GRID_CHECKBOX_COL_DEF, processSustainabilityAttributeDataFromGraphQL, toSentenceCase} from '@coldpbc/lib';
+import { GridCellParams, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid-pro';
 import { HexColors } from '@coldpbc/themes';
 import { Checkbox } from '@mui/material';
 import capitalize from 'lodash/capitalize';
@@ -223,12 +223,7 @@ export const _SustainabilityAttributeDetail = () => {
 
 	const columns: GridColDef[] = [
     {
-      field: 'checkbox',
-      editable: false,
-      sortable: false,
-      hideSortIcons: true,
-      width: 100,
-      headerClassName: 'bg-gray-30',
+      ...GRID_CHECKBOX_COL_DEF,
       renderCell: (params: GridCellParams) => (
         <Checkbox
           checked={rowsSelected.includes(params.row.id) || false}
@@ -343,6 +338,14 @@ export const _SustainabilityAttributeDetail = () => {
 					}}
 					disableRowSelectionOnClick={true}
           searchKey={`${EntityLevel[sustainabilityAttribute.level]}Level${sustainabilityAttribute.id}SustainabilityAttributeDetailEntitySearchValue`}
+          slotProps={{
+            toolbar: {
+              csvOptions: {
+                fileName: `${EntityLevel[sustainabilityAttribute.level]}_Sustainability_Attribute_${new Date().toISOString().split('T')[0]}`,
+                utf8WithBom: true
+              }
+            }
+          }}
 				/>
 			</div>
 			<BulkEditSustainabilityAttributeModal

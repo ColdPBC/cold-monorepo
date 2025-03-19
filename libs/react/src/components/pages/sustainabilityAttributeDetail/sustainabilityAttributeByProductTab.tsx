@@ -6,8 +6,9 @@ import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ProductForMaterialLevelSustainabilityReport, ProductForMaterialLevelSustainabilityReportGraphQL, SustainabilityAttribute } from '@coldpbc/interfaces';
 import { get, groupBy, isError } from 'lodash';
-import { GridColDef } from '@mui/x-data-grid';
+import { GridColDef } from '@mui/x-data-grid-pro';
 import { HexColors } from '@coldpbc/themes';
+import { getCalculatedWeight } from '@coldpbc/lib';
 
 const ACCENT_COLOR = HexColors.lightblue['300'];
 
@@ -46,16 +47,18 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 			const materialNamesWithAttribute: string[] = [];
 
 			productGraphQL.productMaterials.forEach(productMaterial => {
-				if (productMaterial.weight === null) {
+				const weightResult = getCalculatedWeight(productMaterial);
+
+        if (!('weightInKg' in weightResult)) {
 					// If any material is missing weight, we'll hide the % calculation
 					hasMaterialWithMissingWeight = true;
 				} else {
-					totalWeight += productMaterial.weight;
+					totalWeight += weightResult.weightInKg;
 				}
 
 				if (uniqueMaterialIds.has(productMaterial.material.id)) {
 					materialCount += 1;
-					weightWithAttribute += productMaterial.weight || 0;
+					weightWithAttribute += get(weightResult, 'weightInKg') || 0;
 					materialNamesWithAttribute.push(productMaterial.material.name);
 				}
 			});
@@ -105,7 +108,7 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 				category: category || 'No Category',
         hasAttributeAggregatePercent: aggregatePercent,
 				totalCount,
-				percentage: aggregatePercent / totalCount,
+				percentage: totalCount > 0 ? aggregatePercent / totalCount : 0,
 			};
 		});
 
@@ -187,6 +190,9 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 					);
 				}
 			},
+      valueFormatter: (value: number | null) => {
+        return value ? `${value.toFixed(0)}%` : 'Unknown';
+      }
 		},
 		{
 			field: 'materialList',
@@ -197,6 +203,9 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 			renderCell: params => {
 				return <BubbleList values={params.value} />;
 			},
+      valueFormatter: (value) => {
+        return (value as string[]).join(', ');
+      }
 		},
 		{
 			field: 'tier1SupplierName',
@@ -269,7 +278,15 @@ const _SustainabilityAttributeByProductTab: React.FC<SustainabilityAttributeByPr
 						},
 					}}
           searchKey={`${sustainabilityAttribute.id}sustainabilityAttributeByProductsSearchValue`}
-				/>
+          slotProps={{
+            toolbar: {
+              csvOptions: {
+                fileName: `SustainabilityAttributeByProduct_${new Date().toISOString().split('T')[0]}`,
+                utf8WithBom: true
+              }
+            }
+          }}
+        />
 			</div>
 		</div>
 	);

@@ -1,15 +1,23 @@
 import { BaseButton, Card, ErrorFallback, ErrorPage, MuiDataGrid, Spinner } from '@coldpbc/components';
 import { Modal as FBModal } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
-import { GridCellParams, GridColDef, GridRowSelectionModel, GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid';
+import {
+  GridCellParams,
+  GridColDef,
+  GridFilterModel,
+  GridRowSelectionModel,
+} from '@mui/x-data-grid-pro';
 import { ButtonTypes, EntityLevel, GlobalSizes } from '@coldpbc/enums';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Checkbox } from '@mui/material';
 import { withErrorBoundary } from 'react-error-boundary';
 import { type SustainabilityAttributeGraphQL, ToastMessage } from '@coldpbc/interfaces';
-import { get, toLower } from 'lodash';
+import {get, toLower, uniq} from 'lodash';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation, useGraphQLSWR } from '@coldpbc/hooks';
-import { DELETE_ATTRIBUTE_ASSURANCES_FOR_ENTITY_AND_SUSTAINABILITY_ATTRIBUTE, processSustainabilityAttributeDataFromGraphQL } from '@coldpbc/lib';
+import {
+  GRID_CHECKBOX_COL_DEF,
+  processSustainabilityAttributeDataFromGraphQL
+} from '@coldpbc/lib';
 import { mutate } from 'swr';
 
 interface EditSustainabilityAttributesForProductProps {
@@ -44,7 +52,7 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
 	const { addToastMessage } = useAddToastMessage();
-
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({items: [], quickFilterValues: []});
 	const [rowsSelected, setRowsSelected] = useState<GridRowSelectionModel>([]);
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -150,7 +158,22 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 		[orgId, entity.id, createAttributeAssurance, deleteAttributeAssurances, onClose, logBrowser, addToastMessage, sustainabilityAttributesQuery],
 	);
 
-	const error = sustainabilityAttributesQuery.error || get(sustainabilityAttributesQuery.data, 'errors');
+  const clickSelectAll = () => {
+    const filteredIds = filterRows.map(row => row.id);
+
+    setRowsSelected(prev => {
+      const selectedIds = prev.filter((id) => filteredIds.includes(id as string));
+
+      // if all the rows are selected or some of the rows are selected, then unselect all the rows
+      if(selectedIds.length === filterRows.length || selectedIds.length > 0) {
+        return prev.filter(id => !filteredIds.includes(id as string));
+      } else {
+        return uniq([...prev, ...filteredIds])
+      }
+    });
+  }
+
+  const error = sustainabilityAttributesQuery.error || get(sustainabilityAttributesQuery.data, 'errors');
 	if (error) {
 		logBrowser('Error fetching sustainability attribute data', 'error', {}, error);
 		return (
@@ -162,51 +185,53 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 		);
 	}
 
-	const rows = [...sustainabilityAttributes].sort((a, b) => {
-		const aIsSelected = previouslySelectedAttributes.includes(a.id);
-		const bIsSelected = previouslySelectedAttributes.includes(b.id);
-		if (aIsSelected === bIsSelected) {
-			return a.name.localeCompare(b.name);
-		}
-		return aIsSelected ? -1 : 1;
-	});
+  const rows = React.useMemo(() => ([...sustainabilityAttributes].sort((a, b) => {
+    const aIsSelected = previouslySelectedAttributes.includes(a.id);
+    const bIsSelected = previouslySelectedAttributes.includes(b.id);
+    if (aIsSelected === bIsSelected) {
+      return a.name.localeCompare(b.name);
+    }
+    return aIsSelected ? -1 : 1;
+  })), [sustainabilityAttributes, previouslySelectedAttributes]);
 
-	const columns: GridColDef[] = [
+  const filterRows = React.useMemo(() => {
+    if (filterModel.quickFilterValues?.length) {
+      return rows.filter(row =>
+        row.name.toLowerCase().includes(
+          filterModel.quickFilterValues?.join(' ').toLowerCase() || ''
+        )
+      );
+    }
+    return rows;
+  },[rows, filterModel.quickFilterValues]);
+
+  const filteredSelectedIds = rowsSelected.filter(id => filterRows.map(row => row.id).includes(id as string));
+
+  const columns: GridColDef[] = [
 		{
-			field: 'checkbox',
-			editable: false,
-			sortable: false,
-			hideSortIcons: true,
-			width: 100,
-			headerClassName: 'bg-gray-30',
+      ...GRID_CHECKBOX_COL_DEF,
 			cellClassName: 'bg-gray-10',
-			renderCell: (params: GridCellParams) => (
-				<Checkbox
-					checked={rowsSelected.includes(params.row.id) || false}
-					onClick={() =>
-						setRowsSelected(prev => {
-							if (prev.includes(params.row.id)) {
-								return prev.filter(id => id !== params.row.id);
-							} else {
-								return [...prev, params.row.id];
-							}
-						})
-					}
-				/>
-			),
-			renderHeader: params => (
-				<Checkbox
-					checked={rowsSelected.length === rows.length && rowsSelected.length > 0}
-					indeterminate={rowsSelected.length > 0 && rowsSelected.length < rows.length}
-					onClick={() => {
-						if (rowsSelected.length === rows.length || rowsSelected.length > 0) {
-							setRowsSelected([]);
-						} else {
-							setRowsSelected(rows.map(r => r.id));
-						}
-					}}
-				/>
-			),
+      renderCell: (params: GridCellParams) => (
+        <Checkbox
+          checked={rowsSelected.includes(params.row.id) || false}
+          onClick={() =>
+            setRowsSelected(prev => {
+              if (prev.includes(params.row.id)) {
+                return prev.filter(id => id !== params.row.id);
+              } else {
+                return [...prev, params.row.id];
+              }
+            })
+          }
+        />
+      ),
+      renderHeader: params => (
+        <Checkbox
+          checked={filteredSelectedIds.length === filterRows.length && filterRows.length > 0}
+          indeterminate={filteredSelectedIds.length < filterRows.length && filteredSelectedIds.length > 0 && filterRows.length > 0}
+          onClick={clickSelectAll}
+        />
+      ),
 		},
 		{
 			field: 'name',
@@ -217,12 +242,6 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 			cellClassName: 'bg-gray-10',
 		},
 	];
-
-	const getToolbar = () => (
-		<GridToolbarContainer>
-			<GridToolbarQuickFilter />
-		</GridToolbarContainer>
-	);
 
 	// Handle loading and error states
 	if (sustainabilityAttributesQuery.isLoading) {
@@ -256,19 +275,19 @@ const _EditSustainabilityAttributesForProduct: React.FC<EditSustainabilityAttrib
 					<div className="flex flex-row text-h3">{title}</div>
 					<div className="w-full h-[400px]">
 						<MuiDataGrid
-							rows={rows}
+							rows={filterRows}
 							columns={columns}
 							sx={{
 								'--DataGrid-overlayHeight': '300px',
 							}}
 							className="h-full"
 							autoHeight={false}
-							slots={{
-								toolbar: getToolbar,
-							}}
 							disableColumnMenu={true}
 							rowSelection={false}
-						/>
+              filterModel={filterModel}
+              onFilterModelChange={setFilterModel}
+              showSearch
+            />
 					</div>
 				</div>
 				<div className="w-full flex flex-row justify-between">
