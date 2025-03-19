@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManagerPreview } from '@coldpbc/components';
-import { getComplianceCountsMockWithOrgScore, getComplianceMock, StoryMockProvider } from '@coldpbc/mocks';
+import { getComplianceCountsMockWithOrgScore, getComplianceMock, ComplianceManagerContextMockProvider } from '@coldpbc/mocks';
 import { SWRResponse } from 'swr';
 import { ComplianceManagerCountsPayload } from '@coldpbc/interfaces';
 
@@ -17,15 +17,15 @@ type Story = StoryObj<typeof meta>;
 
 export const NonTargetScoreCompliance: Story = {
   render: args => (
-    <StoryMockProvider>
+    <ComplianceManagerContextMockProvider>
       <ComplianceManagerPreview />
-    </StoryMockProvider>
+    </ComplianceManagerContextMockProvider>
   ),
 };
 
 export const TargetScoreCompliance: Story = {
   render: args => (
-    <StoryMockProvider
+    <ComplianceManagerContextMockProvider
       complianceManagerContext={{
         data: {
           complianceCounts: {
@@ -40,6 +40,6 @@ export const TargetScoreCompliance: Story = {
         },
       }}>
       <ComplianceManagerPreview />
-    </StoryMockProvider>
+    </ComplianceManagerContextMockProvider>
   ),
 };

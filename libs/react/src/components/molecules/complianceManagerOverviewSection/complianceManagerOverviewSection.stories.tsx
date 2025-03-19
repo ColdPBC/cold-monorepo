@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManagerOverviewSection } from '@coldpbc/components';
-import { getComplianceManagerOverviewSectionsMock, StoryMockProvider } from '@coldpbc/mocks';
+import { getComplianceManagerOverviewSectionsMock, ComplianceManagerContextMockProvider } from '@coldpbc/mocks';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 
 const meta: Meta<typeof ComplianceManagerOverviewSection> = {
@@ -16,9 +16,9 @@ type Story = StoryObj<typeof meta>;
 
 export const NotActivated: Story = {
   render: args => (
-    <StoryMockProvider>
+    <ComplianceManagerContextMockProvider>
       <ComplianceManagerOverviewSection {...args} />
-    </StoryMockProvider>
+    </ComplianceManagerContextMockProvider>
   ),
   args: {
     section: getComplianceManagerOverviewSectionsMock(),
@@ -29,12 +29,12 @@ export const NotActivated: Story = {
 
 export const Activated: Story = {
   render: args => (
-    <StoryMockProvider
+    <ComplianceManagerContextMockProvider
       complianceManagerContext={{
         status: ComplianceManagerStatus.activated,
       }}>
       <ComplianceManagerOverviewSection {...args} />
-    </StoryMockProvider>
+    </ComplianceManagerContextMockProvider>
   ),
   args: {
     section: getComplianceManagerOverviewSectionsMock(),
@@ -45,7 +45,7 @@ export const Activated: Story = {
 
 export const ColdAIRunning: Story = {
   render: args => (
-    <StoryMockProvider
+    <ComplianceManagerContextMockProvider
       complianceManagerContext={{
         status: ComplianceManagerStatus.startedAi,
         data: {
@@ -58,7 +58,7 @@ export const ColdAIRunning: Story = {
         },
       }}>
       <ComplianceManagerOverviewSection {...args} />
-    </StoryMockProvider>
+    </ComplianceManagerContextMockProvider>
   ),
   args: {
     section: getComplianceManagerOverviewSectionsMock(),

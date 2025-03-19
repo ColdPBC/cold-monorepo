@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceProgressStatusItem } from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { ComplianceProgressStatus } from '@coldpbc/enums';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { ComplianceManagerContextMockProvider } from "@coldpbc/mocks";
 
 const meta: Meta<typeof ComplianceProgressStatusItem> = {
   title: 'Molecules/ComplianceProgressStatusItem',
@@ -17,11 +17,11 @@ type Story = StoryObj<typeof meta>;
 export const NotStarted: Story = {
   render: args => {
     return (
-      <StoryMockProvider complianceManagerContext={{}}>
+      <ComplianceManagerContextMockProvider complianceManagerContext={{}}>
         <div className="w-[300px]">
           <ComplianceProgressStatusItem {...args} />
         </div>
-      </StoryMockProvider>
+      </ComplianceManagerContextMockProvider>
     );
   },
   args: {
@@ -32,11 +32,11 @@ export const NotStarted: Story = {
 export const NeedsReview: Story = {
   render: args => {
     return (
-      <StoryMockProvider complianceManagerContext={{}}>
+      <ComplianceManagerContextMockProvider complianceManagerContext={{}}>
         <div className="w-[300px]">
           <ComplianceProgressStatusItem {...args} />
         </div>
-      </StoryMockProvider>
+      </ComplianceManagerContextMockProvider>
     );
   },
   args: {
@@ -47,11 +47,11 @@ export const NeedsReview: Story = {
 export const Bookmarked: Story = {
   render: args => {
     return (
-      <StoryMockProvider complianceManagerContext={{}}>
+      <ComplianceManagerContextMockProvider complianceManagerContext={{}}>
         <div className="w-[300px]">
           <ComplianceProgressStatusItem {...args} />
         </div>
-      </StoryMockProvider>
+      </ComplianceManagerContextMockProvider>
     );
   },
   args: {
@@ -62,11 +62,11 @@ export const Bookmarked: Story = {
 export const Complete: Story = {
   render: args => {
     return (
-      <StoryMockProvider complianceManagerContext={{}}>
+      <ComplianceManagerContextMockProvider complianceManagerContext={{}}>
         <div className="w-[300px]">
           <ComplianceProgressStatusItem {...args} />
         </div>
-      </StoryMockProvider>
+      </ComplianceManagerContextMockProvider>
     );
   },
   args: {

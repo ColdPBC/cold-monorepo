@@ -1,26 +1,22 @@
 import React, { PropsWithChildren, useEffect } from 'react';
-import ColdContext, {ColdContextType, Organization} from '../context/coldContext';
-import { worker } from './browser';
+import ColdContext, {ColdContextType, Organization} from '../../context/coldContext';
+import { worker } from '../browser';
 import { HttpHandler } from 'msw';
 import { SWRConfig, SWRResponse } from 'swr';
 import { MemoryRouter, MemoryRouterProps } from 'react-router-dom';
 import { Auth0ProviderOptions } from '@auth0/auth0-react';
-import { ComplianceManagerStatus, ErrorType } from '@coldpbc/enums';
+import { ErrorType } from '@coldpbc/enums';
 import { WizardContext, WizardContextType } from '@coldpbc/components';
-import ColdMQTTContext from '../context/coldMQTTContext';
-import { mockMQTTContext } from './mqtt/mockMQTTContext';
-import { defaultMqttDataHandler, defaultMqttTopics } from './mqtt';
+import ColdMQTTContext from '../../context/coldMQTTContext';
+import { mockMQTTContext } from '../mqtt/mockMQTTContext';
+import { defaultMqttDataHandler, defaultMqttTopics } from '../mqtt';
 import {
-	ColdComplianceManagerContext,
 	ColdComplianceQuestionnaireContext,
-	ComplianceManagerContextType,
-	ComplianceManagerData,
 	ComplianceQuestionnaireContextType,
 } from '@coldpbc/context';
-import { getAllFilesMock } from './filesMock';
-import { getComplianceCountsMock, getComplianceMock, getQuestionnaireSidebarComplianceMock } from './complianceMock';
-import { AIDetails, ComplianceManagerCountsPayload, ComplianceSidebarPayload } from '@coldpbc/interfaces';
-import { defaultGraphqlMocks } from './graphql';
+import { getComplianceMock, getQuestionnaireSidebarComplianceMock } from '../complianceMock';
+import { AIDetails } from '@coldpbc/interfaces';
+import { defaultGraphqlMocks } from '../graphql';
 import { ColdApolloContext } from '@coldpbc/providers';
 import { createMockClient, RequestHandler } from 'mock-apollo-client';
 import { DocumentNode, InMemoryCache } from '@apollo/client';
@@ -32,13 +28,6 @@ export interface StoryMockProviderProps {
 	coldContext?: ColdContextType;
 	wizardContext?: WizardContextType;
 	mqttTopics?: { [key: string]: (args: any) => any };
-	complianceManagerContext?: Partial<{
-		data: Partial<ComplianceManagerData>;
-		status: ComplianceManagerStatus;
-		setStatus: (status: ComplianceManagerStatus) => void;
-		showOverviewModal: boolean;
-		setShowOverviewModal: React.Dispatch<React.SetStateAction<boolean>>;
-	}>;
 	complianceQuestionnaireContext?: Partial<ComplianceQuestionnaireContextType>;
 	graphqlMocks?: {
 		query: DocumentNode;
@@ -75,49 +64,6 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
 
 	const mqttTopics = props.mqttTopics ? props.mqttTopics : defaultMqttTopics;
 	const mqttContextValue = mockMQTTContext(defaultMqttDataHandler, mqttTopics);
-
-	const [status, setStatus] = React.useState<ComplianceManagerStatus>(props.complianceManagerContext?.status || ComplianceManagerStatus.notActivated);
-	const [showOverviewModal, setShowOverviewModal] = React.useState<boolean>(props.complianceManagerContext?.showOverviewModal || false);
-
-	const complianceManagerContextData: ComplianceManagerData = {
-		name: 'rei_pia_2024',
-		files: {
-			data: getAllFilesMock(),
-			error: undefined,
-			revalidate: () => {},
-			isValidating: false,
-			isLoading: false,
-			mutate: () => Promise.resolve(),
-		} as SWRResponse<any[], any, any>,
-		currentAIStatus: undefined,
-		complianceCounts: {
-			data: getComplianceCountsMock(),
-			error: undefined,
-			revalidate: () => {},
-			isValidating: false,
-			isLoading: false,
-			mutate: () => Promise.resolve(),
-		} as SWRResponse<ComplianceManagerCountsPayload, any, any>,
-		sectionGroups: {
-			data: getQuestionnaireSidebarComplianceMock(),
-			error: undefined,
-			revalidate: () => {},
-			isValidating: false,
-			isLoading: false,
-			mutate: () => Promise.resolve(),
-		} as SWRResponse<ComplianceSidebarPayload, any, any>,
-		compliance: getComplianceMock().find(c => c.name === 'rei_pia_2024'),
-		...props.complianceManagerContext?.data,
-	};
-
-	const complianceManagerContextValue: ComplianceManagerContextType = {
-		...props.complianceManagerContext,
-		data: complianceManagerContextData,
-		status,
-		setStatus: props.complianceManagerContext?.setStatus || setStatus,
-		showOverviewModal,
-		setShowOverviewModal: props.complianceManagerContext?.setShowOverviewModal || setShowOverviewModal,
-	};
 
 	const [complianceQuestionnaireFocusQuestion, setComplianceQuestionnaireFocusQuestion] = React.useState<{
 		key: string;
@@ -202,7 +148,6 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
 						publishMessage: mqttContextValue.publishMessage,
 						subscribeSWR: mqttContextValue.subscribeSWR,
 					}}>
-					<ColdComplianceManagerContext.Provider value={complianceManagerContextValue}>
 						<ColdComplianceQuestionnaireContext.Provider value={complianceQuestionnaireContextValue}>
 							<ColdApolloContext.Provider
 								value={{
@@ -213,7 +158,6 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
 								</SWRConfig>
 							</ColdApolloContext.Provider>
 						</ColdComplianceQuestionnaireContext.Provider>
-					</ColdComplianceManagerContext.Provider>
 				</ColdMQTTContext.Provider>
 			</WizardContext.Provider>
 		</ColdContext.Provider>

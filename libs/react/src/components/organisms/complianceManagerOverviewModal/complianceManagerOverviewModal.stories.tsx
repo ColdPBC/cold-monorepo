@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManagerOverviewModal, ComplianceManagerOverviewModalProps } from '@coldpbc/components';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { ComplianceManagerContextMockProvider } from '@coldpbc/mocks';
 import { useState } from 'react';
 import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus } from '@coldpbc/enums';
 
@@ -29,12 +29,12 @@ const ModalStory = ({ status = ComplianceManagerStatus.notActivated, props }: { 
   const [show, setShowModal] = useState(true);
   const [flowGuideStatus, setFlowGuideStatus] = useState<ComplianceManagerFlowGuideStatus>(props.flowGuideStatus || ComplianceManagerFlowGuideStatus.activate);
   return (
-    <StoryMockProvider
+    <ComplianceManagerContextMockProvider
       complianceManagerContext={{
         status,
       }}>
       <ComplianceManagerOverviewModal {...props} setShowModal={setShowModal} show={show} flowGuideStatus={flowGuideStatus} setFlowGuideStatus={setFlowGuideStatus} />
-    </StoryMockProvider>
+    </ComplianceManagerContextMockProvider>
   );
 };
 
