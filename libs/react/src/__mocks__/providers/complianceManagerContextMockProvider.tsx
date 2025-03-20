@@ -22,8 +22,9 @@ export interface ComplianceManagerContextMockProviderProps extends StoryMockProv
 }
 
 export const ComplianceManagerContextMockProvider = (props: PropsWithChildren<ComplianceManagerContextMockProviderProps>) => {
-  const [status, setStatus] = React.useState<ComplianceManagerStatus>(props.complianceManagerContext?.status || ComplianceManagerStatus.notActivated);
-  const [showOverviewModal, setShowOverviewModal] = React.useState<boolean>(props.complianceManagerContext?.showOverviewModal || false);
+  const { complianceManagerContext, children, ...storyMockProviderProps } = props;
+  const [status, setStatus] = React.useState<ComplianceManagerStatus>(complianceManagerContext?.status || ComplianceManagerStatus.notActivated);
+  const [showOverviewModal, setShowOverviewModal] = React.useState<boolean>(complianceManagerContext?.showOverviewModal || false);
 
   const complianceManagerContextData: ComplianceManagerData = {
     name: 'rei_pia_2024',
@@ -53,22 +54,24 @@ export const ComplianceManagerContextMockProvider = (props: PropsWithChildren<Co
       mutate: () => Promise.resolve(),
     } as SWRResponse<ComplianceSidebarPayload, any, any>,
     compliance: getComplianceMock().find(c => c.name === 'rei_pia_2024'),
-    ...props.complianceManagerContext?.data,
+    ...complianceManagerContext?.data,
   };
 
   const complianceManagerContextValue: ComplianceManagerContextType = {
-    ...props.complianceManagerContext,
+    ...complianceManagerContext,
     data: complianceManagerContextData,
     status,
-    setStatus: props.complianceManagerContext?.setStatus || setStatus,
+    setStatus: complianceManagerContext?.setStatus || setStatus,
     showOverviewModal,
-    setShowOverviewModal: props.complianceManagerContext?.setShowOverviewModal || setShowOverviewModal,
+    setShowOverviewModal: complianceManagerContext?.setShowOverviewModal || setShowOverviewModal,
   };
 
   return (
-    <StoryMockProvider>
+    <StoryMockProvider
+      {...storyMockProviderProps}
+    >
       <ColdComplianceManagerContext.Provider value={complianceManagerContextValue}>
-        {props.children}
+        {children}
       </ColdComplianceManagerContext.Provider>
     </StoryMockProvider>
     )

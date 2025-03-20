@@ -17,13 +17,15 @@ export interface QuestionnaireContextMockProviderProps extends StoryMockProvider
 }
 
 export const QuestionnaireContextMockProvider = (props: PropsWithChildren<QuestionnaireContextMockProviderProps>) => {
+  const { complianceQuestionnaireContext, children, ...storyMockProviderProps } = props;
+
   const [focusQuestion, setFocusQuestion] = React.useState<{
     key: string;
     aiDetails: AIDetails;
-  } | null>(props.complianceQuestionnaireContext?.focusQuestion ?? null);
+  } | null>(complianceQuestionnaireContext?.focusQuestion ?? null);
 
   const [scrollToQuestion, setScrollToQuestion] = React.useState<string | null>(
-    props.complianceQuestionnaireContext?.scrollToQuestion ?? null
+    complianceQuestionnaireContext?.scrollToQuestion ?? null
   );
 
   const questionnaireContextData: ComplianceQuestionnaireContextType = {
@@ -38,16 +40,18 @@ export const QuestionnaireContextMockProvider = (props: PropsWithChildren<Questi
     } as SWRResponse<any, any, any>,
     complianceDefinition: getComplianceMock().find(c => c.name === 'rei_pia_2024'),
     focusQuestion: focusQuestion,
-    setFocusQuestion: props.complianceQuestionnaireContext?.setFocusQuestion || setFocusQuestion,
+    setFocusQuestion: complianceQuestionnaireContext?.setFocusQuestion || setFocusQuestion,
     scrollToQuestion: scrollToQuestion,
-    setScrollToQuestion: props.complianceQuestionnaireContext?.setScrollToQuestion || setScrollToQuestion,
-    ...props.complianceQuestionnaireContext
+    setScrollToQuestion: complianceQuestionnaireContext?.setScrollToQuestion || setScrollToQuestion,
+    ...complianceQuestionnaireContext
   };
 
   return (
-    <StoryMockProvider>
+    <StoryMockProvider
+      {...storyMockProviderProps}
+    >
       <ColdComplianceQuestionnaireContext.Provider value={questionnaireContextData}>
-        {props.children}
+        {children}
       </ColdComplianceQuestionnaireContext.Provider>
     </StoryMockProvider>
   );
