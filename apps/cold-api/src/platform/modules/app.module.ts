@@ -20,6 +20,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { LinearModule } from './linear/linear.module';
 import { EcoinventImportModule } from './resources/ecoinvent_import/ecoinvent_import.module';
+import { EcoinventActivityModule } from './resources/ecoinvent_import/ecoinvent_activity.module';
 
 @Module({})
 export class AppModule {
@@ -77,6 +78,7 @@ export class AppModule {
 				IntegrationsModule,
 				FacilitiesModule,
 				EcoinventImportModule,
+				EcoinventActivityModule,
 				ComplianceDefinitionModule,
 				ComplianceSetModule,
 				SustainabilityAttributesModule,

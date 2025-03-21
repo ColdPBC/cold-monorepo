@@ -2,6 +2,7 @@ import { EcoinventClassificationHooks } from '../hooks/ecoinvent-classification.
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
 import { Collection, Entity, Index, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import { EcoinventActivity } from './ecoinvent-activity';
 import { EcoinventActivityClassification } from './ecoinvent-activity-classification';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -35,6 +36,9 @@ export class EcoinventClassification {
 
 	@Property({ type: 'datetime', length: 3 })
 	updatedAt!: Date;
+
+	@OneToMany({ entity: () => EcoinventActivity, mappedBy: 'ecoinventClassification' })
+	ecoinventActivities = new Collection<EcoinventActivity>(this);
 
 	@OneToMany({ entity: () => EcoinventActivityClassification, mappedBy: 'ecoinventClassification' })
 	ecoinventActivityClassifications = new Collection<EcoinventActivityClassification>(this);

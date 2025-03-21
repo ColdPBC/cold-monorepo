@@ -114,6 +114,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
 			return response;
 		} catch (err: any) {
 			this.logger.error(err.messsage, { error: err });
+			throw err;
 		}
 	}
 

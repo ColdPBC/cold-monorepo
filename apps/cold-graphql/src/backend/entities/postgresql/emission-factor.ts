@@ -1,7 +1,7 @@
 import { EmissionFactorHooks } from '../hooks/emission-factor.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Collection, Entity, Index, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import { Collection, Entity, Index, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { MaterialEmissionFactor } from './material-emission-factor';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -19,6 +19,8 @@ export class EmissionFactor {
 	@PrimaryKey({ type: 'text' })
 	id!: string;
 
+	@Index({ name: 'emission_factors_name_idx1' })
+	@Unique({ name: 'emission_factors_name_key' })
 	@Property({ type: 'text' })
 	name!: string;
 

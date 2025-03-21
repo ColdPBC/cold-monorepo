@@ -1,6 +1,7 @@
 import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { EcoinventActivity } from './ecoinvent-activity';
 import { EcoinventActivityClassification } from './ecoinvent-activity-classification';
 import { EcoinventClassification as OrmEcoinventClassification } from '../entities';
 import { connection } from '../database';
@@ -26,6 +27,9 @@ export class EcoinventClassification {
 
 	@Field(() => ISODateStringScalar)
 	updatedAt!: Date;
+
+	@RelationshipField<EcoinventActivity>(() => [EcoinventActivity], { relatedField: 'ecoinventClassification' })
+	ecoinventActivities!: EcoinventActivity[];
 
 	@RelationshipField<EcoinventActivityClassification>(() => [EcoinventActivityClassification], { relatedField: 'ecoinventClassification' })
 	ecoinventActivityClassifications!: EcoinventActivityClassification[];

@@ -64,8 +64,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
 	async askRawQuestion(from: string, data: any) {
 		try {
-			this.logger.info(`Processing request from ${from}`, { service: from, data });
-			const { user, organization, system_prompt, question, schema } = data;
+			this.logger.info(`Processing request from ${from}`, { service: from, user: data.user, organization: data.organization, question: data.question });
+			const { user, organization, system_prompt, question, schema, model, context } = data;
 
 			const openai = new OpenAI({
 				organization: this.config.getOrThrow('OPENAI_ORG_ID'),
@@ -76,7 +76,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
 			if (!schema) {
 				classifyResponse = await openai.beta.chat.completions.parse({
-					model: 'o3-mini',
+					model: model ? model : 'gpt-4o',
 					messages: [
 						{
 							role: 'system',
@@ -84,7 +84,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 						},
 						{
 							role: 'user',
-							content: question,
+							content: question + (context ? ` ${context}` : ''),
 						},
 					],
 				});
@@ -94,14 +94,13 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 					organization,
 					question,
 					system_prompt,
-					parsed: classifyResponse?.choices['0']?.message?.content,
 				});
 
 				return classifyResponse?.choices['0']?.message?.content;
 			} else {
 				const responseSchema = eval(jsonSchemaToZod(schema, { module: 'cjs' }));
 				classifyResponse = await openai.beta.chat.completions.parse({
-					model: 'o3-mini',
+					model: model ? model : 'gpt-4o',
 					messages: [
 						{
 							role: 'system',
@@ -109,7 +108,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 						},
 						{
 							role: 'user',
-							content: question,
+							content: question + (context ? ` ${context}` : ''),
 						},
 					],
 					response_format: zodResponseFormat(responseSchema, 'microservice_chat'),
@@ -120,7 +119,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 					organization,
 					question,
 					system_prompt,
-					parsed: classifyResponse?.choices['0']?.message?.parsed,
 				});
 
 				return classifyResponse?.choices['0']?.message?.parsed;

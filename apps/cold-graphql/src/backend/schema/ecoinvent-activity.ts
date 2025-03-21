@@ -3,6 +3,7 @@ import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { EcoinventActivityClassification } from './ecoinvent-activity-classification';
 import { EcoinventActivityImpact } from './ecoinvent-activity-impact';
+import { EcoinventClassification } from './ecoinvent-classification';
 import { MaterialEmissionFactor } from './material-emission-factor';
 import { EcoinventActivity as OrmEcoinventActivity } from '../entities';
 import { connection } from '../database';
@@ -34,6 +35,9 @@ export class EcoinventActivity {
 
 	@Field(() => GraphQLJSON, { nullable: true })
 	rawData?: Record<string, unknown>;
+
+	@RelationshipField<EcoinventActivity>(() => EcoinventClassification, { id: (entity) => entity.ecoinventClassification?.id, nullable: true })
+	ecoinventClassification?: EcoinventClassification;
 
 	@RelationshipField<EcoinventActivityClassification>(() => [EcoinventActivityClassification], { relatedField: 'ecoinventActivity' })
 	ecoinventActivityClassifications!: EcoinventActivityClassification[];

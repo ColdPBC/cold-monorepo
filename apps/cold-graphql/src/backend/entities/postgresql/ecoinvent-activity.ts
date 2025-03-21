@@ -1,9 +1,10 @@
 import { EcoinventActivityHooks } from '../hooks/ecoinvent-activity.hooks';
 import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHookParams } from '@exogee/graphweaver';
 
-import { Collection, Entity, Index, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import { Collection, Entity, Index, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { EcoinventActivityClassification } from './ecoinvent-activity-classification';
 import { EcoinventActivityImpact } from './ecoinvent-activity-impact';
+import { EcoinventClassification } from './ecoinvent-classification';
 import { MaterialEmissionFactor } from './material-emission-factor';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -44,6 +45,9 @@ export class EcoinventActivity {
 
 	@Property({ type: 'json', nullable: true })
 	rawData?: Record<string, unknown>;
+
+	@ManyToOne({ entity: () => EcoinventClassification, ref: true, nullable: true })
+	ecoinventClassification?: Ref<EcoinventClassification>;
 
 	@OneToMany({ entity: () => EcoinventActivityClassification, mappedBy: 'ecoinventActivity' })
 	ecoinventActivityClassifications = new Collection<EcoinventActivityClassification>(this);

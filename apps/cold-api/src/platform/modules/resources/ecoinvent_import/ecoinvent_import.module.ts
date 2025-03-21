@@ -13,6 +13,14 @@ import { BullModule } from '@nestjs/bull';
 				maxStalledCount: 120,
 			},
 		}),
+		BullModule.registerQueue({
+			name: 'ecoinvent:activity',
+			settings: {
+				retryProcessDelay: 60000,
+				stalledInterval: 3600000,
+				maxStalledCount: 120,
+			},
+		}),
 	],
 	controllers: [EcoinventImportController],
 	providers: [EcoinventImportService, EcoinventImportProcessorService],

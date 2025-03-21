@@ -3070,6 +3070,1057 @@ export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
 };
 
+export type EcoinventActivitiesListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_gt?: InputMaybe<Scalars['String']['input']>;
+  description_gte?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_lt?: InputMaybe<Scalars['String']['input']>;
+  description_lte?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  description_null?: InputMaybe<Scalars['Boolean']['input']>;
+  ecoinventActivityClassifications?: InputMaybe<EcoinventActivityClassificationsListFilter>;
+  ecoinventActivityImpacts?: InputMaybe<EcoinventActivityImpactsListFilter>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  location_gt?: InputMaybe<Scalars['String']['input']>;
+  location_gte?: InputMaybe<Scalars['String']['input']>;
+  location_ilike?: InputMaybe<Scalars['String']['input']>;
+  location_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  location_like?: InputMaybe<Scalars['String']['input']>;
+  location_lt?: InputMaybe<Scalars['String']['input']>;
+  location_lte?: InputMaybe<Scalars['String']['input']>;
+  location_ne?: InputMaybe<Scalars['String']['input']>;
+  location_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  location_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  location_null?: InputMaybe<Scalars['Boolean']['input']>;
+  materialEmissionFactors?: InputMaybe<MaterialEmissionFactorsListFilter>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  parentActivityId?: InputMaybe<Scalars['String']['input']>;
+  parentActivityId_gt?: InputMaybe<Scalars['String']['input']>;
+  parentActivityId_gte?: InputMaybe<Scalars['String']['input']>;
+  parentActivityId_ilike?: InputMaybe<Scalars['String']['input']>;
+  parentActivityId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  parentActivityId_like?: InputMaybe<Scalars['String']['input']>;
+  parentActivityId_lt?: InputMaybe<Scalars['String']['input']>;
+  parentActivityId_lte?: InputMaybe<Scalars['String']['input']>;
+  parentActivityId_ne?: InputMaybe<Scalars['String']['input']>;
+  parentActivityId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  parentActivityId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  parentActivityId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  rawData?: InputMaybe<Scalars['JSON']['input']>;
+  rawData_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  rawData_ne?: InputMaybe<Scalars['JSON']['input']>;
+  rawData_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  rawData_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  rawData_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type EcoinventActivitiesOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
+  description?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  location?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  parentActivityId?: InputMaybe<Sort>;
+  rawData?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for EcoinventActivities. */
+export type EcoinventActivitiesPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EcoinventActivitiesOrderByInput>;
+};
+
+export type EcoinventActivity = {
+  __typename?: 'EcoinventActivity';
+  createdAt: Scalars['ISOString']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  ecoinventActivityClassifications: Array<EcoinventActivityClassification>;
+  ecoinventActivityClassifications_aggregate?: Maybe<AggregationResult>;
+  ecoinventActivityImpacts: Array<EcoinventActivityImpact>;
+  ecoinventActivityImpacts_aggregate?: Maybe<AggregationResult>;
+  id: Scalars['ID']['output'];
+  location?: Maybe<Scalars['String']['output']>;
+  materialEmissionFactors: Array<MaterialEmissionFactor>;
+  materialEmissionFactors_aggregate?: Maybe<AggregationResult>;
+  name: Scalars['String']['output'];
+  parentActivityId?: Maybe<Scalars['String']['output']>;
+  rawData?: Maybe<Scalars['JSON']['output']>;
+  updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type EcoinventActivityEcoinventActivityClassificationsArgs = {
+  filter?: InputMaybe<EcoinventActivityClassificationsListFilter>;
+};
+
+
+export type EcoinventActivityEcoinventActivityClassifications_AggregateArgs = {
+  filter?: InputMaybe<EcoinventActivityClassificationsListFilter>;
+};
+
+
+export type EcoinventActivityEcoinventActivityImpactsArgs = {
+  filter?: InputMaybe<EcoinventActivityImpactsListFilter>;
+};
+
+
+export type EcoinventActivityEcoinventActivityImpacts_AggregateArgs = {
+  filter?: InputMaybe<EcoinventActivityImpactsListFilter>;
+};
+
+
+export type EcoinventActivityMaterialEmissionFactorsArgs = {
+  filter?: InputMaybe<MaterialEmissionFactorsListFilter>;
+};
+
+
+export type EcoinventActivityMaterialEmissionFactors_AggregateArgs = {
+  filter?: InputMaybe<MaterialEmissionFactorsListFilter>;
+};
+
+export type EcoinventActivityClassification = {
+  __typename?: 'EcoinventActivityClassification';
+  ecoinventActivity: EcoinventActivity;
+  ecoinventActivity_aggregate?: Maybe<AggregationResult>;
+  ecoinventClassification: EcoinventClassification;
+  ecoinventClassification_aggregate?: Maybe<AggregationResult>;
+  id: Scalars['ID']['output'];
+};
+
+
+export type EcoinventActivityClassificationEcoinventActivityArgs = {
+  filter?: InputMaybe<EcoinventActivitiesListFilter>;
+};
+
+
+export type EcoinventActivityClassificationEcoinventActivity_AggregateArgs = {
+  filter?: InputMaybe<EcoinventActivitiesListFilter>;
+};
+
+
+export type EcoinventActivityClassificationEcoinventClassificationArgs = {
+  filter?: InputMaybe<EcoinventClassificationsListFilter>;
+};
+
+
+export type EcoinventActivityClassificationEcoinventClassification_AggregateArgs = {
+  filter?: InputMaybe<EcoinventClassificationsListFilter>;
+};
+
+/** Data needed to create or update EcoinventActivityClassifications. If an ID is passed, this is an update, otherwise it's an insert. */
+export type EcoinventActivityClassificationCreateOrUpdateInput = {
+  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
+  ecoinventClassification?: InputMaybe<EcoinventClassificationCreateOrUpdateInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
+/** Data needed to create EcoinventActivityClassifications. */
+export type EcoinventActivityClassificationInsertInput = {
+  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
+  ecoinventClassification?: InputMaybe<EcoinventClassificationCreateOrUpdateInput>;
+};
+
+/** Data needed to update EcoinventActivityClassifications. An ID must be passed. */
+export type EcoinventActivityClassificationUpdateInput = {
+  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
+  ecoinventClassification?: InputMaybe<EcoinventClassificationCreateOrUpdateInput>;
+  id: Scalars['ID']['input'];
+};
+
+export type EcoinventActivityClassificationsListFilter = {
+  ecoinventActivity?: InputMaybe<EcoinventActivitiesListFilter>;
+  ecoinventClassification?: InputMaybe<EcoinventClassificationsListFilter>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type EcoinventActivityClassificationsOrderByInput = {
+  id?: InputMaybe<Sort>;
+};
+
+/** Pagination options for EcoinventActivityClassifications. */
+export type EcoinventActivityClassificationsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EcoinventActivityClassificationsOrderByInput>;
+};
+
+/** Data needed to create or update EcoinventActivities. If an ID is passed, this is an update, otherwise it's an insert. */
+export type EcoinventActivityCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  ecoinventActivityClassifications?: InputMaybe<Array<EcoinventActivityClassificationCreateOrUpdateInput>>;
+  ecoinventActivityImpacts?: InputMaybe<Array<EcoinventActivityImpactCreateOrUpdateInput>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  parentActivityId?: InputMaybe<Scalars['String']['input']>;
+  rawData?: InputMaybe<Scalars['JSON']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type EcoinventActivityImpact = {
+  __typename?: 'EcoinventActivityImpact';
+  ecoinventActivity: EcoinventActivity;
+  ecoinventActivity_aggregate?: Maybe<AggregationResult>;
+  ecoinventImpactCategory: EcoinventImpactCategory;
+  ecoinventImpactCategory_aggregate?: Maybe<AggregationResult>;
+  id: Scalars['ID']['output'];
+  impactMethodName: Scalars['String']['output'];
+  impactUnitName: Scalars['String']['output'];
+  impactValue: Scalars['Float']['output'];
+};
+
+
+export type EcoinventActivityImpactEcoinventActivityArgs = {
+  filter?: InputMaybe<EcoinventActivitiesListFilter>;
+};
+
+
+export type EcoinventActivityImpactEcoinventActivity_AggregateArgs = {
+  filter?: InputMaybe<EcoinventActivitiesListFilter>;
+};
+
+
+export type EcoinventActivityImpactEcoinventImpactCategoryArgs = {
+  filter?: InputMaybe<EcoinventImpactCategoriesListFilter>;
+};
+
+
+export type EcoinventActivityImpactEcoinventImpactCategory_AggregateArgs = {
+  filter?: InputMaybe<EcoinventImpactCategoriesListFilter>;
+};
+
+/** Data needed to create or update EcoinventActivityImpacts. If an ID is passed, this is an update, otherwise it's an insert. */
+export type EcoinventActivityImpactCreateOrUpdateInput = {
+  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
+  ecoinventImpactCategory?: InputMaybe<EcoinventImpactCategoryCreateOrUpdateInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  impactMethodName?: InputMaybe<Scalars['String']['input']>;
+  impactUnitName?: InputMaybe<Scalars['String']['input']>;
+  impactValue?: InputMaybe<Scalars['Float']['input']>;
+};
+
+/** Data needed to create EcoinventActivityImpacts. */
+export type EcoinventActivityImpactInsertInput = {
+  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
+  ecoinventImpactCategory?: InputMaybe<EcoinventImpactCategoryCreateOrUpdateInput>;
+  impactMethodName: Scalars['String']['input'];
+  impactUnitName: Scalars['String']['input'];
+  impactValue: Scalars['Float']['input'];
+};
+
+/** Data needed to update EcoinventActivityImpacts. An ID must be passed. */
+export type EcoinventActivityImpactUpdateInput = {
+  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
+  ecoinventImpactCategory?: InputMaybe<EcoinventImpactCategoryCreateOrUpdateInput>;
+  id: Scalars['ID']['input'];
+  impactMethodName?: InputMaybe<Scalars['String']['input']>;
+  impactUnitName?: InputMaybe<Scalars['String']['input']>;
+  impactValue?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type EcoinventActivityImpactsListFilter = {
+  ecoinventActivity?: InputMaybe<EcoinventActivitiesListFilter>;
+  ecoinventImpactCategory?: InputMaybe<EcoinventImpactCategoriesListFilter>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  impactMethodName?: InputMaybe<Scalars['String']['input']>;
+  impactMethodName_gt?: InputMaybe<Scalars['String']['input']>;
+  impactMethodName_gte?: InputMaybe<Scalars['String']['input']>;
+  impactMethodName_ilike?: InputMaybe<Scalars['String']['input']>;
+  impactMethodName_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  impactMethodName_like?: InputMaybe<Scalars['String']['input']>;
+  impactMethodName_lt?: InputMaybe<Scalars['String']['input']>;
+  impactMethodName_lte?: InputMaybe<Scalars['String']['input']>;
+  impactMethodName_ne?: InputMaybe<Scalars['String']['input']>;
+  impactMethodName_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  impactMethodName_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  impactMethodName_null?: InputMaybe<Scalars['Boolean']['input']>;
+  impactUnitName?: InputMaybe<Scalars['String']['input']>;
+  impactUnitName_gt?: InputMaybe<Scalars['String']['input']>;
+  impactUnitName_gte?: InputMaybe<Scalars['String']['input']>;
+  impactUnitName_ilike?: InputMaybe<Scalars['String']['input']>;
+  impactUnitName_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  impactUnitName_like?: InputMaybe<Scalars['String']['input']>;
+  impactUnitName_lt?: InputMaybe<Scalars['String']['input']>;
+  impactUnitName_lte?: InputMaybe<Scalars['String']['input']>;
+  impactUnitName_ne?: InputMaybe<Scalars['String']['input']>;
+  impactUnitName_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  impactUnitName_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  impactUnitName_null?: InputMaybe<Scalars['Boolean']['input']>;
+  impactValue?: InputMaybe<Scalars['Float']['input']>;
+  impactValue_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  impactValue_ne?: InputMaybe<Scalars['Float']['input']>;
+  impactValue_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  impactValue_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  impactValue_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type EcoinventActivityImpactsOrderByInput = {
+  id?: InputMaybe<Sort>;
+  impactMethodName?: InputMaybe<Sort>;
+  impactUnitName?: InputMaybe<Sort>;
+  impactValue?: InputMaybe<Sort>;
+};
+
+/** Pagination options for EcoinventActivityImpacts. */
+export type EcoinventActivityImpactsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EcoinventActivityImpactsOrderByInput>;
+};
+
+/** Data needed to create EcoinventActivities. */
+export type EcoinventActivityInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  ecoinventActivityClassifications?: InputMaybe<Array<EcoinventActivityClassificationCreateOrUpdateInput>>;
+  ecoinventActivityImpacts?: InputMaybe<Array<EcoinventActivityImpactCreateOrUpdateInput>>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
+  name: Scalars['String']['input'];
+  parentActivityId?: InputMaybe<Scalars['String']['input']>;
+  rawData?: InputMaybe<Scalars['JSON']['input']>;
+  updatedAt: Scalars['ISOString']['input'];
+};
+
+/** Data needed to update EcoinventActivities. An ID must be passed. */
+export type EcoinventActivityUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  ecoinventActivityClassifications?: InputMaybe<Array<EcoinventActivityClassificationCreateOrUpdateInput>>;
+  ecoinventActivityImpacts?: InputMaybe<Array<EcoinventActivityImpactCreateOrUpdateInput>>;
+  id: Scalars['ID']['input'];
+  location?: InputMaybe<Scalars['String']['input']>;
+  materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  parentActivityId?: InputMaybe<Scalars['String']['input']>;
+  rawData?: InputMaybe<Scalars['JSON']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type EcoinventClassification = {
+  __typename?: 'EcoinventClassification';
+  createdAt: Scalars['ISOString']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  ecoinventActivityClassifications: Array<EcoinventActivityClassification>;
+  ecoinventActivityClassifications_aggregate?: Maybe<AggregationResult>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  system: Scalars['String']['output'];
+  updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type EcoinventClassificationEcoinventActivityClassificationsArgs = {
+  filter?: InputMaybe<EcoinventActivityClassificationsListFilter>;
+};
+
+
+export type EcoinventClassificationEcoinventActivityClassifications_AggregateArgs = {
+  filter?: InputMaybe<EcoinventActivityClassificationsListFilter>;
+};
+
+/** Data needed to create or update EcoinventClassifications. If an ID is passed, this is an update, otherwise it's an insert. */
+export type EcoinventClassificationCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  ecoinventActivityClassifications?: InputMaybe<Array<EcoinventActivityClassificationCreateOrUpdateInput>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  system?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to create EcoinventClassifications. */
+export type EcoinventClassificationInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  ecoinventActivityClassifications?: InputMaybe<Array<EcoinventActivityClassificationCreateOrUpdateInput>>;
+  name: Scalars['String']['input'];
+  system: Scalars['String']['input'];
+  updatedAt: Scalars['ISOString']['input'];
+};
+
+/** Data needed to update EcoinventClassifications. An ID must be passed. */
+export type EcoinventClassificationUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  ecoinventActivityClassifications?: InputMaybe<Array<EcoinventActivityClassificationCreateOrUpdateInput>>;
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  system?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type EcoinventClassificationsListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_gt?: InputMaybe<Scalars['String']['input']>;
+  description_gte?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_lt?: InputMaybe<Scalars['String']['input']>;
+  description_lte?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  description_null?: InputMaybe<Scalars['Boolean']['input']>;
+  ecoinventActivityClassifications?: InputMaybe<EcoinventActivityClassificationsListFilter>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  system?: InputMaybe<Scalars['String']['input']>;
+  system_gt?: InputMaybe<Scalars['String']['input']>;
+  system_gte?: InputMaybe<Scalars['String']['input']>;
+  system_ilike?: InputMaybe<Scalars['String']['input']>;
+  system_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  system_like?: InputMaybe<Scalars['String']['input']>;
+  system_lt?: InputMaybe<Scalars['String']['input']>;
+  system_lte?: InputMaybe<Scalars['String']['input']>;
+  system_ne?: InputMaybe<Scalars['String']['input']>;
+  system_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  system_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  system_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type EcoinventClassificationsOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
+  description?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  system?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for EcoinventClassifications. */
+export type EcoinventClassificationsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EcoinventClassificationsOrderByInput>;
+};
+
+export type EcoinventDataListFilter = {
+  activityName?: InputMaybe<Scalars['String']['input']>;
+  activityName_gt?: InputMaybe<Scalars['String']['input']>;
+  activityName_gte?: InputMaybe<Scalars['String']['input']>;
+  activityName_ilike?: InputMaybe<Scalars['String']['input']>;
+  activityName_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  activityName_like?: InputMaybe<Scalars['String']['input']>;
+  activityName_lt?: InputMaybe<Scalars['String']['input']>;
+  activityName_lte?: InputMaybe<Scalars['String']['input']>;
+  activityName_ne?: InputMaybe<Scalars['String']['input']>;
+  activityName_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  activityName_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  activityName_null?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_gt?: InputMaybe<Scalars['String']['input']>;
+  description_gte?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_lt?: InputMaybe<Scalars['String']['input']>;
+  description_lte?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  description_null?: InputMaybe<Scalars['Boolean']['input']>;
+  ecoinventImport?: InputMaybe<EcoinventImportsListFilter>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
+  key_gt?: InputMaybe<Scalars['String']['input']>;
+  key_gte?: InputMaybe<Scalars['String']['input']>;
+  key_ilike?: InputMaybe<Scalars['String']['input']>;
+  key_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  key_like?: InputMaybe<Scalars['String']['input']>;
+  key_lt?: InputMaybe<Scalars['String']['input']>;
+  key_lte?: InputMaybe<Scalars['String']['input']>;
+  key_ne?: InputMaybe<Scalars['String']['input']>;
+  key_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  key_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  key_null?: InputMaybe<Scalars['Boolean']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  location_gt?: InputMaybe<Scalars['String']['input']>;
+  location_gte?: InputMaybe<Scalars['String']['input']>;
+  location_ilike?: InputMaybe<Scalars['String']['input']>;
+  location_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  location_like?: InputMaybe<Scalars['String']['input']>;
+  location_lt?: InputMaybe<Scalars['String']['input']>;
+  location_lte?: InputMaybe<Scalars['String']['input']>;
+  location_ne?: InputMaybe<Scalars['String']['input']>;
+  location_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  location_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  location_null?: InputMaybe<Scalars['Boolean']['input']>;
+  parsed?: InputMaybe<Scalars['JSON']['input']>;
+  parsed_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  parsed_ne?: InputMaybe<Scalars['JSON']['input']>;
+  parsed_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  parsed_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  parsed_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  xml?: InputMaybe<Scalars['String']['input']>;
+  xml_gt?: InputMaybe<Scalars['String']['input']>;
+  xml_gte?: InputMaybe<Scalars['String']['input']>;
+  xml_ilike?: InputMaybe<Scalars['String']['input']>;
+  xml_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  xml_like?: InputMaybe<Scalars['String']['input']>;
+  xml_lt?: InputMaybe<Scalars['String']['input']>;
+  xml_lte?: InputMaybe<Scalars['String']['input']>;
+  xml_ne?: InputMaybe<Scalars['String']['input']>;
+  xml_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  xml_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  xml_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type EcoinventDataOrderByInput = {
+  activityName?: InputMaybe<Sort>;
+  createdAt?: InputMaybe<Sort>;
+  description?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  key?: InputMaybe<Sort>;
+  location?: InputMaybe<Sort>;
+  parsed?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+  xml?: InputMaybe<Sort>;
+};
+
+/** Pagination options for EcoinventData. */
+export type EcoinventDataPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EcoinventDataOrderByInput>;
+};
+
+export type EcoinventDatum = {
+  __typename?: 'EcoinventDatum';
+  activityName?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['ISOString']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  ecoinventImport: EcoinventImport;
+  ecoinventImport_aggregate?: Maybe<AggregationResult>;
+  id: Scalars['ID']['output'];
+  key: Scalars['String']['output'];
+  location?: Maybe<Scalars['String']['output']>;
+  parsed?: Maybe<Scalars['JSON']['output']>;
+  updatedAt?: Maybe<Scalars['ISOString']['output']>;
+  xml?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type EcoinventDatumEcoinventImportArgs = {
+  filter?: InputMaybe<EcoinventImportsListFilter>;
+};
+
+
+export type EcoinventDatumEcoinventImport_AggregateArgs = {
+  filter?: InputMaybe<EcoinventImportsListFilter>;
+};
+
+/** Data needed to create or update EcoinventData. If an ID is passed, this is an update, otherwise it's an insert. */
+export type EcoinventDatumCreateOrUpdateInput = {
+  activityName?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  ecoinventImport?: InputMaybe<EcoinventImportCreateOrUpdateInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  parsed?: InputMaybe<Scalars['JSON']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  xml?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Data needed to create EcoinventData. */
+export type EcoinventDatumInsertInput = {
+  activityName?: InputMaybe<Scalars['String']['input']>;
+  createdAt: Scalars['ISOString']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  ecoinventImport?: InputMaybe<EcoinventImportCreateOrUpdateInput>;
+  key: Scalars['String']['input'];
+  location?: InputMaybe<Scalars['String']['input']>;
+  parsed?: InputMaybe<Scalars['JSON']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  xml?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Data needed to update EcoinventData. An ID must be passed. */
+export type EcoinventDatumUpdateInput = {
+  activityName?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  ecoinventImport?: InputMaybe<EcoinventImportCreateOrUpdateInput>;
+  id: Scalars['ID']['input'];
+  key?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  parsed?: InputMaybe<Scalars['JSON']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  xml?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type EcoinventImpactCategoriesListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  ecoinventActivityImpacts?: InputMaybe<EcoinventActivityImpactsListFilter>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  impactMethod?: InputMaybe<Scalars['String']['input']>;
+  impactMethod_gt?: InputMaybe<Scalars['String']['input']>;
+  impactMethod_gte?: InputMaybe<Scalars['String']['input']>;
+  impactMethod_ilike?: InputMaybe<Scalars['String']['input']>;
+  impactMethod_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  impactMethod_like?: InputMaybe<Scalars['String']['input']>;
+  impactMethod_lt?: InputMaybe<Scalars['String']['input']>;
+  impactMethod_lte?: InputMaybe<Scalars['String']['input']>;
+  impactMethod_ne?: InputMaybe<Scalars['String']['input']>;
+  impactMethod_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  impactMethod_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  impactMethod_null?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type EcoinventImpactCategoriesOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  impactMethod?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for EcoinventImpactCategories. */
+export type EcoinventImpactCategoriesPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EcoinventImpactCategoriesOrderByInput>;
+};
+
+export type EcoinventImpactCategory = {
+  __typename?: 'EcoinventImpactCategory';
+  createdAt: Scalars['ISOString']['output'];
+  ecoinventActivityImpacts: Array<EcoinventActivityImpact>;
+  ecoinventActivityImpacts_aggregate?: Maybe<AggregationResult>;
+  id: Scalars['ID']['output'];
+  impactMethod: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type EcoinventImpactCategoryEcoinventActivityImpactsArgs = {
+  filter?: InputMaybe<EcoinventActivityImpactsListFilter>;
+};
+
+
+export type EcoinventImpactCategoryEcoinventActivityImpacts_AggregateArgs = {
+  filter?: InputMaybe<EcoinventActivityImpactsListFilter>;
+};
+
+/** Data needed to create or update EcoinventImpactCategories. If an ID is passed, this is an update, otherwise it's an insert. */
+export type EcoinventImpactCategoryCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  ecoinventActivityImpacts?: InputMaybe<Array<EcoinventActivityImpactCreateOrUpdateInput>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  impactMethod?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to create EcoinventImpactCategories. */
+export type EcoinventImpactCategoryInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  ecoinventActivityImpacts?: InputMaybe<Array<EcoinventActivityImpactCreateOrUpdateInput>>;
+  impactMethod: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  updatedAt: Scalars['ISOString']['input'];
+};
+
+/** Data needed to update EcoinventImpactCategories. An ID must be passed. */
+export type EcoinventImpactCategoryUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  ecoinventActivityImpacts?: InputMaybe<Array<EcoinventActivityImpactCreateOrUpdateInput>>;
+  id: Scalars['ID']['input'];
+  impactMethod?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type EcoinventImport = {
+  __typename?: 'EcoinventImport';
+  activityName: Scalars['String']['output'];
+  bucket: Scalars['String']['output'];
+  createdAt: Scalars['ISOString']['output'];
+  ecoinventData: Array<EcoinventDatum>;
+  ecoinventData_aggregate?: Maybe<AggregationResult>;
+  id: Scalars['ID']['output'];
+  jobStatus?: Maybe<Scalars['String']['output']>;
+  key: Scalars['String']['output'];
+  location: Scalars['String']['output'];
+  processingStatus: EcoinventImportsProcessingStatus;
+  referenceProduct: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['ISOString']['output']>;
+};
+
+
+export type EcoinventImportEcoinventDataArgs = {
+  filter?: InputMaybe<EcoinventDataListFilter>;
+};
+
+
+export type EcoinventImportEcoinventData_AggregateArgs = {
+  filter?: InputMaybe<EcoinventDataListFilter>;
+};
+
+/** Data needed to create or update EcoinventImports. If an ID is passed, this is an update, otherwise it's an insert. */
+export type EcoinventImportCreateOrUpdateInput = {
+  activityName?: InputMaybe<Scalars['String']['input']>;
+  bucket?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  ecoinventData?: InputMaybe<Array<EcoinventDatumCreateOrUpdateInput>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  jobStatus?: InputMaybe<Scalars['String']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  processingStatus?: InputMaybe<EcoinventImportsProcessingStatus>;
+  referenceProduct?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to create EcoinventImports. */
+export type EcoinventImportInsertInput = {
+  activityName: Scalars['String']['input'];
+  bucket: Scalars['String']['input'];
+  createdAt: Scalars['ISOString']['input'];
+  ecoinventData?: InputMaybe<Array<EcoinventDatumCreateOrUpdateInput>>;
+  jobStatus?: InputMaybe<Scalars['String']['input']>;
+  key: Scalars['String']['input'];
+  location: Scalars['String']['input'];
+  processingStatus: EcoinventImportsProcessingStatus;
+  referenceProduct: Scalars['String']['input'];
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+/** Data needed to update EcoinventImports. An ID must be passed. */
+export type EcoinventImportUpdateInput = {
+  activityName?: InputMaybe<Scalars['String']['input']>;
+  bucket?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  ecoinventData?: InputMaybe<Array<EcoinventDatumCreateOrUpdateInput>>;
+  id: Scalars['ID']['input'];
+  jobStatus?: InputMaybe<Scalars['String']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  processingStatus?: InputMaybe<EcoinventImportsProcessingStatus>;
+  referenceProduct?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+};
+
+export type EcoinventImportsListFilter = {
+  activityName?: InputMaybe<Scalars['String']['input']>;
+  activityName_gt?: InputMaybe<Scalars['String']['input']>;
+  activityName_gte?: InputMaybe<Scalars['String']['input']>;
+  activityName_ilike?: InputMaybe<Scalars['String']['input']>;
+  activityName_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  activityName_like?: InputMaybe<Scalars['String']['input']>;
+  activityName_lt?: InputMaybe<Scalars['String']['input']>;
+  activityName_lte?: InputMaybe<Scalars['String']['input']>;
+  activityName_ne?: InputMaybe<Scalars['String']['input']>;
+  activityName_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  activityName_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  activityName_null?: InputMaybe<Scalars['Boolean']['input']>;
+  bucket?: InputMaybe<Scalars['String']['input']>;
+  bucket_gt?: InputMaybe<Scalars['String']['input']>;
+  bucket_gte?: InputMaybe<Scalars['String']['input']>;
+  bucket_ilike?: InputMaybe<Scalars['String']['input']>;
+  bucket_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  bucket_like?: InputMaybe<Scalars['String']['input']>;
+  bucket_lt?: InputMaybe<Scalars['String']['input']>;
+  bucket_lte?: InputMaybe<Scalars['String']['input']>;
+  bucket_ne?: InputMaybe<Scalars['String']['input']>;
+  bucket_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  bucket_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  bucket_null?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  ecoinventData?: InputMaybe<EcoinventDataListFilter>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  jobStatus?: InputMaybe<Scalars['String']['input']>;
+  jobStatus_gt?: InputMaybe<Scalars['String']['input']>;
+  jobStatus_gte?: InputMaybe<Scalars['String']['input']>;
+  jobStatus_ilike?: InputMaybe<Scalars['String']['input']>;
+  jobStatus_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  jobStatus_like?: InputMaybe<Scalars['String']['input']>;
+  jobStatus_lt?: InputMaybe<Scalars['String']['input']>;
+  jobStatus_lte?: InputMaybe<Scalars['String']['input']>;
+  jobStatus_ne?: InputMaybe<Scalars['String']['input']>;
+  jobStatus_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  jobStatus_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  jobStatus_null?: InputMaybe<Scalars['Boolean']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
+  key_gt?: InputMaybe<Scalars['String']['input']>;
+  key_gte?: InputMaybe<Scalars['String']['input']>;
+  key_ilike?: InputMaybe<Scalars['String']['input']>;
+  key_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  key_like?: InputMaybe<Scalars['String']['input']>;
+  key_lt?: InputMaybe<Scalars['String']['input']>;
+  key_lte?: InputMaybe<Scalars['String']['input']>;
+  key_ne?: InputMaybe<Scalars['String']['input']>;
+  key_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  key_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  key_null?: InputMaybe<Scalars['Boolean']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  location_gt?: InputMaybe<Scalars['String']['input']>;
+  location_gte?: InputMaybe<Scalars['String']['input']>;
+  location_ilike?: InputMaybe<Scalars['String']['input']>;
+  location_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  location_like?: InputMaybe<Scalars['String']['input']>;
+  location_lt?: InputMaybe<Scalars['String']['input']>;
+  location_lte?: InputMaybe<Scalars['String']['input']>;
+  location_ne?: InputMaybe<Scalars['String']['input']>;
+  location_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  location_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  location_null?: InputMaybe<Scalars['Boolean']['input']>;
+  processingStatus?: InputMaybe<EcoinventImportsProcessingStatus>;
+  processingStatus_in?: InputMaybe<Array<EcoinventImportsProcessingStatus>>;
+  processingStatus_nin?: InputMaybe<Array<EcoinventImportsProcessingStatus>>;
+  referenceProduct?: InputMaybe<Scalars['String']['input']>;
+  referenceProduct_gt?: InputMaybe<Scalars['String']['input']>;
+  referenceProduct_gte?: InputMaybe<Scalars['String']['input']>;
+  referenceProduct_ilike?: InputMaybe<Scalars['String']['input']>;
+  referenceProduct_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  referenceProduct_like?: InputMaybe<Scalars['String']['input']>;
+  referenceProduct_lt?: InputMaybe<Scalars['String']['input']>;
+  referenceProduct_lte?: InputMaybe<Scalars['String']['input']>;
+  referenceProduct_ne?: InputMaybe<Scalars['String']['input']>;
+  referenceProduct_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  referenceProduct_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  referenceProduct_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type EcoinventImportsOrderByInput = {
+  activityName?: InputMaybe<Sort>;
+  bucket?: InputMaybe<Sort>;
+  createdAt?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  jobStatus?: InputMaybe<Sort>;
+  key?: InputMaybe<Sort>;
+  location?: InputMaybe<Sort>;
+  processingStatus?: InputMaybe<Sort>;
+  referenceProduct?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
+};
+
+/** Pagination options for EcoinventImports. */
+export type EcoinventImportsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EcoinventImportsOrderByInput>;
+};
+
+export enum EcoinventImportsProcessingStatus {
+  AiProcessing = 'AI_PROCESSING',
+  ImportComplete = 'IMPORT_COMPLETE',
+  JobProcessing = 'JOB_PROCESSING',
+  ManualReview = 'MANUAL_REVIEW',
+  Pending = 'PENDING',
+  ProcessingError = 'PROCESSING_ERROR'
+}
+
 export type Emission = {
   __typename?: 'Emission';
   activityData: Scalars['JSON']['output'];
@@ -3995,6 +5046,8 @@ export type Material = {
   emissionStats?: Maybe<Scalars['JSON']['output']>;
   emissionsFactor?: Maybe<Scalars['Float']['output']>;
   id: Scalars['ID']['output'];
+  length?: Maybe<Scalars['Float']['output']>;
+  lengthUnitOfMeasure?: Maybe<Scalars['String']['output']>;
   materialCategory?: Maybe<Scalars['String']['output']>;
   materialClassification?: Maybe<MaterialClassification>;
   materialClassification_aggregate?: Maybe<AggregationResult>;
@@ -4296,6 +5349,8 @@ export type MaterialCreateOrUpdateInput = {
   emissionStats?: InputMaybe<Scalars['JSON']['input']>;
   emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  length?: InputMaybe<Scalars['Float']['input']>;
+  lengthUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
   materialCategory?: InputMaybe<Scalars['String']['input']>;
   materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
   materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
@@ -4318,12 +5373,24 @@ export type MaterialCreateOrUpdateInput = {
 export type MaterialEmissionFactor = {
   __typename?: 'MaterialEmissionFactor';
   createdAt: Scalars['ISOString']['output'];
+  ecoinventActivity?: Maybe<EcoinventActivity>;
+  ecoinventActivity_aggregate?: Maybe<AggregationResult>;
   emissionFactor: EmissionFactor;
   emissionFactor_aggregate?: Maybe<AggregationResult>;
   id: Scalars['ID']['output'];
   material: Material;
   material_aggregate?: Maybe<AggregationResult>;
   updatedAt: Scalars['ISOString']['output'];
+};
+
+
+export type MaterialEmissionFactorEcoinventActivityArgs = {
+  filter?: InputMaybe<EcoinventActivitiesListFilter>;
+};
+
+
+export type MaterialEmissionFactorEcoinventActivity_AggregateArgs = {
+  filter?: InputMaybe<EcoinventActivitiesListFilter>;
 };
 
 
@@ -4349,6 +5416,7 @@ export type MaterialEmissionFactorMaterial_AggregateArgs = {
 /** Data needed to create or update MaterialEmissionFactors. If an ID is passed, this is an update, otherwise it's an insert. */
 export type MaterialEmissionFactorCreateOrUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
   emissionFactor?: InputMaybe<EmissionFactorCreateOrUpdateInput>;
   id?: InputMaybe<Scalars['ID']['input']>;
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
@@ -4358,6 +5426,7 @@ export type MaterialEmissionFactorCreateOrUpdateInput = {
 /** Data needed to create MaterialEmissionFactors. */
 export type MaterialEmissionFactorInsertInput = {
   createdAt: Scalars['ISOString']['input'];
+  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
   emissionFactor?: InputMaybe<EmissionFactorCreateOrUpdateInput>;
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
   updatedAt: Scalars['ISOString']['input'];
@@ -4366,6 +5435,7 @@ export type MaterialEmissionFactorInsertInput = {
 /** Data needed to update MaterialEmissionFactors. An ID must be passed. */
 export type MaterialEmissionFactorUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
   emissionFactor?: InputMaybe<EmissionFactorCreateOrUpdateInput>;
   id: Scalars['ID']['input'];
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
@@ -4383,6 +5453,7 @@ export type MaterialEmissionFactorsListFilter = {
   createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
   createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
+  ecoinventActivity?: InputMaybe<EcoinventActivitiesListFilter>;
   emissionFactor?: InputMaybe<EmissionFactorsListFilter>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
@@ -4432,6 +5503,8 @@ export type MaterialInsertInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   emissionStats?: InputMaybe<Scalars['JSON']['input']>;
   emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
+  length?: InputMaybe<Scalars['Float']['input']>;
+  lengthUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
   materialCategory?: InputMaybe<Scalars['String']['input']>;
   materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
   materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
@@ -4824,6 +5897,8 @@ export type MaterialUpdateInput = {
   emissionStats?: InputMaybe<Scalars['JSON']['input']>;
   emissionsFactor?: InputMaybe<Scalars['Float']['input']>;
   id: Scalars['ID']['input'];
+  length?: InputMaybe<Scalars['Float']['input']>;
+  lengthUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
   materialCategory?: InputMaybe<Scalars['String']['input']>;
   materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
   materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
@@ -4943,6 +6018,24 @@ export type MaterialsListFilter = {
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  length?: InputMaybe<Scalars['Float']['input']>;
+  lengthUnitOfMeasure?: InputMaybe<Scalars['String']['input']>;
+  lengthUnitOfMeasure_gt?: InputMaybe<Scalars['String']['input']>;
+  lengthUnitOfMeasure_gte?: InputMaybe<Scalars['String']['input']>;
+  lengthUnitOfMeasure_ilike?: InputMaybe<Scalars['String']['input']>;
+  lengthUnitOfMeasure_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  lengthUnitOfMeasure_like?: InputMaybe<Scalars['String']['input']>;
+  lengthUnitOfMeasure_lt?: InputMaybe<Scalars['String']['input']>;
+  lengthUnitOfMeasure_lte?: InputMaybe<Scalars['String']['input']>;
+  lengthUnitOfMeasure_ne?: InputMaybe<Scalars['String']['input']>;
+  lengthUnitOfMeasure_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  lengthUnitOfMeasure_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  lengthUnitOfMeasure_null?: InputMaybe<Scalars['Boolean']['input']>;
+  length_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  length_ne?: InputMaybe<Scalars['Float']['input']>;
+  length_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  length_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  length_null?: InputMaybe<Scalars['Boolean']['input']>;
   materialCategory?: InputMaybe<Scalars['String']['input']>;
   materialCategory_gt?: InputMaybe<Scalars['String']['input']>;
   materialCategory_gte?: InputMaybe<Scalars['String']['input']>;
@@ -5063,6 +6156,8 @@ export type MaterialsOrderByInput = {
   emissionStats?: InputMaybe<Sort>;
   emissionsFactor?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
+  length?: InputMaybe<Sort>;
+  lengthUnitOfMeasure?: InputMaybe<Sort>;
   materialCategory?: InputMaybe<Sort>;
   materialSubcategory?: InputMaybe<Sort>;
   metadata?: InputMaybe<Sort>;
@@ -5256,6 +6351,34 @@ export type Mutation = {
   createCoreClassification?: Maybe<CoreClassification>;
   /** Create many CoreClassifications. */
   createCoreClassifications?: Maybe<Array<Maybe<CoreClassification>>>;
+  /** Create many EcoinventActivities. */
+  createEcoinventActivities?: Maybe<Array<Maybe<EcoinventActivity>>>;
+  /** Create a single EcoinventActivity. */
+  createEcoinventActivity?: Maybe<EcoinventActivity>;
+  /** Create a single EcoinventActivityClassification. */
+  createEcoinventActivityClassification?: Maybe<EcoinventActivityClassification>;
+  /** Create many EcoinventActivityClassifications. */
+  createEcoinventActivityClassifications?: Maybe<Array<Maybe<EcoinventActivityClassification>>>;
+  /** Create a single EcoinventActivityImpact. */
+  createEcoinventActivityImpact?: Maybe<EcoinventActivityImpact>;
+  /** Create many EcoinventActivityImpacts. */
+  createEcoinventActivityImpacts?: Maybe<Array<Maybe<EcoinventActivityImpact>>>;
+  /** Create a single EcoinventClassification. */
+  createEcoinventClassification?: Maybe<EcoinventClassification>;
+  /** Create many EcoinventClassifications. */
+  createEcoinventClassifications?: Maybe<Array<Maybe<EcoinventClassification>>>;
+  /** Create many EcoinventData. */
+  createEcoinventData?: Maybe<Array<Maybe<EcoinventDatum>>>;
+  /** Create a single EcoinventDatum. */
+  createEcoinventDatum?: Maybe<EcoinventDatum>;
+  /** Create many EcoinventImpactCategories. */
+  createEcoinventImpactCategories?: Maybe<Array<Maybe<EcoinventImpactCategory>>>;
+  /** Create a single EcoinventImpactCategory. */
+  createEcoinventImpactCategory?: Maybe<EcoinventImpactCategory>;
+  /** Create a single EcoinventImport. */
+  createEcoinventImport?: Maybe<EcoinventImport>;
+  /** Create many EcoinventImports. */
+  createEcoinventImports?: Maybe<Array<Maybe<EcoinventImport>>>;
   /** Create a single Emission. */
   createEmission?: Maybe<Emission>;
   /** Create a single EmissionFactor. */
@@ -5332,6 +6455,20 @@ export type Mutation = {
   createOrUpdateComponentDefinitions?: Maybe<Array<Maybe<ComponentDefinition>>>;
   /** Create or update many CoreClassifications. */
   createOrUpdateCoreClassifications?: Maybe<Array<Maybe<CoreClassification>>>;
+  /** Create or update many EcoinventActivities. */
+  createOrUpdateEcoinventActivities?: Maybe<Array<Maybe<EcoinventActivity>>>;
+  /** Create or update many EcoinventActivityClassifications. */
+  createOrUpdateEcoinventActivityClassifications?: Maybe<Array<Maybe<EcoinventActivityClassification>>>;
+  /** Create or update many EcoinventActivityImpacts. */
+  createOrUpdateEcoinventActivityImpacts?: Maybe<Array<Maybe<EcoinventActivityImpact>>>;
+  /** Create or update many EcoinventClassifications. */
+  createOrUpdateEcoinventClassifications?: Maybe<Array<Maybe<EcoinventClassification>>>;
+  /** Create or update many EcoinventData. */
+  createOrUpdateEcoinventData?: Maybe<Array<Maybe<EcoinventDatum>>>;
+  /** Create or update many EcoinventImpactCategories. */
+  createOrUpdateEcoinventImpactCategories?: Maybe<Array<Maybe<EcoinventImpactCategory>>>;
+  /** Create or update many EcoinventImports. */
+  createOrUpdateEcoinventImports?: Maybe<Array<Maybe<EcoinventImport>>>;
   /** Create or update many EmissionFactors. */
   createOrUpdateEmissionFactors?: Maybe<Array<Maybe<EmissionFactor>>>;
   /** Create or update many EmissionScopes. */
@@ -5586,6 +6723,34 @@ export type Mutation = {
   deleteCoreClassification?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many CoreClassifications with a filter. */
   deleteCoreClassifications?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many EcoinventActivities with a filter. */
+  deleteEcoinventActivities?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single EcoinventActivity. */
+  deleteEcoinventActivity?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single EcoinventActivityClassification. */
+  deleteEcoinventActivityClassification?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many EcoinventActivityClassifications with a filter. */
+  deleteEcoinventActivityClassifications?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single EcoinventActivityImpact. */
+  deleteEcoinventActivityImpact?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many EcoinventActivityImpacts with a filter. */
+  deleteEcoinventActivityImpacts?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single EcoinventClassification. */
+  deleteEcoinventClassification?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many EcoinventClassifications with a filter. */
+  deleteEcoinventClassifications?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many EcoinventData with a filter. */
+  deleteEcoinventData?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single EcoinventDatum. */
+  deleteEcoinventDatum?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many EcoinventImpactCategories with a filter. */
+  deleteEcoinventImpactCategories?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single EcoinventImpactCategory. */
+  deleteEcoinventImpactCategory?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single EcoinventImport. */
+  deleteEcoinventImport?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many EcoinventImports with a filter. */
+  deleteEcoinventImports?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single Emission. */
   deleteEmission?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single EmissionFactor. */
@@ -5806,6 +6971,34 @@ export type Mutation = {
   updateCoreClassification?: Maybe<CoreClassification>;
   /** Update many CoreClassifications. */
   updateCoreClassifications?: Maybe<Array<Maybe<CoreClassification>>>;
+  /** Update many EcoinventActivities. */
+  updateEcoinventActivities?: Maybe<Array<Maybe<EcoinventActivity>>>;
+  /** Update a single EcoinventActivity. */
+  updateEcoinventActivity?: Maybe<EcoinventActivity>;
+  /** Update a single EcoinventActivityClassification. */
+  updateEcoinventActivityClassification?: Maybe<EcoinventActivityClassification>;
+  /** Update many EcoinventActivityClassifications. */
+  updateEcoinventActivityClassifications?: Maybe<Array<Maybe<EcoinventActivityClassification>>>;
+  /** Update a single EcoinventActivityImpact. */
+  updateEcoinventActivityImpact?: Maybe<EcoinventActivityImpact>;
+  /** Update many EcoinventActivityImpacts. */
+  updateEcoinventActivityImpacts?: Maybe<Array<Maybe<EcoinventActivityImpact>>>;
+  /** Update a single EcoinventClassification. */
+  updateEcoinventClassification?: Maybe<EcoinventClassification>;
+  /** Update many EcoinventClassifications. */
+  updateEcoinventClassifications?: Maybe<Array<Maybe<EcoinventClassification>>>;
+  /** Update many EcoinventData. */
+  updateEcoinventData?: Maybe<Array<Maybe<EcoinventDatum>>>;
+  /** Update a single EcoinventDatum. */
+  updateEcoinventDatum?: Maybe<EcoinventDatum>;
+  /** Update many EcoinventImpactCategories. */
+  updateEcoinventImpactCategories?: Maybe<Array<Maybe<EcoinventImpactCategory>>>;
+  /** Update a single EcoinventImpactCategory. */
+  updateEcoinventImpactCategory?: Maybe<EcoinventImpactCategory>;
+  /** Update a single EcoinventImport. */
+  updateEcoinventImport?: Maybe<EcoinventImport>;
+  /** Update many EcoinventImports. */
+  updateEcoinventImports?: Maybe<Array<Maybe<EcoinventImport>>>;
   /** Update a single Emission. */
   updateEmission?: Maybe<Emission>;
   /** Update a single EmissionFactor. */
@@ -6113,6 +7306,76 @@ export type MutationCreateCoreClassificationsArgs = {
 };
 
 
+export type MutationCreateEcoinventActivitiesArgs = {
+  input: Array<EcoinventActivityInsertInput>;
+};
+
+
+export type MutationCreateEcoinventActivityArgs = {
+  input: EcoinventActivityInsertInput;
+};
+
+
+export type MutationCreateEcoinventActivityClassificationArgs = {
+  input: EcoinventActivityClassificationInsertInput;
+};
+
+
+export type MutationCreateEcoinventActivityClassificationsArgs = {
+  input: Array<EcoinventActivityClassificationInsertInput>;
+};
+
+
+export type MutationCreateEcoinventActivityImpactArgs = {
+  input: EcoinventActivityImpactInsertInput;
+};
+
+
+export type MutationCreateEcoinventActivityImpactsArgs = {
+  input: Array<EcoinventActivityImpactInsertInput>;
+};
+
+
+export type MutationCreateEcoinventClassificationArgs = {
+  input: EcoinventClassificationInsertInput;
+};
+
+
+export type MutationCreateEcoinventClassificationsArgs = {
+  input: Array<EcoinventClassificationInsertInput>;
+};
+
+
+export type MutationCreateEcoinventDataArgs = {
+  input: Array<EcoinventDatumInsertInput>;
+};
+
+
+export type MutationCreateEcoinventDatumArgs = {
+  input: EcoinventDatumInsertInput;
+};
+
+
+export type MutationCreateEcoinventImpactCategoriesArgs = {
+  input: Array<EcoinventImpactCategoryInsertInput>;
+};
+
+
+export type MutationCreateEcoinventImpactCategoryArgs = {
+  input: EcoinventImpactCategoryInsertInput;
+};
+
+
+export type MutationCreateEcoinventImportArgs = {
+  input: EcoinventImportInsertInput;
+};
+
+
+export type MutationCreateEcoinventImportsArgs = {
+  input: Array<EcoinventImportInsertInput>;
+};
+
+
 export type MutationCreateEmissionArgs = {
   input: EmissionInsertInput;
 };
@@ -6300,6 +7563,41 @@ export type MutationCreateOrUpdateComponentDefinitionsArgs = {
 
 export type MutationCreateOrUpdateCoreClassificationsArgs = {
   input: Array<CoreClassificationCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateEcoinventActivitiesArgs = {
+  input: Array<EcoinventActivityCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateEcoinventActivityClassificationsArgs = {
+  input: Array<EcoinventActivityClassificationCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateEcoinventActivityImpactsArgs = {
+  input: Array<EcoinventActivityImpactCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateEcoinventClassificationsArgs = {
+  input: Array<EcoinventClassificationCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateEcoinventDataArgs = {
+  input: Array<EcoinventDatumCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateEcoinventImpactCategoriesArgs = {
+  input: Array<EcoinventImpactCategoryCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateEcoinventImportsArgs = {
+  input: Array<EcoinventImportCreateOrUpdateInput>;
 };
 
 
@@ -6938,6 +8236,76 @@ export type MutationDeleteCoreClassificationsArgs = {
 };
 
 
+export type MutationDeleteEcoinventActivitiesArgs = {
+  filter: EcoinventActivitiesListFilter;
+};
+
+
+export type MutationDeleteEcoinventActivityArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteEcoinventActivityClassificationArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteEcoinventActivityClassificationsArgs = {
+  filter: EcoinventActivityClassificationsListFilter;
+};
+
+
+export type MutationDeleteEcoinventActivityImpactArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteEcoinventActivityImpactsArgs = {
+  filter: EcoinventActivityImpactsListFilter;
+};
+
+
+export type MutationDeleteEcoinventClassificationArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteEcoinventClassificationsArgs = {
+  filter: EcoinventClassificationsListFilter;
+};
+
+
+export type MutationDeleteEcoinventDataArgs = {
+  filter: EcoinventDataListFilter;
+};
+
+
+export type MutationDeleteEcoinventDatumArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteEcoinventImpactCategoriesArgs = {
+  filter: EcoinventImpactCategoriesListFilter;
+};
+
+
+export type MutationDeleteEcoinventImpactCategoryArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteEcoinventImportArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteEcoinventImportsArgs = {
+  filter: EcoinventImportsListFilter;
+};
+
+
 export type MutationDeleteEmissionArgs = {
   filter: DeleteOneFilterInput;
 };
@@ -7485,6 +8853,76 @@ export type MutationUpdateCoreClassificationArgs = {
 
 export type MutationUpdateCoreClassificationsArgs = {
   input: Array<CoreClassificationUpdateInput>;
+};
+
+
+export type MutationUpdateEcoinventActivitiesArgs = {
+  input: Array<EcoinventActivityUpdateInput>;
+};
+
+
+export type MutationUpdateEcoinventActivityArgs = {
+  input: EcoinventActivityUpdateInput;
+};
+
+
+export type MutationUpdateEcoinventActivityClassificationArgs = {
+  input: EcoinventActivityClassificationUpdateInput;
+};
+
+
+export type MutationUpdateEcoinventActivityClassificationsArgs = {
+  input: Array<EcoinventActivityClassificationUpdateInput>;
+};
+
+
+export type MutationUpdateEcoinventActivityImpactArgs = {
+  input: EcoinventActivityImpactUpdateInput;
+};
+
+
+export type MutationUpdateEcoinventActivityImpactsArgs = {
+  input: Array<EcoinventActivityImpactUpdateInput>;
+};
+
+
+export type MutationUpdateEcoinventClassificationArgs = {
+  input: EcoinventClassificationUpdateInput;
+};
+
+
+export type MutationUpdateEcoinventClassificationsArgs = {
+  input: Array<EcoinventClassificationUpdateInput>;
+};
+
+
+export type MutationUpdateEcoinventDataArgs = {
+  input: Array<EcoinventDatumUpdateInput>;
+};
+
+
+export type MutationUpdateEcoinventDatumArgs = {
+  input: EcoinventDatumUpdateInput;
+};
+
+
+export type MutationUpdateEcoinventImpactCategoriesArgs = {
+  input: Array<EcoinventImpactCategoryUpdateInput>;
+};
+
+
+export type MutationUpdateEcoinventImpactCategoryArgs = {
+  input: EcoinventImpactCategoryUpdateInput;
+};
+
+
+export type MutationUpdateEcoinventImportArgs = {
+  input: EcoinventImportUpdateInput;
+};
+
+
+export type MutationUpdateEcoinventImportsArgs = {
+  input: Array<EcoinventImportUpdateInput>;
 };
 
 
@@ -10824,7 +12262,9 @@ export type OrganizationFilesPaginationInput = {
 export enum OrganizationFilesProcessingStatus {
   AiProcessing = 'AI_PROCESSING',
   ImportComplete = 'IMPORT_COMPLETE',
+  JobProcessing = 'JOB_PROCESSING',
   ManualReview = 'MANUAL_REVIEW',
+  Pending = 'PENDING',
   ProcessingError = 'PROCESSING_ERROR'
 }
 
@@ -12476,6 +13916,48 @@ export type Query = {
   coreClassifications?: Maybe<Array<Maybe<CoreClassification>>>;
   /** Get aggregated data for CoreClassifications. */
   coreClassifications_aggregate?: Maybe<AggregationResult>;
+  /** Get multiple EcoinventActivities. */
+  ecoinventActivities?: Maybe<Array<Maybe<EcoinventActivity>>>;
+  /** Get aggregated data for EcoinventActivities. */
+  ecoinventActivities_aggregate?: Maybe<AggregationResult>;
+  /** Get a single EcoinventActivity. */
+  ecoinventActivity?: Maybe<EcoinventActivity>;
+  /** Get a single EcoinventActivityClassification. */
+  ecoinventActivityClassification?: Maybe<EcoinventActivityClassification>;
+  /** Get multiple EcoinventActivityClassifications. */
+  ecoinventActivityClassifications?: Maybe<Array<Maybe<EcoinventActivityClassification>>>;
+  /** Get aggregated data for EcoinventActivityClassifications. */
+  ecoinventActivityClassifications_aggregate?: Maybe<AggregationResult>;
+  /** Get a single EcoinventActivityImpact. */
+  ecoinventActivityImpact?: Maybe<EcoinventActivityImpact>;
+  /** Get multiple EcoinventActivityImpacts. */
+  ecoinventActivityImpacts?: Maybe<Array<Maybe<EcoinventActivityImpact>>>;
+  /** Get aggregated data for EcoinventActivityImpacts. */
+  ecoinventActivityImpacts_aggregate?: Maybe<AggregationResult>;
+  /** Get a single EcoinventClassification. */
+  ecoinventClassification?: Maybe<EcoinventClassification>;
+  /** Get multiple EcoinventClassifications. */
+  ecoinventClassifications?: Maybe<Array<Maybe<EcoinventClassification>>>;
+  /** Get aggregated data for EcoinventClassifications. */
+  ecoinventClassifications_aggregate?: Maybe<AggregationResult>;
+  /** Get multiple EcoinventData. */
+  ecoinventData?: Maybe<Array<Maybe<EcoinventDatum>>>;
+  /** Get aggregated data for EcoinventData. */
+  ecoinventData_aggregate?: Maybe<AggregationResult>;
+  /** Get a single EcoinventDatum. */
+  ecoinventDatum?: Maybe<EcoinventDatum>;
+  /** Get multiple EcoinventImpactCategories. */
+  ecoinventImpactCategories?: Maybe<Array<Maybe<EcoinventImpactCategory>>>;
+  /** Get aggregated data for EcoinventImpactCategories. */
+  ecoinventImpactCategories_aggregate?: Maybe<AggregationResult>;
+  /** Get a single EcoinventImpactCategory. */
+  ecoinventImpactCategory?: Maybe<EcoinventImpactCategory>;
+  /** Get a single EcoinventImport. */
+  ecoinventImport?: Maybe<EcoinventImport>;
+  /** Get multiple EcoinventImports. */
+  ecoinventImports?: Maybe<Array<Maybe<EcoinventImport>>>;
+  /** Get aggregated data for EcoinventImports. */
+  ecoinventImports_aggregate?: Maybe<AggregationResult>;
   /** Get a single Emission. */
   emission?: Maybe<Emission>;
   /** Get a single EmissionFactor. */
@@ -12946,6 +14428,118 @@ export type QueryCoreClassificationsArgs = {
 
 export type QueryCoreClassifications_AggregateArgs = {
   filter?: InputMaybe<CoreClassificationsListFilter>;
+};
+
+
+export type QueryEcoinventActivitiesArgs = {
+  filter?: InputMaybe<EcoinventActivitiesListFilter>;
+  pagination?: InputMaybe<EcoinventActivitiesPaginationInput>;
+};
+
+
+export type QueryEcoinventActivities_AggregateArgs = {
+  filter?: InputMaybe<EcoinventActivitiesListFilter>;
+};
+
+
+export type QueryEcoinventActivityArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryEcoinventActivityClassificationArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryEcoinventActivityClassificationsArgs = {
+  filter?: InputMaybe<EcoinventActivityClassificationsListFilter>;
+  pagination?: InputMaybe<EcoinventActivityClassificationsPaginationInput>;
+};
+
+
+export type QueryEcoinventActivityClassifications_AggregateArgs = {
+  filter?: InputMaybe<EcoinventActivityClassificationsListFilter>;
+};
+
+
+export type QueryEcoinventActivityImpactArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryEcoinventActivityImpactsArgs = {
+  filter?: InputMaybe<EcoinventActivityImpactsListFilter>;
+  pagination?: InputMaybe<EcoinventActivityImpactsPaginationInput>;
+};
+
+
+export type QueryEcoinventActivityImpacts_AggregateArgs = {
+  filter?: InputMaybe<EcoinventActivityImpactsListFilter>;
+};
+
+
+export type QueryEcoinventClassificationArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryEcoinventClassificationsArgs = {
+  filter?: InputMaybe<EcoinventClassificationsListFilter>;
+  pagination?: InputMaybe<EcoinventClassificationsPaginationInput>;
+};
+
+
+export type QueryEcoinventClassifications_AggregateArgs = {
+  filter?: InputMaybe<EcoinventClassificationsListFilter>;
+};
+
+
+export type QueryEcoinventDataArgs = {
+  filter?: InputMaybe<EcoinventDataListFilter>;
+  pagination?: InputMaybe<EcoinventDataPaginationInput>;
+};
+
+
+export type QueryEcoinventData_AggregateArgs = {
+  filter?: InputMaybe<EcoinventDataListFilter>;
+};
+
+
+export type QueryEcoinventDatumArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryEcoinventImpactCategoriesArgs = {
+  filter?: InputMaybe<EcoinventImpactCategoriesListFilter>;
+  pagination?: InputMaybe<EcoinventImpactCategoriesPaginationInput>;
+};
+
+
+export type QueryEcoinventImpactCategories_AggregateArgs = {
+  filter?: InputMaybe<EcoinventImpactCategoriesListFilter>;
+};
+
+
+export type QueryEcoinventImpactCategoryArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryEcoinventImportArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryEcoinventImportsArgs = {
+  filter?: InputMaybe<EcoinventImportsListFilter>;
+  pagination?: InputMaybe<EcoinventImportsPaginationInput>;
+};
+
+
+export type QueryEcoinventImports_AggregateArgs = {
+  filter?: InputMaybe<EcoinventImportsListFilter>;
 };
 
 

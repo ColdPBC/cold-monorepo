@@ -48,7 +48,7 @@ export class RabbitService extends BaseWorker {
 	async handleRPCMessages(msg: RabbitMessagePayload): Promise<any | Nack> {
 		try {
 			const parsed: unknown = msg.data || msg;
-			this.logger.info(`received RPC ${msg.event} request from ${msg.from}`, parsed);
+			this.logger.info(`received RPC ${msg.event} request from ${msg.from}`);
 
 			return this.processRPCMessage(msg.event, msg.from, parsed);
 		} catch (err) {

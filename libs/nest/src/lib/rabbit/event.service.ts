@@ -191,6 +191,7 @@ export class EventService extends BaseWorker {
 	 * @returns {Promise<any>} A Promise that resolves with the response from the event.
 	 */
 	async sendRPCEvent(routingKey: string, event: string, payload: any, options?: RabbitMessageOptions): Promise<any> {
-		await this.rabbit.request(routingKey, { from: 'cold-api', event, data: payload }, options);
+		const response = await this.rabbit.request(routingKey, { from: 'cold-api', event, data: payload }, options);
+		return response;
 	}
 }
