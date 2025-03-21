@@ -76,6 +76,9 @@ export class Product {
 	@Field(() => Number, { nullable: true })
 	weight?: number;
 
+	@Field(() => Number, { nullable: true })
+	totalCo2e?: number;
+
 	@RelationshipField<AttributeAssurance>(() => [AttributeAssurance], { relatedField: 'product' })
 	attributeAssurances!: AttributeAssurance[];
 

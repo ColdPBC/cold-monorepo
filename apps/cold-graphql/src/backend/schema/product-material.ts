@@ -52,4 +52,7 @@ export class ProductMaterial {
 
 	@Field(() => String, { nullable: true })
 	plmId?: string;
+
+	@Field(() => Number, { nullable: true })
+	totalCo2e?: number;
 }

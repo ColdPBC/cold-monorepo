@@ -699,6 +699,7 @@ model products {
   supplier_product_id     String?
   supplier_id             String?
   style_code              String?
+	total_co2e					 		Float?
   emission_stats          Json?
   weight                  Float?
   materials               product_materials[]
@@ -1008,6 +1009,7 @@ model product_materials {
   plm_id               String?
   yield                Float?
   weight               Float?
+	total_co2e					 Float?
   unit_of_measure      String?
   placement            String?
   bom_section          String?

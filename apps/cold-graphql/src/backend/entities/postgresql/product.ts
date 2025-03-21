@@ -90,6 +90,9 @@ export class Product {
 	@Property({ type: 'double', nullable: true })
 	weight?: number;
 
+	@Property({ type: 'double', nullable: true })
+	totalCo2e?: number;
+
 	@OneToMany({ entity: () => AttributeAssurance, mappedBy: 'product' })
 	attributeAssurances = new Collection<AttributeAssurance>(this);
 

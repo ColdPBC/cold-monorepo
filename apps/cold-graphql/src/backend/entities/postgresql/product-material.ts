@@ -60,6 +60,9 @@ export class ProductMaterial {
 	@Property({ type: 'text', nullable: true })
 	plmId?: string;
 
+	@Property({ type: 'double', nullable: true })
+	totalCo2e?: number;
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof ProductMaterial, OrgContext>) {
 		if(!this.sidecar) {
