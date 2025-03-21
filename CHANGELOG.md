@@ -1,3 +1,10 @@
+# [1.604.0](https://github.com/coldPBC/cold-monorepo/compare/v1.603.0...v1.604.0) (2025-03-21)
+
+
+### Features
+
+* enhance ecoinvent activity processing with new job queue and improved error handling ([1e4b914](https://github.com/coldPBC/cold-monorepo/commit/1e4b91479902b78680a49af7e3998f1c5f8f985d))
+
 # [1.603.0](https://github.com/coldPBC/cold-monorepo/compare/v1.602.0...v1.603.0) (2025-03-19)
 
 
