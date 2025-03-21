@@ -1,3 +1,10 @@
+# [1.605.0](https://github.com/coldPBC/cold-monorepo/compare/v1.604.0...v1.605.0) (2025-03-21)
+
+
+### Features
+
+* enhance ecoinvent activity processing with improved material classification and error handling ([4ee56bd](https://github.com/coldPBC/cold-monorepo/commit/4ee56bd7bce0e4e5ec49b41b54a996ba282c0bb1))
+
 # [1.604.0](https://github.com/coldPBC/cold-monorepo/compare/v1.603.0...v1.604.0) (2025-03-21)
 
 
