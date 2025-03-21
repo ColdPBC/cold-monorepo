@@ -45,9 +45,10 @@ export const EmissionsFactorDetailedExpandedView = (
               {
                 aggregateEmissionsFactors.emissionFactors.map((ef, index) => {
                   const formattedDescription = isString(ef.description) ? ef.description?.split('[')[0] : ef.description
+                  const formattedName = capitalize(ef.name.trim())
                   return (
                     <li key={index}>
-                      <span className="font-bold text-nowrap">{capitalize(ef.name)}:</span> {formattedDescription}
+                      <span className="font-bold text-nowrap">{formattedName}:</span> {formattedDescription}
                     </li>
                   )
                 })
@@ -84,7 +85,7 @@ export const EmissionsFactorDetailedExpandedView = (
               name={IconNames.CloseModalIcon}
             />
             <div>
-              {aggregateEmissionsFactors.value.toFixed(3)}
+              {Number(aggregateEmissionsFactors.value.toFixed(3)).toString()}
             </div>
           </div>
           <div className={'h-[1px] w-full bg-gray-80'}></div>
