@@ -68,8 +68,8 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 					system: 'ISIC rev.4 ecoinvent',
 				},
 				select: {
-					name: true,
 					id: true,
+					name: true,
 				},
 			});
 
@@ -79,7 +79,29 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 					product_id: product.id,
 				},
 				select: {
-					material: true,
+					material: {
+						select: {
+							id: true,
+							name: true,
+							description: true,
+							material_category: true,
+							material_subcategory: true,
+							material_classification: {
+								select: {
+									id: true,
+									name: true,
+									category: true,
+									weight_factor: true,
+									core_classification: {
+										select: {
+											id: true,
+											name: true,
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			});
 
@@ -94,7 +116,6 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 				'Hangtags and packaging',
 				'Misc',
 				'Tbd',
-				'Component/Logo/Functional Wovens',
 				'',
 				'Labels',
 				'Hangtag',
@@ -123,13 +144,14 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 				'Stiffiner',
 				'Screenprint',
 				'Hook',
-				'Secondary',
 				'Slider + tab',
 			];
 			// Iterate over materials and match them to Ecoinvent activities.
 			for (const item of materials) {
 				const material = item.material;
-				if (ignored_material_categories.includes(material.material_category) || ignored_material_categories.includes(material.material_subcategory)) {
+				const material_classification = material.material_classification.name + ' ' + material.material_classification?.core_classification?.name;
+
+				if (ignored_material_categories.includes(material.material_classification) || ignored_material_categories.includes(material.material_subcategory)) {
 					continue;
 				}
 
@@ -147,14 +169,15 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 								I am trying to understand the environmental impacts that come from manufacturing this component therefore I need to know the ecoinvent activities that are associated with the production of ${material.name}.  
 								Use the information I have provided to do the following:
 								- Use the information I provided along your deep understand of the production of consumer products to identify the core raw material used in the production of the provided component named ${material.name}
-								- Match the provided component with the ecoinvent classifications that are associated with the production of the provided component
-								- Please filter this array of ecoinvent classifications to only include those that are directly involved in the production of the provided component.  Do not modify the array in any other way.
+								- Please filter this array of ecoinvent classifications to only include those that are directly involved in the production of the provided component.
+								- Do not modify the Id in the array
+								- Do not modify the array in any other way.
 								`,
 
 							context: `
-							material_name: ${material.name}${material.description} 
-							material_categories: ${material.material_category}${material.material_subcategory ? `, ${material.material_subcategory}` : ''}
-							material_description: ${material.description}
+							component_name: ${material.name}${material.description} 
+							component_categories: ${material_classification ? material_classification : material.material_category + ' ' + material.material_subcategory ? material.material_subcategory : ''}
+							component_description: ${material.description}
 							ecoinvent classifications: ${JSON.stringify(ecoinventClassifications)}`,
 							schema: ecoinvent_classifications_schema,
 							model: 'o3-mini',
@@ -216,7 +239,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 						
 						product_name: ${product.name} - ${product.description}
 						component_name: ${material.name}${product.description} 
-						component_categories: ${material.material_category}${material.material_subcategory ? `, ${material.material_subcategory}` : ''}
+						component_categories:  ${material_classification ? material_classification : material.material_category + ' ' + material.material_subcategory ? material.material_subcategory : ''}
 						component_description: ${material.description}
 						ecoinvent activities: ${JSON.stringify(ecoinvent_activities)}`,
 								schema: ecoinvent_material_activities_schema,
@@ -229,7 +252,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 							const ecoinvent_activity = await this.prisma.ecoinvent_activities.findFirst({
 								where: {
 									name: {
-										startsWith: activity.name,
+										contains: activity.name,
 									},
 								},
 								include: {
@@ -298,6 +321,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 					}
 				} catch (e) {
 					this.logger.error(`Error processing material: ${material.name}`, { error: e, material });
+					throw e;
 				}
 			}
 			return {};
