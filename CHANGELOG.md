@@ -1,3 +1,12 @@
+# [1.606.0](https://github.com/coldPBC/cold-monorepo/compare/v1.605.0...v1.606.0) (2025-03-21)
+
+
+### Features
+
+* add total_co2e column to product and product_materials tables for enhanced carbon footprint tracking ([8b8bbb9](https://github.com/coldPBC/cold-monorepo/commit/8b8bbb962fe089a106049a843b52c0058e8c1409))
+* enhance ecoinvent activity processing with caching and total CO2e calculation for product materials ([c3e423b](https://github.com/coldPBC/cold-monorepo/commit/c3e423b126e8357466425224d51bc54a6e057d7a))
+* implement ProductCarbonFootprintCalculator for calculating and breaking down carbon footprint of activities ([42636f0](https://github.com/coldPBC/cold-monorepo/commit/42636f0692bb0ac02c6920ea5d6e55bfd67212f2))
+
 # [1.605.0](https://github.com/coldPBC/cold-monorepo/compare/v1.604.0...v1.605.0) (2025-03-21)
 
 
