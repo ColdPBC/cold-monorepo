@@ -3,8 +3,8 @@ import {LightBulbIcon} from "@heroicons/react/20/solid";
 import {ColdIcon} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
 import {IconNames} from "@coldpbc/enums";
-import {EmissionFactor, AggregatedEmissionFactor} from "@coldpbc/interfaces";
-import { capitalize } from "lodash";
+import {AggregatedEmissionFactor} from "@coldpbc/interfaces";
+import {capitalize, isString} from "lodash";
 
 
 export const EmissionsFactorDetailedExpandedView = (
@@ -42,11 +42,17 @@ export const EmissionsFactorDetailedExpandedView = (
           </div>
           <div className={'max-h-[200px] overflow-y-auto scrollbar-hide'}>
             <ul className="list-disc pl-5">
-              {aggregateEmissionsFactors.emissionFactors.map((ef, index) => (
-                <li key={index}>
-                  <span className="font-bold text-nowrap">{capitalize(ef.name)}:</span> {ef.description}
-                </li>
-              ))}
+              {
+                aggregateEmissionsFactors.emissionFactors.map((ef, index) => {
+                  const formattedDescription = isString(ef.description) ? ef.description?.split('[')[0] : ef.description
+                  const formattedName = capitalize(ef.name.trim())
+                  return (
+                    <li key={index}>
+                      <span className="font-bold text-nowrap">{formattedName}:</span> {formattedDescription}
+                    </li>
+                  )
+                })
+              }
             </ul>
 
           </div>
@@ -79,7 +85,7 @@ export const EmissionsFactorDetailedExpandedView = (
               name={IconNames.CloseModalIcon}
             />
             <div>
-              {aggregateEmissionsFactors.value.toFixed(1)}
+              {Number(aggregateEmissionsFactors.value.toFixed(3)).toString()}
             </div>
           </div>
           <div className={'h-[1px] w-full bg-gray-80'}></div>

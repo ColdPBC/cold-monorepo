@@ -6,7 +6,7 @@ import {
   MissingMaterialEmissionsCard,
   MuiDataGrid, PcfSummaryCard,
 } from '@coldpbc/components';
-import { AggregatedEmissionFactor, PcfGraphData, ProductsQuery} from "@coldpbc/interfaces";
+import { AggregatedEmissionFactor, ProductsQuery} from "@coldpbc/interfaces";
 import {
   DataGridProProps,
   GRID_DETAIL_PANEL_TOGGLE_COL_DEF,
@@ -67,7 +67,10 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
     const emissionFactorValue: number | null = get(params, 'row.emissionFactorValue', 0);
     return (
       <div className={'h-full w-full flex items-center'}>
-        {emissionFactorValue ? emissionFactorValue : '--'}
+        {emissionFactorValue
+          ? Number(emissionFactorValue.toFixed(3)).toString()
+          : '--'
+        }
       </div>
     )
   }
