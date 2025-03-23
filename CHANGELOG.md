@@ -1,3 +1,11 @@
+# [1.607.0](https://github.com/coldPBC/cold-monorepo/compare/v1.606.0...v1.607.0) (2025-03-23)
+
+
+### Features
+
+* Improve emission factor formatting and description handling ([2da063f](https://github.com/coldPBC/cold-monorepo/commit/2da063f51acdb4a15a4b46587d10c02e9f5bcaf2))
+* Refine number formatting and improve string handling ([2ed408c](https://github.com/coldPBC/cold-monorepo/commit/2ed408c0ce4a53d17091ff992f3ef9c36785bfd1))
+
 # [1.606.0](https://github.com/coldPBC/cold-monorepo/compare/v1.605.0...v1.606.0) (2025-03-21)
 
 
