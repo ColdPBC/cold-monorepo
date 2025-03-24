@@ -26,6 +26,7 @@ import { Emission } from './emission';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { MaterialClassification } from './material-classification';
+import { MaterialEcoinventClassification } from './material-ecoinvent-classification';
 import { MaterialEmissionFactor } from './material-emission-factor';
 import { MaterialSupplier } from './material-supplier';
 import { MaterialTagAssignment } from './material-tag-assignment';
@@ -89,6 +90,7 @@ export * from './emission';
 export * from './facility-footprint';
 export * from './integration';
 export * from './material-classification';
+export * from './material-ecoinvent-classification';
 export * from './material-emission-factor';
 export * from './material-supplier';
 export * from './material-tag-assignment';
@@ -153,6 +155,7 @@ export const entities = [
 	FacilityFootprint,
 	Integration,
 	MaterialClassification,
+	MaterialEcoinventClassification,
 	MaterialEmissionFactor,
 	MaterialSupplier,
 	MaterialTagAssignment,
