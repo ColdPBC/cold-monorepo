@@ -198,6 +198,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 
 		return selected_classification;
 	}
+
 	@Process('classify_product')
 	async classifyProduct(job: any): Promise<any> {
 		try {
@@ -403,7 +404,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 								data: {
 									name: ecoinvent_activity.name,
 									description: ecoinvent_activity?.description?.replace(/[\n\r]+/g, '').trim(),
-									value: ecoinvent_activity.ecoinvent_activity_impacts[0].impact_value,
+									value: ecoinvent_activity.ecoinvent_activity_impacts.reduce((acc, item) => acc + item.impact_value, 0),
 								},
 							});
 
