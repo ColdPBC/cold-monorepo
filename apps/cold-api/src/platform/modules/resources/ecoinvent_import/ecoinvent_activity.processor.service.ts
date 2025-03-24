@@ -380,6 +380,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 								ecoinvent_activity_impacts: {
 									where: {
 										impact_category_id: '1a0b55c7-46dd-49c5-8495-b8be84b6298a',
+										indicator_name: 'climate change',
 									},
 								},
 							},
@@ -390,11 +391,20 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 							continue;
 						}
 
+						//emission factors are stored in the database and are used to calculate the total co2e for the material
 						let emFactor = await this.prisma.emission_factors.findFirst({
 							where: {
 								name: ecoinvent_activity.name,
 							},
 						});
+
+						// use the ecoinvent_activity_impact with the 'climate change' indicator_name
+						let total_co2e = ecoinvent_activity.ecoinvent_activity_impacts.find(item => item.indicator_name === 'climate change')?.impact_value;
+
+						if (!total_co2e) {
+							// Otherwise, sum up all the impact_value properties
+							total_co2e = ecoinvent_activity.ecoinvent_activity_impacts.reduce((total, item) => total + item.impact_value, 0);
+						}
 
 						if (emFactor) {
 							emFactor = await this.prisma.emission_factors.update({
@@ -404,7 +414,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 								data: {
 									name: ecoinvent_activity.name,
 									description: ecoinvent_activity?.description?.replace(/[\n\r]+/g, '').trim(),
-									value: ecoinvent_activity.ecoinvent_activity_impacts.reduce((acc, item) => acc + item.impact_value, 0),
+									value: total_co2e,
 								},
 							});
 
@@ -414,7 +424,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 								data: {
 									name: ecoinvent_activity.name,
 									description: ecoinvent_activity?.description?.replace(/[\n\r]+/g, '').trim(),
-									value: ecoinvent_activity.ecoinvent_activity_impacts[0].impact_value,
+									value: total_co2e,
 								},
 							});
 
