@@ -17,10 +17,10 @@ export class EcoinventImportController {
 
 	@Put('import/:location')
 	@Roles(Role.ColdAdmin)
-	update(@Req() req: any, @Param('location') location: string, @Query('reprocess', ParseBoolPipe) reprocess: boolean) {
+	update(@Req() req: any, @Param('location') location: string, @Query('reprocess', ParseBoolPipe) reprocess: boolean, @Query('bpc', ParseBoolPipe) bpc: boolean) {
 		if (location === 'all') {
-			return this.ecoinventImportService.queueImportJobs(req, undefined, reprocess);
+			return this.ecoinventImportService.queueImportJobs(req, undefined, reprocess, bpc);
 		}
-		return this.ecoinventImportService.queueImportJobs(req, location, reprocess);
+		return this.ecoinventImportService.queueImportJobs(req, location, reprocess, bpc);
 	}
 }
