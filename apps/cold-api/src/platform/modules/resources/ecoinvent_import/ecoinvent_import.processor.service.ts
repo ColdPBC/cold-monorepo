@@ -20,43 +20,77 @@ export class EcoinventImportProcessorService extends BaseWorker {
 
 	@Process('*')
 	async importEcoSpoldFile(job: any): Promise<any> {
-		const { jobId, bucket, organization, key, activity_name, location, user } = job.data;
+		const { jobId, bucket, key, activity_name, location, user, bpc } = job.data;
+
+		// only process RoW data
+		if (location !== 'RoW') {
+			return {};
+		}
+
+		let parsedXML: any, xmlContent: any, parsedLCIA: any;
 
 		try {
-			const fileObject = await this.s3.getObject(user, bucket, key);
-			const lciaKeyParts = key.split('/');
-			const lcia_key = `${lciaKeyParts[0]}/${lciaKeyParts[1]}/lcia_data/${lciaKeyParts[2]}`;
-			const lciaFileObject = await this.s3.getObject(user, bucket, lcia_key);
+			if (bpc) {
+				const fileObject = await this.s3.getObject(user, bucket, key);
+				const lciaKeyParts = key.split('/');
+				const lcia_key = `${lciaKeyParts[0]}/${lciaKeyParts[1]}/lcia_data/${lciaKeyParts[2]}`;
+				const lciaFileObject = await this.s3.getObject(user, bucket, lcia_key);
 
-			if (!fileObject) {
-				throw new Error(`Error reading EcoSpold file from S3: ${key}`);
+				if (!fileObject) {
+					throw new Error(`Error reading EcoSpold file from S3: ${key}`);
+				}
+
+				xmlContent = await fileObject?.Body?.transformToString('utf-8');
+
+				if (!xmlContent) {
+					throw new Error(`Error reading EcoSpold file from S3: ${key}`);
+				}
+
+				// Parse XML with attributes merged into objects
+				parsedXML = await parseStringPromise(xmlContent, {
+					explicitArray: false,
+					mergeAttrs: true,
+				});
+
+				const lciaContent = await lciaFileObject?.Body?.transformToString('utf-8');
+
+				if (!lciaContent) {
+					throw new Error(`Error reading LCIA file from S3: ${lcia_key}`);
+				}
+
+				parsedLCIA = await parseStringPromise(lciaContent, {
+					explicitArray: false,
+					mergeAttrs: true,
+				});
+
+				// Validate and convert the parsed XML using the Zod schema
+				const validatedData = EcoSpold2Schema.safeParse(parsedXML);
+			} else {
+				const cached_activity_data = await this.prisma.ecoinvent_data.findUnique({
+					where: { key: key },
+				});
+				if (!cached_activity_data) {
+					throw new Error(`No cached ecoinvent data found via key: ${key}`);
+				}
+
+				parsedXML = cached_activity_data.parsed;
+				xmlContent = cached_activity_data.xml;
+
+				const cached_lcia_data = await this.prisma.ecoinvent_activities.findUnique({
+					where: {
+						ecoinventActivityName: {
+							name: activity_name,
+							location: job.data?.location,
+						},
+					},
+				});
+
+				if (!cached_lcia_data) {
+					throw new Error(`No cached ecoinvent activity found via name: ${activity_name} and location: ${job.data?.location}`);
+				}
+
+				parsedLCIA = typeof cached_lcia_data.raw_data === 'string' ? JSON.parse(cached_lcia_data.raw_data) : cached_lcia_data.raw_data;
 			}
-
-			const xmlContent = await fileObject?.Body?.transformToString('utf-8');
-
-			if (!xmlContent) {
-				throw new Error(`Error reading EcoSpold file from S3: ${key}`);
-			}
-
-			// Parse XML with attributes merged into objects
-			const parsedXML = await parseStringPromise(xmlContent, {
-				explicitArray: false,
-				mergeAttrs: true,
-			});
-
-			const lciaContent = await lciaFileObject?.Body?.transformToString('utf-8');
-
-			if (!lciaContent) {
-				throw new Error(`Error reading LCIA file from S3: ${lcia_key}`);
-			}
-
-			const parsedLCIA = await parseStringPromise(lciaContent, {
-				explicitArray: false,
-				mergeAttrs: true,
-			});
-
-			// Validate and convert the parsed XML using the Zod schema
-			const validatedData = EcoSpold2Schema.safeParse(parsedXML);
 
 			const fileActivity = parsedXML.ecoSpold?.childActivityDataset?.activityDescription?.activity || parsedXML.ecoSpold?.activityDataset?.activityDescription?.activity;
 
@@ -193,6 +227,11 @@ export class EcoinventImportProcessorService extends BaseWorker {
 			// process activity impacts
 			const impacts = parsedLCIA.ecoSpold.childActivityDataset.flowData.impactIndicator as any[];
 			for (const impact of impacts) {
+				// We should only be using the EF v3.1 impact method per JH.
+				if (impact.impactMethodName !== 'EF v3.1') {
+					continue;
+				}
+
 				const categoryId = impact.impactCategoryId;
 				const impactName = impact.name;
 
@@ -219,10 +258,11 @@ export class EcoinventImportProcessorService extends BaseWorker {
 				// Persist impact.
 				const activityImpact = await this.prisma.ecoinvent_activity_impacts.upsert({
 					where: {
-						ecoinventActivityImpactKey: {
+						ecoinventActivityImpactIndicatorKey: {
 							ecoinvent_activity_id: activity.id,
 							impact_category_id: impactCategory.id,
 							impact_method_name: impact.impactMethodName,
+							indicator_name: impact.impactCategoryName,
 						},
 					},
 					create: {
@@ -230,10 +270,12 @@ export class EcoinventImportProcessorService extends BaseWorker {
 						impact_category_id: impactCategory.id,
 						impact_method_name: impact.impactMethodName,
 						impact_value: +impact.amount,
+						indicator_name: impact.impactCategoryName,
 						impact_unit_name: impact.unitName,
 					},
 					update: {
 						impact_value: +impact.amount,
+						indicator_name: impact.impactCategoryName,
 					},
 				});
 
@@ -246,7 +288,7 @@ export class EcoinventImportProcessorService extends BaseWorker {
 
 			return {};
 		} catch (error) {
-			this.logger.error(`Error importing EcoSpold file: ${error.message}`, { job, ...error });
+			this.logger.error(`Error importing EcoSpold file: ${error.message}`, { ...error, ...job.data });
 			throw error;
 		}
 	}
