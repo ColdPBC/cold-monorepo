@@ -8,7 +8,7 @@ import { ProductCarbonFootprintCalculator } from './pcf_calculator';
 @Injectable()
 @Processor('ecoinvent:activity')
 export class EcoinventActivityProcessorService extends BaseWorker {
-	ecoinventClassifications: { id: string; name: string }[];
+	ecoinventClassifications: { id: string; description: string | null; name: string }[];
 	pcfc: ProductCarbonFootprintCalculator;
 
 	constructor(readonly s3: S3Service, readonly events: EventService, readonly prisma: PrismaService, readonly cache: CacheService) {
@@ -25,10 +25,179 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 			select: {
 				id: true,
 				name: true,
+				description: true,
 			},
 		});
 	}
 
+	/**
+	 * Find ecoinvent classifications that match the material classifications
+	 */
+	@Process('match_material_and_ecoinvent_classifications')
+	async findEcoinventClassifications(material: any, user, organization): Promise<any> {
+		const material_classifications = await this.prisma.material_classification.findMany();
+
+		const ecoinvent_classifications_schema = {
+			type: 'object',
+			properties: {
+				classifications: {
+					type: 'array',
+					description: 'An array containing classification names',
+					items: {
+						type: 'string',
+					},
+				},
+			},
+			required: ['classifications'],
+			additionalProperties: false,
+		};
+
+		for (const matClass of material_classifications) {
+			// remove the id from each classification object in the array and return a new array to reduce token count
+			const filteredClassifications = this.ecoinventClassifications.map(classification => omit(classification, ['id', 'description']));
+
+			const selected_ecoinvent_activity_classifications = await this.events.sendRPCEvent(
+				'cold.platform.openai.rpc',
+				'openai_question.sent',
+				{
+					user,
+					organization,
+					system_prompt: `You are an expert in manufacturing processes with deep understanding all the processes necessary to produce a raw material and finished good.  The user will provide a material classification name.  Your job is search through the provided classification array and find all the items that are directly involved in the production of the material and return those items in a new array.
+						- If the classification is made from natural fibers (cotton, wool, etc) please include all classifications necessary to produce the raw material (ie: raising the animal, cotton farming, wool shearing, etc).
+						- If the classification is made from synthetic fibers, please include all classifications necessary to produce the raw material (ie: oil extraction, polymer production, etc).
+						- If the classification is made from recycled materials, please include all classifications necessary to produce the finished product from recycled materials
+						- If the classification is fabric or textile, also include all classifications necessary to produce the fabric (ie: yarn production, weaving, etc).
+						
+						classifications: ${JSON.stringify(filteredClassifications)}
+						`,
+					question: `${matClass.name}: ${matClass.category}`,
+					schema: ecoinvent_classifications_schema,
+					strict: true,
+					model: 'gpt-4o',
+				},
+				{ timeout: 120000 },
+			);
+
+			this.logger.info(`Received material classification response from OpenAi`, {
+				item: matClass,
+				selected_ecoinvent_activity_classifications,
+				organization,
+				user,
+			});
+
+			for (const ecoClass of selected_ecoinvent_activity_classifications.classifications) {
+				if (!Array.isArray(selected_ecoinvent_activity_classifications.classifications) || selected_ecoinvent_activity_classifications?.classifications?.length < 1) {
+					this.logger.warn(`No ecoinvent classifications found for material: ${matClass.name}`, { item: matClass, organization, user });
+					continue;
+				}
+
+				// find the ecoinvent classification by name and get the id
+				const ecoclassification = this.ecoinventClassifications.find(classification => classification.name === ecoClass);
+
+				if (!ecoclassification || !ecoclassification.id) {
+					this.logger.error(`Ecoinvent classification not found: ${ecoClass}`, { ecoClass, matClass, organization, user });
+					continue;
+				}
+
+				await this.prisma.material_ecoinvent_classifications.upsert({
+					where: {
+						materialEcoinventClassificationKey: {
+							material_classification_id: matClass.id,
+							ecoinvent_classification_id: ecoclassification?.id,
+						},
+					},
+					create: {
+						material_classification_id: matClass.id,
+						ecoinvent_classification_id: ecoclassification.id,
+					},
+					update: {
+						material_classification_id: matClass.id,
+						ecoinvent_classification_id: ecoclassification.id,
+					},
+				});
+
+				this.logger.info(`Material classification record upserted for: ${matClass.name}`, {
+					ecoinvent_classification: ecoClass,
+					material_classification: matClass.name,
+					organization,
+					user,
+				});
+			}
+		}
+	}
+
+	async classifyMaterial(material: any, user, organization): Promise<any> {
+		const material_classifications = await this.prisma.material_classification.findMany({
+			select: {
+				id: true,
+				name: true,
+				material_ecoinvent_classifications: true,
+				core_classification: {
+					select: {
+						name: true,
+					},
+				},
+			},
+		});
+
+		const material_classifications_schema = {
+			type: 'object',
+			properties: {
+				name: {
+					type: 'string',
+					description: 'The name of the material classification',
+				},
+			},
+			required: ['name'],
+			additionalProperties: false,
+		};
+
+		if (!material_classifications || material_classifications.length < 1) {
+			this.logger.error(`No material classifications found for material: ${material.name}`, { material, organization, user });
+			throw new Error(`No material classifications found for material: ${material.name}`);
+		}
+
+		const classification = await this.events.sendRPCEvent(
+			'cold.platform.openai.rpc',
+			'openai_question.sent',
+			{
+				user,
+				organization,
+				system_prompt: `You are an expert in manufacturing processes with deep understanding all the processes necessary to produce a raw material and finished good.  The user will provide a material name or description.  Your job is search through the provided classification array and select classification that best fits the material.
+						classifications: ${JSON.stringify(material_classifications.map(classification => classification.name))}
+						`,
+				question: `${material.name}: ${material.description}`,
+				schema: material_classifications_schema,
+				strict: true,
+				model: 'gpt-4o',
+			},
+			{ timeout: 120000 },
+		);
+
+		this.logger.info(`Received material classification response`, {
+			classification,
+			organization,
+			material,
+			user,
+		});
+
+		if (!classification.name) {
+			this.logger.error(`No material classification found for material: ${material.name}`, { material, organization, user });
+			throw new Error(`No material classification found for material: ${material.name}`);
+		}
+
+		const selected_classification = material_classifications.find(item => item.name === classification.name);
+		await this.prisma.materials.update({
+			where: {
+				id: material.id,
+			},
+			data: {
+				material_classification_id: selected_classification?.id,
+			},
+		});
+
+		return selected_classification;
+	}
 	@Process('classify_product')
 	async classifyProduct(job: any): Promise<any> {
 		try {
@@ -46,46 +215,15 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 						items: {
 							type: 'object',
 							properties: {
-								id: {
-									type: 'string',
-								},
 								name: {
 									type: 'string',
 								},
-								description: {
-									type: 'string',
-								},
 							},
-							required: ['id', 'name'],
+							required: ['name'],
 						},
 					},
 				},
 				required: ['ecoinvent_activities'],
-			};
-			const ecoinvent_classifications_schema = {
-				$schema: 'http://json-schema.org/draft-07/schema#',
-				type: 'object',
-				properties: {
-					ecoinvent_classifications: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								id: {
-									type: 'string',
-								},
-								name: {
-									type: 'string',
-								},
-								description: {
-									type: 'string',
-								},
-							},
-							required: ['name', 'description'],
-						},
-					},
-				},
-				required: ['ecoinvent_classifications'],
 			};
 
 			const { organization, product, user } = job.data;
@@ -113,6 +251,11 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 									name: true,
 									category: true,
 									weight_factor: true,
+									material_ecoinvent_classifications: {
+										select: {
+											ecoinvent_classification: true,
+										},
+									},
 									core_classification: {
 										select: {
 											id: true,
@@ -126,194 +269,105 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 				},
 			});
 
-			const ignored_material_categories = [
-				'Zippers',
-				'Zipper',
-				'Label/Hangtag/Packaging',
-				'External branding',
-				'Packaging',
-				'Trolley',
-				'Embellishment',
-				'Hangtags and packaging',
-				'Misc',
-				'Tbd',
-				'',
-				'Labels',
-				'Hangtag',
-				'Buckle',
-				'Eyelet',
-				'Buttons',
-				'Grip',
-				'Rivet',
-				'Logo',
-				'Zipper pull',
-				'box',
-				'Rings',
-				'Snaps',
-				'Label/Sticker',
-				'Buckles',
-				'Shoe Box',
-				'Sliders',
-				'Structure',
-				'Embross/Debross',
-				'D-Ring',
-				'Print',
-				'Patch',
-				'Lock',
-				'Wheels + housing assemblies',
-				'Puller',
-				'Stiffiner',
-				'Screenprint',
-				'Hook',
-				'Slider + tab',
-			];
+			const ignored_material_categories = ['External branding', 'Trolley', 'Embellishment', 'Hangtags and packaging', '', 'Logo'];
 			// Iterate over materials and match them to Ecoinvent activities.
 			for (const item of materials) {
 				const material = item.material;
-				const material_classification = material.material_classification.name + ' ' + material.material_classification?.core_classification?.name;
+				let material_classification = material.material_classification?.name ? material.material_classification?.name : '';
 
-				if (ignored_material_categories.includes(material.material_classification.name)) {
-					this.logger.warn(`Material classification exists in ignore array: ${material.name} `, { material, organization, product, user });
-					continue;
+				if (!material_classification) {
+					this.logger.warn(`No material classification found for material: ${material.name}`, { material, organization, product, user });
+					material.material_classification = await this.classifyMaterial(material, user, organization);
+				}
+
+				if (material.material_classification?.core_classification?.name) {
+					material_classification = material_classification + ' ' + material.material_classification?.core_classification?.name;
+				}
+
+				if (material.material_category) {
+					material_classification = material_classification + ' ' + material.material_category;
+				}
+
+				if (material.material_subcategory) {
+					material_classification = material_classification + ' ' + material.material_subcategory;
+				}
+
+				if (material.material_classification?.core_classification?.name) {
+					material_classification = material_classification + ' ' + material.material_classification?.core_classification?.name;
 				}
 
 				try {
-					// Check if the material has already been classified
-					const material_classification_response = {
-						ecoinvent_activities: (await this.cache.get(`material_classification_response:${organization.id}:${product.id}:${material.id}`)) as any[],
+					if (!material?.material_classification?.material_ecoinvent_classifications || material?.material_classification?.material_ecoinvent_classifications?.length === 0) {
+						this.logger.warn(`No ecoinvent classifications found for material: ${material.name}`, { material, organization, product, user });
+						continue;
+					}
+
+					const component_classification_ids: any[] = material?.material_classification?.material_ecoinvent_classifications.map(
+						(classification: any) => classification.ecoinvent_classification.id,
+					);
+
+					if (!component_classification_ids || component_classification_ids?.length === 0) {
+						this.logger.warn(`No ecoinvent classifications found for material: ${material.name}`, { material, organization, product, user });
+						continue;
+					}
+
+					const query = {
+						where: {
+							location: 'RoW',
+						},
+						select: {
+							name: true,
+							description: false,
+						},
 					};
 
-					if (!Array.isArray(material_classification_response.ecoinvent_activities)) {
-						// Get the product classification
-						this.logger.info(`OpenAi is classifying the component and filtering the classification ids for: ${material.name}`, {
-							material,
-							organization,
-							product,
-							user,
+					if (component_classification_ids?.length > 0) {
+						set(query, 'where.ecoinvent_classification_id', {
+							in: component_classification_ids,
 						});
-
-						// Filter the ecoinvent activity classification ids to only those likely to be involed in the material production
-						const selected_ecoinvent_activity_classifications = await this.events.sendRPCEvent(
-							'cold.platform.openai.rpc',
-							'openai_question.sent',
-							{
-								user,
-								organization,
-								system_prompt: 'You are an expert in consumer product manufacturing processes with deep understanding of sustainability and environmental impacts from production',
-								question: `
-								My company is manufacturing a consumer product named ${product.name} - ${product.description}, and we use a component we refer to as ${material.name} in the process of making our ${product.name}.  
-								
-								I am trying to understand the environmental impacts that come from manufacturing this component therefore I need to know the ecoinvent activities that are associated with the production of ${material.name}.  
-								Use the information I have provided to do the following:
-								- Use the component_name and component_description I provided along your deep understand of the consumer product and material manufacturing processes to identify the core raw material used in the production of the provided component named ${material.name}
-								- Please filter this array of ecoinvent classifications to only include those that are directly involved in the production of the provided component.
-								- Do not modify the array in any other way.
-								`,
-
-								context: `
-							component_name: ${material.name} ${
-									material_classification ? material_classification : material.material_category + ' ' + material.material_subcategory ? material.material_subcategory : ''
-								}
-							component_description: ${material.description}
-							ecoinvent classifications: ${JSON.stringify(this.ecoinventClassifications)}`,
-								schema: ecoinvent_classifications_schema,
-								model: 'o3-mini',
-							},
-							{ timeout: 120000 },
-						);
-
-						this.logger.info(`Received filtered classification response from OpenAi`, {
-							selected_ecoinvent_activity_classifications,
-							material,
-							organization,
-							product,
-							user,
-						});
-
-						if (
-							!Array.isArray(selected_ecoinvent_activity_classifications.ecoinvent_classifications) ||
-							selected_ecoinvent_activity_classifications.ecoinvent_classifications.length < 1
-						) {
-							this.logger.warn(`No ecoinvent classifications found for material: ${material.name}`, { material, organization, product, user });
-							continue;
-						}
-
-						const component_classification_ids: any[] = selected_ecoinvent_activity_classifications.ecoinvent_classifications.map((classification: any) => classification.id);
-
-						if (component_classification_ids.length === 0) {
-							this.logger.warn(`No ecoinvent classifications found for material: ${material.name}`, { material, organization, product, user });
-							continue;
-						}
-
-						const query = {
-							where: {
-								location: 'RoW',
-							},
-							select: {
-								name: true,
-								description: true,
-							},
-						};
-
-						if (component_classification_ids?.length > 0) {
-							set(query, 'where.ecoinvent_classification_id', {
-								in: component_classification_ids,
-							});
-						}
-
-						const source_activities = await this.prisma.ecoinvent_activities.findMany(query);
-
-						const ecoinvent_activities = source_activities.map(activity => omit(activity, ['raw_data']));
-
-						this.logger.info(`Matching ecoinvent activities for material: ${material.name}`, { material, organization, product, user });
-
-						// use openAi to filter the activities to only those that are directly involved in the production of the material
-						const material_classification_response = await this.events.sendRPCEvent(
-							'cold.platform.openai.rpc',
-							'openai_question.sent',
-							{
-								user,
-								organization,
-								system_prompt: 'You are an expert in consumer product manufacturing processes with deep understanding of sustainability and environmental impacts from production',
-								question: `
-								My company is manufacturing a consumer product named ${product.name} - ${product.description}, and we use a component we refer to as ${
-									material.name
-								} in the process of making our ${product.name}.  
-								
-								I am trying to understand the environmental impacts that come from manufacturing this component therefore I need to know the ecoinvent activities that are associated with the production of ${
-									material.name
-								}.  
-								
-								Please filter the array activities to include only those activities that are directly involved with the ${material.name} ${
-									material_classification ? material_classification : material.material_category + ' ' + material.material_subcategory ? material.material_subcategory : ''
-								} production.
-								- Use your broad understanding of the production of consumer products to identify and understand the steps necessary to produce the provided material named ${material.name}
-								- Match those steps up with the provided list of activities name and description 
-								- Filter the array, removing any elements that are not directly involved with the production of ${material.name} ${material_classification ? material_classification : ''}.  
-								- You should use your deep knowledge of how this material is manufactured and select only the activities that cover all the steps necessary to produce the material from th, preferring activities that broadly cover the most steps used in producing the component if possible.
-								- If the component is made up of multiple materials, please include all activities that are associated with the production of each material.
-								- If the component is made up of synthetic materials, that are turned into a textile/rope/chord also include all activities that are necessary to produce the textile (ie: yarn production, weaving, etc).
-								- Do not include any duplicate or overlapping activities.  
-								- If the component name or description includes the word "recycled" or "recycling" please include activities use the recycled raw material in the process.
-								- Do not modify the array in any other way.
-								
-						
-						product_name: ${product.name} - ${product.description}
-						component_name: ${material.name} ${
-									material_classification ? material_classification : material.material_category + ' ' + material.material_subcategory ? material.material_subcategory : ''
-								}
-						component_description: ${material.description}
-						ecoinvent activities: ${JSON.stringify(ecoinvent_activities)}`,
-								schema: ecoinvent_material_activities_schema,
-								model: 'o3-mini',
-							},
-							{ timeout: 120000 },
-						);
-
-						this.logger.info(`Received material classification response: ${JSON.stringify(material_classification_response)}`);
-
-						await this.cache.set(`material_classification_response:${organization.id}:${product.id}:${material.id}`, material_classification_response);
 					}
+
+					const source_activities = await this.prisma.ecoinvent_activities.findMany(query);
+
+					if (!source_activities || source_activities.length < 1) {
+						this.logger.error(`No ecoinvent activities found for material: ${material.name}`, { material, organization, product, user });
+						continue;
+					}
+
+					const ecoinvent_activities = source_activities.map(activity => omit(activity, ['raw_data']));
+
+					this.logger.info(`Matching ecoinvent activities for material: ${material.name}`, { material, organization, product, user });
+
+					// use openAi to filter the activities to only those that are directly involved in the production of the material
+					const material_classification_response = await this.events.sendRPCEvent(
+						'cold.platform.openai.rpc',
+						'openai_question.sent',
+						{
+							user,
+							organization,
+							system_prompt: `The user will provide the classification of a material used in manufacturing a consumer product and 
+								your job is to filter the activities array to include not only those processes directly involved in 
+								making the material from cradle-to-gate (raw material processing and intermediate processing) but 
+								also the downstream processes or manufacturing stages that lead to the final product. This can 
+								include additional processes such as weaving, knitting, dyeing, finishing, and any other assembly steps 
+								involved in producing the final fabric or textile.
+								
+								activities array: ${JSON.stringify(ecoinvent_activities)}
+								`,
+							question: `${material_classification}`,
+							schema: ecoinvent_material_activities_schema,
+							model: 'gpt-4o',
+						},
+						{ timeout: 120000 },
+					);
+
+					this.logger.info(`Received material classification response: ${JSON.stringify(material_classification_response)}`);
+
+					if (!Array.isArray(material_classification_response.ecoinvent_activities) || material_classification_response.ecoinvent_activities.length < 1) {
+						this.logger.error(`No ecoinvent activities found for material: ${material.name}`, { material, organization, product, user });
+						continue;
+					}
+
 					for (const activity of material_classification_response.ecoinvent_activities) {
 						const ecoinvent_activity = await this.prisma.ecoinvent_activities.findFirst({
 							where: {
