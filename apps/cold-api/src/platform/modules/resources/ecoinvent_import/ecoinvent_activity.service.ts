@@ -31,16 +31,16 @@ export class EcoinventActivityService extends BaseWorker {
 			},
 		});
 
-		/*const product = products[0];
-		const job = await this.activityQueue.add(
-			'classify_product',
-			{
-				product,
-				organization,
-				user,
-			},
-			{ removeOnComplete: true },
-		);*/
+		// const product = products[10];
+		// const job = await this.activityQueue.add(
+		// 	'classify_product',
+		// 	{
+		// 		product,
+		// 		organization,
+		// 		user,
+		// 	},
+		// 	{ removeOnComplete: true },
+		// );
 
 		for (const product of products) {
 			const job = await this.activityQueue.add(
