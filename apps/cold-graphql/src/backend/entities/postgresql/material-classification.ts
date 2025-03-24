@@ -4,6 +4,7 @@ import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHoo
 import { Collection, Entity, Index, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { CoreClassification } from './core-classification';
 import { Material } from './material';
+import { MaterialEcoinventClassification } from './material-ecoinvent-classification';
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { SustainabilityAttributeClassifcationAssignment } from './sustainability-attribute-classifcation-assignment';
 
@@ -41,6 +42,12 @@ export class MaterialClassification {
 
 	@Property({ type: 'double', nullable: true })
 	weightFactor?: number;
+
+	@Property({ type: 'json', nullable: true })
+	ecoinventActivityClassifications?: Record<string, unknown>;
+
+	@OneToMany({ entity: () => MaterialEcoinventClassification, mappedBy: 'materialClassification' })
+	materialEcoinventClassifications = new Collection<MaterialEcoinventClassification>(this);
 
 	@OneToMany({ entity: () => Material, mappedBy: 'materialClassification' })
 	materials = new Collection<Material>(this);

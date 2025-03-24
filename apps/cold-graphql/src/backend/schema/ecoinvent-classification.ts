@@ -3,6 +3,7 @@ import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { EcoinventActivity } from './ecoinvent-activity';
 import { EcoinventActivityClassification } from './ecoinvent-activity-classification';
+import { MaterialEcoinventClassification } from './material-ecoinvent-classification';
 import { EcoinventClassification as OrmEcoinventClassification } from '../entities';
 import { connection } from '../database';
 
@@ -33,4 +34,7 @@ export class EcoinventClassification {
 
 	@RelationshipField<EcoinventActivityClassification>(() => [EcoinventActivityClassification], { relatedField: 'ecoinventClassification' })
 	ecoinventActivityClassifications!: EcoinventActivityClassification[];
+
+	@RelationshipField<MaterialEcoinventClassification>(() => [MaterialEcoinventClassification], { relatedField: 'ecoinventClassification' })
+	materialEcoinventClassifications!: MaterialEcoinventClassification[];
 }

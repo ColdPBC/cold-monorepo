@@ -890,13 +890,14 @@ model ecoinvent_activity_impacts {
   id                    String                      @id @default(cuid())
   ecoinvent_activity_id String
   impact_category_id    String
+  indicator_name        String?
   impact_value          Float
   impact_unit_name      String
   impact_method_name    String
   impact_category       ecoinvent_impact_categories @relation(fields: [impact_category_id], references: [id], onDelete: Cascade)
   ecoinvent_activity    ecoinvent_activities        @relation(fields: [ecoinvent_activity_id], references: [id], onDelete: Cascade)
 
-  @@unique([ecoinvent_activity_id, impact_category_id, impact_method_name], name: "ecoinventActivityImpactKey")
+  @@unique([ecoinvent_activity_id, impact_category_id, impact_method_name, indicator_name], name: "ecoinventActivityImpactIndicatorKey")
   @@index([ecoinvent_activity_id, impact_method_name], map: "ecoinvent_activity_impact_method_name_idx1")
   @@index([impact_method_name], map: "ecoinvent_activity_impacts_impact_method_name_idx1")
   @@index([impact_category_id], map: "ecoinvent_activity_impacts_impact_category_id_idx1")

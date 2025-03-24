@@ -37,6 +37,9 @@ export class EcoinventActivityImpact {
 	@Property({ type: 'text' })
 	impactMethodName!: string;
 
+	@Property({ type: 'text', nullable: true })
+	indicatorName?: string;
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof EcoinventActivityImpact, OrgContext>) {
 		if(!this.sidecar) {

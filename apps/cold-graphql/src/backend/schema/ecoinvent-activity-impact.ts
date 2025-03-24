@@ -26,4 +26,7 @@ export class EcoinventActivityImpact {
 
 	@Field(() => String)
 	impactMethodName!: string;
+
+	@Field(() => String, { nullable: true })
+	indicatorName?: string;
 }

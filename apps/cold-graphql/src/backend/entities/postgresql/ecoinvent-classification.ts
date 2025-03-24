@@ -4,6 +4,7 @@ import { Hook, HookRegister, CreateOrUpdateHookParams, ReadHookParams, DeleteHoo
 import { Collection, Entity, Index, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 import { EcoinventActivity } from './ecoinvent-activity';
 import { EcoinventActivityClassification } from './ecoinvent-activity-classification';
+import { MaterialEcoinventClassification } from './material-ecoinvent-classification';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl, OrgContext } from '../../libs/acls/acl_policies';
@@ -42,6 +43,9 @@ export class EcoinventClassification {
 
 	@OneToMany({ entity: () => EcoinventActivityClassification, mappedBy: 'ecoinventClassification' })
 	ecoinventActivityClassifications = new Collection<EcoinventActivityClassification>(this);
+
+	@OneToMany({ entity: () => MaterialEcoinventClassification, mappedBy: 'ecoinventClassification' })
+	materialEcoinventClassifications = new Collection<MaterialEcoinventClassification>(this);
 
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof EcoinventClassification, OrgContext>) {
