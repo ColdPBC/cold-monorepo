@@ -1,3 +1,10 @@
+# [1.611.0](https://github.com/coldPBC/cold-monorepo/compare/v1.610.0...v1.611.0) (2025-03-24)
+
+
+### Features
+
+* update total CO2e calculation to prioritize 'climate change' indicator and sum impacts ([9c4c730](https://github.com/coldPBC/cold-monorepo/commit/9c4c730aa65426d50e42a8dc86b69a20c173e294))
+
 # [1.610.0](https://github.com/coldPBC/cold-monorepo/compare/v1.609.0...v1.610.0) (2025-03-24)
 
 
