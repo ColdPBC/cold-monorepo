@@ -1,3 +1,10 @@
+# [1.610.0](https://github.com/coldPBC/cold-monorepo/compare/v1.609.0...v1.610.0) (2025-03-24)
+
+
+### Features
+
+* add MaterialEcoinventClassification import to index.ts ([a68f23b](https://github.com/coldPBC/cold-monorepo/commit/a68f23b7245f28d9c91a73a41d01288b398b0db7))
+
 # [1.609.0](https://github.com/coldPBC/cold-monorepo/compare/v1.608.0...v1.609.0) (2025-03-24)
 
 
