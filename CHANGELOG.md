@@ -1,3 +1,14 @@
+# [1.608.0](https://github.com/coldPBC/cold-monorepo/compare/v1.607.0...v1.608.0) (2025-03-24)
+
+
+### Features
+
+* add ecoinvent_activity_classifications column to material_classification table ([492d920](https://github.com/coldPBC/cold-monorepo/commit/492d9200a5d2164a5dba8152e31ca00c9bcd1990))
+* add material_ecoinvent_classifications model and update related tables ([d23f1d3](https://github.com/coldPBC/cold-monorepo/commit/d23f1d34b9ad1e8633b5878af36abc27367089b0))
+* create material_ecoinvent_classifications table with foreign keys and unique constraints ([c231d1f](https://github.com/coldPBC/cold-monorepo/commit/c231d1f9cc2a916faea4aea6a67d12c102526d35))
+* enhance EcoinventActivityProcessorService to include description in classifications and automatic material classification matching logic, if missing ([656e4b9](https://github.com/coldPBC/cold-monorepo/commit/656e4b906dc79f4b17a846c60b5695a28bb3e8fc))
+* update material_ecoinvent_classifications table structure with new foreign key and unique constraints ([b10022e](https://github.com/coldPBC/cold-monorepo/commit/b10022edf8bf1bd4fe126d3149b3ab248733e106))
+
 # [1.607.0](https://github.com/coldPBC/cold-monorepo/compare/v1.606.0...v1.607.0) (2025-03-23)
 
 
