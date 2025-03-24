@@ -1,3 +1,15 @@
+# [1.609.0](https://github.com/coldPBC/cold-monorepo/compare/v1.608.0...v1.609.0) (2025-03-24)
+
+
+### Features
+
+* add bpc query parameter to update method in ecoinvent_import.controller.ts ([7758c22](https://github.com/coldPBC/cold-monorepo/commit/7758c228cacbd6e0ed0773c181c9e52ad2c44c0a))
+* add indicator_name field and update unique constraint in ecoinvent_activity_impacts table ([039d9f2](https://github.com/coldPBC/cold-monorepo/commit/039d9f2d434341739f53c1c991e208b27a4e875a))
+* add unique constraint and new column to ecoinvent_activity_impacts table ([8a6d0d1](https://github.com/coldPBC/cold-monorepo/commit/8a6d0d18e4c2e1b5f27f05adf6885068b8e9f864))
+* enhance EcoSpold file import to support bpc parameter and improve caching logic ([76d49b4](https://github.com/coldPBC/cold-monorepo/commit/76d49b4ee7e6ff0eb019762946f08fa61670bc31))
+* improve error handling and logging in CSV import process ([2d29ef1](https://github.com/coldPBC/cold-monorepo/commit/2d29ef1ad878cf0b083c41255e8f13dc92c3e9ac))
+* update impact value calculation in classifyProduct method to sum all impact values ([c34957f](https://github.com/coldPBC/cold-monorepo/commit/c34957fada39bd703090bf79a104b4111daef8e9))
+
 # [1.608.0](https://github.com/coldPBC/cold-monorepo/compare/v1.607.0...v1.608.0) (2025-03-24)
 
 
