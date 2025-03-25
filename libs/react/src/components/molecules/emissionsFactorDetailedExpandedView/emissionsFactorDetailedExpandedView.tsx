@@ -1,5 +1,4 @@
 import {ReactNode} from "react";
-import {LightBulbIcon} from "@heroicons/react/20/solid";
 import {ColdIcon} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
 import {IconNames} from "@coldpbc/enums";
@@ -72,7 +71,7 @@ export const EmissionsFactorDetailedExpandedView = (
               Weight
             </div>
             <div>
-              {weight.toFixed(2)} kg
+              {weight.toFixed(3)} kg
             </div>
           </div>
           <div className={'text-body flex flex-row justify-between'}>
