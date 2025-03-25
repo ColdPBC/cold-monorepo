@@ -1,5 +1,4 @@
 import {ReactNode} from "react";
-import {LightBulbIcon} from "@heroicons/react/20/solid";
 import {ColdIcon} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
 import {IconNames} from "@coldpbc/enums";
@@ -54,14 +53,14 @@ export const EmissionsFactorDetailedExpandedView = (
                 })
               }
             </ul>
-
           </div>
-          <div className={'flex flex-row gap-[10px]'}>
-            <LightBulbIcon className={'w-[15px] h-[15px] self-center'} color={'white'}/>
-            <div className={'text-tc-secondary text-body'}>
-              Tip: Look wrong? To match to a different factor, select a new material classification and refresh.
-            </div>
-          </div>
+          {/* Removed for now because we dont have the ability to change classification and re-run factor mapping */}
+          {/*<div className={'flex flex-row gap-[10px]'}>*/}
+          {/*  <LightBulbIcon className={'w-[15px] h-[15px] self-center'} color={'white'}/>*/}
+          {/*  <div className={'text-tc-secondary text-body'}>*/}
+          {/*    Tip: Look wrong? To match to a different factor, select a new material classification and refresh.*/}
+          {/*  </div>*/}
+          {/*</div>*/}
         </div>
         <div className={'flex flex-col h-auto rounded-lg p-4 gap-2 border-[1px] border-gray-90 bg-gray-40 w-[236px] shrink-0 self-start'}>
           <div className={'text-h5'}>
@@ -72,7 +71,7 @@ export const EmissionsFactorDetailedExpandedView = (
               Weight
             </div>
             <div>
-              {weight.toFixed(2)} kg
+              {Number(weight.toFixed(3)).toString()} kg
             </div>
           </div>
           <div className={'text-body flex flex-row justify-between'}>
@@ -94,7 +93,7 @@ export const EmissionsFactorDetailedExpandedView = (
               Emissions
             </div>
             <div className={'font-bold'}>
-              {totalEmissions.toFixed(2)} kg CO2e
+              {Number(totalEmissions.toFixed(3)).toString()} kg CO2e
             </div>
           </div>
         </div>

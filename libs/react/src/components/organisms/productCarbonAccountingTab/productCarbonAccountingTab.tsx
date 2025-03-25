@@ -34,7 +34,7 @@ export const ProductCarbonAccountingTab = (props: { product: ProductsQuery }) =>
       return (
         <div className={'text-body flex flex-row gap-1 justify-end h-full'}>
           <div className={'font-bold text-tc-primary self-center'}>
-            {(emissions).toFixed(2)}
+            {Number((emissions).toFixed(3)).toString()}
           </div>
           <div className={'text-tc-secondary self-center'}>
             kg CO2e
