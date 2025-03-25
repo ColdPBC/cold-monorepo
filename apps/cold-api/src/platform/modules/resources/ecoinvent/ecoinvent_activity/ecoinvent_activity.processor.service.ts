@@ -295,6 +295,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 						},
 						data: {
 							weight: item.weight,
+							metadata: { ...item.metadata, calculated_weight_response: weight_response },
 						},
 					});
 
