@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Process, Processor } from '@nestjs/bull';
 import { BaseWorker, CacheService, Cuid2Generator, EventService, GuidPrefixes, PrismaService, S3Service } from '@coldpbc/nest';
-import { EcoinventImportProcessorService } from './ecoinvent_import.processor.service';
+import { EcoinventImportProcessorService } from '../ecoinvent_import.processor.service';
 import { omit, set } from 'lodash';
 import { ProductCarbonFootprintCalculator } from './pcf_calculator';
 
