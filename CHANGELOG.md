@@ -1,3 +1,11 @@
+# [1.613.0](https://github.com/coldPBC/cold-monorepo/compare/v1.612.0...v1.613.0) (2025-03-25)
+
+
+### Features
+
+* add service for weight calculation in ecoinvent module ([17f5968](https://github.com/coldPBC/cold-monorepo/commit/17f596804a1dabd0f911c147313cc7bcae88a93a))
+* **cold-api:** add weight calculation types for ecoinvent activities ([ddb025b](https://github.com/coldPBC/cold-monorepo/commit/ddb025b302432c11c2179dbcce1205cd0d7bbf3a))
+
 # [1.612.0](https://github.com/coldPBC/cold-monorepo/compare/v1.611.1...v1.612.0) (2025-03-25)
 
 
