@@ -4,6 +4,7 @@ import { BaseWorker, CacheService, Cuid2Generator, EventService, GuidPrefixes, P
 import { EcoinventImportProcessorService } from '../ecoinvent_import.processor.service';
 import { omit, set } from 'lodash';
 import { ProductCarbonFootprintCalculator } from './pcf_calculator';
+import { getCalculatedWeight } from './yield_to_weight.service';
 
 @Injectable()
 @Processor('ecoinvent:activity')
@@ -239,11 +240,17 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 				select: {
 					id: true,
 					weight: true,
+					yield: true,
+					unit_of_measure: true,
 					material: {
 						select: {
 							id: true,
 							name: true,
 							description: true,
+							weight_factor: true,
+							weight_factor_unit_of_measure: true,
+							width: true,
+							width_unit_of_measure: true,
 							material_category: true,
 							material_subcategory: true,
 							material_classification: {
@@ -270,9 +277,32 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 				},
 			});
 
-			const ignored_material_categories = ['External branding', 'Trolley', 'Embellishment', 'Hangtags and packaging', '', 'Logo'];
 			// Iterate over materials and match them to Ecoinvent activities.
 			for (const item of materials) {
+				// Calculate and persist weight for the product_material based on the yield and weight factor.
+				try {
+					const weight_response = getCalculatedWeight(item);
+
+					if (typeof weight_response === 'object' && 'error' in weight_response) {
+						throw new Error(weight_response.error);
+					}
+
+					item.weight = weight_response.weightInKg;
+
+					await this.prisma.product_materials.update({
+						where: {
+							id: item.id,
+						},
+						data: {
+							weight: item.weight,
+						},
+					});
+
+					this.logger.info('Calculated weight for material', { item, product, organization, user, ...weight_response });
+				} catch (e) {
+					this.logger.error(`Error calculating weight for material: ${item.material.name}`, { material: item.material, organization, product, user, error: e });
+				}
+
 				const material = item.material;
 				let material_classification = material.material_classification?.name ? material.material_classification?.name : '';
 
