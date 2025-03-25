@@ -19,8 +19,8 @@ import { SustainabilityAttributesModule } from './resources/sustainability_attri
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { LinearModule } from './linear/linear.module';
-import { EcoinventImportModule } from './resources/ecoinvent_import/ecoinvent_import.module';
-import { EcoinventActivityModule } from './resources/ecoinvent_import/ecoinvent_activity/ecoinvent_activity.module';
+import { EcoinventImportModule } from './resources/ecoinvent/ecoinvent_import.module';
+import { EcoinventActivityModule } from './resources/ecoinvent/ecoinvent_activity/ecoinvent_activity.module';
 
 @Module({})
 export class AppModule {
