@@ -1,3 +1,10 @@
+# [1.614.0](https://github.com/coldPBC/cold-monorepo/compare/v1.613.0...v1.614.0) (2025-03-25)
+
+
+### Features
+
+* **ecoinvent:** add calculated_weight_response to metadata in processor service ([96c8053](https://github.com/coldPBC/cold-monorepo/commit/96c8053a1d0003a9c8c08fbab9fce9ce6ac146b7))
+
 # [1.613.0](https://github.com/coldPBC/cold-monorepo/compare/v1.612.0...v1.613.0) (2025-03-25)
 
 
