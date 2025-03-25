@@ -21,7 +21,7 @@ export class EcoinventActivityService extends BaseWorker {
 		});
 	}
 
-	async queueActivityMatchJobs(req: any, orgId: string): Promise<void> {
+	async queueActivityMatchJobs(req: any, orgId: string): Promise<any> {
 		const { user, organization } = req;
 
 		// Iterate over organization's products and match them to Ecoinvent activities.
@@ -32,7 +32,7 @@ export class EcoinventActivityService extends BaseWorker {
 		});
 
 		// const product = products[10];
-		// const job = await this.activityQueue.add(
+		// return await this.activityQueue.add(
 		// 	'classify_product',
 		// 	{
 		// 		product,
