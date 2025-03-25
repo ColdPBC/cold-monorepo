@@ -1,3 +1,13 @@
+# [1.612.0](https://github.com/coldPBC/cold-monorepo/compare/v1.611.1...v1.612.0) (2025-03-25)
+
+
+### Features
+
+* Adjust emissions display precision to 3 decimal places ([5bcf3a9](https://github.com/coldPBC/cold-monorepo/commit/5bcf3a95f08beaf25ded47a4d781d68be0689f83))
+* Fix weight value formatting in emissions factor view ([9d8d95a](https://github.com/coldPBC/cold-monorepo/commit/9d8d95ab1ec40983f6c8c0014d779b565e1f86e1))
+* Increase weight precision to three decimal places ([4190814](https://github.com/coldPBC/cold-monorepo/commit/4190814911217909a34ae415f98adfe9e40d89da))
+* Remove unused classification tip display block ([ead7238](https://github.com/coldPBC/cold-monorepo/commit/ead7238f7f8124e62cb5167fd4e1faef129cd473))
+
 ## [1.611.1](https://github.com/coldPBC/cold-monorepo/compare/v1.611.0...v1.611.1) (2025-03-25)
 
 
