@@ -93,7 +93,7 @@ export const EmissionsFactorDetailedExpandedView = (
               Emissions
             </div>
             <div className={'font-bold'}>
-              {totalEmissions.toFixed(2)} kg CO2e
+              {Number(totalEmissions.toFixed(3)).toString()} kg CO2e
             </div>
           </div>
         </div>
