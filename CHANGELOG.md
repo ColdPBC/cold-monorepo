@@ -1,3 +1,10 @@
+## [1.611.1](https://github.com/coldPBC/cold-monorepo/compare/v1.611.0...v1.611.1) (2025-03-25)
+
+
+### Bug Fixes
+
+* **app-module:** correct import path for EcoinventActivityModule ([4977f75](https://github.com/coldPBC/cold-monorepo/commit/4977f7577d1493355ff371b2a949d23a5356f0cb))
+
 # [1.611.0](https://github.com/coldPBC/cold-monorepo/compare/v1.610.0...v1.611.0) (2025-03-24)
 
 
