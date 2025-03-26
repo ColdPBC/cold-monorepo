@@ -256,6 +256,23 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 	 * @private
 	 */
 	private async calculateAndPersistMaterialEmissions(productMaterial, ecoinvent_activity, organization, user) {
+		if (
+			!ecoinvent_activity.ecoinvent_activity_impacts ||
+			(Array.isArray(ecoinvent_activity.ecoinvent_activity_impacts) && ecoinvent_activity.ecoinvent_activity_impacts.length < 1)
+		) {
+			this.logger.warn(
+				`no ecoinvent_activity_impacts found in activity; Since there weren't any impacts provided, this activity will not be included in PCF calculation.  ${ecoinvent_activity.name}`,
+				{
+					ecoinvent_activity,
+					productMaterial,
+					organization,
+					user,
+				},
+			);
+
+			return;
+		}
+
 		productMaterial.total_co2e = this.pcfc.addActivity(ecoinvent_activity.name, productMaterial.weight, ecoinvent_activity.ecoinvent_activity_impacts[0].impact_value);
 
 		this.logger.info(`Added activity to PCF calculator: ${ecoinvent_activity.name} - ${productMaterial.total_co2e} KgCO2e`, {
