@@ -1,11 +1,15 @@
 import { EntityLevelAttributeAssuranceGraphQL } from './attributeAssurance';
 import { Length, MaterialClassificationCategory, UnitOfMeasurement, WeightFactorUnits } from '@coldpbc/enums';
+import {CalculatedWeightResult} from "@coldpbc/lib";
 
 export interface ProductMaterialForWeightCalculation {
   id: string
   yield: number | null;
   unitOfMeasure: UnitOfMeasurement | null;
   weight: number | null;
+  metadata: {
+    calculated_weight_response: CalculatedWeightResult | undefined;
+  } | null;
   material: {
     id: string
     materialClassification: {

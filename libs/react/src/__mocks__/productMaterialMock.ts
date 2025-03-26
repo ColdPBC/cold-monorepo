@@ -18,5 +18,6 @@ export const ProductMaterialMock: ProductMaterial = ({
     weightFactorUnitOfMeasure: null,
     width: null,
     widthUnitOfMeasure: null,
-  }
+  },
+  metadata: null
 });

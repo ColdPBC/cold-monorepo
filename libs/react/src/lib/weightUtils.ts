@@ -1,4 +1,4 @@
-import { ProductMaterial, ProductMaterialForWeightCalculation } from '../interfaces';
+import { ProductMaterialForWeightCalculation } from '../interfaces';
 import { Area, Count, Length, Weight, WeightFactorUnits } from '../enums';
 import numeral from 'numeral';
 
@@ -37,12 +37,18 @@ const formatGrams = (weightInKg: number): string => {
 };
 
 export const getCalculatedWeight = (productMaterial: ProductMaterialForWeightCalculation): CalculatedWeightResult => {
+  if(productMaterial.metadata?.calculated_weight_response){
+    return productMaterial.metadata.calculated_weight_response;
+  }
+
   if (typeof productMaterial.weight === 'number') {
 		return {
 			weightInKg: productMaterial.weight,
 			displayWeight: formatGrams(productMaterial.weight),
 		};
 	}
+
+  // todo: sunset this because the BE does this already
 
 	const unitOfMeasure = productMaterial.unitOfMeasure;
 

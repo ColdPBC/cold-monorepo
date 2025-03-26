@@ -37,6 +37,11 @@ export const Default: Story = {
           yield: null,
           unitOfMeasure: null,
           weight: null,
+          metadata: {
+            calculated_weight_response: {
+              error: 'Missing yield or unit of measure',
+            }
+          },
           material: {
             id: 'qrs',
             name: 'Organic Wool',
@@ -105,6 +110,11 @@ export const NoAssurances: Story = {
           yield: null,
           unitOfMeasure: null,
           weight: null,
+          metadata: {
+            calculated_weight_response: {
+              error: 'Missing yield or unit of measure',
+            }
+          },
           material: {
             id: 'qrs',
             name: 'Organic Wool',

@@ -21,6 +21,12 @@ export const getProductsMock = (): ProductsQuery[] => {
 					yield: null,
 					unitOfMeasure: null,
 					weight: 5,
+          metadata: {
+            calculated_weight_response: {
+              weightInKg: 5,
+              displayWeight: "5,000 g"
+            }
+          },
 					material: {
 						id: 'mat_xyqmz0hdf1p8p26wg3d5ju97',
 						name: 'Material 15',
@@ -58,6 +64,12 @@ export const getProductsMock = (): ProductsQuery[] => {
 					yield: null,
 					unitOfMeasure: null,
 					weight: 5,
+          metadata: {
+            calculated_weight_response: {
+              weightInKg: 5,
+              displayWeight: "5,000 g"
+            }
+          },
 					material: {
 						id: 'mat_beq7hd4e7efg5vzrzpp1xcb9',
 						name: 'Material 7',
@@ -129,6 +141,12 @@ export const getProductsMock = (): ProductsQuery[] => {
 					yield: null,
 					unitOfMeasure: null,
 					weight: 2,
+          metadata: {
+            calculated_weight_response: {
+              weightInKg: 2,
+              displayWeight: "2,000 g"
+            }
+          },
 					material: {
 						id: 'mat_x0x7th2m41zdgahmrbt9t58c',
 						name: 'Material 9',
@@ -202,6 +220,12 @@ export const getProductsMock = (): ProductsQuery[] => {
 					yield: null,
 					unitOfMeasure: null,
 					weight: 1,
+          metadata: {
+            calculated_weight_response: {
+              weightInKg: 1,
+              displayWeight: "1,000 g"
+            }
+          },
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
@@ -350,6 +374,11 @@ export const getProductsMock = (): ProductsQuery[] => {
 					yield: null,
 					unitOfMeasure: null,
 					weight: null,
+          metadata: {
+            calculated_weight_response: {
+              error: 'Missing yield or unit of measure'
+            }
+          },
 					material: {
 						id: 'mat_xyqmz0hdf1p8p26wg3d5ju97',
 						name: 'Material 15',
@@ -379,6 +408,11 @@ export const getProductsMock = (): ProductsQuery[] => {
 					yield: null,
 					unitOfMeasure: null,
 					weight: null,
+          metadata: {
+            calculated_weight_response: {
+              error: 'Missing yield or unit of measure'
+            }
+          },
 					material: {
 						id: 'mat_u9lckkyqyii41q3by2wdt86i',
 						name: 'Material 8',
@@ -442,6 +476,11 @@ export const getProductsMock = (): ProductsQuery[] => {
 					yield: null,
 					unitOfMeasure: null,
 					weight: null,
+          metadata: {
+            calculated_weight_response: {
+              error: 'Missing yield or unit of measure'
+            }
+          },
 					material: {
 						id: 'mat_vctuajyeyeuwow0djuxwzb9g',
 						name: 'Material 11',
@@ -494,6 +533,11 @@ export const getProductsMock = (): ProductsQuery[] => {
 					yield: null,
 					unitOfMeasure: null,
 					weight: null,
+          metadata: {
+            calculated_weight_response: {
+              error: 'Missing yield or unit of measure'
+            }
+          },
 					material: {
 						id: 'mat_sdk8wipu9fq5a7ihxhthx5pv',
 						name: 'Example Nylon 1234',
@@ -633,6 +677,12 @@ export const getProductsMock = (): ProductsQuery[] => {
 					yield: 2,
 					unitOfMeasure: 'pcs',
 					weight: 3,
+          metadata: {
+            calculated_weight_response: {
+              weightInKg: 3,
+              displayWeight: "3,000 g",
+            }
+          },
 					material: {
 						id: '5926bb4c-5cbc-4b14-970f-968249444415',
 						name: 'Material 1',
@@ -688,6 +738,13 @@ export const getProductsMock = (): ProductsQuery[] => {
 					yield: 3.3,
 					unitOfMeasure: 'm',
 					weight: null,
+          metadata: {
+            calculated_weight_response: {
+              weightInKg: 0.217932,
+              displayWeight: "218 g",
+              explanation: "Weight estimated using a yield of 3.30 m, a width of 2.00 in, and a weight factor of 1.300 kg per m2"
+            }
+          },
 					material: {
 						id: 'mat_beq7hd4e7efg5vzrzpp1xcb9',
 						name: 'Material 7',
@@ -825,6 +882,12 @@ export const getProductsMock = (): ProductsQuery[] => {
 						width: null,
 						widthUnitOfMeasure: null,
 					},
+          metadata: {
+            calculated_weight_response: {
+              weightInKg: 5.2,
+              displayWeight: '5,200 g'
+            }
+          },
 				},
 				{
 					id: 'opm_btmrnz0tujog6nq1lf86voyj',
@@ -896,12 +959,24 @@ export const getProductsMock = (): ProductsQuery[] => {
 						width: null,
 						widthUnitOfMeasure: null,
 					},
+          metadata: {
+            calculated_weight_response: {
+              weightInKg: 1.1,
+              displayWeight: '1,100 g'
+            }
+          },
 				},
 				{
 					id: 'opm_eppxah0jo1qm1pcl1ipctlty',
 					yield: 2,
 					unitOfMeasure: 'pcs',
 					weight: 3.4,
+          metadata: {
+            calculated_weight_response: {
+              weightInKg: 3.4,
+              displayWeight: '3,400 g'
+            }
+          },
 					material: {
 						id: 'mat_vctuajyeyeuwow0djuxwzb9g',
 						name: 'Material 11',
@@ -956,7 +1031,7 @@ export const getProductsMock = (): ProductsQuery[] => {
 						width: null,
 						widthUnitOfMeasure: null,
 					},
-				},
+        },
 				{
 					id: 'opm_l30omtgvn91n7bt8jm2aiu57',
 					yield: null,
@@ -1033,7 +1108,12 @@ export const getProductsMock = (): ProductsQuery[] => {
 						width: null,
 						widthUnitOfMeasure: null,
 					},
-				},
+          metadata: {
+            calculated_weight_response: {
+              error: 'Missing yield or unit of measure',
+            }
+          },
+        },
 			],
 			attributeAssurances: [
 				{

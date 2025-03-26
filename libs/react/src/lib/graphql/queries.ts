@@ -247,6 +247,7 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
         yield
         unitOfMeasure
         weight
+        metadata
         material {
           id
           name
@@ -474,6 +475,7 @@ export const GET_PRODUCT = gql`
         yield
         unitOfMeasure
         weight
+        metadata
         material {
           id
           name
