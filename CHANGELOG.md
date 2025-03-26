@@ -1,3 +1,10 @@
+## [1.616.1](https://github.com/coldPBC/cold-monorepo/compare/v1.616.0...v1.616.1) (2025-03-26)
+
+
+### Bug Fixes
+
+* handle missing ecoinvent_activity_impacts in material emissions calculation ([0ae7af4](https://github.com/coldPBC/cold-monorepo/commit/0ae7af445f82a62c17e263d3a74a8a380706da6f))
+
 # [1.616.0](https://github.com/coldPBC/cold-monorepo/compare/v1.615.0...v1.616.0) (2025-03-26)
 
 
