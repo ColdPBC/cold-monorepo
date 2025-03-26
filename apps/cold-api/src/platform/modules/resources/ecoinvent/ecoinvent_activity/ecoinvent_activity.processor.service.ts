@@ -754,7 +754,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 
 			this.logger.info('Calculated weight for material', { item, product, organization, user, ...weight_response });
 		} catch (e) {
-			this.logger.error(`Error calculating weight for material ${item.material.name}: ${e.message}`, {
+			this.logger.warn(`Error calculating weight for material ${item.material.name}: ${e.message}`, {
 				material: item.material,
 				organization,
 				product,
