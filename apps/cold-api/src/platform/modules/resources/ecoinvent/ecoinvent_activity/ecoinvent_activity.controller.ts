@@ -1,4 +1,4 @@
-import { Controller, Post, Req, UseGuards, UseFilters, Param } from '@nestjs/common';
+import { Controller, Post, Req, UseGuards, UseFilters, Param, Query, ParseBoolPipe } from '@nestjs/common';
 import { HttpExceptionFilter, JwtAuthGuard, Role, Roles, RolesGuard } from '@coldpbc/nest';
 import { EcoinventActivityService } from './ecoinvent_activity.service';
 
@@ -10,7 +10,12 @@ export class EcoinventActivityController {
 
 	@Post('organizations/:orgId/match')
 	@Roles(Role.ColdAdmin)
-	createOrganization(@Req() req: any, @Param('orgId') orgId: string) {
-		return this.activityService.queueActivityMatchJobs(req, orgId);
+	createOrganization(
+		@Req() req: any,
+		@Param('orgId') orgId: string,
+		@Query('clear_classification', ParseBoolPipe) clearClassification?: boolean,
+		@Query('reclassify_materials', ParseBoolPipe) reclassifyMaterials?: boolean,
+	) {
+		return this.activityService.queueActivityMatchJobs(req, orgId, reclassifyMaterials, clearClassification);
 	}
 }
