@@ -734,6 +734,7 @@ model material_ecoinvent_classifications {
   id                          String   @id @default(cuid())
   material_classification_id  Int
   ecoinvent_classification_id String
+	reasoning										String?
   created_at                  DateTime @default(now())
   updated_at                  DateTime @updatedAt
 
@@ -863,6 +864,7 @@ model ecoinvent_activity_classifications {
   id                          String @id @default(cuid())
   ecoinvent_activity_id       String
   ecoinvent_classification_id String
+	reasoning									  String?
 
   ecoinvent_activity       ecoinvent_activities      @relation(fields: [ecoinvent_activity_id], references: [id], onDelete: Cascade)
   ecoinvent_classification ecoinvent_classifications @relation(fields: [ecoinvent_classification_id], references: [id], onDelete: Cascade)
