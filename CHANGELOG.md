@@ -1,3 +1,10 @@
+## [1.616.2](https://github.com/coldPBC/cold-monorepo/compare/v1.616.1...v1.616.2) (2025-03-26)
+
+
+### Bug Fixes
+
+* **log:** change error log to warning for weight calculation failures ([554d79d](https://github.com/coldPBC/cold-monorepo/commit/554d79db4a6dc50bdff6a03f143ca8aedfe4ffab))
+
 ## [1.616.1](https://github.com/coldPBC/cold-monorepo/compare/v1.616.0...v1.616.1) (2025-03-26)
 
 
