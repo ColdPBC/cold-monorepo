@@ -1,3 +1,10 @@
+# [1.615.0](https://github.com/coldPBC/cold-monorepo/compare/v1.614.0...v1.615.0) (2025-03-26)
+
+
+### Features
+
+* **ecoinvent:** enhance activity matching and classification process ([73c500c](https://github.com/coldPBC/cold-monorepo/commit/73c500cd57479be81182d326f6b8a565f1d11056))
+
 # [1.614.0](https://github.com/coldPBC/cold-monorepo/compare/v1.613.0...v1.614.0) (2025-03-25)
 
 
