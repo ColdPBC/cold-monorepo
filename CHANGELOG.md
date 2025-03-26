@@ -1,3 +1,11 @@
+# [1.616.0](https://github.com/coldPBC/cold-monorepo/compare/v1.615.0...v1.616.0) (2025-03-26)
+
+
+### Features
+
+* **prisma:** add "reasoning" column to classifications tables ([34ce0ba](https://github.com/coldPBC/cold-monorepo/commit/34ce0bae57b11f55c47bdf34924d188ac8670424))
+* **prisma:** add optional reasoning field to relevant models ([dd9c914](https://github.com/coldPBC/cold-monorepo/commit/dd9c91463edd4497a7b5d8c06556338722ededb4))
+
 # [1.615.0](https://github.com/coldPBC/cold-monorepo/compare/v1.614.0...v1.615.0) (2025-03-26)
 
 
