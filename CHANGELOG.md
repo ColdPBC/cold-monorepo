@@ -1,3 +1,11 @@
+# [1.617.0](https://github.com/coldPBC/cold-monorepo/compare/v1.616.2...v1.617.0) (2025-03-27)
+
+
+### Features
+
+* enhance ecoinvent activity processing and weight formatting ([757fed2](https://github.com/coldPBC/cold-monorepo/commit/757fed2386e62fd150a79431b5096f3724413460))
+* **prisma:** update schema and migrations for material and emission factors ([4b0ce1b](https://github.com/coldPBC/cold-monorepo/commit/4b0ce1bee0712a8d0484b6e6df640a55c1110dbc))
+
 ## [1.616.2](https://github.com/coldPBC/cold-monorepo/compare/v1.616.1...v1.616.2) (2025-03-26)
 
 
