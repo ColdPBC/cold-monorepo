@@ -706,7 +706,7 @@ model products {
   organization            organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   supplier                organization_facilities?  @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
   attribute_assurances    attribute_assurances[]
-  product_tag_assignments product_tag_assignments[]
+	product_tag_assignments product_tag_assignments[]
 
   @@unique([organization_id, upc_code, name], name: "orgIdNameUpc")
   @@unique([organization_id, name], name: "orgIdName")
@@ -834,6 +834,8 @@ model material_emission_factors {
   updated_at             DateTime @updatedAt
   emission_factor_id     String
 
+	organization_id				String?
+	reasoning 					 String?
   material             materials?            @relation(fields: [material_id], references: [id], onDelete: Cascade)
   ecoinvent_activities ecoinvent_activities? @relation(fields: [eco_invent_activity_id], references: [id], onDelete: Cascade)
   emission_factors     emission_factors?     @relation(fields: [emission_factor_id], references: [id], onDelete: Cascade)
@@ -864,7 +866,6 @@ model ecoinvent_activity_classifications {
   id                          String @id @default(cuid())
   ecoinvent_activity_id       String
   ecoinvent_classification_id String
-	reasoning									  String?
 
   ecoinvent_activity       ecoinvent_activities      @relation(fields: [ecoinvent_activity_id], references: [id], onDelete: Cascade)
   ecoinvent_classification ecoinvent_classifications @relation(fields: [ecoinvent_classification_id], references: [id], onDelete: Cascade)
