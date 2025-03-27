@@ -33,7 +33,7 @@ export type CalculatedWeightResult = WeightResult | WeightError;
 
 const formatGrams = (weightInKg: number): string => {
 	const roundedGrams = Math.round(weightInKg * 1000);
-	return `${numeral(roundedGrams).format('0,0')} g`;
+	return `${numeral(roundedGrams).format('0,000')} g`;
 };
 
 export const getCalculatedWeight = (productMaterial: ProductMaterialForWeightCalculation): CalculatedWeightResult => {

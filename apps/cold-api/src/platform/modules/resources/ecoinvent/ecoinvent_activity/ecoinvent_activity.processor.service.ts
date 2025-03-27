@@ -205,7 +205,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 						}
 
 						//link material to emission factor and ecoinvent activity
-						await this.upsertMaterialEmissionFactors(material, emFactor, ecoinvent_activity, organization, user);
+						await this.upsertMaterialEmissionFactors(material, emFactor, ecoinvent_activity, activity.reasoning, organization, user);
 
 						// Calculate the total CO2e for the material and update the product material.
 						if (productMaterial?.weight) {
@@ -552,7 +552,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 	 * @param user
 	 * @private
 	 */
-	private async upsertMaterialEmissionFactors(material, emFactor, ecoinvent_activity, organization, user) {
+	private async upsertMaterialEmissionFactors(material, emFactor, ecoinvent_activity, reasoning: string, organization, user) {
 		await this.prisma.material_emission_factors.upsert({
 			where: {
 				materialActivityEmissionFactorKey: {
@@ -566,11 +566,15 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 				material_id: material.id,
 				eco_invent_activity_id: ecoinvent_activity.id,
 				emission_factor_id: emFactor.id,
+				organization_id: organization.id,
+				reasoning: reasoning ? reasoning : null,
 			},
 			update: {
 				material_id: material.id,
 				eco_invent_activity_id: ecoinvent_activity.id,
 				emission_factor_id: emFactor.id,
+				organization_id: organization.id,
+				reasoning: reasoning ? reasoning : null,
 			},
 		});
 
