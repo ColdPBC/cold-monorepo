@@ -1,3 +1,11 @@
+# [1.618.0](https://github.com/coldPBC/cold-monorepo/compare/v1.617.0...v1.618.0) (2025-03-27)
+
+
+### Features
+
+* **prisma:** add material_classification_activities model ([9d5e810](https://github.com/coldPBC/cold-monorepo/commit/9d5e810584c314101418da677500ae4a2b14ac25))
+* **processor:** improve ecoinvent activity processing and classification ([3e3fdbf](https://github.com/coldPBC/cold-monorepo/commit/3e3fdbf4f9e6b2e9000ee70ce53dd7296c723dbb))
+
 # [1.617.0](https://github.com/coldPBC/cold-monorepo/compare/v1.616.2...v1.617.0) (2025-03-27)
 
 
