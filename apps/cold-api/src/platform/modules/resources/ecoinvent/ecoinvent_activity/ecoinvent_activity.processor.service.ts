@@ -148,46 +148,52 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 						continue;
 					}
 
-					// get the ecoinvent activities that match the material classifications
-					const ecoinvent_activities = await this.get_activities_by_classifications(
-						material?.material_classification?.material_ecoinvent_classifications,
-						material,
-						organization,
-						product,
-						user,
-					);
+					let ecoinvent_activities = material.material_classification.material_classification_activities;
 
+					// if activities aren't already established for this classification then
+					// use ai find ecoinvent activities that match the material classifications
 					if (!ecoinvent_activities || ecoinvent_activities.length === 0) {
-						this.logger.warn(`No ecoinvent activities found for material: ${material.name}`, { material, organization, product, user });
-						continue;
-					}
+						ecoinvent_activities = await this.get_activities_by_classifications(
+							material?.material_classification?.material_ecoinvent_classifications,
+							material,
+							organization,
+							product,
+							user,
+						);
 
-					const material_classification_string = await this.determineMaterialCategory(material, organization, product, user);
+						if (!ecoinvent_activities || ecoinvent_activities.length === 0) {
+							this.logger.warn(`No ecoinvent activities found for material: ${material.name}`, { material, organization, product, user });
+							continue;
+						}
 
-					// use openAi to classify the ecoinvent activities for the material
-					const material_classification_response = await this.getMaterialActivityClassificationResponse(
-						material_classification_string,
-						material,
-						ecoinvent_activities,
-						product,
-						user,
-						organization,
-					);
+						const material_classification_string = await this.determineMaterialCategory(material, organization, product, user);
+						// use openAi to classify the ecoinvent activities for the material
+						const material_classification_response = await this.getMaterialActivityClassificationResponse(
+							material_classification_string,
+							material,
+							ecoinvent_activities,
+							product,
+							user,
+							organization,
+						);
 
-					// If nothing is returned from openAi, continue to the next material since we cannot calculate the total CO2e for the material without a
-					// list of ecoinvent activities.
-					if (!material_classification_response) {
-						continue;
-					}
+						// If nothing is returned from openAi, continue to the next material since we cannot calculate the total CO2e for the material without a
+						// list of ecoinvent activities.
+						if (!material_classification_response) {
+							continue;
+						}
 
-					// If no ecoinvent activities are found, continue to the since we cannot calculate the total CO2e for the material.
-					if (!Array.isArray(material_classification_response.ecoinvent_activities) || material_classification_response.ecoinvent_activities.length < 1) {
-						this.logger.error(`No ecoinvent activities found for material: ${material.name}`, { material, organization, product, user });
-						continue;
+						// If no ecoinvent activities are found, continue to the since we cannot calculate the total CO2e for the material.
+						if (!Array.isArray(material_classification_response.ecoinvent_activities) || material_classification_response.ecoinvent_activities.length < 1) {
+							this.logger.error(`No ecoinvent activities found for material: ${material.name}`, { material, organization, product, user });
+							continue;
+						}
+
+						ecoinvent_activities = material_classification_response.ecoinvent_activities;
 					}
 
 					// Iterate over the ecoinvent activities and calculate the total CO2e for the material.
-					for (const activity of material_classification_response.ecoinvent_activities) {
+					for (const activity of ecoinvent_activities) {
 						// find the actual ecoinvent activity identified by openAi from the db by name
 						const ecoinvent_activity = await this.getEcoinventActivityByName(activity.name);
 
@@ -196,6 +202,26 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 							this.logger.error(`Ecoinvent activity not found: ${activity}`, { activity, material, organization, product, user });
 							continue;
 						}
+
+						// Store the material_classification_activity record
+						await this.prisma.material_classification_activities.upsert({
+							where: {
+								materialClassificationActivityKey: {
+									material_classification_id: material.material_classification.id,
+									ecoinvent_activity_id: ecoinvent_activity.id,
+								},
+							},
+							create: {
+								material_classification_id: material.material_classification.id,
+								ecoinvent_activity_id: ecoinvent_activity.id,
+								reasoning: activity.reasoning,
+							},
+							update: {
+								material_classification_id: material.material_classification.id,
+								ecoinvent_activity_id: ecoinvent_activity.id,
+								reasoning: activity.reasoning,
+							},
+						});
 
 						const emFactor = await this.processEmissionFactorsForActivity(ecoinvent_activity, organization, user);
 
@@ -271,6 +297,10 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 			);
 
 			return;
+		}
+
+		for (const impact of ecoinvent_activity.ecoinvent_activity_impacts) {
+			this.pcfc.addActivity(ecoinvent_activity.name, productMaterial.weight, impact.impact_value);
 		}
 
 		productMaterial.total_co2e = this.pcfc.addActivity(ecoinvent_activity.name, productMaterial.weight, ecoinvent_activity.ecoinvent_activity_impacts[0].impact_value);
@@ -624,8 +654,10 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 								name: true,
 								category: true,
 								weight_factor: true,
+								material_classification_activities: true,
 								material_ecoinvent_classifications: {
 									select: {
+										material_classification_id: true,
 										ecoinvent_classification: true,
 									},
 								},
@@ -780,6 +812,14 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 	 * @return {Object} - The updated or created emission factor object.
 	 */
 	private async processEmissionFactorsForActivity(ecoinvent_activity, organization, user) {
+		if (!Array.isArray(ecoinvent_activity.ecoinvent_activity_impacts) || ecoinvent_activity.ecoinvent_activity_impacts.length < 1) {
+			this.logger.warn(
+				`No ecoinvent_activity_impacts found in activity; Since there weren't any impacts provided, this activity will not be included in PCF calculation.  ${ecoinvent_activity.name}`,
+				{ ecoinvent_activity, organization, user },
+			);
+			return null;
+		}
+
 		//emission factors are stored in the database and are used to calculate the total co2e for the material
 		let emFactor = await this.prisma.emission_factors.findFirst({
 			where: {
