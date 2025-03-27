@@ -706,7 +706,7 @@ model products {
   organization            organizations             @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   supplier                organization_facilities?  @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
   attribute_assurances    attribute_assurances[]
-	product_tag_assignments product_tag_assignments[]
+  product_tag_assignments product_tag_assignments[]
 
   @@unique([organization_id, upc_code, name], name: "orgIdNameUpc")
   @@unique([organization_id, name], name: "orgIdName")
@@ -734,7 +734,7 @@ model material_ecoinvent_classifications {
   id                          String   @id @default(cuid())
   material_classification_id  Int
   ecoinvent_classification_id String
-	reasoning										String?
+  reasoning                   String?
   created_at                  DateTime @default(now())
   updated_at                  DateTime @updatedAt
 
@@ -744,6 +744,22 @@ model material_ecoinvent_classifications {
   @@unique([material_classification_id, ecoinvent_classification_id], name: "materialEcoinventClassificationKey")
   @@index([ecoinvent_classification_id], map: "material_ecoinvent_classifications_id_idx1")
   @@index([material_classification_id], map: "material_ecoinvent_material_classifications_idx1")
+}
+
+model material_classification_activities {
+  id                         String   @id @default(cuid())
+  material_classification_id Int
+  ecoinvent_activity_id      String
+	reasoning									 String?
+  created_at                 DateTime @default(now())
+  updated_at                 DateTime @updatedAt
+
+  material_classification material_classification @relation(fields: [material_classification_id], references: [id], onDelete: Cascade)
+  ecoinvent_activity      ecoinvent_activities    @relation(fields: [ecoinvent_activity_id], references: [id], onDelete: Cascade)
+
+  @@unique([material_classification_id, ecoinvent_activity_id], name: "materialClassificationActivityKey")
+  @@index([ecoinvent_activity_id], map: "material_classification_activities_activity_id_idx1")
+  @@index([material_classification_id], map: "material_classification_activities_material_classification_idx1")
 }
 
 model material_classification {
@@ -760,6 +776,7 @@ model material_classification {
   sustainability_attributes                         sustainability_attributes[]
   sustainability_attribute_classifcation_assignment sustainability_attribute_classifcation_assignment[]
   material_ecoinvent_classifications                material_ecoinvent_classifications[]
+  material_classification_activities                material_classification_activities[]
 
   @@unique([category, name], name: "categoryName")
   @@index([category], map: "material_classification_category_idx1")
@@ -834,8 +851,8 @@ model material_emission_factors {
   updated_at             DateTime @updatedAt
   emission_factor_id     String
 
-	organization_id				String?
-	reasoning 					 String?
+  organization_id      String?
+  reasoning            String?
   material             materials?            @relation(fields: [material_id], references: [id], onDelete: Cascade)
   ecoinvent_activities ecoinvent_activities? @relation(fields: [eco_invent_activity_id], references: [id], onDelete: Cascade)
   emission_factors     emission_factors?     @relation(fields: [emission_factor_id], references: [id], onDelete: Cascade)
@@ -938,6 +955,7 @@ model ecoinvent_activities {
   ecoinvent_activity_impacts         ecoinvent_activity_impacts[]
   material_emission_factors          material_emission_factors[]
   ecoinvent_classification           ecoinvent_classifications?           @relation(fields: [ecoinvent_classification_id], references: [id], onDelete: Cascade)
+  material_classification_activities material_classification_activities[]
 
   @@unique([name, location], name: "ecoinventActivityName")
   @@index([location], map: "ecoinvent_activities_location_idx1")
