@@ -44,7 +44,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
       // Hide old Documents item when FF is on
       return !ldFlags.showNewDocumentUploadUxCold1410;
     } else if (item.key === 'regulatory_compliance_key') {
-      return ldFlags.showRegulationPage;
+      return ldFlags.showRegulationsPage;
     } else {
 			return true;
 		}

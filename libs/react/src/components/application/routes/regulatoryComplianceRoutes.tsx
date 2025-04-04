@@ -8,7 +8,7 @@ export const RegulatoryComplianceRoutes = () => {
   return (
     <Route path={'/regulatory_compliance'}>
       {
-        ldFlags.showRegulationPage ? (
+        ldFlags.showRegulationsPage ? (
           <>
             <Route index element={<RegulatoryCompliance />} />
             <Route path={':id'} element={<RegulatoryComplianceDetail />} />
