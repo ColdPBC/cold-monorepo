@@ -11,7 +11,7 @@ export const RegulatoryComplianceRoutes = () => {
         ldFlags.showRegulationsPage ? (
           <>
             <Route index element={<RegulatoryCompliance />} />
-            <Route path={':id'} element={<RegulatoryComplianceDetail />} />
+            <Route path={':slug'} element={<RegulatoryComplianceDetail />} />
           </>
         ) : (
           <Route index element={<Navigate to={DEFAULT_PAGE} replace={true} />} />
