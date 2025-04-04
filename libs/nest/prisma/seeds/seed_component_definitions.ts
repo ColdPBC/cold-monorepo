@@ -129,6 +129,14 @@ const seeds: Array<{
               },
               label: 'Assurance Documents',
               route: '/documents',
+            },
+            {
+              key: 'regulatory_compliance_key',
+              icon: {
+                name: 'ColdRegulatoryComplianceIcon',
+              },
+              label: 'Regulatory Compliance',
+              route: '/regulatory_compliance',
             }
           ]
         },
