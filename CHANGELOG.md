@@ -1,3 +1,11 @@
+# [1.621.0](https://github.com/coldPBC/cold-monorepo/compare/v1.620.0...v1.621.0) (2025-04-04)
+
+
+### Features
+
+* basic Regulatory Compliance details page ([e174544](https://github.com/coldPBC/cold-monorepo/commit/e1745442e11c7c47d2dcaa805779b0e01689eb5f))
+* basic Regulatory Compliance details page ([#849](https://github.com/coldPBC/cold-monorepo/issues/849)) ([c899b49](https://github.com/coldPBC/cold-monorepo/commit/c899b49f5ada242a729d9358c2b9b51a876d7ac8))
+
 # [1.620.0](https://github.com/coldPBC/cold-monorepo/compare/v1.619.0...v1.620.0) (2025-04-04)
 
 
