@@ -32,6 +32,7 @@ import {
   ColdMaterialsNavIcon,
   ColdProductsNavIcon,
   ColdQuestionnaireIcon,
+  ColdRegulatoryComplianceIcon,
   ColdReportIcon,
   ColdRightArrowIcon,
   ColdScoreIcon,
@@ -150,6 +151,8 @@ export const ColdIcon = (props: IconProps) => {
         return <ColdDollarSignIcon {...props} />;
     case IconNames.ColdCalculatorIcon:
       return <ColdCalculatorIcon {...props} />;
+    case IconNames.ColdRegulatoryComplianceIcon:
+      return <ColdRegulatoryComplianceIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;
