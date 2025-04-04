@@ -1,3 +1,11 @@
+# [1.620.0](https://github.com/coldPBC/cold-monorepo/compare/v1.619.0...v1.620.0) (2025-04-04)
+
+
+### Features
+
+* new use regulations hook with some sample data ([5527a7a](https://github.com/coldPBC/cold-monorepo/commit/5527a7a1009bb1cea731f4a66696679eef87507a))
+* new use regulations hook with some sample data ([#848](https://github.com/coldPBC/cold-monorepo/issues/848)) ([e9f290a](https://github.com/coldPBC/cold-monorepo/commit/e9f290ad156940932cb732230628350f15554e67))
+
 # [1.619.0](https://github.com/coldPBC/cold-monorepo/compare/v1.618.0...v1.619.0) (2025-04-04)
 
 
