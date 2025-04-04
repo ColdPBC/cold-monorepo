@@ -1,3 +1,15 @@
+# [1.619.0](https://github.com/coldPBC/cold-monorepo/compare/v1.618.0...v1.619.0) (2025-04-04)
+
+
+### Features
+
+* Add "Regulatory Compliance" section to sidebar mock and seeds ([e534127](https://github.com/coldPBC/cold-monorepo/commit/e534127bcd32cb26f6c4e7585c6e7a4aa3fcb93f))
+* Add breadcrumb for Regulatory Compliance Detail page ([e664ee0](https://github.com/coldPBC/cold-monorepo/commit/e664ee02fbe862ce9c1cad017e9daf2a1bdade39))
+* Add ColdRegulatoryComplianceIcon component ([bf9cace](https://github.com/coldPBC/cold-monorepo/commit/bf9caceb84ab8e22b5b300040bebfa506c3d82d3))
+* Add feature flag logic for regulatory compliance visibility ([e932aae](https://github.com/coldPBC/cold-monorepo/commit/e932aaed6db701656c24687190ca94d289ce25a6))
+* Add Regulatory Compliance routes and pages ([160a135](https://github.com/coldPBC/cold-monorepo/commit/160a135e0c3219cdbbd714695d875cbe39887709))
+* Rename flag to `showRegulationsPage` for consistency. ([11ce857](https://github.com/coldPBC/cold-monorepo/commit/11ce8577ef5eeec33cad5a9cacaa8dd600c0a180))
+
 # [1.618.0](https://github.com/coldPBC/cold-monorepo/compare/v1.617.0...v1.618.0) (2025-03-27)
 
 
