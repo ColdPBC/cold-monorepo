@@ -97,6 +97,7 @@ export default {
         showNewPcfUiCold1450: true,
         showAiSustainabilibuddyCold1464: true,
         showSspDatagridExportButton: true,
+        showRegulationPage: true,
       },
     },
   },
