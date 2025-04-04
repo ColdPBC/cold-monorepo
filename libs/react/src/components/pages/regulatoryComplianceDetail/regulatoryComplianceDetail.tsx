@@ -1,5 +1,5 @@
-import { Card, DetailsItem, ErrorPage, MainContent } from '@coldpbc/components';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Card, DetailsItem, EllipsisMenu, ErrorPage, MainContent } from '@coldpbc/components';
+import { useParams } from 'react-router-dom';
 import { useRegulations } from '@coldpbc/hooks';
 import React from 'react';
 
@@ -38,6 +38,18 @@ export const RegulatoryComplianceDetail = () => {
           label: title,
         }
       ]}
+      headerElement={regulation['Bill Text Link'] && (
+        <EllipsisMenu
+          data-testid={'regulatory-compliance-details-menu'}
+          items={[
+            {
+              label: 'Bill Text',
+              onClick: () => {
+                window.open(regulation['Bill Text Link'], '_blank', 'noopener,noreferrer');
+              },
+            }
+          ]}/>
+      )}
     >
       <div className='w-full h-full flex gap-6 items-start'>
         <Card title={'Details'} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'regulatory-compliance-details-card'}>
