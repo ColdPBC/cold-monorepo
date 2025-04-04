@@ -9,6 +9,9 @@ export const RegulatoryComplianceDetail = () => {
         {
           label: "Regulatory Compliance",
           href: "/regulatory_compliance",
+        },
+        {
+          label: "Regulatory Compliance Detail",
         }
       ]}
     >
