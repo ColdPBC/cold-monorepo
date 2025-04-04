@@ -48,4 +48,5 @@ export enum IconNames {
 	ColdEditPencilIcon = 'ColdEditPencilIcon',
 	ColdDollarSignIcon = 'ColdDollarSignIcon',
 	ColdCalculatorIcon = 'ColdCalculatorIcon',
+  ColdRegulatoryComplianceIcon = 'ColdRegulatoryComplianceIcon',
 }
