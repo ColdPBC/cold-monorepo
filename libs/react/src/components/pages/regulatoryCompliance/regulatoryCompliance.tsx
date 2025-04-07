@@ -35,9 +35,8 @@ export const RegulatoryCompliance = () => {
 
   const columns: GridColDef[] = [
     { ...DEFAULT_GRID_COL_DEF, field: 'Regulation', headerName: 'Regulation', width: 200 },
-    { ...DEFAULT_GRID_COL_DEF, field: 'Bill Number', headerName: 'Bill Number', width: 150 },
-    { ...DEFAULT_GRID_COL_DEF, field: 'In Effect', headerName: 'In Effect', width: 100, renderCell: (params) => (<StatusBadge status={params.row["In Effect"]} />), type: 'singleSelect', valueOptions: Object.values(RegulationStatus)},
-    { ...DEFAULT_GRID_COL_DEF, field: 'Jurisdiction', headerName: 'Jurisdiction', width: 150},
+    { ...DEFAULT_GRID_COL_DEF, field: 'In Effect', headerName: 'In Effect', minWidth: 100, flex: 1, renderCell: (params) => (<StatusBadge status={params.row["In Effect"]} />), type: 'singleSelect', valueOptions: Object.values(RegulationStatus)},
+    { ...DEFAULT_GRID_COL_DEF, field: 'Jurisdiction', headerName: 'Jurisdiction', minWidth: 150, flex: 1},
     { ...DEFAULT_GRID_COL_DEF, field: 'Effective', headerName: 'Effective', width: 150 },
     { ...DEFAULT_GRID_COL_DEF, field: 'Category', headerName: 'Category', width: 100, type: 'singleSelect', valueOptions: Object.values(RegulationCategory)},
     { ...DEFAULT_GRID_COL_DEF, field: 'Subcategory', headerName: 'Subcategory', width: 150, type: 'singleSelect', valueOptions: Object.values(RegulationSubcategory) },
@@ -56,7 +55,7 @@ export const RegulatoryCompliance = () => {
   return (
     <MainContent
       title={'Regulatory Compliance'}
-      className={'w-[calc(100%-100px)]'}
+      className={'w-[calc(100%-100px)] min-w-[1129px]'}
     >
       <MuiDataGrid
         rows={rows}
