@@ -5,11 +5,10 @@ import {
 } from '@coldpbc/enums'
 import { RegulationEntry } from '@coldpbc/interfaces'
 import {
-  getAllRegulations,
   getRegulationBySlug,
   getRegulationsByCategory,
   getRegulationsByJurisdiction,
-  getAllJurisdictions
+  getAllJurisdictions, getAllRegulationsWithSlugs
 } from '@coldpbc/lib';
 
 /**
@@ -23,7 +22,7 @@ export function useRegulations() {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   // Get all regulations
-  const allRegulations = useMemo(() => getAllRegulations(), []);
+  const allRegulations = useMemo(() => getAllRegulationsWithSlugs(), []);
 
   // Get all available jurisdictions for filtering
   const jurisdictions = useMemo(() => getAllJurisdictions(), []);
@@ -31,13 +30,13 @@ export function useRegulations() {
   // Get all available categories and subcategories for filtering
   const categories = useMemo(() => {
     const cats = new Set<RegulationCategory>();
-    allRegulations.forEach(reg => cats.add(reg.Category));
+    allRegulations.forEach(({slug, regulation}) => cats.add(regulation.Category));
     return Array.from(cats).sort();
   }, [allRegulations]);
 
   const subcategories = useMemo(() => {
     const subcats = new Set<RegulationSubcategory>();
-    allRegulations.forEach(reg => subcats.add(reg.Subcategory));
+    allRegulations.forEach(({slug, regulation}) => subcats.add(regulation.Subcategory));
     return Array.from(subcats).sort();
   }, [allRegulations]);
 
@@ -52,26 +51,26 @@ export function useRegulations() {
 
     // Apply category filter
     if (categoryFilter) {
-      result = result.filter(reg => reg.Category === categoryFilter);
+      result = result.filter(({slug, regulation}) => regulation.Category === categoryFilter);
     }
 
     // Apply subcategory filter
     if (subcategoryFilter) {
-      result = result.filter(reg => reg.Subcategory === subcategoryFilter);
+      result = result.filter(({slug, regulation}) => regulation.Subcategory === subcategoryFilter);
     }
 
     // Apply jurisdiction filter
     if (jurisdictionFilter) {
-      result = result.filter(reg => reg.Jurisdiction === jurisdictionFilter);
+      result = result.filter(({slug, regulation}) => regulation.Jurisdiction === jurisdictionFilter);
     }
 
     // Apply search term filter
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      result = result.filter(reg =>
-        reg.Regulation.toLowerCase().includes(term) ||
-        reg.Summary.toLowerCase().includes(term) ||
-        reg.Jurisdiction.toLowerCase().includes(term)
+      result = result.filter(({slug, regulation}) =>
+        regulation.Regulation.toLowerCase().includes(term) ||
+        regulation.Summary.toLowerCase().includes(term) ||
+        regulation.Jurisdiction.toLowerCase().includes(term)
       );
     }
 

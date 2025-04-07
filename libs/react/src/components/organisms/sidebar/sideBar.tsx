@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {clone, forEach, get, upperCase} from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useLocation } from 'react-router-dom';
@@ -17,6 +17,7 @@ import {getGraphqlError, hasGraphqlError} from '@coldpbc/lib';
 
 const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Element => {
 	const ldFlags = useFlags();
+  const {orgId} = useAuth0Wrapper()
 	const [activeItem, setActiveItem] = useState<NavbarItem | NavbarItemWithRoute | null>(null);
 	const sidebarQuery =  useGraphQLSWR<{
     componentDefinitions: SidebarGraphQL[];
@@ -81,9 +82,20 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
     }
     const items: NavbarItem[] = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []);
     matchPathWithSidebarItem(items);
-	}, [location.pathname, sidebarQuery.data, activeItem?.key]);
+	}, [location.pathname, sidebarQuery.data, activeItem?.key, orgId, ldFlags]);
 
-	if (sidebarQuery.isLoading || auth0.isLoading)
+  const filteredSidebarItems = useMemo(() => {
+    // Get the original, complete sidebar items from the query response
+    const originalItems = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []) ?? [];
+
+    // Create a deep clone to avoid modifying the original data
+    const clonedItems = JSON.parse(JSON.stringify(originalItems));
+
+    // Apply filtering to the fresh clone
+    return clonedItems.filter(filterSidebar);
+  }, [ldFlags, sidebarQuery, orgId]);
+
+  if (sidebarQuery.isLoading || auth0.isLoading)
 		return (
 			<div>
 				<Spinner />
@@ -102,9 +114,6 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 		}
 		return <></>;
 	}
-
-	// filter top-level nav items
-	const filteredSidebarItems = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []).filter(filterSidebar) ?? [];
 
 	if (filteredSidebarItems) {
 		// Separate the items into top and bottom nav items

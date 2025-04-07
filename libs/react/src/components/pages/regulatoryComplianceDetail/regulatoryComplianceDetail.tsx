@@ -50,6 +50,8 @@ export const RegulatoryComplianceDetail = () => {
             }
           ]}/>
       )}
+      className={'w-[calc(100%)]'}
+      contentClassName={'min-w-[1129px]'}
     >
       <div className='w-full h-full flex gap-6 items-start'>
         <Card title={'Details'} className={'w-[406px] min-w-[406px] h-fit'} data-testid={'regulatory-compliance-details-card'}>
