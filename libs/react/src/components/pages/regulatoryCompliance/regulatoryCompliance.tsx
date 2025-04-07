@@ -47,9 +47,9 @@ export const RegulatoryCompliance = () => {
   ]
 
   const rows = useMemo(() => {
-    return filteredRegulations.map((regulation) => ({
-      id: regulation.slug,
-      ...regulation.regulation,
+    return filteredRegulations.map((item) => ({
+      id: item.slug,
+      ...item.regulation,
     }));
   }, [filteredRegulations])
 
