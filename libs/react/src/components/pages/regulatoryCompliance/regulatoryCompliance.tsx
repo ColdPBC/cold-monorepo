@@ -3,7 +3,7 @@ import {useRegulations} from "@coldpbc/hooks";
 import {GridColDef} from "@mui/x-data-grid-pro";
 import {useNavigate} from "react-router-dom";
 import {RegulationCategory, RegulationStatus, RegulationSubcategory, YesNo} from "@coldpbc/enums";
-import React from "react";
+import React, {useMemo} from "react";
 
 /**
  * StatusBadge component for displaying regulation status
@@ -46,25 +46,12 @@ export const RegulatoryCompliance = () => {
     { ...DEFAULT_GRID_COL_DEF, field: 'Penalties (Beyond Fees)', headerName: 'Penalties (Beyond Fees)', width: 200, type: 'singleSelect', valueOptions: Object.values(YesNo) },
   ]
 
-  const rows = filteredRegulations.map(({slug, regulation}) => {
-    const {   } = regulation;
-    return ({
-      id: slug,
-      Regulation: regulation["Regulation"],
-      "Bill Number": regulation["Bill Number"],
-      "In Effect": regulation["In Effect"],
-      Jurisdiction: regulation["Jurisdiction"],
-      Effective: regulation["Effective"],
-      Category: regulation["Category"],
-      Subcategory: regulation["Subcategory"],
-      "Product Type Eligibility": regulation["Product Type Eligibility"],
-      Fees: regulation["Fees"],
-      "Penalties (Beyond Fees)": regulation["Penalties (Beyond Fees)"],
-      "Revenue Applicability": regulation["Revenue Applicability"],
-      "Company Type Applicability": regulation["Company Type Applicability"],
-      "Employee Threshold Applicability": regulation["Employee Threshold Applicability"],
-    })
-  })
+  const rows = useMemo(() => {
+    return filteredRegulations.map((regulation) => ({
+      id: regulation.slug,
+      ...regulation.regulation,
+    }));
+  }, [filteredRegulations])
 
   return (
     <MainContent
