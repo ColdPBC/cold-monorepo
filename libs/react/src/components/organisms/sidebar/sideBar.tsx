@@ -84,7 +84,18 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
     matchPathWithSidebarItem(items);
 	}, [location.pathname, sidebarQuery.data, activeItem?.key, orgId, ldFlags]);
 
-	if (sidebarQuery.isLoading || auth0.isLoading)
+  const filteredSidebarItems = useMemo(() => {
+    // Get the original, complete sidebar items from the query response
+    const originalItems = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []) ?? [];
+
+    // Create a deep clone to avoid modifying the original data
+    const clonedItems = JSON.parse(JSON.stringify(originalItems));
+
+    // Apply filtering to the fresh clone
+    return clonedItems.filter(filterSidebar);
+  }, [ldFlags, sidebarQuery, orgId]);
+
+  if (sidebarQuery.isLoading || auth0.isLoading)
 		return (
 			<div>
 				<Spinner />
@@ -103,17 +114,6 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 		}
 		return <></>;
 	}
-
-  const filteredSidebarItems = useMemo(() => {
-    // Get the original, complete sidebar items from the query response
-    const originalItems = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []) ?? [];
-
-    // Create a deep clone to avoid modifying the original data
-    const clonedItems = JSON.parse(JSON.stringify(originalItems));
-
-    // Apply filtering to the fresh clone
-    return clonedItems.filter(filterSidebar);
-  }, [ldFlags, sidebarQuery, orgId]);
 
 	if (filteredSidebarItems) {
 		// Separate the items into top and bottom nav items
