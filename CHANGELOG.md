@@ -1,3 +1,11 @@
+# [1.622.0](https://github.com/coldPBC/cold-monorepo/compare/v1.621.0...v1.622.0) (2025-04-07)
+
+
+### Features
+
+* simply regulatory_compliance route logic ([#851](https://github.com/coldPBC/cold-monorepo/issues/851)) ([2738a32](https://github.com/coldPBC/cold-monorepo/commit/2738a32e42aac4428862a2a57369073cafa8aabd))
+* simply route logic ([8c97327](https://github.com/coldPBC/cold-monorepo/commit/8c97327d97d81cdf851d187b0a9e532f0e4be918))
+
 # [1.621.0](https://github.com/coldPBC/cold-monorepo/compare/v1.620.0...v1.621.0) (2025-04-04)
 
 
