@@ -1,3 +1,16 @@
+# [1.623.0](https://github.com/coldPBC/cold-monorepo/compare/v1.622.0...v1.623.0) (2025-04-07)
+
+
+### Features
+
+* Add data grid to Regulatory Compliance page ([3bc70ec](https://github.com/coldPBC/cold-monorepo/commit/3bc70ec7e62b6ecabe3981f6854860796687e389))
+* Add YesNo enum for penalties column in regulatory table ([1986a82](https://github.com/coldPBC/cold-monorepo/commit/1986a82430ff000685d34e1eaff78eee4a59b989))
+* Enhance layout responsiveness for regulatory compliance pages ([1e556ec](https://github.com/coldPBC/cold-monorepo/commit/1e556ecf235e7d7e247782c2eb56608ea9b41f51))
+* Refactor rows generation with useMemo for optimization ([e28d6c4](https://github.com/coldPBC/cold-monorepo/commit/e28d6c43f55739f7a1a4afc0f9038c75a6274d98))
+* Refactor sidebar filtering logic with useMemo. ([7f443c1](https://github.com/coldPBC/cold-monorepo/commit/7f443c1ced6adbab5d314517f34cbcdcf4c421f5))
+* Refactor sidebar item filtering for improved readability. ([5cd04e6](https://github.com/coldPBC/cold-monorepo/commit/5cd04e6c2a0507dab0c22cc59c47b9957c02b0df))
+* Refactor variable naming in regulatoryCompliance.tsx ([5961855](https://github.com/coldPBC/cold-monorepo/commit/5961855d837de3d96b9a72edaf0a7fdeca8f13e8))
+
 # [1.622.0](https://github.com/coldPBC/cold-monorepo/compare/v1.621.0...v1.622.0) (2025-04-07)
 
 
