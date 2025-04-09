@@ -1,8 +1,8 @@
-import {map} from "lodash";
-import {IconNames} from "@coldpbc/enums";
+import { map } from "lodash";
+import { IconNames } from "@coldpbc/enums";
 import React from "react";
-import {ColdIcon, ProgressCircle} from "@coldpbc/components";
-import {HexColors} from "@coldpbc/themes";
+import { ColdIcon, ProgressCircle } from "@coldpbc/components";
+import { HexColors } from "@coldpbc/themes";
 import { twMerge } from "tailwind-merge";
 
 export interface StatusChecklistItem {
