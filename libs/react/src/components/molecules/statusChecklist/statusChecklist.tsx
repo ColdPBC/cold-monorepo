@@ -51,26 +51,31 @@ export const StatusChecklist = (
   };
 
   const getComplianceStatusProgressBar = (listItem: StatusChecklistItem, index: number) => {
-    // dont show if the checklist is empty, if the checklist has only one item, or if the item is the last one
-    if ( checklist.length === 0 || index === checklist.length - 1 || checklist.length === 1 ) {
+    // Don't show progress bar if checklist is empty, has only one item, or for the last item
+    if (checklist.length <= 1 || index === checklist.length - 1) {
       return null;
     }
 
-    if (showProgressBarGradient(listItem)) {
-      return (
-        <div
-          data-testid={'checklist-progress-bar-gradient-' + index}
-          className={`absolute h-[calc(100%+22px)] w-[1px] left-[6px] top-[6px]`}
-          style={{
-            // have gradient color from 0% to amount of percentage to 100%
-            backgroundImage: `linear-gradient(to bottom, ${ComplianceProgressStatusColor.user_answered} 0%, ${HexColors.bgc.menu} 100%)`,
-          }}></div>
-      );
-    }
+    // Common properties for both bar types
+    const commonProps = {
+      className: `absolute h-[calc(100%+22px)] w-[1px] left-[5.5px] top-[6px]`,
+      "data-testid": `checklist-progress-bar-${showProgressBarGradient(listItem) ? 'gradient-' : ''}${index}`
+    };
 
-    const progressBarColor = listItem.completed ? 'bg-green-200' : 'bg-bgc-menu';
-
-    return <div data-testid={'checklist-progress-bar-' + index} className={`absolute h-[calc(100%+22px)] w-[1px] left-[6px] top-[6px] ${progressBarColor}`}></div>;
+    // Return gradient or solid bar based on condition
+    return showProgressBarGradient(listItem) ? (
+      <div
+        {...commonProps}
+        style={{
+          backgroundImage: `linear-gradient(to bottom, ${ComplianceProgressStatusColor.user_answered} 0%, ${HexColors.bgc.menu} 100%)`
+        }}
+      />
+    ) : (
+      <div
+        {...commonProps}
+        className={`${commonProps.className} ${listItem.completed ? 'bg-green-200' : 'bg-bgc-menu'}`}
+      />
+    );
   };
 
   const getComplianceSetStatusElement = (listItem: StatusChecklistItem, index: number) => {
