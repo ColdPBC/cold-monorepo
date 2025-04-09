@@ -58,3 +58,35 @@ export const WithGradient: Story = {
     }]
   },
 };
+
+export const TwoItems: Story = {
+  render: (args) => {
+    return <StatusChecklist {...args} />;
+  },
+  args: {
+    className: 'w-[347px]',
+    checklist: [{
+      label: 'Step 1',
+      completed: true,
+      showProgressBarGradient: false,
+    }, {
+      label: 'Step 2',
+      completed: true,
+      showProgressBarGradient: false,
+    }]
+  },
+};
+
+export const OneItem: Story = {
+  render: (args) => {
+    return <StatusChecklist {...args} />;
+  },
+  args: {
+    className: 'w-[347px]',
+    checklist: [{
+      label: 'Step 1',
+      completed: true,
+      showProgressBarGradient: false,
+    }]
+  },
+};
