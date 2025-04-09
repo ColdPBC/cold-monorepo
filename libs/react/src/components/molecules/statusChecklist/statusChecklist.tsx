@@ -3,7 +3,6 @@ import {IconNames} from "@coldpbc/enums";
 import React from "react";
 import {ColdIcon, ProgressCircle} from "@coldpbc/components";
 import {HexColors} from "@coldpbc/themes";
-import {ComplianceProgressStatusColor} from "@coldpbc/lib";
 import { twMerge } from "tailwind-merge";
 
 export interface StatusChecklistItem {
@@ -41,7 +40,7 @@ export const StatusChecklist = (
       if (listItem.completed) {
         return (
           <div className={'absolute top-[3px] left-0 w-[12px] h-[12px]'}>
-            <ColdIcon name={IconNames.ColdCheckIcon} color={ComplianceProgressStatusColor.user_answered} width={12} height={12} inverted={true} />
+            <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} width={12} height={12} inverted={true} />
           </div>
         );
       } else {
@@ -50,7 +49,7 @@ export const StatusChecklist = (
     }
   };
 
-  const getComplianceStatusProgressBar = (listItem: StatusChecklistItem, index: number) => {
+  const getChecklistProgressBar = (listItem: StatusChecklistItem, index: number) => {
     // Don't show progress bar if checklist is empty, has only one item, or for the last item
     if (checklist.length <= 1 || index === checklist.length - 1) {
       return null;
@@ -67,7 +66,7 @@ export const StatusChecklist = (
       <div
         {...commonProps}
         style={{
-          backgroundImage: `linear-gradient(to bottom, ${ComplianceProgressStatusColor.user_answered} 0%, ${HexColors.bgc.menu} 100%)`
+          backgroundImage: `linear-gradient(to bottom, ${HexColors.green['200']} 0%, ${HexColors.bgc.menu} 100%)`
         }}
       />
     ) : (
@@ -78,12 +77,12 @@ export const StatusChecklist = (
     );
   };
 
-  const getComplianceSetStatusElement = (listItem: StatusChecklistItem, index: number) => {
+  const getStatusChecklistItem = (listItem: StatusChecklistItem, index: number) => {
     let text = listItem.label;
 
     return (
       <div className={'w-full flex flex-row pl-[28px] relative'} key={index}>
-        {getComplianceStatusProgressBar(listItem, index)}
+        {getChecklistProgressBar(listItem, index)}
         {getStatusIcon(listItem)}
         <div className={'text-tc-primary text-body w-full'}>{text}</div>
       </div>
@@ -93,7 +92,7 @@ export const StatusChecklist = (
   return (
     <div className={twMerge('w-full h-auto p-[24px] flex flex-col gap-[22px] bg-bgc-elevated rounded-[16px]', className)} data-testid={props['data-testid'] || 'checklist'}>
       {map(checklist, (listItem, index) => {
-        return getComplianceSetStatusElement(listItem, index);
+        return getStatusChecklistItem(listItem, index);
       })}
     </div>
   );
