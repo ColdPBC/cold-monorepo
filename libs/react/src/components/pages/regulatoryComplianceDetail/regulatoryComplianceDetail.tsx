@@ -1,4 +1,4 @@
-import { Card, DetailsItem, EllipsisMenu, ErrorPage, MainContent } from '@coldpbc/components';
+import {Card, DetailsItem, EllipsisMenu, ErrorPage, MainContent, StatusChecklist} from '@coldpbc/components';
 import { useParams } from 'react-router-dom';
 import { useRegulations } from '@coldpbc/hooks';
 import React from 'react';
@@ -67,9 +67,16 @@ export const RegulatoryComplianceDetail = () => {
             <DetailsItem category={'Employee Threshold'} value={regulation['Employee Threshold Applicability']} />
           </Card>
           <Card title={'Guidance & Steps to Comply'} className={'w-full h-fit'} data-testid={'regulatory-compliance-details-card'}>
-            <ul className={'list-none pl-0 text-body'}>
-              {guidanceSteps}
-            </ul>
+            <StatusChecklist
+              className={''}
+              checklist={
+                regulation["Guidance & Steps to Comply"].map((step, index) => ({
+                  label: step.trim(),
+                  completed: false,
+                  showProgressBarGradient: false,
+                }))
+              }
+            />
           </Card>
         </div>
       </div>
