@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const YesNo = (props: { onChange: (value: any) => void; value: any; 'data-testid'?: string }) => {
+export const YesNoInput = (props: { onChange: (value: any) => void; value: any; 'data-testid'?: string }) => {
   const { onChange, value } = props;
 
   const onClick = (newValue: any) => {

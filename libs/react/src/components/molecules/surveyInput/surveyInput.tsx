@@ -3,7 +3,7 @@ import { InputTypes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { isUndefined } from 'lodash';
-import { Card, Input, ListItem, PercentSlider, SelectOption, YesNo } from '@coldpbc/components';
+import { Card, Input, ListItem, PercentSlider, SelectOption, YesNoInput } from '@coldpbc/components';
 import { getAIResponseValue, isAIResponseValueValid } from '@coldpbc/lib';
 
 export interface SurveyInputProps {
@@ -41,7 +41,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
     switch (component) {
       case 'yes_no':
         return (
-          <YesNo
+          <YesNoInput
             onChange={value => {
               onFieldUpdated(input_key, value);
             }}

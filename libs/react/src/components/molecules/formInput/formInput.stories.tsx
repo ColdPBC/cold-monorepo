@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { InputTypes } from '../../../enums/inputs';
+import { InputTypes } from '@coldpbc/enums';
 import { FormInput } from './formInput';
-import { FormInputProps } from '../../../interfaces/form/form';
-import { YesNo } from '@coldpbc/components';
+import { FormInputProps } from '@coldpbc/interfaces';
 
 const meta: Meta<typeof FormInput> = {
   title: 'Molecules/FormInput',
