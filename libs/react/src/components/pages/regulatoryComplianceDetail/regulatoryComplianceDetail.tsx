@@ -19,12 +19,6 @@ export const RegulatoryComplianceDetail = () => {
   const title = regulation['Bill Number'] && regulation['Bill Number'] !== regulation.Regulation ? `${regulation.Regulation} (${regulation['Bill Number']})` : regulation.Regulation;
   const subTitle = [regulation.Category, regulation.Subcategory, regulation.Jurisdiction].filter(val => !!val).join(' | ');
 
-  const guidanceSteps = regulation["Guidance & Steps to Comply"].map(
-    (step, index) => (
-      <li key={index} className="mb-2">{step.trim()}</li>
-    )
-  );
-
   return (
     <MainContent
       title={title}
@@ -68,7 +62,7 @@ export const RegulatoryComplianceDetail = () => {
           </Card>
           <Card title={'Guidance & Steps to Comply'} className={'w-full h-fit'} data-testid={'regulatory-compliance-details-card'}>
             <StatusChecklist
-              className={''}
+              className={'pl-0 pt-0'}
               checklist={
                 regulation["Guidance & Steps to Comply"].map((step, index) => ({
                   label: step.trim(),
