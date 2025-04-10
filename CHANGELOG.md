@@ -1,3 +1,13 @@
+# [1.624.0](https://github.com/coldPBC/cold-monorepo/compare/v1.623.0...v1.624.0) (2025-04-10)
+
+
+### Features
+
+* Add StatusChecklist to regulatory compliance details page ([63a6583](https://github.com/coldPBC/cold-monorepo/commit/63a65838bd18be167ad2dc86651db86d82d352b0))
+* Add StatusChecklist to regulatory compliance details page ([1e94e4f](https://github.com/coldPBC/cold-monorepo/commit/1e94e4f1f61ff33a900b2d53e10ac2fa3c385fd9))
+* Refactor compliance card with reusable StatusChecklist ([9639d56](https://github.com/coldPBC/cold-monorepo/commit/9639d56a54ba25716382fb93679438631ac706e8))
+* Set padding for StatusChecklist in compliance detail card ([c47c10b](https://github.com/coldPBC/cold-monorepo/commit/c47c10bb90821d2286f9b36a89b526ebcf0c13d1))
+
 # [1.623.0](https://github.com/coldPBC/cold-monorepo/compare/v1.622.0...v1.623.0) (2025-04-07)
 
 
