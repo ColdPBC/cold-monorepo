@@ -1,4 +1,4 @@
-import { Card, DetailsItem, EllipsisMenu, ErrorPage, MainContent } from '@coldpbc/components';
+import {Card, DetailsItem, EllipsisMenu, ErrorPage, MainContent, StatusChecklist} from '@coldpbc/components';
 import { useParams } from 'react-router-dom';
 import { useRegulations } from '@coldpbc/hooks';
 import React from 'react';
@@ -18,12 +18,6 @@ export const RegulatoryComplianceDetail = () => {
 
   const title = regulation['Bill Number'] && regulation['Bill Number'] !== regulation.Regulation ? `${regulation.Regulation} (${regulation['Bill Number']})` : regulation.Regulation;
   const subTitle = [regulation.Category, regulation.Subcategory, regulation.Jurisdiction].filter(val => !!val).join(' | ');
-
-  const guidanceSteps = regulation["Guidance & Steps to Comply"].map(
-    (step, index) => (
-      <li key={index} className="mb-2">{step.trim()}</li>
-    )
-  );
 
   return (
     <MainContent
@@ -67,9 +61,16 @@ export const RegulatoryComplianceDetail = () => {
             <DetailsItem category={'Employee Threshold'} value={regulation['Employee Threshold Applicability']} />
           </Card>
           <Card title={'Guidance & Steps to Comply'} className={'w-full h-fit'} data-testid={'regulatory-compliance-details-card'}>
-            <ul className={'list-none pl-0 text-body'}>
-              {guidanceSteps}
-            </ul>
+            <StatusChecklist
+              className={'pl-0 pt-0'}
+              checklist={
+                regulation["Guidance & Steps to Comply"].map((step, index) => ({
+                  label: step.trim(),
+                  completed: false,
+                  showProgressBarGradient: false,
+                }))
+              }
+            />
           </Card>
         </div>
       </div>

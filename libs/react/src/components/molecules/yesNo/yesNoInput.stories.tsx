@@ -1,11 +1,11 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { YesNo } from './yesNo';
+import { YesNoInput } from './yesNoInput';
 
-const meta: Meta<typeof YesNo> = {
+const meta: Meta<typeof YesNoInput> = {
   title: 'Molecules/YesNo',
-  component: YesNo,
+  component: YesNoInput,
   tags: ['autodocs'],
   decorators: [withKnobs],
 };
@@ -31,6 +31,6 @@ const RenderYesNoStory = (args: any) => {
     setValue(value);
   };
 
-  return <YesNo value={value} onChange={onChange} />;
+  return <YesNoInput value={value} onChange={onChange} />;
 
 }
