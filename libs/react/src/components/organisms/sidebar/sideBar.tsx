@@ -98,7 +98,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 
     const items: NavbarItem[] = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []);
     matchPathWithSidebarItem(items);
-  }, [location.pathname, sidebarQuery.data, orgId, ldFlags, activeItem?.key]);
+  }, [location.pathname, sidebarQuery.data, activeItem?.key, orgId, ldFlags]);
 
   const filteredSidebarItems = useMemo(() => {
     // Get the original, complete sidebar items from the query response
