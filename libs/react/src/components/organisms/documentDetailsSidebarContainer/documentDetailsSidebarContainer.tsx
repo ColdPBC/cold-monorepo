@@ -42,7 +42,6 @@ export const DocumentDetailsSidebarContainer: React.FC<DocumentDetailsSidebarCon
     const [editDocumentFileState, setEditDocumentFileState] = useState<DocumentDetailsSidebarFileState | undefined>(undefined);
     const [editMaterialsModalIsOpen, setEditMaterialsModalIsOpen] = useState(false);
     const [selectedDocumentURL, setSelectedDocumentURL] = useState<string | undefined>(undefined);
-    const [fileState, setFileState] = useState<DocumentDetailsSidebarFileState | undefined>(undefined);
 
     const { logBrowser } = useColdContext();
     const { addToastMessage } = useAddToastMessage();
@@ -101,8 +100,8 @@ export const DocumentDetailsSidebarContainer: React.FC<DocumentDetailsSidebarCon
         selectedDocument && (
           <DocumentDetailsSidebar
             file={selectedFile}
-            fileState={fileState}
-            setFileState={setFileState}
+            fileState={editDocumentFileState}
+            setFileState={setEditDocumentFileState}
             sustainabilityAttributes={sustainabilityAttributes}
             refreshFiles={refreshFiles}
             closeSidebar={onSidebarClose}
