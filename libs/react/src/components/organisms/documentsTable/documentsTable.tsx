@@ -268,6 +268,7 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
             sortModel: [{ field: 'uploaded', sort: 'desc' }],
           },
         }}
+        showSearch
 			/>
 		</div>
 	);
