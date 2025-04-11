@@ -6,7 +6,6 @@ import {
   ErrorFallback,
   MainContent,
   Spinner,
-  DocumentDetailsSidebarFileState,
   UploadModal,
   AiProcessingDocumentsBanner, DocumentDetailsSidebarContainer
 } from '@coldpbc/components';
@@ -149,59 +148,14 @@ const _DocumentsPage = () => {
         <AiProcessingDocumentsBanner count={files.filter(file => file.processingStatus === ProcessingStatus.AI_PROCESSING).length} />
 				<DocumentsTable files={files} selectDocument={selectDocument} />
 			</MainContent>
-			{/*<DocumentDetailsSidebar*/}
-			{/*	file={files.find(file => file.id === selectedDocument)}*/}
-      {/*  fileState={editDocumentFileState}*/}
-      {/*  setFileState={setEditDocumentFileState}*/}
-			{/*	sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}*/}
-			{/*	refreshFiles={allFiles.mutate}*/}
-			{/*	closeSidebar={onSidebarClose}*/}
-			{/*	innerRef={ref}*/}
-			{/*	deleteFile={onDeleteClick}*/}
-			{/*	isLoading={selectedFileURLSWR.isLoading}*/}
-			{/*	downloadFile={onDocumentDownload}*/}
-			{/*	signedUrl={selectedDocumentURL}*/}
-      {/*  openEditMaterials={(fileState: DocumentDetailsSidebarFileState) => {*/}
-      {/*    setEditDocumentFileState(fileState);*/}
-      {/*    setEditMaterialsModalIsOpen(true);*/}
-      {/*  }}*/}
-      {/*  allMaterials={allMaterials}*/}
-			{/*/>*/}
-      {/*{*/}
-      {/*  documentToDelete && (*/}
-      {/*    <DeleteDocumentModal*/}
-      {/*      show={!!documentToDelete}*/}
-      {/*      setShowModal={(show: boolean) => {*/}
-      {/*        if (!show) {*/}
-      {/*          setDocumentToDelete(undefined);*/}
-      {/*        }*/}
-      {/*      }}*/}
-      {/*      id={documentToDelete?.id || ''}*/}
-      {/*      documentName={documentToDelete?.originalName || ''}*/}
-      {/*      refresh={allFiles.mutate}*/}
-      {/*    />*/}
-      {/*  )*/}
-      {/*}*/}
-      {/*{editDocumentFileState && (*/}
-      {/*  <DocumentsEditMaterialsModal*/}
-      {/*    allMaterials={allMaterials}*/}
-      {/*    fileState={editDocumentFileStateeditDocumentFileState}*/}
-      {/*    setSelectedValueIds={(entityIds: string[]) => (*/}
-      {/*      setEditDocumentFileState({ ...editDocumentFileState, entityIds: entityIds })*/}
-      {/*    )}*/}
-      {/*    isOpen={editMaterialsModalIsOpen}*/}
-      {/*    onClose={() => setEditMaterialsModalIsOpen(false)}*/}
-      {/*  />*/}
-      {/*)}*/}
-
-        <DocumentDetailsSidebarContainer
-          selectedDocument={selectedDocument}
-          setSelectedDocument={setSelectedDocument}
-          files={files}
-          refreshFiles={allFiles.mutate}
-          sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
-          allMaterials={allMaterials}
-        />
+      <DocumentDetailsSidebarContainer
+        selectedDocument={selectedDocument}
+        setSelectedDocument={setSelectedDocument}
+        files={files}
+        refreshFiles={allFiles.mutate}
+        sustainabilityAttributes={get(allSustainabilityAttributes.data, 'data.sustainabilityAttributes', [])}
+        allMaterials={allMaterials}
+      />
     </div>
 	);
 };
