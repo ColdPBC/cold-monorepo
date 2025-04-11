@@ -1,3 +1,16 @@
+# [1.625.0](https://github.com/coldPBC/cold-monorepo/compare/v1.624.0...v1.625.0) (2025-04-11)
+
+
+### Bug Fixes
+
+* stop multiple sidebar re-rendering ([9a2c6ca](https://github.com/coldPBC/cold-monorepo/commit/9a2c6ca43e92b0b2f1111c13f3aa4fabf9f0e866))
+* stop multiple sidebar re-rendering ([#857](https://github.com/coldPBC/cold-monorepo/issues/857)) ([a57b3ed](https://github.com/coldPBC/cold-monorepo/commit/a57b3edb3d09b77ab2a874dd600542e4e5d6a186))
+
+
+### Features
+
+* Fix dependency order in sidebar useEffect dependency array ([22af827](https://github.com/coldPBC/cold-monorepo/commit/22af827e80e7a44b17b7759612d409e27d694851))
+
 # [1.624.0](https://github.com/coldPBC/cold-monorepo/compare/v1.623.0...v1.624.0) (2025-04-10)
 
 
