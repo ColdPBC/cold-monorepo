@@ -185,7 +185,7 @@ const _DocumentsPage = () => {
       {/*{editDocumentFileState && (*/}
       {/*  <DocumentsEditMaterialsModal*/}
       {/*    allMaterials={allMaterials}*/}
-      {/*    fileState={editDocumentFileState}*/}
+      {/*    fileState={editDocumentFileStateeditDocumentFileState}*/}
       {/*    setSelectedValueIds={(entityIds: string[]) => (*/}
       {/*      setEditDocumentFileState({ ...editDocumentFileState, entityIds: entityIds })*/}
       {/*    )}*/}
