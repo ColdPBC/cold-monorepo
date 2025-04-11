@@ -59,6 +59,29 @@ const _ProductDetail = () => {
     organizationId: orgId,
   });
 
+  const allMaterials: MaterialWithTier2Supplier[] = React.useMemo(() => {
+    if (!materialsQuery.isLoading && !get(materialsQuery.data, 'errors', undefined) && !productQuery.isLoading && !get(productQuery.data, 'errors', undefined)) {
+      const data = get(materialsQuery.data, 'data.materials', []);
+      const product = get(productQuery.data, 'data.product');
+
+      // Get the product materials' IDs
+      const productMaterialIds = product?.productMaterials?.map(pm => pm.material?.id).filter(Boolean) || [];
+
+      // Filter materials to only include those in the product's materials
+      const filteredMaterials = productMaterialIds.length > 0
+        ? data.filter(material => productMaterialIds.includes(material.id))
+        : data;
+
+      return filteredMaterials.map(rawMaterial => ({
+        id: rawMaterial.id,
+        name: rawMaterial.name,
+        ...getTier2SupplierData(rawMaterial),
+      }));
+    } else {
+      return [];
+    }
+  }, [materialsQuery.isLoading, materialsQuery.data, productQuery.data, productQuery.isLoading]);
+
   if (productQuery.isLoading || allFiles.isLoading || allSustainabilityAttributes.isLoading || materialsQuery.isLoading) {
     return <Spinner />;
   }
@@ -83,28 +106,6 @@ const _ProductDetail = () => {
 	if (product === null || product === undefined) {
 		return null;
 	}
-
-  const allMaterials: MaterialWithTier2Supplier[] = React.useMemo(() => {
-    if (!materialsQuery.isLoading && !get(materialsQuery.data, 'errors', undefined)) {
-      const data = get(materialsQuery.data, 'data.materials', []);
-
-      // Get the product materials' IDs
-      const productMaterialIds = product?.productMaterials?.map(pm => pm.material?.id).filter(Boolean) || [];
-
-      // Filter materials to only include those in the product's materials
-      const filteredMaterials = productMaterialIds.length > 0
-        ? data.filter(material => productMaterialIds.includes(material.id))
-        : data;
-
-      return filteredMaterials.map(rawMaterial => ({
-        id: rawMaterial.id,
-        name: rawMaterial.name,
-        ...getTier2SupplierData(rawMaterial),
-      }));
-    } else {
-      return [];
-    }
-  }, [materialsQuery.isLoading, materialsQuery.data, product?.productMaterials]);
 
 	const subTitle = [product.productCategory, product.productSubcategory, product.seasonCode].filter(val => !!val).join(' | ');
 

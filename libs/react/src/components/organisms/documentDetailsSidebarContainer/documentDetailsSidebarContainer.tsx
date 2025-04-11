@@ -3,7 +3,7 @@ import {
   DocumentDetailsSidebar,
   DocumentDetailsSidebarFileState,
   DocumentsEditMaterialsModal,
-  DeleteDocumentModal
+  DeleteDocumentModal, MaterialWithTier2Supplier
 } from '@coldpbc/components';
 import { FilesWithAssurances, Claims, ToastMessage } from '@coldpbc/interfaces';
 import { useAddToastMessage, useColdContext, useOrgSWR } from '@coldpbc/hooks';
@@ -11,13 +11,6 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { isAxiosError } from 'axios';
 import { KeyedMutator } from 'swr';
 import { ApolloQueryResult } from '@apollo/client';
-
-export interface MaterialWithTier2Supplier {
-  id: string;
-  name: string;
-  tier2SupplierId: string;
-  tier2SupplierName: string;
-}
 
 export interface DocumentDetailsSidebarContainerProps {
   selectedDocument: string | undefined;
@@ -92,7 +85,7 @@ export const DocumentDetailsSidebarContainer: React.FC<DocumentDetailsSidebarCon
       setEditDocumentFileState(undefined);
     };
 
-    logBrowser('DocumentsSidebar rendered', 'info', { selectedDocument, editDocumentFileState });
+    logBrowser('DocumentsSidebar rendered', 'info', { selectedDocument, editDocumentFileState, allMaterials });
 
   return (
     <>
