@@ -5,13 +5,12 @@ import {
   DocumentsEditMaterialsModal,
   DeleteDocumentModal
 } from '@coldpbc/components';
-import { FilesWithAssurances, MaterialWithSupplier, Claims, ToastMessage } from '@coldpbc/interfaces';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLSWR, useOrgSWR } from '@coldpbc/hooks';
+import { FilesWithAssurances, Claims, ToastMessage } from '@coldpbc/interfaces';
+import { useAddToastMessage, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { isAxiosError } from 'axios';
 import { KeyedMutator } from 'swr';
 import { ApolloQueryResult } from '@apollo/client';
-import { get } from 'lodash';
 
 export interface MaterialWithTier2Supplier {
   id: string;

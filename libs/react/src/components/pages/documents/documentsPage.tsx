@@ -1,6 +1,5 @@
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLSWR, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useGraphQLSWR } from '@coldpbc/hooks';
 import {
-  DocumentDetailsSidebar,
   DocumentsHeaderTypes,
   DocumentsTable,
   DocumentUploadButton,
@@ -8,15 +7,12 @@ import {
   MainContent,
   Spinner,
   DocumentDetailsSidebarFileState,
-  DocumentsEditMaterialsModal,
   UploadModal,
-  AiProcessingDocumentsBanner, DeleteDocumentModal, DocumentDetailsSidebarContainer
+  AiProcessingDocumentsBanner, DocumentDetailsSidebarContainer
 } from '@coldpbc/components';
 import React, { useEffect } from 'react';
-import { axiosFetcher } from '@coldpbc/fetchers';
-import { FilesWithAssurances, MaterialWithSupplier, ToastMessage } from '@coldpbc/interfaces';
+import { FilesWithAssurances, MaterialWithSupplier } from '@coldpbc/interfaces';
 import { AssuranceDocumentTypes, IconNames, MainDocumentCategory, ProcessingStatus} from '@coldpbc/enums';
-import {isAxiosError} from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
 import {get} from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
@@ -35,16 +31,9 @@ export const getTier2SupplierData = (material) => {
 
 const _DocumentsPage = () => {
 	const [selectedDocument, setSelectedDocument] = React.useState<string | undefined>(undefined);
-	// const [documentToDelete, setDocumentToDelete] = React.useState<FilesWithAssurances | undefined>(undefined);
-  const [ editDocumentFileState, setEditDocumentFileState ] = React.useState<DocumentDetailsSidebarFileState | undefined>(undefined);
-	// const [ editMaterialsModalIsOpen, setEditMaterialsModalIsOpen ] = React.useState(false);
 	const [files, setFiles] = React.useState<FilesWithAssurances[]>([]);
-	// const [selectedDocumentURL, setSelectedDocumentURL] = React.useState<string | undefined>(undefined);
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
-	const { addToastMessage } = useAddToastMessage();
-	// const selectedFileURLSWR = useOrgSWR<string>(selectedDocument ? [`/files/${selectedDocument}/url`, 'GET'] : null, axiosFetcher);
-	// const ref = React.useRef<HTMLDivElement>(null);
   const ldFlags = useFlags();
   const docTypeFilter = ldFlags.showNewDocumentUploadUxCold1410 ? { type_in: Object.values(AssuranceDocumentTypes) } : {};
 	const allFiles = useGraphQLSWR<{
@@ -58,6 +47,7 @@ const _DocumentsPage = () => {
       ...docTypeFilter
 		},
 	});
+
 	const allSustainabilityAttributes = useGraphQLSWR('GET_ALL_SUS_ATTRIBUTES', {
 		pagination: {
 			orderBy: {
@@ -91,12 +81,6 @@ const _DocumentsPage = () => {
 			setFiles(files);
 		}
 	}, [allFiles.data]);
-
-	// useEffect(() => {
-	// 	if (selectedFileURLSWR.data && !isAxiosError(selectedFileURLSWR.data)) {
-	// 		setSelectedDocumentURL(selectedFileURLSWR.data);
-	// 	}
-	// }, [selectedFileURLSWR]);
 
 	if (allFiles.error) {
 		logBrowser('Error fetching files', 'error', { ...allFiles.error }, allFiles.error);
@@ -148,25 +132,6 @@ const _DocumentsPage = () => {
     );
   };
 
-	// const onDeleteClick = (id: string) => {
-	// 	setSelectedDocument(undefined);
-	// 	const file = files.find(file => file.id === id);
-	// 	if (file) {
-	// 		setDocumentToDelete(file);
-	// 	}
-	// };
-  //
-	// const onDocumentDownload = async (fileURL: string | undefined) => {
-	// 	// open signedURL
-	// 	if (fileURL) {
-	// 		window.location.href = fileURL;
-	// 		addToastMessage({
-	// 			message: 'Downloaded file',
-	// 			type: ToastMessage.SUCCESS,
-	// 		});
-	// 	}
-	// };
-
 	const selectDocument = (id: string) => {
 		if (selectedDocument && selectedDocument === id) {
 			setSelectedDocument(undefined);
@@ -175,12 +140,7 @@ const _DocumentsPage = () => {
 		}
 	};
 
-	// const onSidebarClose = () => {
-	// 	setSelectedDocument(undefined);
-  //   setEditDocumentFileState(undefined);
-	// };
-
-	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, editDocumentFileState, files, allSustainabilityAttributes });
+	logBrowser('DocumentsPage rendered', 'info', { selectedDocument, files, allSustainabilityAttributes });
 
 	return (
 		<div className="relative overflow-y-auto h-full w-full">
