@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {clone, forEach, get, upperCase} from 'lodash';
+import {clone, get, upperCase} from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useLocation } from 'react-router-dom';
 import {NavbarItem, NavbarItemWithRoute, SidebarGraphQL} from '@coldpbc/interfaces';
@@ -69,20 +69,36 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 
 	useEffect(() => {
     const matchPathWithSidebarItem = (items: NavbarItem[]) => {
-      forEach(items, (item: NavbarItem) => {
-        if(item.items) {
-          matchPathWithSidebarItem(item.items);
-        }
-        if(item.route) {
-          if (location.pathname.includes(item.route) && activeItem?.key !== item.key) {
-            setActiveItem(item);
+      const findMatchingItem = (items: NavbarItem[]): NavbarItem | undefined => {
+        for (const item of items) {
+          if (item.route && location.pathname.includes(item.route)) {
+            return item;
+          }
+
+          if (item.items && item.items.length > 0) {
+            const matchInChildren = findMatchingItem(item.items);
+            if (matchInChildren) {
+              return matchInChildren;
+            }
           }
         }
-      });
-    }
+        return undefined;
+      };
+
+      const matchingItem = findMatchingItem(items);
+
+      // Only set active item if it's different from current
+      if (matchingItem && (!activeItem || activeItem.key !== matchingItem.key)) {
+        setActiveItem(matchingItem);
+      } else if (!matchingItem && activeItem) {
+        // Clear active item if no match is found
+        setActiveItem(null);
+      }
+    };
+
     const items: NavbarItem[] = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []);
     matchPathWithSidebarItem(items);
-	}, [location.pathname, sidebarQuery.data, activeItem?.key, orgId, ldFlags]);
+  }, [location.pathname, sidebarQuery.data, activeItem?.key, orgId, ldFlags]);
 
   const filteredSidebarItems = useMemo(() => {
     // Get the original, complete sidebar items from the query response
