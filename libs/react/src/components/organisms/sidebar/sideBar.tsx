@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {clone, forEach, get, upperCase} from 'lodash';
+import {clone, get, upperCase} from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useLocation } from 'react-router-dom';
 import {NavbarItem, NavbarItemWithRoute, SidebarGraphQL} from '@coldpbc/interfaces';
@@ -38,12 +38,6 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 
     if (item.key === 'settings_billing_key') {
       return ldFlags.showBillingPageCold957;
-    } else if (item.key === 'assurance_documents_key' || item.key === 'uploads_key') {
-      // Show new documents items when FF is on
-      return ldFlags.showNewDocumentUploadUxCold1410;
-    } else if (item.key === 'documents_key') {
-      // Hide old Documents item when FF is on
-      return !ldFlags.showNewDocumentUploadUxCold1410;
     } else if (item.key === 'regulatory_compliance_key') {
       return ldFlags.showRegulationsPage;
     } else {
@@ -69,20 +63,36 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 
 	useEffect(() => {
     const matchPathWithSidebarItem = (items: NavbarItem[]) => {
-      forEach(items, (item: NavbarItem) => {
-        if(item.items) {
-          matchPathWithSidebarItem(item.items);
-        }
-        if(item.route) {
-          if (location.pathname.includes(item.route) && activeItem?.key !== item.key) {
-            setActiveItem(item);
+      const findMatchingItem = (items: NavbarItem[]): NavbarItem | undefined => {
+        for (const item of items) {
+          if (item.route && location.pathname.includes(item.route)) {
+            return item;
+          }
+
+          if (item.items && item.items.length > 0) {
+            const matchInChildren = findMatchingItem(item.items);
+            if (matchInChildren) {
+              return matchInChildren;
+            }
           }
         }
-      });
-    }
+        return undefined;
+      };
+
+      const matchingItem = findMatchingItem(items);
+
+      // Only set active item if it's different from current
+      if (matchingItem && (!activeItem || activeItem.key !== matchingItem.key)) {
+        setActiveItem(matchingItem);
+      } else if (!matchingItem && activeItem) {
+        // Clear active item if no match is found
+        setActiveItem(null);
+      }
+    };
+
     const items: NavbarItem[] = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []);
     matchPathWithSidebarItem(items);
-	}, [location.pathname, sidebarQuery.data, activeItem?.key, orgId, ldFlags]);
+  }, [location.pathname, sidebarQuery.data, orgId, ldFlags]);
 
   const filteredSidebarItems = useMemo(() => {
     // Get the original, complete sidebar items from the query response
@@ -94,6 +104,10 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
     // Apply filtering to the fresh clone
     return clonedItems.filter(filterSidebar);
   }, [ldFlags, sidebarQuery, orgId]);
+
+
+  // const filteredSidebarItems = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []).filter(filterSidebar) ?? [];
+
 
   if (sidebarQuery.isLoading || auth0.isLoading)
 		return (
