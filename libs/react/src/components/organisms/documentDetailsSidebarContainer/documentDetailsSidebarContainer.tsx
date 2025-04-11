@@ -3,7 +3,7 @@ import {
   DocumentDetailsSidebar,
   DocumentDetailsSidebarFileState,
   DocumentsEditMaterialsModal,
-  DeleteDocumentModal, MaterialWithTier2Supplier
+  DeleteDocumentModal, MaterialWithTier2Supplier, ErrorFallback
 } from '@coldpbc/components';
 import { FilesWithAssurances, Claims, ToastMessage } from '@coldpbc/interfaces';
 import { useAddToastMessage, useColdContext, useOrgSWR } from '@coldpbc/hooks';
@@ -11,6 +11,7 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { isAxiosError } from 'axios';
 import { KeyedMutator } from 'swr';
 import { ApolloQueryResult } from '@apollo/client';
+import {withErrorBoundary} from "react-error-boundary";
 
 export interface DocumentDetailsSidebarContainerProps {
   selectedDocument: string | undefined;
@@ -21,71 +22,70 @@ export interface DocumentDetailsSidebarContainerProps {
   allMaterials: MaterialWithTier2Supplier[];
 }
 
-export const DocumentDetailsSidebarContainer: React.FC<DocumentDetailsSidebarContainerProps> =
-  ({
-     selectedDocument,
-     setSelectedDocument,
-     files,
-     refreshFiles,
-     sustainabilityAttributes,
-     allMaterials,
-  }) => {
-    // State management
-    const [documentToDelete, setDocumentToDelete] = useState<FilesWithAssurances | undefined>(undefined);
-    const [editDocumentFileState, setEditDocumentFileState] = useState<DocumentDetailsSidebarFileState | undefined>(undefined);
-    const [editMaterialsModalIsOpen, setEditMaterialsModalIsOpen] = useState(false);
-    const [selectedDocumentURL, setSelectedDocumentURL] = useState<string | undefined>(undefined);
+const _DocumentDetailsSidebarContainer = (props: DocumentDetailsSidebarContainerProps) => {
+  const {selectedDocument,
+    setSelectedDocument,
+    files,
+    refreshFiles,
+    sustainabilityAttributes,
+    allMaterials,
+  } = props
+  // State management
+  const [documentToDelete, setDocumentToDelete] = useState<FilesWithAssurances | undefined>(undefined);
+  const [editDocumentFileState, setEditDocumentFileState] = useState<DocumentDetailsSidebarFileState | undefined>(undefined);
+  const [editMaterialsModalIsOpen, setEditMaterialsModalIsOpen] = useState(false);
+  const [selectedDocumentURL, setSelectedDocumentURL] = useState<string | undefined>(undefined);
 
-    const { logBrowser } = useColdContext();
-    const { addToastMessage } = useAddToastMessage();
-    const ref = useRef<HTMLDivElement>(null);
+  const { logBrowser } = useColdContext();
+  const { addToastMessage } = useAddToastMessage();
+  const ref = useRef<HTMLDivElement>(null);
 
-    // Get the selected file from files array
-    const selectedFile = files.find(file => file.id === selectedDocument);
+  // Get the selected file from files array
+  const selectedFile = files.find(file => file.id === selectedDocument);
 
-    // Fetch the signed URL for the selected document
-    const selectedFileURLSWR = useOrgSWR<string>(
-      selectedDocument ? [`/files/${selectedDocument}/url`, 'GET'] : null,
-      axiosFetcher
-    );
+  // Fetch the signed URL for the selected document
+  const selectedFileURLSWR = useOrgSWR<string>(
+    selectedDocument ? [`/files/${selectedDocument}/url`, 'GET'] : null,
+    axiosFetcher
+  );
 
-    // Update the selectedDocumentURL when the URL is fetched
-    useEffect(() => {
-      if (selectedFileURLSWR.data && !isAxiosError(selectedFileURLSWR.data)) {
-        setSelectedDocumentURL(selectedFileURLSWR.data);
-      }
-    }, [selectedFileURLSWR]);
+  // Update the selectedDocumentURL when the URL is fetched
+  useEffect(() => {
+    if (selectedFileURLSWR.data && !isAxiosError(selectedFileURLSWR.data)) {
+      setSelectedDocumentURL(selectedFileURLSWR.data);
+    }
+  }, [selectedFileURLSWR]);
 
-    const openEditMaterials = (fileState: DocumentDetailsSidebarFileState) => {
-      setEditDocumentFileState(fileState);
-      setEditMaterialsModalIsOpen(true);
-    };
+  const openEditMaterials = (fileState: DocumentDetailsSidebarFileState) => {
+    setEditDocumentFileState(fileState);
+    setEditMaterialsModalIsOpen(true);
+  };
 
-    const onDeleteClick = (id: string) => {
-      const file = files.find(file => file.id === id);
-      if (file) {
-        setDocumentToDelete(file);
-      }
-      setSelectedDocument(undefined);
-    };
+  const onDeleteClick = (id: string) => {
+    const file = files.find(file => file.id === id);
+    if (file) {
+      setDocumentToDelete(file);
+    }
+    setSelectedDocument(undefined);
+  };
 
-    const onDocumentDownload = async (fileURL: string | undefined) => {
-      // open signedURL
-      if (fileURL) {
-        window.location.href = fileURL;
-        addToastMessage({
-          message: 'Downloaded file',
-          type: ToastMessage.SUCCESS,
-        });
-      }
-    };
+  const onDocumentDownload = async (fileURL: string | undefined) => {
+    // open signedURL
+    if (fileURL) {
+      window.location.href = fileURL;
+      addToastMessage({
+        message: 'Downloaded file',
+        type: ToastMessage.SUCCESS,
+      });
+    }
+  };
 
-    const onSidebarClose = () => {
-      setSelectedDocument(undefined);
-      setEditDocumentFileState(undefined);
-    };
+  const onSidebarClose = () => {
+    setSelectedDocument(undefined);
+    setEditDocumentFileState(undefined);
+  };
 
-    logBrowser('DocumentsSidebar rendered', 'info', { selectedDocument, editDocumentFileState, allMaterials });
+  logBrowser('DocumentsSidebar rendered', 'info', { selectedDocument, editDocumentFileState, allMaterials });
 
   return (
     <>
@@ -140,3 +140,10 @@ export const DocumentDetailsSidebarContainer: React.FC<DocumentDetailsSidebarCon
     </>
   );
 };
+
+export const DocumentDetailsSidebarContainer = withErrorBoundary(_DocumentDetailsSidebarContainer, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in DocumentDetailsSidebarContainer: ', error);
+  },
+});
