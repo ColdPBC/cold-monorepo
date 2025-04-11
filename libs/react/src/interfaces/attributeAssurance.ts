@@ -34,7 +34,7 @@ export interface EntityLevelAttributeAssuranceGraphQL {
   effectiveEndDate: string | null;
   organizationFile: {
     id: string;
-    metadata: string;
+    metadata: string | null;
   } | null;
   sustainabilityAttribute: {
     id: string;
