@@ -8,11 +8,11 @@ import {
   ProductDocumentsTab,
   Spinner,
   Tabs, EllipsisMenu, DeleteEntityModal,
-  ProductCarbonAccountingTab,
+  ProductCarbonAccountingTab, MaterialWithTier2Supplier, getTier2SupplierData,
 } from '@coldpbc/components';
 import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from '@coldpbc/hooks';
 import { useParams } from 'react-router-dom';
-import {FilesWithAssurances, ProductsQuery} from '@coldpbc/interfaces';
+import {FilesWithAssurances, MaterialWithSupplier, ProductsQuery} from '@coldpbc/interfaces';
 import { cloneDeep, get, isError } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
@@ -35,7 +35,7 @@ const _ProductDetail = () => {
 	});
 
   const allFiles = useGraphQLSWR<{
-    organizationFiles: FilesWithAssurances[];
+    organizationFiles: FilesWithAssurances[] | null;
   }>('GET_ALL_FILES', {
     filter: {
       organization: {
@@ -45,7 +45,21 @@ const _ProductDetail = () => {
     },
   });
 
-  if (productQuery.isLoading || allFiles.isLoading) {
+  const allSustainabilityAttributes = useGraphQLSWR('GET_ALL_SUS_ATTRIBUTES', {
+    pagination: {
+      orderBy: {
+        name: 'ASC',
+      },
+    },
+  });
+
+  const materialsQuery = useGraphQLSWR<{
+    materials: MaterialWithSupplier[];
+  }>(orgId ? 'GET_ALL_MATERIALS_TO_ADD_ASSURANCE_TO_DOCUMENT' : null, {
+    organizationId: orgId,
+  });
+
+  if (productQuery.isLoading || allFiles.isLoading || allSustainabilityAttributes.isLoading || materialsQuery.isLoading) {
     return <Spinner />;
   }
 
@@ -70,6 +84,28 @@ const _ProductDetail = () => {
 		return null;
 	}
 
+  const allMaterials: MaterialWithTier2Supplier[] = React.useMemo(() => {
+    if (!materialsQuery.isLoading && !get(materialsQuery.data, 'errors', undefined)) {
+      const data = get(materialsQuery.data, 'data.materials', []);
+
+      // Get the product materials' IDs
+      const productMaterialIds = product?.productMaterials?.map(pm => pm.material?.id).filter(Boolean) || [];
+
+      // Filter materials to only include those in the product's materials
+      const filteredMaterials = productMaterialIds.length > 0
+        ? data.filter(material => productMaterialIds.includes(material.id))
+        : data;
+
+      return filteredMaterials.map(rawMaterial => ({
+        id: rawMaterial.id,
+        name: rawMaterial.name,
+        ...getTier2SupplierData(rawMaterial),
+      }));
+    } else {
+      return [];
+    }
+  }, [materialsQuery.isLoading, materialsQuery.data, product?.productMaterials]);
+
 	const subTitle = [product.productCategory, product.productSubcategory, product.seasonCode].filter(val => !!val).join(' | ');
 
   const tabs: {
@@ -92,7 +128,7 @@ const _ProductDetail = () => {
     ),
     {
       label: 'Documents',
-      content: <ProductDocumentsTab files={parseDocumentsForProductDetails(product, cloneDeep(files))} />,
+      content: <ProductDocumentsTab files={parseDocumentsForProductDetails(product, cloneDeep(files))} refreshFiles={allFiles.mutate} allMaterials={allMaterials} allSustainabilityAttributes={allSustainabilityAttributes} />,
     },
   ]
 
