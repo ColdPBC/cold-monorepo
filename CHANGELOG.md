@@ -1,3 +1,10 @@
+# [1.626.0](https://github.com/coldPBC/cold-monorepo/compare/v1.625.0...v1.626.0) (2025-04-11)
+
+
+### Features
+
+* add search to (Assurance) Documents page ([1a8d524](https://github.com/coldPBC/cold-monorepo/commit/1a8d524fad26139832d7d82a00aec702c112b62c))
+
 # [1.625.0](https://github.com/coldPBC/cold-monorepo/compare/v1.624.0...v1.625.0) (2025-04-11)
 
 
