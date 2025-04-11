@@ -165,6 +165,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								effectiveEndDate: addDays(new Date(), 75).toISOString(),
 								organizationFile: {
 									id: 'f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b',
+                  metadata: JSON.stringify({
+                    status: "ai_classified",
+                    certificate_number: "123456",
+                  }),
 								},
 								sustainabilityAttribute: {
 									id: '6fc74c15-cf95-4a4a-95ae-4f0f0eb3c401',
@@ -713,6 +717,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								effectiveEndDate: addDays(new Date(), 50).toISOString(),
 								organizationFile: {
 									id: 'f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b',
+                  metadata: JSON.stringify({
+                    status: "ai_classified",
+                    certificate_number: "ABCDEFG",
+                  }),
 								},
 								sustainabilityAttribute: {
 									id: '58421269-225a-4736-acdd-9acd7b4a1147',
@@ -726,6 +734,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								effectiveEndDate: addDays(new Date(), 50).toISOString(),
 								organizationFile: {
 									id: 'f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b',
+                  metadata: JSON.stringify({
+                    status: "ai_classified",
+                    certificate_number: "HIJKLM",
+                  }),
 								},
 								sustainabilityAttribute: {
 									id: '7cb028eb-bafe-4dd3-b11a-dddaa535b807',
@@ -739,6 +751,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 								effectiveEndDate: addDays(new Date(), 50).toISOString(),
 								organizationFile: {
 									id: 'f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b',
+                  metadata: JSON.stringify({
+                    status: "ai_classified",
+                    certificate_number: "NOPQRS",
+                  }),
 								},
 								sustainabilityAttribute: {
 									id: 'ccac80fd-2c4a-4ca0-aec3-989b615461c0',
@@ -1041,6 +1057,10 @@ export const getProductsMock = (): ProductsQuery[] => {
 					effectiveEndDate: addDays(new Date(), 75).toISOString(),
 					organizationFile: {
 						id: 'f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b',
+            metadata: JSON.stringify({
+              status: "ai_classified",
+              certificate_number: "TUVWXY",
+            }),
 					},
 					sustainabilityAttribute: {
 						id: 'susatr_ctzexktkgpudh39j7fr5v506',

@@ -225,6 +225,10 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
             effectiveEndDate: addDays(new Date(), 75).toISOString(),
             organizationFile: {
               id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+              metadata: JSON.stringify({
+                status: "ai_classified",
+                certificate_number: "XYZ321",
+              }),
             },
             sustainabilityAttribute: {
               id: "7d061431-6c78-40e7-94ca-02bc55b32d9f",
@@ -238,6 +242,10 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
             effectiveEndDate: addDays(new Date(), 15).toISOString(),
             organizationFile: {
               id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+              metadata: JSON.stringify({
+                status: "ai_classified",
+                certificate_number: "172.543.241",
+              }),
             },
             sustainabilityAttribute: {
               id: "b315a3e4-6cc2-4443-8c0e-09dc651b3ac8",
@@ -380,6 +388,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
             effectiveEndDate: addDays(new Date(), 75).toISOString(),
             organizationFile: {
               id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+              metadata: JSON.stringify({}),
             },
             sustainabilityAttribute: {
               id: "a99e4eff-72ee-40f4-a476-0385ac6f52d3",
@@ -396,6 +405,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
           effectiveEndDate: addDays(new Date(), 15).toISOString(),
           organizationFile: {
             id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+            metadata: JSON.stringify({}),
           },
           sustainabilityAttribute: {
             id: "58421269-225a-4736-acdd-9acd7b4a1147",
@@ -409,6 +419,7 @@ export function getMaterialsMocksWithAssurances(): MaterialsWithAssurances[] {
           effectiveEndDate: addDays(new Date(), 50).toISOString(),
           organizationFile: {
             id: "f1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+            metadata: JSON.stringify({}),
           },
           sustainabilityAttribute: {
             id: "7cb028eb-bafe-4dd3-b11a-dddaa535b807",
@@ -548,6 +559,10 @@ export const getMaterialMock: MaterialGraphQL = (
         effectiveEndDate: addDays(new Date(), 100).toISOString(),
         organizationFile: {
           id: 'document_1',
+          metadata: JSON.stringify({
+            status: "ai_classified",
+            certificate_number: "ABC123",
+          }),
         },
         sustainabilityAttribute: {
           id: 'attribute_2',
@@ -562,6 +577,10 @@ export const getMaterialMock: MaterialGraphQL = (
         effectiveEndDate: subDays(new Date(), 100).toISOString(),
         organizationFile: {
           id: 'document_1',
+          metadata: JSON.stringify({
+            status: "ai_classified",
+            certificate_number: "XYZ321",
+          }),
         },
         sustainabilityAttribute: {
           id: 'attribute_3',
