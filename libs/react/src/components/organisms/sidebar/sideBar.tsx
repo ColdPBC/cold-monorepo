@@ -111,10 +111,6 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
     return clonedItems.filter(filterSidebar);
   }, [ldFlags, sidebarQuery, orgId]);
 
-
-  // const filteredSidebarItems = get(sidebarQuery.data, 'data.componentDefinitions[0].definition.items', []).filter(filterSidebar) ?? [];
-
-
   if (sidebarQuery.isLoading || auth0.isLoading)
 		return (
 			<div>
