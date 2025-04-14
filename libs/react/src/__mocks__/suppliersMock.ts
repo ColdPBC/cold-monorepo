@@ -680,6 +680,9 @@ export const getSupplierMock: (tier: number) => SupplierGraphQL = (
         effectiveEndDate: addDays(new Date(), 100).toISOString(),
         organizationFile: {
           id: 'document_1',
+          metadata: JSON.stringify({
+            certificateId: '123.456'
+          }),
         },
         sustainabilityAttribute: {
           id: 'attribute_2',
@@ -694,6 +697,9 @@ export const getSupplierMock: (tier: number) => SupplierGraphQL = (
         effectiveEndDate: subDays(new Date(), 100).toISOString(),
         organizationFile: {
           id: 'document_1',
+          metadata: JSON.stringify({
+            certificateId: '123.456'
+          }),
         },
         sustainabilityAttribute: {
           id: 'attribute_3',

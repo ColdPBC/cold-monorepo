@@ -11,7 +11,7 @@ export interface SustainabilityAttributeAssurance {
     supplierName?: string;
   }
   status: AttributeAssuranceStatus;
-  certificateId: string | null;
+  certificateId?: string | null;
 }
 
 // This is the structure of AttributeAssurances when queried from
