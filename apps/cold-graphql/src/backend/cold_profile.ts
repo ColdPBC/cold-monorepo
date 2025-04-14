@@ -5,6 +5,7 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { WorkerLogger } from './libs/logger';
 
 const logger = new WorkerLogger('ColdProfile');
+
 export interface ColdProfile<T> extends UserProfile<T> {
 	organization: any;
 	isAdmin: boolean;
