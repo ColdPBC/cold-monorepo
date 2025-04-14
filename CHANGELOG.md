@@ -1,3 +1,10 @@
+## [1.627.1](https://github.com/coldPBC/cold-monorepo/compare/v1.627.0...v1.627.1) (2025-04-14)
+
+
+### Bug Fixes
+
+* add logger initialization for ColdProfile ([211a6a0](https://github.com/coldPBC/cold-monorepo/commit/211a6a09289b2bbd2785b1a18b70e16a9db88774))
+
 # [1.627.0](https://github.com/coldPBC/cold-monorepo/compare/v1.626.0...v1.627.0) (2025-04-14)
 
 
