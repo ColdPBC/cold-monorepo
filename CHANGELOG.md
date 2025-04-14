@@ -1,3 +1,15 @@
+# [1.627.0](https://github.com/coldPBC/cold-monorepo/compare/v1.626.0...v1.627.0) (2025-04-14)
+
+
+### Features
+
+* Clean up unused imports and commented-out code ([9ed3959](https://github.com/coldPBC/cold-monorepo/commit/9ed395993da8c53259008285ca53f7b9f177c129))
+* Fix typo in commented-out fileState reference ([4859b16](https://github.com/coldPBC/cold-monorepo/commit/4859b167aa4f7f841ce836bba0abc0f5bc844ac2))
+* Refactor documents page to use DocumentDetailsSidebarContainer ([b430d43](https://github.com/coldPBC/cold-monorepo/commit/b430d43e7abae1bb255df9e455b936fff804f592))
+* Refactor product documents tab to include sidebar and state ([4a89a31](https://github.com/coldPBC/cold-monorepo/commit/4a89a31be15157b75b0dca3a12615d83139eb332))
+* Refactor product loading logic and enhance logging. ([b3e2167](https://github.com/coldPBC/cold-monorepo/commit/b3e2167efd02e421d782a315dd15a81d90405ed9))
+* Remove unused `fileState` and update sidebar prop usage. ([eb6d25b](https://github.com/coldPBC/cold-monorepo/commit/eb6d25bc0bdc7ef2208cc997f62f890fe596f564))
+
 # [1.626.0](https://github.com/coldPBC/cold-monorepo/compare/v1.625.0...v1.626.0) (2025-04-11)
 
 
