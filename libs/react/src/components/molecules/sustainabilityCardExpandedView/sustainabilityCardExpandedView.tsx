@@ -55,6 +55,16 @@ const _SustainabilityCardExpandedView: React.FC<SustainabilityCardExpandedViewPr
     ),
   };
 
+  const certificateIdColumn: GridColDef = {
+    field: 'certificateId',
+    headerName: 'Certificate ID',
+    flex: 1,
+    minWidth: 100,
+    renderHeader: (params) => (
+      <div className="p-1 h-full flex items-center font-bold">{params.colDef.headerName}</div>
+    ),
+  };
+
   const tier2SupplierColumn: GridColDef = {
     field: 'supplierName',
     headerName: 'Supplier',
@@ -74,8 +84,8 @@ const _SustainabilityCardExpandedView: React.FC<SustainabilityCardExpandedViewPr
   )
 
   const columns = showTier2SupplierColumn
-    ? [nameColumn, tier2SupplierColumn, statusColumn]
-    : [nameColumn, statusColumn];
+    ? [nameColumn, tier2SupplierColumn, statusColumn, certificateIdColumn]
+    : [nameColumn, statusColumn, certificateIdColumn];
 
   const rows: GridValidRowModel[] = sustainabilityAttribute.attributeAssurances.map(attributeAssurance => ({
     id: attributeAssurance.entity.id,
@@ -84,7 +94,8 @@ const _SustainabilityCardExpandedView: React.FC<SustainabilityCardExpandedViewPr
     assuranceStatus: {
       status: attributeAssurance.status,
       effectiveEndDate: attributeAssurance.effectiveEndDate,
-    }
+    },
+    certificateId: attributeAssurance.certificateId,
   }));
 
   return (

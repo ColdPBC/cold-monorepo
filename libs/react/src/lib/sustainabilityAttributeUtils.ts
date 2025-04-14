@@ -11,6 +11,7 @@ import {
 } from '@coldpbc/interfaces';
 import { AttributeAssuranceStatus, EntityLevel } from '@coldpbc/enums';
 import { addDays } from 'date-fns';
+import { get } from 'lodash';
 
 const statusPriority: { [key in AttributeAssuranceStatus]: number } = {
 	[AttributeAssuranceStatus.ACTIVE]: 0,
@@ -88,54 +89,90 @@ export const getAggregateStatusFromAttributeAssurances = (
   }
 }
 
+// Helper to sort assurances by most future expiration date and get the most relevant one
+const getMostRelevantAssurance = (assurances: SustainabilityAttributeAssuranceGraphQL[]): SustainabilityAttributeAssuranceGraphQL => {
+  return assurances.sort((a, b) => {
+    // All assurances passed here should have effectiveEndDate, but just in case
+    if (!a.effectiveEndDate) return 1;
+    if (!b.effectiveEndDate) return -1;
+
+    const dateA = new Date(a.effectiveEndDate).getTime();
+    const dateB = new Date(b.effectiveEndDate).getTime();
+    return dateB - dateA; // Sort in descending order (latest first)
+  })[0];
+};
+
 const getAggregateStatusFromAttributeAssurancesGraphQL = (
   assurances: SustainabilityAttributeAssuranceGraphQL[]
 ) => {
-  const currentDate = new Date();
-  let hasActiveAssurance = false;
-  let hasExpiringAssurance = false;
-  let hasExpiredAssurance = false;
-  let hasDocumentedAssurance = false;
-  let maxExpirationDate: Date | null | undefined = undefined;
-  let assuranceStatus: AttributeAssuranceStatus;
-
-  for (const assurance of assurances) {
-    const hasDocument = !!assurance.organizationFile?.id;
-    const expirationDate = assurance.effectiveEndDate ? new Date(assurance.effectiveEndDate) : null;
-
-    // Null expiration date is considered active 'forever'
-    if (maxExpirationDate !== null && (expirationDate === null || maxExpirationDate === undefined || maxExpirationDate < expirationDate)) {
-      maxExpirationDate = expirationDate;
-    }
-
-    if (hasDocument) {
-      if (!expirationDate) {
-        hasDocumentedAssurance = true;
-      } else if (expirationDate > addDays(currentDate, 60)) {
-        hasActiveAssurance = true;
-      } else if (expirationDate > currentDate) {
-        hasExpiringAssurance = true;
-      } else if (expirationDate) {
-        hasExpiredAssurance = true;
-      }
-    }
+  if (assurances.length === 0) {
+    return {
+      assuranceStatus: AttributeAssuranceStatus.NOT_DOCUMENTED,
+      assuranceExpiration: null,
+      certificateId: null
+    };
   }
 
-  if (hasActiveAssurance) {
+  // Step 1: Filter for documented assurances
+  const documentedAssurances = assurances.filter(assurance => !!assurance.organizationFile?.id);
+
+  if (documentedAssurances.length === 0) {
+    return {
+      assuranceStatus: AttributeAssuranceStatus.NOT_DOCUMENTED,
+      assuranceExpiration: null,
+      certificateId: null
+    };
+  }
+
+  // Step 2: Filter for those with dates
+  const assurancesWithDates = documentedAssurances.filter(assurance => !!assurance.effectiveEndDate);
+
+  if (assurancesWithDates.length === 0) {
+    // No dates means MISSING_DATE status
+    const primaryAssurance = documentedAssurances[0];
+    return {
+      assuranceStatus: AttributeAssuranceStatus.MISSING_DATE,
+      assuranceExpiration: null,
+      certificateId: extractCertificateId(primaryAssurance)
+    };
+  }
+
+  // Step 3: Sort by effective end date and pick the one with the latest date
+  const primaryAssurance = getMostRelevantAssurance(assurancesWithDates);
+  const expirationDate = new Date(primaryAssurance.effectiveEndDate!);
+
+  // Determine status based on the expiration date
+  let assuranceStatus: AttributeAssuranceStatus;
+  const currentDate = new Date();
+
+  if (expirationDate > addDays(currentDate, 60)) {
     assuranceStatus = AttributeAssuranceStatus.ACTIVE;
-  } else if (hasExpiringAssurance) {
+  } else if (expirationDate > currentDate) {
     assuranceStatus = AttributeAssuranceStatus.EXPIRING;
-  } else if (hasExpiredAssurance) {
-    assuranceStatus = AttributeAssuranceStatus.EXPIRED;
-  } else if (hasDocumentedAssurance) {
-    assuranceStatus = AttributeAssuranceStatus.MISSING_DATE;
   } else {
-    assuranceStatus = AttributeAssuranceStatus.NOT_DOCUMENTED;
+    assuranceStatus = AttributeAssuranceStatus.EXPIRED;
   }
 
   return {
     assuranceStatus,
-    assuranceExpiration: maxExpirationDate
+    assuranceExpiration: expirationDate,
+    certificateId: extractCertificateId(primaryAssurance)
+  };
+};
+
+// Helper function to extract certificate ID
+const extractCertificateId = (assurance: SustainabilityAttributeAssuranceGraphQL): string | null => {
+  if (!assurance?.organizationFile?.metadata) return null;
+
+  try {
+    const metadata = typeof assurance.organizationFile.metadata === 'string'
+      ? JSON.parse(assurance.organizationFile.metadata)
+      : assurance.organizationFile.metadata;
+
+    return get(metadata, 'certificate_number', null);
+  } catch (e) {
+    // If parsing fails, try direct access
+    return get(assurance.organizationFile.metadata, 'certificate_number', null);
   }
 };
 
@@ -163,7 +200,7 @@ export const processSustainabilityAttributeDataFromGraphQL = (
     const transformedAssurances: SustainabilityAttributeAssurance[] =
       Array.from(assurancesByEntity.entries()).map(([entityId, assurances]) => {
         // Get status and max expiration for this group of assurances
-        const { assuranceStatus, assuranceExpiration } =
+        const { assuranceStatus, assuranceExpiration, certificateId } =
           getAggregateStatusFromAttributeAssurancesGraphQL(assurances);
 
         // Get the entity name from the first assurance
@@ -177,7 +214,8 @@ export const processSustainabilityAttributeDataFromGraphQL = (
             id: entityId,
             name: entityName,
           },
-          status: assuranceStatus
+          status: assuranceStatus,
+          certificateId
         };
       });
 
@@ -213,7 +251,7 @@ export const processEntityLevelAssurances = (
     // Process each attribute group for this entity
     for (const [attributeId, assurances] of assurancesByAttribute) {
       const attribute = assurances[0]!.sustainabilityAttribute!;
-      const { assuranceStatus, assuranceExpiration } = getAggregateStatusFromAttributeAssurancesGraphQL(assurances);
+      const { assuranceStatus, assuranceExpiration, certificateId } = getAggregateStatusFromAttributeAssurancesGraphQL(assurances);
 
       // Get or create the attribute in our map
       let sustainabilityAttribute = attributesMap.get(attributeId);
@@ -234,13 +272,14 @@ export const processEntityLevelAssurances = (
           // For materials, we try to grab the Tier 2 supplier name
           supplierName: entity.organizationFacility?.name,
         },
-        status: assuranceStatus
+        status: assuranceStatus,
+        certificateId
       });
     }
   }
 
   // Return alphabetized Sustainability Attribute list
-  return Array.from(attributesMap.values()).sort((a, b) => a.name.localeCompare(b.name));;
+  return Array.from(attributesMap.values()).sort((a, b) => a.name.localeCompare(b.name));
 };
 
 export const filterAttributes = (attributes: SustainabilityAttribute[], level: EntityLevel) => {

@@ -11,6 +11,7 @@ export interface SustainabilityAttributeAssurance {
     supplierName?: string;
   }
   status: AttributeAssuranceStatus;
+  certificateId: string | null;
 }
 
 // This is the structure of AttributeAssurances when queried from
@@ -33,6 +34,7 @@ export interface EntityLevelAttributeAssuranceGraphQL {
   effectiveEndDate: string | null;
   organizationFile: {
     id: string;
+    metadata: string | null;
   } | null;
   sustainabilityAttribute: {
     id: string;
@@ -59,6 +61,7 @@ export interface SustainabilityAttributeAssuranceGraphQL {
   } | null;
   organizationFile: {
     id: string;
+    metadata: string;
   } | null;
   organizationFacility?: {
     id: string;

@@ -151,6 +151,7 @@ query GET_PAGINATED_MATERIALS_FOR_ORG($filter: MaterialsListFilter!, $pagination
       }
       organizationFile {
         id
+        metadata
       }
     }
     productMaterials {
@@ -196,6 +197,7 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
         effectiveEndDate
         organizationFile {
           id
+          metadata
         }
         sustainabilityAttribute {
           id
@@ -212,6 +214,7 @@ export const GET_ALL_SUPPLIERS_FOR_ORG = gql`
           effectiveEndDate
           organizationFile {
             id
+            metadata
           }
           sustainabilityAttribute {
             id
@@ -273,6 +276,7 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
             effectiveEndDate
             organizationFile {
               id
+              metadata
             }
             sustainabilityAttribute {
               id
@@ -292,6 +296,7 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
         effectiveEndDate
         organizationFile {
           id
+          metadata
         }
         sustainabilityAttribute {
           id
@@ -308,6 +313,7 @@ export const GET_PAGINATED_PRODUCTS_FOR_ORG= gql`
           effectiveEndDate
           organizationFile {
             id
+            metadata
           }
           sustainabilityAttribute {
             id
@@ -406,6 +412,7 @@ export const GET_SUPPLIER = gql`
         effectiveEndDate
         organizationFile {
           id
+          metadata
         }
         sustainabilityAttribute {
           id
@@ -424,6 +431,7 @@ export const GET_SUPPLIER = gql`
           effectiveEndDate
           organizationFile {
             id
+            metadata
           }
           sustainabilityAttribute {
             id
@@ -443,6 +451,7 @@ export const GET_SUPPLIER = gql`
           effectiveEndDate
           organizationFile {
             id
+            metadata
           }
           sustainabilityAttribute {
             id
@@ -498,6 +507,7 @@ export const GET_PRODUCT = gql`
             effectiveEndDate
             organizationFile {
               id
+              metadata
             }
             sustainabilityAttribute {
               id
@@ -523,6 +533,7 @@ export const GET_PRODUCT = gql`
         effectiveEndDate
         organizationFile {
           id
+          metadata
         }
         sustainabilityAttribute {
           id
@@ -539,6 +550,7 @@ export const GET_PRODUCT = gql`
           effectiveEndDate
           organizationFile {
             id
+            metadata
           }
           sustainabilityAttribute {
             id
@@ -567,6 +579,7 @@ export const GET_MATERIAL = gql`
         effectiveEndDate
         organizationFile {
           id
+          metadata
         }
         sustainabilityAttribute {
           id
