@@ -61,7 +61,7 @@ export interface SustainabilityAttributeAssuranceGraphQL {
   } | null;
   organizationFile: {
     id: string;
-    metadata: string;
+    metadata: string | null;
   } | null;
   organizationFacility?: {
     id: string;
