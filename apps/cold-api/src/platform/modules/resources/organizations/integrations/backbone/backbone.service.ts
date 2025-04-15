@@ -171,8 +171,8 @@ export class BackboneService extends BaseWorker {
 				if (!isNaN(+item.year?.name)) {
 					const parts = item.year?.name.split(' ');
 
-					const p0IsNumber = !isNaN(parts[0]);
-					const p1IsNumber = !isNaN(parts[1]);
+					const p0IsNumber = !isNaN(+parts[0]);
+					const p1IsNumber = !isNaN(+parts[1]);
 
 					if (!p0IsNumber) {
 						set(item, 'season.name', parts[0]);
@@ -223,10 +223,11 @@ export class BackboneService extends BaseWorker {
 					},
 				});
 
+				const season = product?.season?.name ? product?.season?.name : '';
 				const data = {
 					name: product?.name,
 					description: existingProduct?.description ? existingProduct.description : product.description,
-					season_code: `${product?.season?.name + ' ' || ''}${product?.year?.name}`,
+					season_code: `${season}${product?.year?.name}`,
 					plm_id: product._id,
 					brand_product_id: product.code,
 					style_code: product.code,
@@ -529,13 +530,8 @@ export class BackboneService extends BaseWorker {
 
 			return;
 		} catch (e) {
-			try {
-				await this.authenticate(req);
-			} catch (e) {
-				this.logger.error(e.message, e);
-			}
-
 			this.logger.error(e.message, e);
+			throw e;
 		}
 	}
 
