@@ -1,3 +1,14 @@
+# [1.628.0](https://github.com/coldPBC/cold-monorepo/compare/v1.627.5...v1.628.0) (2025-04-15)
+
+
+### Features
+
+* Add saveColumnKey support to DocumentsTable component ([dbb2776](https://github.com/coldPBC/cold-monorepo/commit/dbb27764108d31b1f222686f29ea24b2b5b4f277))
+* Add support for saving column visibility to storage. ([1cd7759](https://github.com/coldPBC/cold-monorepo/commit/1cd7759f7cc8177a9171a94fd41185745c2ee711))
+* Add unique keys to SuppliersDataGrid components ([0d1e3c7](https://github.com/coldPBC/cold-monorepo/commit/0d1e3c7602e936c8be50c32eeb96703a68afe870))
+* Handle null values in column visibility restoration ([c8bf23b](https://github.com/coldPBC/cold-monorepo/commit/c8bf23b7ecc6f800b667d888b2af7e2123e1577c))
+* Remove unused twMerge import from documentsTable ([ec334aa](https://github.com/coldPBC/cold-monorepo/commit/ec334aae3f7cddd371fcb6a6dbb540ff2af750d1))
+
 ## [1.627.5](https://github.com/coldPBC/cold-monorepo/compare/v1.627.4...v1.627.5) (2025-04-15)
 
 
