@@ -1,3 +1,10 @@
+## [1.627.2](https://github.com/coldPBC/cold-monorepo/compare/v1.627.1...v1.627.2) (2025-04-15)
+
+
+### Bug Fixes
+
+* **backbone:** improve number parsing and season code formatting ([070b7dd](https://github.com/coldPBC/cold-monorepo/commit/070b7ddbe43b941169c7c291b15b80c5b224011b))
+
 ## [1.627.1](https://github.com/coldPBC/cold-monorepo/compare/v1.627.0...v1.627.1) (2025-04-14)
 
 
