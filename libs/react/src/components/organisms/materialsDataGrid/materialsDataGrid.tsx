@@ -8,7 +8,7 @@ import {
   SustainabilityAttributeColumnList,
 } from '@coldpbc/components';
 import {
-  GridColDef, GridColumnVisibilityModel, GridFilterModel,
+  GridColDef, GridFilterModel,
   GridPaginationModel,
   GridSortModel,
   GridValidRowModel,
@@ -49,12 +49,6 @@ const _MaterialsDataGrid = (props: MUIDataGridProps) => {
   const [sortModel, setSortModel] = useState<GridSortModel>([
     { field: 'name', sort: 'asc' }
   ]);
-
-  const [columnVisibility, setColumnVisibility] = useState<GridColumnVisibilityModel | undefined>(undefined);
-
-  const handleColumnsChange = (model: GridColumnVisibilityModel) => {
-    setColumnVisibility(model);
-  };
 
   const [searchQuery, setSearchQuery] = useState<string>(getFromOrgStorage(orgId, 'materialsDataGridSearchValue') || '');
 
@@ -311,8 +305,7 @@ const _MaterialsDataGrid = (props: MUIDataGridProps) => {
             }
           }
         }}
-        columnVisibilityModel={columnVisibility}
-        onColumnVisibilityModelChange={handleColumnsChange}
+        saveColumnKey={'materialsDataGridColumns'}
       />
     </div>
   );

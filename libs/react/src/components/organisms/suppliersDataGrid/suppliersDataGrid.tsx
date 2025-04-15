@@ -214,6 +214,7 @@ export const SuppliersDataGrid = (props: { tier: number }) => {
             }
           }
         }}
+        saveColumnKey={`${tier}TierSuppliersDataGridColumns`}
       />
     </div>
   );

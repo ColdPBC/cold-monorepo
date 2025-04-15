@@ -25,10 +25,15 @@ import {
 } from '@coldpbc/lib';
 import {withErrorBoundary} from 'react-error-boundary';
 import {useColdContext} from '@coldpbc/hooks';
-import {twMerge} from 'tailwind-merge';
 
-const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: (id: string) => void }) => {
-	const { files, selectDocument } = props;
+const _DocumentsTable = (
+  props: {
+    files: FilesWithAssurances[];
+    selectDocument: (id: string) => void
+    saveColumnKey?: string;
+  },
+) => {
+	const { files, selectDocument, saveColumnKey } = props;
 	const { logBrowser } = useColdContext();
 
   const renderName = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
@@ -269,6 +274,8 @@ const _DocumentsTable = (props: { files: FilesWithAssurances[]; selectDocument: 
           },
         }}
         showSearch
+        showManageColumns
+        saveColumnKey={saveColumnKey || 'documentsDataGridColumns'}
 			/>
 		</div>
 	);

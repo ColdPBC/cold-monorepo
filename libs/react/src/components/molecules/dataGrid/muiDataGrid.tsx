@@ -3,7 +3,7 @@ import { MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import {
   DataGridPro,
   DataGridProProps, GridCallbackDetails,
-  GridColDef, GridFilterModel,
+  GridColDef, GridColumnVisibilityModel, GridFilterModel,
   GridToolbarColumnsButton,
   GridToolbarContainer,
   GridToolbarExport, GridToolbarProps,
@@ -11,7 +11,7 @@ import {
   GridValidRowModel,
 } from '@mui/x-data-grid-pro';
 import { twMerge } from 'tailwind-merge';
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box} from "@mui/material";
 import {useAuth0Wrapper} from "@coldpbc/hooks";
 import {addToOrgStorage, getFromOrgStorage} from "@coldpbc/lib";
@@ -24,6 +24,7 @@ export interface MUIDataGridProps extends DataGridProProps {
   showManageColumns?: boolean;
   searchKey?: string; // enabled controlled search
   ref?: React.RefObject<HTMLDivElement>
+  saveColumnKey?: string; // defines the key to save the columns in local storage
 }
 
 interface CustomDataGridToolbarProps extends GridToolbarProps {
@@ -56,7 +57,7 @@ const CustomDataGridToolbar = (props: CustomDataGridToolbarProps) => {
 };
 
 export const MuiDataGrid = (props: MUIDataGridProps) => {
-  const { showSearch, showExport, showManageColumns, slotProps, searchKey } = props;
+  const { showSearch, showExport, showManageColumns, slotProps, searchKey, saveColumnKey } = props;
   const { orgId } = useAuth0Wrapper()
 
   const initialFilterModel: GridFilterModel = {
@@ -65,6 +66,15 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
   };
 
   const [filterModel, setFilterModel] = React.useState<GridFilterModel>(initialFilterModel);
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState<GridColumnVisibilityModel>();
+
+  const handleColumnsChange = (model: GridColumnVisibilityModel) => {
+    if(orgId && saveColumnKey) {
+      const searchValue = model || undefined;
+      addToOrgStorage(orgId, saveColumnKey, searchValue);
+    }
+    setColumnVisibilityModel(model);
+  };
 
   useEffect(() => {
     if (orgId && searchKey) {
@@ -75,6 +85,16 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
       }));
     }
   }, [orgId, searchKey]);
+
+  useEffect(() => {
+    if (orgId && saveColumnKey) {
+      // get org storage key object for column visibility and set the column visibility model
+      const savedColumns = getFromOrgStorage(orgId, saveColumnKey);
+      if(savedColumns){
+        setColumnVisibilityModel(savedColumns);
+      }
+    }
+  }, [orgId, saveColumnKey]);
 
   const controlledFilterModelChange = (filterModel: GridFilterModel, details: GridCallbackDetails) => {
     if(orgId && searchKey) {
@@ -201,6 +221,8 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
       filterDebounceMs={searchKey ? 500 : props.filterDebounceMs}
       onFilterModelChange={searchKey ? controlledFilterModelChange : props.onFilterModelChange}
       filterModel={searchKey ? filterModel : props.filterModel}
+      columnVisibilityModel={saveColumnKey ? columnVisibilityModel : props.columnVisibilityModel}
+      onColumnVisibilityModelChange={saveColumnKey ? handleColumnsChange : props.onColumnVisibilityModelChange}
     />
   );
 };

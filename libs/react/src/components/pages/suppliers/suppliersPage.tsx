@@ -22,10 +22,10 @@ const _SuppliersPage = () => {
         tabs={[
           {
             label: 'Tier 1 Suppliers',
-            content: <SuppliersDataGrid tier={1} />
+            content: <SuppliersDataGrid tier={1} key={'tier1'} />
           }, {
             label: 'Tier 2 Suppliers',
-            content: <SuppliersDataGrid tier={2} />
+            content: <SuppliersDataGrid tier={2} key={'tier2'} />
           }
         ]}
         defaultTab={'Tier 1 Suppliers'}
