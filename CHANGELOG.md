@@ -1,3 +1,10 @@
+## [1.627.5](https://github.com/coldPBC/cold-monorepo/compare/v1.627.4...v1.627.5) (2025-04-15)
+
+
+### Bug Fixes
+
+* **backbone:** handle optional chaining for error response status ([04f8847](https://github.com/coldPBC/cold-monorepo/commit/04f8847592c549d48abf1b3c0137e2da3423233b))
+
 ## [1.627.4](https://github.com/coldPBC/cold-monorepo/compare/v1.627.3...v1.627.4) (2025-04-15)
 
 
