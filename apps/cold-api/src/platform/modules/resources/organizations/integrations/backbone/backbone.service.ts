@@ -143,7 +143,7 @@ export class BackboneService extends BaseWorker {
 			try {
 				response = await this.axios.axiosRef.get('/products', this.config);
 			} catch (e) {
-				if (e.response.status === 500) {
+				if (e.response?.status === 500) {
 					this.logger.warn('Authentication token expired, re-authenticating');
 					await this.authenticate(req);
 					await this.syncProducts(req, skip, limit, total);
