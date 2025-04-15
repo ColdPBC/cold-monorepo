@@ -10524,45 +10524,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mikro-orm/core@npm:^6.3.13":
-  version: 6.3.13
-  resolution: "@mikro-orm/core@npm:6.3.13"
+"@mikro-orm/core@npm:^6.4.13":
+  version: 6.4.13
+  resolution: "@mikro-orm/core@npm:6.4.13"
   dependencies:
-    dataloader: "npm:2.2.2"
-    dotenv: "npm:16.4.5"
+    dataloader: "npm:2.2.3"
+    dotenv: "npm:16.5.0"
     esprima: "npm:4.0.1"
-    fs-extra: "npm:11.2.0"
+    fs-extra: "npm:11.3.0"
     globby: "npm:11.1.0"
-    mikro-orm: "npm:6.3.13"
+    mikro-orm: "npm:6.4.13"
     reflect-metadata: "npm:0.2.2"
-  checksum: 10/9d4f7ea6faffb216fb1cd0f035425789f8e186a6f792aa291a308776847cff40e9b903dfde57bf6b3353acca2beefe1b43bba061eac855ca77b6527d9c96f5a3
+  checksum: 10/7d6ae0db46e6e092f037530d02bc9cf0608859cbc929bfd045316938fd807d87be16d7e4ded5258acd209bfe7ef77116668f4307676ead893f12496d5360fded
   languageName: node
   linkType: hard
 
-"@mikro-orm/knex@npm:6.3.13, @mikro-orm/knex@npm:^6.3.13":
-  version: 6.3.13
-  resolution: "@mikro-orm/knex@npm:6.3.13"
-  dependencies:
-    fs-extra: "npm:11.2.0"
-    knex: "npm:3.1.0"
-    sqlstring: "npm:2.3.3"
-  peerDependencies:
-    "@mikro-orm/core": ^6.0.0
-    better-sqlite3: "*"
-    libsql: "*"
-    mariadb: "*"
-  peerDependenciesMeta:
-    better-sqlite3:
-      optional: true
-    libsql:
-      optional: true
-    mariadb:
-      optional: true
-  checksum: 10/bd7f843578bef770350556b47045f10e7a3eabef4b493b458041f35f3305b45b9e6f47897baffe959b5345b707654e9743bc97477bbb2f94dc246110ba44d79e
-  languageName: node
-  linkType: hard
-
-"@mikro-orm/knex@npm:6.4.13, @mikro-orm/knex@npm:^6.4.11":
+"@mikro-orm/knex@npm:6.4.13, @mikro-orm/knex@npm:^6.4.11, @mikro-orm/knex@npm:^6.4.13":
   version: 6.4.13
   resolution: "@mikro-orm/knex@npm:6.4.13"
   dependencies:
@@ -10597,22 +10574,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mikro-orm/postgresql@npm:^6.3.13":
-  version: 6.3.13
-  resolution: "@mikro-orm/postgresql@npm:6.3.13"
-  dependencies:
-    "@mikro-orm/knex": "npm:6.3.13"
-    pg: "npm:8.13.0"
-    postgres-array: "npm:3.0.2"
-    postgres-date: "npm:2.1.0"
-    postgres-interval: "npm:4.0.2"
-  peerDependencies:
-    "@mikro-orm/core": ^6.0.0
-  checksum: 10/1b961a0b6d182ea5dcb6b4004df893147c3873a8907da95962577867504e157fd0b1b36e0ae59b9d019dff7933fb8176aefd2689e1009afbdf5ea8e841382c4f
-  languageName: node
-  linkType: hard
-
-"@mikro-orm/postgresql@npm:^6.4.11":
+"@mikro-orm/postgresql@npm:^6.4.11, @mikro-orm/postgresql@npm:^6.4.13":
   version: 6.4.13
   resolution: "@mikro-orm/postgresql@npm:6.4.13"
   dependencies:
@@ -25188,9 +25150,9 @@ __metadata:
     "@exogee/graphweaver-mikroorm": "npm:2.15.0"
     "@exogee/graphweaver-scalars": "npm:2.15.0"
     "@exogee/graphweaver-server": "npm:2.15.0"
-    "@mikro-orm/core": "npm:^6.3.13"
-    "@mikro-orm/knex": "npm:^6.3.13"
-    "@mikro-orm/postgresql": "npm:^6.3.13"
+    "@mikro-orm/core": "npm:^6.4.13"
+    "@mikro-orm/knex": "npm:^6.4.13"
+    "@mikro-orm/postgresql": "npm:^6.4.13"
     "@opentelemetry/api": "npm:^1.9.0"
     "@paralleldrive/cuid2": "npm:^2.2.2"
     "@types/jest": "npm:^29.5.12"
@@ -25199,7 +25161,7 @@ __metadata:
     axios: "npm:^1.7.7"
     fast-safe-stringify: "npm:^2.1.1"
     graphql: "npm:^16.10.0"
-    graphweaver: "npm:2.15.0"
+    graphweaver: "npm:^2.15.0"
     jest: "npm:^29.7.0"
     lodash: "npm:^4.17.21"
     mqtt: "npm:^5.10.1"
@@ -27330,17 +27292,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dataloader@npm:2.2.2, dataloader@npm:^2.2.2":
-  version: 2.2.2
-  resolution: "dataloader@npm:2.2.2"
-  checksum: 10/9c7a1f02cfa6391ab8bc21ebd0ef60b03832bd3beafdfecf48b111fba14090f98d33965f8e268045ba3c289f801b6a9000a9e61a41188363bdee2344811f64f1
-  languageName: node
-  linkType: hard
-
 "dataloader@npm:2.2.3":
   version: 2.2.3
   resolution: "dataloader@npm:2.2.3"
   checksum: 10/83fe6259abe00ae64c5f48252ef59d8e5fcabda9fd4d26685f14a76eeca596bf6f9500d9f22a0094c50c3ea782a0977728f9367e232dfa0fdb5c9d646de279b2
+  languageName: node
+  linkType: hard
+
+"dataloader@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "dataloader@npm:2.2.2"
+  checksum: 10/9c7a1f02cfa6391ab8bc21ebd0ef60b03832bd3beafdfecf48b111fba14090f98d33965f8e268045ba3c289f801b6a9000a9e61a41188363bdee2344811f64f1
   languageName: node
   linkType: hard
 
@@ -28398,6 +28360,13 @@ __metadata:
   version: 16.4.7
   resolution: "dotenv@npm:16.4.7"
   checksum: 10/f13bfe97db88f0df4ec505eeffb8925ec51f2d56a3d0b6d916964d8b4af494e6fb1633ba5d09089b552e77ab2a25de58d70259b2c5ed45ec148221835fc99a0c
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:16.5.0":
+  version: 16.5.0
+  resolution: "dotenv@npm:16.5.0"
+  checksum: 10/e68a16834f1a41cc2dfb01563bc150668ad675e6cd09191211467b5c0806b6ecd6ec438e021aa8e01cd0e72d2b70ef4302bec7cc0fe15b6955f85230b62dc8a9
   languageName: node
   linkType: hard
 
@@ -31779,17 +31748,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:11.2.0, fs-extra@npm:^11.0.0, fs-extra@npm:^11.1.0, fs-extra@npm:^11.2.0":
-  version: 11.2.0
-  resolution: "fs-extra@npm:11.2.0"
-  dependencies:
-    graceful-fs: "npm:^4.2.0"
-    jsonfile: "npm:^6.0.1"
-    universalify: "npm:^2.0.0"
-  checksum: 10/0579bf6726a4cd054d4aa308f10b483f52478bb16284f32cf60b4ce0542063d551fca1a08a2af365e35db21a3fa5a06cf2a6ed614004b4368982bc754cb816b3
-  languageName: node
-  linkType: hard
-
 "fs-extra@npm:11.3.0":
   version: 11.3.0
   resolution: "fs-extra@npm:11.3.0"
@@ -31821,6 +31779,17 @@ __metadata:
     jsonfile: "npm:^6.0.1"
     universalify: "npm:^2.0.0"
   checksum: 10/05ce2c3b59049bcb7b52001acd000e44b3c4af4ec1f8839f383ef41ec0048e3cfa7fd8a637b1bddfefad319145db89be91f4b7c1db2908205d38bf91e7d1d3b7
+  languageName: node
+  linkType: hard
+
+"fs-extra@npm:^11.0.0, fs-extra@npm:^11.1.0, fs-extra@npm:^11.2.0":
+  version: 11.2.0
+  resolution: "fs-extra@npm:11.2.0"
+  dependencies:
+    graceful-fs: "npm:^4.2.0"
+    jsonfile: "npm:^6.0.1"
+    universalify: "npm:^2.0.0"
+  checksum: 10/0579bf6726a4cd054d4aa308f10b483f52478bb16284f32cf60b4ce0542063d551fca1a08a2af365e35db21a3fa5a06cf2a6ed614004b4368982bc754cb816b3
   languageName: node
   linkType: hard
 
@@ -32847,7 +32816,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphweaver@npm:2.15.0, graphweaver@npm:^2.15.0":
+"graphweaver@npm:^2.15.0":
   version: 2.15.0
   resolution: "graphweaver@npm:2.15.0"
   dependencies:
@@ -39582,10 +39551,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mikro-orm@npm:6.3.13":
-  version: 6.3.13
-  resolution: "mikro-orm@npm:6.3.13"
-  checksum: 10/99909602a0c380462413897ded2629d84bebcd2d1a2f8447a9d3bc53354eadec20768711d85093bca597d4efee01c8c68feb7ad833ed40759167e7f0ba41d4bc
+"mikro-orm@npm:6.4.13":
+  version: 6.4.13
+  resolution: "mikro-orm@npm:6.4.13"
+  checksum: 10/27fa6f7a69ceb5d06bb6ca58eede869c27b57f14a22286c054075f375c253eec72d0961eff9c8008654530646c339cb0ea4e62d05dd169971a10d0fc3c0c9fc6
   languageName: node
   linkType: hard
 
@@ -43301,7 +43270,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-pool@npm:^3.6.2, pg-pool@npm:^3.7.0":
+"pg-pool@npm:^3.6.2":
   version: 3.7.0
   resolution: "pg-pool@npm:3.7.0"
   peerDependencies:
@@ -43319,7 +43288,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-protocol@npm:^1.6.1, pg-protocol@npm:^1.7.0":
+"pg-protocol@npm:^1.6.1":
   version: 1.7.0
   resolution: "pg-protocol@npm:1.7.0"
   checksum: 10/ffffdf74426c9357b57050f1c191e84447c0e8b2a701b3ab302ac7dd0eb27b862d92e5e3b2d38876a1051de83547eb9165d6a58b3a8e90bb050dae97f9993d54
@@ -43365,28 +43334,6 @@ __metadata:
     pg-native:
       optional: true
   checksum: 10/ce39af0e85d42bf5fc8dcc02c57b38d4cb203fea937688509a77c0b005a54d4821e5e5963a5663934d76994eab42381698f08a44e21544b4545fd9d142dcfd12
-  languageName: node
-  linkType: hard
-
-"pg@npm:8.13.0":
-  version: 8.13.0
-  resolution: "pg@npm:8.13.0"
-  dependencies:
-    pg-cloudflare: "npm:^1.1.1"
-    pg-connection-string: "npm:^2.7.0"
-    pg-pool: "npm:^3.7.0"
-    pg-protocol: "npm:^1.7.0"
-    pg-types: "npm:^2.1.0"
-    pgpass: "npm:1.x"
-  peerDependencies:
-    pg-native: ">=3.0.1"
-  dependenciesMeta:
-    pg-cloudflare:
-      optional: true
-  peerDependenciesMeta:
-    pg-native:
-      optional: true
-  checksum: 10/6defa3254b121317014c6de0ce4c21a9a1ec9b7ef24651164596b813d951d6545542faab964131f11e81c64c5c166b14051f6808e0247af928e1773a9fd7e0af
   languageName: node
   linkType: hard
 
@@ -44562,13 +44509,6 @@ __metadata:
     picocolors: "npm:^1.1.1"
     source-map-js: "npm:^1.2.1"
   checksum: 10/6d7e21a772e8b05bf102636918654dac097bac013f0dc8346b72ac3604fc16829646f94ea862acccd8f82e910b00e2c11c1f0ea276543565d278c7ca35516a7c
-  languageName: node
-  linkType: hard
-
-"postgres-array@npm:3.0.2":
-  version: 3.0.2
-  resolution: "postgres-array@npm:3.0.2"
-  checksum: 10/0159517e4e5f263bf9e324f0c4d3c10244a294021f2b5980abc8c23afdb965370a7fc0c82012fce4d28e83186ad089b6476b05fcef6c88f8e43e37a3a2fa0ad5
   languageName: node
   linkType: hard
 
