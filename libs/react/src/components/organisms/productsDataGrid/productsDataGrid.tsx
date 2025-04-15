@@ -18,7 +18,6 @@ import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
 import {
-  GridColumnVisibilityModel,
   GridFilterModel,
   GridPaginationModel,
   GridSortModel
@@ -88,12 +87,6 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
     page: 0,
     pageSize: 25,
   });
-
-  const [columnVisibility, setColumnVisibility] = useState<GridColumnVisibilityModel | undefined>(undefined);
-
-  const handleColumnsChange = (model: GridColumnVisibilityModel) => {
-    setColumnVisibility(model);
-  };
 
   // Handle search input changes
   const handleFilterChange = (filterModel: GridFilterModel) => {
@@ -375,8 +368,7 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
             }
           }
         }}
-        columnVisibilityModel={columnVisibility}
-        onColumnVisibilityModelChange={handleColumnsChange}
+        saveColumnKey={'productsDataGridColumns'}
       />
     </div>
   )
