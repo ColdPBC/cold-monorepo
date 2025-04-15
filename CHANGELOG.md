@@ -1,3 +1,10 @@
+## [1.627.4](https://github.com/coldPBC/cold-monorepo/compare/v1.627.3...v1.627.4) (2025-04-15)
+
+
+### Bug Fixes
+
+* **package:** update mikro-orm dependencies to version 6.4.13 ([517ade6](https://github.com/coldPBC/cold-monorepo/commit/517ade6de0726cd0046c3a4c764b61f4e051ad1d))
+
 ## [1.627.3](https://github.com/coldPBC/cold-monorepo/compare/v1.627.2...v1.627.3) (2025-04-15)
 
 
