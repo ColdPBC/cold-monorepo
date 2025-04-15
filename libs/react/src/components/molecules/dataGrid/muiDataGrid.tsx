@@ -89,8 +89,10 @@ export const MuiDataGrid = (props: MUIDataGridProps) => {
   useEffect(() => {
     if (orgId && saveColumnKey) {
       // get org storage key object for column visibility and set the column visibility model
-      const searchValue = getFromOrgStorage(orgId, saveColumnKey);
-      setColumnVisibilityModel(searchValue);
+      const savedColumns = getFromOrgStorage(orgId, saveColumnKey);
+      if(savedColumns){
+        setColumnVisibilityModel(savedColumns);
+      }
     }
   }, [orgId, saveColumnKey]);
 
