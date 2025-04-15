@@ -26,7 +26,11 @@ export const _ProductDocumentsTab = (props: {
   return (
     <>
       <Card title={'Documents'} className={'w-full'} data-testid={'product-documents-tab-card'}>
-        <DocumentsTable files={files} selectDocument={selectDocument} />
+        <DocumentsTable
+          files={files}
+          selectDocument={selectDocument}
+          saveColumnKey={'productDocumentsDataGridColumns'}
+        />
       </Card>
       <DocumentDetailsSidebarContainer
         selectedDocument={selectedDocument}
