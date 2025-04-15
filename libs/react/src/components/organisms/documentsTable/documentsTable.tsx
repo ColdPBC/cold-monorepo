@@ -25,7 +25,6 @@ import {
 } from '@coldpbc/lib';
 import {withErrorBoundary} from 'react-error-boundary';
 import {useColdContext} from '@coldpbc/hooks';
-import {twMerge} from 'tailwind-merge';
 
 const _DocumentsTable = (
   props: {
