@@ -156,6 +156,7 @@ const _DocumentsTable = (
 				status: getDateActiveStatus(effectiveEndDate),
 				expiration: effectiveEndDate ? addTZOffset(effectiveEndDate) : new Date(0),
 				type: file.type,
+        certificateId: get(file.metadata, 'certificate_number', null),
 				sustainability_attribute: sustainabilityAttribute,
 				associated_records: getAssociatedRecords(file),
         expiration_date: effectiveEndDate,
@@ -224,6 +225,12 @@ const _DocumentsTable = (
       valueOptions: uniqFileTypes,
       renderCell: renderType,
 		},
+    {
+      field: 'certificateId',
+      headerName: 'Certificate ID',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      width: 125,
+    },
 		{
 			field: 'sustainability_attribute',
 			headerName: 'Sustainability Attribute',
