@@ -1,24 +1,20 @@
 import React, { useEffect } from 'react';
+import { Claims, FilesWithAssurances, InputOption, ToastMessage } from '@coldpbc/interfaces';
 import {
-  Claims,
-  FilesWithAssurances,
-  InputOption,
-  ToastMessage,
-} from '@coldpbc/interfaces';
-import {
-  BaseButton,
-  ColdIcon,
-  DetailsItem,
-  EllipsisMenu,
-  DocumentMaterialsTable,
-  EntitySelect,
-  ErrorFallback,
-  Input, MaterialWithTier2Supplier,
-  Select,
-  Spinner,
-  SustainabilityAttributeSelect,
+	BaseButton,
+	ColdIcon,
+	DetailsItem,
+	DocumentMaterialsTable,
+	EllipsisMenu,
+	EntitySelect,
+	ErrorFallback,
+	Input,
+	MaterialWithTier2Supplier,
+	Select,
+	Spinner,
+	SustainabilityAttributeSelect,
 } from '@coldpbc/components';
-import { AssuranceDocumentTypes, ButtonTypes, DocumentTypes, EntityLevel, IconNames } from '@coldpbc/enums';
+import { AssuranceDocumentTypes, ButtonTypes, DocumentTypes, EntityLevel, IconNames, ProcessingStatus } from '@coldpbc/enums';
 import { forEach, get, has } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
@@ -27,15 +23,7 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext, useGraphQLMutation
 import { KeyedMutator } from 'swr';
 import { format, isSameDay, parseISO } from 'date-fns';
 import { ApolloQueryResult, isApolloError } from '@apollo/client';
-import {
-  addTZOffset,
-  areArraysEqual, formatScreamingSnakeCase,
-  getEffectiveEndDate,
-  getEffectiveStartDate,
-  getEntity,
-  removeTZOffset,
-  toSentenceCase,
-} from '@coldpbc/lib';
+import { addTZOffset, areArraysEqual, formatScreamingSnakeCase, getEffectiveEndDate, getEffectiveStartDate, getEntity, removeTZOffset, toSentenceCase } from '@coldpbc/lib';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export interface DocumentDetailsSidebarFileState {
@@ -48,9 +36,9 @@ export interface DocumentDetailsSidebarFileState {
 	endDate: Date | null;
 	entityIds: string[];
 	sustainabilityAttribute: {
-    id: string;
-    level: EntityLevel;
-  } | null;
+		id: string;
+		level: EntityLevel;
+	} | null;
 	certificate_number: string | null;
 }
 
@@ -478,6 +466,10 @@ const _DocumentDetailsSidebar = (props: {
             effectiveEndDate: fileState.endDate ? removeTZOffset(fileState.endDate.toISOString()) : null,
           },
 				};
+        // update document status to Import Complete if stuck in AI Processing given manual update
+        if (file.processingStatus === ProcessingStatus.AI_PROCESSING) {
+          variables.input.processingStatus = ProcessingStatus.IMPORT_COMPLETE;
+        }
         // only send metadata if needed
         if(
           !isSameDay(fileState.startDate || 0, compareFileState.startDate || 0) ||
