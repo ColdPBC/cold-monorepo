@@ -43,20 +43,38 @@ export const translateFilterOperator = (field: string, operator: string, value: 
   }
 
   const operatorMap = {
-    equals: '',
-    doesNotEqual: '_ne',
-    contains: '_ilike',
-    startsWith: '_ilike',
-    endsWith: '_ilike',
-    isEmpty: '_null',
-    isNotEmpty: '_notnull',
-    notEquals: '_ne',
-    greaterThan: '_gt',
-    greaterThanOrEqual: '_gte',
-    lessThan: '_lt',
-    lessThanOrEqual: '_lte',
-    isAnyOf: '_in',
-    doesNotContain: '_ne',
+    // String operators
+    equals: '',               // direct match
+    doesNotEqual: '_ne',      // not equals
+    contains: '_ilike',       // case-insensitive contains
+    doesNotContain: '',       // special handling - we'll use _nin
+    startsWith: '_ilike',     // starts with - requires value%
+    endsWith: '_ilike',       // ends with - requires %value
+
+    // Number operators (also using the same symbols in filter UI)
+    '=': '',                  // equals
+    '!=': '_ne',              // not equals
+    '>': '_gt',               // greater than
+    '>=': '_gte',             // greater than or equal
+    '<': '_lt',               // less than
+    '<=': '_lte',             // less than or equal
+    greaterThan: '_gt',       // alternative name for >
+    greaterThanOrEqual: '_gte', // alternative name for >=
+    lessThan: '_lt',          // alternative name for <
+    lessThanOrEqual: '_lte',  // alternative name for <=
+
+    // Common operators
+    isEmpty: '_null',         // field is null
+    isNotEmpty: '_notnull',   // field is not null
+    isAnyOf: '_in',           // in a list of values
+
+    // Date operators
+    is: '',                   // exact date match
+    not: '_ne',               // not equals date
+    after: '_gt',             // date after
+    onOrAfter: '_gte',        // date on or after
+    before: '_lt',            // date before
+    onOrBefore: '_lte',       // date on or before
   };
 
   // If the operator isn't in our map, return null
@@ -76,7 +94,7 @@ export const translateFilterOperator = (field: string, operator: string, value: 
     case 'contains':
       return { [`${field}${operatorMap[operator]}`]: `%${value}%` };
 
-    // this is work around because graphweaver does not have a nilike suffix
+    // Special handling for doesNotContain - Graphweaver doesn't have a _nilike suffix
     case 'doesNotContain':
       return { [`${field}_nin`]: [`%${value}%`] };
 
@@ -87,6 +105,32 @@ export const translateFilterOperator = (field: string, operator: string, value: 
       return { [`${field}${operatorMap[operator]}`]: `%${value}` };
 
     case 'isAnyOf':
+      return { [`${field}${operatorMap[operator]}`]: value };
+
+    // Date operators - ensure date formats are properly handled
+    case 'is':
+    case 'not':
+    case 'after':
+    case 'onOrAfter':
+    case 'before':
+    case 'onOrBefore':
+      // Convert Date objects to ISO strings if needed
+      if (value instanceof Date) {
+        value = value.toISOString();
+      }
+      return { [`${field}${operatorMap[operator]}`]: value };
+
+    // Handle numeric operators with the same symbols in UI
+    case '=':
+    case '!=':
+    case '>':
+    case '>=':
+    case '<':
+    case '<=':
+      // Ensure value is a number if possible
+      if (typeof value === 'string' && !isNaN(Number(value))) {
+        value = Number(value);
+      }
       return { [`${field}${operatorMap[operator]}`]: value };
 
     default:
