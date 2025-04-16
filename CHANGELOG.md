@@ -1,3 +1,12 @@
+# [1.629.0](https://github.com/coldPBC/cold-monorepo/compare/v1.628.1...v1.629.0) (2025-04-16)
+
+
+### Features
+
+* Enhance search filter in productsDataGrid component ([56f7747](https://github.com/coldPBC/cold-monorepo/commit/56f774782bae34d741cb300c9ad6328b5a8eedbf))
+* Update filter to use case-insensitive search for brandProductId ([d2e3a16](https://github.com/coldPBC/cold-monorepo/commit/d2e3a167562b752a222623030243047f536a7609))
+* Update quick filter placeholder and add custom width class ([12cd138](https://github.com/coldPBC/cold-monorepo/commit/12cd138c704ee61aec7ac793552da81aac5d91cf))
+
 ## [1.628.1](https://github.com/coldPBC/cold-monorepo/compare/v1.628.0...v1.628.1) (2025-04-16)
 
 
