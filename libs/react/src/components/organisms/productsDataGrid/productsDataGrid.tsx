@@ -378,7 +378,8 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
         slotProps={{
           toolbar: {
             quickFilterProps: {
-              placeholder: 'Search by name...',
+              placeholder: 'Search by name or brand product ID...',
+              className: 'w-[350px]',
             }
           }
         }}
