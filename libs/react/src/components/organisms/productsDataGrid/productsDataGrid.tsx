@@ -14,7 +14,12 @@ import {
 import React, {useEffect, useState} from 'react';
 import { get, has } from 'lodash';
 import { withErrorBoundary } from "react-error-boundary";
-import {addToOrgStorage, getFromOrgStorage, processEntityLevelAssurances} from '@coldpbc/lib';
+import {
+  addToOrgStorage,
+  getFromOrgStorage,
+  processEntityLevelAssurances,
+  translateFilterOperator
+} from '@coldpbc/lib';
 import { useFlags } from "launchdarkly-react-client-sdk";
 import { useNavigate } from "react-router-dom";
 import {
@@ -81,7 +86,10 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
     { field: 'name', sort: 'asc' }
   ]);
 
-  const [searchQuery, setSearchQuery] = useState<string>(getFromOrgStorage(orgId, 'productsDataGridSearchValue') || '');
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({
+    quickFilterValues: [getFromOrgStorage(orgId, 'productsDataGridSearchValue') || ''],
+    items: []
+  });
 
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
     page: 0,
@@ -91,7 +99,7 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
   // Handle search input changes
   const handleFilterChange = (filterModel: GridFilterModel) => {
     const searchValue = filterModel.quickFilterValues?.join(' ') || '';
-    setSearchQuery(searchValue);
+    setFilterModel(filterModel)
     setPaginationModel(prev => ({
       ...prev,
       page: 0,
@@ -110,12 +118,24 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
   };
 
   // Build search filter
-  const getSearchFilter = (searchQuery: string) => {
-    const baseFilter = {
+  const getSearchFilter = (filterModel: GridFilterModel) => {
+    let baseFilter = {
       organization: {
         id: orgId
       }
     };
+
+    const searchQuery = filterModel.quickFilterValues?.join(' ') || '';
+
+    filterModel.items.forEach(item => {
+      const translatedOperator = translateFilterOperator(item.field, item.operator, item.value);
+      if (translatedOperator) {
+        baseFilter = {
+          ...baseFilter,
+          ...translatedOperator
+        }
+      }
+    })
 
     if (!searchQuery) {
       return baseFilter;
@@ -131,7 +151,7 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
     products: PaginatedProductsQuery[];
     products_aggregate: { count: number };
   }>(orgId ? 'GET_PAGINATED_PRODUCTS_FOR_ORG' : null, {
-    filter: getSearchFilter(searchQuery),
+    filter: getSearchFilter(filterModel),
     pagination: {
       offset: paginationModel.page * paginationModel.pageSize,
       limit: paginationModel.pageSize,
@@ -261,7 +281,8 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
 			headerName: 'Season',
 			minWidth: 200,
 			flex: 1,
-		},
+      filterable: true,
+    },
 		...productFootprintColumn,
 		{
 			...defaultColumnProperties,
@@ -355,10 +376,7 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
         rowCount={totalRows}
         // Search props
         filterMode="server"
-        filterModel={{
-          items: [],
-          quickFilterValues: [searchQuery],
-        }}
+        filterModel={filterModel}
         onFilterModelChange={handleFilterChange}
         filterDebounceMs={500}
         slotProps={{
