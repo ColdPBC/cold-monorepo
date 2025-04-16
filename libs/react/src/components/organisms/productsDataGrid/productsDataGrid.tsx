@@ -130,7 +130,14 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
 
     return {
       ...baseFilter,
-      name_ilike: `%${searchQuery}%`,
+      _or: [
+        {
+          name_ilike: `%${searchQuery}%`
+        },
+        {
+          brandProductId: `%${searchQuery}%`
+        }
+      ]
     };
   };
 
