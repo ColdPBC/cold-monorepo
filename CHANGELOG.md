@@ -1,3 +1,10 @@
+## [1.628.1](https://github.com/coldPBC/cold-monorepo/compare/v1.628.0...v1.628.1) (2025-04-16)
+
+
+### Bug Fixes
+
+* **package:** downgrade @exogee/graphweaver dependencies to version 2.12.2 to fix clientGeneratedId bug in the latest Graphweaver ([8911069](https://github.com/coldPBC/cold-monorepo/commit/89110698568685da813801494afc3b490d3d2f3f))
+
 # [1.628.0](https://github.com/coldPBC/cold-monorepo/compare/v1.627.5...v1.628.0) (2025-04-15)
 
 
