@@ -1,3 +1,13 @@
+# [1.630.0](https://github.com/coldPBC/cold-monorepo/compare/v1.629.0...v1.630.0) (2025-04-16)
+
+
+### Features
+
+* Refactor and expand operator handling in dataGridUtils ([3f3feed](https://github.com/coldPBC/cold-monorepo/commit/3f3feed2f74693bc701919149bf84e7cce4415b9))
+* Refactor filter logic to use shared utility function ([410b237](https://github.com/coldPBC/cold-monorepo/commit/410b237dfd4afa21cc5bcbe28b7387c99c6afc49))
+* Refactor GraphQL filter creation for robustness and clarity ([e67ccef](https://github.com/coldPBC/cold-monorepo/commit/e67ccef2ceda98714fa213bb8b551af03c0d7801))
+* Refactor Product DataGrid filtering logic ([d3d30c6](https://github.com/coldPBC/cold-monorepo/commit/d3d30c62710c57378938949629ce2ef4bc8aa76b))
+
 # [1.629.0](https://github.com/coldPBC/cold-monorepo/compare/v1.628.1...v1.629.0) (2025-04-16)
 
 
