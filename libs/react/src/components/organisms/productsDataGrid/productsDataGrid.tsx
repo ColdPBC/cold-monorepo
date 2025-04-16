@@ -135,7 +135,7 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
           name_ilike: `%${searchQuery}%`
         },
         {
-          brandProductId: `%${searchQuery}%`
+          brandProductId_ilike: `%${searchQuery}%`
         }
       ]
     };
