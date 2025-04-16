@@ -5,6 +5,36 @@
 @tailwind components;
 /* You can add global styles to this file, and also import other style files */
 
+@layer base {
+  /* Chrome, Safari, Edge autofill styling */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    appearance: none !important;
+    background-image: none !important;
+    background-color: transparent !important;
+    -webkit-box-shadow: 0 0 0 30px rgba(0, 0, 0, 0) inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* Animation-based autofill detection - works in Chrome and may help with Firefox */
+  @keyframes autofill { from { } to { } }
+
+  input:-webkit-autofill {
+    animation-name: autofill;
+    animation-fill-mode: both;
+  }
+
+  /* Firefox doesn't have a specific autofill selector, so we use a more general approach */
+  /* This applies to all inputs, ensuring consistent styling */
+  input {
+    background-color: transparent !important;
+    color: #ffffff !important;
+  }
+}
+
 @layer utilities {
   .animation-delay-200 {
     animation-delay: 200ms;
