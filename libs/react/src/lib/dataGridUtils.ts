@@ -3,7 +3,7 @@ import {
   GridCellParams,
   GridColDef,
   GridComparatorFn,
-  GridFilterItem
+  GridFilterItem, GridFilterModel
 } from '@mui/x-data-grid-pro';
 import {isEmpty, toArray} from 'lodash';
 
@@ -138,3 +138,18 @@ export const translateFilterOperator = (field: string, operator: string, value: 
       return { [`${field}${operatorMap[operator]}`]: value };
   }
 };
+
+export const createGraphqlFilterFromFilterModel = (filterModel: GridFilterModel) => {
+  let baseFilter: any = {};
+  filterModel.items.forEach(item => {
+    const translatedOperator = translateFilterOperator(item.field, item.operator, item.value);
+    if (translatedOperator) {
+      baseFilter = {
+        ...baseFilter,
+        ...translatedOperator
+      }
+    }
+  })
+
+  return baseFilter;
+}

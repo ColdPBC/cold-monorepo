@@ -15,7 +15,7 @@ import React, {useEffect, useState} from 'react';
 import { get, has } from 'lodash';
 import { withErrorBoundary } from "react-error-boundary";
 import {
-  addToOrgStorage,
+  addToOrgStorage, createGraphqlFilterFromFilterModel,
   getFromOrgStorage,
   processEntityLevelAssurances,
   translateFilterOperator
@@ -122,20 +122,11 @@ export const _ProductsDataGrid = (props: MUIDataGridProps) => {
     let baseFilter = {
       organization: {
         id: orgId
-      }
+      },
+      ...createGraphqlFilterFromFilterModel(filterModel),
     };
 
     const searchQuery = filterModel.quickFilterValues?.join(' ') || '';
-
-    filterModel.items.forEach(item => {
-      const translatedOperator = translateFilterOperator(item.field, item.operator, item.value);
-      if (translatedOperator) {
-        baseFilter = {
-          ...baseFilter,
-          ...translatedOperator
-        }
-      }
-    })
 
     if (!searchQuery) {
       return baseFilter;
