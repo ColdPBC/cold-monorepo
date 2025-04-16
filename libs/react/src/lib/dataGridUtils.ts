@@ -140,16 +140,37 @@ export const translateFilterOperator = (field: string, operator: string, value: 
 };
 
 export const createGraphqlFilterFromFilterModel = (filterModel: GridFilterModel) => {
-  let baseFilter: any = {};
-  filterModel.items.forEach(item => {
-    const translatedOperator = translateFilterOperator(item.field, item.operator, item.value);
-    if (translatedOperator) {
-      baseFilter = {
-        ...baseFilter,
-        ...translatedOperator
-      }
-    }
-  })
+  if (!filterModel || !filterModel.items || filterModel.items.length === 0) {
+    return {};
+  }
 
-  return baseFilter;
+  // Process filter items
+  const filterItems = filterModel.items
+    .map(item => {
+      if (!item.field || !item.operator) return null;
+      return translateFilterOperator(item.field, item.operator, item.value);
+    })
+    .filter(item => item !== null);
+
+  if (filterItems.length === 0) {
+    return {};
+  }
+
+  // If only one filter, return it directly
+  if (filterItems.length === 1) {
+    return filterItems[0];
+  }
+
+  // Check if a logic operator is specified
+  const logicOperator = filterModel.logicOperator;
+
+  if (logicOperator === 'and' || logicOperator === 'or') {
+    // Return with _and or _or array
+    return { [`_${logicOperator}`]: filterItems };
+  } else {
+    // No logic operator or undefined, merge all filters into a single object
+    return filterItems.reduce((acc, item) => {
+      return { ...acc, ...item };
+    }, {});
+  }
 }
