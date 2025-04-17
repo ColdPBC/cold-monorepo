@@ -1,3 +1,12 @@
+## [1.630.1](https://github.com/coldPBC/cold-monorepo/compare/v1.630.0...v1.630.1) (2025-04-17)
+
+
+### Bug Fixes
+
+* **backbone:** update product retrieval logic to use findFirst and improve error handling ([a4ddfe5](https://github.com/coldPBC/cold-monorepo/commit/a4ddfe5ec02c96d94697c73eb89605c3a6f362b0))
+* **database:** add unique constraints and indexes to products table for improved data integrity ([41c288f](https://github.com/coldPBC/cold-monorepo/commit/41c288feb446853686b32a24bfaab5bfdc376d4e))
+* **database:** make organization_file_id column required in vector_records table ([aa3b143](https://github.com/coldPBC/cold-monorepo/commit/aa3b1438a426c6a1f3907556323bd1b8f4d4db1e))
+
 # [1.630.0](https://github.com/coldPBC/cold-monorepo/compare/v1.629.0...v1.630.0) (2025-04-16)
 
 
