@@ -585,13 +585,13 @@ model vector_records {
   metadata             Json
   created_at           DateTime            @default(now())
   updated_at           DateTime            @updatedAt
-  organization_file_id String?
+  organization_file_id String
   organization_id      String
   url                  String?
   values               Json
   index_name           String
   namespace            String
-  organization_file    organization_files? @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
+  organization_file    organization_files @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
   organization         organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
   @@index([organization_file_id], map: "vector_records_organization_file_id_idx1")
@@ -1566,6 +1566,30 @@ view product_material_emissions {
   emissions_factor    Float?
 
   @@ignore
+}
+
+view organization_claims_view {
+	facility_id            String        @id
+	facility_name          String?
+	address_line_1         String?
+	address_line_2         String?
+	city                   String?
+	state_province         String?
+	postal_code            String?
+	country                String?
+	supplier               Boolean
+	claim_id               String?
+	claim_name             String?
+	claim_level            claim_levels?
+	claim_type             claim_types?
+	organization_file_id   String?
+	organization_file_name String?
+	organization_file_type file_types?
+	mimetype               String?
+	effective_start_date   DateTime?
+	effective_end_date     DateTime?
+	expires_at             DateTime?
+	organization_name      String
 }
 
 /// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
