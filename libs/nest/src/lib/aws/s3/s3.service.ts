@@ -14,18 +14,25 @@ export class S3Service extends BaseWorker implements OnModuleInit {
 
 	constructor(private readonly config: ConfigService) {
 		super(S3Service.name);
-		this.client = new S3Client('us-east-1');
+		this.client = new S3Client({
+			region: 'us-east-1',
+		});
 	}
 
 	override async onModuleInit(): Promise<void> {
 		await super.onModuleInit();
 
-		const altCreds = {
-			region: this.config.get('AWS_REGION', 'us-east-1'),
-			accessKeyId: this.config.get('AWS_ACCESS_KEY_ID'),
-			secretAccessKey: this.config.get('AWS_SECRET_ACCESS_KEY'),
-		};
-		this.client = new S3Client(altCreds);
+		if (process.env.NODE_ENV !== 'development' && this.config.get('AWS_ACCESS_KEY_ID') && this.config.get('AWS_SECRET_ACCESS_KEY')) {
+			const altCreds = {
+				region: this.config.get('AWS_REGION', 'us-east-1'),
+				credentials: {
+					accessKeyId: this.config.get('AWS_ACCESS_KEY_ID'),
+					secretAccessKey: this.config.get('AWS_SECRET_ACCESS_KEY'),
+				},
+			};
+
+			this.client = new S3Client(altCreds);
+		}
 		this.logger.info('S3 Client initialized');
 	}
 
