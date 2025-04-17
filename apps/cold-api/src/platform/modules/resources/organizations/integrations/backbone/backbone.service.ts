@@ -143,7 +143,7 @@ export class BackboneService extends BaseWorker {
 			try {
 				response = await this.axios.axiosRef.get('/products', this.config);
 			} catch (e) {
-				if (e.response?.status === 500) {
+				if (e?.response?.status === 500) {
 					this.logger.warn('Authentication token expired, re-authenticating');
 					await this.authenticate(req);
 					await this.syncProducts(req, skip, limit, total);
@@ -216,14 +216,16 @@ export class BackboneService extends BaseWorker {
 
 				let existingProduct: any = await this.prisma.products.findUnique({
 					where: {
-						orgIdName: {
+						orgIdNamePlmId: {
 							name: product?.name,
 							organization_id: req.organization.id,
+							plm_id: product._id,
 						},
 					},
 				});
 
-				const season = product?.season?.name ? product?.season?.name : '';
+				const season = product?.season?.name ? product.season.name : '';
+
 				const data = {
 					name: product?.name,
 					description: existingProduct?.description ? existingProduct.description : product.description,
@@ -257,12 +259,10 @@ export class BackboneService extends BaseWorker {
 					try {
 						existingProduct = await this.prisma.products.update({
 							where: {
-								orgIdName: {
-									name: product?.name,
-									organization_id: req.organization.id,
-								},
+								id: existingProduct.id,
 							},
 							data: {
+								...data,
 								weight: existingProduct.weight ? existingProduct.weight : !isNaN(+weight) ? +weight : null,
 								metadata: merge(existingProduct.metadata, { backbone_data: product }),
 							},
@@ -322,10 +322,7 @@ export class BackboneService extends BaseWorker {
 
 				await this.prisma.products.update({
 					where: {
-						orgIdName: {
-							name: product?.name,
-							organization_id: req.organization.id,
-						},
+						id: existingProduct.id,
 					},
 					data: existingProduct,
 				});
