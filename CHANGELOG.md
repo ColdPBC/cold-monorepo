@@ -1,3 +1,10 @@
+# [1.632.0](https://github.com/coldPBC/cold-monorepo/compare/v1.631.0...v1.632.0) (2025-04-17)
+
+
+### Features
+
+* **n8n:** add entrypoint script and task runners configuration for enhanced execution control ([b66da76](https://github.com/coldPBC/cold-monorepo/commit/b66da76f399b99bff922c5ac43ec220258907985))
+
 # [1.631.0](https://github.com/coldPBC/cold-monorepo/compare/v1.630.1...v1.631.0) (2025-04-17)
 
 
