@@ -1,3 +1,19 @@
+# [1.631.0](https://github.com/coldPBC/cold-monorepo/compare/v1.630.1...v1.631.0) (2025-04-17)
+
+
+### Bug Fixes
+
+* **controller:** refactor ComponentDefinitionsController for improved readability and maintainability ([55e7338](https://github.com/coldPBC/cold-monorepo/commit/55e73387cb64262d2530b42e90d011427ca2247b))
+* **dependencies:** update Prisma and related packages to version 6.6.0 for improved compatibility and performance ([fb8d28b](https://github.com/coldPBC/cold-monorepo/commit/fb8d28bb50a913d46248eced25153363ded2b39a))
+* **docker:** update Traefik configuration and add n8n service with enhanced security settings ([45338c9](https://github.com/coldPBC/cold-monorepo/commit/45338c9fa210949f78626e35f7c6e3dd793d9d97))
+* **prisma:** integrate optimization extension and enhance logging for query events ([dd30430](https://github.com/coldPBC/cold-monorepo/commit/dd30430075c76934c2a203de2e176c66ac721180))
+* **s3:** enhance S3 client initialization with conditional credentials handling ([3605c72](https://github.com/coldPBC/cold-monorepo/commit/3605c72bded1281e140ee0ea6fad40b1df2a6422))
+
+
+### Features
+
+* **n8n:** add Dockerfile and update docker-compose for n8n service with environment configurations ([fddbf58](https://github.com/coldPBC/cold-monorepo/commit/fddbf584549e5915c253d81912554e577fc60bb9))
+
 ## [1.630.1](https://github.com/coldPBC/cold-monorepo/compare/v1.630.0...v1.630.1) (2025-04-17)
 
 
