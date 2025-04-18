@@ -396,7 +396,7 @@
 		      "watchPaths": [
 			      "_n8n.dockerfile"
 		      ],
-		      "healthCheckPath": "/health",
+		      "healthCheckPath": "/healthz",
 		      "containerInsights": true,
 		      "enableCloudfrontSwr": false,
 		      "versionHistoryCount": 10,
@@ -904,7 +904,7 @@
 		      "watchPaths": [
 			      "_n8n.dockerfile"
 		      ],
-		      "healthCheckPath": "/health",
+		      "healthCheckPath": "/healthz",
 		      "containerInsights": true,
 		      "enableCloudfrontSwr": false,
 		      "versionHistoryCount": 10,
