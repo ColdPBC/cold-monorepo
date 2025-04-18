@@ -42,6 +42,10 @@ export interface DocumentDetailsSidebarFileState {
 	certificate_number: string | null;
 }
 
+function requiresCertificateId(fileType: string): boolean {
+  return ['CERTIFICATE', 'SCOPE_CERTIFICATE', 'TRANSACTION_CERTIFICATE'].includes(fileType);
+}
+
 const getUpdatedEntities = (file: FilesWithAssurances, fileState: DocumentDetailsSidebarFileState) => {
   if (!fileState.sustainabilityAttribute) {
     return { assuranceIdsToUpdate: [], assuranceIdsToDelete: file.attributeAssurances.map(assurance => assurance.id), entityIdsToCreate: [] };
@@ -190,7 +194,7 @@ const _DocumentDetailsSidebar = (props: {
 			fileState['startDate'] = startDate ? addTZOffset(startDate) : null;
 			fileState['endDate'] = endDate ? addTZOffset(endDate) : null;
 
-			if (file.type === 'CERTIFICATE' || file.type === 'SCOPE_CERTIFICATE') {
+      if (requiresCertificateId(file.type)) {
 				fileState['certificate_number'] = get(file.metadata, 'certificate_number', null);
 			}
 
@@ -238,7 +242,7 @@ const _DocumentDetailsSidebar = (props: {
 	};
 
 	const getCertificateNumberInput = (fileState: DocumentDetailsSidebarFileState) => {
-		if (fileState.type !== 'CERTIFICATE' && fileState.type !== 'SCOPE_CERTIFICATE') {
+    if (!requiresCertificateId(fileState.type)) {
 			return null;
 		}
 		return (
@@ -482,8 +486,8 @@ const _DocumentDetailsSidebar = (props: {
             effective_start_date: fileState.startDate ? removeTZOffset(fileState.startDate.toISOString()) : null,
           };
 
-          if(fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
-            // if the file type is certificate or scope certificate, then send the certificate number
+          if (requiresCertificateId(file.type)) {
+            // if the file type is certificate, scope certificate, or transaction certificate, then send the certificate number
             variables.input.metadata.certificate_number = fileState.certificate_number
           }
         }
@@ -586,7 +590,7 @@ const _DocumentDetailsSidebar = (props: {
 		const isFileTypeSame = compareFileState.type === fileState.type;
 		const sameEntities = areArraysEqual(compareFileState.entityIds, fileState.entityIds);
 		let certificateNumberSame = true;
-		if (fileState.type === 'CERTIFICATE' || fileState.type === 'SCOPE_CERTIFICATE') {
+    if (requiresCertificateId(file.type)) {
 			certificateNumberSame = compareFileState.certificate_number === fileState.certificate_number;
 		}
 		return !(
