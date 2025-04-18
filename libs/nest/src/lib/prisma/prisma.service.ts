@@ -54,40 +54,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 	async onModuleInit() {
 		await this.$connect();
 		const logger = new WorkerLogger('PrismaService');
-
-		// @ts-expect-error Prisma event
-		this.$on('query', (e: QueryEvent) => {
-			if (process.env['NODE_ENV'] !== 'development') {
-				logger.info('Postgres Query', {
-					timestamp: e.timestamp,
-					target: e.target,
-					query: e.query,
-					params: e.params,
-					duration: e.duration,
-					dd: {
-						service: process.env['DD_SERVICE'],
-						version: process.env['DD_VERSION'],
-						env: process.env['NODE_ENV'],
-					},
-				});
-			} else {
-				console.info({
-					message: 'Postgres Query',
-					level: 'info',
-					context: 'PrismaService',
-					timestamp: e.timestamp,
-					target: e.target,
-					query: e.query,
-					params: e.params,
-					duration: e.duration,
-					dd: {
-						service: process.env['DD_SERVICE'],
-						version: process.env['DD_VERSION'],
-						env: process.env['NODE_ENV'],
-					},
-				});
-			}
-		});
 		// @ts-expect-error Prisma event
 		this.$on('error', (e: LogEvent) => {
 			logger.error(e.message, { timestamp: e.timestamp, target: e.target });
