@@ -883,7 +883,7 @@
 		      "id": "cold-platform-n8n-staging",
 		      "name": "cold-platform-n8n",
 		      "domain": "n8n.coldclimate.online",
-		      "port": 80,
+		      "port": 5678,
 		      "type": "web",
 		      "ci": {
 			      "type": "ec2",
@@ -937,7 +937,7 @@
 			      "SUBDOMAIN": "n8n",
 			      "DOMAIN_NAME": "coldclimate.online",
 			      "N8N_HOST": "n8n.coldclimate.online",
-			      "N8N_PORT": 80,
+			      "N8N_PORT": 5678,
 			      "N8N_RUNNERS_ENABLED": true,
 			      "N8N_PROTOCOL": "https",
 			      "WEBHOOK_URL": "https://n8n.coldclimate.online/",
