@@ -394,7 +394,9 @@
 		      "includeEnvVariablesInBuild": true,
 		      "injectEnvVariablesInDockerfile": true,
 		      "watchPaths": [
-			      "_n8n.dockerfile"
+			      "_n8n.dockerfile",
+			      "n8n-entrypoint.sh",
+			      "n8n-task-runners.json"
 		      ],
 		      "healthCheckPath": "/healthz",
 		      "containerInsights": true,
@@ -420,6 +422,7 @@
 			      "healthCheckInterval": 35
 		      },
 		      "envVariables": {
+			      "DB_TABLE_PREFIX": "n8n_",
 			      "N8N_HOST": "n8n.coldclimate.com",
 			      "N8N_PORT": 5678,
 	          "N8N_PROTOCOL": "https",
@@ -928,6 +931,7 @@
 			      "healthCheckInterval": 35
 		      },
 		      "envVariables": {
+			      "DB_TABLE_PREFIX": "n8n_",
 			      "SUBDOMAIN": "n8n",
 			      "DOMAIN_NAME": "coldclimate.online",
 			      "N8N_HOST": "n8n.coldclimate.online",

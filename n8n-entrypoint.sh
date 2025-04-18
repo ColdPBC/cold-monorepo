@@ -1,32 +1,32 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
 if [ -d /opt/custom-certificates ]; then
   echo "Trusting custom certificates from /opt/custom-certificates."
   export NODE_OPTIONS="--use-openssl-ca $NODE_OPTIONS"
   export SSL_CERT_DIR=/opt/custom-certificates
   c_rehash /opt/custom-certificates
 fi
-# --- Parse $DATABASE_URL and export individual parts ------------------------
-# Accepts schemes: postgres://  or  postgresql://
-# Works whether port or password are present or not.
 
-if [[ -z "$DATABASE_URL" ]]; then
-  echo "ERROR: DATABASE_URL is not set"; exit 1
-fi
+# POSIX‑compliant parser for postgres URLs
+# Expected formats:
+#   postgres://user:pass@host:5432/db
+#   postgresql://user@host/db
+#   postgres://user:pass@host/db
 
-regex='^postgres(?:ql)?://([^:/]+)(:([^@]*))?@([^:/]+)(:([0-9]+))?/([^?]+)'
-
-if [[ "$DATABASE_URL" =~ $regex ]]; then
-  export DB_TYPE=postgresdb
-  export DB_POSTGRESDB_DATABASE="${BASH_REMATCH[7]}"
-  export DB_POSTGRESDB_HOST="${BASH_REMATCH[4]}"
-  export DB_POSTGRESDB_PORT=5432
-  export DB_POSTGRESDB_USER="${BASH_REMATCH[1]}"
-  export DB_POSTGRESDB_PASSWORD="${BASH_REMATCH[3]}"
-  export DB_POSTGRESDB_SCHEMA=public
-else
-  echo "ERROR: DATABASE_URL does not match expected pattern"; exit 1
-fi
+case "${DATABASE_URL:-}" in
+  postgres://*|postgresql://*)
+    parsed=$(printf '%s\n' "$DATABASE_URL" |
+      sed -E 's#^postgres(ql)?://([^:/]+)(:([^@]*))?@([^:/]+)(:([0-9]+))?/([^?]+).*#DB_POSTGRESDB_USER="\2" DB_POSTGRESDB_PASSWORD="\4" DB_POSTGRESDB_HOST="\5" DB_POSTGRESDB_PORT="\7" DB_NAME="\8"#')
+    # shellcheck disable=SC2086
+    eval "$parsed"
+    : "${DB_PORT:=5432}"   # default port
+    export DB_POSTGRESDB_DATABASE=n8n
+    export DB_POSTGRESDB_USER DB_POSTGRESDB_PASSWORD DB_POSTGRESDB_HOST DB_POSTGRESDB_PORT
+    ;;
+  *)
+    echo "ERROR: DATABASE_URL is empty or malformed" >&2
+    exit 1
+    ;;
+esac
 
 if [ "$#" -gt 0 ]; then
   # Got started with arguments
