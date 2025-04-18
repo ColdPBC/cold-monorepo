@@ -1,3 +1,10 @@
+# [1.634.0](https://github.com/coldPBC/cold-monorepo/compare/v1.633.0...v1.634.0) (2025-04-18)
+
+
+### Features
+
+* **n8n:** update environment variables and enhance entrypoint script for PostgreSQL support ([e0021ea](https://github.com/coldPBC/cold-monorepo/commit/e0021ea5d2d57ead231b291bb9560a41462bcf8d))
+
 # [1.633.0](https://github.com/coldPBC/cold-monorepo/compare/v1.632.2...v1.633.0) (2025-04-18)
 
 
