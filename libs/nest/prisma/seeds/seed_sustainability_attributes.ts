@@ -673,7 +673,7 @@ const seeds: Array<{
 	{
 		name: 'Bluesign System Partner',
 		type: 'THIRD_PARTY',
-		level: 'ORGANIZATION',
+		level: 'SUPPLIER',
 		logo_url: `${baseUrl}/Bluesign.png`,
 	},
 ];
