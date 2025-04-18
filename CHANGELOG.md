@@ -1,3 +1,10 @@
+# [1.635.0](https://github.com/coldPBC/cold-monorepo/compare/v1.634.0...v1.635.0) (2025-04-18)
+
+
+### Features
+
+* **flightcontrol:** update n8n port to 80 for consistent service configuration ([a6c30fa](https://github.com/coldPBC/cold-monorepo/commit/a6c30fa170fbeaf1535f35d5df6869ec2892dece))
+
 # [1.634.0](https://github.com/coldPBC/cold-monorepo/compare/v1.633.0...v1.634.0) (2025-04-18)
 
 
