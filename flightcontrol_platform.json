@@ -372,7 +372,7 @@
 		      "id": "cold-platform-n8n-production",
 		      "name": "cold-platform-n8n",
 		      "domain": "n8n.coldclimate.com",
-		      "port": 5678,
+		      "port": 80,
 		      "type": "web",
 		      "ci": {
 			      "type": "ec2",
@@ -424,7 +424,7 @@
 		      "envVariables": {
 			      "DB_TABLE_PREFIX": "n8n_",
 			      "N8N_HOST": "n8n.coldclimate.com",
-			      "N8N_PORT": 5678,
+			      "N8N_PORT": 80,
 	          "N8N_PROTOCOL": "https",
 	          "WEBHOOK_URL": "https://n8n.coldclimate.com/",
 	          "GENERIC_TIMEZONE": "US/Central",
@@ -883,7 +883,7 @@
 		      "id": "cold-platform-n8n-staging",
 		      "name": "cold-platform-n8n",
 		      "domain": "n8n.coldclimate.online",
-		      "port": 5678,
+		      "port": 80,
 		      "type": "web",
 		      "ci": {
 			      "type": "ec2",
@@ -905,7 +905,9 @@
 		      "includeEnvVariablesInBuild": true,
 		      "injectEnvVariablesInDockerfile": true,
 		      "watchPaths": [
-			      "_n8n.dockerfile"
+			      "_n8n.dockerfile",
+			      "n8n-entrypoint.sh",
+			      "n8n-task-runners.json"
 		      ],
 		      "healthCheckPath": "/healthz",
 		      "containerInsights": true,
@@ -935,7 +937,7 @@
 			      "SUBDOMAIN": "n8n",
 			      "DOMAIN_NAME": "coldclimate.online",
 			      "N8N_HOST": "n8n.coldclimate.online",
-			      "N8N_PORT": 5678,
+			      "N8N_PORT": 80,
 			      "N8N_RUNNERS_ENABLED": true,
 			      "N8N_PROTOCOL": "https",
 			      "WEBHOOK_URL": "https://n8n.coldclimate.online/",
