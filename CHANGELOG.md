@@ -1,3 +1,10 @@
+## [1.632.1](https://github.com/coldPBC/cold-monorepo/compare/v1.632.0...v1.632.1) (2025-04-18)
+
+
+### Bug Fixes
+
+* **database:** update vector_records schema to allow nullable organization_file_id and enhance product upsert logic ([a492a4b](https://github.com/coldPBC/cold-monorepo/commit/a492a4b42b0353dac52334ff8b68b6d1e0604857))
+
 # [1.632.0](https://github.com/coldPBC/cold-monorepo/compare/v1.631.0...v1.632.0) (2025-04-17)
 
 
