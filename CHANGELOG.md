@@ -1,3 +1,10 @@
+# [1.633.0](https://github.com/coldPBC/cold-monorepo/compare/v1.632.2...v1.633.0) (2025-04-18)
+
+
+### Features
+
+* **n8n:** enhance entrypoint script to parse DATABASE_URL and set environment variables ([330e173](https://github.com/coldPBC/cold-monorepo/commit/330e173dde95e060d46dffb67fcef18045ab8999))
+
 ## [1.632.2](https://github.com/coldPBC/cold-monorepo/compare/v1.632.1...v1.632.2) (2025-04-18)
 
 
