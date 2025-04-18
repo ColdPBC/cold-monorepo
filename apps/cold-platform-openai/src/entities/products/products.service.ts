@@ -80,9 +80,10 @@ export class ProductsService extends BaseWorker {
 
 			const product = await this.prisma.products.upsert({
 				where: {
-					orgIdName: {
+					orgIdNamePlmId: {
 						name: item.name,
 						organization_id: organization.id,
+						plm_id: item.plm_id,
 					},
 				},
 				create: {

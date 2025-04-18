@@ -585,13 +585,13 @@ model vector_records {
   metadata             Json
   created_at           DateTime            @default(now())
   updated_at           DateTime            @updatedAt
-  organization_file_id String
+  organization_file_id String?
   organization_id      String
   url                  String?
   values               Json
   index_name           String
   namespace            String
-  organization_file    organization_files @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
+  organization_file    organization_files? @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
   organization         organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
   @@index([organization_file_id], map: "vector_records_organization_file_id_idx1")
