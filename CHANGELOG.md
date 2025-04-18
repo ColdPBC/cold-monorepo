@@ -1,3 +1,10 @@
+## [1.632.2](https://github.com/coldPBC/cold-monorepo/compare/v1.632.1...v1.632.2) (2025-04-18)
+
+
+### Bug Fixes
+
+* **flightcontrol:** update health check path to /healthz for improved service monitoring ([14b38df](https://github.com/coldPBC/cold-monorepo/commit/14b38df1a69c65f574bc02af6337e4595fdfabfb))
+
 ## [1.632.1](https://github.com/coldPBC/cold-monorepo/compare/v1.632.0...v1.632.1) (2025-04-18)
 
 
