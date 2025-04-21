@@ -1,3 +1,10 @@
+## [1.637.1](https://github.com/coldPBC/cold-monorepo/compare/v1.637.0...v1.637.1) (2025-04-21)
+
+
+### Bug Fixes
+
+* **pinecone:** enhance persistEmbeddings to handle errors and update processing status ([e8930a3](https://github.com/coldPBC/cold-monorepo/commit/e8930a32ee314e5e2390715d2a09da914481f998))
+
 # [1.637.0](https://github.com/coldPBC/cold-monorepo/compare/v1.636.0...v1.637.0) (2025-04-18)
 
 
