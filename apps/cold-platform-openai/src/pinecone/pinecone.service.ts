@@ -1,11 +1,22 @@
 import { BadRequestException, ConflictException, Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
+import {
+	AuthenticatedUser,
+	BaseWorker,
+	CacheService,
+	Cuid2Generator,
+	DarklyService,
+	EventService,
+	GuidPrefixes,
+	IAuthenticatedUser,
+	PrismaService,
+	S3Service,
+} from '@coldpbc/nest';
 import { Pinecone, PineconeRecord, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { ConfigService } from '@nestjs/config';
 import { Document } from '@langchain/core/documents';
 import OpenAI from 'openai';
 import { LangchainLoaderService } from '../langchain/langchain.loader.service';
-import { organization_files, organizations } from '@prisma/client';
+import { organization_files, organizations, processing_status } from '@prisma/client';
 import { InjectQueue } from '@nestjs/bull';
 import { fromBuffer } from 'pdf2pic';
 import { Queue } from 'bull';
@@ -40,6 +51,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 		readonly lc: LangchainLoaderService,
 		readonly prisma: PrismaService,
 		readonly s3: S3Service,
+		readonly events: EventService,
 	) {
 		super(PineconeService.name);
 		this.openai = new OpenAI({
@@ -579,12 +591,30 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 		}
 	}
 
-	async persistEmbeddings(index: any, content: Document<Record<string, any>>[], filePayload: any, organization: { name: string }) {
-		// Get the vector embeddings for the document
-		const embeddings = await Promise.all(content.flat().map(doc => this.embedDocument(doc, filePayload, organization.name)));
-		for (const v of embeddings) {
-			const record = { id: v.id, values: v.values, metadata: v.metadata };
-			index.namespace(organization.name).upsert([record]);
+	async persistEmbeddings(index: any, content: Document<Record<string, any>>[], filePayload: any, organization: { name: string; id: string }) {
+		try {
+			// Get the vector embeddings for the document
+			const embeddings = await Promise.all(content.flat().map(doc => this.embedDocument(doc, filePayload, organization.name)));
+			for (const v of embeddings) {
+				const record = { id: v.id, values: v.values, metadata: v.metadata };
+				index.namespace(organization.name).upsert([record]);
+			}
+		} catch (e) {
+			this.logger.error(e.message, { error: e, filePayload, content, organization });
+
+			await this.events.sendAsyncEvent('cold.core.linear.events', processing_status.PROCESSING_ERROR, { error: JSON.stringify(e), orgFile: filePayload, index, organization });
+
+			await this.prisma.organization_files.update({
+				where: {
+					organization_id: organization.id,
+					id: filePayload.id,
+				},
+				data: {
+					processing_status: processing_status.PROCESSING_ERROR,
+				},
+			});
+
+			throw e;
 		}
 	}
 
