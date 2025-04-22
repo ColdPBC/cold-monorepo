@@ -26,6 +26,8 @@ RUN set -eux; \
 ARG TARGETPLATFORM
 ARG LAUNCHER_VERSION=1.1.1
 COPY n8n-task-runners.json /etc/n8n-task-runners.json
+COPY rds-ca.pem /etc/rds-ca.pem
+
 # Download, verify, then extract the launcher binary
 RUN \
 	if [[ "$TARGETPLATFORM" = "linux/amd64" ]]; then export ARCH_NAME="amd64"; \
