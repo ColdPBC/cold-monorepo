@@ -1,3 +1,10 @@
+# [1.639.0](https://github.com/coldPBC/cold-monorepo/compare/v1.638.0...v1.639.0) (2025-04-22)
+
+
+### Features
+
+* **n8n:** add RDS CA certificate for secure database connections ([6aeb664](https://github.com/coldPBC/cold-monorepo/commit/6aeb664c0327f58fbe39e80283bf71fbe0b7d57f))
+
 # [1.638.0](https://github.com/coldPBC/cold-monorepo/compare/v1.637.2...v1.638.0) (2025-04-22)
 
 
