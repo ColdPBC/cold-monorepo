@@ -1,3 +1,10 @@
+# [1.638.0](https://github.com/coldPBC/cold-monorepo/compare/v1.637.2...v1.638.0) (2025-04-22)
+
+
+### Features
+
+* **flightcontrol:** update n8n port to 5678 and add environment variables for configuration ([bf1891e](https://github.com/coldPBC/cold-monorepo/commit/bf1891eb9894a19f78835a69b97f297ab2ed362f))
+
 ## [1.637.2](https://github.com/coldPBC/cold-monorepo/compare/v1.637.1...v1.637.2) (2025-04-22)
 
 
