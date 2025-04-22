@@ -372,7 +372,7 @@
 		      "id": "cold-platform-n8n-production",
 		      "name": "cold-platform-n8n",
 		      "domain": "n8n.coldclimate.com",
-		      "port": 80,
+		      "port": 5678,
 		      "type": "web",
 		      "ci": {
 			      "type": "ec2",
@@ -422,6 +422,11 @@
 			      "healthCheckInterval": 35
 		      },
 		      "envVariables": {
+			      "PGHOST": "postgres",
+			      "DB_TYPE": "postgresdb",
+			      "SUBDOMAIN": "n8n",
+			      "DOMAIN_NAME": "coldclimate.online",
+			      "N8N_RUNNERS_ENABLED": true,
 			      "DB_TABLE_PREFIX": "n8n_",
 			      "N8N_HOST": "n8n.coldclimate.com",
 			      "N8N_PORT": 5678,
@@ -933,6 +938,8 @@
 			      "healthCheckInterval": 35
 		      },
 		      "envVariables": {
+			      "PGHOST": "postgres",
+			      "DB_TYPE": "postgresdb",
 			      "DB_TABLE_PREFIX": "n8n_",
 			      "SUBDOMAIN": "n8n",
 			      "DOMAIN_NAME": "coldclimate.online",
@@ -942,6 +949,7 @@
 			      "N8N_PROTOCOL": "https",
 			      "WEBHOOK_URL": "https://n8n.coldclimate.online/",
 			      "GENERIC_TIMEZONE": "US/Central",
+
 			      "DD_SERVICE": "cold-platform-n8n",
 			      "DD_ENV": "staging",
 			      "NODE_ENV": "staging",
