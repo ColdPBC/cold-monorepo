@@ -543,7 +543,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
 			if (Array.isArray(content) && content.length < 256) {
 				// Store the vector embeddings for the document
-				await this.persistEmbeddings(index, content, filePayload, organization);
+				await this.persistEmbeddings(index, content, filePayload, organization, user);
 
 				//await this.extraction.extractDataFromContent(content, user, filePayload, organization);
 			} else {
@@ -555,7 +555,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 				// Create embedding for content
 				const embedding = (await this.lc.getDocContent(extension, bytes, user)) as Document<Record<string, any>>[];
 
-				await this.persistEmbeddings(index, embedding, filePayload, organization);
+				await this.persistEmbeddings(index, embedding, filePayload, organization, user);
 			}
 
 			return { bytes, extension, organization, user, filePayload };
@@ -591,7 +591,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 		}
 	}
 
-	async persistEmbeddings(index: any, content: Document<Record<string, any>>[], filePayload: any, organization: { name: string; id: string }) {
+	async persistEmbeddings(index: any, content: Document<Record<string, any>>[], filePayload: any, organization: { name: string; id: string }, user: IAuthenticatedUser) {
 		try {
 			// Get the vector embeddings for the document
 			const embeddings = await Promise.all(content.flat().map(doc => this.embedDocument(doc, filePayload, organization.name)));
@@ -602,7 +602,12 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 		} catch (e) {
 			this.logger.error(e.message, { error: e, filePayload, content, organization });
 
-			await this.events.sendAsyncEvent('cold.core.linear.events', processing_status.PROCESSING_ERROR, { error: JSON.stringify(e), orgFile: filePayload, index, organization });
+			await this.events.sendAsyncEvent('cold.core.linear.events', processing_status.PROCESSING_ERROR, {
+				error: JSON.stringify(e),
+				orgFile: filePayload,
+				user,
+				organization,
+			});
 
 			await this.prisma.organization_files.update({
 				where: {

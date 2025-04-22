@@ -134,7 +134,7 @@ export class LinearService extends BaseWorker {
 			if (data.error) {
 				const error = JSON.parse(data.error);
 				title = `Review Failed Ingestion for ${data.organization.display_name} : ${data.orgFile.original_name} | ${data?.orgFile?.type}`;
-				description = `The file uploaded by ${data.user.coldclimate_claims.email} failed to process due to the following error: ${error.message}`;
+				description = `The file uploaded by ${data.user?.coldclimate_claims?.email} failed to process due to the following error: ${error.message}`;
 			} else {
 				title = `Manual Review Request from ${data.organization.display_name} : ${data.orgFile.original_name} | ${data?.orgFile?.type}`;
 				description = `User ${data.user.coldclimate_claims.email} from ${data.organization.display_name} uploaded a file with a ${data?.orgFile?.type} type for ingestion.`;
@@ -245,7 +245,7 @@ export class LinearService extends BaseWorker {
 
 			return webhook;
 		} catch (e) {
-			this.logger.error(e.message);
+			this.logger.warn(e.message);
 			return;
 		}
 	}
