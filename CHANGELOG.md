@@ -1,3 +1,10 @@
+## [1.637.2](https://github.com/coldPBC/cold-monorepo/compare/v1.637.1...v1.637.2) (2025-04-22)
+
+
+### Bug Fixes
+
+* **linear, pinecone:** fix issue with creating linear ticket ([d4bcee4](https://github.com/coldPBC/cold-monorepo/commit/d4bcee4b70a40f36758e62ed0d36571dcdb8dba6))
+
 ## [1.637.1](https://github.com/coldPBC/cold-monorepo/compare/v1.637.0...v1.637.1) (2025-04-21)
 
 
