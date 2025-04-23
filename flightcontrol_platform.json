@@ -197,7 +197,6 @@
 	          "N8N_PROTOCOL": "https",
 			      "N8N_PROXY_HOPS": 2,
 			      "N8N_SMTP_SSL": false,
-			      "N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS": true,
 	          "WEBHOOK_URL": "https://n8n.coldclimate.com/",
 	          "GENERIC_TIMEZONE": "US/Central",
 
@@ -484,8 +483,6 @@
 			      "N8N_PROTOCOL": "https",
 			      "WEBHOOK_URL": "https://n8n.coldclimate.online/",
 			      "GENERIC_TIMEZONE": "US/Central",
-			      "N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS": true,
-
 			      "DD_SERVICE": "cold-platform-n8n",
 			      "DD_ENV": "staging",
 			      "NODE_ENV": "staging",
