@@ -1,3 +1,10 @@
+## [1.639.1](https://github.com/coldPBC/cold-monorepo/compare/v1.639.0...v1.639.1) (2025-04-23)
+
+
+### Bug Fixes
+
+* **n8n:** update Dockerfile and configuration to enforce settings file permissions ([9921714](https://github.com/coldPBC/cold-monorepo/commit/99217144dda2035abe24a12c496ce569e33060e9))
+
 # [1.639.0](https://github.com/coldPBC/cold-monorepo/compare/v1.638.0...v1.639.0) (2025-04-22)
 
 
