@@ -1,3 +1,10 @@
+## [1.639.2](https://github.com/coldPBC/cold-monorepo/compare/v1.639.1...v1.639.2) (2025-04-23)
+
+
+### Bug Fixes
+
+* **flightcontrol:** remove N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS from configuration ([fbbc33e](https://github.com/coldPBC/cold-monorepo/commit/fbbc33ed4eab2c8df8d9e3c6f488beface027109))
+
 ## [1.639.1](https://github.com/coldPBC/cold-monorepo/compare/v1.639.0...v1.639.1) (2025-04-23)
 
 
