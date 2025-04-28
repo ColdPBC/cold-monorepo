@@ -31,21 +31,8 @@ export class LinearService extends BaseWorker {
 	}
 
 	/** Update the file processing_status in the database whenever an issue is marked done. **/
-	async updateFileStatus(req: any) {
-		let file_status: any;
-
-		const issueId = req.body.data.id;
-
-		// Set the file status based on the issue status
-		switch (req.body.data.state.name) {
-			case 'Queued':
-				return;
-			case 'Done':
-				file_status = processing_status.IMPORT_COMPLETE;
-				break;
-			default:
-				file_status = processing_status.MANUAL_REVIEW;
-		}
+	async updateFileStatus(file_status: processing_status, data: { id: string | number; state: { name: string } }) {
+		const issueId = data.id.toString();
 
 		// Update all files with the same linear_issue_id
 		const updated = await this.prisma.organization_files.updateMany({
@@ -60,9 +47,10 @@ export class LinearService extends BaseWorker {
 
 		// archive the issue in Linear if we are in development or staging
 		if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
-			this.logger.info('Archiving issue', { issue: req.body.data });
-			await this.client.archiveIssue(issueId);
+			this.logger.info('Archiving issue', { issue: data });
+			await this.client.archiveIssue(data.id.toString());
 		}
+
 		return updated;
 	}
 
@@ -180,7 +168,10 @@ export class LinearService extends BaseWorker {
 				where: {
 					id: data.orgFile.id,
 				},
-				data: { metadata: data.orgFile.metadata as object },
+				data: {
+					metadata: data.orgFile.metadata as object,
+					processing_status: processing_status.MANUAL_REVIEW,
+				},
 			});
 			// Get the File object from S3 bucket
 			const file = await this.getFile(data.orgFile);

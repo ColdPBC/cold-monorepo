@@ -4,6 +4,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Response, Request } from 'express';
 import { LinearService } from './linear.service';
 import { LinearWebhooks } from '@linear/sdk';
+import { processing_status } from '@prisma/client';
 
 interface RawRequest extends Request {
 	rawBody?: Buffer;
@@ -65,8 +66,17 @@ export class LinearController extends BaseWorker {
 		console.log('Verified webhook payload:', payload);
 
 		// Process the webhook payload as needed...
+		// Set the file status based on the issue status
 
-		await this.linearService.updateFileStatus(req);
+		let file_status: processing_status;
+		switch (req.body.state.name) {
+			case 'Done':
+				file_status = processing_status.IMPORT_COMPLETE;
+				break;
+			default:
+				file_status = processing_status.MANUAL_REVIEW;
+		}
+		await this.linearService.updateFileStatus(file_status, req.body?.data);
 
 		return res.status(HttpStatus.OK).send('Webhook verified');
 	}
