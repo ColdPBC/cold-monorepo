@@ -66,7 +66,7 @@ export class JobConsumer extends BaseWorker {
 
 	@Process('file.uploaded')
 	async processFileJob(job: Job) {
-		await this.classification.add('classify', { ...job.data }, { removeOnFail: true, removeOnComplete: true });
+		await this.classification.add('classify', { ...job.data }, { removeOnFail: true, removeOnComplete: true, attempts: 1 });
 	}
 
 	@Process('file.deleted')
