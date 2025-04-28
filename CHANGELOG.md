@@ -1,3 +1,10 @@
+## [1.639.4](https://github.com/coldPBC/cold-monorepo/compare/v1.639.3...v1.639.4) (2025-04-28)
+
+
+### Bug Fixes
+
+* **job.consumer:** set attempts to 1 for file upload job processing ([b20f799](https://github.com/coldPBC/cold-monorepo/commit/b20f799b5f671c7121c4da5cb79f7c04f3f495fc))
+
 ## [1.639.3](https://github.com/coldPBC/cold-monorepo/compare/v1.639.2...v1.639.3) (2025-04-23)
 
 
