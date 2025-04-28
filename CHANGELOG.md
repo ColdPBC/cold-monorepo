@@ -1,3 +1,10 @@
+## [1.639.5](https://github.com/coldPBC/cold-monorepo/compare/v1.639.4...v1.639.5) (2025-04-28)
+
+
+### Bug Fixes
+
+* **linear:** update file status handling based on issue state in webhook processing ([015caec](https://github.com/coldPBC/cold-monorepo/commit/015caec8bae634098aa753281f1982bdd4b22550))
+
 ## [1.639.4](https://github.com/coldPBC/cold-monorepo/compare/v1.639.3...v1.639.4) (2025-04-28)
 
 
