@@ -2,7 +2,7 @@ import {EprProgressStatusBucket, MainContent} from "@coldpbc/components";
 import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from "@coldpbc/hooks";
 import {EprSubmissionGraphQL} from "@coldpbc/interfaces";
 import {useEffect, useState} from "react";
-import {getGraphqlError, hasGraphqlError} from "@coldpbc/lib";
+import {getGraphqlError} from "@coldpbc/lib";
 
 
 export const EprProgress = () => {

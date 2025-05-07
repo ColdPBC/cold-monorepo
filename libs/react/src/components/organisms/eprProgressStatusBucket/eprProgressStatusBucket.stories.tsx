@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import {EprProgressStatusBucket, MainContent} from '@coldpbc/components';
-import {getEPRMocksFilterByStatus, StoryMockProvider} from "@coldpbc/mocks";
+import {EprProgressStatusBucket} from '@coldpbc/components';
+import {getEPRMocksFilterByStatus} from "@coldpbc/mocks";
 import React from "react";
 
 const meta = {
