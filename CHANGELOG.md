@@ -1,3 +1,10 @@
+## [1.640.1](https://github.com/coldPBC/cold-monorepo/compare/v1.640.0...v1.640.1) (2025-05-07)
+
+
+### Bug Fixes
+
+* **suppliers:** update unique constraint name and comment out database queries ([8170466](https://github.com/coldPBC/cold-monorepo/commit/8170466b2db9f7d760864dc5a3c5da983ad511a0))
+
 # [1.640.0](https://github.com/coldPBC/cold-monorepo/compare/v1.639.5...v1.640.0) (2025-05-07)
 
 
