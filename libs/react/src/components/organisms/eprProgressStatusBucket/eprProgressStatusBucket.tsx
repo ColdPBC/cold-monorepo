@@ -14,8 +14,8 @@ export const EprProgressStatusBucket = (props: {
 
   const getSubmissionDate = (item: EprSubmissionGraphQL) => {
     let text = 'Submitted ';
-    if(item.submission_date) {
-      const date = new Date(item.submission_date);
+    if(item.submittedAt) {
+      const date = new Date(item.submittedAt);
       const formattedDate = format(date, 'M/d/yy');
       text += `${formattedDate}`;
     }
@@ -31,9 +31,9 @@ export const EprProgressStatusBucket = (props: {
 
   const getDueDate = (item: EprSubmissionGraphQL) => {
     let content = <></>
-    if(item.due_date){
-      const formattedDate = format(new Date(item.due_date), 'MMM dd,yyyy');
-      const diff = `Due in ${formatDistance(new Date(item.due_date), new Date())}`;
+    if(item.dueDate){
+      const formattedDate = format(new Date(item.dueDate), 'MMM dd,yyyy');
+      const diff = `Due in ${formatDistance(new Date(item.dueDate), new Date())}`;
       content =
         <>
           <div className={'flex flex-row gap-1 items-center'}>
@@ -82,17 +82,17 @@ export const EprProgressStatusBucket = (props: {
             <div key={idx} className={'w-full h-auto flex flex-col gap-6 p-4 rounded-2xl border-[1px] border-bgc-menu bg-gray-30'}>
               <div className={'w-full flex flex-row bg-gray-40 rounded-lg'}>
                 <div className={'w-[96px] h-[96px] shrink-0'}>
-                  <img src={getLogo(item)} alt={item.bill_identifier} className={'w-full h-full rounded-l-lg'}/>
+                  <img src={getLogo(item)} alt={item.billIdentifier} className={'w-full h-full rounded-l-lg'}/>
                 </div>
                 <div className={'w-full px-4 py-2 flex flex-col gap-1'}>
                   <div className={'text-h4'}>
                     {item.state}
                   </div>
                   <div className={'text-tc-secondary text-body font-bold'}>
-                    {item.bill_identifier}
+                    {item.billIdentifier}
                   </div>
                   <div className={'text-tc-secondary text-body'}>
-                    {item.pro_name}
+                    {item.proName}
                   </div>
                 </div>
               </div>

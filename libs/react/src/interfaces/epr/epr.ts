@@ -2,9 +2,9 @@
 export interface EprSubmissionGraphQL {
   id: string;
   state: string;
-  bill_identifier: string;
-  pro_name: string;
-  due_date: string | null;
+  billIdentifier: string;
+  proName: string;
+  dueDate: string | null;
   status: string;
-  submission_date: string | null;
+  submittedAt: string | null;
 }
