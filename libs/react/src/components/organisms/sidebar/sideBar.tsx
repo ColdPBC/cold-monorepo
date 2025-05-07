@@ -46,6 +46,8 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
       return !ldFlags.showNewDocumentUploadUxCold1410;
     } else if (item.key === 'regulatory_compliance_key') {
       return ldFlags.showRegulationsPage;
+    } else if (item.key === 'epr_progress_key') {
+      return ldFlags.showEpr;
     } else {
 			return true;
 		}

@@ -98,6 +98,7 @@ export default {
         showAiSustainabilibuddyCold1464: true,
         showSspDatagridExportButton: true,
         showRegulationsPage: true,
+        showEpr: true,
       },
     },
   },
