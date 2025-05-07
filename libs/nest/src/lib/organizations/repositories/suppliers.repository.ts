@@ -126,7 +126,8 @@ export class SuppliersRepository extends BaseWorker {
 
 	async getSupplierClaimNames(org: organizations, user: IAuthenticatedUser) {
 		try {
-			const list = await this.prisma.organization_claims_view.findMany({
+			const list = [];
+			/*const list = await this.prisma.organization_claims_view.findMany({
 				distinct: ['claim_name'],
 				where: {
 					organization_name: org.name,
@@ -135,7 +136,7 @@ export class SuppliersRepository extends BaseWorker {
 				select: {
 					claim_name: true,
 				},
-			});
+			});*/
 
 			if (!list || list.length === 0) {
 				throw new NotFoundException(`No Claims found`);
@@ -155,7 +156,8 @@ export class SuppliersRepository extends BaseWorker {
 
 	async getOrgClaimList(org: organizations, user: IAuthenticatedUser) {
 		try {
-			const list = await this.prisma.organization_claims_view.findMany({
+			const list = [];
+			/*const list = await this.prisma.organization_claims_view.findMany({
 				where: {
 					organization_name: org.name,
 					supplier: true,
@@ -181,7 +183,7 @@ export class SuppliersRepository extends BaseWorker {
 					effective_start_date: true,
 					effective_end_date: true,
 				},
-			});
+			});*/
 
 			if (!list || list.length === 0) {
 				throw new NotFoundException(`No Claims found`);

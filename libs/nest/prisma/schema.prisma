@@ -713,7 +713,7 @@ model products {
 
   @@unique([organization_id, upc_code, name], name: "orgIdNameUpc")
   @@unique([organization_id, name, season_code, style_code], name: "orgIdNameSeasonStyle")
-  @@unique([organization_id, name, plm_id])
+  @@unique([organization_id, name, plm_id], name: "orgIdNamePlmId" )
   @@index([organization_id, name], map: "products_organization_id_name_idx1")
   @@index([organization_id, name, upc_code], map: "products_organization_id_name_upc_idx1")
   @@index([product_category], map: "brand_category_idx1")
