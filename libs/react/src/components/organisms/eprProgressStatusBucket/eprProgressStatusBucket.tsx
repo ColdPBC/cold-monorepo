@@ -53,7 +53,7 @@ export const EprProgressStatusBucket = (props: {
     } else {
       content =
         <div>
-          To Be Determined
+          Due date to be determined
         </div>
     }
     return (
