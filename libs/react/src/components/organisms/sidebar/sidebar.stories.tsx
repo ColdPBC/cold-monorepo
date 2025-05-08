@@ -44,3 +44,107 @@ export const ColdAdmin: Story = {
     },
   },
 };
+
+export const MyDataOff: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <SideBar />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    auth0AddOn: {
+      user: {
+        ...auth0UserMock,
+        coldclimate_claims: {
+          ...auth0UserMock.coldclimate_claims,
+          roles: ['cold:admin'],
+        },
+      },
+    },
+    launchdarkly: {
+      flag: {
+        showMyDataOff: false,
+      }
+    }
+  },
+};
+
+export const ReportingAutomationOff: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <SideBar />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    auth0AddOn: {
+      user: {
+        ...auth0UserMock,
+        coldclimate_claims: {
+          ...auth0UserMock.coldclimate_claims,
+          roles: ['cold:admin'],
+        },
+      },
+    },
+    launchdarkly: {
+      flag: {
+        showReportingAutomation: false,
+      }
+    }
+  },
+};
+
+export const ClimateSectionOff: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <SideBar />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    auth0AddOn: {
+      user: {
+        ...auth0UserMock,
+        coldclimate_claims: {
+          ...auth0UserMock.coldclimate_claims,
+          roles: ['cold:admin'],
+        },
+      },
+    },
+    launchdarkly: {
+      flag: {
+        showClimateSection: false,
+      }
+    }
+  },
+};
+
+export const SustainabilityAndAssuranceDocsOff: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <SideBar />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    auth0AddOn: {
+      user: {
+        ...auth0UserMock,
+        coldclimate_claims: {
+          ...auth0UserMock.coldclimate_claims,
+          roles: ['cold:admin'],
+        },
+      },
+    },
+    launchdarkly: {
+      flag: {
+        sustainabilityAttributesAndAssuranceDocs: false,
+      }
+    }
+  },
+};

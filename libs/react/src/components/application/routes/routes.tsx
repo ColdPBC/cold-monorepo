@@ -20,12 +20,26 @@ import {
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { QuestionnaireRoutes } from './questionnaireRoutes';
 import {ProductRoutes} from "./productRoutes";
+import { LDFlagSet } from '@launchdarkly/node-server-sdk';
 
-export const DEFAULT_PAGE = '/sustainability_claims';
+export const getDefaultPage = (flags: LDFlagSet): string => {
+  switch(true){
+    case flags.sustainabilityAttributesAndAssuranceDocs:
+      return '/sustainability_claims';
+    case flags.showMyData:
+      return '/products';
+    case flags.showClimateSection:
+      return '/regulatory_compliance';
+    case flags.showReportingAutomation:
+      return '/assessments';
+    default:
+      return '/settings/account';
+  }
+}
 
 export const ColdRoutes = () => {
   const ldFlags = useFlags();
-
+  const DEFAULT_PAGE = getDefaultPage(ldFlags);
   const getFilteredRoutes = () => {
 
     return (
