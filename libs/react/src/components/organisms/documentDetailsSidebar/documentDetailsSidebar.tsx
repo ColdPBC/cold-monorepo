@@ -14,7 +14,7 @@ import {
 	Spinner,
 	SustainabilityAttributeSelect,
 } from '@coldpbc/components';
-import { AssuranceDocumentTypes, ButtonTypes, DocumentTypes, EntityLevel, IconNames, ProcessingStatus } from '@coldpbc/enums';
+import { AssuranceDocumentTypes, ButtonTypes, EntityLevel, IconNames, ProcessingStatus } from '@coldpbc/enums';
 import { forEach, get, has } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
