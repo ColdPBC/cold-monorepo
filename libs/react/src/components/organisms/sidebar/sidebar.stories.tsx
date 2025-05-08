@@ -54,15 +54,6 @@ export const MyDataOff: Story = {
     );
   },
   parameters: {
-    auth0AddOn: {
-      user: {
-        ...auth0UserMock,
-        coldclimate_claims: {
-          ...auth0UserMock.coldclimate_claims,
-          roles: ['cold:admin'],
-        },
-      },
-    },
     launchdarkly: {
       flags: {
         showMyData: false,
@@ -80,15 +71,6 @@ export const ReportingAutomationOff: Story = {
     );
   },
   parameters: {
-    auth0AddOn: {
-      user: {
-        ...auth0UserMock,
-        coldclimate_claims: {
-          ...auth0UserMock.coldclimate_claims,
-          roles: ['cold:admin'],
-        },
-      },
-    },
     launchdarkly: {
       flags: {
         showReportingAutomation: false,
@@ -106,15 +88,6 @@ export const ClimateSectionOff: Story = {
     );
   },
   parameters: {
-    auth0AddOn: {
-      user: {
-        ...auth0UserMock,
-        coldclimate_claims: {
-          ...auth0UserMock.coldclimate_claims,
-          roles: ['cold:admin'],
-        },
-      },
-    },
     launchdarkly: {
       flags: {
         showClimateSection: false,
@@ -144,6 +117,23 @@ export const SustainabilityAndAssuranceDocsOff: Story = {
     launchdarkly: {
       flags: {
         sustainabilityAttributesAndAssuranceDocs: false,
+      }
+    }
+  },
+};
+
+export const UploadsOff: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <SideBar />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showUploadsPage: false,
       }
     }
   },

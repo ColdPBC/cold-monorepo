@@ -102,6 +102,7 @@ export default {
         showMyData: true,
         showClimateSection: true,
         showReportingAutomation: true,
+        showUploadsPage: true,
       },
     },
   },

@@ -37,8 +37,6 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
         if (!ldFlags.showReportingAutomation) return false;
       } else if (item.key === 'climate_key') {
         if (!ldFlags.showClimateSection) return false;
-      } else if (item.key === 'my_data_key') {
-        if (!ldFlags.showMyData) return false;
       }
 
       // Filter children but preserve parent structure
@@ -54,6 +52,10 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
       return ldFlags.showRegulationsPage;
     } else if (item.key === 'sustainability_key' || item.key === 'assurance_documents_key') {
       return ldFlags.sustainabilityAttributesAndAssuranceDocs;
+    } else if (['materials_key', 'products_key', 'suppliers_key'].includes(item.key)){
+      return ldFlags.showMyData;
+    } else if (item.key === 'uploads_key') {
+      return ldFlags.showUploadsPage;
     } else {
 			return true;
 		}

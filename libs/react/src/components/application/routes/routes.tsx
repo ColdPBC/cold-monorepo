@@ -29,9 +29,11 @@ export const getDefaultPage = (flags: LDFlagSet): string => {
     case flags.showMyData:
       return '/products';
     case flags.showClimateSection:
-      return '/regulatory_compliance';
+      return '/carbon_footprint';
     case flags.showReportingAutomation:
       return '/assessments';
+    case flags.showUploadsPage:
+      return '/uploads';
     default:
       return '/settings/account';
   }
@@ -45,21 +47,21 @@ export const ColdRoutes = () => {
     return (
       <>
         <Route path={'/'} element={<Navigate to={DEFAULT_PAGE} replace={true} />} />
-        {ComplianceRoutes()}
-        {QuestionnaireRoutes()}
-        <Route path={'/sustainability_claims'} element={<SustainabilityPage />} />
-        <Route path={'/sustainability_claims/:id'} element={<SustainabilityAttributeDetail />} />
-        <Route path={'/carbon_footprint'} element={<CarbonFootprint />} />
-        <Route path={'/documents'} element={<DocumentsPage />} />
-        <Route path={'/uploads'} element={<UploadsPage />} />
+        {ldFlags.showReportingAutomation && ComplianceRoutes()}
+        {ldFlags.showReportingAutomation && QuestionnaireRoutes()}
+        <Route path={'/sustainability_claims'} element={ldFlags.sustainabilityAttributesAndAssuranceDocs ? <SustainabilityPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
+        <Route path={'/sustainability_claims/:id'} element={ldFlags.sustainabilityAttributesAndAssuranceDocs ? <SustainabilityAttributeDetail /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
+        <Route path={'/carbon_footprint'} element={ldFlags.showClimateSection ? <CarbonFootprint /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
+        <Route path={'/documents'} element={ldFlags.sustainabilityAttributesAndAssuranceDocs ? <DocumentsPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
+        <Route path={'/uploads'} element={ldFlags.showUploadsPage ? <UploadsPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />
         <Route path={'/settings/users'} element={<UserSettingsPage />} />
         <Route path="*" element={<Navigate to={DEFAULT_PAGE} replace={true} />} />
         {WizardRoutes()}
-        {MaterialRoutes()}
-        {SupplierRoutes()}
-        {ProductRoutes()}
-        {RegulatoryComplianceRoutes()}
+        {ldFlags.showMyData && MaterialRoutes()}
+        {ldFlags.showMyData && SupplierRoutes()}
+        {ldFlags.showMyData && ProductRoutes()}
+        {ldFlags.showReportingAutomation && RegulatoryComplianceRoutes()}
         <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
         // Temporary redirects from old route until we're certain that the seeds are updated to the new sidebar.
         <Route path={'/questionnaires'} element={<Navigate to={'/assessments'} replace={true} />} />
