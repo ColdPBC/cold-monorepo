@@ -64,8 +64,8 @@ export const MyDataOff: Story = {
       },
     },
     launchdarkly: {
-      flag: {
-        showMyDataOff: false,
+      flags: {
+        showMyData: false,
       }
     }
   },
@@ -90,7 +90,7 @@ export const ReportingAutomationOff: Story = {
       },
     },
     launchdarkly: {
-      flag: {
+      flags: {
         showReportingAutomation: false,
       }
     }
@@ -116,7 +116,7 @@ export const ClimateSectionOff: Story = {
       },
     },
     launchdarkly: {
-      flag: {
+      flags: {
         showClimateSection: false,
       }
     }
@@ -142,7 +142,7 @@ export const SustainabilityAndAssuranceDocsOff: Story = {
       },
     },
     launchdarkly: {
-      flag: {
+      flags: {
         sustainabilityAttributesAndAssuranceDocs: false,
       }
     }
