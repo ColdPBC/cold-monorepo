@@ -787,7 +787,7 @@ export const GET_MATERIALS_COUNT = gql`
 `;
 
 export const GET_EPR_SUBMISSIONS = gql`
-  query GetEPRSubmissions($filter: EprSubmissionsListFilter) {
+  query GET_EPR_SUBMISSIONS($filter: EprSubmissionsListFilter) {
     eprSubmissions(filter: $filter) {
       id
       state
