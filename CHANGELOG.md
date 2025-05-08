@@ -1,3 +1,17 @@
+## [1.640.1](https://github.com/coldPBC/cold-monorepo/compare/v1.640.0...v1.640.1) (2025-05-07)
+
+
+### Bug Fixes
+
+* **suppliers:** update unique constraint name and comment out database queries ([8170466](https://github.com/coldPBC/cold-monorepo/commit/8170466b2db9f7d760864dc5a3c5da983ad511a0))
+
+# [1.640.0](https://github.com/coldPBC/cold-monorepo/compare/v1.639.5...v1.640.0) (2025-05-07)
+
+
+### Features
+
+* **epr:** add epr_submissions table and related indices to schema ([868687b](https://github.com/coldPBC/cold-monorepo/commit/868687b430e84e5a0af8b4900f1697cb36cbef0d))
+
 ## [1.639.5](https://github.com/coldPBC/cold-monorepo/compare/v1.639.4...v1.639.5) (2025-04-28)
 
 

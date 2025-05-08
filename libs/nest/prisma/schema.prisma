@@ -7,20 +7,20 @@ generator client {
 generator zod {
   provider                         = "zod-prisma-types"
   output                           = "../src/validation/generated"
-  createOptionalDefaultValuesTypes = "false"
-  useMultipleFiles                 = "true"
-  coerceDate                       = "false"
-  addIncludeType                   = "false"
-  createModelTypes                 = "true"
   writeNullishInModelTypes         = "false"
-  addInputTypeValidation           = "false"
-  validateWhereUniqueInput         = "false"
+  addIncludeType                   = "false"
+  createOptionalDefaultValuesTypes = "false"
+  coerceDate                       = "false"
   addSelectType                    = "false"
-  createPartialTypes               = "false"
+  validateWhereUniqueInput         = "false"
   createInputTypes                 = "false"
-  useDefaultValidators             = "false"
-  createRelationValuesTypes        = "false"
   writeBarrelFiles                 = "false"
+  addInputTypeValidation           = "false"
+  createPartialTypes               = "false"
+  createModelTypes                 = "true"
+  createRelationValuesTypes        = "false"
+  useMultipleFiles                 = "true"
+  useDefaultValidators             = "false"
 }
 
 datasource db {
@@ -350,6 +350,7 @@ model organizations {
   utility_bills                                     utility_bills[]
   vector_records                                    vector_records[]
   compliance_responses                              compliance_responses[]
+  epr_submissions                                   epr_submissions[]
 
   @@index([name], map: "organizations_name_idx1")
 }
@@ -711,10 +712,10 @@ model products {
   supplier                organization_facilities?  @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
 
   @@unique([organization_id, upc_code, name], name: "orgIdNameUpc")
-	@@unique([organization_id, name, plm_id], name: "orgIdNamePlmId")
   @@unique([organization_id, name, season_code, style_code], name: "orgIdNameSeasonStyle")
-	@@index([organization_id, name], map: "products_organization_id_name_idx1")
-	@@index([organization_id, name, upc_code], map: "products_organization_id_name_upc_idx1")
+  @@unique([organization_id, name, plm_id], name: "orgIdNamePlmId" )
+  @@index([organization_id, name], map: "products_organization_id_name_idx1")
+  @@index([organization_id, name, upc_code], map: "products_organization_id_name_upc_idx1")
   @@index([product_category], map: "brand_category_idx1")
   @@index([product_subcategory], map: "brand_subcategory_idx1")
   @@index([brand_product_id], map: "brand_product_id_idx1")
@@ -1388,6 +1389,31 @@ model organization_compliance_ai_response_files {
   @@index([organization_id])
 }
 
+model epr_submissions {
+  id              Int           @id @default(autoincrement())
+  organization_id String
+  status          String
+  state           String
+  bill_identifier String
+  due_date        DateTime?
+  created_at      DateTime?     @default(now())
+  updated_at      DateTime?     @updatedAt
+  submitted_at    DateTime?
+  organization    organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  @@index([organization_id], map: "epr_submissions_organization_id_idx1")
+  @@index([organization_id, status], map: "epr_submissions_organization_id_status_idx1")
+  @@index([organization_id, state], map: "epr_submissions_organization_id_state_idx1")
+  @@index([organization_id, bill_identifier], map: "epr_submissions_organization_id_bill_identifier_idx1")
+  @@index([organization_id, due_date], map: "epr_submissions_organization_id_due_date_idx1")
+  @@index([organization_id, submitted_at], map: "epr_submissions_organization_id_submitted_at_idx1")
+  @@index([submitted_at], map: "epr_submissions_submitted_at_idx1")
+  @@index([status], map: "epr_submissions_status_idx1")
+  @@index([state], map: "epr_submissions_state_idx1")
+  @@index([bill_identifier], map: "epr_submissions_bill_identifier_idx1")
+  @@index([due_date], map: "epr_submissions_due_date_idx1")
+}
+
 model climatiq_actvities {
   id                            String  @id
   activity_id                   String
@@ -1501,6 +1527,25 @@ view suppliers_view {
 }
 
 /// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view organization_product_material_emissions {
+  organization_id         String?
+  organization_name       String?
+  product_id              String?
+  product_name            String?
+  product_category        String?
+  product_subcategory     String?
+  material_id             String?
+  material_name           String?
+  emissions_factor        Float?
+  material_subcategory    String?
+  material_category       String?
+  product_emission_stats  Json?
+  material_emission_stats Json?
+
+  @@ignore
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 view pg_stat_statements_info {
   dealloc     BigInt?
   stats_reset DateTime? @db.Timestamptz(6)
@@ -1564,49 +1609,6 @@ view product_material_emissions {
   product_subcategory String?
   material_name       String?
   emissions_factor    Float?
-
-  @@ignore
-}
-
-view organization_claims_view {
-	facility_id            String        @id
-	facility_name          String?
-	address_line_1         String?
-	address_line_2         String?
-	city                   String?
-	state_province         String?
-	postal_code            String?
-	country                String?
-	supplier               Boolean
-	claim_id               String?
-	claim_name             String?
-	claim_level            claim_levels?
-	claim_type             claim_types?
-	organization_file_id   String?
-	organization_file_name String?
-	organization_file_type file_types?
-	mimetype               String?
-	effective_start_date   DateTime?
-	effective_end_date     DateTime?
-	expires_at             DateTime?
-	organization_name      String
-}
-
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view organization_product_material_emissions {
-  organization_id         String?
-  organization_name       String?
-  product_id              String?
-  product_name            String?
-  product_category        String?
-  product_subcategory     String?
-  material_id             String?
-  material_name           String?
-  emissions_factor        Float?
-  material_subcategory    String?
-  material_category       String?
-  product_emission_stats  Json?
-  material_emission_stats Json?
 
   @@ignore
 }
