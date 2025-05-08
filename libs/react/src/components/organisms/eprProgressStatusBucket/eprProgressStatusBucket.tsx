@@ -3,10 +3,13 @@ import {ColdIcon} from "../../atoms";
 import {IconNames} from "@coldpbc/enums";
 import {format, formatDistance} from "date-fns";
 import {HexColors} from "@coldpbc/themes";
+import {withErrorBoundary} from "react-error-boundary";
+import {ErrorFallback} from "../../application";
+import React from "react";
 
 const S3_IMAGE_BUCKET = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/epr/'
 
-export const EprProgressStatusBucket = (props: {
+const _EprProgressStatusBucket = (props: {
   title: string;
   items: EprSubmissionGraphQL[]
 }) => {
@@ -115,3 +118,10 @@ export const EprProgressStatusBucket = (props: {
     </div>
   )
 }
+
+export const EprProgressStatusBucket = withErrorBoundary(_EprProgressStatusBucket, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in EprProgressStatusBucket: ', error);
+  },
+});

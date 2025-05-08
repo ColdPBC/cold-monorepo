@@ -1,11 +1,12 @@
-import {EprProgressStatusBucket, MainContent} from "@coldpbc/components";
+import {EprProgressStatusBucket, ErrorFallback, MainContent} from "@coldpbc/components";
 import {useAuth0Wrapper, useColdContext, useGraphQLSWR} from "@coldpbc/hooks";
 import {EprSubmissionGraphQL} from "@coldpbc/interfaces";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getGraphqlError} from "@coldpbc/lib";
+import {withErrorBoundary} from "react-error-boundary";
 
 
-export const EprProgress = () => {
+const _EprProgress = () => {
   const {logBrowser} = useColdContext();
   const {orgId} = useAuth0Wrapper();
   const [epsSubmissions, setEpsSubmissions] = useState<EprSubmissionGraphQL[]>([])
@@ -55,3 +56,10 @@ export const EprProgress = () => {
     </MainContent>
   )
 }
+
+export const EprProgress = withErrorBoundary(_EprProgress, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in EprProgress: ', error);
+  },
+});
