@@ -1,10 +1,11 @@
 import {Navigate, Route} from "react-router-dom";
-import { RegulatoryComplianceDetail, RegulatoryCompliance, DEFAULT_PAGE } from '@coldpbc/components';
+import {RegulatoryComplianceDetail, RegulatoryCompliance, getDefaultPage} from '@coldpbc/components';
 import {useFlags} from "launchdarkly-react-client-sdk";
 
 
 export const RegulatoryComplianceRoutes = () => {
   const ldFlags = useFlags()
+  const DEFAULT_PAGE = getDefaultPage(ldFlags);
   return (
     <>
       <Route path={'/regulatory_compliance'} element={ldFlags.showRegulationsPage ? <RegulatoryCompliance /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />

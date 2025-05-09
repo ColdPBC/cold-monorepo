@@ -34,7 +34,7 @@ const _DocumentsPage = () => {
 	const { orgId } = useAuth0Wrapper();
 	const { logBrowser } = useColdContext();
   const ldFlags = useFlags();
-  const docTypeFilter = ldFlags.showNewDocumentUploadUxCold1410 ? { type_in: Object.values(AssuranceDocumentTypes) } : {};
+  const docTypeFilter = { type_in: Object.values(AssuranceDocumentTypes) };
 	const allFiles = useGraphQLSWR<{
     organizationFiles: FilesWithAssurances[] | null;
   }>('GET_ALL_FILES', {

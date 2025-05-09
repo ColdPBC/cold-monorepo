@@ -20,32 +20,48 @@ import {
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { QuestionnaireRoutes } from './questionnaireRoutes';
 import {ProductRoutes} from "./productRoutes";
+import { LDFlagSet } from '@launchdarkly/node-server-sdk';
 
-export const DEFAULT_PAGE = '/sustainability_claims';
+export const getDefaultPage = (flags: LDFlagSet): string => {
+  switch(true){
+    case flags.sustainabilityAttributesAndAssuranceDocs:
+      return '/sustainability_claims';
+    case flags.showMyData:
+      return '/products';
+    case flags.showClimateSection:
+      return '/carbon_footprint';
+    case flags.showReportingAutomation:
+      return '/assessments';
+    case flags.showUploadsPage:
+      return '/uploads';
+    default:
+      return '/settings/account';
+  }
+}
 
 export const ColdRoutes = () => {
   const ldFlags = useFlags();
-
+  const DEFAULT_PAGE = getDefaultPage(ldFlags);
   const getFilteredRoutes = () => {
 
     return (
       <>
         <Route path={'/'} element={<Navigate to={DEFAULT_PAGE} replace={true} />} />
-        {ComplianceRoutes()}
-        {QuestionnaireRoutes()}
-        <Route path={'/sustainability_claims'} element={<SustainabilityPage />} />
-        <Route path={'/sustainability_claims/:id'} element={<SustainabilityAttributeDetail />} />
-        <Route path={'/carbon_footprint'} element={<CarbonFootprint />} />
-        <Route path={'/documents'} element={<DocumentsPage />} />
-        <Route path={'/uploads'} element={ldFlags.showNewDocumentUploadUxCold1410 ? <UploadsPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
+        {ldFlags.showReportingAutomation && ComplianceRoutes()}
+        {ldFlags.showReportingAutomation && QuestionnaireRoutes()}
+        <Route path={'/sustainability_claims'} element={ldFlags.sustainabilityAttributesAndAssuranceDocs ? <SustainabilityPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
+        <Route path={'/sustainability_claims/:id'} element={ldFlags.sustainabilityAttributesAndAssuranceDocs ? <SustainabilityAttributeDetail /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
+        <Route path={'/carbon_footprint'} element={ldFlags.showClimateSection ? <CarbonFootprint /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
+        <Route path={'/documents'} element={ldFlags.sustainabilityAttributesAndAssuranceDocs ? <DocumentsPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
+        <Route path={'/uploads'} element={ldFlags.showUploadsPage ? <UploadsPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />
         <Route path={'/settings/users'} element={<UserSettingsPage />} />
         <Route path="*" element={<Navigate to={DEFAULT_PAGE} replace={true} />} />
         {WizardRoutes()}
-        {MaterialRoutes()}
-        {SupplierRoutes()}
-        {ProductRoutes()}
-        {RegulatoryComplianceRoutes()}
+        {ldFlags.showMyData && MaterialRoutes()}
+        {ldFlags.showMyData && SupplierRoutes()}
+        {ldFlags.showMyData && ProductRoutes()}
+        {ldFlags.showReportingAutomation && RegulatoryComplianceRoutes()}
         <Route path={'/epr_progress'} element={ldFlags.showEpr ? <EprProgress /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
         <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
         // Temporary redirects from old route until we're certain that the seeds are updated to the new sidebar.
