@@ -26,6 +26,8 @@ export const getDefaultPage = (flags: LDFlagSet): string => {
   switch(true){
     case flags.sustainabilityAttributesAndAssuranceDocs:
       return '/sustainability_claims';
+    case flags.showEpr:
+      return '/epr_progress';
     case flags.showMyData:
       return '/products';
     case flags.showClimateSection:
@@ -61,7 +63,7 @@ export const ColdRoutes = () => {
         {ldFlags.showMyData && MaterialRoutes()}
         {ldFlags.showMyData && SupplierRoutes()}
         {ldFlags.showMyData && ProductRoutes()}
-        {ldFlags.showReportingAutomation && RegulatoryComplianceRoutes()}
+        {RegulatoryComplianceRoutes()}
         <Route path={'/epr_progress'} element={ldFlags.showEpr ? <EprProgress /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
         <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
         // Temporary redirects from old route until we're certain that the seeds are updated to the new sidebar.
