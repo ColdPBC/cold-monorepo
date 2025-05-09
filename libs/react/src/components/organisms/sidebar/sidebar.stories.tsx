@@ -138,3 +138,20 @@ export const UploadsOff: Story = {
     }
   },
 };
+
+export const EprOff: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <SideBar />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showEpr: false,
+      }
+    }
+  },
+};
