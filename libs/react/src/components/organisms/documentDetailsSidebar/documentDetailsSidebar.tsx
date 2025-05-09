@@ -14,7 +14,7 @@ import {
 	Spinner,
 	SustainabilityAttributeSelect,
 } from '@coldpbc/components';
-import { AssuranceDocumentTypes, ButtonTypes, DocumentTypes, EntityLevel, IconNames, ProcessingStatus } from '@coldpbc/enums';
+import { AssuranceDocumentTypes, ButtonTypes, EntityLevel, IconNames, ProcessingStatus } from '@coldpbc/enums';
 import { forEach, get, has } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
@@ -210,7 +210,7 @@ const _DocumentDetailsSidebar = (props: {
 	}, [setFileState, file]);
 
   // In the new document upload UX, this sidebar is for Assurance Documents only
-  const fileTypes = ldFlags.showNewDocumentUploadUxCold1410 ? Object.values(AssuranceDocumentTypes) : Object.values(DocumentTypes);
+  const fileTypes = Object.values(AssuranceDocumentTypes);
 	const documentTypeOptions: InputOption[] = fileTypes
 		.map((type, index) => {
 			const name = formatScreamingSnakeCase(type);
