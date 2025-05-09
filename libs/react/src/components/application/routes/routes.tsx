@@ -30,12 +30,12 @@ export const getDefaultPage = (flags: LDFlagSet): string => {
       return '/epr_progress';
     case flags.showMyData:
       return '/products';
+    case flags.showUploadsPage:
+      return '/uploads';
     case flags.showClimateSection:
       return '/carbon_footprint';
     case flags.showReportingAutomation:
       return '/assessments';
-    case flags.showUploadsPage:
-      return '/uploads';
     default:
       return '/settings/account';
   }
