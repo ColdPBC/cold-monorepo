@@ -12,10 +12,11 @@ export interface DocumentUploadButtonProps {
   mutateFunction?: KeyedMutator<any>;
   successfulToastMessage?: Partial<ToastMessageType>;
   failureToastMessage?: Partial<ToastMessageType>;
+  uploadType?: string
 }
 
 export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
-  const { buttonProps, mutateFunction, successfulToastMessage, failureToastMessage} = props;
+  const { buttonProps, mutateFunction, successfulToastMessage, failureToastMessage, uploadType} = props;
   const [sending, setSending] = React.useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId } = useAuth0Wrapper();
@@ -36,7 +37,7 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
       },
       timeout: 60000,
       queryParams: {
-        type: 'OTHER',
+        type: uploadType || 'OTHER',
       },
     } as AxiosRequestConfig);
     const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, config]);

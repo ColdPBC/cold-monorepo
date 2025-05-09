@@ -6,12 +6,11 @@ import {
   ErrorFallback,
   MainContent,
   Spinner,
-  UploadModal,
   AiProcessingDocumentsBanner, DocumentDetailsSidebarContainer
 } from '@coldpbc/components';
 import React, { useEffect } from 'react';
 import { FilesWithAssurances, MaterialWithSupplier } from '@coldpbc/interfaces';
-import { AssuranceDocumentTypes, IconNames, MainDocumentCategory, ProcessingStatus} from '@coldpbc/enums';
+import { AssuranceDocumentTypes, IconNames, ProcessingStatus} from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import {get} from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
@@ -92,41 +91,25 @@ const _DocumentsPage = () => {
   const getPageButtons = () => {
     return (
       <div className={'h-auto'}>
-        {
-          ldFlags.showNewDocumentUploadUxCold1410 ?
-            (
-              <UploadModal
-                refreshData={allFiles.mutate}
-                types={[
-                  MainDocumentCategory.Assurance,
-                ]}
-                buttonProps={{
-                  label: 'Upload Assurance Doc',
-                  iconLeft: IconNames.PlusIcon,
-                }}
-              />
-            ) : (
-              <DocumentUploadButton
-                buttonProps={{
-                  label: 'Add New',
-                  iconLeft: IconNames.PlusIcon,
-                }}
-                mutateFunction={allFiles.mutate}
-                successfulToastMessage={{
-                  message: (
-                    <div className={'flex flex-col gap-[10px]'}>
-                      <div className={'font-bold'}>Upload Complete</div>
-                      <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
-                    </div>
-                  ),
-                  position: 'bottomRight',
-                }}
-                failureToastMessage={{
-                  position: 'bottomRight',
-                }}
-              />
-            )
-        }
+        <DocumentUploadButton
+          buttonProps={{
+            label: 'Upload Assurance Doc',
+            iconLeft: IconNames.PlusIcon,
+          }}
+          mutateFunction={allFiles.mutate}
+          successfulToastMessage={{
+            message: (
+              <div className={'flex flex-col gap-[10px]'}>
+                <div className={'font-bold'}>Upload Complete</div>
+                <div className={'test-eyebrow'}>✨ Cold AI categorization has started</div>
+              </div>
+            ),
+            position: 'bottomRight',
+          }}
+          failureToastMessage={{
+            position: 'bottomRight',
+          }}
+        />
       </div>
     );
   };
