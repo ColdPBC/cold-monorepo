@@ -1,3 +1,14 @@
+# [1.641.0](https://github.com/coldPBC/cold-monorepo/compare/v1.640.1...v1.641.0) (2025-05-09)
+
+
+### Features
+
+* Add feature flag support for 'showUploadsPage' ([db9433b](https://github.com/coldPBC/cold-monorepo/commit/db9433b72be99b48af23ff41733ac8c14513e019))
+* Add LaunchDarkly feature flags for new UI sections ([2efbd57](https://github.com/coldPBC/cold-monorepo/commit/2efbd57dd0c4fea372c36d33587b95619eab2fd1))
+* Remove 'Documents' entry from sidebarMock and seed data ([f5aa22d](https://github.com/coldPBC/cold-monorepo/commit/f5aa22d61a2d2a9885232a1c17b529fd2800f92a))
+* Remove feature flag checks for new document upload UX ([72889a9](https://github.com/coldPBC/cold-monorepo/commit/72889a98b24ae7640741c05067ba8e19c4e4741d))
+* Remove unused DocumentTypes import from documentDetailsSidebar ([b3d82c0](https://github.com/coldPBC/cold-monorepo/commit/b3d82c0e9533e8e54afbdb0ce3c14530cbbe986b))
+
 ## [1.640.1](https://github.com/coldPBC/cold-monorepo/compare/v1.640.0...v1.640.1) (2025-05-07)
 
 
