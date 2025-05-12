@@ -138,7 +138,7 @@ export const _UploadsPage = () => {
       headerElement={
         <DocumentUploadButton
           buttonProps={{
-            label: 'Add New',
+            label: 'Upload',
             iconLeft: IconNames.PlusIcon,
             className: 'h-[40px] self-center',
             'data-testid': 'upload-button',
