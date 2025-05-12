@@ -95,6 +95,7 @@ const _DocumentsPage = () => {
           buttonProps={{
             label: 'Upload Assurance Doc',
             iconLeft: IconNames.PlusIcon,
+            className: 'h-[40px] self-center',
           }}
           mutateFunction={allFiles.mutate}
           successfulToastMessage={{

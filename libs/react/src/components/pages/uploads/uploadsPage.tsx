@@ -140,6 +140,7 @@ export const _UploadsPage = () => {
           buttonProps={{
             label: 'Add New',
             iconLeft: IconNames.PlusIcon,
+            className: 'h-[40px] self-center',
           }}
           mutateFunction={uploadsQuery.mutate}
           successfulToastMessage={{
