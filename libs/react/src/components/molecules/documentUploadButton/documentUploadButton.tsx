@@ -16,7 +16,7 @@ export interface DocumentUploadButtonProps {
 }
 
 export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
-  const { buttonProps, mutateFunction, successfulToastMessage, failureToastMessage, uploadType} = props;
+  const { buttonProps, mutateFunction, successfulToastMessage, failureToastMessage, uploadType = 'OTHER'} = props;
   const [sending, setSending] = React.useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId } = useAuth0Wrapper();
@@ -36,8 +36,8 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
         'Content-Type': 'multipart/form-data',
       },
       timeout: 60000,
-      queryParams: {
-        type: uploadType || 'OTHER',
+      params: {
+        type: uploadType,
       },
     } as AxiosRequestConfig);
     const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, config]);
@@ -81,6 +81,11 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
         });
         return newFiles;
       });
+    }
+
+    // Reset input to allow re-uploading the same file
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
     setSending(false);
   };
