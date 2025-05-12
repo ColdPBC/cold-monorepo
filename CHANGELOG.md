@@ -1,3 +1,13 @@
+# [1.642.0](https://github.com/coldPBC/cold-monorepo/compare/v1.641.0...v1.642.0) (2025-05-12)
+
+
+### Features
+
+* Refactor document upload components to simplify logic. ([5b73451](https://github.com/coldPBC/cold-monorepo/commit/5b73451a5c5075d47740fa1a911154feaf4f5e13))
+* Set consistent button styling on documents and uploads pages ([02ab300](https://github.com/coldPBC/cold-monorepo/commit/02ab300acb7c9ac24ece91297a4c9349f065b2f5))
+* Set default uploadType and reset file input after upload ([c0e19bd](https://github.com/coldPBC/cold-monorepo/commit/c0e19bdb8d8870d3865ef1ec8f991cdc12523efe))
+* Update label text for DocumentUploadButton to "Upload" ([26e898d](https://github.com/coldPBC/cold-monorepo/commit/26e898d01954046b433b42185c56857d5eea5a31))
+
 # [1.641.0](https://github.com/coldPBC/cold-monorepo/compare/v1.640.1...v1.641.0) (2025-05-09)
 
 
