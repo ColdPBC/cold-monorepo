@@ -197,14 +197,6 @@ const seeds: Array<{
               route: '/suppliers',
             },
             {
-              key: 'documents_key',
-              icon: {
-                name: 'ColdDocumentsIcon',
-              },
-              label: 'Documents',
-              route: '/documents',
-            },
-            {
               key: 'uploads_key',
               icon: {
                 name: 'ColdDocumentsIcon',

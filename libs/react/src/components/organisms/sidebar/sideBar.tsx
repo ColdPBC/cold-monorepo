@@ -33,19 +33,29 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
 
 	const filterSidebar = (item: NavbarItem) => {
     if (item.items) {
+      if (item.key === 'reporting_automation_key') {
+        if (!ldFlags.showReportingAutomation) return false;
+      } else if (item.key === 'climate_key') {
+        if (!ldFlags.showClimateSection) return false;
+      }
+
+      // Filter children but preserve parent structure
       item.items = item.items.filter(filterSidebar);
+
+      // Hide parent if all children are filtered out
+      return item.items.length > 0;
     }
 
     if (item.key === 'settings_billing_key') {
       return ldFlags.showBillingPageCold957;
-    } else if (item.key === 'assurance_documents_key' || item.key === 'uploads_key') {
-      // Show new documents items when FF is on
-      return ldFlags.showNewDocumentUploadUxCold1410;
-    } else if (item.key === 'documents_key') {
-      // Hide old Documents item when FF is on
-      return !ldFlags.showNewDocumentUploadUxCold1410;
     } else if (item.key === 'regulatory_compliance_key') {
       return ldFlags.showRegulationsPage;
+    } else if (item.key === 'sustainability_key' || item.key === 'assurance_documents_key') {
+      return ldFlags.sustainabilityAttributesAndAssuranceDocs;
+    } else if (['materials_key', 'products_key', 'suppliers_key'].includes(item.key)){
+      return ldFlags.showMyData;
+    } else if (item.key === 'uploads_key') {
+      return ldFlags.showUploadsPage;
     } else {
 			return true;
 		}
