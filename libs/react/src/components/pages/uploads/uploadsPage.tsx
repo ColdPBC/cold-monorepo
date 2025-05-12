@@ -141,6 +141,7 @@ export const _UploadsPage = () => {
             label: 'Add New',
             iconLeft: IconNames.PlusIcon,
             className: 'h-[40px] self-center',
+            'data-testid': 'upload-button',
           }}
           mutateFunction={uploadsQuery.mutate}
           successfulToastMessage={{
