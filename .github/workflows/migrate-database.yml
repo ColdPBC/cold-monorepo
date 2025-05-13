@@ -17,6 +17,8 @@ env:
   CACHE_NAME: cache-node-modules
   PR_NUMBER: ${{ github.event.number }}
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  DATABASE_HOST: $([[ $BRANCH_NAME == main* ]] && ${{ secrets.PRODUCTION_DB_HOST }} || ${{ secrets.STAGING_DB_HOST }})
+  DATABASE_PASSWORD: $([[ $BRANCH_NAME == main* ]] && ${{ secrets.PRODUCTION_DB_PASSWORD }} || ${{ secrets.STAGING_DB_PASSWORD }})
 jobs:
   migrate-db:
     name: 🪿Migrate Database Changes 🪿
@@ -36,16 +38,21 @@ jobs:
       - name: Use Yarn
         run: corepack prepare yarn@4.4.1 --activate
 
-      - name: Cache node modules
+      - name: Cache Yarn PnP artifacts
         uses: actions/cache@v3
         with:
-          path: '**/node_modules'
+          path: |
+            **/node_modules
+            .yarn/cache
+            .yarn/install-state.gz
+            .yarn/build-state.yml
+            .pnp.*
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Set DATABASE_URL
-        run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: yarn install --immutable
 
       - name: Install dependencies
         run: yarn install
@@ -54,7 +61,7 @@ jobs:
         run: yarn prisma migrate deploy
 
       - name: Sync ❡𝓇𝓪𝓹𝒽𝓠𝓛 Changes
-        run: yarn sync
+        run: graphweaver import postgresql -o --host ${{ env.DATABASE_HOST }} --password ${{ env.DATABASE_PASSWORD }} --user flightcontrol --database flightcontrol --port 5432
         working-directory: apps/cold-graphql
 
       - name: Configure 🄶🄸🅃🄷🅄🄱
