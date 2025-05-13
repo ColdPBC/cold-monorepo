@@ -1,6 +1,6 @@
 import {Body, Controller, Get, HttpStatus, Post, Req, UseFilters, UseGuards} from '@nestjs/common';
 import {Span} from "nestjs-ddtrace";
-import {BaseWorker, HttpExceptionFilter, IRequest, JwtAuthGuard, RolesGuard} from "@coldpbc/nest";
+import {allRoles, BaseWorker, HttpExceptionFilter, IRequest, JwtAuthGuard, Roles, RolesGuard} from "@coldpbc/nest";
 import {ApiBody, ApiOAuth2, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {EprSubmissionsService} from "./epr_submissions.service";
 import {CreateEprSubmissionDto} from "./dto/create-epr-submission.dto";
@@ -38,6 +38,7 @@ export class EprSubmissionsController extends BaseWorker{
     status: HttpStatus.BAD_REQUEST,
     description: 'Invalid submission data provided',
   })
+  @Roles(...allRoles)
   async create(@Req() req: IRequest, @Body() createEprSubmissionDto: CreateEprSubmissionDto) {
     this.logger.log('Creating new EPR submission');
     return this.eprSubmissions.create(req, createEprSubmissionDto);
