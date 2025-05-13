@@ -4,6 +4,7 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Action } from './action';
 import { AttributeAssurance } from './attribute-assurance';
 import { CategoryDatum } from './category-datum';
+import { EprSubmission } from './epr-submission';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { Material } from './material';
@@ -86,6 +87,9 @@ export class Organization {
 
 	@RelationshipField<CategoryDatum>(() => [CategoryDatum], { relatedField: 'organization' })
 	categoryData!: CategoryDatum[];
+
+	@RelationshipField<EprSubmission>(() => [EprSubmission], { relatedField: 'organization' })
+	eprSubmissions!: EprSubmission[];
 
 	@RelationshipField<FacilityFootprint>(() => [FacilityFootprint], { relatedField: 'organization' })
 	facilityFootprints!: FacilityFootprint[];
