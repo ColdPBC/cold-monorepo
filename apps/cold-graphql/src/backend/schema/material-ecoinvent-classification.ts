@@ -24,4 +24,7 @@ export class MaterialEcoinventClassification {
 
 	@RelationshipField<MaterialEcoinventClassification>(() => MaterialClassification, { id: (entity) => entity.materialClassification?.id })
 	materialClassification!: MaterialClassification;
+
+	@Field(() => String, { nullable: true })
+	reasoning?: string;
 }
