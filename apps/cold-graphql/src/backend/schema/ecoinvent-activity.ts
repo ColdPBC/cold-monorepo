@@ -4,6 +4,7 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { EcoinventActivityClassification } from './ecoinvent-activity-classification';
 import { EcoinventActivityImpact } from './ecoinvent-activity-impact';
 import { EcoinventClassification } from './ecoinvent-classification';
+import { MaterialClassificationActivity } from './material-classification-activity';
 import { MaterialEmissionFactor } from './material-emission-factor';
 import { EcoinventActivity as OrmEcoinventActivity } from '../entities';
 import { connection } from '../database';
@@ -44,6 +45,9 @@ export class EcoinventActivity {
 
 	@RelationshipField<EcoinventActivityImpact>(() => [EcoinventActivityImpact], { relatedField: 'ecoinventActivity' })
 	ecoinventActivityImpacts!: EcoinventActivityImpact[];
+
+	@RelationshipField<MaterialClassificationActivity>(() => [MaterialClassificationActivity], { relatedField: 'ecoinventActivity' })
+	materialClassificationActivities!: MaterialClassificationActivity[];
 
 	@RelationshipField<MaterialEmissionFactor>(() => [MaterialEmissionFactor], { relatedField: 'ecoinventActivity' })
 	materialEmissionFactors!: MaterialEmissionFactor[];
