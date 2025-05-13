@@ -3,6 +3,7 @@ import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { CoreClassification } from './core-classification';
 import { Material } from './material';
+import { MaterialClassificationActivity } from './material-classification-activity';
 import { MaterialEcoinventClassification } from './material-ecoinvent-classification';
 import { SustainabilityAttribute } from './sustainability-attribute';
 import { SustainabilityAttributeClassifcationAssignment } from './sustainability-attribute-classifcation-assignment';
@@ -36,6 +37,9 @@ export class MaterialClassification {
 
 	@Field(() => GraphQLJSON, { nullable: true })
 	ecoinventActivityClassifications?: Record<string, unknown>;
+
+	@RelationshipField<MaterialClassificationActivity>(() => [MaterialClassificationActivity], { relatedField: 'materialClassification' })
+	materialClassificationActivities!: MaterialClassificationActivity[];
 
 	@RelationshipField<MaterialEcoinventClassification>(() => [MaterialEcoinventClassification], { relatedField: 'materialClassification' })
 	materialEcoinventClassifications!: MaterialEcoinventClassification[];
