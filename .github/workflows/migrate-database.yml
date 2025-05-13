@@ -80,9 +80,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: 'apps/cold-graphql/node_modules'
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-
+            ${{ runner.os }}-yarn-
 
       - name: Set DATABASE_URL
         run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
@@ -125,7 +125,6 @@ jobs:
           git commit -m "ci: sync prisma schema changes"
 
       - name: 🫸 Push Changes To 🄶🄸🅃🄷🅄🄱
-        if: steps.PR.outputs.pr_found != 'true'
         uses: CasperWA/push-protected@v2
         with:
           token: ${{ secrets.GH_TOKEN }}
