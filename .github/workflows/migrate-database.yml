@@ -17,6 +17,8 @@ env:
   CACHE_NAME: cache-node-modules
   PR_NUMBER: ${{ github.event.number }}
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  DATABASE_HOST: $([[ $BRANCH_NAME == main* ]] && ${{ secrets.PRODUCTION_DB_HOST }} || ${{ secrets.STAGING_DB_HOST }})
+  DATABASE_PASSWORD: $([[ $BRANCH_NAME == main* ]] && ${{ secrets.PRODUCTION_DB_PASSWORD }} || ${{ secrets.STAGING_DB_PASSWORD }})
 jobs:
   migrate-db:
     name: 🪿Migrate Database Changes 🪿
@@ -36,16 +38,21 @@ jobs:
       - name: Use Yarn
         run: corepack prepare yarn@4.4.1 --activate
 
-      - name: Cache node modules
+      - name: Cache Yarn PnP artifacts
         uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: |
+            **/node_modules
+            .yarn/cache
+            .yarn/install-state.gz
+            .yarn/build-state.yml
+            .pnp.*
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-
+            ${{ runner.os }}-yarn-
 
-      - name: Set DATABASE_URL
-        run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: yarn install --immutable
 
       - name: Install dependencies
         run: yarn install
@@ -53,65 +60,8 @@ jobs:
       - name: Run Prisma Migrations
         run: yarn prisma migrate deploy
 
-  sync-graphql:
-    runs-on: ubuntu-latest
-    name: 🔄 Sync GraphQL Schema
-    needs:
-      - migrate-db
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.9.0'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install TS-NODE
-        run: npm install -g ts-node
-
-      - name: Use PNPM
-        run: corepack prepare pnpm@9.8.0 --activate
-
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: 'apps/cold-graphql/node_modules'
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: Set DATABASE_URL
-        run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
-
-      - name: Set PGSSLMODE
-        run: echo "PGSSLMODE=no-verify" >> $GITHUB_ENV
-
-      - name: Set DATABASE_NAME
-        run: echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> $GITHUB_ENV
-
-      - name: Set DATABASE_USERNAME
-        run: echo "DATABASE_USERNAME=flightcontrol" >> $GITHUB_ENV
-        # run: echo "DATABASE_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-
-      - name: Set DATABASE_PASSWORD
-        run: echo "DATABASE_PASSWORD=$([[ $BRANCH_NAME == main* ]] && echo '${{ secrets.PRODUCTION_DB_PASSWORD }}' || echo '${{ secrets.STAGING_DB_PASSWORD }}')" >> $GITHUB_ENV
-
-      - name: Set DATABASE_HOST
-        run: echo "DATABASE_HOST=$([[ $BRANCH_NAME == main* ]] && echo '${{ secrets.PRODUCTION_DB_HOST }}' || echo '${{ secrets.STAGING_DB_HOST }}')" >> $GITHUB_ENV
-
-      - name: Set NODE_ENV
-        run: echo "NODE_ENV=$([[ $BRANCH_NAME == main* ]] && echo production || echo staging)" >> $GITHUB_ENV
-
-      - name: Install dependencies
-        run: pnpm install
-        working-directory: apps/cold-graphql
-
       - name: Sync ❡𝓇𝓪𝓹𝒽𝓠𝓛 Changes
-        run: pnpm sync
+        run: graphweaver import postgresql -o --host ${{ env.DATABASE_HOST }} --password ${{ env.DATABASE_PASSWORD }} --user flightcontrol --database flightcontrol --port 5432
         working-directory: apps/cold-graphql
 
       - name: Configure 🄶🄸🅃🄷🅄🄱
@@ -125,7 +75,6 @@ jobs:
           git commit -m "ci: sync prisma schema changes"
 
       - name: 🫸 Push Changes To 🄶🄸🅃🄷🅄🄱
-        if: steps.PR.outputs.pr_found != 'true'
         uses: CasperWA/push-protected@v2
         with:
           token: ${{ secrets.GH_TOKEN }}
