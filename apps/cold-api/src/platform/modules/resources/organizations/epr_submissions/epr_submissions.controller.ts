@@ -1,4 +1,14 @@
-import {Body, Controller, Get, HttpStatus, Post, Req, UseFilters, UseGuards} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Post,
+  Req,
+  UnprocessableEntityException,
+  UseFilters,
+  UseGuards, ValidationPipe
+} from '@nestjs/common';
 import {Span} from "nestjs-ddtrace";
 import {allRoles, BaseWorker, HttpExceptionFilter, IRequest, JwtAuthGuard, Roles, RolesGuard} from "@coldpbc/nest";
 import {ApiBody, ApiOAuth2, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
@@ -30,16 +40,32 @@ export class EprSubmissionsController extends BaseWorker{
   @Post()
   @ApiOperation({ summary: 'Create a new EPR submission' })
   @ApiBody({ description: 'EPR submission data' })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: 'The EPR submission has been successfully created',
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid submission data provided',
-  })
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'The EPR submission has been successfully created' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid submission data provided' })
   @Roles(...allRoles)
-  async create(@Req() req: IRequest, @Body() createEprSubmissionDto: CreateEprSubmissionDto) {
+  async create(
+    @Req() req,
+    @Body(new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      exceptionFactory: (errors) => {
+        const errorMessages = errors.map(error => {
+          const constraints = error.constraints ? Object.values(error.constraints) : ['Invalid value'];
+          return {
+            field: error.property,
+            value: error.value,
+            constraints: constraints
+          };
+        });
+
+        return new UnprocessableEntityException({
+          message: 'Invalid EPR submission data',
+          details: { validationErrors: errorMessages }
+        });
+      }
+    })) createEprSubmissionDto: CreateEprSubmissionDto
+  ) {
     this.logger.log('Creating new EPR submission');
     return this.eprSubmissions.create(req, createEprSubmissionDto);
   }
