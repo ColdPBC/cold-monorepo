@@ -28,4 +28,10 @@ export class MaterialEmissionFactor {
 
 	@RelationshipField<MaterialEmissionFactor>(() => EcoinventActivity, { id: (entity) => entity.ecoinventActivity?.id, nullable: true })
 	ecoinventActivity?: EcoinventActivity;
+
+	@Field(() => String, { nullable: true })
+	organizationId?: string;
+
+	@Field(() => String, { nullable: true })
+	reasoning?: string;
 }
