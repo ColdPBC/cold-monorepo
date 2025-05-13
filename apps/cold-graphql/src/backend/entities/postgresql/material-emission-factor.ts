@@ -36,6 +36,12 @@ export class MaterialEmissionFactor {
 	@ManyToOne({ entity: () => EcoinventActivity, ref: true, fieldName: 'eco_invent_activity_id', nullable: true, index: 'material_emission_factors_activity_id_idx1' })
 	ecoinventActivity?: Ref<EcoinventActivity>;
 
+	@Property({ type: 'text', nullable: true })
+	organizationId?: string;
+
+	@Property({ type: 'text', nullable: true })
+	reasoning?: string;
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof MaterialEmissionFactor, OrgContext>) {
 		if(!this.sidecar) {

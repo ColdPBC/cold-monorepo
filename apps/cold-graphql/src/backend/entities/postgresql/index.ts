@@ -23,9 +23,11 @@ import { EcoinventImport } from './ecoinvent-import';
 import { EmissionFactor } from './emission-factor';
 import { EmissionScope } from './emission-scope';
 import { Emission } from './emission';
+import { EprSubmission } from './epr-submission';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { MaterialClassification } from './material-classification';
+import { MaterialClassificationActivity } from './material-classification-activity';
 import { MaterialEcoinventClassification } from './material-ecoinvent-classification';
 import { MaterialEmissionFactor } from './material-emission-factor';
 import { MaterialSupplier } from './material-supplier';
@@ -87,9 +89,11 @@ export * from './ecoinvent-import';
 export * from './emission-factor';
 export * from './emission-scope';
 export * from './emission';
+export * from './epr-submission';
 export * from './facility-footprint';
 export * from './integration';
 export * from './material-classification';
+export * from './material-classification-activity';
 export * from './material-ecoinvent-classification';
 export * from './material-emission-factor';
 export * from './material-supplier';
@@ -152,9 +156,11 @@ export const entities = [
 	EmissionFactor,
 	EmissionScope,
 	Emission,
+	EprSubmission,
 	FacilityFootprint,
 	Integration,
 	MaterialClassification,
+	MaterialClassificationActivity,
 	MaterialEcoinventClassification,
 	MaterialEmissionFactor,
 	MaterialSupplier,

@@ -5,6 +5,7 @@ import { Collection, Entity, Index, OneToMany, PrimaryKey, Property, Unique } fr
 import { Action } from './action';
 import { AttributeAssurance } from './attribute-assurance';
 import { CategoryDatum } from './category-datum';
+import { EprSubmission } from './epr-submission';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { Material } from './material';
@@ -95,6 +96,9 @@ export class Organization {
 
 	@OneToMany({ entity: () => CategoryDatum, mappedBy: 'organization' })
 	categoryData = new Collection<CategoryDatum>(this);
+
+	@OneToMany({ entity: () => EprSubmission, mappedBy: 'organization' })
+	eprSubmissions = new Collection<EprSubmission>(this);
 
 	@OneToMany({ entity: () => FacilityFootprint, mappedBy: 'organization' })
 	facilityFootprints = new Collection<FacilityFootprint>(this);
