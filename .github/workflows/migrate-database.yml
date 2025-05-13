@@ -40,9 +40,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-
+            ${{ runner.os }}-yarn-
 
       - name: Set DATABASE_URL
         run: echo "DATABASE_URL=$([[ $BRANCH_NAME == main* ]] && echo ${{ secrets.PRODUCTION_DATABASE_URL }} || echo ${{ secrets.STAGING_DATABASE_URL }})" >> $GITHUB_ENV
@@ -108,7 +108,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-        working-directory: apps/cold-graphql
 
       - name: Sync ❡𝓇𝓪𝓹𝒽𝓠𝓛 Changes
         run: yarn sync
