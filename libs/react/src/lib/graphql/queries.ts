@@ -792,10 +792,10 @@ export const GET_EPR_SUBMISSIONS = gql`
       id
       state
       billIdentifier
-      proName
       dueDate
       status
       submissionDate
+      metadata
     }
   }
 `;

@@ -95,7 +95,7 @@ const _EprProgressStatusBucket = (props: {
                     {item.billIdentifier}
                   </div>
                   <div className={'text-tc-secondary text-body'}>
-                    {item.proName}
+                    {item.metadata?.pro_name}
                   </div>
                 </div>
               </div>
