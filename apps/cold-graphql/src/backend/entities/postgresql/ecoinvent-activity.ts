@@ -5,6 +5,7 @@ import { Collection, Entity, Index, ManyToOne, OneToMany, PrimaryKey, Property, 
 import { EcoinventActivityClassification } from './ecoinvent-activity-classification';
 import { EcoinventActivityImpact } from './ecoinvent-activity-impact';
 import { EcoinventClassification } from './ecoinvent-classification';
+import { MaterialClassificationActivity } from './material-classification-activity';
 import { MaterialEmissionFactor } from './material-emission-factor';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
@@ -54,6 +55,9 @@ export class EcoinventActivity {
 
 	@OneToMany({ entity: () => EcoinventActivityImpact, mappedBy: 'ecoinventActivity' })
 	ecoinventActivityImpacts = new Collection<EcoinventActivityImpact>(this);
+
+	@OneToMany({ entity: () => MaterialClassificationActivity, mappedBy: 'ecoinventActivity' })
+	materialClassificationActivities = new Collection<MaterialClassificationActivity>(this);
 
 	@OneToMany({ entity: () => MaterialEmissionFactor, mappedBy: 'ecoinventActivity' })
 	materialEmissionFactors = new Collection<MaterialEmissionFactor>(this);

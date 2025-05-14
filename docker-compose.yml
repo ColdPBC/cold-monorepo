@@ -133,7 +133,7 @@ services:
     command: redis-server --save 20 1 --loglevel warning
   postgres:
     container_name: cold-postgres
-    image: postgres:14-alpine
+    image: postgres:15-alpine
     labels:
       - "traefik.http.routers.postgres.rule=Host(`db.coldclimate.local`)"
       - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
@@ -145,7 +145,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - ~/apps/postgres:/var/lib/postgresql/data
+      - ~/apps/postgres/15:/var/lib/postgresql/15/data
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres

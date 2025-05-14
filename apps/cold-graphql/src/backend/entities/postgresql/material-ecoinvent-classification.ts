@@ -32,6 +32,9 @@ export class MaterialEcoinventClassification {
 	@ManyToOne({ entity: () => MaterialClassification, ref: true, index: 'material_ecoinvent_material_classifications_idx1' })
 	materialClassification!: Ref<MaterialClassification>;
 
+	@Property({ type: 'text', nullable: true })
+	reasoning?: string;
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof MaterialEcoinventClassification, OrgContext>) {
 		if(!this.sidecar) {

@@ -24,7 +24,6 @@ import { MqttModule } from './mqtt/mqtt.module';
 import { ProductsModule } from './products/products.module';
 import { SuppliersModule } from './suppliers/suppliers.module';
 import { MaterialsModule } from './materials/materials.module';
-import {EprSubmissionsModule} from "./epr_submissions/epr_submissions.module";
 
 @Module({
   imports: [
@@ -48,7 +47,6 @@ import {EprSubmissionsModule} from "./epr_submissions/epr_submissions.module";
     ProductsModule,
     SuppliersModule,
     MaterialsModule,
-    EprSubmissionsModule,
   ],
   controllers: [OrganizationController, OrganizationFilesController],
   providers: [OrganizationService, CacheService, OrganizationHelper, OrganizationsRabbitService, OrganizationsRepository],
