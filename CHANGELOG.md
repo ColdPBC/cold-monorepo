@@ -1,3 +1,14 @@
+# [1.643.0](https://github.com/coldPBC/cold-monorepo/compare/v1.642.0...v1.643.0) (2025-05-14)
+
+
+### Features
+
+* Add EPR Submissions module with controller, service, and tests ([4f2546c](https://github.com/coldPBC/cold-monorepo/commit/4f2546ccb4e8c98cab6b9282bfd0712de9a93d3a))
+* Add role-based access control to EPR submission creation ([149b45f](https://github.com/coldPBC/cold-monorepo/commit/149b45facd2c76922d03e69b5cb7c1ec8934c33b))
+* Add validation to EPR submission creation ([2e67ee7](https://github.com/coldPBC/cold-monorepo/commit/2e67ee75875f05dda44762fe23b8f7894c06060a))
+* Remove EPR Submissions module from the codebase ([a4827b5](https://github.com/coldPBC/cold-monorepo/commit/a4827b5d99a6ed4986f4116a20726caa94ac14bd))
+* Update role restriction for EPR submissions creation ([f06b7c6](https://github.com/coldPBC/cold-monorepo/commit/f06b7c6083ded10aa66f6cce68ab7ff3abe77711))
+
 # [1.642.0](https://github.com/coldPBC/cold-monorepo/compare/v1.641.0...v1.642.0) (2025-05-12)
 
 
