@@ -7,6 +7,6 @@ export interface EprSubmissionGraphQL {
   status: string;
   submittedAt: string | null;
   metadata: {
-    pro_name: string;
+    pro_name: string | undefined;
   } | null;
 }
