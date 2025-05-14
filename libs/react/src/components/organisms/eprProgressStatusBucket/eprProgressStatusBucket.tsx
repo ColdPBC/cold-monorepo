@@ -39,7 +39,7 @@ const _EprProgressStatusBucket = (props: {
       const diff = `Due in ${formatDistance(new Date(item.dueDate), new Date())}`;
       content =
         <>
-          <div className={'flex flex-row gap-1 items-center'} data-chromatic="ignore">
+          <div className={'flex flex-row gap-1 items-center'}>
             <ColdIcon
               name={IconNames.ColdCalendarEventIcon}
               className={'w-4 h-4'}
@@ -60,7 +60,7 @@ const _EprProgressStatusBucket = (props: {
         </div>
     }
     return (
-      <div className={'flex flex-row justify-between text-tc-primary text-body w-full'}>
+      <div className={'flex flex-row justify-between text-tc-primary text-body w-full'} data-chromatic={'ignore'}>
         {content}
       </div>
     )
