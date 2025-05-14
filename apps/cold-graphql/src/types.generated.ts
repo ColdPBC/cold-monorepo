@@ -3167,7 +3167,6 @@ export type EcoinventActivitiesListFilter = {
   location_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   location_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   location_null?: InputMaybe<Scalars['Boolean']['input']>;
-  materialClassificationActivities?: InputMaybe<MaterialClassificationActivitiesListFilter>;
   materialEmissionFactors?: InputMaybe<MaterialEmissionFactorsListFilter>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_gt?: InputMaybe<Scalars['String']['input']>;
@@ -3241,8 +3240,6 @@ export type EcoinventActivity = {
   ecoinventClassification_aggregate?: Maybe<AggregationResult>;
   id: Scalars['ID']['output'];
   location?: Maybe<Scalars['String']['output']>;
-  materialClassificationActivities: Array<MaterialClassificationActivity>;
-  materialClassificationActivities_aggregate?: Maybe<AggregationResult>;
   materialEmissionFactors: Array<MaterialEmissionFactor>;
   materialEmissionFactors_aggregate?: Maybe<AggregationResult>;
   name: Scalars['String']['output'];
@@ -3279,16 +3276,6 @@ export type EcoinventActivityEcoinventClassificationArgs = {
 
 export type EcoinventActivityEcoinventClassification_AggregateArgs = {
   filter?: InputMaybe<EcoinventClassificationsListFilter>;
-};
-
-
-export type EcoinventActivityMaterialClassificationActivitiesArgs = {
-  filter?: InputMaybe<MaterialClassificationActivitiesListFilter>;
-};
-
-
-export type EcoinventActivityMaterialClassificationActivities_AggregateArgs = {
-  filter?: InputMaybe<MaterialClassificationActivitiesListFilter>;
 };
 
 
@@ -3387,7 +3374,6 @@ export type EcoinventActivityCreateOrUpdateInput = {
   ecoinventClassification?: InputMaybe<EcoinventClassificationCreateOrUpdateInput>;
   id?: InputMaybe<Scalars['ID']['input']>;
   location?: InputMaybe<Scalars['String']['input']>;
-  materialClassificationActivities?: InputMaybe<Array<MaterialClassificationActivityCreateOrUpdateInput>>;
   materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
   parentActivityId?: InputMaybe<Scalars['String']['input']>;
@@ -3542,7 +3528,6 @@ export type EcoinventActivityInsertInput = {
   ecoinventActivityImpacts?: InputMaybe<Array<EcoinventActivityImpactCreateOrUpdateInput>>;
   ecoinventClassification?: InputMaybe<EcoinventClassificationCreateOrUpdateInput>;
   location?: InputMaybe<Scalars['String']['input']>;
-  materialClassificationActivities?: InputMaybe<Array<MaterialClassificationActivityCreateOrUpdateInput>>;
   materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
   name: Scalars['String']['input'];
   parentActivityId?: InputMaybe<Scalars['String']['input']>;
@@ -3559,7 +3544,6 @@ export type EcoinventActivityUpdateInput = {
   ecoinventClassification?: InputMaybe<EcoinventClassificationCreateOrUpdateInput>;
   id: Scalars['ID']['input'];
   location?: InputMaybe<Scalars['String']['input']>;
-  materialClassificationActivities?: InputMaybe<Array<MaterialClassificationActivityCreateOrUpdateInput>>;
   materialEmissionFactors?: InputMaybe<Array<MaterialEmissionFactorCreateOrUpdateInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
   parentActivityId?: InputMaybe<Scalars['String']['input']>;
@@ -4833,189 +4817,6 @@ export type EmissionsPaginationInput = {
   orderBy?: InputMaybe<EmissionsOrderByInput>;
 };
 
-export type EprSubmission = {
-  __typename?: 'EprSubmission';
-  billIdentifier: Scalars['String']['output'];
-  createdAt?: Maybe<Scalars['ISOString']['output']>;
-  dueDate?: Maybe<Scalars['ISOString']['output']>;
-  id: Scalars['ID']['output'];
-  metadata?: Maybe<Scalars['JSON']['output']>;
-  organization: Organization;
-  organization_aggregate?: Maybe<AggregationResult>;
-  state: Scalars['String']['output'];
-  status: Scalars['String']['output'];
-  submittedAt?: Maybe<Scalars['ISOString']['output']>;
-  updatedAt?: Maybe<Scalars['ISOString']['output']>;
-};
-
-
-export type EprSubmissionOrganizationArgs = {
-  filter?: InputMaybe<OrganizationsListFilter>;
-};
-
-
-export type EprSubmissionOrganization_AggregateArgs = {
-  filter?: InputMaybe<OrganizationsListFilter>;
-};
-
-/** Data needed to create or update EprSubmissions. If an ID is passed, this is an update, otherwise it's an insert. */
-export type EprSubmissionCreateOrUpdateInput = {
-  billIdentifier?: InputMaybe<Scalars['String']['input']>;
-  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
-  dueDate?: InputMaybe<Scalars['ISOString']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  metadata?: InputMaybe<Scalars['JSON']['input']>;
-  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
-  state?: InputMaybe<Scalars['String']['input']>;
-  status?: InputMaybe<Scalars['String']['input']>;
-  submittedAt?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
-};
-
-/** Data needed to create EprSubmissions. */
-export type EprSubmissionInsertInput = {
-  billIdentifier: Scalars['String']['input'];
-  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
-  dueDate?: InputMaybe<Scalars['ISOString']['input']>;
-  metadata?: InputMaybe<Scalars['JSON']['input']>;
-  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
-  state: Scalars['String']['input'];
-  status: Scalars['String']['input'];
-  submittedAt?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
-};
-
-/** Data needed to update EprSubmissions. An ID must be passed. */
-export type EprSubmissionUpdateInput = {
-  billIdentifier?: InputMaybe<Scalars['String']['input']>;
-  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
-  dueDate?: InputMaybe<Scalars['ISOString']['input']>;
-  id: Scalars['ID']['input'];
-  metadata?: InputMaybe<Scalars['JSON']['input']>;
-  organization?: InputMaybe<OrganizationCreateOrUpdateInput>;
-  state?: InputMaybe<Scalars['String']['input']>;
-  status?: InputMaybe<Scalars['String']['input']>;
-  submittedAt?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
-};
-
-export type EprSubmissionsListFilter = {
-  _and?: InputMaybe<Array<InputMaybe<EprSubmissionsListFilter>>>;
-  _or?: InputMaybe<Array<InputMaybe<EprSubmissionsListFilter>>>;
-  billIdentifier?: InputMaybe<Scalars['String']['input']>;
-  billIdentifier_gt?: InputMaybe<Scalars['String']['input']>;
-  billIdentifier_gte?: InputMaybe<Scalars['String']['input']>;
-  billIdentifier_ilike?: InputMaybe<Scalars['String']['input']>;
-  billIdentifier_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  billIdentifier_like?: InputMaybe<Scalars['String']['input']>;
-  billIdentifier_lt?: InputMaybe<Scalars['String']['input']>;
-  billIdentifier_lte?: InputMaybe<Scalars['String']['input']>;
-  billIdentifier_ne?: InputMaybe<Scalars['String']['input']>;
-  billIdentifier_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  billIdentifier_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  billIdentifier_null?: InputMaybe<Scalars['Boolean']['input']>;
-  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
-  dueDate?: InputMaybe<Scalars['ISOString']['input']>;
-  dueDate_gt?: InputMaybe<Scalars['ISOString']['input']>;
-  dueDate_gte?: InputMaybe<Scalars['ISOString']['input']>;
-  dueDate_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  dueDate_lt?: InputMaybe<Scalars['ISOString']['input']>;
-  dueDate_lte?: InputMaybe<Scalars['ISOString']['input']>;
-  dueDate_ne?: InputMaybe<Scalars['ISOString']['input']>;
-  dueDate_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  dueDate_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  dueDate_null?: InputMaybe<Scalars['Boolean']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  metadata?: InputMaybe<Scalars['JSON']['input']>;
-  metadata_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
-  metadata_ne?: InputMaybe<Scalars['JSON']['input']>;
-  metadata_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
-  metadata_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  metadata_null?: InputMaybe<Scalars['Boolean']['input']>;
-  organization?: InputMaybe<OrganizationsListFilter>;
-  state?: InputMaybe<Scalars['String']['input']>;
-  state_gt?: InputMaybe<Scalars['String']['input']>;
-  state_gte?: InputMaybe<Scalars['String']['input']>;
-  state_ilike?: InputMaybe<Scalars['String']['input']>;
-  state_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  state_like?: InputMaybe<Scalars['String']['input']>;
-  state_lt?: InputMaybe<Scalars['String']['input']>;
-  state_lte?: InputMaybe<Scalars['String']['input']>;
-  state_ne?: InputMaybe<Scalars['String']['input']>;
-  state_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  state_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  state_null?: InputMaybe<Scalars['Boolean']['input']>;
-  status?: InputMaybe<Scalars['String']['input']>;
-  status_gt?: InputMaybe<Scalars['String']['input']>;
-  status_gte?: InputMaybe<Scalars['String']['input']>;
-  status_ilike?: InputMaybe<Scalars['String']['input']>;
-  status_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  status_like?: InputMaybe<Scalars['String']['input']>;
-  status_lt?: InputMaybe<Scalars['String']['input']>;
-  status_lte?: InputMaybe<Scalars['String']['input']>;
-  status_ne?: InputMaybe<Scalars['String']['input']>;
-  status_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  status_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  status_null?: InputMaybe<Scalars['Boolean']['input']>;
-  submittedAt?: InputMaybe<Scalars['ISOString']['input']>;
-  submittedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
-  submittedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
-  submittedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  submittedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
-  submittedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
-  submittedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
-  submittedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  submittedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  submittedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
-  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-export type EprSubmissionsOrderByInput = {
-  billIdentifier?: InputMaybe<Sort>;
-  createdAt?: InputMaybe<Sort>;
-  dueDate?: InputMaybe<Sort>;
-  id?: InputMaybe<Sort>;
-  metadata?: InputMaybe<Sort>;
-  state?: InputMaybe<Sort>;
-  status?: InputMaybe<Sort>;
-  submittedAt?: InputMaybe<Sort>;
-  updatedAt?: InputMaybe<Sort>;
-};
-
-/** Pagination options for EprSubmissions. */
-export type EprSubmissionsPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<EprSubmissionsOrderByInput>;
-};
-
 export type FacilityFootprint = {
   __typename?: 'FacilityFootprint';
   createdAt: Scalars['ISOString']['output'];
@@ -5497,8 +5298,6 @@ export type MaterialClassification = {
   createdAt: Scalars['ISOString']['output'];
   ecoinventActivityClassifications?: Maybe<Scalars['JSON']['output']>;
   id: Scalars['ID']['output'];
-  materialClassificationActivities: Array<MaterialClassificationActivity>;
-  materialClassificationActivities_aggregate?: Maybe<AggregationResult>;
   materialEcoinventClassifications: Array<MaterialEcoinventClassification>;
   materialEcoinventClassifications_aggregate?: Maybe<AggregationResult>;
   materials: Array<Material>;
@@ -5520,16 +5319,6 @@ export type MaterialClassificationCoreClassificationArgs = {
 
 export type MaterialClassificationCoreClassification_AggregateArgs = {
   filter?: InputMaybe<CoreClassificationsListFilter>;
-};
-
-
-export type MaterialClassificationMaterialClassificationActivitiesArgs = {
-  filter?: InputMaybe<MaterialClassificationActivitiesListFilter>;
-};
-
-
-export type MaterialClassificationMaterialClassificationActivities_AggregateArgs = {
-  filter?: InputMaybe<MaterialClassificationActivitiesListFilter>;
 };
 
 
@@ -5572,130 +5361,6 @@ export type MaterialClassificationSustainabilityAttributes_AggregateArgs = {
   filter?: InputMaybe<SustainabilityAttributesListFilter>;
 };
 
-export type MaterialClassificationActivitiesListFilter = {
-  _and?: InputMaybe<Array<InputMaybe<MaterialClassificationActivitiesListFilter>>>;
-  _or?: InputMaybe<Array<InputMaybe<MaterialClassificationActivitiesListFilter>>>;
-  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
-  ecoinventActivity?: InputMaybe<EcoinventActivitiesListFilter>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  materialClassification?: InputMaybe<MaterialClassificationsListFilter>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
-  reasoning_gt?: InputMaybe<Scalars['String']['input']>;
-  reasoning_gte?: InputMaybe<Scalars['String']['input']>;
-  reasoning_ilike?: InputMaybe<Scalars['String']['input']>;
-  reasoning_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  reasoning_like?: InputMaybe<Scalars['String']['input']>;
-  reasoning_lt?: InputMaybe<Scalars['String']['input']>;
-  reasoning_lte?: InputMaybe<Scalars['String']['input']>;
-  reasoning_ne?: InputMaybe<Scalars['String']['input']>;
-  reasoning_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  reasoning_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  reasoning_null?: InputMaybe<Scalars['Boolean']['input']>;
-  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
-  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-export type MaterialClassificationActivitiesOrderByInput = {
-  createdAt?: InputMaybe<Sort>;
-  id?: InputMaybe<Sort>;
-  reasoning?: InputMaybe<Sort>;
-  updatedAt?: InputMaybe<Sort>;
-};
-
-/** Pagination options for MaterialClassificationActivities. */
-export type MaterialClassificationActivitiesPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MaterialClassificationActivitiesOrderByInput>;
-};
-
-export type MaterialClassificationActivity = {
-  __typename?: 'MaterialClassificationActivity';
-  createdAt: Scalars['ISOString']['output'];
-  ecoinventActivity: EcoinventActivity;
-  ecoinventActivity_aggregate?: Maybe<AggregationResult>;
-  id: Scalars['ID']['output'];
-  materialClassification: MaterialClassification;
-  materialClassification_aggregate?: Maybe<AggregationResult>;
-  reasoning?: Maybe<Scalars['String']['output']>;
-  updatedAt: Scalars['ISOString']['output'];
-};
-
-
-export type MaterialClassificationActivityEcoinventActivityArgs = {
-  filter?: InputMaybe<EcoinventActivitiesListFilter>;
-};
-
-
-export type MaterialClassificationActivityEcoinventActivity_AggregateArgs = {
-  filter?: InputMaybe<EcoinventActivitiesListFilter>;
-};
-
-
-export type MaterialClassificationActivityMaterialClassificationArgs = {
-  filter?: InputMaybe<MaterialClassificationsListFilter>;
-};
-
-
-export type MaterialClassificationActivityMaterialClassification_AggregateArgs = {
-  filter?: InputMaybe<MaterialClassificationsListFilter>;
-};
-
-/** Data needed to create or update MaterialClassificationActivities. If an ID is passed, this is an update, otherwise it's an insert. */
-export type MaterialClassificationActivityCreateOrUpdateInput = {
-  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
-  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
-  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
-};
-
-/** Data needed to create MaterialClassificationActivities. */
-export type MaterialClassificationActivityInsertInput = {
-  createdAt: Scalars['ISOString']['input'];
-  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
-  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
-  updatedAt: Scalars['ISOString']['input'];
-};
-
-/** Data needed to update MaterialClassificationActivities. An ID must be passed. */
-export type MaterialClassificationActivityUpdateInput = {
-  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
-  ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
-  id: Scalars['ID']['input'];
-  materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
-  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
-};
-
 /** Data needed to create or update MaterialClassifications. If an ID is passed, this is an update, otherwise it's an insert. */
 export type MaterialClassificationCreateOrUpdateInput = {
   category?: InputMaybe<Scalars['String']['input']>;
@@ -5703,7 +5368,6 @@ export type MaterialClassificationCreateOrUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   ecoinventActivityClassifications?: InputMaybe<Scalars['JSON']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
-  materialClassificationActivities?: InputMaybe<Array<MaterialClassificationActivityCreateOrUpdateInput>>;
   materialEcoinventClassifications?: InputMaybe<Array<MaterialEcoinventClassificationCreateOrUpdateInput>>;
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -5719,7 +5383,6 @@ export type MaterialClassificationInsertInput = {
   coreClassification?: InputMaybe<CoreClassificationCreateOrUpdateInput>;
   createdAt: Scalars['ISOString']['input'];
   ecoinventActivityClassifications?: InputMaybe<Scalars['JSON']['input']>;
-  materialClassificationActivities?: InputMaybe<Array<MaterialClassificationActivityCreateOrUpdateInput>>;
   materialEcoinventClassifications?: InputMaybe<Array<MaterialEcoinventClassificationCreateOrUpdateInput>>;
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   name: Scalars['String']['input'];
@@ -5736,7 +5399,6 @@ export type MaterialClassificationUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   ecoinventActivityClassifications?: InputMaybe<Scalars['JSON']['input']>;
   id: Scalars['ID']['input'];
-  materialClassificationActivities?: InputMaybe<Array<MaterialClassificationActivityCreateOrUpdateInput>>;
   materialEcoinventClassifications?: InputMaybe<Array<MaterialEcoinventClassificationCreateOrUpdateInput>>;
   materials?: InputMaybe<Array<MaterialCreateOrUpdateInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -5788,7 +5450,6 @@ export type MaterialClassificationsListFilter = {
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  materialClassificationActivities?: InputMaybe<MaterialClassificationActivitiesListFilter>;
   materialEcoinventClassifications?: InputMaybe<MaterialEcoinventClassificationsListFilter>;
   materials?: InputMaybe<MaterialsListFilter>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -5882,7 +5543,6 @@ export type MaterialEcoinventClassification = {
   id: Scalars['ID']['output'];
   materialClassification: MaterialClassification;
   materialClassification_aggregate?: Maybe<AggregationResult>;
-  reasoning?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['ISOString']['output'];
 };
 
@@ -5912,7 +5572,6 @@ export type MaterialEcoinventClassificationCreateOrUpdateInput = {
   ecoinventClassification?: InputMaybe<EcoinventClassificationCreateOrUpdateInput>;
   id?: InputMaybe<Scalars['ID']['input']>;
   materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
@@ -5921,7 +5580,6 @@ export type MaterialEcoinventClassificationInsertInput = {
   createdAt: Scalars['ISOString']['input'];
   ecoinventClassification?: InputMaybe<EcoinventClassificationCreateOrUpdateInput>;
   materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
   updatedAt: Scalars['ISOString']['input'];
 };
 
@@ -5931,7 +5589,6 @@ export type MaterialEcoinventClassificationUpdateInput = {
   ecoinventClassification?: InputMaybe<EcoinventClassificationCreateOrUpdateInput>;
   id: Scalars['ID']['input'];
   materialClassification?: InputMaybe<MaterialClassificationCreateOrUpdateInput>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
@@ -5960,18 +5617,6 @@ export type MaterialEcoinventClassificationsListFilter = {
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   materialClassification?: InputMaybe<MaterialClassificationsListFilter>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
-  reasoning_gt?: InputMaybe<Scalars['String']['input']>;
-  reasoning_gte?: InputMaybe<Scalars['String']['input']>;
-  reasoning_ilike?: InputMaybe<Scalars['String']['input']>;
-  reasoning_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  reasoning_like?: InputMaybe<Scalars['String']['input']>;
-  reasoning_lt?: InputMaybe<Scalars['String']['input']>;
-  reasoning_lte?: InputMaybe<Scalars['String']['input']>;
-  reasoning_ne?: InputMaybe<Scalars['String']['input']>;
-  reasoning_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  reasoning_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  reasoning_null?: InputMaybe<Scalars['Boolean']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -5987,7 +5632,6 @@ export type MaterialEcoinventClassificationsListFilter = {
 export type MaterialEcoinventClassificationsOrderByInput = {
   createdAt?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
-  reasoning?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
 };
 
@@ -6008,8 +5652,6 @@ export type MaterialEmissionFactor = {
   id: Scalars['ID']['output'];
   material: Material;
   material_aggregate?: Maybe<AggregationResult>;
-  organizationId?: Maybe<Scalars['String']['output']>;
-  reasoning?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['ISOString']['output'];
 };
 
@@ -6050,8 +5692,6 @@ export type MaterialEmissionFactorCreateOrUpdateInput = {
   emissionFactor?: InputMaybe<EmissionFactorCreateOrUpdateInput>;
   id?: InputMaybe<Scalars['ID']['input']>;
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
-  organizationId?: InputMaybe<Scalars['String']['input']>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
@@ -6061,8 +5701,6 @@ export type MaterialEmissionFactorInsertInput = {
   ecoinventActivity?: InputMaybe<EcoinventActivityCreateOrUpdateInput>;
   emissionFactor?: InputMaybe<EmissionFactorCreateOrUpdateInput>;
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
-  organizationId?: InputMaybe<Scalars['String']['input']>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
   updatedAt: Scalars['ISOString']['input'];
 };
 
@@ -6073,8 +5711,6 @@ export type MaterialEmissionFactorUpdateInput = {
   emissionFactor?: InputMaybe<EmissionFactorCreateOrUpdateInput>;
   id: Scalars['ID']['input'];
   material?: InputMaybe<MaterialCreateOrUpdateInput>;
-  organizationId?: InputMaybe<Scalars['String']['input']>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
 };
 
@@ -6104,30 +5740,6 @@ export type MaterialEmissionFactorsListFilter = {
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   material?: InputMaybe<MaterialsListFilter>;
-  organizationId?: InputMaybe<Scalars['String']['input']>;
-  organizationId_gt?: InputMaybe<Scalars['String']['input']>;
-  organizationId_gte?: InputMaybe<Scalars['String']['input']>;
-  organizationId_ilike?: InputMaybe<Scalars['String']['input']>;
-  organizationId_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  organizationId_like?: InputMaybe<Scalars['String']['input']>;
-  organizationId_lt?: InputMaybe<Scalars['String']['input']>;
-  organizationId_lte?: InputMaybe<Scalars['String']['input']>;
-  organizationId_ne?: InputMaybe<Scalars['String']['input']>;
-  organizationId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  organizationId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  organizationId_null?: InputMaybe<Scalars['Boolean']['input']>;
-  reasoning?: InputMaybe<Scalars['String']['input']>;
-  reasoning_gt?: InputMaybe<Scalars['String']['input']>;
-  reasoning_gte?: InputMaybe<Scalars['String']['input']>;
-  reasoning_ilike?: InputMaybe<Scalars['String']['input']>;
-  reasoning_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  reasoning_like?: InputMaybe<Scalars['String']['input']>;
-  reasoning_lt?: InputMaybe<Scalars['String']['input']>;
-  reasoning_lte?: InputMaybe<Scalars['String']['input']>;
-  reasoning_ne?: InputMaybe<Scalars['String']['input']>;
-  reasoning_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  reasoning_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  reasoning_null?: InputMaybe<Scalars['Boolean']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -6143,8 +5755,6 @@ export type MaterialEmissionFactorsListFilter = {
 export type MaterialEmissionFactorsOrderByInput = {
   createdAt?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
-  organizationId?: InputMaybe<Sort>;
-  reasoning?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
 };
 
@@ -7065,10 +6675,6 @@ export type Mutation = {
   createEmissionScopes?: Maybe<Array<Maybe<EmissionScope>>>;
   /** Create many Emissions. */
   createEmissions?: Maybe<Array<Maybe<Emission>>>;
-  /** Create a single EprSubmission. */
-  createEprSubmission?: Maybe<EprSubmission>;
-  /** Create many EprSubmissions. */
-  createEprSubmissions?: Maybe<Array<Maybe<EprSubmission>>>;
   /** Create a single FacilityFootprint. */
   createFacilityFootprint?: Maybe<FacilityFootprint>;
   /** Create many FacilityFootprints. */
@@ -7081,10 +6687,6 @@ export type Mutation = {
   createMaterial?: Maybe<Material>;
   /** Create a single MaterialClassification. */
   createMaterialClassification?: Maybe<MaterialClassification>;
-  /** Create many MaterialClassificationActivities. */
-  createMaterialClassificationActivities?: Maybe<Array<Maybe<MaterialClassificationActivity>>>;
-  /** Create a single MaterialClassificationActivity. */
-  createMaterialClassificationActivity?: Maybe<MaterialClassificationActivity>;
   /** Create many MaterialClassifications. */
   createMaterialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
   /** Create a single MaterialEcoinventClassification. */
@@ -7161,14 +6763,10 @@ export type Mutation = {
   createOrUpdateEmissionScopes?: Maybe<Array<Maybe<EmissionScope>>>;
   /** Create or update many Emissions. */
   createOrUpdateEmissions?: Maybe<Array<Maybe<Emission>>>;
-  /** Create or update many EprSubmissions. */
-  createOrUpdateEprSubmissions?: Maybe<Array<Maybe<EprSubmission>>>;
   /** Create or update many FacilityFootprints. */
   createOrUpdateFacilityFootprints?: Maybe<Array<Maybe<FacilityFootprint>>>;
   /** Create or update many Integrations. */
   createOrUpdateIntegrations?: Maybe<Array<Maybe<Integration>>>;
-  /** Create or update many MaterialClassificationActivities. */
-  createOrUpdateMaterialClassificationActivities?: Maybe<Array<Maybe<MaterialClassificationActivity>>>;
   /** Create or update many MaterialClassifications. */
   createOrUpdateMaterialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
   /** Create or update many MaterialEcoinventClassifications. */
@@ -7455,10 +7053,6 @@ export type Mutation = {
   deleteEmissionScopes?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Emissions with a filter. */
   deleteEmissions?: Maybe<Scalars['Boolean']['output']>;
-  /** Delete a single EprSubmission. */
-  deleteEprSubmission?: Maybe<Scalars['Boolean']['output']>;
-  /** Delete many EprSubmissions with a filter. */
-  deleteEprSubmissions?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single FacilityFootprint. */
   deleteFacilityFootprint?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many FacilityFootprints with a filter. */
@@ -7471,10 +7065,6 @@ export type Mutation = {
   deleteMaterial?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single MaterialClassification. */
   deleteMaterialClassification?: Maybe<Scalars['Boolean']['output']>;
-  /** Delete many MaterialClassificationActivities with a filter. */
-  deleteMaterialClassificationActivities?: Maybe<Scalars['Boolean']['output']>;
-  /** Delete a single MaterialClassificationActivity. */
-  deleteMaterialClassificationActivity?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many MaterialClassifications with a filter. */
   deleteMaterialClassifications?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single MaterialEcoinventClassification. */
@@ -7715,10 +7305,6 @@ export type Mutation = {
   updateEmissionScopes?: Maybe<Array<Maybe<EmissionScope>>>;
   /** Update many Emissions. */
   updateEmissions?: Maybe<Array<Maybe<Emission>>>;
-  /** Update a single EprSubmission. */
-  updateEprSubmission?: Maybe<EprSubmission>;
-  /** Update many EprSubmissions. */
-  updateEprSubmissions?: Maybe<Array<Maybe<EprSubmission>>>;
   /** Update a single FacilityFootprint. */
   updateFacilityFootprint?: Maybe<FacilityFootprint>;
   /** Update many FacilityFootprints. */
@@ -7731,10 +7317,6 @@ export type Mutation = {
   updateMaterial?: Maybe<Material>;
   /** Update a single MaterialClassification. */
   updateMaterialClassification?: Maybe<MaterialClassification>;
-  /** Update many MaterialClassificationActivities. */
-  updateMaterialClassificationActivities?: Maybe<Array<Maybe<MaterialClassificationActivity>>>;
-  /** Update a single MaterialClassificationActivity. */
-  updateMaterialClassificationActivity?: Maybe<MaterialClassificationActivity>;
   /** Update many MaterialClassifications. */
   updateMaterialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
   /** Update a single MaterialEcoinventClassification. */
@@ -8122,16 +7704,6 @@ export type MutationCreateEmissionsArgs = {
 };
 
 
-export type MutationCreateEprSubmissionArgs = {
-  input: EprSubmissionInsertInput;
-};
-
-
-export type MutationCreateEprSubmissionsArgs = {
-  input: Array<EprSubmissionInsertInput>;
-};
-
-
 export type MutationCreateFacilityFootprintArgs = {
   input: FacilityFootprintInsertInput;
 };
@@ -8159,16 +7731,6 @@ export type MutationCreateMaterialArgs = {
 
 export type MutationCreateMaterialClassificationArgs = {
   input: MaterialClassificationInsertInput;
-};
-
-
-export type MutationCreateMaterialClassificationActivitiesArgs = {
-  input: Array<MaterialClassificationActivityInsertInput>;
-};
-
-
-export type MutationCreateMaterialClassificationActivityArgs = {
-  input: MaterialClassificationActivityInsertInput;
 };
 
 
@@ -8362,11 +7924,6 @@ export type MutationCreateOrUpdateEmissionsArgs = {
 };
 
 
-export type MutationCreateOrUpdateEprSubmissionsArgs = {
-  input: Array<EprSubmissionCreateOrUpdateInput>;
-};
-
-
 export type MutationCreateOrUpdateFacilityFootprintsArgs = {
   input: Array<FacilityFootprintCreateOrUpdateInput>;
 };
@@ -8374,11 +7931,6 @@ export type MutationCreateOrUpdateFacilityFootprintsArgs = {
 
 export type MutationCreateOrUpdateIntegrationsArgs = {
   input: Array<IntegrationCreateOrUpdateInput>;
-};
-
-
-export type MutationCreateOrUpdateMaterialClassificationActivitiesArgs = {
-  input: Array<MaterialClassificationActivityCreateOrUpdateInput>;
 };
 
 
@@ -9097,16 +8649,6 @@ export type MutationDeleteEmissionsArgs = {
 };
 
 
-export type MutationDeleteEprSubmissionArgs = {
-  filter: DeleteOneFilterInput;
-};
-
-
-export type MutationDeleteEprSubmissionsArgs = {
-  filter: EprSubmissionsListFilter;
-};
-
-
 export type MutationDeleteFacilityFootprintArgs = {
   filter: DeleteOneFilterInput;
 };
@@ -9133,16 +8675,6 @@ export type MutationDeleteMaterialArgs = {
 
 
 export type MutationDeleteMaterialClassificationArgs = {
-  filter: DeleteOneFilterInput;
-};
-
-
-export type MutationDeleteMaterialClassificationActivitiesArgs = {
-  filter: MaterialClassificationActivitiesListFilter;
-};
-
-
-export type MutationDeleteMaterialClassificationActivityArgs = {
   filter: DeleteOneFilterInput;
 };
 
@@ -9747,16 +9279,6 @@ export type MutationUpdateEmissionsArgs = {
 };
 
 
-export type MutationUpdateEprSubmissionArgs = {
-  input: EprSubmissionUpdateInput;
-};
-
-
-export type MutationUpdateEprSubmissionsArgs = {
-  input: Array<EprSubmissionUpdateInput>;
-};
-
-
 export type MutationUpdateFacilityFootprintArgs = {
   input: FacilityFootprintUpdateInput;
 };
@@ -9784,16 +9306,6 @@ export type MutationUpdateMaterialArgs = {
 
 export type MutationUpdateMaterialClassificationArgs = {
   input: MaterialClassificationUpdateInput;
-};
-
-
-export type MutationUpdateMaterialClassificationActivitiesArgs = {
-  input: Array<MaterialClassificationActivityUpdateInput>;
-};
-
-
-export type MutationUpdateMaterialClassificationActivityArgs = {
-  input: MaterialClassificationActivityUpdateInput;
 };
 
 
@@ -10221,8 +9733,6 @@ export type Organization = {
   displayName: Scalars['String']['output'];
   email?: Maybe<Scalars['String']['output']>;
   enabledConnections: Scalars['JSON']['output'];
-  eprSubmissions: Array<EprSubmission>;
-  eprSubmissions_aggregate?: Maybe<AggregationResult>;
   facilityFootprints: Array<FacilityFootprint>;
   facilityFootprints_aggregate?: Maybe<AggregationResult>;
   id: Scalars['ID']['output'];
@@ -10306,16 +9816,6 @@ export type OrganizationCategoryDataArgs = {
 
 export type OrganizationCategoryData_AggregateArgs = {
   filter?: InputMaybe<CategoryDataListFilter>;
-};
-
-
-export type OrganizationEprSubmissionsArgs = {
-  filter?: InputMaybe<EprSubmissionsListFilter>;
-};
-
-
-export type OrganizationEprSubmissions_AggregateArgs = {
-  filter?: InputMaybe<EprSubmissionsListFilter>;
 };
 
 
@@ -12135,7 +11635,6 @@ export type OrganizationCreateOrUpdateInput = {
   displayName?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   enabledConnections?: InputMaybe<Scalars['JSON']['input']>;
-  eprSubmissions?: InputMaybe<Array<EprSubmissionCreateOrUpdateInput>>;
   facilityFootprints?: InputMaybe<Array<FacilityFootprintCreateOrUpdateInput>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
@@ -13154,7 +12653,6 @@ export type OrganizationInsertInput = {
   displayName: Scalars['String']['input'];
   email?: InputMaybe<Scalars['String']['input']>;
   enabledConnections: Scalars['JSON']['input'];
-  eprSubmissions?: InputMaybe<Array<EprSubmissionCreateOrUpdateInput>>;
   facilityFootprints?: InputMaybe<Array<FacilityFootprintCreateOrUpdateInput>>;
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
   isTest: Scalars['Boolean']['input'];
@@ -13198,7 +12696,6 @@ export type OrganizationUpdateInput = {
   displayName?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   enabledConnections?: InputMaybe<Scalars['JSON']['input']>;
-  eprSubmissions?: InputMaybe<Array<EprSubmissionCreateOrUpdateInput>>;
   facilityFootprints?: InputMaybe<Array<FacilityFootprintCreateOrUpdateInput>>;
   id: Scalars['ID']['input'];
   integrations?: InputMaybe<Array<IntegrationCreateOrUpdateInput>>;
@@ -13290,7 +12787,6 @@ export type OrganizationsListFilter = {
   enabledConnections_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
   enabledConnections_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   enabledConnections_null?: InputMaybe<Scalars['Boolean']['input']>;
-  eprSubmissions?: InputMaybe<EprSubmissionsListFilter>;
   facilityFootprints?: InputMaybe<FacilityFootprintsListFilter>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
@@ -14875,12 +14371,6 @@ export type Query = {
   emissions?: Maybe<Array<Maybe<Emission>>>;
   /** Get aggregated data for Emissions. */
   emissions_aggregate?: Maybe<AggregationResult>;
-  /** Get a single EprSubmission. */
-  eprSubmission?: Maybe<EprSubmission>;
-  /** Get multiple EprSubmissions. */
-  eprSubmissions?: Maybe<Array<Maybe<EprSubmission>>>;
-  /** Get aggregated data for EprSubmissions. */
-  eprSubmissions_aggregate?: Maybe<AggregationResult>;
   /** Get a single FacilityFootprint. */
   facilityFootprint?: Maybe<FacilityFootprint>;
   /** Get multiple FacilityFootprints. */
@@ -14897,12 +14387,6 @@ export type Query = {
   material?: Maybe<Material>;
   /** Get a single MaterialClassification. */
   materialClassification?: Maybe<MaterialClassification>;
-  /** Get multiple MaterialClassificationActivities. */
-  materialClassificationActivities?: Maybe<Array<Maybe<MaterialClassificationActivity>>>;
-  /** Get aggregated data for MaterialClassificationActivities. */
-  materialClassificationActivities_aggregate?: Maybe<AggregationResult>;
-  /** Get a single MaterialClassificationActivity. */
-  materialClassificationActivity?: Maybe<MaterialClassificationActivity>;
   /** Get multiple MaterialClassifications. */
   materialClassifications?: Maybe<Array<Maybe<MaterialClassification>>>;
   /** Get aggregated data for MaterialClassifications. */
@@ -15508,22 +14992,6 @@ export type QueryEmissions_AggregateArgs = {
 };
 
 
-export type QueryEprSubmissionArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryEprSubmissionsArgs = {
-  filter?: InputMaybe<EprSubmissionsListFilter>;
-  pagination?: InputMaybe<EprSubmissionsPaginationInput>;
-};
-
-
-export type QueryEprSubmissions_AggregateArgs = {
-  filter?: InputMaybe<EprSubmissionsListFilter>;
-};
-
-
 export type QueryFacilityFootprintArgs = {
   id: Scalars['ID']['input'];
 };
@@ -15562,22 +15030,6 @@ export type QueryMaterialArgs = {
 
 
 export type QueryMaterialClassificationArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryMaterialClassificationActivitiesArgs = {
-  filter?: InputMaybe<MaterialClassificationActivitiesListFilter>;
-  pagination?: InputMaybe<MaterialClassificationActivitiesPaginationInput>;
-};
-
-
-export type QueryMaterialClassificationActivities_AggregateArgs = {
-  filter?: InputMaybe<MaterialClassificationActivitiesListFilter>;
-};
-
-
-export type QueryMaterialClassificationActivityArgs = {
   id: Scalars['ID']['input'];
 };
 
