@@ -9,7 +9,7 @@ import {withErrorBoundary} from "react-error-boundary";
 const _EprProgress = () => {
   const {logBrowser} = useColdContext();
   const {orgId} = useAuth0Wrapper();
-  const [epsSubmissions, setEpsSubmissions] = useState<EprSubmissionGraphQL[]>([])
+  const [eprSubmissions, setEprSubmissions] = useState<EprSubmissionGraphQL[]>([])
   const eprQuery = useGraphQLSWR<{
     eprSubmissions: EprSubmissionGraphQL[]
   }>('GET_EPR_SUBMISSIONS', {
@@ -23,7 +23,7 @@ const _EprProgress = () => {
   useEffect(() => {
     const error = getGraphqlError(eprQuery);
     if(eprQuery.data && error === null){
-      setEpsSubmissions(eprQuery.data.data.eprSubmissions)
+      setEprSubmissions(eprQuery.data.data.eprSubmissions)
     }
   }, [eprQuery]);
 
@@ -39,9 +39,9 @@ const _EprProgress = () => {
   }
 
   // separate the submissions by status into 'Upcoming', 'In Progress', and 'Submitted' arrays
-  const upcomingSubmissions = epsSubmissions.filter(submission => submission.status === 'Upcoming');
-  const inProgressSubmissions = epsSubmissions.filter(submission => submission.status === 'In Progress');
-  const submittedSubmissions = epsSubmissions.filter(submission => submission.status === 'Submitted');
+  const upcomingSubmissions = eprSubmissions.filter(submission => submission.status === 'Upcoming');
+  const inProgressSubmissions = eprSubmissions.filter(submission => submission.status === 'In Progress');
+  const submittedSubmissions = eprSubmissions.filter(submission => submission.status === 'Submitted');
 
   return (
     <MainContent
