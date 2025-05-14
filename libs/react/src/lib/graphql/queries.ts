@@ -794,7 +794,7 @@ export const GET_EPR_SUBMISSIONS = gql`
       billIdentifier
       dueDate
       status
-      submissionDate
+      submittedAt
       metadata
     }
   }
