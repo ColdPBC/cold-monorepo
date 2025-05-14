@@ -23,10 +23,10 @@ const _EprProgressStatusBucket = (props: {
       text += `${formattedDate}`;
     }
     return (
-      <div className={'text-tc-primary flex flex-row p-1 justify-center rounded-[32px] w-full border-[1px] border-green-200'}>
+      <div className={'text-tc-primary flex flex-row p-1 justify-center rounded-[32px] w-full border-[1px] border-green-200'} data-chromatic="ignore">
         <div className={'flex flex-row pr-[12px] pl-[4px]'}>
           <ColdIcon name={IconNames.ColdCheckIcon} className={'w-6 h-6'} color={HexColors.green[200]} />
-          <div className={'text-body font-bold'} data-chromatic="ignore">{text}</div>
+          <div className={'text-body font-bold'}>{text}</div>
         </div>
       </div>
     )
