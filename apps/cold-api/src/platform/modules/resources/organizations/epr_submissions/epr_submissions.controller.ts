@@ -10,7 +10,16 @@ import {
   UseGuards, ValidationPipe
 } from '@nestjs/common';
 import {Span} from "nestjs-ddtrace";
-import {allRoles, BaseWorker, HttpExceptionFilter, IRequest, JwtAuthGuard, Roles, RolesGuard} from "@coldpbc/nest";
+import {
+  allRoles,
+  BaseWorker,
+  coldAdminOnly,
+  HttpExceptionFilter,
+  IRequest,
+  JwtAuthGuard,
+  Roles,
+  RolesGuard
+} from "@coldpbc/nest";
 import {ApiBody, ApiOAuth2, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {EprSubmissionsService} from "./epr_submissions.service";
 import {CreateEprSubmissionDto} from "./dto/create-epr-submission.dto";
@@ -42,7 +51,7 @@ export class EprSubmissionsController extends BaseWorker{
   @ApiBody({ description: 'EPR submission data' })
   @ApiResponse({ status: HttpStatus.CREATED, description: 'The EPR submission has been successfully created' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid submission data provided' })
-  @Roles(...allRoles)
+  @Roles(...coldAdminOnly)
   async create(
     @Req() req,
     @Body(new ValidationPipe({
