@@ -71,7 +71,7 @@ const _EprProgressStatusBucket = (props: {
   }
 
   return (
-    <div className={'w-[456px] min-h-[900px] p-4 rounded-lg bg-gray-20 flex flex-col gap-4 text-tc-primary shrink-0'}>
+    <div className={'min-w-[341px] max-w-[456px] min-h-[900px] p-4 rounded-lg bg-gray-20 flex flex-col gap-4 text-tc-primary flex-1'}>
       <div className={'w-full flex flex-col gap-4'}>
         <div className={'w-full text-h4'}>
           {title}
@@ -87,16 +87,16 @@ const _EprProgressStatusBucket = (props: {
                 <div className={'w-[96px] h-[96px] shrink-0'}>
                   <img src={getLogo(item)} alt={item.billIdentifier} className={'w-full h-full rounded-l-lg'}/>
                 </div>
-                <div className={'w-full px-4 py-2 flex flex-col gap-1'}>
-                  <div className={'text-h4'}>
+                <div className={'w-full px-4 py-2 flex flex-col gap-1 text-overflow-ellipsis overflow-hidden'}>
+                  <span className={'text-h4 truncate whitespace-nowrap'}>
                     {item.state}
-                  </div>
-                  <div className={'text-tc-secondary text-body font-bold'}>
+                  </span>
+                  <span className={'text-tc-secondary text-body font-bold truncate whitespace-nowrap'}>
                     {item.billIdentifier}
-                  </div>
-                  <div className={'text-tc-secondary text-body'}>
+                  </span>
+                  <span className={'text-tc-secondary text-body truncate whitespace-nowrap'}>
                     {item.metadata?.pro_name}
-                  </div>
+                  </span>
                 </div>
               </div>
               <div className={'w-full flex flex-row'}>
