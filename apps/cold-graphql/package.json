@@ -8,7 +8,7 @@
     "start": "graphweaver start backend",
     "start:ui": "graphweaver start frontend",
     "watch": "graphweaver watch",
-    "import": "graphweaver import postgresql -o --host localhost --password postgres --user postgres --database colddb --port 5432",
+    "import": "graphweaver import postgresql -o",
     "apply:acl": "ts-node ./custom_generators/apply_acls.ts",
     "apply:hooks": "ts-node ./custom_generators/apply_hooks.ts",
     "create:sidecar": "ts-node ./custom_generators/create_sidecar.ts",
