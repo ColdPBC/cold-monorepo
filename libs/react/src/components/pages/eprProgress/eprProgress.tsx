@@ -48,7 +48,7 @@ const _EprProgress = () => {
       title="Extended Producer Responsibility Progress"
       className={'w-full h-full ml-0 pl-[50px]'}
       isLoading={eprQuery.isLoading}>
-      <div className={'w-full h-full overflow-x-auto scrollbar-hide flex flex-row gap-4 pr-[50px]'}>
+      <div className={'w-full h-full overflow-x-auto overflow-y-auto scrollbar-dark flex flex-row gap-4 pr-[50px] pb-[50px]'}>
         <EprProgressStatusBucket title={'Upcoming'} items={upcomingSubmissions} />
         <EprProgressStatusBucket title={'In Progress'} items={inProgressSubmissions} />
         <EprProgressStatusBucket title={'Submitted'} items={submittedSubmissions} />
