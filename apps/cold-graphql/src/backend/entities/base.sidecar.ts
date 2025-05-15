@@ -6,7 +6,7 @@ import { OrgContext } from '../libs/acls/acl_policies';
 import { merge, set } from 'lodash';
 import { v4 } from 'uuid';
 import { GuidPrefixes } from '../libs/cuid/compliance.enums';
-import {EntityManager, EntityName} from '@mikro-orm/core';
+import { EntityManager, EntityName } from '@mikro-orm/core';
 
 export class BaseSidecar {
 	logger;
@@ -36,6 +36,7 @@ export class BaseSidecar {
 		'sustainability_attributes',
 		'utility_bills',
 	];
+
 	constructor(readonly entity: any, readonly tableName: string) {
 		this.logger = new WorkerLogger('organization');
 		this.mqtt = mqttService;
@@ -57,19 +58,23 @@ export class BaseSidecar {
 		return params;
 	}
 
-	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>) {
+	async beforeCreateHook(params: CreateOrUpdateHookParams<typeof this.entity, OrgContext>, generateId = true) {
 		if (params.args.items.length > 0) {
 			this.logger.log(`before create ${this.entityName} hook`, { user: params.context.user, arguments: params.args });
 
 			for (const item of params.args.items) {
-				let id: string;
-				if (GuidPrefixes[`${this.entity.name}` as keyof typeof GuidPrefixes]) {
-					id = new Cuid2Generator(GuidPrefixes[`${this.entity.name}` as keyof typeof GuidPrefixes]).scopedId;
-				} else {
-					id = v4();
+				if (generateId) {
+					let id: string;
+
+					if (GuidPrefixes[`${this.entity.name}` as keyof typeof GuidPrefixes]) {
+						id = new Cuid2Generator(GuidPrefixes[`${this.entity.name}` as keyof typeof GuidPrefixes]).scopedId;
+					} else {
+						id = v4();
+					}
+
+					set(item, 'id', id);
 				}
 
-				set(item, 'id', id);
 				set(item, 'updatedAt', new Date());
 				set(item, 'createdAt', new Date());
 
@@ -111,21 +116,22 @@ export class BaseSidecar {
 			em.clear(); //clear EM cache
 			for (const item of params.args.items as (typeof this.entity)[]) {
 				if (item.metadata) {
-          const response = await em.findOneOrFail(this.entity.name as EntityName<{
-            id: string;
-            metadata?: object | string | null;
-          }>, { id: item.id })
+					const response = await em.findOneOrFail(
+						this.entity.name as EntityName<{
+							id: string;
+							metadata?: object | string | null;
+						}>,
+						{ id: item.id },
+					);
 
-          // Check if metadata exists on the response
-          const source = response.metadata ?
-            (typeof response.metadata === 'string' ? JSON.parse(response.metadata) : response.metadata) :
-            {};
+					// Check if metadata exists on the response
+					const source = response.metadata ? (typeof response.metadata === 'string' ? JSON.parse(response.metadata) : response.metadata) : {};
 
-          const update = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata;
-          item.metadata = merge({}, source, update);
+					const update = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata;
+					item.metadata = merge({}, source, update);
 
-          this.logger.log(`Updated metadata for ${this.entityName}`, { metadata: item.metadata });
-        }
+					this.logger.log(`Updated metadata for ${this.entityName}`, { metadata: item.metadata });
+				}
 
 				set(item, 'updatedAt', new Date());
 			}
