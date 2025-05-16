@@ -1,3 +1,10 @@
+# [1.644.0](https://github.com/coldPBC/cold-monorepo/compare/v1.643.0...v1.644.0) (2025-05-14)
+
+
+### Features
+
+* Add metadata property to EprSubmission entity and schema ([13b5a86](https://github.com/coldPBC/cold-monorepo/commit/13b5a86242aa6fa2c08885195105eaea89bbb9f3))
+
 # [1.643.0](https://github.com/coldPBC/cold-monorepo/compare/v1.642.0...v1.643.0) (2025-05-14)
 
 

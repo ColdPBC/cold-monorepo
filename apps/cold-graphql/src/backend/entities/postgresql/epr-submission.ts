@@ -48,6 +48,9 @@ export class EprSubmission {
 	@Property({ type: 'datetime', length: 3, nullable: true })
 	submittedAt?: Date;
 
+	@Property({ type: 'json', nullable: true })
+	metadata?: Record<string, unknown>;
+
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHookParams<typeof EprSubmission, OrgContext>) {
 		if(!this.sidecar) {

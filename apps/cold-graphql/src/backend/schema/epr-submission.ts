@@ -1,5 +1,5 @@
 import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
+import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Organization } from './organization';
 import { EprSubmission as OrmEprSubmission } from '../entities';
@@ -35,4 +35,7 @@ export class EprSubmission {
 
 	@Field(() => ISODateStringScalar, { nullable: true })
 	submittedAt?: Date;
+
+	@Field(() => GraphQLJSON, { nullable: true })
+	metadata?: Record<string, unknown>;
 }
