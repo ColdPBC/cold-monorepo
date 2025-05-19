@@ -1,3 +1,24 @@
+# [1.645.0](https://github.com/coldPBC/cold-monorepo/compare/v1.644.0...v1.645.0) (2025-05-19)
+
+
+### Features
+
+* Add EPR Progress feature with UI components and GraphQL support ([a7e9dc9](https://github.com/coldPBC/cold-monorepo/commit/a7e9dc9ec4c672643c495d5cd8420a9762f1cddd))
+* Add EPR route and simplify RegulatoryComplianceRoutes logic ([a2bd808](https://github.com/coldPBC/cold-monorepo/commit/a2bd808b1a667cdd5453216d7b1fa6f55c54758c))
+* Add new EPR menu item to seed data ([faaca3e](https://github.com/coldPBC/cold-monorepo/commit/faaca3e1dbdfae07143858ebb133579dd40729f5))
+* Add new routing logic for 'showUploadsPage' flag ([2ebea6e](https://github.com/coldPBC/cold-monorepo/commit/2ebea6ed457f03fe0d6e57b906177241f50d3e4b))
+* Add or update data-chromatic attribute in key div elements ([1c500cc](https://github.com/coldPBC/cold-monorepo/commit/1c500ccd71ecbe26e6a70ad559e53fa4f15463f5))
+* Adjust spacing in EPR Progress layout for better alignment ([20355e4](https://github.com/coldPBC/cold-monorepo/commit/20355e4c6d48f470adde2fc9439597cec997dcad))
+* Enhance scrollbar styling and add vertical scroll support. ([381064e](https://github.com/coldPBC/cold-monorepo/commit/381064eaa77af8f686fab0fec94091b4a28f1004))
+* Refactor data structure to nest `pro_name` under `metadata` ([f3d31f5](https://github.com/coldPBC/cold-monorepo/commit/f3d31f5b86829c0b8d73c4c6e2a13c7adeef5381))
+* Refactor EprSubmissionGraphQL to use camelCase naming ([4739ed6](https://github.com/coldPBC/cold-monorepo/commit/4739ed6f77d570ad0462b2326d4ea458236e4876))
+* Refine layout and improve text overflow handling. ([97466b9](https://github.com/coldPBC/cold-monorepo/commit/97466b96fcf1c8dc659e882ce3850f4c17ee7bcd))
+* Rename 'submissionDate' to 'submittedAt' in GraphQL query ([5247af0](https://github.com/coldPBC/cold-monorepo/commit/5247af0cecd5b41d6e142296fb09c96be68f38b8))
+* Rename GraphQL query to match naming conventions ([0cbd05d](https://github.com/coldPBC/cold-monorepo/commit/0cbd05d015c8a82fa7bd676d968e4c6027a8dfcb))
+* Rename variable from `epsSubmissions` to `eprSubmissions`. ([a2fbda7](https://github.com/coldPBC/cold-monorepo/commit/a2fbda772483bff1295fd23fd7264e61ea68507b))
+* Update 'pro_name' type to allow undefined in EPR interface ([e1c2827](https://github.com/coldPBC/cold-monorepo/commit/e1c28271479f20e72b46e3136692ac13e07aa83d))
+* Update placeholder text for undetermined due date ([e354cce](https://github.com/coldPBC/cold-monorepo/commit/e354ccee341ffcaa254678e359ef9c63f1c63b7a))
+
 # [1.644.0](https://github.com/coldPBC/cold-monorepo/compare/v1.643.0...v1.644.0) (2025-05-14)
 
 
