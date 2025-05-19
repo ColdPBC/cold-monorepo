@@ -15,7 +15,7 @@ import {
   SustainabilityAttributeDetail,
   Terms,
   UserSettingsPage,
-  WizardRoutes, UploadsPage, RegulatoryComplianceRoutes,
+  WizardRoutes, UploadsPage, RegulatoryComplianceRoutes, EprProgress,
 } from '@coldpbc/components';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { QuestionnaireRoutes } from './questionnaireRoutes';
@@ -26,14 +26,16 @@ export const getDefaultPage = (flags: LDFlagSet): string => {
   switch(true){
     case flags.sustainabilityAttributesAndAssuranceDocs:
       return '/sustainability_claims';
+    case flags.showEpr:
+      return '/epr_progress';
     case flags.showMyData:
       return '/products';
+    case flags.showUploadsPage:
+      return '/uploads';
     case flags.showClimateSection:
       return '/carbon_footprint';
     case flags.showReportingAutomation:
       return '/assessments';
-    case flags.showUploadsPage:
-      return '/uploads';
     default:
       return '/settings/account';
   }
@@ -61,7 +63,8 @@ export const ColdRoutes = () => {
         {ldFlags.showMyData && MaterialRoutes()}
         {ldFlags.showMyData && SupplierRoutes()}
         {ldFlags.showMyData && ProductRoutes()}
-        {ldFlags.showReportingAutomation && RegulatoryComplianceRoutes()}
+        {RegulatoryComplianceRoutes()}
+        <Route path={'/epr_progress'} element={ldFlags.showEpr ? <EprProgress /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
         <Route path={'/settings/billing'} element={ldFlags.showBillingPageCold957 ? <BillingPage /> : <Navigate to={DEFAULT_PAGE} replace={true} />} />
         // Temporary redirects from old route until we're certain that the seeds are updated to the new sidebar.
         <Route path={'/questionnaires'} element={<Navigate to={'/assessments'} replace={true} />} />

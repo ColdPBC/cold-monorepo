@@ -786,6 +786,20 @@ export const GET_MATERIALS_COUNT = gql`
   }
 `;
 
+export const GET_EPR_SUBMISSIONS = gql`
+  query GET_EPR_SUBMISSIONS($filter: EprSubmissionsListFilter) {
+    eprSubmissions(filter: $filter) {
+      id
+      state
+      billIdentifier
+      dueDate
+      status
+      submittedAt
+      metadata
+    }
+  }
+`;
+
 export const queries: {
   [key: string]: DocumentNode;
 } = {
@@ -836,4 +850,5 @@ export const queries: {
   GET_COMPONENT_DEFINITIONS: GET_COMPONENT_DEFINITIONS,
   GET_PRODUCTS_COUNT: GET_PRODUCTS_COUNT,
   GET_MATERIALS_COUNT: GET_MATERIALS_COUNT,
+  GET_EPR_SUBMISSIONS: GET_EPR_SUBMISSIONS,
 };

@@ -34,6 +34,14 @@ export function getSidebarMock() {
               },
               label: 'Regulatory Compliance',
               route: '/regulatory_compliance',
+            },
+            {
+              key: 'epr_progress_key',
+              icon: {
+                name: 'ColdRegulatoryComplianceIcon',
+              },
+              label: 'EPR',
+              route: '/epr_progress',
             }
           ]
         },

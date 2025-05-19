@@ -56,6 +56,8 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
       return ldFlags.showMyData;
     } else if (item.key === 'uploads_key') {
       return ldFlags.showUploadsPage;
+    } else if (item.key === 'epr_progress_key') {
+      return ldFlags.showEpr;
     } else {
 			return true;
 		}

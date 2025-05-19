@@ -59,6 +59,38 @@
     background: #A3A6C2; /* Visible scrollbar */
     border-radius: 8px;
   }
+
+  /* Vertical scrollbar styling */
+  .scrollbar-dark::-webkit-scrollbar {
+    width: 15px; /* Vertical scrollbar width increased to 20px */
+    height: 15px; /* Horizontal scrollbar height */
+  }
+
+  /* Scrollbar track (the area behind the thumb) */
+  .scrollbar-dark::-webkit-scrollbar-track {
+    background: transparent; /* Slightly visible dark track */
+    margin-top: 10px; /* Adds space above the scrollbar */
+    margin-bottom: 10px; /* Adds space below the scrollbar */
+    border-radius: 10px; /* Rounded corners for track */
+  }
+
+  /* Scrollbar thumb (the draggable part) */
+  .scrollbar-dark::-webkit-scrollbar-thumb {
+    background: rgba(70, 70, 70, 0.2); /* Darker, more opaque thumb */
+    border-radius: 10px; /* Rounded corners */
+  }
+
+  /* Scrollbar thumb hover effect */
+  .scrollbar-dark::-webkit-scrollbar-thumb:hover {
+    background: rgba(90, 90, 90, 0.9); /* Even darker on hover */
+    background-clip: padding-box;
+  }
+
+  /* Scrollbar corner (where horizontal and vertical scrollbars meet) */
+  .scrollbar-dark::-webkit-scrollbar-corner {
+    background: rgba(30, 30, 30, 0.6); /* Match track color */
+  }
+
 }
 
 @media print {
