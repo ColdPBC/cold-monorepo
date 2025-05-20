@@ -9,6 +9,11 @@ const meta: Meta<typeof ProductSustainabilityAttributesCard> = {
 	component: ProductSustainabilityAttributesCard,
 	tags: ['autodocs'],
 	decorators: [],
+  render: args => (
+    <StoryMockProvider>
+      <ProductSustainabilityAttributesCard {...args} />
+    </StoryMockProvider>
+  )
 };
 
 export default meta;
