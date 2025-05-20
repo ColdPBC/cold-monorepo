@@ -1,3 +1,10 @@
+## [1.645.2](https://github.com/coldPBC/cold-monorepo/compare/v1.645.1...v1.645.2) (2025-05-20)
+
+
+### Bug Fixes
+
+* improve createIssue method signature and update label handling ([4b1c8dd](https://github.com/coldPBC/cold-monorepo/commit/4b1c8dd044030abb64fb63c54febf02f63c8bef4))
+
 ## [1.645.1](https://github.com/coldPBC/cold-monorepo/compare/v1.645.0...v1.645.1) (2025-05-20)
 
 
