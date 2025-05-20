@@ -4,6 +4,7 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { EcoinventActivity } from './ecoinvent-activity';
 import { EmissionFactor } from './emission-factor';
 import { Material } from './material';
+import { Organization } from './organization';
 import { MaterialEmissionFactor as OrmMaterialEmissionFactor } from '../entities';
 import { connection } from '../database';
 
@@ -29,8 +30,8 @@ export class MaterialEmissionFactor {
 	@RelationshipField<MaterialEmissionFactor>(() => EcoinventActivity, { id: (entity) => entity.ecoinventActivity?.id, nullable: true })
 	ecoinventActivity?: EcoinventActivity;
 
-	@Field(() => String, { nullable: true })
-	organizationId?: string;
+	@RelationshipField<MaterialEmissionFactor>(() => Organization, { id: (entity) => entity.organization?.id, nullable: true })
+	organization?: Organization;
 
 	@Field(() => String, { nullable: true })
 	reasoning?: string;

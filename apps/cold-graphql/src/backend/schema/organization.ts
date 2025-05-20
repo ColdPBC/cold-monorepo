@@ -8,6 +8,7 @@ import { EprSubmission } from './epr-submission';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { Material } from './material';
+import { MaterialEmissionFactor } from './material-emission-factor';
 import { MaterialSupplier } from './material-supplier';
 import { MaterialTag } from './material-tag';
 import { MaterialTagAssignment } from './material-tag-assignment';
@@ -96,6 +97,9 @@ export class Organization {
 
 	@RelationshipField<Integration>(() => [Integration], { relatedField: 'organization' })
 	integrations!: Integration[];
+
+	@RelationshipField<MaterialEmissionFactor>(() => [MaterialEmissionFactor], { relatedField: 'organization' })
+	materialEmissionFactors!: MaterialEmissionFactor[];
 
 	@RelationshipField<MaterialSupplier>(() => [MaterialSupplier], { relatedField: 'organization' })
 	materialSuppliers!: MaterialSupplier[];

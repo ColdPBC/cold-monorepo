@@ -5,6 +5,7 @@ import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { EcoinventActivity } from './ecoinvent-activity';
 import { EmissionFactor } from './emission-factor';
 import { Material } from './material';
+import { Organization } from './organization';
 
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { default_acl, OrgContext } from '../../libs/acls/acl_policies';
@@ -36,8 +37,8 @@ export class MaterialEmissionFactor {
 	@ManyToOne({ entity: () => EcoinventActivity, ref: true, fieldName: 'eco_invent_activity_id', nullable: true, index: 'material_emission_factors_activity_id_idx1' })
 	ecoinventActivity?: Ref<EcoinventActivity>;
 
-	@Property({ type: 'text', nullable: true })
-	organizationId?: string;
+	@ManyToOne({ entity: () => Organization, ref: true, nullable: true })
+	organization?: Ref<Organization>;
 
 	@Property({ type: 'text', nullable: true })
 	reasoning?: string;

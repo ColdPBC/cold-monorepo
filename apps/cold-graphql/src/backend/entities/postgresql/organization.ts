@@ -9,6 +9,7 @@ import { EprSubmission } from './epr-submission';
 import { FacilityFootprint } from './facility-footprint';
 import { Integration } from './integration';
 import { Material } from './material';
+import { MaterialEmissionFactor } from './material-emission-factor';
 import { MaterialSupplier } from './material-supplier';
 import { MaterialTag } from './material-tag';
 import { MaterialTagAssignment } from './material-tag-assignment';
@@ -105,6 +106,9 @@ export class Organization {
 
 	@OneToMany({ entity: () => Integration, mappedBy: 'organization' })
 	integrations = new Collection<Integration>(this);
+
+	@OneToMany({ entity: () => MaterialEmissionFactor, mappedBy: 'organization' })
+	materialEmissionFactors = new Collection<MaterialEmissionFactor>(this);
 
 	@OneToMany({ entity: () => MaterialSupplier, mappedBy: 'organization' })
 	materialSuppliers = new Collection<MaterialSupplier>(this);
