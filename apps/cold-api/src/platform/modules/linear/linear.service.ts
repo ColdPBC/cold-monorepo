@@ -110,7 +110,15 @@ export class LinearService extends BaseWorker {
 	}
 
 	/** Creates an issue in Linear. @throws */
-	async createIssue(labels: string[], data: { organization: organizations; user: IAuthenticatedUser; orgFile: organization_files; error?: string }): Promise<Issue> {
+	async createIssue(
+		labels: string[],
+		data: {
+			organization: organizations;
+			user: IAuthenticatedUser;
+			orgFile: organization_files;
+			error?: string;
+		},
+	): Promise<Issue> {
 		try {
 			if (!data?.organization?.linear_webhook_id) {
 				await this.createWebhook(data);
@@ -243,14 +251,12 @@ export class LinearService extends BaseWorker {
 
 	getLabel(type: string) {
 		switch (type) {
-			case file_types.OTHER:
-				return this.ingestion_other_label_id;
 			case file_types.PURCHASE_ORDER:
 				return this.ingestion_po_label_id;
 			case file_types.BILL_OF_MATERIALS:
 				return this.ingestion_bom_label_id;
 			default:
-				return this.ingestion_sustainability_label_id;
+				return this.ingestion_other_label_id;
 		}
 	}
 
