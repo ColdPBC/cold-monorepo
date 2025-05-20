@@ -15,6 +15,11 @@ const meta: Meta<typeof SustainabilityAttributeCard> = {
 	component: SustainabilityAttributeCard,
 	tags: ['autodocs'],
 	decorators: [],
+  render: args => (
+    <StoryMockProvider graphqlMocks={defaultGraphqlMocks}>
+      <SustainabilityAttributeCard {...args} />
+    </StoryMockProvider>
+  )
 };
 
 export default meta;
@@ -43,11 +48,6 @@ export const MaterialAttributeWithLogoAndOneAssurance: Story = {
       level: EntityLevel.MATERIAL,
     }
   },
-  render: args => (
-    <StoryMockProvider graphqlMocks={defaultGraphqlMocks}>
-      <SustainabilityAttributeCard {...args} />
-    </StoryMockProvider>
-  )
 };
 
 export const SupplierAttributeWithLogoAndManyAssurances: Story = {
@@ -60,11 +60,6 @@ export const SupplierAttributeWithLogoAndManyAssurances: Story = {
       level: EntityLevel.SUPPLIER,
     }
   },
-  render: args => (
-    <StoryMockProvider graphqlMocks={defaultGraphqlMocks}>
-      <SustainabilityAttributeCard {...args} />
-    </StoryMockProvider>
-  )
 };
 
 export const LongNameThatTruncatesInsideOfASmallBox: Story = {
@@ -191,5 +186,17 @@ export const EntityDetailSupplier: Story = {
       level: EntityLevel.SUPPLIER,
     },
     cardStyle: SustainabilityAttributeCardStyle.ENTITY_DETAIL,
+  }
+};
+
+export const WithViewDetailsLink: Story = {
+  args: {
+    sustainabilityAttribute: {
+      id: 'a',
+      name: 'Default Product Attribute',
+      attributeAssurances: [],
+      level: EntityLevel.PRODUCT,
+    },
+    isNavigable: true,
   }
 };
