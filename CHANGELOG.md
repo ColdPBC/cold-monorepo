@@ -1,3 +1,10 @@
+## [1.645.3](https://github.com/coldPBC/cold-monorepo/compare/v1.645.2...v1.645.3) (2025-05-20)
+
+
+### Bug Fixes
+
+* increase instanceStorage from 200 to 250 in flightcontrol.json ([124484b](https://github.com/coldPBC/cold-monorepo/commit/124484b3ba331b3f8dec4a59ea0ac298aa46d019))
+
 ## [1.645.2](https://github.com/coldPBC/cold-monorepo/compare/v1.645.1...v1.645.2) (2025-05-20)
 
 
