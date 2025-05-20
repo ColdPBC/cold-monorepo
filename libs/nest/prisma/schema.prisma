@@ -351,6 +351,7 @@ model organizations {
   vector_records                                    vector_records[]
   compliance_responses                              compliance_responses[]
   epr_submissions                                   epr_submissions[]
+  material_emission_factors                         material_emission_factors[]
 
   @@index([name], map: "organizations_name_idx1")
 }
@@ -854,6 +855,7 @@ model material_emission_factors {
   eco_invent_activity_id String?
   organization_id        String?
   reasoning              String?
+  organization           organizations?        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   ecoinvent_activities   ecoinvent_activities? @relation(fields: [eco_invent_activity_id], references: [id], onDelete: Cascade)
   emission_factors       emission_factors      @relation(fields: [emission_factor_id], references: [id], onDelete: Cascade)
   material               materials             @relation(fields: [material_id], references: [id], onDelete: Cascade)
