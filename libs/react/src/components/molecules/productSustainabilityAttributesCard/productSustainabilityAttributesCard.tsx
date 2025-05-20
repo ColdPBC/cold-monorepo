@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { PcfGraphData, ProductsQuery } from '@coldpbc/interfaces';
+import { ProductsQuery } from '@coldpbc/interfaces';
 import {
   BaseButton,
   Card,

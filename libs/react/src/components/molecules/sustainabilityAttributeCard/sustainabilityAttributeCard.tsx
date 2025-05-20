@@ -4,14 +4,12 @@ import { ErrorFallback } from '../../application';
 import {
   AttributeAssuranceCountGraph,
   AttributeAssuranceEntityDetail,
-  AttributeAssuranceSingleStatus, AttributeAssuranceStatusGraph, BaseButton,
+  AttributeAssuranceSingleStatus, BaseButton,
   SustainabilityCardExpandedView,
 } from '@coldpbc/components';
 import { SustainabilityAttribute } from '@coldpbc/interfaces';
 import {ButtonTypes, EntityLevel} from '@coldpbc/enums';
 import {useNavigate} from "react-router-dom";
-import {twMerge} from "tailwind-merge";
-import {handleTabChange} from "@coldpbc/lib";
 
 interface SustainabilityAttributeCardProps {
   sustainabilityAttribute: SustainabilityAttribute;
