@@ -34,7 +34,7 @@ const _SupplierSustainabilityAttributesCard: React.FC<SupplierSustainabilityAttr
 					<span className="text-body font-bold text-white">Supplier-level</span>
 					{supplierSustainabilityAttributes.map(sustainabilityAttribute => (
 						<div className="w-full" key={sustainabilityAttribute.id}>
-							<SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} cardStyle={SustainabilityAttributeCardStyle.SINGLE_STATUS} />
+							<SustainabilityAttributeCard sustainabilityAttribute={sustainabilityAttribute} cardStyle={SustainabilityAttributeCardStyle.SINGLE_STATUS} isNavigable />
 						</div>
 					))}
 				</div>
@@ -48,6 +48,7 @@ const _SupplierSustainabilityAttributesCard: React.FC<SupplierSustainabilityAttr
                 sustainabilityAttribute={sustainabilityAttribute}
                 cardStyle={SustainabilityAttributeCardStyle.ENTITY_DETAIL}
                 displayedOnEntityLevel={EntityLevel.SUPPLIER}
+                isNavigable
               />
 						</div>
 					))}

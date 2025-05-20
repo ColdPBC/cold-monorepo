@@ -37,6 +37,7 @@ const _MaterialSustainabilityAttributesCard: React.FC<MaterialSustainabilityAttr
               <SustainabilityAttributeCard
                 sustainabilityAttribute={sustainabilityAttribute}
                 cardStyle={SustainabilityAttributeCardStyle.SINGLE_STATUS}
+                isNavigable
               />
             </div>
           ))}
