@@ -1,3 +1,10 @@
+## [1.645.1](https://github.com/coldPBC/cold-monorepo/compare/v1.645.0...v1.645.1) (2025-05-20)
+
+
+### Bug Fixes
+
+* add organization and material emission factor relationships ([33ead36](https://github.com/coldPBC/cold-monorepo/commit/33ead365c5cc70c7ea32176e9056da50932007a1))
+
 # [1.645.0](https://github.com/coldPBC/cold-monorepo/compare/v1.644.0...v1.645.0) (2025-05-19)
 
 
