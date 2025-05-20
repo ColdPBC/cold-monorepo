@@ -90,6 +90,7 @@ const _SustainabilityAttributeCard: React.FC<SustainabilityAttributeCardProps> =
                       navigate(`/sustainability_claims/${sustainabilityAttribute.id}`);
                     }}
                     variant={ButtonTypes.secondary}
+                    className={'flex-none'}
                   />
                 )
               }
