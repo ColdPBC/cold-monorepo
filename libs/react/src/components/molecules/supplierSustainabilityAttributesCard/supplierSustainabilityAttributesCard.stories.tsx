@@ -1,13 +1,18 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { SupplierSustainabilityAttributesCard } from '@coldpbc/components';
-import { getSupplierMock } from '@coldpbc/mocks';
+import {getSupplierMock, StoryMockProvider} from '@coldpbc/mocks';
 
 const meta: Meta<typeof SupplierSustainabilityAttributesCard> = {
 	title: 'Molecules/SupplierSustainabilityAttributesCard',
 	component: SupplierSustainabilityAttributesCard,
 	tags: ['autodocs'],
 	decorators: [],
+  render: args => (
+    <StoryMockProvider>
+      <SupplierSustainabilityAttributesCard {...args} />
+    </StoryMockProvider>
+  )
 };
 
 export default meta;
