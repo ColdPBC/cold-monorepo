@@ -1,3 +1,13 @@
+# [1.646.0](https://github.com/coldPBC/cold-monorepo/compare/v1.645.4...v1.646.0) (2025-05-21)
+
+
+### Features
+
+* Add a flex-none class to button in sustainability card ([b10d9bb](https://github.com/coldPBC/cold-monorepo/commit/b10d9bb5a9b7150ef1e152fc09ffb920e4ed947c))
+* Add a flex-none class to button in sustainability card ([8f7c28f](https://github.com/coldPBC/cold-monorepo/commit/8f7c28f1abf15dc43efdea7719bcdb906a085de7))
+* Add navigation functionality to SustainabilityAttributeCard ([0fb48c9](https://github.com/coldPBC/cold-monorepo/commit/0fb48c940bff9885874bb2bf7f7cf2fe19ac2956))
+* Remove unused imports from sustainability card components ([ea71e8a](https://github.com/coldPBC/cold-monorepo/commit/ea71e8ac61b2886d2e74887e865f7920d63f69f0))
+
 ## [1.645.4](https://github.com/coldPBC/cold-monorepo/compare/v1.645.3...v1.645.4) (2025-05-20)
 
 
