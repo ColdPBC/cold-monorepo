@@ -419,7 +419,7 @@
 		"vite": "5.4.6",
 		"vite-plugin-dts": "~3.6.3",
 		"vite-plugin-eslint": "^1.8.1",
-		"vite-plugin-node-polyfills": "^0.12.0",
+		"vite-plugin-node-polyfills": "^0.23.0",
 		"vite-plugin-turbosnap": "^1.0.3",
 		"vite-tsconfig-paths": "^4.0.2",
 		"vitest": "~0.32.0",
