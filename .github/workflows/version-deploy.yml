@@ -70,7 +70,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
       - name: 🧑‍💻 Setup Node.js
         if: steps.PR.outputs.pr_found != 'true'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "20.9.0"
       - name: 🌱 Get Next Version
