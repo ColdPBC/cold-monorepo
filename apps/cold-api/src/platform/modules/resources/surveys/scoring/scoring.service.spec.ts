@@ -9,7 +9,7 @@ describe('ScoringService', () => {
   const complianceSets = ['rei_pia_2024', 'rei_pia_2023'];
   for (const complianceSet of complianceSets) {
     const mockData = generateMockData(complianceSet);
-    scoredSurvey = service.scoreSurvey(mockData.definition);
+    scoredSurvey = service.scoreSurvey(mockData);
 
     it('should be defined', () => {
       expect(service).toBeDefined();
@@ -20,8 +20,8 @@ describe('ScoringService', () => {
     });
 
     describe(`${complianceSet}: valid data`, () => {
-      Object.keys(scoredSurvey.sections).forEach(sectionKey => {
-        const section = scoredSurvey.sections[sectionKey];
+      Object.keys(scoredSurvey.definition.sections).forEach(sectionKey => {
+        const section = scoredSurvey.definition.sections[sectionKey];
         describe(`section: ${sectionKey}`, () => {
           Object.keys(section.follow_up).forEach(followUpKey => {
             const followUp = section.follow_up[followUpKey];

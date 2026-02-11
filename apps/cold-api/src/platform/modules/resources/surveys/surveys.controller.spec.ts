@@ -1,96 +1,88 @@
-import { JwtService } from '@nestjs/jwt';
-import { Test, TestingModule } from '@nestjs/testing';
-import { Auth0TokenService, CacheService, DarklyService, JwtStrategy, PrismaService, ZodSurveyTypesSchema } from '@coldpbc/nest';
+import { ZodSurveyTypesSchema } from '@coldpbc/nest';
 import { SurveysController } from './surveys.controller';
 import { SurveysService } from './surveys.service';
-import { mockDeep } from 'jest-mock-extended';
-import { RoleService } from '../auth0/roles/role.service';
-import { MemberService } from '../auth0/members/member.service';
 import { fullReqExample } from '../_global/global.examples';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
-describe('Surveys Controller', () => {
+describe('SurveysController', () => {
   let controller: SurveysController;
-  let service: SurveysService;
-  /*
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule],
-      controllers: [SurveysController],
-      providers: [ConfigService, DarklyService, SurveysService, JwtService, JwtStrategy, PrismaService, CacheService],
-    })
-      .overrideProvider(SurveysService)
-      .useValue(mockDeep<SurveysService>())
-      .overrideProvider(Auth0TokenService)
-      .useValue(mockDeep<Auth0TokenService>())
-      .overrideProvider(RoleService)
-      .useValue(mockDeep<RoleService>())
-      .overrideProvider(MemberService)
-      .useValue(mockDeep<MemberService>())
-      .overrideProvider(JwtService)
-      .useValue(mockDeep<JwtService>())
-      .overrideProvider(JwtStrategy)
-      .useValue(mockDeep<JwtStrategy>())
-      .overrideProvider(PrismaService)
-      .useValue(mockDeep<PrismaService>())
-      .overrideProvider(CacheService)
-      .useValue(mockDeep<CacheService>())
-      .overrideProvider(DarklyService)
-      .useValue({
-        getJSONFlag: jest.fn().mockReturnValue(true),
-      })
-      .compile({
-        snapshot: true,
-      });
+  let service: jest.Mocked<
+    Pick<
+      SurveysService,
+      | 'findAll'
+      | 'findAllSubmittedSurveysByOrg'
+      | 'findDefinitionByType'
+      | 'findDefinitionByName'
+      | 'findOne'
+      | 'submitResults'
+      | 'create'
+      | 'update'
+      | 'remove'
+      | 'delete'
+    >
+  >;
 
-    service = module.get<SurveysService>(SurveysService);
-    controller = module.get<SurveysController>(SurveysController);
+  beforeEach(() => {
+    service = {
+      findAll: jest.fn(),
+      findAllSubmittedSurveysByOrg: jest.fn(),
+      findDefinitionByType: jest.fn(),
+      findDefinitionByName: jest.fn(),
+      findOne: jest.fn(),
+      submitResults: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      remove: jest.fn(),
+      delete: jest.fn(),
+    };
+
+    controller = new SurveysController(service as unknown as SurveysService);
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
 
-  it('FindAll called', async () => {
-    await controller.findAll(fullReqExample, ZodSurveyTypesSchema.enum.TEST, 'test');
-    expect(service.findAll).toHaveBeenCalled();
+  it('delegates findAll', async () => {
+    await controller.findAll(fullReqExample as any, ZodSurveyTypesSchema.enum.TEST as any, 'test');
+    expect(service.findAll).toHaveBeenCalledWith(fullReqExample, { name: 'test', type: ZodSurveyTypesSchema.enum.TEST }, undefined);
   });
 
-  it('FindOne called', async () => {
-    await controller.findByName('TEST', 'test', fullReqExample);
-    expect(service.findOne).toHaveBeenCalled();
+  it('delegates findByName', async () => {
+    await controller.findByName(ZodSurveyTypesSchema.enum.TEST as any, 'test', fullReqExample as any);
+    expect(service.findOne).toHaveBeenCalledWith('test', fullReqExample, undefined);
   });
 
-  it('FindAllByType called', async () => {
-    await controller.getAllByType('TEST', false, fullReqExample);
-    expect(service.findDefinitionByType).toHaveBeenCalled();
+  it('delegates getAllByType', async () => {
+    await controller.getAllByType(ZodSurveyTypesSchema.enum.TEST as any, false, fullReqExample as any);
+    expect(service.findDefinitionByType).toHaveBeenCalledWith(fullReqExample, ZodSurveyTypesSchema.enum.TEST, false);
   });
 
-  it('SubmitResults called', async () => {
-    await controller.submitOrgSurvey('TEST', 'test', {}, fullReqExample);
-    expect(service.submitResults).toHaveBeenCalled();
+  it('delegates submitOrgSurvey', async () => {
+    await controller.submitOrgSurvey('org-1', 'test', {} as any, fullReqExample as any);
+    expect(service.submitResults).toHaveBeenCalledWith('test', {}, fullReqExample, 'org-1');
   });
 
-  it('Create called', async () => {
-    await controller.create(fullReqExample, {
+  it('delegates create', async () => {
+    const payload = {
       updated_at: new Date(),
       created_at: new Date(),
       definition: {},
       description: '',
       id: '',
       name: '',
-      type: 'TEST',
-    });
-    expect(service.create).toHaveBeenCalled();
+      type: ZodSurveyTypesSchema.enum.TEST,
+    };
+    await controller.create(fullReqExample as any, payload as any);
+    expect(service.create).toHaveBeenCalledWith(payload, fullReqExample);
   });
 
-  it('Update called', async () => {
-    await controller.update('test', {}, fullReqExample);
-    expect(service.update).toHaveBeenCalled();
+  it('delegates update', async () => {
+    await controller.update('test', {} as any, fullReqExample as any);
+    expect(service.update).toHaveBeenCalledWith('test', {}, fullReqExample);
   });
 
-  it('Remove called', async () => {
-    await controller.remove('test', fullReqExample);
-    expect(service.remove).toHaveBeenCalled();
-  });*/
+  it('delegates remove', async () => {
+    await controller.remove('test', fullReqExample as any);
+    expect(service.remove).toHaveBeenCalledWith('test', fullReqExample);
+  });
 });

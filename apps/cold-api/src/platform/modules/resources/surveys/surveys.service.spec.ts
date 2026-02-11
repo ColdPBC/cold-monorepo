@@ -108,6 +108,7 @@ describe('Survey Service', () => {
     jest.spyOn(prismaService.survey_definitions, 'findMany').mockResolvedValue(surveys as any);
     jest.spyOn(prismaService.survey_definitions, 'findUnique').mockResolvedValue(origin as any);
     jest.spyOn(prismaService.survey_definitions, 'update').mockResolvedValue(updated as any);
+    jest.spyOn(prismaService.survey_status, 'findMany').mockResolvedValue([] as any);
   });
 
   it('should be defined', () => {
@@ -142,6 +143,7 @@ describe('Survey Service', () => {
   });
 
   it('should delete a survey', async () => {
+    jest.spyOn(service, 'findOne').mockResolvedValue(origin as any);
     await service.remove(origin.name, {
       organization: orgMock,
       user: authenticatedUserExample,

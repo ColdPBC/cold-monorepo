@@ -19,7 +19,7 @@ describe('SurveyFilterService', () => {
           Object.keys(section.follow_up).forEach(followUpKey => {
             const followUp = section.follow_up[followUpKey];
             describe(`question: ${followUpKey}`, () => {
-              if (followUp.dependency) {
+              if (followUp.dependency?.expression) {
                 try {
                   it(`${followUpKey} should pass evaluation `, async () => {
                     let answer;
@@ -61,7 +61,7 @@ describe('SurveyFilterService', () => {
           Object.keys(section.follow_up).forEach(followUpKey => {
             const followUp = section.follow_up[followUpKey];
             describe(`question: ${followUpKey}`, () => {
-              if (followUp.dependency) {
+              if (followUp.dependency?.expression) {
                 try {
                   let answer;
 
