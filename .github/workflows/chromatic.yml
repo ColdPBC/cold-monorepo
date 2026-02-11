@@ -65,7 +65,7 @@ jobs:
         run: yarn
         # 👇 Adds Chromatic as a step in the workflow
       - name: 🎑 Publish to Chromatic
-        uses: chromaui/action@v1
+        uses: chromaui/action@v15
         # Chromatic GitHub Action options
         with:
           skip: 'dependabot/**' # 👈 Skip dependabot PRs
