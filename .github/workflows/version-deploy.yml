@@ -63,7 +63,7 @@ jobs:
           filterOutDraft: true
       - name: 🛒 Checkout
         if: steps.PR.outputs.pr_found != 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
