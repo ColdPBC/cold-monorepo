@@ -1,8 +1,10 @@
-name: Shared-library unit tests
+name: RabbitMQ regression tests
 
 on:
   push:
     branches:
+      - main
+      - staging
       - 'fix/**'
     paths:
       - 'libs/nest/**'
@@ -27,27 +29,21 @@ permissions:
   contents: read
 
 concurrency:
-  group: shared-library-unit-tests-${{ github.ref }}
+  group: rabbitmq-unit-tests-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   test:
-    name: ${{ matrix.suite }}
+    name: RabbitMQ regression tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - suite: RabbitMQ regression tests
-            test-args: --runTestsByPath libs/nest/src/lib/rabbit/rabbit.service.spec.ts
-          - suite: Shared-library suite
-            test-args: ''
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/cold_test
       SHADOW_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/cold_shadow_test
       DD_SERVICE: cold-api
+      DD_TRACE_ENABLED: 'false'
+      DD_INSTRUMENTATION_TELEMETRY_ENABLED: 'false'
       NODE_ENV: test
     steps:
       - uses: actions/checkout@v4
@@ -63,4 +59,4 @@ jobs:
       - name: Generate Prisma models
         run: node .yarn/releases/yarn-4.4.1.cjs prisma generate --schema libs/nest/prisma/schema.prisma
       - name: Run unit tests
-        run: node .yarn/releases/yarn-4.4.1.cjs jest --config libs/nest/jest.config.ts --runInBand --ci --forceExit ${{ matrix.test-args }}
+        run: node .yarn/releases/yarn-4.4.1.cjs jest --config libs/nest/jest.config.ts --runInBand --ci --detectOpenHandles --runTestsByPath libs/nest/src/lib/rabbit/rabbit.service.spec.ts
