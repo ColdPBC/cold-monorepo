@@ -1,4 +1,4 @@
-name: RabbitMQ unit tests
+name: Shared-library unit tests
 
 on:
   push:
@@ -13,7 +13,6 @@ on:
       - '.yarn/releases/**'
       - '.github/workflows/rabbitmq-unit-tests.yml'
   pull_request:
-    branches: [main, staging]
     paths:
       - 'libs/nest/**'
       - 'package.json'
@@ -28,16 +27,28 @@ permissions:
   contents: read
 
 concurrency:
-  group: rabbitmq-unit-tests-${{ github.ref }}
+  group: shared-library-unit-tests-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  rabbitmq:
-    name: RabbitMQ regression tests
+  test:
+    name: ${{ matrix.suite }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: RabbitMQ regression tests
+            test-args: --runTestsByPath libs/nest/src/lib/rabbit/rabbit.service.spec.ts
+          - suite: Shared-library suite
+            test-args: ''
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/cold_test
+      SHADOW_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/cold_shadow_test
+      DD_SERVICE: cold-api
+      NODE_ENV: test
     steps:
       - uses: actions/checkout@v4
         with:
@@ -49,5 +60,7 @@ jobs:
         run: corepack enable
       - name: Install locked dependencies
         run: node .yarn/releases/yarn-4.4.1.cjs install --immutable
-      - name: Run RabbitMQ regression tests
-        run: node .yarn/releases/yarn-4.4.1.cjs jest --config libs/nest/jest.rabbit.config.cjs --runInBand --ci --runTestsByPath libs/nest/src/lib/rabbit/rabbit.service.spec.ts
+      - name: Generate Prisma models
+        run: node .yarn/releases/yarn-4.4.1.cjs prisma generate --schema libs/nest/prisma/schema.prisma
+      - name: Run unit tests
+        run: node .yarn/releases/yarn-4.4.1.cjs jest --config libs/nest/jest.config.ts --runInBand --ci --forceExit ${{ matrix.test-args }}
