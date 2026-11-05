@@ -1,0 +1,33 @@
+name: E2E support unit tests
+
+on:
+  push:
+    branches: [main, staging, 'fix/**']
+  pull_request:
+    branches: [main, staging, 'fix/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-support-unit-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e-support-unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install locked dependencies without lifecycle scripts
+        run: node .yarn/releases/yarn-4.4.1.cjs install --immutable --mode=skip-build
+      - name: Run isolated setup unit tests with mocked external services
+        run: node .yarn/releases/yarn-4.4.1.cjs exec jest --config apps/cold-api-e2e/jest.unit.config.ts --runInBand --ci --json --outputFile "$RUNNER_TEMP/e2e-support-unit-results.json"
+      - name: Require executed tests
+        run: node -e "const r = require(process.env.RUNNER_TEMP + '/e2e-support-unit-results.json'); if (!(r.numTotalTests > 0) || r.numFailedTests !== 0) process.exit(1)"
