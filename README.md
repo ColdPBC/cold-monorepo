@@ -153,8 +153,8 @@ Local development
 - If you use Docker Compose directly, you can export vars in your shell or use an `.env` file at the repo root; Compose will read from it.
 
 CI and manual integration tests
-- GitHub Actions runs automated checks without deploying the application.
-- API E2E workflows are manual-only. Supply an explicit API URL and configure the matching GitHub Actions test secrets before running them.
+- GitHub Actions runs automated checks without deploying the application. Existing semantic-release version, changelog, tag, and GitHub release automation remains restricted to main; it does not deploy the application.
+- Legacy remote API E2E execution is disabled because the tests mutate remote data and their teardown is not safely scoped. Manual dispatch fails with an explanation before accessing services. The test code is retained for repair against a disposable environment.
 - No Flightcontrol deployment manifests or deploy hooks are maintained in this repository. Existing external infrastructure is not changed by this repository cleanup.
 
 Cloud services
@@ -301,7 +301,7 @@ docker compose -f docker-compose-openAi.yml up -d api climatiq openai bayou
 ### CI and deployment policy
 
 This repository is used for development and testing. GitHub Actions does not deploy it through Flightcontrol.
-The manual API E2E workflows require an explicitly supplied test URL and do not run in response to deployment notifications.
+Legacy remote API E2E workflows do not run in response to deployment notifications. Their execution jobs are disabled until a disposable test target and safe cleanup are configured; manual dispatch reports this as a failure rather than implying that tests passed.
 
 The database migration workflow is a separate existing integration. It has not been changed by the Flightcontrol removal and must be reviewed before making Prisma schema changes.
 
