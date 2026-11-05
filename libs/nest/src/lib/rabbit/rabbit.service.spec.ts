@@ -80,6 +80,15 @@ describe('ColdRabbitService', () => {
   });
 
   describe('request', () => {
+    it('preserves an explicit empty exchange for RabbitMQ default-exchange routing', async () => {
+      let sent: unknown;
+      const service = createService({ request: async (message: unknown) => { sent = message; } });
+
+      await service.request('destination.queue', payload, { exchange: '' });
+
+      assert.deepEqual(sent, { exchange: '', routingKey: 'destination.queue', timeout: 5000, payload });
+    });
+
     it('uses the requested exchange and timeout', async () => {
       let sent: unknown;
       const response = { accepted: true };
