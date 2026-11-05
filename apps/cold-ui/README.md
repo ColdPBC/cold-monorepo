@@ -29,7 +29,7 @@
 # Troubleshooting
 
 ## UI: Build
-Run `yarn build:dev` from the repository root after enabling Corepack and installing dependencies with the pinned Yarn version. The project is developed and tested locally and in GitHub Actions; it is not deployed through Flightcontrol.
+Run `yarn prebuild && yarn nx run cold-ui:build:development` from the repository root after enabling Corepack and installing dependencies with the pinned Yarn version. The project is developed and tested locally and in GitHub Actions; it is not deployed through Flightcontrol.
 
 ## Canvas Package
 If you have trouble with the canvas package dependency on Apple silicon, you might need to build it from source. See [here](https://github.com/Automattic/node-canvas/).

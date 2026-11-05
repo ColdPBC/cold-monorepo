@@ -1,4 +1,4 @@
-name: Manual Production API E2E Tests
+name: Disabled legacy Production API E2E Tests
 on:
   workflow_dispatch:
     inputs:
@@ -12,21 +12,33 @@ permissions:
 
 env:
   API_SERVER_URL: ${{ inputs.api_url }}
-  API_ADMIN_EMAIL: ${{ secrets.API_ADMIN_EMAIL }}
-  API_ADMIN_PASSWORD: ${{ secrets.PRODUCTION_API_ADMIN_PASSWORD }}
-  AUTH0_AUDIENCE: ${{ secrets.PRODUCTION_AUTH0_AUDIENCE }}
-  AUTH0_CLIENT_ID: ${{ secrets.PRODUCTION_AUTH0_CLIENT_ID }}
-  AUTH0_CLIENT_SECRET: ${{ secrets.PRODUCTION_AUTH0_CLIENT_SECRET }}
-  AUTH0_ORG_ID: ${{ secrets.PRODUCTION_AUTH0_ORG_ID }}
-  AUTH0_TOKEN_URL: ${{ secrets.PRODUCTION_AUTH0_TOKEN_URL }}
-  DD_SITE: us5.datadoghq.com
-  DD_API_KEY: ${{ secrets.DD_API_KEY }}
-  DD_CIVISIBILITY_AGENTLESS_ENABLED: true
-  DD_ENV: test
-  DD_SERVICE: cold-api-e2e
 
 jobs:
+  explain-disabled-tests:
+    name: Remote E2E requires safe isolation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stop before accessing remote services
+        run: |
+          echo "::error::Legacy remote E2E tests are disabled. They mutate remote data and their teardown can delete unrelated records. Configure a disposable test environment and scoped cleanup before re-enabling them."
+          exit 1
+
   api-e2e:
+    # Keep the runner available for repair, but never execute it against remote data.
+    if: ${{ false }}
+    env:
+      API_ADMIN_EMAIL: ${{ secrets.API_ADMIN_EMAIL }}
+      API_ADMIN_PASSWORD: ${{ secrets.PRODUCTION_API_ADMIN_PASSWORD }}
+      AUTH0_AUDIENCE: ${{ secrets.PRODUCTION_AUTH0_AUDIENCE }}
+      AUTH0_CLIENT_ID: ${{ secrets.PRODUCTION_AUTH0_CLIENT_ID }}
+      AUTH0_CLIENT_SECRET: ${{ secrets.PRODUCTION_AUTH0_CLIENT_SECRET }}
+      AUTH0_ORG_ID: ${{ secrets.PRODUCTION_AUTH0_ORG_ID }}
+      AUTH0_TOKEN_URL: ${{ secrets.PRODUCTION_AUTH0_TOKEN_URL }}
+      DD_SITE: us5.datadoghq.com
+      DD_API_KEY: ${{ secrets.DD_API_KEY }}
+      DD_CIVISIBILITY_AGENTLESS_ENABLED: true
+      DD_ENV: test
+      DD_SERVICE: cold-api-e2e
     name: API E2E tests
     timeout-minutes: 20
     runs-on: ubuntu-latest

@@ -2,6 +2,7 @@
 from pathlib import Path
 import json
 import re
+import subprocess
 import unittest
 from urllib.parse import urlparse
 
@@ -79,6 +80,13 @@ class NoFlightcontrolDeploymentTests(unittest.TestCase):
             for job in workflow['jobs'].values():
                 if any('cold-api-e2e:e2e:ci' in step.get('run', '') for step in job.get('steps', [])):
                     self.assertEqual(job.get('if'), '${{ false }}', name)
+                    self.assertIsInstance(job.get('env'), dict)
+            diagnostic = workflow['jobs']['explain-disabled-tests']
+            self.assertFalse(diagnostic.get('env'))
+            for step in diagnostic['steps']:
+                result = subprocess.run(['bash', '-c', step['run']], capture_output=True, text=True)
+                self.assertEqual(result.returncode, 1)
+                self.assertIn('::error::', result.stdout)
 
     def test_release_is_preserved_without_pr_publication(self):
         """Releases keep the existing main-only behavior and never run on PRs."""
