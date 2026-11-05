@@ -1,0 +1,33 @@
+name: UI unit tests
+
+on:
+  push:
+    branches: ['fix/**']
+  pull_request:
+    branches: [main, staging]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ui-unit-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.9.0'
+      - name: Enable pinned Yarn
+        run: corepack enable
+      - name: Install locked dependencies
+        run: yarn install --immutable --mode=skip-build
+      - name: Generate source barrels
+        run: yarn exec barrelsby -D -l all --directory ./libs/react/src -e stories.tsx -e react-app-env -e private.tsx -e spec.ts -S -H
+      - name: Run UI unit tests
+        run: yarn exec vitest run --config libs/react/vitest.config.ts
