@@ -256,7 +256,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 	}
 
 	private async updateProductCarbonFootprint(total_co2e: number, product, organization, user) {
-		if (isNaN(total_co2e)) {
+		if (Number.isFinite(total_co2e)) {
 			const breakdown = this.pcfc.getBreakdown();
 			this.logger.info(`Product carbon footprint calculated: ${total_co2e} KgCO2e`, { product, organization, user });
 			this.logger.info(`Product carbon footprint breakdown: ${breakdown}`, { product, organization, user });
