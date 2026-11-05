@@ -1,81 +1,63 @@
-name: ⏮ Production E2E Tests ⏭
+name: Disabled legacy Production API E2E Tests
 on:
   workflow_dispatch:
     inputs:
       api_url:
-        description: 'Production API Server URL'
+        description: 'Explicit API server URL to test. This workflow does not deploy an application.'
         type: string
-        default: 'https://api.coldclimate.com'
         required: true
-  deployment_status:
-        branches: [ main ]
-        types: [ completed, success ]
+
+permissions:
+  contents: read
+
 env:
-  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-  NODE_ENV: ci
-  DD_SITE: us5.datadoghq.com
-  DD_CIVISIBILITY_AGENTLESS_ENABLED: true
-  DD_API_KEY: ${{ secrets.DD_APP_KEY }}
-  GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  NPM_TOKEN: ${{ secrets.GH_TOKEN }}
-  CACHE_NAME: cache-node-modules
-  PR_NUMBER: ${{ github.event.number }}
-  API_ADMIN_EMAIL: ${{ secrets.API_ADMIN_EMAIL }}
-  API_ADMIN_PASSWORD: ${{ secrets.PRODUCTION_API_ADMIN_PASSWORD }}
-  AUTH0_AUDIENCE: ${{ secrets.PRODUCTION_AUTH0_AUDIENCE }}
-  AUTH0_CLIENT_ID: ${{ secrets.PRODUCTION_AUTH0_CLIENT_ID }}
-  AUTH0_CLIENT_SECRET: ${{ secrets.PRODUCTION_AUTH0_CLIENT_SECRET }}
-  AUTH0_ORG_ID: ${{ secrets.PRODUCTION_AUTH0_ORG_ID }}
-  AUTH0_TOKEN_URL: ${{ secrets.PRODUCTION_AUTH0_TOKEN_URL }}
-  API_SERVER_URL: "https://api.coldclimate.com"
+  API_SERVER_URL: ${{ inputs.api_url }}
 
 jobs:
-  api-e2e:
-    name: 🔬 API Tests
-    timeout-minutes: 10
+  explain-disabled-tests:
+    name: Remote E2E requires safe isolation
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-      id-token: write # to enable use of OIDC for npm provenance
+    steps:
+      - name: Stop before accessing remote services
+        run: |
+          echo "::error::Legacy remote E2E tests are disabled. They mutate remote data and their teardown can delete unrelated records. Configure a disposable test environment and scoped cleanup before re-enabling them."
+          exit 1
+
+  api-e2e:
+    # Keep the runner available for repair, but never execute it against remote data.
+    if: ${{ false }}
+    env:
+      API_ADMIN_EMAIL: ${{ secrets.API_ADMIN_EMAIL }}
+      API_ADMIN_PASSWORD: ${{ secrets.PRODUCTION_API_ADMIN_PASSWORD }}
+      AUTH0_AUDIENCE: ${{ secrets.PRODUCTION_AUTH0_AUDIENCE }}
+      AUTH0_CLIENT_ID: ${{ secrets.PRODUCTION_AUTH0_CLIENT_ID }}
+      AUTH0_CLIENT_SECRET: ${{ secrets.PRODUCTION_AUTH0_CLIENT_SECRET }}
+      AUTH0_ORG_ID: ${{ secrets.PRODUCTION_AUTH0_ORG_ID }}
+      AUTH0_TOKEN_URL: ${{ secrets.PRODUCTION_AUTH0_TOKEN_URL }}
+      DD_SITE: us5.datadoghq.com
+      DD_API_KEY: ${{ secrets.DD_API_KEY }}
+      DD_CIVISIBILITY_AGENTLESS_ENABLED: true
+      DD_ENV: test
+      DD_SERVICE: cold-api-e2e
+    name: API E2E tests
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           persist-credentials: false
-          fetch-depth: 0
-      - name: 👨‍💻Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20.9.0"
-
-      - name: 🪢 Install Yarn
-        run: corepack enable && yarn set version stable
-
-      - name: 💼 Cache Node Modules
-        id: cache-node-modules
-        uses: actions/cache@v3
-        with:
-          path: ./node_modules
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}
-      - name: 🧩 Install Dependencies
-        # 👇 If cache not found, install dependencies with the same package manager used in the project (replace it as needed), e.g. yarn, npm, pnpm
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: yarn
-
-      - name: 🌈 Generate Prisma Client
-        run: yarn dlx nx run cold-nest-library:prisma-generate
-
-      - name: 🏗 build development
-        run: yarn barrels && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
-
-      - name: Parse Payload
-        if: github.event.deployment_status.state == 'success'
-        id: parse_payload
-        run: echo "::set-output name=service_url::$(node .github/scripts/parse_payload.js "${{ toJson(github.event.deployment.payload) }}" cold-api)"
-
-      - name: 🩻 Run Tests
-        if: github.event.deployment_status.state == 'success'
-        run: API_SERVER_URL=${{ steps.parse_payload.outputs.service_url }} DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r $(pwd)/.pnp.cjs -r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
-
+          node-version: '20'
+      - name: Enable pinned Yarn
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Generate Prisma Client
+        run: yarn nx run cold-nest-library:prisma-generate
+      - name: Build development API
+        run: yarn prebuild && yarn nx run cold-api:build:development
+      - name: Run API E2E tests
+        run: yarn nx run cold-api-e2e:e2e:ci
