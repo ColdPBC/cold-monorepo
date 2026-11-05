@@ -10,6 +10,7 @@ test('the built Storybook preview boots and renders its basic Button story', { t
   const errors = [];
   try {
     const page = await browser.newPage();
+    page.on('requestfailed', request => console.error('Preview failed request:', request.url(), request.failure()?.errorText));
     page.on('pageerror', error => { errors.push(error.message); console.error('Preview page error:', error.message); });
     page.on('console', message => {
       if (message.type() === 'error' && !message.text().includes('ERR_PROXY_CONNECTION_FAILED')) {
