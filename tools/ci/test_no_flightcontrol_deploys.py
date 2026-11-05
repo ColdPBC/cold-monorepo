@@ -71,5 +71,27 @@ class NoFlightcontrolDeploymentTests(unittest.TestCase):
                     self.assertNotIn('API_SERVER_URL=', step['run'], 'Use the supplied API_SERVER_URL environment')
 
 
+    def test_remote_e2e_execution_is_disabled(self):
+        """Legacy mutating remote tests must remain blocked until isolated safely."""
+        all_workflows = dict(workflows())
+        for name in ['e2e_test.yml', 'production_e2e_test.yml']:
+            workflow = all_workflows[name]
+            for job in workflow['jobs'].values():
+                if any('cold-api-e2e:e2e:ci' in step.get('run', '') for step in job.get('steps', [])):
+                    self.assertEqual(job.get('if'), '${{ false }}', name)
+
+    def test_release_is_preserved_without_pr_publication(self):
+        """Releases keep the existing main-only behavior and never run on PRs."""
+        all_workflows = dict(workflows())
+        self.assertTrue('release.yml' in all_workflows, 'Preserve the existing release job')
+        release = all_workflows['release.yml']
+        self.assertEqual(set(release['on']), {'push', 'workflow_dispatch'})
+        self.assertEqual(release['on']['push']['branches'], ['main'])
+        self.assertEqual(release['jobs']['release']['if'], "github.ref == 'refs/heads/main'")
+        self.assertEqual(release['permissions'], {'contents': 'write', 'issues': 'write', 'pull-requests': 'write'})
+        config = json.loads((ROOT / '.releaserc').read_text())
+        self.assertEqual([branch['name'] for branch in config['branches']], ['main'])
+
+
 if __name__ == '__main__':
     unittest.main()
