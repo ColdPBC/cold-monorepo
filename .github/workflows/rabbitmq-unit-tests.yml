@@ -43,9 +43,6 @@ jobs:
             test-args: --runTestsByPath libs/nest/src/lib/rabbit/rabbit.service.spec.ts
           - suite: Shared-library suite
             test-args: ''
-          - suite: Shared-library baseline
-            baseline: true
-            test-args: ''
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/cold_test
@@ -56,8 +53,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-          # Compare the untouched starting revision using exactly the same job.
-          ref: ${{ matrix.baseline && '3940630f6b5acf855511d6faaa6f849138e2de00' || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '20.9.0'
