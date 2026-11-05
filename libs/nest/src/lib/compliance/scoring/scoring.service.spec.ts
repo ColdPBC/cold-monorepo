@@ -1,6 +1,15 @@
 import { organizations } from '@prisma/client';
 import { ScoringService } from './scoring.service';
 import { IAuthenticatedUser } from '../../primitives';
+import { FilteringService } from '../filtering/filtering.service';
+import { PrismaService } from '../../prisma/prisma.service';
+
+// Scoring uses the real filter, but does not need tracing or metrics clients.
+jest.mock('../../worker', () => ({
+  BaseWorker: class {
+    logger = { warn: jest.fn(), error: jest.fn(), info: jest.fn() };
+  },
+}));
 
 const mockData = {
   id: 'org_liq0Z0GHUJ044liS',
@@ -241,16 +250,19 @@ describe('ScoringService', () => {
   let service: ScoringService;
   let scoredCompliance;
   let scoredSectionGroup;
-  const scoredSections: any = [];
+  let scoredSections: any[];
+  const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 
   beforeEach(async () => {
-    const response = mockData.organization_compliance[0].compliance_definition; // replace with a valid compliance response
-    scoredCompliance = await service.scoreComplianceResponse(response, {} as organizations, {} as IAuthenticatedUser);
-    scoredSectionGroup = await service.scoreSectionGroup(response.compliance_section_groups[0], {} as organizations, {} as IAuthenticatedUser);
-    for (const section of response.compliance_section_groups[0].compliance_sections) {
-      const scoredSection = await service.scoreSection(section, {} as organizations, {} as IAuthenticatedUser);
-      scoredSections.push(scoredSection);
-    }
+    const prisma = {} as PrismaService;
+    service = new ScoringService(new FilteringService(prisma), prisma);
+    const response = mockData.organization_compliance[0].compliance_definition;
+    // Each scoring method mutates its input; never reuse a previously scored object.
+    scoredCompliance = await service.scoreComplianceResponse(clone(response), {} as organizations, {} as IAuthenticatedUser);
+    scoredSectionGroup = await service.scoreSectionGroup(clone(response.compliance_section_groups[0]), {} as organizations, {} as IAuthenticatedUser);
+    scoredSections = await Promise.all(
+      response.compliance_section_groups[0].compliance_sections.map(section => service.scoreSection(clone(section), {} as organizations, {} as IAuthenticatedUser)),
+    );
   });
 
   it('should be defined', () => {
@@ -290,23 +302,34 @@ describe('ScoringService', () => {
   });
 
   describe('scoreSections', () => {
-    for (const section of scoredSections) {
-      it('should return a scored section', async () => {
-        expect(section).toBeDefined();
+    // Declare cases from the static fixture, not data populated later by beforeEach.
+    for (const [index, fixture] of mockData.organization_compliance[0].compliance_definition.compliance_section_groups[0].compliance_sections.entries()) {
+      it(`should return scored section ${fixture.key}`, () => {
+        expect(scoredSections[index]).toBeDefined();
       });
-      it('should have score property', () => {
-        expect(section).toHaveProperty('score');
+      it(`${fixture.key} should have score property`, () => {
+        expect(scoredSections[index]).toHaveProperty('score');
       });
-      it('should have ai_score property', () => {
-        expect(section).toHaveProperty('ai_score');
+      it(`${fixture.key} should have ai_score property`, () => {
+        expect(scoredSections[index]).toHaveProperty('ai_score');
       });
-      it('should have max_score property', () => {
-        expect(section).toHaveProperty('max_score');
+      it(`${fixture.key} should have max_score property`, () => {
+        expect(scoredSections[index]).toHaveProperty('max_score');
       });
     }
   });
 
   describe('scoreQuestion', () => {
+    it('scores an affirmative organization response and suppresses the AI score', async () => {
+      const question = {
+        component: 'yes_no',
+        rubric: { max_score: 4, score_map: { true: 4, false: 0 } },
+        compliance_responses: [{ org_response: { value: true }, ai_response: { answer: true } }],
+      };
+      const result = await service.scoreQuestion(question, {} as organizations, {} as IAuthenticatedUser);
+      expect(result).toMatchObject({ score: 4, ai_score: 0, max_score: 4, counts: { org_answered: 1, ai_answered: 0, not_started: 0 } });
+    });
+
     it('should return a scored question', async () => {
       const question = {}; // replace with a valid question
       const result = await service.scoreQuestion(question, {} as organizations, {} as IAuthenticatedUser);
