@@ -12,7 +12,7 @@ const config: StorybookConfig = {
   addons: [
     getAbsolutePath("@storybook/addon-knobs"),
     getAbsolutePath("@storybook/addon-essentials"),
-    getAbsolutePath("storybook-addon-cookie"),
+    join(__dirname, "cookie-preset.cjs"),
     getAbsolutePath("storybook-addon-launchdarkly"),
     getAbsolutePath("@storybook/addon-interactions"),
     getAbsolutePath("@storybook/addon-mdx-gfm"),

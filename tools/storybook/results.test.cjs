@@ -10,8 +10,10 @@ function run(results) {
   const directory = mkdtempSync(join(tmpdir(), 'storybook-results-'));
   try {
     const file = join(directory, 'results.json');
+    const index = join(directory, 'index.json');
+    writeFileSync(index, JSON.stringify({ entries: { one: { type: 'story' }, two: { type: 'story' }, docs: { type: 'docs' } } }));
     writeFileSync(file, typeof results === 'string' ? results : JSON.stringify(results));
-    return spawnSync(process.execPath, [join(__dirname, 'verify-results.cjs'), file], { encoding: 'utf8' });
+    return spawnSync(process.execPath, [join(__dirname, 'verify-results.cjs'), file, index], { encoding: 'utf8' });
   } finally { rmSync(directory, { recursive: true, force: true }); }
 }
 test('a complete successful suite passes', () => assert.equal(run(complete).status, 0));
@@ -22,6 +24,7 @@ for (const [name, result] of Object.entries({
   todo: { ...complete, numTodoTests: 1, numPassedTests: 1 },
   runtime: { ...complete, numRuntimeErrorTestSuites: 1 },
   incomplete: { ...complete, numPassedTests: 1 },
+  omittedStory: { ...complete, numTotalTests: 1, numPassedTests: 1 },
   unsuccessful: { ...complete, success: false },
   missing: {},
   malformed: '{',

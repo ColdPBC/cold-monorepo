@@ -4,7 +4,7 @@ on:
   pull_request:
   merge_group:
   push:
-    branches: [main, staging, 'fix/**']
+    branches: [main, staging]
   workflow_dispatch:
 
 permissions:
@@ -23,6 +23,7 @@ jobs:
       CI: true
       STORYBOOK_DISABLE_TELEMETRY: '1'
       DO_NOT_TRACK: '1'
+      NODE_OPTIONS: --max-old-space-size=4096
       STORYBOOK_API_URL: http://127.0.0.1:4400
       PUPPETEER_SKIP_DOWNLOAD: 'true'
     steps:
@@ -35,11 +36,11 @@ jobs:
       - name: Install immutable dependencies without lifecycle scripts
         run: node .yarn/releases/yarn-4.4.1.cjs install --immutable --mode=skip-build
       - name: Install locked Chromium browser and system dependencies
-        run: node .yarn/releases/yarn-4.4.1.cjs exec playwright install --with-deps chromium
+        run: node "$(node -p "require('path').join(require('path').dirname(require.resolve('playwright/package.json', {paths:[require.resolve('@storybook/test-runner')]})), 'cli.js')")" install --with-deps chromium
       - name: Verify browser network isolation
         run: node --test tools/storybook/isolation.test.cjs
       - name: Verify result gate regressions
-        run: node --test tools/storybook/results.test.cjs
+        run: node --test tools/storybook/results.test.cjs tools/storybook/presets.test.cjs
       - name: Generate source barrels with the locked tool
         run: node .yarn/releases/yarn-4.4.1.cjs exec barrelsby -D -l all --directory ./libs/react/src -e stories.tsx -e react-app-env -e private.tsx -e spec.ts -S -H
       - name: Build all Storybook stories locally
@@ -51,6 +52,6 @@ jobs:
           python3 -m http.server 4400 --bind 127.0.0.1 --directory dist/storybook/cold-ui > "$RUNNER_TEMP/storybook-server.log" 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
-          node .yarn/releases/yarn-4.4.1.cjs exec wait-on --timeout 30000 http-get://127.0.0.1:4400/index.json
-          node .yarn/releases/yarn-4.4.1.cjs exec test-storybook --config-dir apps/cold-ui/.storybook --url http://127.0.0.1:4400 --browsers chromium --maxWorkers 2 --ci --json --outputFile "$RUNNER_TEMP/storybook-results.json"
-          node tools/storybook/verify-results.cjs "$RUNNER_TEMP/storybook-results.json"
+          curl --fail --silent --retry 20 --retry-delay 1 --retry-connrefused http://127.0.0.1:4400/index.json > /dev/null
+          node .yarn/releases/yarn-4.4.1.cjs exec test-storybook --config-dir apps/cold-ui/.storybook --url http://127.0.0.1:4400 --browsers chromium --index-json --maxWorkers 2 --ci --json --outputFile "$RUNNER_TEMP/storybook-results.json"
+          node tools/storybook/verify-results.cjs "$RUNNER_TEMP/storybook-results.json" dist/storybook/cold-ui/index.json
