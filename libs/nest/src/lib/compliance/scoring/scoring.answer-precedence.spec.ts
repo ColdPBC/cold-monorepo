@@ -37,7 +37,6 @@ describe('Compliance answer precedence', () => {
 		{ label: 'numeric zero', component: 'number', value: 0, aiAnswer: 1, scoreMap: { 0: 0, 1: 4 } },
 		{ label: 'numeric zero array', component: 'number', value: [0], aiAnswer: 1, scoreMap: { 0: 0, 1: 4 } },
 		{ label: 'zero-scoring text', component: 'text', value: 'none', aiAnswer: 'best', scoreMap: { none: 0, best: 4 } },
-		{ label: 'valid unmapped text', component: 'text', value: 'other', aiAnswer: 'best', scoreMap: { none: 0, best: 4 } },
 	])('keeps the human $label answer instead of awarding AI points', async ({ component, value, aiAnswer, scoreMap }) => {
 		const input = question(component, { value }, aiAnswer, scoreMap);
 		const result = await service.scoreQuestion(input, org, user, { responses: true });
@@ -51,6 +50,8 @@ describe('Compliance answer precedence', () => {
 		{ label: 'positive human score', component: 'yes_no', value: true, aiAnswer: false, scoreMap: { false: 0, true: 4 }, expectedScore: 4 },
 		{ label: 'capped human score', component: 'number', value: 2, aiAnswer: 1, scoreMap: { 1: 3, 2: 9 }, expectedScore: 4 },
 		{ label: 'partial human score', component: 'text', value: 'good', aiAnswer: 'best', scoreMap: { good: 2, best: 4 }, expectedScore: 2 },
+		{ label: 'string-array boolean mapping', component: 'yes_no', value: ['true'], aiAnswer: false, scoreMap: { true: 4, false: 0 }, expectedScore: 4 },
+		{ label: 'string-array numeric mapping', component: 'number', value: ['1'], aiAnswer: 2, scoreMap: { 1: 3, 2: 4 }, expectedScore: 3 },
 	])('preserves the $label', async ({ component, value, aiAnswer, scoreMap, expectedScore }) => {
 		const input = question(component, { value }, aiAnswer, scoreMap);
 		expect(await service.scoreQuestion(input, org, user, { responses: true })).toMatchObject({ score: expectedScore, ai_score: 0, max_score: 4 });
@@ -67,6 +68,21 @@ describe('Compliance answer precedence', () => {
 		{ label: 'empty array', orgResponse: { value: [] } },
 	])('retains AI fallback for a human $label', async ({ orgResponse }) => {
 		const input = question('yes_no', orgResponse, true, { false: 0, true: 4 });
+		expect(await service.scoreQuestion(input, org, user)).toMatchObject({ score: 0, ai_score: 4, max_score: 4 });
+	});
+
+	it.each([
+		{ component: 'currency', value: undefined },
+		{ component: 'currency', value: [] },
+		{ component: 'currency', value: {} },
+		{ component: 'text', value: [''] },
+		{ component: 'text', value: 'other' },
+		{ component: 'text', value: 'toString' },
+		{ component: 'text', value: 'constructor' },
+		{ component: 'text', value: '__proto__' },
+		{ component: 'yes_no', value: 'unrecognized' },
+	])('preserves AI fallback for an unmapped $component answer $value', async ({ component, value }) => {
+		const input = question(component, { value }, 'best', { best: 4 });
 		expect(await service.scoreQuestion(input, org, user)).toMatchObject({ score: 0, ai_score: 4, max_score: 4 });
 	});
 
@@ -116,6 +132,16 @@ describe('Compliance answer precedence', () => {
 		expect(result).toMatchObject({ score: 4, ai_score: 4, estimated_score: 8, max_score: 12 });
 		expect(result.compliance_section_groups[0]).toMatchObject({ score: 4, ai_score: 4, estimated_score: 8, max_score: 12 });
 		expect(result.compliance_section_groups[0].compliance_sections[0]).toMatchObject({ score: 4, ai_score: 4, estimated_score: 8, max_score: 12 });
+	});
+
+	it.each(['toString', 'constructor', '__proto__'])('keeps aggregate scores numeric for unmapped text %s', async value => {
+		const input = {
+			compliance_section_groups: [
+				{ compliance_sections: [{ compliance_questions: [question('text', { value }, 'best', { best: 4 }), question('yes_no', { value: true }, false, { false: 0, true: 4 })] }] },
+			],
+		};
+		const result = await service.scoreComplianceResponse(input, org, user);
+		expect(result).toMatchObject({ score: 4, ai_score: 4, estimated_score: 8, max_score: 8 });
 	});
 
 	it('retains corrected scores in the counts-only response projection', async () => {
