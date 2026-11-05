@@ -1,0 +1,49 @@
+name: RabbitMQ unit tests
+
+on:
+  push:
+    branches:
+      - 'fix/**'
+    paths:
+      - 'libs/nest/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'jest.preset.js'
+      - '.github/workflows/rabbitmq-unit-tests.yml'
+  pull_request:
+    branches: [main, staging]
+    paths:
+      - 'libs/nest/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'jest.preset.js'
+      - '.github/workflows/rabbitmq-unit-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rabbitmq-unit-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rabbitmq:
+    name: RabbitMQ regression tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.9.0'
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install locked dependencies
+        run: node .yarn/releases/yarn-4.4.1.cjs install --immutable
+      - name: Run RabbitMQ regression tests
+        run: node .yarn/releases/yarn-4.4.1.cjs jest --config libs/nest/jest.config.ts --runInBand --ci --runTestsByPath libs/nest/src/lib/rabbit/rabbit.service.spec.ts
