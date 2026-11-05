@@ -1,0 +1,46 @@
+name: Lockfile integrity
+
+on:
+  push:
+    branches: [main, staging, 'fix/**']
+    paths:
+      - '**/package.json'
+      - yarn.lock
+      - .yarnrc.yml
+      - '.yarn/releases/**'
+      - .github/workflows/lockfile-integrity.yml
+  pull_request:
+    paths:
+      - '**/package.json'
+      - yarn.lock
+      - .yarnrc.yml
+      - '.yarn/releases/**'
+      - .github/workflows/lockfile-integrity.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lockfile-integrity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-lockfile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      YARN_ENABLE_HARDENED_MODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify pinned Yarn
+        run: node .yarn/releases/yarn-4.4.1.cjs --version
+      - name: Validate immutable lockfile metadata and resolutions
+        run: node .yarn/releases/yarn-4.4.1.cjs install --immutable --refresh-lockfile --check-resolutions --mode=skip-build
+      - name: Require unchanged manifests and lockfile
+        run: git diff --exit-code -- yarn.lock package.json ':(glob)**/package.json'
