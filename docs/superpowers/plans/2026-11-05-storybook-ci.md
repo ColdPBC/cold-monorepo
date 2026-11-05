@@ -1,6 +1,6 @@
 # Storybook UI CI Implementation Plan
 
-> **For agentic workers:** Use superpowers:executing-plans to implement each task and verify the final branch.
+> **For agentic workers:** Implement each task and verify the final branch.
 
 **Goal:** A genuine Storybook UI required check for every pull request.
 **Architecture:** Build locally, serve on loopback, execute the existing Storybook Chromium suite with offline browser configuration, and validate complete Jest results.
@@ -18,11 +18,11 @@ Check missing/failed/skipped result JSON, pull requests outside main, service-wo
 
 ## Task 1: Protect CI entry and result interpretation
 - [x] Add and observe failing tests for absent all-PR workflow and result verifier.
-- [ ] Implement the stable workflow and fail-closed result verifier.
-- [ ] Run all CI contract and Node result tests.
+- [x] Implement the stable workflow and fail-closed result verifier.
+- [x] Run all CI contract and Node result tests.
 
 ## Task 2: Isolate and execute Storybook
-- [ ] Observe a local-fixture browser isolation failure in CI (local Chromium is sandbox-blocked).
-- [ ] Configure the test runner with an offline Chromium proxy; verify direct and service-worker egress against disposable loopback fixtures.
+- [x] Observe a local-fixture browser isolation failure in CI (local Chromium is sandbox-blocked).
+- [x] Configure the test runner with an offline Chromium proxy; verify direct and service-worker egress against disposable loopback fixtures.
 - [ ] Build all stories, run real render/play tests in CI, and fix or report blockers without masking failures.
 - [ ] Request review, push, open a draft PR linked to #930, and verify exact-head checks.

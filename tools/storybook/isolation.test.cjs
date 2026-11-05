@@ -5,7 +5,7 @@ const { once } = require('node:events');
 const { chromium } = require('playwright');
 
 // Both endpoints are local fixtures. Nothing in this test contacts the internet.
-test('browser and service worker can use localhost but cannot bypass the offline proxy', async () => {
+test('browser and service worker can use localhost but cannot bypass the offline proxy', { timeout: 60000 }, async () => {
   let unexpectedRequests = 0;
   const blocked = createServer((req, res) => {
     unexpectedRequests++;
@@ -23,9 +23,9 @@ test('browser and service worker can use localhost but cannot bypass the offline
   await once(allowed, 'listening');
   let browser;
   try {
-    // Baseline options have no egress protection; the test catches that behavior.
-    let options = {};
-    try { options = require('./offline-browser.cjs'); } catch (error) { if (error.code !== 'MODULE_NOT_FOUND') throw error; }
+    // Load the actual runner config so this also detects missing isolation wiring.
+    const runner = require('../../apps/cold-ui/.storybook/test-runner-jest.config.js');
+    const options = runner.testEnvironmentOptions['jest-playwright'].launchOptions;
     browser = await chromium.launch({ ...options, executablePath: process.env.STORYBOOK_BROWSER_EXECUTABLE || undefined });
     const page = await browser.newPage();
     await page.goto(`http://127.0.0.1:${allowed.address().port}`);
