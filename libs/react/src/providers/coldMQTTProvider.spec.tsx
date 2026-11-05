@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { EventEmitter } from 'events';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, render, waitFor } from '@testing-library/react';
+import { act, cleanup, render, flushEffects } from '../../test-utils/telemetry';
 import { ColdMQTTProvider } from './coldMQTTProvider';
 import ColdMQTTContext, { ColdMQTTContextType } from '../context/coldMQTTContext';
 
@@ -67,7 +67,8 @@ afterEach(() => {
 describe('authenticated MQTT telemetry', () => {
   it('authenticates the connection without logging its token-bearing URL', async () => {
     render(<ColdMQTTProvider><CaptureContext /></ColdMQTTProvider>);
-    await waitFor(() => expect(dependencies.connect).toHaveBeenCalled());
+    await flushEffects();
+    expect(dependencies.connect).toHaveBeenCalled();
 
     const [url, options] = dependencies.connect.mock.calls[0];
     expect(new URL(url).searchParams.get('token')).toBe(token);
@@ -79,7 +80,8 @@ describe('authenticated MQTT telemetry', () => {
 
   it('preserves authenticated publish payloads without logging their credentials', async () => {
     render(<ColdMQTTProvider><CaptureContext /></ColdMQTTProvider>);
-    await waitFor(() => expect(dependencies.connect).toHaveBeenCalled());
+    await flushEffects();
+    expect(dependencies.connect).toHaveBeenCalled();
 
     act(() => mqttContext.publishMessage('actions/test', JSON.stringify({ action: 'refresh', id: 'product-1' })));
 
@@ -97,7 +99,8 @@ describe('authenticated MQTT telemetry', () => {
 
   it('preserves organization/public subscriptions and connection status', async () => {
     render(<ColdMQTTProvider><CaptureContext /></ColdMQTTProvider>);
-    await waitFor(() => expect(dependencies.connect).toHaveBeenCalled());
+    await flushEffects();
+    expect(dependencies.connect).toHaveBeenCalled();
     act(() => { client.emit('connect'); });
     expect(client.subscribe.mock.calls.map(call => call[0])).toEqual([
       'ui/test/organization-1/#',
@@ -110,11 +113,13 @@ describe('authenticated MQTT telemetry', () => {
 
   it('still refreshes cached data for an incoming update', async () => {
     render(<ColdMQTTProvider><CaptureContext /></ColdMQTTProvider>);
-    await waitFor(() => expect(dependencies.connect).toHaveBeenCalled());
+    await flushEffects();
+    expect(dependencies.connect).toHaveBeenCalled();
     const payload = Buffer.from(JSON.stringify({ swr_key: '/organizations/organization-1/products' }));
     act(() => { client.emit('message', 'ui/test/organization-1/products', payload, { payload }); });
-    await waitFor(() => expect(dependencies.mutate).toHaveBeenCalledWith([
+    await flushEffects();
+    expect(dependencies.mutate).toHaveBeenCalledWith([
       '/organizations/organization-1/products', 'GET',
-    ]));
+    ]);
   });
 });

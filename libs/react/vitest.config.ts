@@ -7,8 +7,9 @@ export default defineConfig({
   root: __dirname,
   plugins: [tsconfigPaths({ projects: [resolve(__dirname, '../../tsconfig.base.json')] })],
   test: {
-    environment: 'jsdom',
+    environment: 'node',
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    setupFiles: ['./test-utils/browserStorage.ts'],
     clearMocks: true,
     restoreMocks: true,
     minThreads: 1,

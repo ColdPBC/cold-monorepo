@@ -1,6 +1,6 @@
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, render } from '../../test-utils/telemetry';
 import axios, { AxiosError, AxiosHeaders } from 'axios';
 import { ColdAxiosInterceptorProvider } from './coldAxiosInterceptorProvider';
 
@@ -36,7 +36,6 @@ afterEach(() => {
   cleanup();
   axios.interceptors.request.clear();
   axios.interceptors.response.clear();
-  localStorage.clear();
 });
 
 describe('authenticated Axios telemetry', () => {

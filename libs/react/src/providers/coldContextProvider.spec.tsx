@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, render } from '../../test-utils/telemetry';
 import { AxiosError, AxiosHeaders } from 'axios';
 import { ColdContextProvider } from './coldContextProvider';
 import ColdContext from '../context/coldContext';
 import { ErrorType } from '../enums/errors';
+
+vi.mock('react-router-dom', () => ({ BrowserRouter: ({ children }) => children }));
 
 const sinks = vi.hoisted(() => ({ log: vi.fn(), addError: vi.fn() }));
 vi.mock('@datadog/browser-logs', () => ({ datadogLogs: { logger: { log: sinks.log } } }));
