@@ -7,7 +7,8 @@ import { FootprintsService } from './footprints.service';
 
 describe('Facility footprint HTTP routes', () => {
 	let app: INestApplication;
-	let user: IAuthenticatedUser | undefined;
+	let user: IAuthenticatedUser;
+	let authenticated: boolean;
 	const path = '/organizations/org_one/facilities/fac_one/footprints';
 	const organizations = [
 		{ id: 'org_one', name: 'One' },
@@ -42,7 +43,7 @@ describe('Facility footprint HTTP routes', () => {
 			.overrideGuard(JwtAuthGuard)
 			.useValue({
 				canActivate(context: ExecutionContext) {
-					if (!user) throw new UnauthorizedException();
+					if (!authenticated) throw new UnauthorizedException();
 					context.switchToHttp().getRequest().user = user;
 					return true;
 				},
@@ -54,6 +55,7 @@ describe('Facility footprint HTTP routes', () => {
 
 	beforeEach(() => {
 		jest.clearAllMocks();
+		authenticated = true;
 		user = {
 			company_id: null,
 			coldclimate_claims: { email: 'member@example.test', org_id: 'org_one', id: 'user_one', roles: [Role.CompanyMember] },
@@ -77,8 +79,8 @@ describe('Facility footprint HTTP routes', () => {
 	});
 
 	it.each([Role.CompanyMember, Role.CompanyAdmin, Role.CompanyOwner, Role.ColdAdmin])('lists only the requested organization and facility for %s', async role => {
-		user!.coldclimate_claims.roles = [role];
-		user!.isColdAdmin = role === Role.ColdAdmin;
+		user.coldclimate_claims.roles = [role];
+		user.isColdAdmin = role === Role.ColdAdmin;
 
 		const response = await request(app.getHttpServer()).get(path).expect(200);
 
@@ -90,8 +92,8 @@ describe('Facility footprint HTTP routes', () => {
 	});
 
 	it('allows a platform administrator to select another organization without widening the result', async () => {
-		user!.coldclimate_claims.roles = [Role.ColdAdmin];
-		user!.isColdAdmin = true;
+		user.coldclimate_claims.roles = [Role.ColdAdmin];
+		user.isColdAdmin = true;
 		const response = await request(app.getHttpServer()).get('/organizations/org_two/facilities/fac_three/footprints').expect(200);
 		expect(response.body).toEqual({ periods: [footprints[2]] });
 		expect(prisma.facility_footprints.findMany).toHaveBeenCalledWith({
@@ -117,7 +119,7 @@ describe('Facility footprint HTTP routes', () => {
 	});
 
 	it('rejects an unauthenticated request before reading footprint data', async () => {
-		user = undefined;
+		authenticated = false;
 		await request(app.getHttpServer()).get(path).expect(401);
 		expect(prisma.facility_footprints.findMany).not.toHaveBeenCalled();
 	});
@@ -128,7 +130,7 @@ describe('Facility footprint HTTP routes', () => {
 	});
 
 	it('rejects an identity without an allowed role', async () => {
-		user!.coldclimate_claims.roles = [Role.Default];
+		user.coldclimate_claims.roles = [Role.Default];
 		await request(app.getHttpServer()).get(path).expect(401);
 		expect(prisma.facility_footprints.findMany).not.toHaveBeenCalled();
 	});
