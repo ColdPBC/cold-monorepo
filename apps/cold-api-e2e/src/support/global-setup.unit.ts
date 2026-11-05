@@ -123,9 +123,16 @@ describe('isolated E2E setup diagnostics', () => {
     expectPrivateDiagnostics();
   });
 
-  it('reports a network failure without requiring or printing a provider response', async () => {
-    post.mockRejectedValue(new Error(`Network failure ${clientSecret}`));
-    await expect(setup()).resolves.toBeUndefined();
+  it('rejects a network failure with a safe diagnostic instead of configuring an unauthenticated client', async () => {
+    const networkError = new Error(`Network failure ${clientSecret}`);
+    post.mockRejectedValue(networkError);
+    const failure = await setup().catch(reason => reason);
+    expect(failure).toBeInstanceOf(Error);
+    expect(failure).not.toBe(networkError);
+    expect(failure.message).toBe('Unable to authenticate API tests');
+    expect(failure.cause).toBeUndefined();
+    expect(globalThis.auth0Axios).toBeUndefined();
+    expect(axios.defaults.headers.common.Authorization).toBeUndefined();
     expect(errorLog).toHaveBeenCalled();
     expectPrivateDiagnostics();
   });
@@ -134,6 +141,14 @@ describe('isolated E2E setup diagnostics', () => {
     delete process.env[key];
     await expect(setup()).rejects.toThrow();
     expect(post).not.toHaveBeenCalled();
+    expectPrivateDiagnostics();
+  });
+
+  it.each([true, 123, {}])('rejects malformed token responses (%s) without configuring a client', async token => {
+    post.mockResolvedValue({ status: 200, data: { access_token: token, client_secret: clientSecret } });
+    await expect(setup()).rejects.toThrow('Unable to authenticate API tests');
+    expect(globalThis.auth0Axios).toBeUndefined();
+    expect(axios.defaults.headers.common.Authorization).toBeUndefined();
     expectPrivateDiagnostics();
   });
 
