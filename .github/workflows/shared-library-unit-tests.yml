@@ -1,0 +1,59 @@
+name: Shared-library tests
+
+on:
+  push:
+    branches: [main, staging, 'fix/**']
+    paths:
+      - 'libs/nest/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'jest.preset.js'
+      - '.yarnrc.yml'
+      - '.yarn/releases/**'
+      - '.github/workflows/shared-library-unit-tests.yml'
+  pull_request:
+    paths:
+      - 'libs/nest/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'jest.preset.js'
+      - '.yarnrc.yml'
+      - '.yarn/releases/**'
+      - '.github/workflows/shared-library-unit-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shared-library-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shared-library:
+    name: Full shared-library suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NODE_ENV: test
+      DD_SERVICE: cold-api
+      DD_TRACE_ENABLED: 'false'
+      DD_INSTRUMENTATION_TELEMETRY_ENABLED: 'false'
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/cold_test
+      SHADOW_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/cold_shadow_test
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.9.0'
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install locked dependencies
+        run: node .yarn/releases/yarn-4.4.1.cjs install --immutable
+      - name: Generate Prisma models
+        run: node .yarn/releases/yarn-4.4.1.cjs prisma generate --schema libs/nest/prisma/schema.prisma
+      - name: Run every shared-library test
+        run: node .yarn/releases/yarn-4.4.1.cjs jest --config libs/nest/jest.config.ts --runInBand --ci --detectOpenHandles
