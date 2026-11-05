@@ -62,18 +62,18 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
     return compliance;
   }
 
-  async createOrganizationComplianceStatus(name: string, type: string, user: IAuthenticatedUser, organization: organizations) {
+  async createOrganizationComplianceStatus(orgComplianceId: string, name: string, type: string, user: IAuthenticatedUser, organization: organizations) {
     const start = new Date();
 
     await this.cache.delete(`organizations:${organization.id}:compliance:${name}:status`, true);
 
     this.logger.info(`Creating Compliance Status`, { user, compliance_name: name, organization });
     const compliance_status = this.prisma.organization_compliance_statuses.create({
-      // @ts-expect-error - This is a valid type
       data: {
         id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceStatus).scopedId,
         type,
         email: user.coldclimate_claims.email,
+        organization_compliance_id: orgComplianceId,
       },
     });
     this.sendMetrics('organization.compliance.statuses', 'cold-nest', 'create', 'completed', {

@@ -8,15 +8,15 @@ export class OrganizationComplianceStatusesService extends BaseWorker {
     super(OrganizationComplianceStatusesService.name);
   }
 
-  create(org_id: string, name: string, statusType: survey_status_types, req: IRequest) {
+  async create(org_id: string, name: string, statusType: survey_status_types, req: IRequest) {
     try {
-      const orgCompliance = this.orgComplianceRepository.getOrgComplianceDefinitionByName(name, req.user, req.organization);
+      const orgCompliance = await this.orgComplianceRepository.getOrgComplianceDefinitionByName(name, req.user, req.organization);
 
       if (!orgCompliance) {
         throw new NotFoundException({ organization: { id: org_id }, compliance: { name }, statusType, user: req.user }, 'Organization not found');
       }
 
-      return this.repository.createOrganizationComplianceStatus(name, statusType, req.user, req.organization);
+      return this.repository.createOrganizationComplianceStatus(orgCompliance.id, name, statusType, req.user, req.organization);
     } catch (error) {
       this.logger.error(`Error creating organization compliance status`, { error });
       throw error;
