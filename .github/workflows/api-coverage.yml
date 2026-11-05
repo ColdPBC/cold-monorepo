@@ -1,0 +1,57 @@
+name: API coverage (native command)
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - 'fix/**'
+  pull_request:
+    branches:
+      - main
+      - staging
+      - 'fix/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: api-coverage-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: true
+      NX_DAEMON: false
+      NX_ISOLATE_PLUGINS: false
+      NX_DISABLE_DB: true
+      NODE_ENV: test
+      DD_SERVICE: cold-api
+      DD_TRACE_ENABLED: false
+      DD_INSTRUMENTATION_TELEMETRY_ENABLED: false
+      PUPPETEER_SKIP_DOWNLOAD: true
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cold_test
+      SHADOW_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cold_test_shadow
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install locked dependencies
+        id: dependencies
+        run: node .yarn/releases/yarn-4.4.1.cjs install --immutable
+      - name: Generate Prisma types
+        id: prisma
+        run: node .yarn/releases/yarn-4.4.1.cjs prisma generate --schema libs/nest/prisma/schema.prisma
+      - name: Verify installed upload type declarations
+        run: node -p "require.resolve('@types/multer/package.json')"
+      - name: Run native API coverage gate
+        run: node .yarn/releases/yarn-4.4.1.cjs test --runInBand --skipNxCache
