@@ -299,11 +299,12 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 			return;
 		}
 
+		let totalCo2e = 0;
 		for (const impact of ecoinvent_activity.ecoinvent_activity_impacts) {
-			this.pcfc.addActivity(ecoinvent_activity.name, productMaterial.weight, impact.impact_value);
+			totalCo2e += this.pcfc.addActivity(ecoinvent_activity.name, productMaterial.weight, impact.impact_value);
 		}
 
-		productMaterial.total_co2e = this.pcfc.addActivity(ecoinvent_activity.name, productMaterial.weight, ecoinvent_activity.ecoinvent_activity_impacts[0].impact_value);
+		productMaterial.total_co2e = totalCo2e;
 
 		this.logger.info(`Added activity to PCF calculator: ${ecoinvent_activity.name} - ${productMaterial.total_co2e} KgCO2e`, {
 			activity: ecoinvent_activity,
