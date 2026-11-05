@@ -53,5 +53,6 @@ jobs:
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           curl --fail --silent --retry 20 --retry-delay 1 --retry-connrefused http://127.0.0.1:4400/index.json > /dev/null
+          node --test tools/storybook/startup.test.cjs
           node .yarn/releases/yarn-4.4.1.cjs exec test-storybook --config-dir apps/cold-ui/.storybook --url http://127.0.0.1:4400 --browsers chromium --index-json --maxWorkers 2 --ci --json --outputFile "$RUNNER_TEMP/storybook-results.json"
           node tools/storybook/verify-results.cjs "$RUNNER_TEMP/storybook-results.json" dist/storybook/cold-ui/index.json
