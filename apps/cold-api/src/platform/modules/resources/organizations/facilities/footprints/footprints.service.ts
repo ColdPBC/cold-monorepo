@@ -62,7 +62,13 @@ export class FootprintsService extends BaseWorker {
               value: period.value,
             },
           },
-          update: FacilityFootprint.fromJSON(orgId, period),
+          update: {
+            facility_id: period.facility_id,
+            organization_id: orgId,
+            emissions: period.emissions,
+            value: period.value,
+            type: period.type,
+          },
           create: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationFootprint).scopedId,
             facility_id: period.facility_id,
