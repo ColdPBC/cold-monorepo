@@ -11,6 +11,8 @@ export default defineConfig({
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
     clearMocks: true,
     restoreMocks: true,
-    threads: false,
+    minThreads: 1,
+    maxThreads: 2,
+    passWithNoTests: false,
   },
 });

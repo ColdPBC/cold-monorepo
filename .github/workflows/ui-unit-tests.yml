@@ -30,4 +30,6 @@ jobs:
       - name: Generate source barrels
         run: yarn exec barrelsby -D -l all --directory ./libs/react/src -e stories.tsx -e react-app-env -e private.tsx -e spec.ts -S -H
       - name: Run UI unit tests
-        run: yarn exec vitest run --config libs/react/vitest.config.ts
+        run: yarn exec vitest run --config libs/react/vitest.config.ts --reporter default --reporter json --outputFile "$RUNNER_TEMP/ui-test-results.json"
+      - name: Require executed tests
+        run: node -e "const r = require(process.env.RUNNER_TEMP + '/ui-test-results.json'); if (!(r.numTotalTests > 0) || r.numFailedTests !== 0) process.exit(1)"
