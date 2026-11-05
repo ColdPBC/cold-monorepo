@@ -1,4 +1,5 @@
 import axios from 'axios';
+import setupModule = require('./global-setup');
 
 jest.mock('axios', () => ({
   create: jest.fn(),
@@ -9,7 +10,7 @@ jest.mock('dotenv', () => ({ config: jest.fn() }));
 jest.mock('@prisma/client', () => ({ PrismaClient: class {} }));
 jest.mock('./enhancedPrimsa', () => ({ enhancePrisma: (client: unknown) => client }));
 
-const setup = require('./global-setup') as () => Promise<void>;
+const setup = setupModule as unknown as () => Promise<void>;
 const post = jest.fn();
 const password = 'PwQ7x-synthetic-password';
 const clientSecret = 'CsR8y-synthetic-client-secret';
@@ -64,6 +65,9 @@ describe('isolated E2E setup diagnostics', () => {
     expect(log).toHaveBeenCalled();
     expectPrivateDiagnostics();
     expect(errorLog).not.toHaveBeenCalled();
+    expect(logged()).not.toContain('api-user@example.invalid');
+    expect(logged()).not.toContain('synthetic-client-id');
+    expect(logged()).not.toContain('synthetic-org-id');
   });
 
   it.each([
@@ -109,6 +113,13 @@ describe('isolated E2E setup diagnostics', () => {
     await setup();
     expect(errorLog).toHaveBeenCalled();
     expect(logged()).toContain('401');
+    expectPrivateDiagnostics();
+  });
+
+  it.each([clientSecret, 999, Number.NaN])('does not log invalid HTTP status values (%s)', async status => {
+    post.mockRejectedValue({ response: { status, data: { password } } });
+    await setup();
+    expect(errorLog).toHaveBeenCalledWith('Unable to get access token for API tests');
     expectPrivateDiagnostics();
   });
 
