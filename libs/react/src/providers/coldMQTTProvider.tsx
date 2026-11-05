@@ -61,7 +61,6 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
 
         if (client.current === null) {
           logBrowser('Connecting to IOT', 'info', {
-            url,
             org_id,
             env,
           });
@@ -74,7 +73,6 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           });
         } else {
           logBrowser('Reconnecting to IOT', 'info', {
-            url,
             org_id,
             env,
           });
@@ -224,7 +222,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
       set(newMessage, 'user', user);
       set(newMessage, 'org_id', orgId);
       set(newMessage, 'token', token);
-      logBrowser(`Publishing message to ${topic}`, 'info', { topic, newMessage });
+      logBrowser(`Publishing message to ${topic}`, 'info', { topic, org_id: orgId });
       client.current.publish(topic, JSON.stringify(newMessage));
     }
   };

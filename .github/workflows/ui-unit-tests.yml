@@ -4,7 +4,7 @@ on:
   push:
     branches: ['fix/**']
   pull_request:
-    branches: [main, staging]
+    branches: [main, staging, fix/remove-flightcontrol-deploys]
   workflow_dispatch:
 
 permissions:

@@ -6,10 +6,11 @@ import { act, create, ReactTestRenderer } from 'react-test-renderer';
 const mounted = new Set<ReactTestRenderer>();
 
 export function render(element: React.ReactElement) {
-  let renderer: ReactTestRenderer;
+  let renderer: ReactTestRenderer | undefined;
   act(() => { renderer = create(element); });
-  mounted.add(renderer!);
-  return renderer!;
+  if (!renderer) throw new Error('Renderer did not mount');
+  mounted.add(renderer);
+  return renderer;
 }
 
 export function cleanup() {
