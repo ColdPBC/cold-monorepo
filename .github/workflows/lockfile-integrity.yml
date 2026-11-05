@@ -10,7 +10,6 @@ on:
       - '.yarn/releases/**'
       - .github/workflows/lockfile-integrity.yml
   pull_request:
-    branches: [main, staging]
     paths:
       - '**/package.json'
       - yarn.lock

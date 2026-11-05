@@ -7078,7 +7078,7 @@ __metadata:
     wouter: "npm:3.6.0"
   peerDependencies:
     formik: ^2.4.6
-    graphql: ^16.0.0
+    graphql: 16
     react: ^18.0.0 || ^19.0.0
     react-dom: ^18.0.0 || ^19.0.0
   checksum: 10/5e9c35c900d1337f11711df03a6fe307ca0c8ce872df0f4b44b0c3e9d88a9982302158cb018a97482e53286ea08e4e69a4f47009cc8da7304283ec5e8139831d
@@ -7133,7 +7133,7 @@ __metadata:
     react-modal: "npm:3.16.3"
     wouter: "npm:3.6.0"
   peerDependencies:
-    graphql: ^16.0.0
+    graphql: 16
   checksum: 10/aabb46096bc32ba9d11dd66d6640072ac837cc8006210c27dcdc8afa63dba3f00fab83297d95d774ea10c844ec5d420c65d60328c7fe138a153a8c1971ead2c1
   languageName: node
   linkType: hard
@@ -7243,7 +7243,7 @@ __metadata:
     esbuild: "npm:0.25.1"
     esbuild-css-modules-plugin: "npm:3.1.4"
     glob: "npm:11.0.1"
-    graphql: "npm:^16.10.0"
+    graphql: "npm:16.10.0"
     graphql-tag: "npm:2.12.6"
     hash-wasm: "npm:4.12.0"
     log-node: "npm:8.0.3"
@@ -7340,7 +7340,7 @@ __metadata:
   peerDependencies:
     "@mikro-orm/core": 6
     "@mikro-orm/knex": 6
-    graphql: ^16.0.0
+    graphql: 16
   dependenciesMeta:
     "@mikro-orm/knex":
       optional: true
@@ -7396,7 +7396,7 @@ __metadata:
     graphql-scalars: "npm:1.24.2"
     luxon: "npm:3.5.0"
   peerDependencies:
-    graphql: ^16.0.0
+    graphql: 16
   checksum: 10/fd631e8a783740c9bb700c3e7c69300efa998c2d7646181c343b95c10bcfde5ede752d81d8505e477ab8ba56b07ade2c18063fb9f54712d8598d0da70e363473
   languageName: node
   linkType: hard
@@ -7427,7 +7427,7 @@ __metadata:
     class-validator: "npm:0.14.1"
     decimal.js: "npm:10.5.0"
     fastify: "npm:4.28.1"
-    graphql: "npm:^16.10.0"
+    graphql: "npm:16.10.0"
     graphql-deduplicator: "npm:2.0.6"
   checksum: 10/771962d1fac6a32ab637b9a1108a1470c04054981d71224dd7dcc4ce79f7bb5a5ab949ec9af11634d060561be6109566da0ba1d6b1f7bf2857777648e11a429c
   languageName: node
@@ -7470,7 +7470,7 @@ __metadata:
     async-mutex: "npm:0.5.0"
     class-validator: "npm:0.14.1"
     dataloader: "npm:2.2.3"
-    graphql: "npm:^16.10.0"
+    graphql: "npm:16.10.0"
     graphql-parse-resolve-info: "npm:4.13.0"
     graphql-query-complexity: "npm:1.0.0"
     pluralize: "npm:8.0.0"
@@ -10548,7 +10548,7 @@ __metadata:
   resolution: "@linear/sdk@npm:38.0.0"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.0"
-    graphql: "npm:^16.0.0"
+    graphql: "npm:^15.4.0"
     isomorphic-unfetch: "npm:^3.1.0"
   checksum: 10/da7c713d6573347a1366aebdf07a6305ba6d0d7bb5795ed007936b83627c398f1cdb691b5e9ce8b4c60be3da124af6ecd9053aa284030ae743d6a70e3da6ce2c
   languageName: node
