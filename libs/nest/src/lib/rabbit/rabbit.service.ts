@@ -170,4 +170,3 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
 		};
 	}
 }
-
