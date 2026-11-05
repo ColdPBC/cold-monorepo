@@ -287,10 +287,10 @@ Targets can be defined in the `package.json` or `projects.json`. Learn more [in 
 
 ## Troubleshooting
 
-### Errors During FlightControl/ AWS Code Build
+### Errors during builds
 
 ### ENOMEM error when running `nx build cold-api`
-When building the apps in FlightControl or CodeBuild, you may receive an ENOMEM error like in the log below:
+When building the apps in a memory-constrained environment, you may receive an ENOMEM error like in the log below:
 
 ```log
 .4 ➤ YN0000: │ contentlayer@npm:0.3.4 STDERR Error: spawn ENOMEM
@@ -307,7 +307,7 @@ When building the apps in FlightControl or CodeBuild, you may receive an ENOMEM 
 ```
 In order to prevent this from happening, you need to increase the memory available to AWS CodeBuild.  To do this, 
 - log into the AWS Console and navigate to CodeBuild.  
-- Click on whichever project failed (ie: `cold-api-fc-vvac0727`) 
+- Click on the API build project that failed.
 - Click on the `Edit` button.  
 - Scroll down to the `Environment` section
 - Click on the `Additional configuration` button.  

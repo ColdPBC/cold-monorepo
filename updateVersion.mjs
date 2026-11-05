@@ -2,14 +2,6 @@ import * as fs from 'fs';
 import path from "node:path";
 import {execSync} from "node:child_process";
 
-const files = () => ['flightcontrol.json', 'flightcontrol_platform.json'];
-
-const updateFiles = (version) => {
-    files().forEach((file) => {
-        updateVersion(file, version);
-    });
-}
-
 function getChangedFilesGroupedByDirectory() {
 	try {
 		const output = execSync('git diff --name-only').toString().trim();
@@ -122,5 +114,5 @@ const updateVersion = () => {
   updateVersions(getFromLatestCommit('./libs'), pkg.version);
 };
 
-updateFiles(process.argv[2]);
+updateVersion();
 

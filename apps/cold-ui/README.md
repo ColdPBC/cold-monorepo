@@ -29,14 +29,7 @@
 # Troubleshooting
 
 ## UI: Build
-- `yarn: command not found`
-  - flightcontrol.dev UI build fails with an error:
-    ```
-       6:43:21 PM #11 [ 7/10] RUN  yarn prebuild && yarn dlx nx build cold-ui:build:development
-       6:43:21 PM #11 sha256:de51b5d92e3e08950b5d940e9e15dc33ebe9b860d501bec10328dcc547964456
-       6:43:21 PM #11 0.266 /bin/bash: line 1: yarn: command not found
-    ```
-  This is due to flight control not being able to locate the yarn.lock file.  This is typically caused by an incorrect value for `basePath`.  Make sure you have the path to the yarn.lock file relative to where the `flightcontrol.json` file. For example, if both file reside in the project root, then the basePath should be: `.`'
+Run `yarn build:dev` from the repository root after enabling Corepack and installing dependencies with the pinned Yarn version. The project is developed and tested locally and in GitHub Actions; it is not deployed through Flightcontrol.
 
 ## Canvas Package
 If you have trouble with the canvas package dependency on Apple silicon, you might need to build it from source. See [here](https://github.com/Automattic/node-canvas/).

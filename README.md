@@ -104,7 +104,7 @@ Nx tips:
 - Caching/queues: Redis and Bull
 - Front-end: React (Vite), MUI, Storybook/Chromatic
 - Observability: Datadog (browser logs + RUM), via Docker labels in deployment
-- CI/CD & Infra: Flightcontrol (see `flightcontrol*.json`), ECS/EC2 targets, Traefik for local
+- CI: GitHub Actions for automated checks; Docker Compose and Traefik for local development
 
 ### Working with the database
 Prisma schema lives at `libs/nest/prisma/schema.prisma`.
@@ -139,7 +139,7 @@ Minimum for local dev:
 NODE_ENV=development
 DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5432/colddb
 ```
-Additional environment variables exist for third-party integrations (Auth0, Datadog, LaunchDarkly, etc.). Check per-app configuration and deployment files like `flightcontrol_platform.json` and in-app `.env` usage.
+Additional environment variables exist for third-party integrations (Auth0, Datadog, LaunchDarkly, etc.). Check per-app configuration and in-app `.env` usage.
 
 ### Secrets management
 This project uses environment variables for configuration in all environments. Treat any credential-bearing variables as secrets.
@@ -152,10 +152,10 @@ Local development
 - Do not place secrets inside source files, Dockerfiles, or checked-in JSON/YAML.
 - If you use Docker Compose directly, you can export vars in your shell or use an `.env` file at the repo root; Compose will read from it.
 
-CI/CD and deployments (Flightcontrol)
-- Production and staging secrets are provided as environment variables in Flightcontrol. Configure or rotate them in the Flightcontrol dashboard rather than committing anything to the repo.
-- Flightcontrol injects environment variables at build and/or runtime per the service config in `flightcontrol*.json` (for example, `includeEnvVariablesInBuild` / `injectEnvVariablesInDockerfile`).
-- Never print secrets in logs. Avoid echoing env values in build steps.
+CI and manual integration tests
+- GitHub Actions runs automated checks without deploying the application.
+- API E2E workflows are manual-only. Supply an explicit API URL and configure the matching GitHub Actions test secrets before running them.
+- No Flightcontrol deployment manifests or deploy hooks are maintained in this repository. Existing external infrastructure is not changed by this repository cleanup.
 
 Cloud services
 - Database credentials and other runtime settings are supplied via `DATABASE_URL` and related env vars. Ensure these are set in the deployment environment before releasing.
@@ -163,7 +163,7 @@ Cloud services
 
 Adding or rotating a secret
 1) Local: add/update the key in your local `.env`; re-run the affected service.
-2) Staging/Production: update the variable in Flightcontrol’s environment settings for the target service; trigger a new deployment if required.
+2) CI/manual tests: update the matching GitHub Actions secret; rerun only the intended test workflow.
 3) Clean up: remove any old values from terminals, shells, and notes. If a secret was exposed, rotate it immediately and document the incident.
 
 Do and don’t checklist
@@ -298,12 +298,12 @@ docker compose -f docker-compose-core.yml up -d proxy postgres rabbit cache api 
 docker compose -f docker-compose-openAi.yml up -d api climatiq openai bayou
 ```
 
-### Deployment overview
-Production deployments are defined via Flightcontrol JSON configs (`flightcontrol.json`, `flightcontrol_platform.json`):
-- ECS on EC2, with health checks, autoscaling, and Docker-based builds
-- Services such as `cold-platform-openai` deploy from `main` by manual trigger
+### CI and deployment policy
 
-For a new developer, local development via Docker + Nx is sufficient. Coordinate with the team before triggering any remote deployment.
+This repository is used for development and testing. GitHub Actions does not deploy it through Flightcontrol.
+The manual API E2E workflows require an explicitly supplied test URL and do not run in response to deployment notifications.
+
+The database migration workflow is a separate existing integration. It has not been changed by the Flightcontrol removal and must be reviewed before making Prisma schema changes.
 
 ### Troubleshooting
 - Yarn complains or installs v1: run `corepack enable` and re-open your terminal
