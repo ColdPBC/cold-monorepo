@@ -97,7 +97,7 @@ class NoFlightcontrolDeploymentTests(unittest.TestCase):
         self.assertEqual(release['on']['push']['branches'], ['main'])
         self.assertEqual(release['jobs']['release']['if'], "github.ref == 'refs/heads/main'")
         self.assertEqual(release['permissions'], {'contents': 'write', 'issues': 'write', 'pull-requests': 'write'})
-        config = json.loads((ROOT / '.releaserc').read_text())
+        config = yaml.safe_load((ROOT / '.releaserc.yml').read_text())
         self.assertEqual([branch['name'] for branch in config['branches']], ['main'])
 
 
