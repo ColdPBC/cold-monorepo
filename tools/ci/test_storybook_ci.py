@@ -23,5 +23,14 @@ class StorybookWorkflowTests(unittest.TestCase):
         for step in job['steps']:
             self.assertNotIn('continue-on-error', step)
 
+    def test_browser_install_uses_the_pinned_runner_libraries(self):
+        workflow = yaml.load((ROOT / '.github/workflows/storybook-ui-tests.yml').read_text(), Loader=yaml.BaseLoader)
+        job = workflow['jobs']['storybook-ui-tests']
+        self.assertEqual(job['runs-on'], 'ubuntu-24.04')
+        install = next(step['run'] for step in job['steps'] if step.get('name', '').startswith('Install locked Chromium'))
+        self.assertIn("require.resolve('@storybook/test-runner')", install)
+        self.assertIn('install chromium', install)
+        self.assertNotIn('--with-deps', install, 'The hosted image already provides Chromium libraries; avoid optional apt font downloads')
+
 if __name__ == '__main__':
     unittest.main()

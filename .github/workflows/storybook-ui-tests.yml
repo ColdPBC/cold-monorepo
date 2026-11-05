@@ -17,7 +17,7 @@ concurrency:
 jobs:
   storybook-ui-tests:
     name: storybook-ui-tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
       CI: true
@@ -36,8 +36,10 @@ jobs:
           node-version: '20'
       - name: Install immutable dependencies without lifecycle scripts
         run: node .yarn/releases/yarn-4.4.1.cjs install --immutable --mode=skip-build
-      - name: Install locked Chromium browser and system dependencies
-        run: node "$(node -p "require('path').join(require('path').dirname(require.resolve('playwright/package.json', {paths:[require.resolve('@storybook/test-runner')]})), 'cli.js')")" install --with-deps chromium
+      # The hosted Ubuntu24 image already provides Chromium libraries and base fonts.
+      # Browser smoke tests below validate them without optional apt font downloads.
+      - name: Install locked Chromium browser
+        run: node "$(node -p "require('path').join(require('path').dirname(require.resolve('playwright/package.json', {paths:[require.resolve('@storybook/test-runner')]})), 'cli.js')")" install chromium
       - name: Verify browser network isolation
         run: node --test tools/storybook/isolation.test.cjs
       - name: Verify result gate regressions
