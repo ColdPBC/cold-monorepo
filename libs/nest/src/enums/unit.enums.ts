@@ -106,6 +106,11 @@ export enum WeightUnits {
 	lb = 'lb',
 }
 
+export enum WeightFactorUnits {
+	KG_PER_M2 = 'kg per m2',
+	KG_PER_PCS = 'kg per pcs',
+}
+
 export enum EnergyUnits {
 	Wh = 'Wh',
 	kWh = 'kWh',
@@ -125,5 +130,6 @@ export const DataUnitsSchema = z.nativeEnum(DataUnits);
 export const MoneyUnitsSchema = z.nativeEnum(MoneyUnits);
 export const VolumeUnitsSchema = z.nativeEnum(VolumeUnits);
 export const WeightUnitsSchema = z.nativeEnum(WeightUnits);
+export const WeightFactorUnitsSchema = z.nativeEnum(WeightFactorUnits);
 export const EnergyUnitsSchema = z.nativeEnum(EnergyUnits);
 export const ImperialUnitsSchema = z.nativeEnum(ImperialUnits);

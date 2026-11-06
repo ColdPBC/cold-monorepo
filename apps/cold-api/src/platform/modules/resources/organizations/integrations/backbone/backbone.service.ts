@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, Cuid2Generator, GuidPrefixes, IRequest, PrismaService, ImperialUnits, IAuthenticatedUser } from '@coldpbc/nest';
+
+import { BaseWorker, Cuid2Generator, GuidPrefixes, IRequest, PrismaService, ImperialUnits, WeightFactorUnits } from '@coldpbc/nest';
 import { HttpService } from '@nestjs/axios';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { capitalize, find, get, merge, set } from 'lodash';
@@ -40,7 +41,23 @@ export class BackboneService extends BaseWorker {
 	}
 
 	// custom fields
-
+	/*customFields = {
+		value_field_name: 'name',
+		year_field_id: '62fa7cfba63b100013a6e7d7',
+		season_field: '5e29ee82e38dd60034e3c369',
+		material_supplier_field_id: '5e2a079c9556da0033a23232',
+		material_weight_field_id: '67acdb7031b9c1da6490ece5',
+		material_yield_field_id: '5e4ecd88a369020033942cbd',
+		material_description_field_id: '5e3c6cfd490c1100343dbcce',
+		material_notes_field_id: '5e4ecda1a369020033942cbf',
+		product_supplier_field_id: '5e31c0dd56f58f003e3cc4e8',
+		product_weight_field_id: '5e31c26f56f58f003e3cc501',
+		product_gender_field_id: '5e31bff356f58f003e3cc4e3',
+		product_landed_cost: '5e31cef056f58f003e3cc58b',
+		product_folded_dimensions_field_id: '6070a2bf2597fa00141fe8bd',
+		product_packaging_dimensions: '5e90a66e5b9d8b00327d59e7',
+		product_sustainability_notes_field_id: '5e31c25c56f58f003e3cc4ff',
+*/
 	value_field_name = 'name';
 	year_field_id = '62fa7cfba63b100013a6e7d7';
 	season_field = '5e29ee82e38dd60034e3c369';
@@ -92,6 +109,7 @@ export class BackboneService extends BaseWorker {
 		material_bluesign_status_field_id: '62c72e57361e1100131810bc',
 		material_recycled_type_field_id: '62c72eab4468a9001328f7b3',
 	};
+
 	async authenticate(req: IRequest) {
 		try {
 			if (!req.body || !req.body['api_key']) {
@@ -125,6 +143,7 @@ export class BackboneService extends BaseWorker {
 	 * @param limit
 	 * @param total
 	 */
+
 	async syncProducts(req: IRequest, skip: number, limit: number, total?: number) {
 		try {
 			this.logger.info(`Syncing products from Backbone API: ${skip}/${total}`);
@@ -462,7 +481,10 @@ export class BackboneService extends BaseWorker {
 							this.logger.error(e.message, e);
 						}
 					} else {
-						this.logger.warn(`Material Supplier not found for ${item.component?.name}`);
+
+					if (!material.id || !existingProduct?.id) {
+						this.logger.warn(`Material or Product not found for ${item.component.name} or ${existingProduct?.name}`, { material, product: existingProduct });
+						continue;
 					}
 
 					const existing = await this.prisma.product_materials.findUnique({
@@ -517,7 +539,6 @@ export class BackboneService extends BaseWorker {
 						this.logger.error(e.message, e);
 					}
 				}
-
 				this.logger.info(`Product synced: ${product?.name}`);
 			}
 
@@ -690,6 +711,29 @@ export class BackboneService extends BaseWorker {
 		return data;
 	}
 
+	resolveWeightFactor(weight: string) {
+		try {
+			const regex = /(\d+)\s*(\w+)/;
+			const match = weight.match(regex);
+
+			if (match) {
+				switch (match[2]) {
+					case 'gsm':
+						return { weight: +match[1] / 1000, unit: WeightFactorUnits.KG_PER_M2 };
+					case 'oz':
+						return { weight: +match[1] * 0.0283495, unit: WeightFactorUnits.KG_PER_PCS };
+					default:
+						throw new Error(`Unknown weight unit: ${weight}`);
+				}
+			}
+
+			return { weight: null, unit: null };
+		} catch (e) {
+			this.logger.error(e.message, { weight });
+			return { weight: null, unit: null };
+		}
+	}
+
 	/**
 	 * Retrieves the material supplier from the given custom fields based on field information.
 	 *
@@ -754,7 +798,7 @@ export class BackboneService extends BaseWorker {
 		const categories: string[] = [];
 
 		while (currentCategoryId) {
-			const category = this.productCategories.find(cat => cat._id === currentCategoryId);
+			const category = this.productCategories?.find(cat => cat._id === currentCategoryId);
 
 			if (!category) break;
 
