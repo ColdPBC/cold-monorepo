@@ -19,16 +19,12 @@ module.exports = async function () {
   const AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET;
 
   const AUTH0_ORG_ID = process.env.AUTH0_ORG_ID ?? 'org_VWv3Al9pLEI4CaOH';
-  let ACCESS_TOKEN: string;
+  let ACCESS_TOKEN: string | undefined;
 
-  console.log('\nSetting up...\n');
-  console.log(`API_ADMIN_EMAIL: ${API_ADMIN_EMAIL}`);
-  console.log(`API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD.substring(0, 5)}...`);
-  console.log(`AUTH0_AUDIENCE: ${AUTH0_AUDIENCE}`);
-  console.log(`AUTH0_TOKEN_URL: ${AUTH0_TOKEN_URL}`);
-  console.log(`AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID}`);
-  console.log(`AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET.substring(0, 5)}...`);
-  console.log(`AUTH0_ORG_ID: ${AUTH0_ORG_ID}`);
+  // Validate required credentials without including their values in diagnostics.
+  if (API_ADMIN_PASSWORD === undefined || AUTH0_CLIENT_SECRET === undefined) {
+    throw new Error('API_ADMIN_PASSWORD and AUTH0_CLIENT_SECRET must be configured for API tests');
+  }
 
   const auth0 = axios.create();
 
@@ -48,13 +44,28 @@ module.exports = async function () {
     );
 
     if (authResponse?.data?.access_token) {
+      if (typeof authResponse.data.access_token !== 'string') {
+        throw new Error('Invalid authentication response for API tests');
+      }
       ACCESS_TOKEN = authResponse.data.access_token;
-      console.log(`Authenticated with Auth0 and got access token: ${ACCESS_TOKEN.substring(0, 10)}...`);
+      console.log('Authenticated with Auth0 for API tests');
     } else {
       console.error('Unable to get access token for API tests');
     }
-  } catch (error) {
-    console.error('Unable to get access token for API tests', error.response.data);
+  } catch (error: unknown) {
+    // Provider bodies and error messages can contain authentication data.
+    // Only a valid HTTP status is safe to include in this diagnostic.
+    const response = (error as { response?: { status?: unknown } } | null)?.response;
+    const status = response?.status;
+    if (typeof status === 'number' && Number.isInteger(status) && status >= 100 && status <= 599) {
+      console.error('Unable to get access token for API tests', { status });
+    } else {
+      console.error('Unable to get access token for API tests');
+    }
+    if (!response) {
+      // Preserve setup rejection without exposing the original error or cause.
+      throw new Error('Unable to authenticate API tests');
+    }
   }
 
   axios.defaults.baseURL = process.env.API_SERVER_URL ?? `http://localhost:7001`;
