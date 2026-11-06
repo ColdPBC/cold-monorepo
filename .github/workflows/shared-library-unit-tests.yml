@@ -2,7 +2,7 @@ name: Shared-library tests
 
 on:
   push:
-    branches: [main, staging, 'fix/**']
+    branches: [main, staging]
     paths:
       - 'libs/nest/**'
       - 'package.json'
