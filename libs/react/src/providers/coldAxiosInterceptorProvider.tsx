@@ -6,6 +6,7 @@ import { ErrorType } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
 import { ColdContextType } from '@coldpbc/context';
 import { forEach, get } from 'lodash';
+import { redactTelemetry } from '../lib/telemetryUtils';
 
 const setAxiosTokenInterceptor = async ( auth0Context: Auth0ContextInterface<User>, context: ColdContextType): Promise<void> => {
   const { logBrowser } = context;
@@ -37,7 +38,7 @@ const setAxiosTokenInterceptor = async ( auth0Context: Auth0ContextInterface<Use
       }
     }
     logBrowser(`Axios request sent to ${config.url}`, 'info', {
-      config: config
+      method: config.method,
     });
     return config;
   });
@@ -48,21 +49,22 @@ const setAxiosResponseInterceptor = (coldContext: ColdContextType) => {
   axios.interceptors.response.use(
     response => {
       logBrowser(`Axios response received from ${response.config.url}`, 'info', {
-        response: {
-          ...response,
-          data: undefined
-        }
+        method: response.config.method,
+        status: response.status,
       });
       return response;
     },
     error => {
+      const diagnostics = {
+        method: error.config?.method,
+        status: error.response?.status,
+        code: error.code,
+      };
       if (!(error.response && error.response.status === 404 && error.config.url?.includes('/categories'))) {
-        logError(error, ErrorType.AxiosError, {
-          error: error
-        });
+        logError(redactTelemetry(error), ErrorType.AxiosError, diagnostics);
       }
       logBrowser(`Axios error connecting to ${error.config.url}`, 'error', {
-        error: error
+        ...diagnostics,
       });
       return Promise.reject(error);
     },
