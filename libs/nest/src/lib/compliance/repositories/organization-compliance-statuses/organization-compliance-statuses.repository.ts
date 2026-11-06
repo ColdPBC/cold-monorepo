@@ -42,7 +42,7 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
   async getOrganizationComplianceStatusById(orgComplianceId: string, statusId: string, user: IAuthenticatedUser, organization: organizations) {
     const compliance = await this.prisma.organization_compliance.findUnique({
       where: {
-        id: 'id',
+        id: orgComplianceId,
       },
       select: {
         id: true,
