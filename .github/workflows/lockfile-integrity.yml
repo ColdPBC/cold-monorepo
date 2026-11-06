@@ -2,7 +2,7 @@ name: Lockfile integrity
 
 on:
   push:
-    branches: [main, staging, 'fix/**']
+    branches: [main, staging]
     paths:
       - '**/package.json'
       - yarn.lock
