@@ -1,0 +1,41 @@
+name: UI association tests
+
+on:
+  push:
+    branches: [main, staging, 'fix/**']
+  pull_request:
+    branches: [main, staging, 'fix/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ui-association-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  association-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install locked dependencies without lifecycle scripts
+        run: node .yarn/releases/yarn-4.4.1.cjs install --immutable --mode=skip-build
+      - name: Generate source barrels using the locked tool
+        run: node .yarn/releases/yarn-4.4.1.cjs exec barrelsby -D -l all --directory ./libs/react/src -e stories.tsx -e react-app-env -e private.tsx -e spec.ts -S -H
+      - name: Lint the regression tests and configuration
+        run: node .yarn/releases/yarn-4.4.1.cjs exec eslint --no-ignore --max-warnings 0 libs/react/src/hooks/useUpdateEntityAssociations.spec.ts libs/react/src/hooks/useUpdateEntityAssociations.integration.spec.tsx libs/react/test-utils/renderHook.ts libs/react/vitest.associations.config.ts
+      - name: Lint the mutation hook
+        run: node .yarn/releases/yarn-4.4.1.cjs exec eslint --no-ignore libs/react/src/hooks/useUpdateEntityAssociations.ts
+      - name: Type-check the React library
+        run: node .yarn/releases/yarn-4.4.1.cjs exec tsc -p libs/react/tsconfig.lib.json --noEmit --incremental false
+      - name: Run supplier association regression tests
+        run: node .yarn/releases/yarn-4.4.1.cjs exec vitest run --config libs/react/vitest.associations.config.ts --reporter default --reporter json --outputFile "$RUNNER_TEMP/association-test-results.json"
+      - name: Require executed tests
+        run: node -e "const r = require(process.env.RUNNER_TEMP + '/association-test-results.json'); if (!(r.numTotalTests > 0) || r.numFailedTests !== 0) process.exit(1)"
