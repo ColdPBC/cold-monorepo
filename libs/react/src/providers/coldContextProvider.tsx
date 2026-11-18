@@ -10,6 +10,7 @@ import { ErrorType } from '../enums/errors';
 import { ColdMQTTProvider } from './coldMQTTProvider';
 import { datadogLogs, StatusType } from '@datadog/browser-logs';
 import { ColdApolloProvider } from './coldApolloProvider';
+import { redactTelemetry, redactTelemetryText } from '../lib/telemetryUtils';
 
 export interface ColdContextProviderProps {
   auth0Options: Auth0ProviderOptions;
@@ -31,12 +32,20 @@ export const ColdContextProvider = (props: PropsWithChildren<ColdContextProvider
   const [impersonatingOrg, setImpersonatingOrg] = React.useState<any | undefined>(getImpersonatingOrg());
 
   const logError = (error: any, type: ErrorType, context?: object) => {
-    error.name = type;
-    datadogRum.addError(error, context);
+    const safeError = redactTelemetry(error);
+    if (safeError && typeof safeError === 'object') {
+      Object.assign(safeError, { name: type });
+    }
+    datadogRum.addError(safeError, redactTelemetry(context) as object | undefined);
   };
 
   const logBrowser = (message: string, type: StatusType, context?: any, error?: any) => {
-    datadogLogs.logger.log(message, context, type, error);
+    datadogLogs.logger.log(
+      redactTelemetryText(message),
+      redactTelemetry(context) as object | undefined,
+      type,
+      redactTelemetry(error) as Error | undefined,
+    );
   };
 
   const setSelectedOrg = (org: any) => {
