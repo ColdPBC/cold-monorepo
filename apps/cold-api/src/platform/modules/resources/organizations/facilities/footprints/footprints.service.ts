@@ -46,7 +46,7 @@ export class FootprintsService extends BaseWorker {
           if (emission.scope?.ghg_subcategory && emission.scope?.ghg_subcategory > 0) {
             const emission_scope = await this.prisma.emission_scopes.findFirst({
               where: {
-                ghg_subcategory: period.emissions[0].scope.ghg_subcategory,
+                ghg_subcategory: emission.scope.ghg_subcategory,
               },
             });
             if (emission_scope) {
@@ -62,7 +62,13 @@ export class FootprintsService extends BaseWorker {
               value: period.value,
             },
           },
-          update: FacilityFootprint.fromJSON(orgId, period),
+          update: {
+            facility_id: period.facility_id,
+            organization_id: orgId,
+            emissions: period.emissions,
+            value: period.value,
+            type: period.type,
+          },
           create: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationFootprint).scopedId,
             facility_id: period.facility_id,

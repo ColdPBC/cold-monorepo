@@ -256,7 +256,7 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 	}
 
 	private async updateProductCarbonFootprint(total_co2e: number, product, organization, user) {
-		if (isNaN(total_co2e)) {
+		if (Number.isFinite(total_co2e)) {
 			const breakdown = this.pcfc.getBreakdown();
 			this.logger.info(`Product carbon footprint calculated: ${total_co2e} KgCO2e`, { product, organization, user });
 			this.logger.info(`Product carbon footprint breakdown: ${breakdown}`, { product, organization, user });
@@ -299,11 +299,12 @@ export class EcoinventActivityProcessorService extends BaseWorker {
 			return;
 		}
 
+		let totalCo2e = 0;
 		for (const impact of ecoinvent_activity.ecoinvent_activity_impacts) {
-			this.pcfc.addActivity(ecoinvent_activity.name, productMaterial.weight, impact.impact_value);
+			totalCo2e += this.pcfc.addActivity(ecoinvent_activity.name, productMaterial.weight, impact.impact_value);
 		}
 
-		productMaterial.total_co2e = this.pcfc.addActivity(ecoinvent_activity.name, productMaterial.weight, ecoinvent_activity.ecoinvent_activity_impacts[0].impact_value);
+		productMaterial.total_co2e = totalCo2e;
 
 		this.logger.info(`Added activity to PCF calculator: ${ecoinvent_activity.name} - ${productMaterial.total_co2e} KgCO2e`, {
 			activity: ecoinvent_activity,

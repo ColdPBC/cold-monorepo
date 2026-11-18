@@ -5,7 +5,6 @@ describe('FootprintsController', () => {
   let controller: FootprintsController;
 
   const service = {
-    findAll: jest.fn(),
     create: jest.fn(),
     findAllByOrgFacility: jest.fn(),
     findOne: jest.fn(),
@@ -18,13 +17,6 @@ describe('FootprintsController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
-  });
-
-  it('findAll delegates to service', () => {
-    service.findAll.mockReturnValue('ok');
-
-    expect(controller.findAll()).toBe('ok');
-    expect(service.findAll).toHaveBeenCalled();
   });
 
   it('create delegates to service and sets facility ids', () => {

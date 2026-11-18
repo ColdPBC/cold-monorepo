@@ -2,7 +2,7 @@
  * Unit tests for the `Cuid2Generator` Class' methods defined in `cuid2-generator.service.ts` file.
  */
 import { Cuid2Generator } from './cuid2-generator.service';
-import { GuidPrefixes } from '../repositories';
+import { GuidPrefixes } from './compliance.enums';
 
 describe('Cuid2Generator', () => {
   beforeEach(() => {});
@@ -21,7 +21,7 @@ describe('Cuid2Generator', () => {
     }
 
     it('should return false if the second part of the ID is not a valid CUID', () => {
-      const id = `${new Cuid2Generator(GuidPrefixes.OrganizationComplianceStatus)}_notAValidCUID`;
+      const id = `${GuidPrefixes.OrganizationComplianceStatus}_notAValidCUID`;
       expect(Cuid2Generator.isColdCuid2(id)).toEqual(false);
     });
 

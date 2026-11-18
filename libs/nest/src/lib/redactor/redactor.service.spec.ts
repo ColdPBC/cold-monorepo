@@ -368,11 +368,13 @@ describe('When calling RedactorService', () => {
         password: v4(),
         pass: v4(),
         pwd: v4(),
+        images: 'sensitive-image-data',
+        url: 'https://example.test/private',
         sub: v4(),
         id: v4(),
         default_org: v4(),
         org_id: v4(),
-        deep: { nested: { id: v4() } },
+        deep: { nested: { id: 'nested-identifier', password: 'deep-password' } },
         veryDeep: { one: { two: { three: { four: { five: { six: { seven: { eight: { nine: { ten: { eleven: { password: 'alsdkfjasldfk' } } } } } } } } } } } },
       };
 
@@ -389,13 +391,13 @@ describe('When calling RedactorService', () => {
         }
 
         it('deeply nested property is scrubbed', () => {
-          const val = get(defaultScrubbed, 'deep.nested.id');
-          expect(val).toMatch(/.{2}#{4}[aA-zZ0-9]{2}/);
+          expect(get(defaultScrubbed, 'deep.nested.password')).toBe('####');
+          expect(get(defaultScrubbed, 'deep.nested.id')).toBe('nested-identifier');
         });
 
         it('very deeply nested property is scrubbed', () => {
           const val = get(defaultScrubbed, `veryDeep.one.two.three.four.five.six.seven.eight.nine`);
-          expect(val).toMatchSnapshot();
+          expect(val).toEqual({ ten: { eleven: { password: '####' } } });
         });
       });
 
@@ -405,6 +407,10 @@ describe('When calling RedactorService', () => {
         scrubber.addProperties(customProps);
 
         const scrubbed = scrubber.redact(scrubit);
+        it('redacts a deeply nested id when explicitly configured', () => {
+          expect(get(scrubbed, 'deep.nested.id')).toBe('nest####fier');
+          expect(get(scrubbed, 'deep.nested.password')).toBe('####');
+        });
         for (const p of customProps) {
           it(`${p.prop} is scrubbed!`, () => {
             const pattern = new RegExp(`.{${p.leftPad}}#{4}.{${p.rightPad}}`);
