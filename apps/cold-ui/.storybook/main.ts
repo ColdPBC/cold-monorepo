@@ -2,6 +2,7 @@ import { dirname, join } from "path";
 import type { StorybookConfig } from '@storybook/react-vite';
 import turbosnap from 'vite-plugin-turbosnap';
 import { mergeConfig } from 'vite';
+const offlineFonts = require('./offline-fonts.cjs');
 
 const config: StorybookConfig = {
   stories: [
@@ -12,7 +13,7 @@ const config: StorybookConfig = {
   addons: [
     getAbsolutePath("@storybook/addon-knobs"),
     getAbsolutePath("@storybook/addon-essentials"),
-    getAbsolutePath("storybook-addon-cookie"),
+    join(__dirname, "cookie-preset.cjs"),
     getAbsolutePath("storybook-addon-launchdarkly"),
     getAbsolutePath("@storybook/addon-interactions"),
     getAbsolutePath("@storybook/addon-mdx-gfm"),
@@ -30,15 +31,17 @@ const config: StorybookConfig = {
 
   async viteFinal(config, { configType }) {
     return mergeConfig(config, {
-      plugins:
-        configType === 'PRODUCTION'
+      plugins: [
+        ...(process.env.STORYBOOK_OFFLINE === '1' ? [offlineFonts()] : []),
+        ...(configType === 'PRODUCTION'
           ? [
               turbosnap({
                 // This should be the base path of your storybook.  In monorepos, you may only need process.cwd().
                 rootDir: process.cwd(),
               }),
             ]
-          : [],
+          : []),
+      ],
     });
   },
 

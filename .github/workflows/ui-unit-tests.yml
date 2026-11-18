@@ -2,7 +2,7 @@ name: UI unit tests
 
 on:
   push:
-    branches: ['fix/**']
+    branches: [main, staging]
   pull_request:
     branches: [main, staging, fix/remove-flightcontrol-deploys]
   workflow_dispatch:
