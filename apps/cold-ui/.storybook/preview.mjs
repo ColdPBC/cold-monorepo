@@ -7,18 +7,17 @@ import {CustomDecorators} from "./customDecorators";
 // Storybook executes this module in both bootstap phase (Node)
 // and a story's runtime (browser). However, we cannot call `setupWorker`
 // in Node environment, so need to check if we're in a browser.
-if (typeof global.process === 'undefined' || global.process.title === 'browser') {
-  // Start the mocking when each story is loaded.
-  // Repetitive calls to the `.start()` method do not register a new worker,
-  // but check whether there's an existing once, reusing it, if so.
-  worker
-    .start({
-      onUnhandledRequest: 'bypass',
-    })
-    .then(r => console.log(r));
-}
+const mockWorkerReady = typeof global.process === 'undefined' || global.process.title === 'browser'
+  ? worker.start({ onUnhandledRequest: 'bypass' })
+  : Promise.resolve();
 
 export default {
+  loaders: [async () => {
+    // MSW 2 does not defer requests while its worker registers. Keep data
+    // fetching and play functions behind readiness, not a timing assumption.
+    await mockWorkerReady;
+    return {};
+  }],
   parameters: {
     controls: {
       matchers: {
