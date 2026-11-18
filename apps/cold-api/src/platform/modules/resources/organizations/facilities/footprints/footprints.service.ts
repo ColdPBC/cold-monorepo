@@ -46,7 +46,7 @@ export class FootprintsService extends BaseWorker {
           if (emission.scope?.ghg_subcategory && emission.scope?.ghg_subcategory > 0) {
             const emission_scope = await this.prisma.emission_scopes.findFirst({
               where: {
-                ghg_subcategory: period.emissions[0].scope.ghg_subcategory,
+                ghg_subcategory: emission.scope.ghg_subcategory,
               },
             });
             if (emission_scope) {

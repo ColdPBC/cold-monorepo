@@ -251,8 +251,10 @@ export class ScoringService extends BaseWorker {
 						}
 					} else {
 						// For other component types, just map the answer to a score
-						if (question.rubric.score_map[response?.org_response?.value] > 0) {
-							score = question.rubric.score_map[response?.org_response?.value];
+						// A mapped zero is still a human answer and must not fall back to AI.
+						const orgScore = question.rubric.score_map[response?.org_response?.value];
+						if (orgScore === 0 || orgScore > 0) {
+							score = orgScore;
 							aiScore = 0;
 						} else {
 							score = 0;

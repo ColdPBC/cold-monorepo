@@ -9,12 +9,6 @@ import { allRoles, coldAdminOnly, JwtAuthGuard, OrgUserInterceptor, Roles, Roles
 export class FootprintsController {
   constructor(private readonly footprintsService: FootprintsService) {}
 
-  @Get('footprints')
-  @Roles(...coldAdminOnly)
-  findAll() {
-    return this.footprintsService.findAll();
-  }
-
   @Post('footprints')
   @Roles(...coldAdminOnly)
   create(
