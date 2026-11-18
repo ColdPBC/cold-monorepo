@@ -2,7 +2,7 @@ name: UI association tests
 
 on:
   push:
-    branches: [main, staging, 'fix/**']
+    branches: [main, staging]
   pull_request:
     branches: [main, staging, 'fix/**']
   workflow_dispatch:
