@@ -2,8 +2,17 @@ import {useGraphQLMutation} from "./useGraphqlMutation";
 import {EntityLevel} from "@coldpbc/enums";
 import {FetchResult} from "@apollo/client";
 import { axiosFetcher } from '@coldpbc/fetchers';
+import { isAxiosError } from 'axios';
 
 
+// The shared fetcher resolves errors as values; mutation callers require rejection.
+const mutateRestAssociation = async (params: Parameters<typeof axiosFetcher>[0]) => {
+  const result = await axiosFetcher(params);
+  if (result instanceof Error || isAxiosError(result)) {
+    throw result;
+  }
+  return result;
+};
 
 export const useUpdateEntityAssociations = () => {
   // get the right graphQL mutation function i.e. delete/add entity associations
@@ -20,7 +29,7 @@ export const useUpdateEntityAssociations = () => {
   }) => {
     const {productId, orgId} = variables;
 
-    return axiosFetcher([`/organizations/${orgId}/products/${productId}`, 'PATCH', {
+    return mutateRestAssociation([`/organizations/${orgId}/products/${productId}`, 'PATCH', {
       id: productId,
       supplier_id: null,
     }])
@@ -32,7 +41,7 @@ export const useUpdateEntityAssociations = () => {
   }) => {
     const {materialId, orgId} = variables;
 
-    return axiosFetcher([`/organizations/${orgId}/materials/${materialId}`, 'PATCH', {
+    return mutateRestAssociation([`/organizations/${orgId}/materials/${materialId}`, 'PATCH', {
       id: materialId,
       organization_facility_id: null,
     }])
